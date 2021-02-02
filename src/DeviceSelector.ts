@@ -35,7 +35,7 @@
  */
 
 import { connect } from 'react-redux';
-import { DeviceSelector, logger } from 'pc-nrfconnect-shared';
+import { Device, DeviceSelector, logger } from 'pc-nrfconnect-shared';
 
 /**
  * Configures which device types to show in the device selector.
@@ -77,7 +77,7 @@ const mapState = () => ({
  * are only invoked, if a deviceSetup is defined.
  */
 const mapDispatch = (/* dispatch */) => ({
-    onDeviceSelected: device => {
+    onDeviceSelected: (device: Device) => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
     },
     // releaseCurrentDevice: () => {

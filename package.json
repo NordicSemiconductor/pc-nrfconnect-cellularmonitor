@@ -31,12 +31,14 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.1",
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "7.2.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/react-redux": "7.1.16"
+  },
   "eslintConfig": {
     "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
   },
