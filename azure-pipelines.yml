@@ -1,0 +1,12 @@
+pool:
+  vmImage: 'Ubuntu-20.04'
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: 10.15.0
+- script: |
+    set -o errexit -o pipefail
+    npm i
+    npm run lint
+    npm run build
+    npm test
