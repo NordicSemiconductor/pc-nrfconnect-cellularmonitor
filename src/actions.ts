@@ -34,18 +34,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect } from 'react';
-import { logger } from 'pc-nrfconnect-shared';
+import { Serialport } from 'pc-nrfconnect-shared';
 
-import './terminal.scss';
+export enum ActionType {
+    SET_MODEM_PORT = 'SET_MODEM_PORT',
+}
 
-export default () => {
-    useEffect(() => {
-        logger.info('Showing Terminal pane');
-        return () => {
-            logger.info('Hiding Terminal pane');
-        };
-    }, []);
+interface SetModemPort {
+    type: ActionType.SET_MODEM_PORT;
+    modemPort: Serialport | null;
+}
 
-    return <h3 className="title">Terminal</h3>;
-};
+export const setModemPort = (modemPort = null): SetModemPort => ({
+    type: ActionType.SET_MODEM_PORT,
+    modemPort,
+});
+
+export type AppAction = SetModemPort;

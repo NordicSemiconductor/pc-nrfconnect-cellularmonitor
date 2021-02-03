@@ -34,10 +34,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { logger } from 'pc-nrfconnect-shared';
 
-import './info.scss';
+import { setModemPort } from '../actions';
+import ModemPort from '../nRFmodem';
 
-export default () => {
-    return <h3 className="title">Info</h3>;
+export const closeDevice = () => async (dispatch, getState) => {
+    const { modemPort } = getState().app;
+    if (modemPort) {
+        logger.info(`Closing modem port`);
+        modemPort.close(() => {
+            dispatch(setModemPort());
+        });
+    }
+};
+
+export const openDevice = device => async dispatch => {
+    await dispatch(closeDevice());
+    const path = device?.serialport?.path;
+    if (path) {
+        logger.info(`Opening modem port ${path}`);
+        const modemPort = new ModemPort(path);
+        dispatch(setModemPort(modemPort));
+    }
 };

@@ -40,14 +40,11 @@ import { App } from 'pc-nrfconnect-shared';
 import DeviceSelector from './DeviceSelector';
 import GPS from './GPS/GPS';
 import Info from './Info/Info';
+import reducer from './reducer';
 import SidePanel from './SidePanel/SidePanel';
 import Terminal from './Terminal/Terminal';
 
 import './index.scss';
-
-// If your app uses redux, then specify your root reducer here.
-// It will handle the slice of state under the name `app`.
-const reducer = undefined;
 
 export default () => (
     <App

@@ -37,6 +37,8 @@
 import { connect } from 'react-redux';
 import { DeviceSelector, logger } from 'pc-nrfconnect-shared';
 
+import { closeDevice, openDevice } from './actions/deviceActions';
+
 /**
  * Configures which device types to show in the device selector.
  * The config format is described on
@@ -76,9 +78,10 @@ const mapState = () => ({
  * Note that the callbacks releaseCurrentDevice and onDeviceIsReady
  * are only invoked, if a deviceSetup is defined.
  */
-const mapDispatch = (/* dispatch */) => ({
+const mapDispatch = dispatch => ({
     onDeviceSelected: device => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
+        dispatch(openDevice(device));
     },
     // releaseCurrentDevice: () => {
     //     logger.info('Will set up selected device');
@@ -88,6 +91,7 @@ const mapDispatch = (/* dispatch */) => ({
     // },
     onDeviceDeselected: () => {
         logger.info('Deselected device');
+        dispatch(closeDevice());
     },
 });
 

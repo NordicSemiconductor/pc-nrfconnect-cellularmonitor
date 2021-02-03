@@ -34,10 +34,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import produce from 'immer';
+import { NrfConnectState, Serialport } from 'pc-nrfconnect-shared';
 
-import './info.scss';
+import { ActionType } from './actions';
 
-export default () => {
-    return <h3 className="title">Info</h3>;
+interface State {
+    readonly modemPort: Serialport;
+}
+
+const initialState: State = {
+    modemPort: null,
 };
+
+export default produce((draft: Draft<State>, action: AppAction) => {
+    switch (action.type) {
+        case ActionType.SET_MODEM_PORT:
+            draft.modemPort = action.modemPort;
+            break;
+        default:
+    }
+}, initialState);
+
+type AppState = NrfConnectState<State>;
+
+export const getModemPort = (state: AppState) => state.app.modemPort;

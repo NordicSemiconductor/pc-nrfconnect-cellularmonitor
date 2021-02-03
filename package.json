@@ -31,10 +31,21 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
+    "ansi-colors": "^4.1.1",
+    "immer": "^8.0.1",
+    "markdown-to-ansi": "^0.1.1",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.1",
+    "pc-xterm-lib": "github:NordicPlayground/pc-xterm-lib",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-redux": "7.2.0"
+    "react-redux": "7.2.0",
+    "react-resize-detector": "^5.2.0",
+    "serialport": "^9.0.6",
+    "xterm-addon-fit": "^0.4.0",
+    "xterm-addon-search": "^0.7.0",
+    "xterm-addon-search-bar": "^0.2.0",
+    "xterm-addon-web-links": "^0.4.0",
+    "xterm-for-react": "^1.0.4"
   },
   "dependencies": {},
   "eslintConfig": {
