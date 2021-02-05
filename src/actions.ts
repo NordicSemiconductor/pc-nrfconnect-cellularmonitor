@@ -34,20 +34,33 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Serialport } from 'pc-nrfconnect-shared';
+import ModemPort from './nRFmodem';
 
 export enum ActionType {
     SET_MODEM_PORT = 'SET_MODEM_PORT',
+    SET_KNOWN_AT_COMMANDS = 'SET_KNOWN_AT_COMMANDS',
 }
 
 interface SetModemPort {
     type: ActionType.SET_MODEM_PORT;
-    modemPort: Serialport | null;
+    modemPort: ModemPort | null;
 }
 
-export const setModemPort = (modemPort = null): SetModemPort => ({
+export const setModemPort = (modemPort: ModemPort | null): SetModemPort => ({
     type: ActionType.SET_MODEM_PORT,
     modemPort,
 });
 
-export type AppAction = SetModemPort;
+interface SetKnownATCommands {
+    type: ActionType.SET_KNOWN_AT_COMMANDS;
+    knownATCommands: Array<string>;
+}
+
+export const setKnownATCommands = (
+    knownATCommands: Array<string>
+): SetKnownATCommands => ({
+    type: ActionType.SET_KNOWN_AT_COMMANDS,
+    knownATCommands,
+});
+
+export type AppAction = SetModemPort | SetKnownAtCommands;

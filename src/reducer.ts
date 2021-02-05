@@ -34,17 +34,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import produce from 'immer';
-import { NrfConnectState, Serialport } from 'pc-nrfconnect-shared';
+import produce, { Draft } from 'immer';
+import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { ActionType } from './actions';
+import { ActionType, AppAction } from './actions';
+import ModemPort from './nRFmodem';
 
 interface State {
-    readonly modemPort: Serialport;
+    readonly modemPort: ModemPort | null;
+    readonly knownATCommands: Array<string>;
 }
 
 const initialState: State = {
     modemPort: null,
+    knownATCommands: [],
 };
 
 export default produce((draft: Draft<State>, action: AppAction) => {
@@ -52,10 +55,15 @@ export default produce((draft: Draft<State>, action: AppAction) => {
         case ActionType.SET_MODEM_PORT:
             draft.modemPort = action.modemPort;
             break;
+        case ActionType.SET_KNOWN_AT_COMMANDS:
+            draft.knownATCommands = action.knownATCommands;
+            break;
         default:
     }
 }, initialState);
 
-type AppState = NrfConnectState<State>;
+export type RootState = NrfConnectState<State>;
 
-export const getModemPort = (state: AppState) => state.app.modemPort;
+export const getModemPort = (state: RootState) => state.app.modemPort;
+export const getKnownATCommands = (state: RootState) =>
+    state.app.knownATCommands;

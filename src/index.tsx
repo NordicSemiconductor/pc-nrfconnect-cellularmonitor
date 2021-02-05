@@ -37,9 +37,9 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
+import Dashboard from './Dashboard/Dashboard';
 import DeviceSelector from './DeviceSelector';
 import GPS from './GPS/GPS';
-import Info from './Info/Info';
 import reducer from './reducer';
 import SidePanel from './SidePanel/SidePanel';
 import Terminal from './Terminal/Terminal';
@@ -52,7 +52,7 @@ export default () => (
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
         panes={[
-            ['Info', Info],
+            ['Dashboard', Dashboard],
             ['Terminal', Terminal],
             ['GPS', GPS],
         ]}

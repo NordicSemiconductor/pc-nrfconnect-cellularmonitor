@@ -31,11 +31,11 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
+    "@types/serialport": "^8.0.1",
     "ansi-colors": "^4.1.1",
     "immer": "^8.0.1",
     "markdown-to-ansi": "^0.1.1",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.2",
-    "pc-xterm-lib": "github:NordicPlayground/pc-xterm-lib",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "7.2.0",

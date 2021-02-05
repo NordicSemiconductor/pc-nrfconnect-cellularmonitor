@@ -38,11 +38,13 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { withResizeDetector } from 'react-resize-detector';
 import * as c from 'ansi-colors';
-import { number } from 'prop-types';
+import * as md from 'markdown-to-ansi';
 import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
-import { getModemPort } from '../reducer';
+import * as ATCommands from '../nRFmodem/ATCommands';
+import { getKnownATCommands, getModemPort } from '../reducer';
+import { NrfTerminalCommander, NrfTerminalConfig } from './pc-xterm-lib';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
@@ -52,19 +54,58 @@ const fitAddon = new FitAddon();
 let output = '';
 const EOL = '\n';
 
-const TerminalComponent = ({ width, height }) => {
-    const xtermRef = useRef(null);
+// const atCommandList = [];
+const completer = line => {
+    const completions = ['/help']; // , ...knownATCommands
+    const lastWord = line.substr(line.lastIndexOf(' ') + 1);
+    const hits = completions.filter(str => str.startsWith(lastWord));
+    return [hits.length ? hits : completions, lastWord];
+};
+
+const config: NrfTerminalConfig = {
+    completions: [],
+    commands: {
+        my_custom_command: () => {
+            console.log('Doing something...');
+        },
+    },
+    prompt: 'AT[:lineCount]>',
+    hoverMetadata: [],
+    // showTimestamps: true,
+};
+
+const nrfTerminalCommander = new NrfTerminalCommander(config);
+
+// const help = topic => {
+//     const key = Object.keys(ATCommands).find(cmd => cmd.replace('__', '%').replace('_', '+') === topic);
+//     if (!key) return;
+//     const at = new ATCommands[key];
+//     console.log(c.green(`Main:\n${md(at.manual.main)}\n\n` +
+//     `Set command:\n${md(at.manual.set)}\n\n` +
+//     `Read command:\n${md(at.manual.read)}\n\n` +
+//     `Test command:\n${md(at.manual.test)}\n`));
+// }
+
+const TerminalComponent = ({
+    width,
+    height,
+}: {
+    width: number;
+    height: number;
+}) => {
+    const xtermRef: React.MutableRefObject<XTerm | null> = useRef(null);
 
     const modemPort = useSelector(getModemPort);
+    const knownATCommands = useSelector(getKnownATCommands);
 
     useEffect(() => {
         if (!modemPort) {
-            xtermRef.current.terminal.writeln(
+            xtermRef.current?.terminal.writeln(
                 'Open a device to activate the terminal.'
             );
             return;
         }
-        xtermRef.current.terminal.clear();
+        xtermRef.current?.terminal.clear();
         modemPort.on('rx', (data: string, unsolicited: boolean) => {
             let str = data
                 // .replace(/\r$/, EOL)
@@ -75,7 +116,13 @@ const TerminalComponent = ({ width, height }) => {
             if (unsolicited) {
                 str = c.italic(str);
             }
-            xtermRef.current.terminal.write(str);
+            xtermRef.current?.terminal.write(str);
+        });
+        modemPort.on('line', line => {
+            xtermRef.current?.terminal.writeln(c.blue(line));
+        });
+        modemPort.on('response', () => {
+            // prompt here
         });
     }, [modemPort]);
 
@@ -86,15 +133,14 @@ const TerminalComponent = ({ width, height }) => {
     }, [width, height]);
 
     useEffect(() => {
-        xtermRef.current.terminal.parser.registerCsiHandler(
-            { final: 'H' },
-            console.log
-        );
-    }, []);
+        // nrfTerminalCommander.autocompleteAddon.setCompletions(knownATCommands);
+    }, [knownATCommands]);
+
     const onData = useCallback(
         (data: string) => {
             const str = data.replace('\r', EOL);
-            xtermRef.current.terminal.write(str);
+            console.log(str);
+            xtermRef.current?.terminal.write(str);
 
             output = `${output}${str}`;
             let i: number;
@@ -103,7 +149,22 @@ const TerminalComponent = ({ width, height }) => {
                 if (modemPort) {
                     const line = output.slice(0, i + EOL.length);
                     if (line !== EOL) {
-                        modemPort.writeCommand(line);
+                        console.log('send', line);
+                        if (line.startsWith('AT')) {
+                            modemPort.writeAT(line.trim(), (err, lines) => {
+                                const color = err ? c.red : c.yellow;
+                                lines.forEach(l => {
+                                    xtermRef.current?.terminal.writeln(
+                                        color(l)
+                                    );
+                                });
+                                // prompt here
+                            });
+                            // } else if (line.startsWith('/help')) {
+                            //     help(line.split(' ')[1]);
+                            // } else if (line.startsWith('/quit')) {
+                            //     port.close(process.exit);
+                        }
                     }
                 }
                 output = output.slice(i + EOL.length);
@@ -115,10 +176,12 @@ const TerminalComponent = ({ width, height }) => {
     return (
         <XTerm
             ref={xtermRef}
-            addons={[fitAddon]}
+            addons={[
+                fitAddon,
+                // nrfTerminalCommander,
+            ]}
             className="terminal-container"
             options={{
-                // rendererType: 'dom',
                 convertEol: true,
                 theme: {
                     foreground: colors.gray50,
@@ -128,11 +191,6 @@ const TerminalComponent = ({ width, height }) => {
             onData={onData}
         />
     );
-};
-
-TerminalComponent.propTypes = {
-    width: number.isRequired,
-    height: number.isRequired,
 };
 
 export default withResizeDetector(TerminalComponent);

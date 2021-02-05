@@ -5,7 +5,7 @@
  * The general commands are for the identification of the device.
  */
 
-import { ATCommand } from './at_command';
+import ATCommand from './ATCommand';
 
 // 4.1
 export class AT_CGMI extends ATCommand {
@@ -34,7 +34,7 @@ The following command example reads the manufacturer ID:
 */
         return {
             command: this.command,
-            parser(input) {
+            parser(input: string) {
                 return input;
             },
         };
@@ -68,7 +68,7 @@ The following command example reads the model ID:
 */
         return {
             command: this.command,
-            parser(input) {
+            parser(input: string) {
                 return input;
             },
         };
@@ -102,7 +102,7 @@ The following command example reads the revision ID:
 */
         return {
             command: this.command,
-            parser(input) {
+            parser(input: string) {
                 return input;
             },
         };
@@ -173,10 +173,10 @@ The following command example reads the IMEI:
         const id = ['sn', 'imei', 'imeisv', 'svn'][snt];
         return {
             command: `AT${this.command}=${snt}`,
-            parser(input) {
-                const match = /\+CGSN: "(?<id>.*?)"/.exec(input)[0];
+            parser(input: string) {
+                const match = /\+CGSN: "(?<id>.*?)"/.exec(input)?.[0];
                 return {
-                    [id]: match.id,
+                    [id]: match?.id,
                 };
             },
         };
@@ -206,10 +206,10 @@ Example:
 */
         return {
             command: `AT${this.command}=?`,
-            parser(input) {
-                const match = /\+CGSN: "(?<id_list>.*?)"/.exec(input)[0];
+            parser(input: string) {
+                const match = /\+CGSN: "(?<id_list>.*?)"/.exec(input)?.[0];
                 return {
-                    id_list: match.id_list,
+                    id_list: match?.id_list,
                 };
             },
         };
@@ -253,7 +253,7 @@ The following command example reads the IMSI string:
 */
         return {
             command: `AT${this.command}`,
-            parser(input) {
+            parser(input: string) {
                 return input;
             },
         };
@@ -294,8 +294,8 @@ The following command example requests short software identification:
 */
         return {
             command: `AT${this.command}`,
-            parser(input) {
-                return /%SHORTSWVER: (?<version_string>.*)/.exec(input)[0];
+            parser(input: string) {
+                return /%SHORTSWVER: (?<version_string>.*)/.exec(input)?.[0];
             },
         };
     }
@@ -335,8 +335,8 @@ The following command example requests hardware identification:
 */
         return {
             command: `AT${this.command}`,
-            parser(input) {
-                return /%HWVERSION: (?<version_string>.*)/.exec(input)[0];
+            parser(input: string) {
+                return /%HWVERSION: (?<version_string>.*)/.exec(input)?.[0];
             },
         };
     }
@@ -378,8 +378,8 @@ The following command example requests the UUID of a modem build:
 */
         return {
             commnad: `AT${this.command}`,
-            parser(input) {
-                return /%XMODEMUUID: (?<UUID>.*)/.exec(input)[0];
+            parser(input: string) {
+                return /%XMODEMUUID: (?<UUID>.*)/.exec(input)?.[0];
             },
         };
     }
@@ -421,8 +421,8 @@ The following command example requests the _ICCID_ of the _USIM_ card:
 */
         return {
             command: `AT${this.command}`,
-            parser(input) {
-                return /%XICCID: (?<ICCID>.*)/.exec(input)[0];
+            parser(input: string) {
+                return /%XICCID: (?<ICCID>.*)/.exec(input)?.[0];
             },
         };
     }
@@ -479,10 +479,10 @@ The following command example reads the current values:
 */
         return {
             command: `AT${this.command}?`,
-            parser(input) {
+            parser(input: string) {
                 return /\+ODIS: "(?<HDMAN>.*?)","(?<HDMOD>.*?)","(?<HDSW>.*?)"/.exec(
                     input
-                )[0];
+                )?.[0];
             },
         };
     }
@@ -529,10 +529,10 @@ The following is an example of an unsolicited ODIS notification:
 */
         return {
             command: `AT${this.command}=${enable}`,
-            parser(input) {
+            parser(input: string) {
                 return /\+ODISNTF: "(?<HDID>.*?)","(?<HDMAN>.*?)","(?<HDMOD>.*?)","(?<HDSW>.*?)"/.exec(
                     input
-                )[0];
+                )?.[0];
             },
         };
     }

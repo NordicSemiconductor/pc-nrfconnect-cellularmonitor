@@ -36,8 +36,8 @@
 
 import React from 'react';
 
-import './info.scss';
+import './dashboard.scss';
 
 export default () => {
-    return <h3 className="title">Info</h3>;
+    return <h3 className="title">Dashboard</h3>;
 };

@@ -35,16 +35,42 @@
  */
 
 import { logger } from 'pc-nrfconnect-shared';
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
-import { setModemPort } from '../actions';
+import { setKnownATCommands, setModemPort } from '../actions';
 import ModemPort from '../nRFmodem';
+import { RootState } from '../reducer';
+
+type TAction = ThunkAction<void, RootState, null, Action<unknown>>;
+
+const checkModemResponse = (): TAction => async (_, getState) => {
+    const { modemPort } = getState().app;
+    try {
+        await modemPort?.writeAT('AT');
+        logger.info('Modem is responding');
+    } catch (err) {
+        logger.error(err);
+    }
+};
+
+const queryAllKnownCommands = (): TAction => async (dispatch, getState) => {
+    const { modemPort } = getState().app;
+    try {
+        const lines = await modemPort?.writeAT('AT+CLAC');
+        lines?.pop(); // remove OK
+        dispatch(setKnownATCommands(lines));
+    } catch (err) {
+        logger.error(err);
+    }
+};
 
 export const closeDevice = () => async (dispatch, getState) => {
     const { modemPort } = getState().app;
     if (modemPort) {
         logger.info(`Closing modem port`);
         modemPort.close(() => {
-            dispatch(setModemPort());
+            dispatch(setModemPort(null));
         });
     }
 };
@@ -56,5 +82,7 @@ export const openDevice = device => async dispatch => {
         logger.info(`Opening modem port ${path}`);
         const modemPort = new ModemPort(path);
         dispatch(setModemPort(modemPort));
+        await dispatch(checkModemResponse());
+        await dispatch(queryAllKnownCommands());
     }
 };

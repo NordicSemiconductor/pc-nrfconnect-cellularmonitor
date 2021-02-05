@@ -14,7 +14,7 @@ export class AT_CFUN extends ATCommand {
         super('+CFUN');
     }
 
-    set(fun) {
+    set(fun: number) {
         /*!
 The command sets the functional mode to Minimum (Power off), Normal, or
 Offline mode (Flight mode). There is a specific mode for Flight mode with UICC
@@ -64,7 +64,7 @@ The following command example activates the modem Normal mode:
 */
         return {
             command: `AT${this.command}=${fun}`,
-            parser(input) {
+            parser(input: string) {
                 return input;
             },
         };
