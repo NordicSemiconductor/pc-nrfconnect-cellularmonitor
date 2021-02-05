@@ -1,67 +1,12 @@
-/* Mobile termination control and status commands
- *
- * Mobile termination control and status commands are used for mobile
- * terminated power and indicator handling.Two commands are listed for
- * accessing SIM / Universal Integrated Circuit Card(UICC) database records.
- */
-
-const { ATCommand } = require('./at_command');
+import ATCommand from './ATCommand';
 
 // 5.1
 export class AT_CFUN extends ATCommand {
-    /*! Functional mode */
     constructor() {
         super('+CFUN');
     }
 
     set(fun: number) {
-        /*!
-The command sets the functional mode to Minimum (Power off), Normal, or
-Offline mode (Flight mode). There is a specific mode for Flight mode with UICC
-on. It is also possible to activate or deactivate LTE or GNSS separately.
-
-Syntax:
-
-    +CFUN=<fun>
-
-The set command parameters and their defined values are the following:
-
-**<fun>**
-    0 – Sets the device to minimum functionality. Disables both transmit and
-        receive RF circuits and deactivates LTE and Global Navigation Satellite
-        System (GNSS) services.
-    1 – Sets the device to full functionality.
-    4 – Sets the device to flight mode. Disables both transmit and receive RF
-        circuits and deactivates LTE and GNSS services. 20 – Deactivates LTE
-        without shutting down GNSS services.
-    21 – Activates LTE without changing GNSS.
-    30 – Deactivates GNSS without shutting down LTE services.
-    31 – Activates GNSS without changing LTE.
-    40 – Deactivates UICC.
-    41 – Activates UICC.
-    44 – Sets the device to flight mode without shutting down UICC.
-
-Note:
-- **%XSYSTEMMODE** should be used for enabling system modes. It is possible to
-  activate enabled modes.
-- The response to changing to Normal mode could be ERROR if the _SIM_ card has failed.
-- Commanding the device to Power off or to Offline mode might take some time
-  if signaling with the network is needed.
-- When commanding the device to power off, wait for OK to make sure that
-  _Non-volatile Memory_ _(NVM)_ has been updated.
-- CFUN=41 is allowed only when LTE Cat-M1 or LTE Cat-NB1 is enabled by **%XSYSTEMMODE**.
-- _UICC_ initialization is started in modes CFUN=1, CFUN=21, and CFUN=41.
-  **%XSIM** indications shall be followed for the _UICC_ state.
-- The configuration made with an AT command can be stored in _NVM_ using AT+CFUN=0
-  if the option is mentioned in the description of the command. This is useful
-  if the command relates to a permanent hardware configuration, because it
-  avoids the need to give the command every time in the beginning of the application.
-
-The following command example activates the modem Normal mode:
-
-    AT+CFUN=1
-    OK
-*/
         return {
             command: `AT${this.command}=${fun}`,
             parser(input: string) {
@@ -71,27 +16,6 @@ The following command example activates the modem Normal mode:
     }
 
     read() {
-        /*!
-The command reads the current functional mode.
-
-Response syntax:
-
-    +CFUN: <fun>
-
-The read response parameter and its defined value is the following:
-
-**<fun>**
-    0 – Power off and store. RF circuits are disabled by deactivating LTE and GNSS services.
-    1 – Normal mode. The active mode is either LTE or GNSS, or both.
-        Full functional mode. Active modes depend on %XSYSTEMMODE setting.
-    4 – Flight mode. RF circuits are disabled by deactivating LTE and GNSS services.
-
-The following command example reads the current functional mode:
-
-    AT+CFUN?
-    +CFUN: 1
-    OK
-*/
         return {
             command: `AT${this.command}?`,
             parser(input) {
@@ -101,35 +25,6 @@ The following command example reads the current functional mode:
     }
 
     test() {
-        /*!
-The test command lists supported functional modes.
-
-Response syntax:
-
-    +CFUN: (list of supported <fun>s)
-
-The response parameters and their defined values are the following:
-
-**<fun>**
-    0 – Sets the device to minimum functionality. Disables both transmit and receive
-        RF circuits and deactivates LTE and GNSS services.
-    1 – Sets the device to full functionality.
-    4 – Sets the device to flight mode. Disables both transmit and receive RF
-        circuits and deactivates LTE and GNSS services.
-    20 – Deactivates LTE without shutting down GNSS services.
-    21 – Activates LTE without changing GNSS.
-    30 – Deactivates GNSS without shutting down LTE services.
-    31 – Activates GNSS without changing LTE.
-    40 – Deactivates UICC.
-    41 – Activates UICC.
-    44 – Sets the device to flight mode without shutting down UICC.
-
-The following command example returns the supported functional modes.
-
-    AT+CFUN=?
-    +CFUN: (0,1,4,20,21,30,31,40,41,44)
-    OK
-*/
         return {
             command: `AT${this.command}=?`,
             parser(input) {

@@ -1,14 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
-const hereDoc = (func: Function) => {
-    let s = func.toString();
-    s = s.substr(s.indexOf('/*!') + 3);
-    return s.substr(0, s.indexOf('*/')).trim();
+import doc4 from './General.yaml';
+import doc5 from './MobileTermination.yaml';
+
+const doc = {
+    ...doc4,
+    ...doc5,
 };
 
 export default class ATCommand {
     command: string;
-
-    manual: { main: string; set: string; read: string; test: string };
+    doc: { description: string; set?: string; read?: string; test?: string };
 
     set() {
         /*! The set command is not supported. */
@@ -33,11 +33,6 @@ export default class ATCommand {
 
     constructor(command: string) {
         this.command = command;
-        this.manual = {
-            main: hereDoc(this.constructor),
-            set: hereDoc(this.set),
-            read: hereDoc(this.read),
-            test: hereDoc(this.test),
-        };
+        this.doc = doc[command];
     }
 }

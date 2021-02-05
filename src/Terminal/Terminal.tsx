@@ -50,6 +50,8 @@ import 'xterm/css/xterm.css';
 import './terminal.scss';
 import colors from './colors.scss';
 
+console.log(ATCommands);
+
 const fitAddon = new FitAddon();
 let output = '';
 const EOL = '\n';
