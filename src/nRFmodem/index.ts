@@ -19,7 +19,7 @@ class ModemPort extends SerialPort {
     private parseLine(line: string) {
         let error;
         if (line === 'OK') error = null;
-        if (line === 'ERROR') error = 'ERROR';
+        else if (line === 'ERROR') error = 'ERROR';
         else {
             error = line.match(/\+CM[ES] ERROR: (?<cause_value>.*)/)?.groups
                 ?.cause_value;
