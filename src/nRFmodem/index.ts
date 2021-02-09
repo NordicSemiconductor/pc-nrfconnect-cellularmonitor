@@ -25,12 +25,11 @@ class ModemPort extends SerialPort {
                 ?.cause_value;
         }
         if (error !== undefined) {
-            this.incomingLines.push(line);
             this.emit('response', {
-                lines: this.incomingLines.slice(0),
+                lines: [...this.incomingLines, line],
                 error,
             });
-            this.incomingLines.splice(0);
+            this.incomingLines = [];
         } else if (this.waitingForResponse) {
             this.incomingLines.push(line);
         } else {
