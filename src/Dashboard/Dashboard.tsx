@@ -34,18 +34,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect } from 'react';
-import { logger } from 'pc-nrfconnect-shared';
+import React from 'react';
 
-import './info.scss';
+import './dashboard.scss';
 
 export default () => {
-    useEffect(() => {
-        logger.info('Showing Info pane');
-        return () => {
-            logger.info('Hiding Info pane');
-        };
-    }, []);
-
-    return <h3 className="title">Info</h3>;
+    return <h3 className="title">Dashboard</h3>;
 };
