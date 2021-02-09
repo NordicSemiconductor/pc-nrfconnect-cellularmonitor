@@ -31,15 +31,16 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
+    "@types/react-redux": "7.1.16",
+    "@types/serialport": "^8.0.1",
     "immer": "^8.0.1",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-redux": "7.2.0"
+    "react-redux": "7.2.0",
+    "serialport": "^9.0.6"
   },
-  "dependencies": {
-    "@types/react-redux": "7.1.16"
-  },
+  "dependencies": {},
   "eslintConfig": {
     "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
   },

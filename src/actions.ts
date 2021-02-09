@@ -34,28 +34,21 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import produce, { Draft } from 'immer';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { AnyAction } from 'redux';
 
-import { ActionType } from './actions';
 import ModemPort from './nRFmodem';
 
-interface State {
-    readonly modemPort: ModemPort | null;
+export enum ActionType {
+    SET_MODEM_PORT = 'SET_MODEM_PORT',
+    SET_KNOWN_AT_COMMANDS = 'SET_KNOWN_AT_COMMANDS',
 }
 
-const initialState: State = {
-    modemPort: null,
-};
+interface SetModemPort extends AnyAction {
+    type: ActionType.SET_MODEM_PORT;
+    modemPort: ModemPort | null;
+}
 
-export default produce((draft: Draft<State>, action: AnyAction) => {
-    switch (action.type) {
-        case ActionType.SET_MODEM_PORT:
-            draft.modemPort = action.modemPort;
-            break;
-        default:
-    }
-}, initialState);
-
-export type RootState = NrfConnectState<State>;
+export const setModemPort = (modemPort: ModemPort | null): SetModemPort => ({
+    type: ActionType.SET_MODEM_PORT,
+    modemPort,
+});

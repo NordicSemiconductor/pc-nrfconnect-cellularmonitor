@@ -34,28 +34,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import produce, { Draft } from 'immer';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
-import { AnyAction } from 'redux';
+import { Device, logger } from 'pc-nrfconnect-shared';
 
-import { ActionType } from './actions';
-import ModemPort from './nRFmodem';
+import { setModemPort } from '../actions';
+import ModemPort from '../nRFmodem';
+import { TAction } from '../thunk';
 
-interface State {
-    readonly modemPort: ModemPort | null;
-}
-
-const initialState: State = {
-    modemPort: null,
+export const closeDevice = (): TAction => async (dispatch, getState) => {
+    const { modemPort } = getState().app;
+    if (modemPort) {
+        logger.info(`Closing modem port`);
+        modemPort.close(() => {
+            dispatch(setModemPort(null));
+        });
+    }
 };
 
-export default produce((draft: Draft<State>, action: AnyAction) => {
-    switch (action.type) {
-        case ActionType.SET_MODEM_PORT:
-            draft.modemPort = action.modemPort;
-            break;
-        default:
+export const openDevice = (device: Device): TAction => async dispatch => {
+    await dispatch(closeDevice());
+    const path = device?.serialport?.path;
+    if (path) {
+        logger.info(`Opening modem port ${path}`);
+        const modemPort = new ModemPort(path);
+        dispatch(setModemPort(modemPort));
     }
-}, initialState);
-
-export type RootState = NrfConnectState<State>;
+};
