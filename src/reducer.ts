@@ -59,3 +59,5 @@ export default produce((draft: Draft<State>, action: AnyAction) => {
 }, initialState);
 
 export type RootState = NrfConnectState<State>;
+
+export const getModemPort = (state: RootState) => state.app.modemPort;
