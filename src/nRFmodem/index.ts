@@ -1,5 +1,4 @@
-import Readline from '@serialport/parser-readline';
-import SerialPort from 'serialport';
+import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
 
@@ -12,7 +11,7 @@ class ModemPort extends SerialPort {
         this.waitingForResponse = false;
 
         const lines: string[] = [];
-        this.pipe(new Readline({ delimiter: '\r\n' })).on(
+        this.pipe(new parsers.Readline({ delimiter: '\r\n' })).on(
             'data',
             (line: string) => {
                 let error;
