@@ -31,7 +31,8 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.2",
+    "immer": "^8.0.1",
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "7.2.0"
