@@ -34,27 +34,21 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import produce, { Draft } from 'immer';
+import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import Dashboard from './Dashboard/Dashboard';
-import DeviceSelector from './DeviceSelector';
-import GPS from './GPS/GPS';
-import reducer from './reducer';
-import SidePanel from './SidePanel/SidePanel';
-import Terminal from './Terminal/Terminal';
+interface State {
+    readonly modemPort: null;
+}
 
-import './index.scss';
+const initialState: State = {
+    modemPort: null,
+};
 
-export default () => (
-    <App
-        appReducer={reducer}
-        deviceSelect={<DeviceSelector />}
-        sidePanel={<SidePanel />}
-        panes={[
-            ['Dashboard', Dashboard],
-            ['Terminal', Terminal],
-            ['GPS', GPS],
-        ]}
-    />
-);
+export default produce((draft: Draft<State>, action: { type: string }) => {
+    switch (action.type) {
+        default:
+    }
+}, initialState);
+
+export type RootState = NrfConnectState<State>;
