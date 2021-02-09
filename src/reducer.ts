@@ -36,8 +36,9 @@
 
 import produce, { Draft } from 'immer';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
+import { AnyAction } from 'redux';
 
-import { ActionType, AppAction } from './actions';
+import { ActionType } from './actions';
 import ModemPort from './nRFmodem';
 
 interface State {
@@ -48,7 +49,7 @@ const initialState: State = {
     modemPort: null,
 };
 
-export default produce((draft: Draft<State>, action: AppAction) => {
+export default produce((draft: Draft<State>, action: AnyAction) => {
     switch (action.type) {
         case ActionType.SET_MODEM_PORT:
             draft.modemPort = action.modemPort;
