@@ -19,12 +19,8 @@ class ModemPort extends SerialPort {
                 if (line === 'OK') error = null;
                 if (line === 'ERROR') error = 'ERROR';
                 else {
-                    const match = /\+CM[ES] ERROR: (?<cause_value>.*)/.exec(
-                        line
-                    );
-                    if (match) {
-                        error = match[0].groups.cause_value;
-                    }
+                    error = line.match(/\+CM[ES] ERROR: (?<cause_value>.*)/)
+                        ?.groups?.cause_value;
                 }
                 if (error !== undefined) {
                     lines.push(line);
