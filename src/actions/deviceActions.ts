@@ -35,14 +35,10 @@
  */
 
 import { Device, logger } from 'pc-nrfconnect-shared';
-import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 
 import { setModemPort } from '../actions';
 import ModemPort from '../nRFmodem';
-import { RootState } from '../reducer';
-
-type TAction = ThunkAction<void, RootState, null, Action<unknown>>;
+import { TAction } from '../thunk';
 
 export const closeDevice = (): TAction => async (dispatch, getState) => {
     const { modemPort } = getState().app;
