@@ -37,16 +37,22 @@
 import produce, { Draft } from 'immer';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
+import { ActionType, AppAction } from './actions';
+import ModemPort from './nRFmodem';
+
 interface State {
-    readonly modemPort: null;
+    readonly modemPort: ModemPort | null;
 }
 
 const initialState: State = {
     modemPort: null,
 };
 
-export default produce((draft: Draft<State>, action: { type: string }) => {
+export default produce((draft: Draft<State>, action: AppAction) => {
     switch (action.type) {
+        case ActionType.SET_MODEM_PORT:
+            draft.modemPort = action.modemPort;
+            break;
         default:
     }
 }, initialState);

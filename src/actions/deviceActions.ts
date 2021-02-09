@@ -34,65 +34,32 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
-import { Device, DeviceSelector, logger } from 'pc-nrfconnect-shared';
+import { Device, logger } from 'pc-nrfconnect-shared';
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
-import { closeDevice, openDevice } from './actions/deviceActions';
+import { setModemPort } from '../actions';
+import ModemPort from '../nRFmodem';
+import { RootState } from '../reducer';
 
-/**
- * Configures which device types to show in the device selector.
- * The config format is described on
- * https://github.com/NordicSemiconductor/nrf-device-lister-js.
- */
-const deviceListing = {
-    nordicUsb: true,
-    serialport: true,
-    jlink: true,
+type TAction = ThunkAction<void, RootState, null, Action<unknown>>;
+
+export const closeDevice = (): TAction => async (dispatch, getState) => {
+    const { modemPort } = getState().app;
+    if (modemPort) {
+        logger.info(`Closing modem port`);
+        modemPort.close(() => {
+            dispatch(setModemPort(null));
+        });
+    }
 };
 
-/**
- * Configures how devices should be set up (programmed) when selected.
- * The config format is described on
- * https://github.com/NordicSemiconductor/nrf-device-setup-js.
- *
- * Currently no setup is done. If you need one, set deviceSetup appropriately
- * and add it in mapState below.
- *
- * To refer to files provided by your app, use getAppFile exported by
- * pc-nrfconnect-shared
- */
-// const deviceSetup = {
-// dfu: {},
-// jprog: {},
-// };
-
-const mapState = () => ({
-    deviceListing,
-    // deviceSetup,
-});
-
-/*
- * In these callbacks you may react on events when users (de)selected a device.
- * Leave out callbacks you do not need.
- *
- * Note that the callbacks releaseCurrentDevice and onDeviceIsReady
- * are only invoked, if a deviceSetup is defined.
- */
-const mapDispatch = dispatch => ({
-    onDeviceSelected: (device: Device) => {
-        logger.info(`Selected device with s/n ${device.serialNumber}`);
-        dispatch(openDevice(device));
-    },
-    // releaseCurrentDevice: () => {
-    //     logger.info('Will set up selected device');
-    // },
-    // onDeviceIsReady: device => {
-    //     logger.info(`Device with s/n ${device.serialNumber} was set up with a firmware`);
-    // },
-    onDeviceDeselected: () => {
-        logger.info('Deselected device');
-        dispatch(closeDevice());
-    },
-});
-
-export default connect(mapState, mapDispatch)(DeviceSelector);
+export const openDevice = (device: Device): TAction => async dispatch => {
+    await dispatch(closeDevice());
+    const path = device?.serialport?.path;
+    if (path) {
+        logger.info(`Opening modem port ${path}`);
+        const modemPort = new ModemPort(path);
+        dispatch(setModemPort(modemPort));
+    }
+};
