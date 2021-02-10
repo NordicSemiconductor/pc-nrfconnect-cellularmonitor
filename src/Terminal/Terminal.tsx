@@ -38,6 +38,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import ReactResizeDetector from 'react-resize-detector';
 import * as c from 'ansi-colors';
+import { colors } from 'pc-nrfconnect-shared';
 import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
@@ -45,7 +46,6 @@ import { getModemPort } from '../reducer';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
-import colors from './colors.scss';
 
 const fitAddon = new FitAddon();
 let output = '';
@@ -129,6 +129,10 @@ const TerminalComponent = ({
         />
     );
 };
+
+// TODO: Replace ReactResizeDetector with useResizeDetector hook when the
+// related issue is solved:
+// https://github.com/maslianok/react-resize-detector/issues/130
 
 export default () => (
     <ReactResizeDetector handleWidth handleHeight>
