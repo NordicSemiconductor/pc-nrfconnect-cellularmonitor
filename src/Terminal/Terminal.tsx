@@ -34,18 +34,110 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect } from 'react';
-import { logger } from 'pc-nrfconnect-shared';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import ReactResizeDetector from 'react-resize-detector';
+import * as c from 'ansi-colors';
+import { colors } from 'pc-nrfconnect-shared';
+import { FitAddon } from 'xterm-addon-fit';
+import { XTerm } from 'xterm-for-react';
 
+import { getModemPort } from '../reducer';
+
+import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-export default () => {
-    useEffect(() => {
-        logger.info('Showing Terminal pane');
-        return () => {
-            logger.info('Hiding Terminal pane');
-        };
-    }, []);
+const fitAddon = new FitAddon();
+let output = '';
+const EOL = '\n';
 
-    return <h3 className="title">Terminal</h3>;
+const TerminalComponent = ({
+    width,
+    height,
+}: {
+    width: number;
+    height: number;
+}) => {
+    const xtermRef: React.MutableRefObject<XTerm | null> = useRef(null);
+
+    const modemPort = useSelector(getModemPort);
+
+    useEffect(() => {
+        if (!modemPort) {
+            xtermRef.current?.terminal.writeln(
+                'Open a device to activate the terminal.'
+            );
+            return;
+        }
+        xtermRef.current?.terminal.clear();
+        modemPort.on('line', line => {
+            xtermRef.current?.terminal.writeln(c.blue(line));
+        });
+        modemPort.on('response', () => {
+            // prompt here
+        });
+    }, [modemPort]);
+
+    useEffect(() => {
+        if (width * height > 0) fitAddon.fit();
+    }, [width, height]);
+
+    const onData = useCallback(
+        (data: string) => {
+            const str = data.replace('\r', EOL);
+            xtermRef.current?.terminal.write(str);
+
+            output = `${output}${str}`;
+            let i: number;
+            // eslint-disable-next-line no-cond-assign
+            while ((i = output.indexOf(EOL)) > -1) {
+                if (modemPort) {
+                    const line = output.slice(0, i + EOL.length);
+                    if (line !== EOL) {
+                        if (line.startsWith('AT')) {
+                            modemPort.writeAT(line.trim(), (err, lines) => {
+                                const color = err ? c.red : c.yellow;
+                                lines.forEach(l => {
+                                    xtermRef.current?.terminal.writeln(
+                                        color(l)
+                                    );
+                                });
+                                // prompt here
+                            });
+                        }
+                    }
+                }
+                output = output.slice(i + EOL.length);
+            }
+        },
+        [modemPort]
+    );
+
+    return (
+        <XTerm
+            ref={xtermRef}
+            addons={[fitAddon]}
+            className="terminal-container"
+            options={{
+                convertEol: true,
+                theme: {
+                    foreground: colors.gray50,
+                    background: colors.gray900,
+                },
+            }}
+            onData={onData}
+        />
+    );
 };
+
+// TODO: Replace ReactResizeDetector with useResizeDetector hook when the
+// related issue is solved:
+// https://github.com/maslianok/react-resize-detector/issues/130
+
+export default () => (
+    <ReactResizeDetector handleWidth handleHeight>
+        {({ width, height }) => (
+            <TerminalComponent width={width || 0} height={height || 0} />
+        )}
+    </ReactResizeDetector>
+);

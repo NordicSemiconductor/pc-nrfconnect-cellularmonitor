@@ -1,1 +1,9 @@
 @import "~pc-nrfconnect-shared/src/variables";
+
+.terminal-container {
+    height: 100%;
+
+    .xterm.terminal {
+        padding: 0.25rem;
+    }
+}
