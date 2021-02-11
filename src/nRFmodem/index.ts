@@ -1,8 +1,7 @@
 import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
-console.log('parsers');
-console.log(parsers.Readline);
+
 class ModemPort extends SerialPort {
     private waitingForResponse = false;
 
