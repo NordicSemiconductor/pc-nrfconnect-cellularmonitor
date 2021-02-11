@@ -34,21 +34,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { AnyAction } from 'redux';
+import { createAction } from '@reduxjs/toolkit';
 
 import ModemPort from './nRFmodem';
 
 export enum ActionType {
-    SET_MODEM_PORT = 'SET_MODEM_PORT',
     SET_KNOWN_AT_COMMANDS = 'SET_KNOWN_AT_COMMANDS',
 }
 
-interface SetModemPort extends AnyAction {
-    type: ActionType.SET_MODEM_PORT;
-    modemPort: ModemPort | null;
-}
-
-export const setModemPort = (modemPort: ModemPort | null): SetModemPort => ({
-    type: ActionType.SET_MODEM_PORT,
-    modemPort,
-});
+export const setModemPort = createAction<ModemPort | null>('SET_MODEM_PORT');
