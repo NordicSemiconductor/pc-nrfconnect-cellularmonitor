@@ -38,7 +38,9 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import ReactResizeDetector from 'react-resize-detector';
 import * as c from 'ansi-colors';
+import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
+import { NrfTerminalCommander } from 'pc-xterm-lib';
 import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
@@ -48,6 +50,23 @@ import 'xterm/css/xterm.css';
 import './terminal.scss';
 
 const fitAddon = new FitAddon();
+const nrfTerminalCommander = new NrfTerminalCommander({
+    commands: {
+        my_custom_command: () => {
+            console.log('Doing something...');
+        },
+    },
+    prompt: 'AT[:lineCount]>',
+    hoverMetadata: [],
+    completerFunction: () => [
+        {
+            value: 'my_custom_command',
+            description: 'Does something interesting',
+        },
+    ],
+    showTimestamps: false,
+});
+
 let output = '';
 const EOL = '\n';
 
@@ -62,21 +81,32 @@ const TerminalComponent = ({
 
     const modemPort = useSelector(getModemPort);
 
+    const prompt = useCallback(() => {
+        xtermRef.current?.terminal.write(
+            nrfTerminalCommander.prompt.value + nrfTerminalCommander.output
+        );
+    }, []);
+
+    const writeln = useCallback(
+        (line: string | Uint8Array) => {
+            xtermRef.current?.terminal.write(ansi.eraseLine + ansi.cursorTo(0));
+            xtermRef.current?.terminal.write(line);
+            prompt();
+        },
+        [prompt]
+    );
+
     useEffect(() => {
         if (!modemPort) {
-            xtermRef.current?.terminal.writeln(
-                'Open a device to activate the terminal.'
-            );
+            writeln('Open a device to activate the terminal.');
             return;
         }
         xtermRef.current?.terminal.clear();
         modemPort.on('line', line => {
-            xtermRef.current?.terminal.writeln(c.blue(line));
+            writeln(c.blue(line));
         });
-        modemPort.on('response', () => {
-            // prompt here
-        });
-    }, [modemPort]);
+        // modemPort.on('response', () => { /* end of response */ });
+    }, [modemPort, writeln]);
 
     useEffect(() => {
         if (width * height > 0) fitAddon.fit();
@@ -85,7 +115,6 @@ const TerminalComponent = ({
     const onData = useCallback(
         (data: string) => {
             const str = data.replace('\r', EOL);
-            xtermRef.current?.terminal.write(str);
 
             output = `${output}${str}`;
             let i: number;
@@ -98,11 +127,9 @@ const TerminalComponent = ({
                             modemPort.writeAT(line.trim(), (err, lines) => {
                                 const color = err ? c.red : c.yellow;
                                 lines.forEach(l => {
-                                    xtermRef.current?.terminal.writeln(
-                                        color(l)
-                                    );
+                                    writeln(color(l));
                                 });
-                                // prompt here
+                                prompt();
                             });
                         }
                     }
@@ -110,13 +137,13 @@ const TerminalComponent = ({
                 output = output.slice(i + EOL.length);
             }
         },
-        [modemPort]
+        [modemPort, prompt, writeln]
     );
 
     return (
         <XTerm
             ref={xtermRef}
-            addons={[fitAddon]}
+            addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
             options={{
                 convertEol: true,

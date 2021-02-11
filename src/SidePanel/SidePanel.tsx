@@ -36,8 +36,10 @@
 
 import React from 'react';
 
+import './sidepanel.scss';
+
 export default () => (
-    <div>
+    <div className="sidepanel">
         The side panel can be used for configurations or information that are
         always shown to the side of the main view.
     </div>
