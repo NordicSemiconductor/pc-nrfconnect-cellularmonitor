@@ -34,9 +34,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
+import { setModemPort } from './actions';
 import ModemPort from './nRFmodem';
 
 interface State {
@@ -46,8 +47,6 @@ interface State {
 const initialState: State = {
     modemPort: null,
 };
-
-export const setModemPort = createAction<ModemPort | null>('SET_MODEM_PORT');
 
 export default createReducer(initialState, {
     [setModemPort.type]: (state, action: PayloadAction<ModemPort>) => {

@@ -34,8 +34,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* eslint-disable import/prefer-default-export */
+import { createAction } from '@reduxjs/toolkit';
+
+import ModemPort from './nRFmodem';
 
 export enum ActionType {
     SET_KNOWN_AT_COMMANDS = 'SET_KNOWN_AT_COMMANDS',
 }
+
+export const setModemPort = createAction<ModemPort | null>('SET_MODEM_PORT');
