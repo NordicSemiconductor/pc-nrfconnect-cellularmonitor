@@ -34,11 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import produce, { Draft } from 'immer';
+import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
-import { AnyAction } from 'redux';
 
-import { ActionType } from './actions';
 import ModemPort from './nRFmodem';
 
 interface State {
@@ -49,14 +47,13 @@ const initialState: State = {
     modemPort: null,
 };
 
-export default produce((draft: Draft<State>, action: AnyAction) => {
-    switch (action.type) {
-        case ActionType.SET_MODEM_PORT:
-            draft.modemPort = action.modemPort;
-            break;
-        default:
-    }
-}, initialState);
+export const setModemPort = createAction<ModemPort | null>('SET_MODEM_PORT');
+
+export default createReducer(initialState, {
+    [setModemPort.type]: (state, action: PayloadAction<ModemPort>) => {
+        state.modemPort = action.payload;
+    },
+});
 
 export type RootState = NrfConnectState<State>;
 

@@ -36,8 +36,8 @@
 
 import { Device, logger } from 'pc-nrfconnect-shared';
 
-import { setModemPort } from '../actions';
 import ModemPort from '../nRFmodem';
+import { setModemPort } from '../reducer';
 import { TAction } from '../thunk';
 
 export const closeDevice = (): TAction => async (dispatch, getState) => {

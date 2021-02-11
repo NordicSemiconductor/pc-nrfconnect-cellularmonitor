@@ -34,21 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { AnyAction } from 'redux';
-
-import ModemPort from './nRFmodem';
+/* eslint-disable import/prefer-default-export */
 
 export enum ActionType {
-    SET_MODEM_PORT = 'SET_MODEM_PORT',
     SET_KNOWN_AT_COMMANDS = 'SET_KNOWN_AT_COMMANDS',
 }
-
-interface SetModemPort extends AnyAction {
-    type: ActionType.SET_MODEM_PORT;
-    modemPort: ModemPort | null;
-}
-
-export const setModemPort = (modemPort: ModemPort | null): SetModemPort => ({
-    type: ActionType.SET_MODEM_PORT,
-    modemPort,
-});
