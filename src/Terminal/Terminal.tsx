@@ -40,32 +40,15 @@ import ReactResizeDetector from 'react-resize-detector';
 import * as c from 'ansi-colors';
 import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
-import { NrfTerminalCommander } from 'pc-xterm-lib';
-import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
+import useFitAddon from '../hooks/useFitAddon';
+import { Response } from '../nRFmodem';
 import { getModemPort } from '../reducer';
+import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
-
-const fitAddon = new FitAddon();
-const nrfTerminalCommander = new NrfTerminalCommander({
-    commands: {
-        my_custom_command: () => {
-            console.log('Doing something...');
-        },
-    },
-    prompt: 'AT[:lineCount]>',
-    hoverMetadata: [],
-    completerFunction: () => [
-        {
-            value: 'my_custom_command',
-            description: 'Does something interesting',
-        },
-    ],
-    showTimestamps: false,
-});
 
 let output = '';
 const EOL = '\n';
@@ -77,9 +60,10 @@ const TerminalComponent = ({
     width: number;
     height: number;
 }) => {
-    const xtermRef: React.MutableRefObject<XTerm | null> = useRef(null);
+    const xtermRef = useRef<XTerm | null>(null);
 
     const modemPort = useSelector(getModemPort);
+    const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
         xtermRef.current?.terminal.write(
@@ -108,9 +92,26 @@ const TerminalComponent = ({
         // modemPort.on('response', () => { /* end of response */ });
     }, [modemPort, writeln]);
 
-    useEffect(() => {
-        if (width * height > 0) fitAddon.fit();
-    }, [width, height]);
+    const handleModemResponse = useCallback(
+        (err: string, lines: Response) => {
+            const color = err ? c.red : c.yellow;
+            lines.forEach(l => {
+                writeln(color(l));
+            });
+            prompt();
+        },
+        [writeln, prompt]
+    );
+
+    const handleOutput = useCallback(
+        (line: string) => {
+            if (line === EOL) return;
+            if (modemPort != null && line.startsWith('AT')) {
+                modemPort.writeAT(line.trim(), handleModemResponse);
+            }
+        },
+        [modemPort, handleModemResponse]
+    );
 
     const onData = useCallback(
         (data: string) => {
@@ -120,38 +121,27 @@ const TerminalComponent = ({
             let i: number;
             // eslint-disable-next-line no-cond-assign
             while ((i = output.indexOf(EOL)) > -1) {
-                if (modemPort) {
-                    const line = output.slice(0, i + EOL.length);
-                    if (line !== EOL) {
-                        if (line.startsWith('AT')) {
-                            modemPort.writeAT(line.trim(), (err, lines) => {
-                                const color = err ? c.red : c.yellow;
-                                lines.forEach(l => {
-                                    writeln(color(l));
-                                });
-                                prompt();
-                            });
-                        }
-                    }
-                }
+                handleOutput(output.slice(0, i + EOL.length));
                 output = output.slice(i + EOL.length);
             }
         },
-        [modemPort, prompt, writeln]
+        [handleOutput]
     );
+
+    const terminalOptions = {
+        convertEol: true,
+        theme: {
+            foreground: colors.gray50,
+            background: colors.gray900,
+        },
+    };
 
     return (
         <XTerm
             ref={xtermRef}
             addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
-            options={{
-                convertEol: true,
-                theme: {
-                    foreground: colors.gray50,
-                    background: colors.gray900,
-                },
-            }}
+            options={terminalOptions}
             onData={onData}
         />
     );
