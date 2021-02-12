@@ -43,6 +43,7 @@ import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
 import useFitAddon from '../hooks/useFitAddon';
+import { Response } from '../nRFmodem';
 import { getModemPort } from '../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
@@ -91,6 +92,26 @@ const TerminalComponent = ({
         // modemPort.on('response', () => { /* end of response */ });
     }, [modemPort, writeln]);
 
+    const handleModemResponse = useCallback(
+        (err: string, lines: Response) => {
+            const color = err ? c.red : c.yellow;
+            lines.forEach(l => {
+                writeln(color(l));
+            });
+            prompt();
+        },
+        [writeln, prompt]
+    );
+
+    const writeToModem = useCallback(
+        (line: string) => {
+            if (line === EOL) return;
+            if (!line.startsWith('AT')) return;
+            modemPort?.writeAT(line.trim(), handleModemResponse);
+        },
+        [modemPort?.writeAT, handleModemResponse]
+    );
+
     const onData = useCallback(
         (data: string) => {
             const str = data.replace('\r', EOL);
@@ -99,24 +120,11 @@ const TerminalComponent = ({
             let i: number;
             // eslint-disable-next-line no-cond-assign
             while ((i = output.indexOf(EOL)) > -1) {
-                if (modemPort) {
-                    const line = output.slice(0, i + EOL.length);
-                    if (line !== EOL) {
-                        if (line.startsWith('AT')) {
-                            modemPort.writeAT(line.trim(), (err, lines) => {
-                                const color = err ? c.red : c.yellow;
-                                lines.forEach(l => {
-                                    writeln(color(l));
-                                });
-                                prompt();
-                            });
-                        }
-                    }
-                }
+                if (modemPort) writeToModem(output.slice(0, i + EOL.length));
                 output = output.slice(i + EOL.length);
             }
         },
-        [modemPort, prompt, writeln]
+        [modemPort, writeToModem]
     );
 
     return (
