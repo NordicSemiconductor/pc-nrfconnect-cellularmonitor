@@ -34,9 +34,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
+import { initUsageData } from './actions/usageDataActions';
 import Dashboard from './Dashboard/Dashboard';
 import DeviceSelector from './DeviceSelector';
 import GPS from './GPS/GPS';
@@ -46,15 +47,22 @@ import Terminal from './Terminal/Terminal';
 
 import './index.scss';
 
-export default () => (
-    <App
-        appReducer={reducer}
-        deviceSelect={<DeviceSelector />}
-        sidePanel={<SidePanel />}
-        panes={[
-            ['Dashboard', Dashboard],
-            ['Terminal', Terminal],
-            ['GPS', GPS],
-        ]}
-    />
-);
+export default () => {
+    useEffect(() => {
+        // Init usage data functionality comes after rendering.
+        // Usage data functionality should not block rendering.
+        initUsageData();
+    }, []);
+    return (
+        <App
+            appReducer={reducer}
+            deviceSelect={<DeviceSelector />}
+            sidePanel={<SidePanel />}
+            panes={[
+                ['Dashboard', Dashboard],
+                ['Terminal', Terminal],
+                ['GPS', GPS],
+            ]}
+        />
+    );
+};
