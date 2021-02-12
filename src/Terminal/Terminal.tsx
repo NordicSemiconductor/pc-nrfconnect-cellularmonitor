@@ -40,16 +40,14 @@ import ReactResizeDetector from 'react-resize-detector';
 import * as c from 'ansi-colors';
 import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
-import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
+import useFitAddon from '../hooks/useFitAddon';
 import { getModemPort } from '../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
-
-const fitAddon = new FitAddon();
 
 let output = '';
 const EOL = '\n';
@@ -64,6 +62,7 @@ const TerminalComponent = ({
     const xtermRef: React.MutableRefObject<XTerm | null> = useRef(null);
 
     const modemPort = useSelector(getModemPort);
+    const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
         xtermRef.current?.terminal.write(
@@ -91,10 +90,6 @@ const TerminalComponent = ({
         });
         // modemPort.on('response', () => { /* end of response */ });
     }, [modemPort, writeln]);
-
-    useEffect(() => {
-        if (width * height > 0) fitAddon.fit();
-    }, [width, height]);
 
     const onData = useCallback(
         (data: string) => {
