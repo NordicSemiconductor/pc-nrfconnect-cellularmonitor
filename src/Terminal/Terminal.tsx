@@ -40,32 +40,16 @@ import ReactResizeDetector from 'react-resize-detector';
 import * as c from 'ansi-colors';
 import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
-import { NrfTerminalCommander } from 'pc-xterm-lib';
 import { FitAddon } from 'xterm-addon-fit';
 import { XTerm } from 'xterm-for-react';
 
 import { getModemPort } from '../reducer';
+import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
 const fitAddon = new FitAddon();
-const nrfTerminalCommander = new NrfTerminalCommander({
-    commands: {
-        my_custom_command: () => {
-            console.log('Doing something...');
-        },
-    },
-    prompt: 'AT[:lineCount]>',
-    hoverMetadata: [],
-    completerFunction: () => [
-        {
-            value: 'my_custom_command',
-            description: 'Does something interesting',
-        },
-    ],
-    showTimestamps: false,
-});
 
 let output = '';
 const EOL = '\n';
