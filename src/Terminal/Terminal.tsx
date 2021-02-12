@@ -103,13 +103,14 @@ const TerminalComponent = ({
         [writeln, prompt]
     );
 
-    const writeToModem = useCallback(
+    const handleOutput = useCallback(
         (line: string) => {
             if (line === EOL) return;
-            if (!line.startsWith('AT')) return;
-            modemPort?.writeAT(line.trim(), handleModemResponse);
+            if (modemPort != null && line.startsWith('AT')) {
+                modemPort.writeAT(line.trim(), handleModemResponse);
+            }
         },
-        [modemPort?.writeAT, handleModemResponse]
+        [modemPort, handleModemResponse]
     );
 
     const onData = useCallback(
@@ -120,11 +121,11 @@ const TerminalComponent = ({
             let i: number;
             // eslint-disable-next-line no-cond-assign
             while ((i = output.indexOf(EOL)) > -1) {
-                if (modemPort) writeToModem(output.slice(0, i + EOL.length));
+                handleOutput(output.slice(0, i + EOL.length));
                 output = output.slice(i + EOL.length);
             }
         },
-        [modemPort, writeToModem]
+        [handleOutput]
     );
 
     return (
