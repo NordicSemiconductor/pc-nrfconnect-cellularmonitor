@@ -128,18 +128,20 @@ const TerminalComponent = ({
         [handleOutput]
     );
 
+    const terminalOptions = {
+        convertEol: true,
+        theme: {
+            foreground: colors.gray50,
+            background: colors.gray900,
+        },
+    };
+
     return (
         <XTerm
             ref={xtermRef}
             addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
-            options={{
-                convertEol: true,
-                theme: {
-                    foreground: colors.gray50,
-                    background: colors.gray900,
-                },
-            }}
+            options={terminalOptions}
             onData={onData}
         />
     );
