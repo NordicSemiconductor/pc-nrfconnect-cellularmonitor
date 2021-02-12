@@ -60,7 +60,7 @@ const TerminalComponent = ({
     width: number;
     height: number;
 }) => {
-    const xtermRef: React.MutableRefObject<XTerm | null> = useRef(null);
+    const xtermRef = useRef<XTerm | null>(null);
 
     const modemPort = useSelector(getModemPort);
     const fitAddon = useFitAddon(height, width);
