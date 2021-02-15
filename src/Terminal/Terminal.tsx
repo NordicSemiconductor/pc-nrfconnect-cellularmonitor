@@ -113,20 +113,15 @@ const TerminalComponent = ({
         [modemPort, handleModemResponse]
     );
 
-    const onData = useCallback(
-        (data: string) => {
-            const str = data.replace('\r', EOL);
-
-            output = `${output}${str}`;
-            let i: number;
-            // eslint-disable-next-line no-cond-assign
-            while ((i = output.indexOf(EOL)) > -1) {
-                handleOutput(output.slice(0, i + EOL.length));
-                output = output.slice(i + EOL.length);
-            }
-        },
-        [handleOutput]
-    );
+    const onData = useCallback(() => {
+        output = nrfTerminalCommander.output;
+        let i: number;
+        // eslint-disable-next-line no-cond-assign
+        while ((i = output.indexOf(EOL)) > -1) {
+            handleOutput(output.slice(0, i + EOL.length));
+            output = output.slice(i + EOL.length);
+        }
+    }, [handleOutput]);
 
     const terminalOptions = {
         convertEol: true,
