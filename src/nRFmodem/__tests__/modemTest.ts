@@ -25,8 +25,13 @@ jest.mock('serialport', () => {
 
 describe('modem', () => {
     const modem = new ModemPort('some-path');
-    it('should append callback to the AT command if not provided', () => {
-        const result = modem.writeAT('command');
-        expect(result).toBe(Promise);
+    it('should provide callback if it is not provided', () => {
+        modem.writeAT('command');
+        expect(modem.write).toHaveBeenCalledTimes(1);
+    });
+
+    it('should write command', () => {
+        modem.writeAT('command', jest.fn());
+        expect(modem.write).toHaveBeenCalledWith('command\r\n');
     });
 });
