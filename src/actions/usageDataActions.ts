@@ -46,7 +46,7 @@ export enum EventAction {
     REPORT_ERROR = 'Report error',
 }
 
-const EventCategory = pkgJson.name;
+const eventCategory = pkgJson.name;
 
 let isInited = false;
 let eventQueue: { action: EventAction; label: string }[] = [];
@@ -57,7 +57,7 @@ let eventQueue: { action: EventAction; label: string }[] = [];
  */
 export const initUsageData = async (): Promise<void> => {
     try {
-        await usageData.init(EventCategory);
+        await usageData.init(eventCategory);
         isInited = true;
         sendUsageData(EventAction.LAUNCH_APP, `v${pkgJson.version}`);
         sendUsageData(
@@ -82,11 +82,11 @@ export const sendUsageData = (action: EventAction, label: string): void => {
     }
     if (eventQueue.length > 0) {
         eventQueue.forEach(e => {
-            usageData.sendEvent(EventCategory, e.action, e.label || '');
+            usageData.sendEvent(eventCategory, e.action, e.label || '');
         });
     }
     eventQueue = [];
-    usageData.sendEvent(EventCategory, action, label || '');
+    usageData.sendEvent(eventCategory, action, label || '');
 };
 
 /**
