@@ -80,10 +80,12 @@ export const sendUsageData = (action: EventAction, label: string): void => {
         eventQueue.push({ action, label });
         return;
     }
-    if (eventQueue.length > 0) {
-        eventQueue.forEach(e => {
-            usageData.sendEvent(eventCategory, e.action, e.label || '');
-        });
+    while (eventQueue.length) {
+        const event = eventQueue.shift() as {
+            action: EventAction;
+            label: string;
+        };
+        usageData.sendEvent(eventCategory, event.action, event.label || '');
     }
     eventQueue = [];
     usageData.sendEvent(eventCategory, action, label || '');
