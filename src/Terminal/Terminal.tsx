@@ -70,7 +70,7 @@ const TerminalComponent = ({
         xtermRef.current?.terminal.write(
             nrfTerminalCommander.prompt.value + nrfTerminalCommander.output
         );
-    }, [nrfTerminalCommander.prompt, nrfTerminalCommander.output]);
+    }, [nrfTerminalCommander.prompt.value, nrfTerminalCommander.output]);
 
     const writeln = useCallback(
         (line: string | Uint8Array) => {
@@ -122,7 +122,7 @@ const TerminalComponent = ({
             handleOutput(output.slice(0, i + EOL.length));
             output = output.slice(i + EOL.length);
         }
-    }, [handleOutput]);
+    }, [handleOutput, nrfTerminalCommander]);
 
     const terminalOptions = {
         convertEol: true,
