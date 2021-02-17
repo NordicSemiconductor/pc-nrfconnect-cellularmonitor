@@ -45,7 +45,7 @@ import { XTerm } from 'xterm-for-react';
 import useFitAddon from '../hooks/useFitAddon';
 import { Response } from '../nRFmodem';
 import { getModemPort } from '../reducer';
-import nrfTerminalCommander from './terminalCommander';
+import createNrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
@@ -61,6 +61,7 @@ const TerminalComponent = ({
     height: number;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
+    const nrfTerminalCommander = createNrfTerminalCommander();
 
     const modemPort = useSelector(getModemPort);
     const fitAddon = useFitAddon(height, width);
@@ -69,7 +70,7 @@ const TerminalComponent = ({
         xtermRef.current?.terminal.write(
             nrfTerminalCommander.prompt.value + nrfTerminalCommander.output
         );
-    }, []);
+    }, [nrfTerminalCommander.prompt, nrfTerminalCommander.output]);
 
     const writeln = useCallback(
         (line: string | Uint8Array) => {
