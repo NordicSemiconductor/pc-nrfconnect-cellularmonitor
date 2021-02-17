@@ -1,7 +1,8 @@
-import MockBinding from '@serialport/binding-mock';
 import SerialPort, { parsers } from 'serialport';
 
 import ModemPort from '../index';
+
+const MockBinding = require('@serialport/binding-mock');
 
 describe('modem', () => {
     const [modem, modemReadline] = initialiseModem();
