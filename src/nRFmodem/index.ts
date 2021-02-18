@@ -1,8 +1,10 @@
 import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
+type ErrorType = string | undefined | null;
 
 const DELIMITER = '\r\n';
+const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
 
 class ModemPort extends SerialPort {
     private waitingForResponse = false;
@@ -17,13 +19,21 @@ class ModemPort extends SerialPort {
     }
 
     private parseLine(line: string) {
-        let error;
-        if (line === 'OK') error = null;
-        else if (line === 'ERROR') error = 'ERROR';
-        else {
-            error = line.match(/\+CM[ES] ERROR: (?<cause_value>.*)/)?.groups
-                ?.cause_value;
+        const error = ModemPort.checkLineForError(line);
+        this.handleResponse(line, error);
+    }
+
+    private static checkLineForError(line: string) {
+        if (line === 'OK') {
+            return null;
         }
+        if (line === 'ERROR') {
+            return 'ERROR';
+        }
+        return line.match(ERROR_PATTERN)?.groups?.cause_value;
+    }
+
+    private handleResponse(line: string, error: ErrorType) {
         if (error !== undefined) {
             this.emit('response', {
                 lines: [...this.incomingLines, line],
