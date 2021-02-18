@@ -2,6 +2,8 @@ import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
 
+const DELIMITER = '\r\n';
+
 class ModemPort extends SerialPort {
     private waitingForResponse = false;
 
@@ -10,10 +12,8 @@ class ModemPort extends SerialPort {
     constructor(path: string, opts = { baudRate: 112500 }) {
         super(path, { ...opts });
 
-        this.pipe(new parsers.Readline({ delimiter: '\r\n' })).on(
-            'data',
-            this.parseLine.bind(this)
-        );
+        const readLine = new parsers.Readline({ delimiter: DELIMITER });
+        this.pipe(readLine).on('data', this.parseLine.bind(this));
     }
 
     private parseLine(line: string) {
@@ -55,7 +55,7 @@ class ModemPort extends SerialPort {
         this.prependOnceListener('response', ({ result, lines }) => {
             this.waitingForResponse = false;
             callback(result, lines);
-        }).write(`${command}\r\n`);
+        }).write(`${command}${DELIMITER}`);
     }
 }
 
