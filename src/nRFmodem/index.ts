@@ -1,43 +1,46 @@
 import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
-type ErrorType = string | undefined | null;
+type Error = string | undefined | null;
 
 const DELIMITER = '\r\n';
+const LINE_READER = new parsers.Readline({ delimiter: DELIMITER });
 const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
+
+const SUCCESS_MESSAGE = 'OK';
+const ERROR_MESSAGE = 'ERROR';
 
 class ModemPort extends SerialPort {
     private waitingForResponse = false;
-
     private incomingLines: string[] = [];
+    private error: Error;
 
     constructor(path: string, opts = { baudRate: 112500 }) {
         super(path, { ...opts });
 
-        const readLine = new parsers.Readline({ delimiter: DELIMITER });
-        this.pipe(readLine).on('data', this.parseLine.bind(this));
+        this.pipe(LINE_READER).on('data', this.parseLine.bind(this));
     }
 
     private parseLine(line: string) {
-        const error = ModemPort.checkLineForError(line);
-        this.handleResponse(line, error);
+        this.checkLineForError(line);
+        this.handleLineResponse(line);
     }
 
-    private static checkLineForError(line: string) {
-        if (line === 'OK') {
-            return null;
+    private checkLineForError(line: string) {
+        if (line === SUCCESS_MESSAGE) {
+            this.error = null;
         }
-        if (line === 'ERROR') {
-            return 'ERROR';
+        if (line === ERROR_MESSAGE) {
+            this.error = ERROR_MESSAGE;
         }
-        return line.match(ERROR_PATTERN)?.groups?.cause_value;
+        this.error = line.match(ERROR_PATTERN)?.groups?.cause_value;
     }
 
-    private handleResponse(line: string, error: ErrorType) {
-        if (error !== undefined) {
+    private handleLineResponse(line: string) {
+        if (this.error !== undefined) {
             this.emit('response', {
                 lines: [...this.incomingLines, line],
-                error,
+                error: this.error,
             });
             this.incomingLines = [];
         } else if (this.waitingForResponse) {
