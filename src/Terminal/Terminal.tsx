@@ -45,7 +45,7 @@ import { XTerm } from 'xterm-for-react';
 import useFitAddon from '../hooks/useFitAddon';
 import { Response } from '../nRFmodem';
 import { getModemPort } from '../reducer';
-import createNrfTerminalCommander from './terminalCommander';
+import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
@@ -61,7 +61,6 @@ const TerminalComponent = ({
     height: number;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
-    const nrfTerminalCommander = createNrfTerminalCommander();
 
     const modemPort = useSelector(getModemPort);
     const fitAddon = useFitAddon(height, width);
@@ -70,7 +69,7 @@ const TerminalComponent = ({
         xtermRef.current?.terminal.write(
             nrfTerminalCommander.prompt.value + nrfTerminalCommander.output
         );
-    }, [nrfTerminalCommander.prompt.value, nrfTerminalCommander.output]);
+    }, []);
 
     const writeln = useCallback(
         (line: string | Uint8Array) => {
@@ -114,15 +113,22 @@ const TerminalComponent = ({
         [modemPort, handleModemResponse]
     );
 
-    const onData = useCallback(() => {
-        output = nrfTerminalCommander.output;
-        let i: number;
-        // eslint-disable-next-line no-cond-assign
-        while ((i = output.indexOf(EOL)) > -1) {
-            handleOutput(output.slice(0, i + EOL.length));
-            output = output.slice(i + EOL.length);
-        }
-    }, [handleOutput, nrfTerminalCommander]);
+    const onData = useCallback(
+        data => {
+            if (data.charCodeAt(0) === 13) {
+                output += EOL;
+            } else {
+                output = nrfTerminalCommander.output;
+            }
+            let i: number;
+            // eslint-disable-next-line no-cond-assign
+            while ((i = output.indexOf(EOL)) > -1) {
+                handleOutput(output.slice(0, i + EOL.length));
+                output = output.slice(i + EOL.length);
+            }
+        },
+        [handleOutput]
+    );
 
     const terminalOptions = {
         convertEol: true,

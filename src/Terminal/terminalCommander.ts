@@ -36,22 +36,21 @@
 
 import { NrfTerminalCommander } from 'pc-xterm-lib';
 
-const createNrfTerminalCommander = () =>
-    new NrfTerminalCommander({
-        commands: {
-            my_custom_command: () => {
-                console.log('Doing something...');
-            },
+const nrfTerminalCommander = new NrfTerminalCommander({
+    commands: {
+        my_custom_command: () => {
+            console.log('Doing something...');
         },
-        prompt: 'AT[:lineCount]>',
-        hoverMetadata: [],
-        completerFunction: () => [
-            {
-                value: 'my_custom_command',
-                description: 'Does something interesting',
-            },
-        ],
-        showTimestamps: false,
-    });
+    },
+    prompt: 'AT[:lineCount]>',
+    hoverMetadata: [],
+    completerFunction: () => [
+        {
+            value: 'my_custom_command',
+            description: 'Does something interesting',
+        },
+    ],
+    showTimestamps: false,
+});
 
-export default createNrfTerminalCommander;
+export default nrfTerminalCommander;

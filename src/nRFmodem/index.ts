@@ -4,7 +4,6 @@ export type Response = string[];
 type Error = string | undefined | null;
 
 const DELIMITER = '\r\n';
-const LINE_READER = new parsers.Readline({ delimiter: DELIMITER });
 const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
 
 const SUCCESS_MESSAGE = 'OK';
@@ -13,34 +12,34 @@ const ERROR_MESSAGE = 'ERROR';
 class ModemPort extends SerialPort {
     private waitingForResponse = false;
     private incomingLines: string[] = [];
-    private error: Error;
 
     constructor(path: string, opts = { baudRate: 112500 }) {
         super(path, { ...opts });
 
-        this.pipe(LINE_READER).on('data', this.parseLine.bind(this));
+        const lineReader = new parsers.Readline({ delimiter: DELIMITER });
+        this.pipe(lineReader).on('data', this.parseLine.bind(this));
     }
 
     private parseLine(line: string) {
-        this.checkLineForError(line);
-        this.handleLineResponse(line);
+        const error = ModemPort.checkLineForError(line);
+        this.emitLineResponse(line, error);
     }
 
-    private checkLineForError(line: string) {
+    private static checkLineForError(line: string) {
         if (line === SUCCESS_MESSAGE) {
-            this.error = null;
+            return null;
         }
         if (line === ERROR_MESSAGE) {
-            this.error = ERROR_MESSAGE;
+            return ERROR_MESSAGE;
         }
-        this.error = line.match(ERROR_PATTERN)?.groups?.cause_value;
+        return line.match(ERROR_PATTERN)?.groups?.cause_value;
     }
 
-    private handleLineResponse(line: string) {
-        if (this.error !== undefined) {
+    private emitLineResponse(line: string, error: Error) {
+        if (error !== undefined) {
             this.emit('response', {
                 lines: [...this.incomingLines, line],
-                error: this.error,
+                error,
             });
             this.incomingLines = [];
         } else if (this.waitingForResponse) {
@@ -56,19 +55,26 @@ class ModemPort extends SerialPort {
     ): Promise<Response> | undefined {
         if (!callback) {
             return new Promise((resolve, reject) => {
-                this.writeAT(command, (err, resp) =>
-                    err ? reject(err) : resolve(resp)
-                );
+                this.writeAT(command, (err, resp) => {
+                    err ? reject(err) : resolve(resp);
+                });
             });
         }
-
         if (this.waitingForResponse) return;
         this.waitingForResponse = true;
 
-        this.prependOnceListener('response', ({ result, lines }) => {
+        const responseHandler = ({
+            result,
+            lines,
+        }: {
+            result: string;
+            lines: Response;
+        }) => {
             this.waitingForResponse = false;
             callback(result, lines);
-        }).write(`${command}${DELIMITER}`);
+        };
+        this.prependOnceListener('response', responseHandler);
+        this.write(command + DELIMITER);
     }
 }
 
