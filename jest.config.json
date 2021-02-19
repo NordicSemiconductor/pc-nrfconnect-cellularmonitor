@@ -1,0 +1,20 @@
+{    
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/fileMock.js",
+      "\\.(css|scss)$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/emptyMock.js",
+      "nrfconnect/core": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/coreMock.js",
+      "pc-ble-driver-js": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/bleDriverMock.js",
+      "pc-nrfjprog-js|nrf-device-lister|nrf-device-setup|usb": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/emptyMock.js",
+      "^electron$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/electronMock.js",
+      "^electron-store$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/electronStoreMock.js"
+    },
+    "transform": {
+      "^.+\\.[jt]sx?$": [
+        "babel-jest",
+        { "configFile": "./node_modules/pc-nrfconnect-shared/config/babel.config.js" }
+      ]
+    },
+    "transformIgnorePatterns": [ "node_modules/(?!(pc-nrfconnect-shared)/)" ],
+    "setupFilesAfterEnv": [ "<rootDir>/node_modules/pc-nrfconnect-shared/test/setupTests.js" ]
+  }
+  
