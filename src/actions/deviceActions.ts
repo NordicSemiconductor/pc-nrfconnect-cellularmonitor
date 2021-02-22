@@ -36,16 +36,16 @@
 
 import { Device, logger } from 'pc-nrfconnect-shared';
 
-import { setModemPort } from '../actions';
-import ModemPort from '../nRFmodem';
+import Modem from '../modem';
+import { getModem, setModem } from '../reducer';
 import { TAction } from '../thunk';
 
 export const closeDevice = (): TAction => async (dispatch, getState) => {
-    const { modemPort } = getState().app;
-    if (modemPort) {
+    const modem = getModem(getState());
+    if (modem) {
         logger.info(`Closing modem port`);
-        modemPort.close(() => {
-            dispatch(setModemPort(null));
+        modem.close(() => {
+            dispatch(setModem(null));
         });
     }
 };
@@ -55,7 +55,6 @@ export const openDevice = (device: Device): TAction => async dispatch => {
     const path = device?.serialport?.path;
     if (path) {
         logger.info(`Opening modem port ${path}`);
-        const modemPort = new ModemPort(path);
-        dispatch(setModemPort(modemPort));
+        dispatch(setModem(new Modem(path)));
     }
 };

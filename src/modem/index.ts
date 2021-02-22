@@ -9,7 +9,7 @@ const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
 const SUCCESS_MESSAGE = 'OK';
 const ERROR_MESSAGE = 'ERROR';
 
-class ModemPort extends SerialPort {
+class Modem extends SerialPort {
     private waitingForResponse = false;
     private incomingLines: string[] = [];
 
@@ -21,7 +21,7 @@ class ModemPort extends SerialPort {
     }
 
     private parseLine(line: string) {
-        const error = ModemPort.checkLineForError(line);
+        const error = Modem.checkLineForError(line);
         this.emitLineResponse(line, error);
     }
 
@@ -78,4 +78,4 @@ class ModemPort extends SerialPort {
     }
 }
 
-export default ModemPort;
+export default Modem;

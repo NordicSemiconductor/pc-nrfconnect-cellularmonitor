@@ -1,6 +1,6 @@
 import SerialPort, { parsers } from 'serialport';
 
-import ModemPort from '../index';
+import Modem from '../index';
 
 const MockBinding = require('@serialport/binding-mock');
 
@@ -57,7 +57,7 @@ describe('modem', () => {
 
 // SETUP
 
-function initialiseModem(): [ModemPort, parsers.Readline] {
+function initialiseModem(): [Modem, parsers.Readline] {
     SerialPort.Binding = MockBinding;
 
     // Create a port and enable echoing of input
@@ -65,7 +65,7 @@ function initialiseModem(): [ModemPort, parsers.Readline] {
         echo: true,
         readyData: Buffer.from([]),
     });
-    const modem = new ModemPort('/dev/PORT');
+    const modem = new Modem('/dev/PORT');
     const modemReadline = modem.pipe(
         new parsers.Readline({ delimiter: '\r\n' })
     );

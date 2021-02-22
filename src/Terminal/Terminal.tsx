@@ -43,8 +43,8 @@ import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
 import useFitAddon from '../hooks/useFitAddon';
-import { Response } from '../nRFmodem';
-import { getModemPort } from '../reducer';
+import { Response } from '../modem';
+import { getModem } from '../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
@@ -62,7 +62,7 @@ const TerminalComponent = ({
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
 
-    const modemPort = useSelector(getModemPort);
+    const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
@@ -81,16 +81,16 @@ const TerminalComponent = ({
     );
 
     useEffect(() => {
-        if (!modemPort) {
+        if (!modem) {
             writeln('Open a device to activate the terminal.');
             return;
         }
         xtermRef.current?.terminal.clear();
-        modemPort.on('line', line => {
+        modem.on('line', line => {
             writeln(c.blue(line));
         });
-        // modemPort.on('response', () => { /* end of response */ });
-    }, [modemPort, writeln]);
+        // modem.on('response', () => { /* end of response */ });
+    }, [modem, writeln]);
 
     const handleModemResponse = useCallback(
         (err: string, lines: Response) => {
@@ -106,11 +106,11 @@ const TerminalComponent = ({
     const handleOutput = useCallback(
         (line: string) => {
             if (line === EOL) return;
-            if (modemPort != null && line.startsWith('AT')) {
-                modemPort.writeAT(line.trim(), handleModemResponse);
+            if (modem != null && line.startsWith('AT')) {
+                modem.writeAT(line.trim(), handleModemResponse);
             }
         },
-        [modemPort, handleModemResponse]
+        [modem, handleModemResponse]
     );
 
     const onData = useCallback(
