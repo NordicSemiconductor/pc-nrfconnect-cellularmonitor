@@ -57,31 +57,13 @@ class Modem extends EventEmitter {
         this.serialPort.close(callback);
     }
 
-    write(
-        command: string,
-        callback?: (err: string, response: Response) => void
-    ): Promise<Response> | undefined {
-        if (!callback) {
-            return new Promise((resolve, reject) => {
-                this.write(command, (err, resp) => {
-                    err ? reject(err) : resolve(resp);
-                });
-            });
-        }
+    write(command: string) {
         if (this.waitingForResponse) return;
         this.waitingForResponse = true;
 
-        const responseHandler = ({
-            result,
-            lines,
-        }: {
-            result: string;
-            lines: Response;
-        }) => {
+        this.prependOnceListener('response', () => {
             this.waitingForResponse = false;
-            callback(result, lines);
-        };
-        this.prependOnceListener('response', responseHandler);
+        });
         this.serialPort.write(command + DELIMITER);
     }
 }

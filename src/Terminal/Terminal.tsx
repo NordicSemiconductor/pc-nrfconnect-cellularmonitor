@@ -80,18 +80,6 @@ const TerminalComponent = ({
         [prompt]
     );
 
-    useEffect(() => {
-        if (!modem) {
-            writeln('Open a device to activate the terminal.');
-            return;
-        }
-        xtermRef.current?.terminal.clear();
-        modem.on('line', line => {
-            writeln(c.blue(line));
-        });
-        // modem.on('response', () => { /* end of response */ });
-    }, [modem, writeln]);
-
     const handleModemResponse = useCallback(
         (err: string, lines: Response) => {
             const color = err ? c.red : c.yellow;
@@ -103,14 +91,28 @@ const TerminalComponent = ({
         [writeln, prompt]
     );
 
+    useEffect(() => {
+        if (!modem) {
+            writeln('Open a device to activate the terminal.');
+            return;
+        }
+        xtermRef.current?.terminal.clear();
+        modem.on('line', line => {
+            writeln(c.blue(line));
+        });
+        modem.on('response', (err, lines) => {
+            handleModemResponse(err, lines);
+        });
+    }, [modem, writeln, handleModemResponse]);
+
     const handleOutput = useCallback(
         (line: string) => {
             if (line === EOL) return;
             if (modem != null && line.startsWith('AT')) {
-                modem.write(line.trim(), handleModemResponse);
+                modem.write(line.trim());
             }
         },
-        [modem, handleModemResponse]
+        [modem]
     );
 
     const onData = useCallback(
