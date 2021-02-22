@@ -43,8 +43,8 @@ import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
 import useFitAddon from '../hooks/useFitAddon';
-import { Response } from '../nRFmodem';
-import { getModemPort } from '../reducer';
+import { Response } from '../modem';
+import { getModem } from '../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
@@ -62,7 +62,7 @@ const TerminalComponent = ({
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
 
-    const modemPort = useSelector(getModemPort);
+    const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
@@ -80,18 +80,6 @@ const TerminalComponent = ({
         [prompt]
     );
 
-    useEffect(() => {
-        if (!modemPort) {
-            writeln('Open a device to activate the terminal.');
-            return;
-        }
-        xtermRef.current?.terminal.clear();
-        modemPort.on('line', line => {
-            writeln(c.blue(line));
-        });
-        // modemPort.on('response', () => { /* end of response */ });
-    }, [modemPort, writeln]);
-
     const handleModemResponse = useCallback(
         (err: string, lines: Response) => {
             const color = err ? c.red : c.yellow;
@@ -103,23 +91,37 @@ const TerminalComponent = ({
         [writeln, prompt]
     );
 
+    useEffect(() => {
+        if (!modem) {
+            writeln('Open a device to activate the terminal.');
+            return;
+        }
+        xtermRef.current?.terminal.clear();
+        modem.on('line', line => {
+            writeln(c.blue(line));
+        });
+        modem.on('response', ({ err, lines }) => {
+            handleModemResponse(err, lines);
+        });
+    }, [modem, writeln, handleModemResponse]);
+
     const handleOutput = useCallback(
         (line: string) => {
             if (line === EOL) return;
-            if (modemPort != null && line.startsWith('AT')) {
-                modemPort.writeAT(line.trim(), handleModemResponse);
+            if (modem != null && line.startsWith('AT')) {
+                modem.write(line.trim());
             }
         },
-        [modemPort, handleModemResponse]
+        [modem]
     );
 
     const onData = useCallback(
         data => {
-            if (data.charCodeAt(0) === 13) {
-                output += EOL;
-            } else {
-                output = nrfTerminalCommander.output;
-            }
+            output =
+                data.charCodeAt(0) === 13
+                    ? output + EOL
+                    : nrfTerminalCommander.output;
+
             let i: number;
             // eslint-disable-next-line no-cond-assign
             while ((i = output.indexOf(EOL)) > -1) {

@@ -34,26 +34,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { setModemPort } from './actions';
-import ModemPort from './nRFmodem';
+import Modem from './modem';
+
+export const setModem = createAction<Modem | null>('SET_MODEM');
 
 interface State {
-    readonly modemPort: ModemPort | null;
+    readonly modem: Modem | null;
 }
 
 const initialState: State = {
-    modemPort: null,
+    modem: null,
 };
 
 export default createReducer(initialState, {
-    [setModemPort.type]: (state, action: PayloadAction<ModemPort>) => {
-        state.modemPort = action.payload;
+    [setModem.type]: (state, action: PayloadAction<Modem>) => {
+        state.modem = action.payload;
     },
 });
 
 export type RootState = NrfConnectState<State>;
 
-export const getModemPort = (state: RootState) => state.app.modemPort;
+export const getModem = (state: RootState) => state.app.modem;
