@@ -1,7 +1,7 @@
+import EventEmitter from 'events';
 import SerialPort, { parsers } from 'serialport';
 
 export type Response = string[];
-type Error = string | undefined | null;
 
 const DELIMITER = '\r\n';
 const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
@@ -9,15 +9,17 @@ const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
 const SUCCESS_MESSAGE = 'OK';
 const ERROR_MESSAGE = 'ERROR';
 
-class Modem extends SerialPort {
+class Modem extends EventEmitter {
     private waitingForResponse = false;
     private incomingLines: string[] = [];
+    private serialPort: SerialPort;
 
-    constructor(path: string, opts = { baudRate: 112500 }) {
-        super(path, { ...opts });
+    constructor(serialPort: SerialPort) {
+        super();
+        this.serialPort = serialPort;
 
         const lineReader = new parsers.Readline({ delimiter: DELIMITER });
-        this.pipe(lineReader).on('data', this.parseLine.bind(this));
+        this.serialPort.pipe(lineReader).on('data', this.parseLine.bind(this));
     }
 
     private parseLine(line: string) {
@@ -35,7 +37,7 @@ class Modem extends SerialPort {
         return line.match(ERROR_PATTERN)?.groups?.cause_value;
     }
 
-    private emitLineResponse(line: string, error: Error) {
+    private emitLineResponse(line: string, error?: string | null) {
         if (error !== undefined) {
             this.emit('response', {
                 lines: [...this.incomingLines, line],
@@ -49,13 +51,17 @@ class Modem extends SerialPort {
         }
     }
 
-    writeAT(
+    close(callback?: (error?: Error | null) => void) {
+        this.serialPort.close(callback);
+    }
+
+    write(
         command: string,
         callback?: (err: string, response: Response) => void
     ): Promise<Response> | undefined {
         if (!callback) {
             return new Promise((resolve, reject) => {
-                this.writeAT(command, (err, resp) => {
+                this.write(command, (err, resp) => {
                     err ? reject(err) : resolve(resp);
                 });
             });
@@ -74,7 +80,7 @@ class Modem extends SerialPort {
             callback(result, lines);
         };
         this.prependOnceListener('response', responseHandler);
-        this.write(command + DELIMITER);
+        this.serialPort.write(command + DELIMITER);
     }
 }
 

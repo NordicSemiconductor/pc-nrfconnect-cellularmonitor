@@ -107,7 +107,7 @@ const TerminalComponent = ({
         (line: string) => {
             if (line === EOL) return;
             if (modem != null && line.startsWith('AT')) {
-                modem.writeAT(line.trim(), handleModemResponse);
+                modem.write(line.trim(), handleModemResponse);
             }
         },
         [modem, handleModemResponse]
@@ -115,11 +115,11 @@ const TerminalComponent = ({
 
     const onData = useCallback(
         data => {
-            if (data.charCodeAt(0) === 13) {
-                output += EOL;
-            } else {
-                output = nrfTerminalCommander.output;
-            }
+            output =
+                data.charCodeAt(0) === 13
+                    ? output + EOL
+                    : nrfTerminalCommander.output;
+
             let i: number;
             // eslint-disable-next-line no-cond-assign
             while ((i = output.indexOf(EOL)) > -1) {

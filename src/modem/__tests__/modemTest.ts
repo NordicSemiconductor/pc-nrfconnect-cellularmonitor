@@ -1,16 +1,16 @@
-import SerialPort, { parsers } from 'serialport';
+import SerialPort from 'serialport';
 
 import Modem from '../index';
 
 const MockBinding = require('@serialport/binding-mock');
 
 describe('modem', () => {
-    it('should write to modem', done => {
-        const [modem, modemReadline] = initialiseModem();
+    it('emits a line event for unexpected data from the serial port', done => {
+        const [modem, serialPort] = initialiseModem();
 
         const inputCommand = 'command';
 
-        modemReadline.on('data', data => {
+        modem.on('line', data => {
             try {
                 expect(data).toEqual(inputCommand);
                 modem.close(done);
@@ -18,7 +18,7 @@ describe('modem', () => {
                 done(e);
             }
         });
-        modem.writeAT(inputCommand);
+        serialPort.write(`${inputCommand}\r\n`);
     });
 
     it('should handle OK response', done => {
@@ -34,7 +34,7 @@ describe('modem', () => {
                 done(e);
             }
         });
-        modem.writeAT(okResponse);
+        modem.write(okResponse);
     });
 
     it('should handle errors', done => {
@@ -51,23 +51,20 @@ describe('modem', () => {
             }
         });
 
-        modem.writeAT(errorResponse);
+        modem.write(errorResponse);
     });
 });
 
 // SETUP
 
-function initialiseModem(): [Modem, parsers.Readline] {
+function initialiseModem(): [Modem, SerialPort] {
     SerialPort.Binding = MockBinding;
-
+    const port = '/dev/PORT';
     // Create a port and enable echoing of input
-    MockBinding.createPort('/dev/PORT', {
+    MockBinding.createPort(port, {
         echo: true,
         readyData: Buffer.from([]),
     });
-    const modem = new Modem('/dev/PORT');
-    const modemReadline = modem.pipe(
-        new parsers.Readline({ delimiter: '\r\n' })
-    );
-    return [modem, modemReadline];
+    const serialPort = new SerialPort(port);
+    return [new Modem(serialPort), serialPort];
 }
