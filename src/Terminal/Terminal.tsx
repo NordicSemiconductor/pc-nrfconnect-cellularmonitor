@@ -100,7 +100,7 @@ const TerminalComponent = ({
         modem.on('line', line => {
             writeln(c.blue(line));
         });
-        modem.on('response', (err, lines) => {
+        modem.on('response', ({ err, lines }) => {
             handleModemResponse(err, lines);
         });
     }, [modem, writeln, handleModemResponse]);
