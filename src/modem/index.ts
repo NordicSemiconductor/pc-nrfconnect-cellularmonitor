@@ -4,10 +4,22 @@ import SerialPort, { parsers } from 'serialport';
 export type Response = string[];
 
 const DELIMITER = '\r\n';
-const ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
+const AT_ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
 
 const SUCCESS_MESSAGE = 'OK';
 const ERROR_MESSAGE = 'ERROR';
+
+const parseLine = (line: string) => {
+    if (line === SUCCESS_MESSAGE) {
+        return { complete: true };
+    }
+    if (line === ERROR_MESSAGE) {
+        return { complete: true, error: ERROR_MESSAGE };
+    }
+
+    const errorMessage = line.match(AT_ERROR_PATTERN)?.groups?.cause_value;
+    return { complete: errorMessage != null, error: errorMessage };
+};
 
 class Modem extends EventEmitter {
     private waitingForResponse = false;
@@ -19,36 +31,26 @@ class Modem extends EventEmitter {
         this.serialPort = serialPort;
 
         const lineReader = new parsers.Readline({ delimiter: DELIMITER });
-        this.serialPort.pipe(lineReader).on('data', this.parseLine.bind(this));
+        this.serialPort.pipe(lineReader).on('data', this.handleLine.bind(this));
     }
 
-    private parseLine(line: string) {
-        const error = Modem.checkLineForError(line);
-        this.emitLineResponse(line, error);
-    }
-
-    private static checkLineForError(line: string) {
-        if (line === SUCCESS_MESSAGE) {
-            return null;
-        }
-        if (line === ERROR_MESSAGE) {
-            return ERROR_MESSAGE;
-        }
-        return line.match(ERROR_PATTERN)?.groups?.cause_value;
-    }
-
-    private emitLineResponse(line: string, error?: string | null) {
-        if (error !== undefined) {
-            this.emit('response', {
-                lines: [...this.incomingLines, line],
-                error,
-            });
-            this.incomingLines = [];
-        } else if (this.waitingForResponse) {
-            this.incomingLines.push(line);
-        } else {
+    private handleLine(line: string) {
+        if (!this.waitingForResponse) {
             this.emit('line', line);
+            return;
         }
+
+        const { complete, error } = parseLine(line);
+        if (!complete) {
+            this.incomingLines.push(line);
+            return;
+        }
+
+        this.emit('response', {
+            lines: [...this.incomingLines, line],
+            error,
+        });
+        this.incomingLines = [];
     }
 
     close(callback?: (error?: Error | null) => void) {

@@ -28,7 +28,7 @@ describe('modem', () => {
         modem.on('response', res => {
             try {
                 expect(res.lines[0]).toBe(okResponse);
-                expect(res.error).toBe(null);
+                expect(res.error).toBe(undefined);
                 modem.close(done);
             } catch (e) {
                 done(e);
