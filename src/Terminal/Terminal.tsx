@@ -43,15 +43,22 @@ import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
 import useFitAddon from '../hooks/useFitAddon';
-import { Response } from '../modem';
+import { Response } from '../modem/modem';
 import { getModem } from '../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-let output = '';
 const EOL = '\n';
+
+const split = (userInput: string) => {
+    const inputLines = userInput.split(EOL);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Because inputLines will never be an empty array
+    const remainder = inputLines.pop()!;
+
+    return { inputLines, remainder };
+};
 
 const TerminalComponent = ({
     width,
@@ -61,6 +68,7 @@ const TerminalComponent = ({
     height: number;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
+    const userInput = useRef('');
 
     const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
@@ -81,55 +89,58 @@ const TerminalComponent = ({
     );
 
     const handleModemResponse = useCallback(
-        (err: string, lines: Response) => {
+        (lines: Response, err?: string) => {
             const color = err ? c.red : c.yellow;
             lines.forEach(l => {
                 writeln(color(l));
             });
-            prompt();
         },
-        [writeln, prompt]
+        [writeln]
     );
 
     useEffect(() => {
         if (!modem) {
-            writeln('Open a device to activate the terminal.');
+            writeln(c.yellow('Open a device to activate the terminal.'));
             return;
         }
         xtermRef.current?.terminal.clear();
-        modem.on('line', line => {
-            writeln(c.blue(line));
-        });
-        modem.on('response', ({ err, lines }) => {
-            handleModemResponse(err, lines);
-        });
+        const unregisterOnLine = modem.onLine(line => writeln(c.blue(line)));
+        const unregisterOnResponse = modem.onResponse(handleModemResponse);
+        return () => {
+            unregisterOnLine();
+            unregisterOnResponse();
+        };
     }, [modem, writeln, handleModemResponse]);
 
-    const handleOutput = useCallback(
+    const handleUserInputLine = useCallback(
         (line: string) => {
             if (line === EOL) return;
             if (modem != null && line.startsWith('AT')) {
-                modem.write(line.trim());
+                const commandWasAccepted = modem.write(line.trim());
+                if (!commandWasAccepted) {
+                    writeln(
+                        c.red(
+                            'Command rejected while processing previous command'
+                        )
+                    );
+                }
             }
         },
-        [modem]
+        [modem, writeln]
     );
 
-    const onData = useCallback(
-        data => {
-            output =
-                data.charCodeAt(0) === 13
-                    ? output + EOL
-                    : nrfTerminalCommander.output;
+    const onKeyPress = useCallback(
+        key => {
+            const pressedReturn = key.charCodeAt(0) === 13;
+            userInput.current = pressedReturn
+                ? userInput.current + EOL
+                : nrfTerminalCommander.output;
 
-            let i: number;
-            // eslint-disable-next-line no-cond-assign
-            while ((i = output.indexOf(EOL)) > -1) {
-                handleOutput(output.slice(0, i + EOL.length));
-                output = output.slice(i + EOL.length);
-            }
+            const { inputLines, remainder } = split(userInput.current);
+            inputLines.forEach(handleUserInputLine);
+            userInput.current = remainder;
         },
-        [handleOutput]
+        [handleUserInputLine]
     );
 
     const terminalOptions = {
@@ -146,7 +157,7 @@ const TerminalComponent = ({
             addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
             options={terminalOptions}
-            onData={onData}
+            onData={onKeyPress}
         />
     );
 };

@@ -37,7 +37,7 @@
 import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import Modem from './modem';
+import { Modem } from './modem/modem';
 
 export const setModem = createAction<Modem | null>('SET_MODEM');
 

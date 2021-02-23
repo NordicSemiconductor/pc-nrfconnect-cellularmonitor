@@ -37,7 +37,7 @@
 import { Device, logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
 
-import Modem from '../modem';
+import { createModem } from '../modem/modem';
 import { getModem, setModem } from '../reducer';
 import { TAction } from '../thunk';
 
@@ -57,6 +57,7 @@ export const openDevice = (device: Device): TAction => async dispatch => {
     if (path) {
         logger.info(`Opening modem port ${path}`);
         const serialPort = new SerialPort(path, { baudRate: 112500 });
-        dispatch(setModem(new Modem(serialPort)));
+        const modem = createModem(serialPort);
+        dispatch(setModem(modem));
     }
 };
