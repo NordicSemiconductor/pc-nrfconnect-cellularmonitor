@@ -81,7 +81,7 @@ const TerminalComponent = ({
     );
 
     const handleModemResponse = useCallback(
-        (err: string, lines: Response) => {
+        (lines: Response, err?: string) => {
             const color = err ? c.red : c.yellow;
             lines.forEach(l => {
                 writeln(color(l));
@@ -97,12 +97,12 @@ const TerminalComponent = ({
             return;
         }
         xtermRef.current?.terminal.clear();
-        modem.on('line', line => {
-            writeln(c.blue(line));
-        });
-        modem.on('response', ({ err, lines }) => {
-            handleModemResponse(err, lines);
-        });
+        const unregisterOnLine = modem.onLine(line => writeln(c.blue(line)));
+        const unregisterOnResponse = modem.onResponse(handleModemResponse);
+        return () => {
+            unregisterOnLine();
+            unregisterOnResponse();
+        };
     }, [modem, writeln, handleModemResponse]);
 
     const handleOutput = useCallback(

@@ -10,7 +10,7 @@ describe('modem', () => {
 
         const inputCommand = 'command';
 
-        modem.on('line', data => {
+        modem.onLine(data => {
             try {
                 expect(data).toEqual(inputCommand);
                 modem.close(done);
@@ -25,10 +25,10 @@ describe('modem', () => {
         const [modem] = initialiseModem();
 
         const okResponse = 'OK';
-        modem.on('response', res => {
+        modem.onResponse((lines, error) => {
             try {
-                expect(res.lines[0]).toBe(okResponse);
-                expect(res.error).toBe(undefined);
+                expect(lines[0]).toBe(okResponse);
+                expect(error).toBe(undefined);
                 modem.close(done);
             } catch (e) {
                 done(e);
@@ -41,10 +41,10 @@ describe('modem', () => {
         const [modem] = initialiseModem();
         const errorResponse = 'ERROR';
 
-        modem.on('response', res => {
+        modem.onResponse((lines, error) => {
             try {
-                expect(res.lines[0]).toBe(errorResponse);
-                expect(res.error).toBe(errorResponse);
+                expect(lines[0]).toBe(errorResponse);
+                expect(error).toBe(errorResponse);
                 modem.close(done);
             } catch (e) {
                 done(e);

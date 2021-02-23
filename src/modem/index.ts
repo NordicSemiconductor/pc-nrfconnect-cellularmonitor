@@ -21,13 +21,13 @@ const parseLine = (line: string) => {
     return { complete: errorMessage != null, error: errorMessage };
 };
 
-class Modem extends EventEmitter {
+class Modem {
     private waitingForResponse = false;
     private incomingLines: string[] = [];
     private serialPort: SerialPort;
+    private eventEmitter = new EventEmitter();
 
     constructor(serialPort: SerialPort) {
-        super();
         this.serialPort = serialPort;
 
         const lineReader = new parsers.Readline({ delimiter: DELIMITER });
@@ -36,7 +36,7 @@ class Modem extends EventEmitter {
 
     private handleLine(line: string) {
         if (!this.waitingForResponse) {
-            this.emit('line', line);
+            this.eventEmitter.emit('line', line);
             return;
         }
 
@@ -46,11 +46,22 @@ class Modem extends EventEmitter {
             return;
         }
 
-        this.emit('response', {
-            lines: [...this.incomingLines, line],
-            error,
-        });
+        this.eventEmitter.emit(
+            'response',
+            [...this.incomingLines, line],
+            error
+        );
         this.incomingLines = [];
+    }
+
+    onLine(handler: (line: string) => void) {
+        this.eventEmitter.on('line', handler);
+        return () => this.eventEmitter.removeListener('line', handler);
+    }
+
+    onResponse(handler: (lines: Response, error?: string) => void) {
+        this.eventEmitter.on('response', handler);
+        return () => this.eventEmitter.removeListener('response', handler);
     }
 
     close(callback?: (error?: Error | null) => void) {
@@ -61,7 +72,7 @@ class Modem extends EventEmitter {
         if (this.waitingForResponse) return;
         this.waitingForResponse = true;
 
-        this.prependOnceListener('response', () => {
+        this.eventEmitter.prependOnceListener('response', () => {
             this.waitingForResponse = false;
         });
         this.serialPort.write(command + DELIMITER);
