@@ -92,7 +92,7 @@ const TerminalComponent = ({
 
     useEffect(() => {
         if (!modem) {
-            writeln('Open a device to activate the terminal.');
+            writeln(c.yellow('Open a device to activate the terminal.'));
             return;
         }
         xtermRef.current?.terminal.clear();
