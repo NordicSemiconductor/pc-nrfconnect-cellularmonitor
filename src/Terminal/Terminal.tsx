@@ -60,8 +60,6 @@ const split = (userInput: string) => {
     return { inputLines, remainder };
 };
 
-let userInput = '';
-
 const TerminalComponent = ({
     width,
     height,
@@ -70,6 +68,7 @@ const TerminalComponent = ({
     height: number;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
+    const userInput = useRef('');
 
     const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
@@ -133,13 +132,13 @@ const TerminalComponent = ({
     const onKeyPress = useCallback(
         key => {
             const pressedReturn = key.charCodeAt(0) === 13;
-            userInput = pressedReturn
-                ? userInput + EOL
+            userInput.current = pressedReturn
+                ? userInput.current + EOL
                 : nrfTerminalCommander.output;
 
-            const { inputLines, remainder } = split(userInput);
+            const { inputLines, remainder } = split(userInput.current);
             inputLines.forEach(handleUserInputLine);
-            userInput = remainder;
+            userInput.current = remainder;
         },
         [handleUserInputLine]
     );
