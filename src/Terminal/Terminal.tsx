@@ -50,8 +50,17 @@ import nrfTerminalCommander from './terminalCommander';
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-let userInput = '';
 const EOL = '\n';
+
+const split = (userInput: string) => {
+    const inputLines = userInput.split(EOL);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Because inputLines will never be an empty array
+    const remainder = inputLines.pop()!;
+
+    return { inputLines, remainder };
+};
+
+let userInput = '';
 
 const TerminalComponent = ({
     width,
@@ -128,12 +137,9 @@ const TerminalComponent = ({
                 ? userInput + EOL
                 : nrfTerminalCommander.output;
 
-            let i: number;
-            // eslint-disable-next-line no-cond-assign
-            while ((i = userInput.indexOf(EOL)) > -1) {
-                handleUserInputLine(userInput.slice(0, i + EOL.length));
-                userInput = userInput.slice(i + EOL.length);
-            }
+            const { inputLines, remainder } = split(userInput);
+            inputLines.forEach(handleUserInputLine);
+            userInput = remainder;
         },
         [handleUserInputLine]
     );
