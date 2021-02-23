@@ -86,9 +86,8 @@ const TerminalComponent = ({
             lines.forEach(l => {
                 writeln(color(l));
             });
-            prompt();
         },
-        [writeln, prompt]
+        [writeln]
     );
 
     useEffect(() => {
