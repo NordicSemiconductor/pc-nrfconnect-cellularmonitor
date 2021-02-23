@@ -34,72 +34,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { logger, usageData } from 'pc-nrfconnect-shared';
-
-import pkgJson from '../../package.json';
-
-export enum EventAction {
+enum EventAction {
     LAUNCH_APP = 'Launch app',
     LAUNCH_SETTINGS_VIEW = 'Launch settings view',
     LAUNCH_ABOUT_VIEW = 'Launch about view',
-    REPORT_OS_INFO = 'Report OS info',
-    REPORT_ERROR = 'Report error',
 }
 
-const eventCategory = pkgJson.name;
-
-let isInited = false;
-let eventQueue: { action: EventAction; label: string }[] = [];
-
-/**
- * Initialize Google Analytics to send usage data event
- * @returns {Promise<void>} Promise<void>
- */
-export const initUsageData = async (): Promise<void> => {
-    try {
-        await usageData.init(eventCategory);
-        isInited = true;
-        sendUsageData(EventAction.LAUNCH_APP, `v${pkgJson.version}`);
-        sendUsageData(
-            EventAction.REPORT_OS_INFO,
-            `${process.platform}; ${process.arch}`
-        );
-    } catch (e) {
-        console.warn('Usage data not available and will not be stored');
-    }
-};
-
-/**
- * Send usage data event to Google Analytics
- * @param {EventAction} action The event action
- * @param {string} label The event label
- * @returns {void} Promise<void>
- */
-export const sendUsageData = (action: EventAction, label: string): void => {
-    if (!isInited) {
-        eventQueue.push({ action, label });
-        return;
-    }
-    while (eventQueue.length) {
-        const event = eventQueue.shift() as {
-            action: EventAction;
-            label: string;
-        };
-        usageData.sendEvent(eventCategory, event.action, event.label || '');
-    }
-    eventQueue = [];
-    usageData.sendEvent(eventCategory, action, label || '');
-};
-
-/**
- * Send error usage data event to Google Analytics and also show it in the logger view
- * @param {EventAction} error The event action
- * @returns {void} void
- */
-export const sendErrorReport = (error: string): void => {
-    logger.error(error);
-    sendUsageData(
-        EventAction.REPORT_ERROR,
-        `${process.platform}; ${process.arch}; v${pkgJson.version}; ${error}`
-    );
-};
+export default EventAction;
