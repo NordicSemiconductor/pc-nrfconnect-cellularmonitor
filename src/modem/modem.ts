@@ -4,19 +4,17 @@ import SerialPort, { parsers } from 'serialport';
 export type Response = string[];
 
 const DELIMITER = '\r\n';
-const AT_ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
-
-const SUCCESS_MESSAGE = 'OK';
-const ERROR_MESSAGE = 'ERROR';
 
 const parseLine = (line: string) => {
-    if (line === SUCCESS_MESSAGE) {
+    if (line === 'OK') {
         return { complete: true };
     }
-    if (line === ERROR_MESSAGE) {
-        return { complete: true, error: ERROR_MESSAGE };
+
+    if (line === 'ERROR') {
+        return { complete: true, error: line };
     }
 
+    const AT_ERROR_PATTERN = /\+CM[ES] ERROR: (?<cause_value>.*)/;
     const errorMessage = line.match(AT_ERROR_PATTERN)?.groups?.cause_value;
     return { complete: errorMessage != null, error: errorMessage };
 };
