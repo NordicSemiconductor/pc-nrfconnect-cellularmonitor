@@ -108,10 +108,17 @@ const TerminalComponent = ({
         (line: string) => {
             if (line === EOL) return;
             if (modem != null && line.startsWith('AT')) {
-                modem.write(line.trim());
+                const commandWasAccepted = modem.write(line.trim());
+                if (!commandWasAccepted) {
+                    writeln(
+                        c.red(
+                            'Command rejected while processing previous command'
+                        )
+                    );
+                }
             }
         },
-        [modem]
+        [modem, writeln]
     );
 
     const onData = useCallback(

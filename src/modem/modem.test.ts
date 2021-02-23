@@ -21,6 +21,21 @@ describe('modem', () => {
         serialPort.write(`${inputCommand}\r\n`);
     });
 
+    it('accepts a command', () => {
+        const [modem] = initialiseModem();
+        const result = modem.write('command');
+
+        expect(result).toBe(true);
+    });
+
+    it('rejects a command while the previous command is processed', () => {
+        const [modem] = initialiseModem();
+        modem.write('one command');
+        const result = modem.write('second command');
+
+        expect(result).toBe(false);
+    });
+
     it('should handle OK response', done => {
         const [modem] = initialiseModem();
 

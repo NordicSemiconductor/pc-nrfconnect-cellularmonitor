@@ -69,13 +69,15 @@ class Modem {
     }
 
     write(command: string) {
-        if (this.waitingForResponse) return;
+        if (this.waitingForResponse) return false;
         this.waitingForResponse = true;
 
         this.eventEmitter.prependOnceListener('response', () => {
             this.waitingForResponse = false;
         });
         this.serialPort.write(command + DELIMITER);
+
+        return true;
     }
 }
 
