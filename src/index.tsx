@@ -35,9 +35,9 @@
  */
 
 import React, { useEffect } from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { App, usageData } from 'pc-nrfconnect-shared';
 
-import { initUsageData } from './actions/usageDataActions';
+import packageJson from '../package.json';
 import Dashboard from './Dashboard/Dashboard';
 import DeviceSelector from './DeviceSelector';
 import GPS from './GPS/GPS';
@@ -49,9 +49,12 @@ import './index.scss';
 
 export default () => {
     useEffect(() => {
-        // Init usage data functionality comes after rendering.
         // Usage data functionality should not block rendering.
-        initUsageData();
+        try {
+            usageData.init(packageJson);
+        } catch (error) {
+            console.log(error);
+        }
     }, []);
     return (
         <App
