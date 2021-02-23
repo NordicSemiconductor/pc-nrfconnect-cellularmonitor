@@ -49,10 +49,11 @@ import './index.scss';
 
 export default () => {
     useEffect(() => {
-        // Usage data functionality should not block rendering.
+        // Usage data functionality should not block rendering
         try {
             usageData.init(packageJson);
         } catch (error) {
+            // No need to display the error message for the user
             console.log(error);
         }
     }, []);
