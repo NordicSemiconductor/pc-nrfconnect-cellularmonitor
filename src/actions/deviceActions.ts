@@ -37,7 +37,7 @@
 import { Device, logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
 
-import Modem from '../modem';
+import Modem from '../modem/modem';
 import { getModem, setModem } from '../reducer';
 import { TAction } from '../thunk';
 

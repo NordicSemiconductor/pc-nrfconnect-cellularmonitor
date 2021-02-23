@@ -1,6 +1,6 @@
 import SerialPort from 'serialport';
 
-import Modem from '../index';
+import Modem from './modem';
 
 const MockBinding = require('@serialport/binding-mock');
 
