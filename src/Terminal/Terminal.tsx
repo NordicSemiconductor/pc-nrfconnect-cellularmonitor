@@ -50,7 +50,7 @@ import nrfTerminalCommander from './terminalCommander';
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-let output = '';
+let userInput = '';
 const EOL = '\n';
 
 const TerminalComponent = ({
@@ -104,7 +104,7 @@ const TerminalComponent = ({
         };
     }, [modem, writeln, handleModemResponse]);
 
-    const handleOutput = useCallback(
+    const handleUserInputLine = useCallback(
         (line: string) => {
             if (line === EOL) return;
             if (modem != null && line.startsWith('AT')) {
@@ -121,21 +121,21 @@ const TerminalComponent = ({
         [modem, writeln]
     );
 
-    const onData = useCallback(
-        data => {
-            output =
-                data.charCodeAt(0) === 13
-                    ? output + EOL
-                    : nrfTerminalCommander.output;
+    const onKeyPress = useCallback(
+        key => {
+            const pressedReturn = key.charCodeAt(0) === 13;
+            userInput = pressedReturn
+                ? userInput + EOL
+                : nrfTerminalCommander.output;
 
             let i: number;
             // eslint-disable-next-line no-cond-assign
-            while ((i = output.indexOf(EOL)) > -1) {
-                handleOutput(output.slice(0, i + EOL.length));
-                output = output.slice(i + EOL.length);
+            while ((i = userInput.indexOf(EOL)) > -1) {
+                handleUserInputLine(userInput.slice(0, i + EOL.length));
+                userInput = userInput.slice(i + EOL.length);
             }
         },
-        [handleOutput]
+        [handleUserInputLine]
     );
 
     const terminalOptions = {
@@ -152,7 +152,7 @@ const TerminalComponent = ({
             addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
             options={terminalOptions}
-            onData={onData}
+            onData={onKeyPress}
         />
     );
 };
