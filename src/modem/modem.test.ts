@@ -1,6 +1,6 @@
 import SerialPort from 'serialport';
 
-import Modem from './modem';
+import { createModem, Modem } from './modem';
 
 const MockBinding = require('@serialport/binding-mock');
 
@@ -81,5 +81,5 @@ function initialiseModem(): [Modem, SerialPort] {
         readyData: Buffer.from([]),
     });
     const serialPort = new SerialPort(port);
-    return [new Modem(serialPort), serialPort];
+    return [createModem(serialPort), serialPort];
 }

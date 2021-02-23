@@ -19,64 +19,63 @@ const parseLine = (line: string) => {
     return { complete: errorMessage != null, error: errorMessage };
 };
 
-class Modem {
-    private waitingForResponse = false;
-    private incomingLines: string[] = [];
-    private serialPort: SerialPort;
-    private eventEmitter = new EventEmitter();
+const createHandleLine = (eventEmitter: EventEmitter) => {
+    let incomingLines: string[] = [];
 
-    constructor(serialPort: SerialPort) {
-        this.serialPort = serialPort;
-
-        const lineReader = new parsers.Readline({ delimiter: DELIMITER });
-        this.serialPort.pipe(lineReader).on('data', this.handleLine.bind(this));
-    }
-
-    private handleLine(line: string) {
-        if (!this.waitingForResponse) {
-            this.eventEmitter.emit('line', line);
+    return (line: string, waitingForResponse: boolean) => {
+        if (!waitingForResponse) {
+            eventEmitter.emit('line', line);
             return;
         }
 
         const { complete, error } = parseLine(line);
         if (!complete) {
-            this.incomingLines.push(line);
+            incomingLines.push(line);
             return;
         }
 
-        this.eventEmitter.emit(
-            'response',
-            [...this.incomingLines, line],
-            error
-        );
-        this.incomingLines = [];
-    }
+        eventEmitter.emit('response', [...incomingLines, line], error);
+        incomingLines = [];
+    };
+};
 
-    onLine(handler: (line: string) => void) {
-        this.eventEmitter.on('line', handler);
-        return () => this.eventEmitter.removeListener('line', handler);
-    }
+export type Modem = ReturnType<typeof createModem>;
 
-    onResponse(handler: (lines: Response, error?: string) => void) {
-        this.eventEmitter.on('response', handler);
-        return () => this.eventEmitter.removeListener('response', handler);
-    }
+export const createModem = (serialPort: SerialPort) => {
+    const eventEmitter = new EventEmitter();
+    let waitingForResponse = false;
 
-    close(callback?: (error?: Error | null) => void) {
-        this.serialPort.close(callback);
-    }
+    const lineSplitter = new parsers.Readline({ delimiter: DELIMITER });
+    const handleLine = createHandleLine(eventEmitter);
+    serialPort
+        .pipe(lineSplitter)
+        .on('data', (line: string) => handleLine(line, waitingForResponse));
 
-    write(command: string) {
-        if (this.waitingForResponse) return false;
-        this.waitingForResponse = true;
+    return {
+        onLine: (handler: (line: string) => void) => {
+            eventEmitter.on('line', handler);
+            return () => eventEmitter.removeListener('line', handler);
+        },
 
-        this.eventEmitter.prependOnceListener('response', () => {
-            this.waitingForResponse = false;
-        });
-        this.serialPort.write(command + DELIMITER);
+        onResponse: (handler: (lines: Response, error?: string) => void) => {
+            eventEmitter.on('response', handler);
+            return () => eventEmitter.removeListener('response', handler);
+        },
 
-        return true;
-    }
-}
+        close: (callback?: (error?: Error | null) => void) => {
+            serialPort.close(callback);
+        },
 
-export default Modem;
+        write: (command: string) => {
+            if (waitingForResponse) return false;
+            waitingForResponse = true;
+
+            eventEmitter.prependOnceListener('response', () => {
+                waitingForResponse = false;
+            });
+            serialPort.write(command + DELIMITER);
+
+            return true;
+        },
+    };
+};
