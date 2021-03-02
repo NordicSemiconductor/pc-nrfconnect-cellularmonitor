@@ -69,6 +69,7 @@ const TerminalComponent = ({
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
     const userInput = useRef('');
+    const previousUserInput = useRef('');
 
     const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
@@ -129,12 +130,22 @@ const TerminalComponent = ({
         [modem, writeln]
     );
 
+    const outputHandler = (output: string) => {
+        previousUserInput.current = userInput.current;
+        userInput.current = output;
+    };
+
+    useEffect(() => {
+        nrfTerminalCommander.registerOutputListener(outputHandler);
+    }, []);
+
     const onKeyPress = useCallback(
         key => {
             const pressedReturn = key.charCodeAt(0) === 13;
-            userInput.current = pressedReturn
-                ? userInput.current + EOL
-                : nrfTerminalCommander.output;
+
+            if (pressedReturn) {
+                userInput.current = previousUserInput.current + EOL;
+            }
 
             const { inputLines, remainder } = split(userInput.current);
             inputLines.forEach(handleUserInputLine);
