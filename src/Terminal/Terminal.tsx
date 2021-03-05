@@ -50,16 +50,6 @@ import nrfTerminalCommander from './terminalCommander';
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-const EOL = '\n';
-
-const split = (userInput: string) => {
-    const inputLines = userInput.split(EOL);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Because inputLines will never be an empty array
-    const remainder = inputLines.pop()!;
-
-    return { inputLines, remainder };
-};
-
 const TerminalComponent = ({
     width,
     height,
@@ -68,8 +58,6 @@ const TerminalComponent = ({
     height: number;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
-    const userInput = useRef('');
-    const previousUserInput = useRef('');
 
     const modem = useSelector(getModem);
     const fitAddon = useFitAddon(height, width);
@@ -115,7 +103,7 @@ const TerminalComponent = ({
 
     const handleUserInputLine = useCallback(
         (line: string) => {
-            if (line === EOL) return;
+            if (line === '\n') return; // check if this ever happens
             if (modem != null && line.startsWith('AT')) {
                 const commandWasAccepted = modem.write(line.trim());
                 if (!commandWasAccepted) {
@@ -130,29 +118,15 @@ const TerminalComponent = ({
         [modem, writeln]
     );
 
-    const outputHandler = (output: string) => {
-        previousUserInput.current = userInput.current;
-        userInput.current = output;
-    };
-
     useEffect(() => {
-        nrfTerminalCommander.registerOutputListener(outputHandler);
-    }, []);
-
-    const onKeyPress = useCallback(
-        key => {
-            const pressedReturn = key.charCodeAt(0) === 13;
-
-            if (pressedReturn) {
-                userInput.current = previousUserInput.current + EOL;
-            }
-
-            const { inputLines, remainder } = split(userInput.current);
-            inputLines.forEach(handleUserInputLine);
-            userInput.current = remainder;
-        },
-        [handleUserInputLine]
-    );
+        if (modem) {
+            nrfTerminalCommander.registerRunCommandListener(
+                handleUserInputLine
+            );
+        } else {
+            nrfTerminalCommander.clearRunCommandListeners();
+        }
+    }, [modem, handleUserInputLine]);
 
     const terminalOptions = {
         convertEol: true,
@@ -168,7 +142,6 @@ const TerminalComponent = ({
             addons={[fitAddon, nrfTerminalCommander]}
             className="terminal-container"
             options={terminalOptions}
-            onData={onKeyPress}
         />
     );
 };
