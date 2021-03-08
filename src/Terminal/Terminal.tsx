@@ -36,7 +36,7 @@
 
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import ReactResizeDetector from 'react-resize-detector';
+import { useResizeDetector } from 'react-resize-detector';
 import * as c from 'ansi-colors';
 import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
@@ -50,16 +50,15 @@ import nrfTerminalCommander from './terminalCommander';
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-const TerminalComponent = ({
-    width,
-    height,
-}: {
-    width: number;
-    height: number;
-}) => {
+const TerminalComponent = () => {
     const xtermRef = useRef<XTerm | null>(null);
 
     const modem = useSelector(getModem);
+    const {
+        width,
+        height,
+        ref: resizeRef,
+    } = useResizeDetector<HTMLDivElement>();
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
@@ -133,23 +132,15 @@ const TerminalComponent = ({
     };
 
     return (
-        <XTerm
-            ref={xtermRef}
-            addons={[fitAddon, nrfTerminalCommander]}
-            className="terminal-container"
-            options={terminalOptions}
-        />
+        <div ref={resizeRef} style={{ height: '100%' }}>
+            <XTerm
+                ref={xtermRef}
+                addons={[fitAddon, nrfTerminalCommander]}
+                className="terminal-container"
+                options={terminalOptions}
+            />
+        </div>
     );
 };
 
-// TODO: Replace ReactResizeDetector with useResizeDetector hook when the
-// related issue is solved:
-// https://github.com/maslianok/react-resize-detector/issues/130
-
-export default () => (
-    <ReactResizeDetector handleWidth handleHeight>
-        {({ width, height }) => (
-            <TerminalComponent width={width || 0} height={height || 0} />
-        )}
-    </ReactResizeDetector>
-);
+export default TerminalComponent;
