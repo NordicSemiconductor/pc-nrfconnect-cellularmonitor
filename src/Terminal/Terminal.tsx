@@ -64,7 +64,7 @@ const TerminalComponent = ({
 
     const prompt = useCallback(() => {
         xtermRef.current?.terminal.write(
-            nrfTerminalCommander.prompt.value + nrfTerminalCommander.output
+            nrfTerminalCommander.prompt.value + nrfTerminalCommander.userInput
         );
     }, []);
 
@@ -120,11 +120,7 @@ const TerminalComponent = ({
 
     useEffect(() => {
         if (modem) {
-            nrfTerminalCommander.registerRunCommandListener(
-                handleUserInputLine
-            );
-        } else {
-            nrfTerminalCommander.clearRunCommandListeners();
+            return nrfTerminalCommander.onRunCommand(handleUserInputLine);
         }
     }, [modem, handleUserInputLine]);
 
