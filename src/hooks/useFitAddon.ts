@@ -39,7 +39,7 @@ import { FitAddon } from 'xterm-addon-fit';
 
 const fitAddon = new FitAddon();
 
-const useFitAddon = (height: number, width: number) => {
+const useFitAddon = (height = 0, width = 0) => {
     useEffect(() => {
         if (width * height > 0) fitAddon.fit();
     }, [width, height]);
