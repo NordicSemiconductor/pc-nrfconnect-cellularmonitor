@@ -38,7 +38,7 @@
     "ansi-colors": "^4.1.1",
     "ansi-escapes": "^4.3.1",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.18.0",
-    "pc-xterm-lib": "github:NordicPlayground/pc-xterm-lib#e704769d618e7ff44d16b14ae32f89ac76ae2d33",
+    "pc-xterm-lib": "github:NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "7.2.0",
