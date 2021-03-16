@@ -47,7 +47,9 @@
     "xterm-addon-fit": "^0.5.0",
     "xterm-for-react": "^1.0.4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nrf-monitor-lib-js": "file:resources/nrf-monitor-lib-js-0.1.0.tgz"
+  },
   "eslintConfig": {
     "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
   },
