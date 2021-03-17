@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.5.0",
+    "@types/react": "^16.14.4",
     "@types/react-redux": "7.1.16",
     "@types/serialport": "^8.0.1",
     "ansi-colors": "^4.1.1",
