@@ -35,17 +35,46 @@
  */
 
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import { logger, openUrl } from 'pc-nrfconnect-shared';
 
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+import { loadPcapFile } from '../utils/fileLoader';
+import openInWireshark from '../utils/wireshark';
 
-import './sidepanel.scss';
+const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
-export default () => (
-    <div className="sidepanel">
-        The side panel can be used for configurations or information that are
-        always shown to the side of the main view.
-        <TraceConverter />
-        <Wireshark />
-    </div>
-);
+export default () => {
+    const loadPcap = async () => {
+        const filename = await loadPcapFile();
+        if (!filename) {
+            logger.error('Invalid file, please select a valid pcap file');
+            return;
+        }
+        openInWireshark(filename);
+    };
+
+    return (
+        <div className="wireshark">
+            <Button
+                className="w-100 secondary-btn"
+                style={{ marginTop: 8 }}
+                variant="primary"
+                onClick={loadPcap}
+            >
+                Open in Wireshark
+            </Button>
+            <Button
+                variant="link"
+                onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+                style={{
+                    paddingLeft: 0,
+                    display: 'inline-block',
+                    textAlign: 'initial',
+                    marginTop: 4,
+                }}
+            >
+                Don&apos;t have Wireshark? Get it here
+            </Button>
+        </div>
+    );
+};

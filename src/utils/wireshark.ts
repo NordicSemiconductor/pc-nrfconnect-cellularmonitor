@@ -34,25 +34,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { logger } from 'pc-nrfconnect-shared';
 
-const {
-    remote: { dialog },
-} = require('electron');
+const { exec } = require('child_process');
 
-const appPath = getAppDir();
-
-export default async () => {
-    const filters = [
-        { name: 'Trace', extensions: ['bin'] },
-        { name: 'All Files', extensions: ['*'] },
-    ];
-    const {
-        filePaths: [filename],
-    } =
-        (await dialog.showOpenDialog({
-            defaultPath: appPath,
-            filters,
-        })) || [];
-    return filename;
-};
+export default (filepath: string) =>
+    exec(
+        `"C:\\Program Files\\Wireshark\\Wireshark.exe" -r ${filepath}`,
+        (err: Error) => {
+            if (err) {
+                logger.error(err);
+            }
+        }
+    );
