@@ -34,18 +34,38 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { getAppDir } from 'pc-nrfconnect-shared';
 
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+const {
+    remote: { dialog },
+} = require('electron');
 
-import './sidepanel.scss';
+const appPath = getAppDir();
 
-export default () => (
-    <div className="sidepanel">
-        The side panel can be used for configurations or information that are
-        always shown to the side of the main view.
-        <TraceConverter />
-        <Wireshark />
-    </div>
-);
+type Filter = {
+    name: string;
+    extensions: string[];
+};
+
+export const loadTraceFile = async () =>
+    loadFile([
+        { name: 'Trace', extensions: ['bin'] },
+        { name: 'All Files', extensions: ['*'] },
+    ]);
+
+export const loadPcapFile = async () =>
+    loadFile([
+        { name: 'PCAP', extensions: ['pcap'] },
+        { name: 'All Files', extensions: ['*'] },
+    ]);
+
+const loadFile = async (filters: Filter[]) => {
+    const {
+        filePaths: [filename],
+    } =
+        (await dialog.showOpenDialog({
+            defaultPath: appPath,
+            filters,
+        })) || [];
+    return filename;
+};

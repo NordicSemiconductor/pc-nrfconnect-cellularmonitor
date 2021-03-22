@@ -34,20 +34,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
+import { logger } from 'pc-nrfconnect-shared';
 
 import convertTraceFile from '../nrfml/nrfml';
-import loadFile from '../utils/traceFileLoader';
+import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
-    const [error, setError] = useState('');
-
-    const loadTraceFile = async () => {
-        setError('');
-        const filename = await loadFile();
+    const loadTrace = async () => {
+        const filename = await loadTraceFile();
         if (!filename) {
-            setError('Invalid file, please select a valid trace file');
+            logger.error('Invalid file, please select a valid trace file');
             return;
         }
         convertTraceFile(filename);
@@ -58,11 +56,10 @@ export default () => {
             <Button
                 className="w-100 secondary-btn"
                 variant="primary"
-                onClick={loadTraceFile}
+                onClick={loadTrace}
             >
                 Convert Trace
             </Button>
-            {error.length > 0 && <div style={{ color: 'red' }}>{error}</div>}
         </div>
     );
 };
