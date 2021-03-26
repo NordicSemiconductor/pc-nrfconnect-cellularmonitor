@@ -63,9 +63,9 @@ export default () => {
             deviceSelect={<DeviceSelector />}
             sidePanel={<SidePanel />}
             panes={[
-                ['Dashboard', Dashboard],
-                ['Terminal', Terminal],
-                ['GPS', GPS],
+                { name: 'Dashboard', Main: Dashboard },
+                { name: 'Terminal', Main: Terminal },
+                { name: 'GPS', Main: GPS },
             ]}
         />
     );
