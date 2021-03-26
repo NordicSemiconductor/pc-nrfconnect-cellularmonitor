@@ -37,8 +37,6 @@
 import React, { useEffect } from 'react';
 import { logger } from 'pc-nrfconnect-shared';
 
-import './gps.scss';
-
 export default () => {
     useEffect(() => {
         logger.info('Showing GPS pane');
