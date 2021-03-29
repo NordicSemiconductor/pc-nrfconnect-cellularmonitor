@@ -34,10 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect } from 'react';
-import { App, usageData } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { App } from 'pc-nrfconnect-shared';
 
-import packageJson from '../package.json';
 import Dashboard from './Dashboard/Dashboard';
 import DeviceSelector from './DeviceSelector';
 import GPS from './GPS/GPS';
@@ -47,26 +46,16 @@ import Terminal from './Terminal/Terminal';
 
 import './index.scss';
 
-export default () => {
-    useEffect(() => {
-        // Usage data functionality should not block rendering
-        try {
-            usageData.init(packageJson);
-        } catch (error) {
-            // No need to display the error message for the user
-            console.log(error);
-        }
-    }, []);
-    return (
-        <App
-            appReducer={reducer}
-            deviceSelect={<DeviceSelector />}
-            sidePanel={<SidePanel />}
-            panes={[
-                ['Dashboard', Dashboard],
-                ['Terminal', Terminal],
-                ['GPS', GPS],
-            ]}
-        />
-    );
-};
+export default () => (
+    <App
+        reportUsageData
+        appReducer={reducer}
+        deviceSelect={<DeviceSelector />}
+        sidePanel={<SidePanel />}
+        panes={[
+            { name: 'Dashboard', Main: Dashboard },
+            { name: 'Terminal', Main: Terminal },
+            { name: 'GPS', Main: GPS },
+        ]}
+    />
+);
