@@ -34,10 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import nrfml from 'nrf-monitor-lib-js';
+import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
-
-const nrfml = require('nrf-monitor-lib-js');
-const path = require('path');
 
 const appPath = getAppDir();
 
@@ -66,21 +65,23 @@ const convertTraceFile = (tracePath: string) => {
             ],
             sources: [
                 {
+                    name: 'nrfml-insight-source',
                     init_parameters: {
                         file_path: tracePath,
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                     },
-                    name: 'nrfml-insight-source',
-                    configuration: {
+                    config: {
                         buffer_size: 10,
                     },
                 },
             ],
         },
-        (err: string) => {
-            console.log('err ', err);
+        err => {
+            if (err != null) {
+                console.error('err ', err);
+            }
         },
-        (progress: string) => {
+        progress => {
             console.log('progress ', progress);
         }
     );
