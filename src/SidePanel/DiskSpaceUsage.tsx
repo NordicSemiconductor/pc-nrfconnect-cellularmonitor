@@ -34,34 +34,50 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { useDispatch } from 'react-redux';
-import { logger } from 'pc-nrfconnect-shared';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import checkDiskSpace from 'check-disk-space';
+import { getAppDataDir } from 'pc-nrfconnect-shared';
+import prettyBytes from 'pretty-bytes';
 
-import convertTraceFile from '../nrfml/nrfml';
-import { loadTraceFile } from '../utils/fileLoader';
+import { traceSizeSelector } from '../reducer';
+
+type Diskspace = {
+    free: number;
+    size: number;
+};
 
 export default () => {
-    const dispatch = useDispatch();
-    const loadTrace = async () => {
-        const filename = await loadTraceFile();
-        if (!filename) {
-            logger.error('Invalid file, please select a valid trace file');
-            return;
-        }
-        dispatch(convertTraceFile(filename));
-    };
+    const [diskspace, setDiskspace] = useState<Diskspace>({
+        free: 0,
+        size: 0,
+    });
+    const traceSize = useSelector(traceSizeSelector);
 
+    useEffect(() => {
+        checkDiskSpace(getAppDataDir()).then(({ free, size }) =>
+            setDiskspace({ free, size })
+        );
+    }, []);
+
+    const isDiskspaceAvailable = diskspace.free && diskspace.size;
     return (
-        <div className="traceUpload">
-            <Button
-                className="w-100 secondary-btn"
-                variant="primary"
-                onClick={loadTrace}
-            >
-                Convert Trace
-            </Button>
-        </div>
+        <>
+            <div>
+                <h4>Disk space usage</h4>
+                {isDiskspaceAvailable ? (
+                    <div>
+                        Disk space: {prettyBytes(diskspace.free)} free of{' '}
+                        {prettyBytes(diskspace.size)}
+                    </div>
+                ) : (
+                    <div>Checking available disk space</div>
+                )}
+            </div>
+            <div>
+                <h4>Trace file usage</h4>
+                <strong>{prettyBytes(traceSize)}</strong>
+            </div>
+        </>
     );
 };

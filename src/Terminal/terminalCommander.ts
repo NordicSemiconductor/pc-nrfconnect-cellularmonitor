@@ -35,11 +35,18 @@
  */
 
 import { NrfTerminalCommander } from 'pc-xterm-lib';
+// import NrfTerminalCommander from '../../../pc-xterm-lib/src/NrfTerminalCommander';
 
 const nrfTerminalCommander = new NrfTerminalCommander({
     commands: {
         my_custom_command: () => {
             console.log('Doing something...');
+        },
+        foo: () => {
+            console.log('fooooo');
+        },
+        hello: () => {
+            console.log('world!');
         },
     },
     prompt: 'AT[:lineCount]>',
@@ -48,6 +55,10 @@ const nrfTerminalCommander = new NrfTerminalCommander({
         {
             value: 'my_custom_command',
             description: 'Does something interesting',
+        },
+        {
+            value: 'my_other_command',
+            description: 'Nothing interesting',
         },
     ],
     showTimestamps: false,

@@ -36,6 +36,7 @@
 
 import React from 'react';
 
+import DiskSpaceUsage from './DiskSpaceUsage';
 import TraceConverter from './TraceConverter';
 import Wireshark from './Wireshark';
 
@@ -47,5 +48,6 @@ export default () => (
         always shown to the side of the main view.
         <TraceConverter />
         <Wireshark />
+        <DiskSpaceUsage />
     </div>
 );

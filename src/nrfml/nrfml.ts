@@ -38,6 +38,9 @@ import nrfml from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
+import { setTraceSize, traceSizeSelector } from '../reducer';
+import { TAction } from '../thunk';
+
 const appPath = getAppDir();
 
 const pluginsDir = path.join(
@@ -47,7 +50,12 @@ const pluginsDir = path.join(
     'Release'
 );
 
-const convertTraceFile = (tracePath: string) => {
+const BUFFER_SIZE = 10;
+
+const convertTraceFile = (tracePath: string): TAction => (
+    dispatch,
+    getState
+) => {
     const filename = path.basename(tracePath, '.bin');
     const directory = path.dirname(tracePath);
     return nrfml.start(
@@ -70,8 +78,9 @@ const convertTraceFile = (tracePath: string) => {
                         file_path: tracePath,
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                     },
-                    config: {
-                        buffer_size: 10,
+                    name: 'nrfml-insight-source',
+                    configuration: {
+                        buffer_size: BUFFER_SIZE,
                     },
                 },
             ],
@@ -81,8 +90,9 @@ const convertTraceFile = (tracePath: string) => {
                 console.error('err ', err);
             }
         },
-        progress => {
-            console.log('progress ', progress);
+        (progress: string) => {
+            console.log('progressing', progress);
+            dispatch(setTraceSize(traceSizeSelector(getState()) + BUFFER_SIZE));
         }
     );
 };

@@ -40,21 +40,29 @@ import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { Modem } from './modem/modem';
 
 export const setModem = createAction<Modem | null>('SET_MODEM');
+export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
 
 interface State {
     readonly modem: Modem | null;
+    traceSize: number;
 }
 
 const initialState: State = {
     modem: null,
+    traceSize: 0,
 };
 
 export default createReducer(initialState, {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
     },
+    [setTraceSize.type]: (state, action: PayloadAction<number>) => {
+        state.traceSize = action.payload;
+    },
 });
 
 export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
+
+export const traceSizeSelector = ({ app }: { app: State }) => app.traceSize;
