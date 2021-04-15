@@ -41,13 +41,18 @@ import { getAppDir } from 'pc-nrfconnect-shared';
 import { setTraceSize, traceSizeSelector } from '../reducer';
 import { TAction } from '../thunk';
 
+const os = require('os');
+
+export type TaskId = string;
+
 const appPath = getAppDir();
 
 const pluginsDir = path.join(
     appPath,
     'node_modules',
     'nrf-monitor-lib-js',
-    'Release'
+    'Release',
+    `${process.platform}-${os.arch()}`
 );
 
 const BUFFER_SIZE = 10;
@@ -97,4 +102,52 @@ const convertTraceFile = (tracePath: string): TAction => (
     );
 };
 
-export default convertTraceFile;
+const getTrace = (): TaskId => {
+    return nrfml.start(
+        {
+            config: {
+                plugins_directory: pluginsDir,
+            },
+            sinks: [
+                {
+                    name: 'nrfml-pcap-sink',
+                    init_parameters: {
+                        file_path: path.join(
+                            appPath,
+                            'newtraces',
+                            'example.bin'
+                        ),
+                    },
+                },
+            ],
+            sources: [
+                {
+                    init_parameters: {
+                        serialport: {
+                            path: 'COM5',
+                            settings: '1000000D8S1PNFN',
+                        },
+                        db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        extract_raw: true,
+                    },
+                    name: 'nrfml-insight-source',
+                    configuration: {
+                        buffer_size: 10,
+                    },
+                },
+            ],
+        },
+        (err: string) => {
+            console.log('err ', err);
+        },
+        (progress: string) => {
+            console.log('progressing', progress);
+        }
+    );
+};
+
+const stopTrace = (traceId: TaskId) => {
+    return nrfml.stop(traceId);
+};
+
+export { convertTraceFile, getTrace, stopTrace };

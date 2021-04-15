@@ -44,8 +44,6 @@ import './sidepanel.scss';
 
 export default () => (
     <div className="sidepanel">
-        The side panel can be used for configurations or information that are
-        always shown to the side of the main view.
         <TraceConverter />
         <Wireshark />
         <DiskSpaceUsage />

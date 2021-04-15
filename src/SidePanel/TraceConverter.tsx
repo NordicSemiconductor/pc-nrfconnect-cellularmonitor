@@ -34,16 +34,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
-import convertTraceFile from '../nrfml/nrfml';
+import { convertTraceFile, getTrace, stopTrace, TaskId } from '../nrfml/nrfml';
 import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
+    const [nrfmlTaskId, setNrfmlTaskId] = useState<TaskId | null>(null);
     const dispatch = useDispatch();
+
     const loadTrace = async () => {
         const filename = await loadTraceFile();
         if (!filename) {
@@ -51,6 +53,14 @@ export default () => {
             return;
         }
         dispatch(convertTraceFile(filename));
+    };
+
+    const start = () => setNrfmlTaskId(getTrace());
+
+    const stop = (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        stopTrace(nrfmlTaskId!);
+        setNrfmlTaskId(null);
     };
 
     return (
@@ -62,6 +72,23 @@ export default () => {
             >
                 Convert Trace
             </Button>
+            {nrfmlTaskId === null ? (
+                <Button
+                    className="w-100 secondary-btn"
+                    variant="primary"
+                    onClick={start}
+                >
+                    Start tracing
+                </Button>
+            ) : (
+                <Button
+                    className="w-100 secondary-btn"
+                    variant="primary"
+                    onClick={stop}
+                >
+                    Stop tracing
+                </Button>
+            )}
         </div>
     );
 };
