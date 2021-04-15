@@ -34,50 +34,43 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import checkDiskSpace from 'check-disk-space';
-import { getAppDataDir } from 'pc-nrfconnect-shared';
+import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { traceSizeSelector } from '../reducer';
+import { render } from '../utils/testUtils';
+import DiskSpaceUsage from './DiskSpaceUsage';
 
-export default () => {
-    const [freeSpace, setFreeSpace] = useState(0);
-    const [totalSize, setTotalSize] = useState(0);
+const FREE = 100;
+const TOTAL = 200;
 
-    const traceSize = useSelector(traceSizeSelector);
+jest.mock('pc-nrfconnect-shared', () => ({
+    getAppDataDir: () => 'X:\\test',
+}));
 
-    useEffect(() => {
-        checkDiskSpace(getAppDataDir())
-            .then(({ free, size }) => {
-                setFreeSpace(free);
-                setTotalSize(size);
-            })
-            .catch(err => console.log(err));
-    }, []);
+jest.mock('check-disk-space', () => ({
+    __esModule: true,
+    default: () =>
+        new Promise(resolve => {
+            resolve({
+                free: FREE,
+                size: TOTAL,
+            });
+        }),
+}));
 
-    const isDiskspaceAvailable = freeSpace && totalSize;
-    return (
-        <>
-            <div>
-                <h4>Disk space usage</h4>
-                {isDiskspaceAvailable ? (
-                    <div>
-                        <span>Disk space</span>:{' '}
-                        <span>
-                            {prettyBytes(freeSpace)} available of{' '}
-                            {prettyBytes(totalSize)}
-                        </span>
-                    </div>
-                ) : (
-                    <div>Checking available disk space</div>
-                )}
-            </div>
-            <div>
-                <h4>Trace file usage</h4>
-                <strong>{prettyBytes(traceSize)}</strong>
-            </div>
-        </>
-    );
+const initialState = {
+    app: {
+        traceSize: 0,
+    },
 };
+
+describe('Disk space usage', () => {
+    it('should show something', async () => {
+        const screen = render(<DiskSpaceUsage />, { initialState });
+        const diskSpaceString = `${prettyBytes(
+            FREE
+        )} available of ${prettyBytes(TOTAL)}`;
+        const diskNode = await screen.findByText(diskSpaceString);
+        expect(diskNode).toBeInTheDocument();
+    });
+});

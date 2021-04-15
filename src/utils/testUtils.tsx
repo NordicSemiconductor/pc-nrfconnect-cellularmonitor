@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2020, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,50 +34,39 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import checkDiskSpace from 'check-disk-space';
-import { getAppDataDir } from 'pc-nrfconnect-shared';
-import prettyBytes from 'pretty-bytes';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { render as rtlRender } from '@testing-library/react';
+import { createStore } from 'redux';
 
-import { traceSizeSelector } from '../reducer';
+import reducer from '../reducer';
 
-export default () => {
-    const [freeSpace, setFreeSpace] = useState(0);
-    const [totalSize, setTotalSize] = useState(0);
+jest.mock('pc-nrfconnect-shared', () => {
+    const storeAlwaysReturningDefaultValues = {
+        get: (_key: string, defaultValue: any) => defaultValue,
+        set: jest.fn(),
+    };
 
-    const traceSize = useSelector(traceSizeSelector);
+    return {
+        ...jest.requireActual('pc-nrfconnect-shared'),
+        getPersistentStore: () => storeAlwaysReturningDefaultValues,
+        getAppDataDir: () => '/mocked/data/dir',
+    };
+});
 
-    useEffect(() => {
-        checkDiskSpace(getAppDataDir())
-            .then(({ free, size }) => {
-                setFreeSpace(free);
-                setTotalSize(size);
-            })
-            .catch(err => console.log(err));
-    }, []);
+function render(
+    ui: any,
+    {
+        initialState,
+        store = createStore(reducer, initialState),
+        ...renderOptions
+    } = {}
+) {
+    function Wrapper(props: any) {
+        return <Provider store={store} {...props} />;
+    }
+    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+}
 
-    const isDiskspaceAvailable = freeSpace && totalSize;
-    return (
-        <>
-            <div>
-                <h4>Disk space usage</h4>
-                {isDiskspaceAvailable ? (
-                    <div>
-                        <span>Disk space</span>:{' '}
-                        <span>
-                            {prettyBytes(freeSpace)} available of{' '}
-                            {prettyBytes(totalSize)}
-                        </span>
-                    </div>
-                ) : (
-                    <div>Checking available disk space</div>
-                )}
-            </div>
-            <div>
-                <h4>Trace file usage</h4>
-                <strong>{prettyBytes(traceSize)}</strong>
-            </div>
-        </>
-    );
-};
+export * from '@testing-library/react';
+export { render };
