@@ -34,43 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
+import React from 'react';
 
-import { Modem } from './modem/modem';
-import { TaskId } from './nrfml/nrfml';
+import { render } from '../utils/testUtils';
+import TraceConverter from './TraceConverter';
 
-export const setModem = createAction<Modem | null>('SET_MODEM');
-export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
-
-export interface State {
-    readonly modem: Modem | null;
-    traceSize: number;
-    nrfmlTaskId: TaskId | null;
-}
-
-const initialState: State = {
-    modem: null,
-    traceSize: 0,
-    nrfmlTaskId: null,
-};
-
-export default createReducer(initialState, {
-    [setModem.type]: (state, action: PayloadAction<Modem>) => {
-        state.modem = action.payload;
-    },
-    [setTraceSize.type]: (state, action: PayloadAction<number>) => {
-        state.traceSize = action.payload;
-    },
-    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
-        state.nrfmlTaskId = action.payload;
-    },
+describe('TraceConverter', () => {
+    it('should convert trace', () => {
+        expect(true).toBe(true);
+    });
 });
-
-export type RootState = NrfConnectState<State>;
-
-export const getModem = (state: RootState) => state.app.modem;
-
-export const traceSizeSelector = ({ app }: { app: State }) => app.traceSize;
-export const nrfmlTaskIdSelector = ({ app }: { app: State }) => app.nrfmlTaskId;

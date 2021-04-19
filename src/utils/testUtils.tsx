@@ -36,33 +36,32 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render as rtlRender } from '@testing-library/react';
-import { createStore } from 'redux';
+import { render as rtlRender, RenderOptions } from '@testing-library/react';
+import { AnyAction, createStore, Store } from 'redux';
 
-import reducer from '../reducer';
+import reducer, { State } from '../reducer';
 
 jest.mock('pc-nrfconnect-shared', () => {
-    const storeAlwaysReturningDefaultValues = {
-        get: (_key: string, defaultValue: any) => defaultValue,
-        set: jest.fn(),
-    };
-
     return {
         ...jest.requireActual('pc-nrfconnect-shared'),
-        getPersistentStore: () => storeAlwaysReturningDefaultValues,
-        getAppDataDir: () => '/mocked/data/dir',
+        getAppDir: () => '/mocked/data/dir',
     };
 });
 
+type StoreOptions = {
+    initialState?: State;
+    store?: Store<State, AnyAction>;
+} & RenderOptions;
+
 function render(
-    ui: any,
+    ui: React.ReactElement,
     {
         initialState,
         store = createStore(reducer, initialState),
         ...renderOptions
-    } = {}
+    }: StoreOptions = {}
 ) {
-    function Wrapper(props: any) {
+    function Wrapper(props: unknown) {
         return <Provider store={store} {...props} />;
     }
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });

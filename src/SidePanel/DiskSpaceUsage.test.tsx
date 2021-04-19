@@ -43,10 +43,6 @@ import DiskSpaceUsage from './DiskSpaceUsage';
 const FREE = 100;
 const TOTAL = 200;
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    getAppDataDir: () => 'X:\\test',
-}));
-
 jest.mock('check-disk-space', () => ({
     __esModule: true,
     default: () =>

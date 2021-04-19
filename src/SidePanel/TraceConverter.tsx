@@ -34,17 +34,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
-import { convertTraceFile, getTrace, stopTrace, TaskId } from '../nrfml/nrfml';
+import { convertTraceFile, getTrace, stopTrace } from '../nrfml/nrfml';
+import { nrfmlTaskIdSelector } from '../reducer';
 import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
-    const [nrfmlTaskId, setNrfmlTaskId] = useState<TaskId | null>(null);
     const dispatch = useDispatch();
+    const nrfmlTaskId = useSelector(nrfmlTaskIdSelector);
 
     const loadTrace = async () => {
         const filename = await loadTraceFile();
@@ -55,13 +56,9 @@ export default () => {
         dispatch(convertTraceFile(filename));
     };
 
-    const start = () => setNrfmlTaskId(getTrace());
+    const start = () => dispatch(getTrace());
 
-    const stop = (): void => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        stopTrace(nrfmlTaskId!);
-        setNrfmlTaskId(null);
-    };
+    const stop = () => dispatch(stopTrace(nrfmlTaskId));
 
     return (
         <div className="traceUpload">

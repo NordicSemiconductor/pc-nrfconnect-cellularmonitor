@@ -38,7 +38,7 @@ import nrfml from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { setTraceSize, traceSizeSelector } from '../reducer';
+import { setNrfmlTaskId, setTraceSize, traceSizeSelector } from '../reducer';
 import { TAction } from '../thunk';
 
 const os = require('os');
@@ -63,7 +63,7 @@ const convertTraceFile = (tracePath: string): TAction => (
 ) => {
     const filename = path.basename(tracePath, '.bin');
     const directory = path.dirname(tracePath);
-    return nrfml.start(
+    const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
@@ -100,10 +100,11 @@ const convertTraceFile = (tracePath: string): TAction => (
             dispatch(setTraceSize(traceSizeSelector(getState()) + BUFFER_SIZE));
         }
     );
+    dispatch(setNrfmlTaskId(taskId));
 };
 
-const getTrace = (): TaskId => {
-    return nrfml.start(
+const getTrace = (): TAction => dispatch => {
+    const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
@@ -144,10 +145,13 @@ const getTrace = (): TaskId => {
             console.log('progressing', progress);
         }
     );
+    dispatch(setNrfmlTaskId(taskId));
 };
 
-const stopTrace = (traceId: TaskId) => {
-    return nrfml.stop(traceId);
+const stopTrace = (taskId: TaskId | null): TAction => dispatch => {
+    if (taskId === null) return;
+    nrfml.stop(taskId);
+    dispatch(setNrfmlTaskId(null));
 };
 
 export { convertTraceFile, getTrace, stopTrace };

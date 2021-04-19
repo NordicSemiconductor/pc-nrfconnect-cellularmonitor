@@ -34,43 +34,34 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-import { Modem } from './modem/modem';
-import { TaskId } from './nrfml/nrfml';
+// import { mockStore } from '../utils/testUtils';
+import { convertTraceFile } from './nrfml';
 
-export const setModem = createAction<Modem | null>('SET_MODEM');
-export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
+jest.mock('pc-nrfconnect-shared', () => ({
+    getAppDir: () => 'foo/bar',
+}));
 
-export interface State {
-    readonly modem: Modem | null;
-    traceSize: number;
-    nrfmlTaskId: TaskId | null;
-}
-
-const initialState: State = {
-    modem: null,
-    traceSize: 0,
-    nrfmlTaskId: null,
+const getMockStore = () => {
+    const middlewares = [thunk];
+    return configureMockStore(middlewares);
 };
 
-export default createReducer(initialState, {
-    [setModem.type]: (state, action: PayloadAction<Modem>) => {
-        state.modem = action.payload;
-    },
-    [setTraceSize.type]: (state, action: PayloadAction<number>) => {
-        state.traceSize = action.payload;
-    },
-    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
-        state.nrfmlTaskId = action.payload;
-    },
+const mockStore = getMockStore();
+
+const initialState = {
+    traceSize: 0,
+};
+
+const store = mockStore(initialState);
+
+describe('nrfml', () => {
+    it('should start tracing', () => {
+        store.dispatch(convertTraceFile('somePath'));
+        expect(store.getActions()).toEqual([
+            { type: 'SET_NRFML_TASK_ID', payload: 'taskId' },
+        ]);
+    });
 });
-
-export type RootState = NrfConnectState<State>;
-
-export const getModem = (state: RootState) => state.app.modem;
-
-export const traceSizeSelector = ({ app }: { app: State }) => app.traceSize;
-export const nrfmlTaskIdSelector = ({ app }: { app: State }) => app.nrfmlTaskId;
