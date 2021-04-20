@@ -34,12 +34,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { FC } from 'react';
 import { Provider } from 'react-redux';
-import { render as rtlRender, RenderOptions } from '@testing-library/react';
-import { AnyAction, createStore, Store } from 'redux';
+import { render } from '@testing-library/react';
+import { applyMiddleware, createStore } from 'redux';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-import reducer, { State } from '../reducer';
+import reducer from '../reducer';
 
 jest.mock('pc-nrfconnect-shared', () => {
     return {
@@ -48,24 +50,24 @@ jest.mock('pc-nrfconnect-shared', () => {
     };
 });
 
-type StoreOptions = {
-    initialState?: State;
-    store?: Store<State, AnyAction>;
-} & RenderOptions;
+const getMockStore = () => {
+    const middlewares = [thunk];
+    return configureMockStore(middlewares);
+};
 
-function render(
+const customRender = (
     ui: React.ReactElement,
     {
         initialState,
-        store = createStore(reducer, initialState),
-        ...renderOptions
-    }: StoreOptions = {}
-) {
-    function Wrapper(props: unknown) {
+        store = createStore(reducer, initialState, applyMiddleware(thunk)),
+        ...options
+    }: any = {}
+) => {
+    const Wrapper: FC = props => {
         return <Provider store={store} {...props} />;
-    }
-    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
-}
+    };
+    return render(ui, { wrapper: Wrapper, ...options });
+};
 
 export * from '@testing-library/react';
-export { render };
+export { customRender as render, getMockStore };

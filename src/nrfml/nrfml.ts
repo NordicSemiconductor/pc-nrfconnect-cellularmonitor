@@ -43,10 +43,9 @@ import { TAction } from '../thunk';
 
 const os = require('os');
 
-export type TaskId = string;
+export type TaskId = number;
 
 const appPath = getAppDir();
-
 const pluginsDir = path.join(
     appPath,
     'node_modules',
@@ -55,7 +54,7 @@ const pluginsDir = path.join(
     `${process.platform}-${os.arch()}`
 );
 
-const BUFFER_SIZE = 10;
+const BUFFER_SIZE = 1;
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -84,7 +83,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                     },
                     name: 'nrfml-insight-source',
-                    configuration: {
+                    config: {
                         buffer_size: BUFFER_SIZE,
                     },
                 },
@@ -95,7 +94,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                 console.error('err ', err);
             }
         },
-        (progress: string) => {
+        progress => {
             console.log('progressing', progress);
             dispatch(setTraceSize(traceSizeSelector(getState()) + BUFFER_SIZE));
         }
@@ -132,16 +131,18 @@ const getTrace = (): TAction => dispatch => {
                         extract_raw: true,
                     },
                     name: 'nrfml-insight-source',
-                    configuration: {
-                        buffer_size: 10,
+                    config: {
+                        buffer_size: BUFFER_SIZE,
                     },
                 },
             ],
         },
-        (err: string) => {
-            console.log('err ', err);
+        err => {
+            if (err != null) {
+                console.error('err ', err);
+            }
         },
-        (progress: string) => {
+        progress => {
             console.log('progressing', progress);
         }
     );

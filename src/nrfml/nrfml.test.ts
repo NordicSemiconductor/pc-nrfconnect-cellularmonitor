@@ -34,20 +34,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
-// import { mockStore } from '../utils/testUtils';
+import { getMockStore } from '../utils/testUtils';
 import { convertTraceFile } from './nrfml';
 
 jest.mock('pc-nrfconnect-shared', () => ({
     getAppDir: () => 'foo/bar',
 }));
-
-const getMockStore = () => {
-    const middlewares = [thunk];
-    return configureMockStore(middlewares);
-};
 
 const mockStore = getMockStore();
 
@@ -58,10 +50,10 @@ const initialState = {
 const store = mockStore(initialState);
 
 describe('nrfml', () => {
-    it('should start tracing', () => {
-        store.dispatch(convertTraceFile('somePath'));
+    it('should start converting', () => {
+        store.dispatch(convertTraceFile('somePath') as any);
         expect(store.getActions()).toEqual([
-            { type: 'SET_NRFML_TASK_ID', payload: 'taskId' },
+            { type: 'SET_NRFML_TASK_ID', payload: 1 },
         ]);
     });
 });
