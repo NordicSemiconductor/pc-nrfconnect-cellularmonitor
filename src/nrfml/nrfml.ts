@@ -84,7 +84,6 @@ const convertTraceFile = (tracePath: string): TAction => (
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         chunk_size: CHUNK_SIZE,
                     },
-                    name: 'nrfml-insight-source',
                     config: {
                         buffer_size: BUFFER_SIZE,
                     },
