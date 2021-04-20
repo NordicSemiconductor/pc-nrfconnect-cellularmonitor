@@ -61,6 +61,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
     getState
 ) => {
+    setTraceSize(0);
     const filename = path.basename(tracePath, '.bin');
     const directory = path.dirname(tracePath);
     const taskId = nrfml.start(
@@ -103,7 +104,8 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setNrfmlTaskId(taskId));
 };
 
-const getTrace = (): TAction => dispatch => {
+const getTrace = (): TAction => (dispatch, getState) => {
+    setTraceSize(0);
     const taskId = nrfml.start(
         {
             config: {
@@ -146,6 +148,7 @@ const getTrace = (): TAction => dispatch => {
         },
         progress => {
             console.log('progressing', progress);
+            dispatch(setTraceSize(traceSizeSelector(getState()) + CHUNK_SIZE));
         }
     );
     dispatch(setNrfmlTaskId(taskId));

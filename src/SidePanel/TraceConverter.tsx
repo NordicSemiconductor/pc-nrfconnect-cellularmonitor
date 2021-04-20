@@ -58,13 +58,13 @@ export default () => {
     };
 
     const start = () => {
-        dispatch(getTrace());
         setTracing(true);
+        dispatch(getTrace());
     };
 
     const stop = () => {
-        dispatch(stopTrace(nrfmlTaskId));
         setTracing(false);
+        dispatch(stopTrace(nrfmlTaskId));
     };
 
     return (

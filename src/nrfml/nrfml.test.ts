@@ -37,10 +37,6 @@
 import { getMockStore } from '../utils/testUtils';
 import { convertTraceFile } from './nrfml';
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    getAppDir: () => 'foo/bar',
-}));
-
 const mockStore = getMockStore();
 
 const initialState = {
