@@ -36,11 +36,23 @@
 
 import React from 'react';
 
-import { render } from '../utils/testUtils';
+import { fireEvent, render } from '../utils/testUtils';
 import TraceConverter from './TraceConverter';
 
+const initialState = {
+    app: {
+        nrfmlTaskId: null,
+    },
+};
+
 describe('TraceConverter', () => {
-    it('should convert trace', () => {
-        expect(true).toBe(true);
+    it('should start tracing', async () => {
+        const screen = render(<TraceConverter />, {
+            initialState,
+        });
+        fireEvent.click(screen.getByText('Start tracing'));
+        const stopButton = await screen.findByText('Stop tracing');
+        fireEvent.click(stopButton);
+        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
     });
 });

@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
@@ -44,6 +44,7 @@ import { nrfmlTaskIdSelector } from '../reducer';
 import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
+    const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(nrfmlTaskIdSelector);
 
@@ -56,9 +57,15 @@ export default () => {
         dispatch(convertTraceFile(filename));
     };
 
-    const start = () => dispatch(getTrace());
+    const start = () => {
+        dispatch(getTrace());
+        setTracing(true);
+    };
 
-    const stop = () => dispatch(stopTrace(nrfmlTaskId));
+    const stop = () => {
+        dispatch(stopTrace(nrfmlTaskId));
+        setTracing(false);
+    };
 
     return (
         <div className="traceUpload">
@@ -69,21 +76,21 @@ export default () => {
             >
                 Convert Trace
             </Button>
-            {nrfmlTaskId === null ? (
-                <Button
-                    className="w-100 secondary-btn"
-                    variant="primary"
-                    onClick={start}
-                >
-                    Start tracing
-                </Button>
-            ) : (
+            {tracing ? (
                 <Button
                     className="w-100 secondary-btn"
                     variant="primary"
                     onClick={stop}
                 >
                     Stop tracing
+                </Button>
+            ) : (
+                <Button
+                    className="w-100 secondary-btn"
+                    variant="primary"
+                    onClick={start}
+                >
+                    Start tracing
                 </Button>
             )}
         </div>
