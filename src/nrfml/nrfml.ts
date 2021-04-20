@@ -55,6 +55,7 @@ const pluginsDir = path.join(
 );
 
 const BUFFER_SIZE = 1;
+const CHUNK_SIZE = 256;
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -81,6 +82,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                     init_parameters: {
                         file_path: tracePath,
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        chunk_size: CHUNK_SIZE,
                     },
                     name: 'nrfml-insight-source',
                     config: {
@@ -96,7 +98,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         progress => {
             console.log('progressing', progress);
-            dispatch(setTraceSize(traceSizeSelector(getState()) + BUFFER_SIZE));
+            dispatch(setTraceSize(traceSizeSelector(getState()) + CHUNK_SIZE));
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -129,6 +131,7 @@ const getTrace = (): TAction => dispatch => {
                         },
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         extract_raw: true,
+                        chunk_size: 16,
                     },
                     name: 'nrfml-insight-source',
                     config: {
