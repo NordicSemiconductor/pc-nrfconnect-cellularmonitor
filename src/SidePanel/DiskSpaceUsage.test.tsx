@@ -38,6 +38,7 @@ import React from 'react';
 import checkDiskSpace from 'check-disk-space';
 import prettyBytes from 'pretty-bytes';
 
+import { setTraceSize } from '../reducer';
 import { render } from '../utils/testUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
@@ -49,22 +50,37 @@ jest.mock('check-disk-space');
 const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
     typeof checkDiskSpace
 >;
-mockedCheckDiskSpace.mockImplementation(() => {
-    return new Promise(resolve => {
-        resolve({
-            free: FREE,
-            size: TOTAL,
-        });
-    });
-});
 
 describe('Disk space usage', () => {
-    it('should show something', async () => {
+    it('should display free and total disk space', async () => {
+        mockedCheckDiskSpace.mockImplementation(
+            () =>
+                new Promise(resolve => {
+                    resolve({
+                        free: FREE,
+                        size: TOTAL,
+                    });
+                })
+        );
         const screen = render(<DiskSpaceUsage />);
         const diskSpaceString = `${prettyBytes(
             FREE
         )} available of ${prettyBytes(TOTAL)}`;
-        const diskNode = await screen.findByText(diskSpaceString);
-        expect(diskNode).toBeInTheDocument();
+        expect(await screen.findByText(diskSpaceString)).toBeInTheDocument();
+    });
+
+    it('should display loading message if disk is still unknown', async () => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        const screen = render(<DiskSpaceUsage />);
+        const loadingMessage = 'Checking available disk space';
+        expect(await screen.findByText(loadingMessage)).toBeInTheDocument();
+    });
+
+    it('should display the current trace size', async () => {
+        const traceSize = 50;
+        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
+        expect(
+            await screen.findByText(prettyBytes(traceSize))
+        ).toBeInTheDocument();
     });
 });
