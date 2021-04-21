@@ -38,7 +38,7 @@ import React from 'react';
 import checkDiskSpace from 'check-disk-space';
 import prettyBytes from 'pretty-bytes';
 
-import { setTraceSize } from '../reducer';
+import { setTraceSize } from '../actions/traceActions';
 import { render } from '../utils/testUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
@@ -63,7 +63,7 @@ describe('Disk space usage', () => {
                 })
         );
         const screen = render(<DiskSpaceUsage />);
-        const diskSpaceString = `${prettyBytes(
+        const diskSpaceString = `Disk space:${prettyBytes(
             FREE
         )} available of ${prettyBytes(TOTAL)}`;
         expect(await screen.findByText(diskSpaceString)).toBeInTheDocument();

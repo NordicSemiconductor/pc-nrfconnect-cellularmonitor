@@ -40,13 +40,13 @@ import checkDiskSpace from 'check-disk-space';
 import { getAppDataDir, Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
-import { traceSizeSelector } from '../reducer';
+import { getTraceSize } from '../reducer';
 
 export default () => {
     const [freeSpace, setFreeSpace] = useState(0);
     const [totalSize, setTotalSize] = useState(0);
 
-    const traceSize = useSelector(traceSizeSelector);
+    const traceSize = useSelector(getTraceSize);
 
     useEffect(() => {
         checkDiskSpace(getAppDataDir())
@@ -63,11 +63,9 @@ export default () => {
             <Group heading="Disk space usage">
                 {isDiskspaceAvailable ? (
                     <div>
-                        <span>Disk space</span>:{' '}
-                        <span>
-                            {prettyBytes(freeSpace)} available of{' '}
-                            {prettyBytes(totalSize)}
-                        </span>
+                        Disk space:
+                        {prettyBytes(freeSpace)} available of{' '}
+                        {prettyBytes(totalSize)}
                     </div>
                 ) : (
                     <div>Checking available disk space</div>

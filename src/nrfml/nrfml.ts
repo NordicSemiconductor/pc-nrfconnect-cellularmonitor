@@ -38,7 +38,8 @@ import nrfml from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { setNrfmlTaskId, setTraceSize, traceSizeSelector } from '../reducer';
+import { setNrfmlTaskId, setTraceSize } from '../actions/traceActions';
+import { getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 const os = require('os');
@@ -98,7 +99,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         progress => {
             console.log('progressing', progress);
-            dispatch(setTraceSize(traceSizeSelector(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -148,7 +149,7 @@ const getTrace = (): TAction => (dispatch, getState) => {
         },
         progress => {
             console.log('progressing', progress);
-            dispatch(setTraceSize(traceSizeSelector(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
     dispatch(setNrfmlTaskId(taskId));

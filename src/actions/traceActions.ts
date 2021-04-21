@@ -34,31 +34,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger } from 'pc-nrfconnect-shared';
-import SerialPort from 'serialport';
+import { createAction } from '@reduxjs/toolkit';
 
-import { createModem } from '../modem/modem';
-import { getModem } from '../reducer';
-import { TAction } from '../thunk';
-import { setModem } from './traceActions';
+import { Modem } from '../modem/modem';
+import { TaskId } from '../nrfml/nrfml';
 
-export const closeDevice = (): TAction => async (dispatch, getState) => {
-    const modem = getModem(getState());
-    if (modem) {
-        logger.info('Closing modem port');
-        modem.close(() => {
-            dispatch(setModem(null));
-        });
-    }
-};
-
-export const openDevice = (device: Device): TAction => async dispatch => {
-    await dispatch(closeDevice());
-    const path = device?.serialport?.path;
-    if (path) {
-        logger.info(`Opening modem port ${path}`);
-        const serialPort = new SerialPort(path, { baudRate: 112500 });
-        const modem = createModem(serialPort);
-        dispatch(setModem(modem));
-    }
-};
+export const setModem = createAction<Modem | null>('SET_MODEM');
+export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
+export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');

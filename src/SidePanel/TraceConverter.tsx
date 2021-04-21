@@ -40,13 +40,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile, getTrace, stopTrace } from '../nrfml/nrfml';
-import { nrfmlTaskIdSelector } from '../reducer';
+import { getNrfmlTaskId } from '../reducer';
 import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
     const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
-    const nrfmlTaskId = useSelector(nrfmlTaskIdSelector);
+    const nrfmlTaskId = useSelector(getNrfmlTaskId);
 
     const loadTrace = async () => {
         const filename = await loadTraceFile();
