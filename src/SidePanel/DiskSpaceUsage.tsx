@@ -34,18 +34,46 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import checkDiskSpace from 'check-disk-space';
+import { getAppDataDir, Group } from 'pc-nrfconnect-shared';
+import prettyBytes from 'pretty-bytes';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+import { getTraceSize } from '../reducer';
 
-import './sidepanel.scss';
+export default () => {
+    const [freeSpace, setFreeSpace] = useState(0);
+    const [totalSize, setTotalSize] = useState(0);
 
-export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
-        <Wireshark />
-        <DiskSpaceUsage />
-    </div>
-);
+    const traceSize = useSelector(getTraceSize);
+
+    useEffect(() => {
+        checkDiskSpace(getAppDataDir())
+            .then(({ free, size }) => {
+                setFreeSpace(free);
+                setTotalSize(size);
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    const isDiskspaceAvailable = freeSpace && totalSize;
+    return (
+        <>
+            <Group heading="Disk space usage">
+                {isDiskspaceAvailable ? (
+                    <div>
+                        Disk space:
+                        {prettyBytes(freeSpace)} available of{' '}
+                        {prettyBytes(totalSize)}
+                    </div>
+                ) : (
+                    <div>Checking available disk space</div>
+                )}
+            </Group>
+            <Group heading="Trace file size">
+                <strong>{prettyBytes(traceSize)}</strong>
+            </Group>
+        </>
+    );
+};

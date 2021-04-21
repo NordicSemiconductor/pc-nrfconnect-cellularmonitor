@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2020, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,18 +34,52 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { FC } from 'react';
+import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
+import {
+    AnyAction,
+    applyMiddleware,
+    combineReducers,
+    createStore,
+} from 'redux';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+import reducer from '../reducer';
 
-import './sidepanel.scss';
+jest.mock('pc-nrfconnect-shared', () => {
+    return {
+        ...jest.requireActual('pc-nrfconnect-shared'),
+        getAppDir: () => '/mocked/data/dir',
+    };
+});
 
-export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
-        <Wireshark />
-        <DiskSpaceUsage />
-    </div>
-);
+const getMockStore = () => {
+    const middlewares = [thunk];
+    return configureMockStore(middlewares);
+};
+
+const createPreparedStore = (actions: AnyAction[]) => {
+    const store = createStore(
+        combineReducers({ app: reducer }),
+        applyMiddleware(thunk)
+    );
+    actions.forEach(store.dispatch);
+
+    return store;
+};
+
+const customRender = (
+    element: React.ReactElement,
+    actions: AnyAction[] = [],
+    ...options: any
+) => {
+    const Wrapper: FC = props => {
+        return <Provider store={createPreparedStore(actions)} {...props} />;
+    };
+    return render(element, { wrapper: Wrapper, ...options });
+};
+
+export * from '@testing-library/react';
+export { customRender as render, getMockStore };

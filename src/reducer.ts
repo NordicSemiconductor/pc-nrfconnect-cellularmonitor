@@ -34,27 +34,39 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
+import { setModem, setNrfmlTaskId, setTraceSize } from './actions/traceActions';
 import { Modem } from './modem/modem';
+import { TaskId } from './nrfml/nrfml';
 
-export const setModem = createAction<Modem | null>('SET_MODEM');
-
-interface State {
+export interface State {
     readonly modem: Modem | null;
+    traceSize: number;
+    nrfmlTaskId: TaskId | null;
 }
 
 const initialState: State = {
     modem: null,
+    traceSize: 0,
+    nrfmlTaskId: null,
 };
 
 export default createReducer(initialState, {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
     },
+    [setTraceSize.type]: (state, action: PayloadAction<number>) => {
+        state.traceSize = action.payload;
+    },
+    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
+        state.nrfmlTaskId = action.payload;
+    },
 });
 
 export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
+export const getTraceSize = (state: RootState) => state.app.traceSize;
+export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;

@@ -34,18 +34,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { createAction } from '@reduxjs/toolkit';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+import { Modem } from '../modem/modem';
+import { TaskId } from '../nrfml/nrfml';
 
-import './sidepanel.scss';
-
-export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
-        <Wireshark />
-        <DiskSpaceUsage />
-    </div>
-);
+export const setModem = createAction<Modem | null>('SET_MODEM');
+export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
+export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');

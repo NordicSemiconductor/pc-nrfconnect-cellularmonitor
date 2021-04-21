@@ -34,18 +34,22 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import { getMockStore } from '../utils/testUtils';
+import { convertTraceFile } from './nrfml';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
+const mockStore = getMockStore();
 
-import './sidepanel.scss';
+const initialState = {
+    traceSize: 0,
+};
 
-export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
-        <Wireshark />
-        <DiskSpaceUsage />
-    </div>
-);
+const store = mockStore(initialState);
+
+describe('nrfml', () => {
+    it('should start converting', () => {
+        store.dispatch(convertTraceFile('somePath') as any);
+        expect(store.getActions()).toEqual([
+            { type: 'SET_NRFML_TASK_ID', payload: 1 },
+        ]);
+    });
+});

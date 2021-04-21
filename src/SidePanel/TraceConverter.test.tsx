@@ -36,16 +36,15 @@
 
 import React from 'react';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
+import { fireEvent, render } from '../utils/testUtils';
 import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
 
-import './sidepanel.scss';
-
-export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
-        <Wireshark />
-        <DiskSpaceUsage />
-    </div>
-);
+describe('TraceConverter', () => {
+    it('should start tracing', async () => {
+        const screen = render(<TraceConverter />);
+        fireEvent.click(screen.getByText('Start tracing'));
+        const stopButton = await screen.findByText('Stop tracing');
+        fireEvent.click(stopButton);
+        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+    });
+});

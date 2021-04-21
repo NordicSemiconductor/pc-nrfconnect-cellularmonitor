@@ -38,19 +38,34 @@ import nrfml from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-const appPath = getAppDir();
+import { setNrfmlTaskId, setTraceSize } from '../actions/traceActions';
+import { getTraceSize } from '../reducer';
+import { TAction } from '../thunk';
 
+const os = require('os');
+
+export type TaskId = number;
+
+const appPath = getAppDir();
 const pluginsDir = path.join(
     appPath,
     'node_modules',
     'nrf-monitor-lib-js',
-    'Release'
+    'Release',
+    `${process.platform}-${os.arch()}`
 );
 
-const convertTraceFile = (tracePath: string) => {
+const BUFFER_SIZE = 1;
+const CHUNK_SIZE = 256;
+
+const convertTraceFile = (tracePath: string): TAction => (
+    dispatch,
+    getState
+) => {
+    setTraceSize(0);
     const filename = path.basename(tracePath, '.bin');
     const directory = path.dirname(tracePath);
-    return nrfml.start(
+    const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
@@ -69,9 +84,10 @@ const convertTraceFile = (tracePath: string) => {
                     init_parameters: {
                         file_path: tracePath,
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        chunk_size: CHUNK_SIZE,
                     },
                     config: {
-                        buffer_size: 10,
+                        buffer_size: BUFFER_SIZE,
                     },
                 },
             ],
@@ -82,9 +98,67 @@ const convertTraceFile = (tracePath: string) => {
             }
         },
         progress => {
-            console.log('progress ', progress);
+            console.log('progressing', progress);
+            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
+    dispatch(setNrfmlTaskId(taskId));
 };
 
-export default convertTraceFile;
+const getTrace = (): TAction => (dispatch, getState) => {
+    setTraceSize(0);
+    const taskId = nrfml.start(
+        {
+            config: {
+                plugins_directory: pluginsDir,
+            },
+            sinks: [
+                {
+                    name: 'nrfml-pcap-sink',
+                    init_parameters: {
+                        file_path: path.join(
+                            appPath,
+                            'newtraces',
+                            'example.bin'
+                        ),
+                    },
+                },
+            ],
+            sources: [
+                {
+                    init_parameters: {
+                        serialport: {
+                            path: 'COM5',
+                            settings: '1000000D8S1PNFN',
+                        },
+                        db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        extract_raw: true,
+                        chunk_size: 16,
+                    },
+                    name: 'nrfml-insight-source',
+                    config: {
+                        buffer_size: BUFFER_SIZE,
+                    },
+                },
+            ],
+        },
+        err => {
+            if (err != null) {
+                console.error('err ', err);
+            }
+        },
+        progress => {
+            console.log('progressing', progress);
+            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
+        }
+    );
+    dispatch(setNrfmlTaskId(taskId));
+};
+
+const stopTrace = (taskId: TaskId | null): TAction => dispatch => {
+    if (taskId === null) return;
+    nrfml.stop(taskId);
+    dispatch(setNrfmlTaskId(null));
+};
+
+export { convertTraceFile, getTrace, stopTrace };

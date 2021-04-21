@@ -38,8 +38,9 @@ import { Device, logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
 
 import { createModem } from '../modem/modem';
-import { getModem, setModem } from '../reducer';
+import { getModem } from '../reducer';
 import { TAction } from '../thunk';
+import { setModem } from './traceActions';
 
 export const closeDevice = (): TAction => async (dispatch, getState) => {
     const modem = getModem(getState());
