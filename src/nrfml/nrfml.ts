@@ -59,8 +59,8 @@ const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
 export const NRFML_SINKS = {
-    pcap: 'nrfml-pcap-sink',
     raw: 'nrfml-raw-file-sink',
+    pcap: 'nrfml-pcap-sink',
 };
 
 const convertTraceFile = (tracePath: string): TAction => (
@@ -138,7 +138,7 @@ const getTrace = (): TAction => (dispatch, getState) => {
                         },
                         db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         extract_raw: true,
-                        chunk_size: 16,
+                        chunk_size: CHUNK_SIZE,
                     },
                     name: 'nrfml-insight-source',
                     config: {
