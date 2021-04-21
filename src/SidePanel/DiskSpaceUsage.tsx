@@ -35,18 +35,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import checkDiskSpace from 'check-disk-space';
-import { getAppDataDir, Group } from 'pc-nrfconnect-shared';
+import { getAppDataDir } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
-
-import { getTraceSize } from '../reducer';
 
 export default () => {
     const [freeSpace, setFreeSpace] = useState(0);
     const [totalSize, setTotalSize] = useState(0);
-
-    const traceSize = useSelector(getTraceSize);
 
     useEffect(() => {
         checkDiskSpace(getAppDataDir())
@@ -59,21 +54,15 @@ export default () => {
 
     const isDiskspaceAvailable = freeSpace && totalSize;
     return (
-        <>
-            <Group heading="Disk space usage">
-                {isDiskspaceAvailable ? (
-                    <div>
-                        Disk space:
-                        {prettyBytes(freeSpace)} available of{' '}
-                        {prettyBytes(totalSize)}
-                    </div>
-                ) : (
-                    <div>Checking available disk space</div>
-                )}
-            </Group>
-            <Group heading="Trace file size">
-                <strong>{prettyBytes(traceSize)}</strong>
-            </Group>
-        </>
+        <div className="disk-space-container">
+            {isDiskspaceAvailable ? (
+                <div>
+                    {prettyBytes(freeSpace)} free disk space of{' '}
+                    {prettyBytes(totalSize)}
+                </div>
+            ) : (
+                <div>Checking available disk space</div>
+            )}
+        </div>
     );
 };

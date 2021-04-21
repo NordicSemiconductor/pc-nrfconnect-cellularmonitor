@@ -35,21 +35,13 @@
  */
 
 import React from 'react';
-import checkDiskSpace from 'check-disk-space';
 import prettyBytes from 'pretty-bytes';
 
-import { setTraceSize } from '../actions/traceActions';
-import { render } from '../utils/testUtils';
+import { mockedCheckDiskSpace, render } from '../utils/testUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
 const FREE = 100;
 const TOTAL = 200;
-
-jest.mock('check-disk-space');
-
-const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
-    typeof checkDiskSpace
->;
 
 describe('Disk space usage', () => {
     it('should display free and total disk space', async () => {
@@ -63,9 +55,9 @@ describe('Disk space usage', () => {
                 })
         );
         const screen = render(<DiskSpaceUsage />);
-        const diskSpaceString = `Disk space:${prettyBytes(
+        const diskSpaceString = `${prettyBytes(
             FREE
-        )} available of ${prettyBytes(TOTAL)}`;
+        )} free disk space of ${prettyBytes(TOTAL)}`;
         expect(await screen.findByText(diskSpaceString)).toBeInTheDocument();
     });
 
@@ -74,13 +66,5 @@ describe('Disk space usage', () => {
         const screen = render(<DiskSpaceUsage />);
         const loadingMessage = 'Checking available disk space';
         expect(await screen.findByText(loadingMessage)).toBeInTheDocument();
-    });
-
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
-        expect(
-            await screen.findByText(prettyBytes(traceSize))
-        ).toBeInTheDocument();
     });
 });

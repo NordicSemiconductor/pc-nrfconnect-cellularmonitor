@@ -35,9 +35,18 @@
  */
 
 import React from 'react';
+import prettyBytes from 'pretty-bytes';
 
-import { fireEvent, render } from '../utils/testUtils';
+import { setTraceSize } from '../actions/traceActions';
+import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
 import TraceCollector from './TraceCollector';
+
+mockedCheckDiskSpace.mockImplementation(
+    () =>
+        new Promise(resolve => {
+            resolve({ free: 0, size: 0 });
+        })
+);
 
 describe('TraceCollector', () => {
     it('should start tracing', async () => {
@@ -46,5 +55,13 @@ describe('TraceCollector', () => {
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);
         expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+    });
+
+    it('should display the current trace size', async () => {
+        const traceSize = 50;
+        const screen = render(<TraceCollector />, [setTraceSize(traceSize)]);
+        expect(
+            await screen.findByText(prettyBytes(traceSize))
+        ).toBeInTheDocument();
     });
 });

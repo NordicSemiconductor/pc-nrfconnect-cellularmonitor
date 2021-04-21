@@ -37,6 +37,7 @@
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
+import checkDiskSpace from 'check-disk-space';
 import {
     AnyAction,
     applyMiddleware,
@@ -47,6 +48,12 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer from '../reducer';
+
+jest.mock('check-disk-space');
+
+const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
+    typeof checkDiskSpace
+>;
 
 jest.mock('pc-nrfconnect-shared', () => {
     return {
@@ -82,4 +89,4 @@ const customRender = (
 };
 
 export * from '@testing-library/react';
-export { customRender as render, getMockStore };
+export { customRender as render, getMockStore, mockedCheckDiskSpace };

@@ -39,6 +39,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAppDir, Group, logger } from 'pc-nrfconnect-shared';
+import prettyBytes from 'pretty-bytes';
 
 import {
     convertTraceFile,
@@ -46,14 +47,16 @@ import {
     NRFML_SINKS,
     stopTrace,
 } from '../nrfml/nrfml';
-import { getNrfmlTaskId } from '../reducer';
+import { getNrfmlTaskId, getTraceSize } from '../reducer';
 import { loadTraceFile } from '../utils/fileLoader';
+import DiskSpaceUsage from './DiskSpaceUsage';
 
 export default () => {
     const [traceType, setTraceType] = useState(Object.keys(NRFML_SINKS)[0]);
     const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
+    const traceSize = useSelector(getTraceSize);
 
     const loadTrace = async () => {
         const filename = await loadTraceFile();
@@ -89,7 +92,7 @@ export default () => {
                     ))}
                 </ButtonGroup>
             </Group>
-
+            <DiskSpaceUsage />
             {tracing ? (
                 <Button
                     className="w-100 secondary-btn start-stop"
@@ -123,6 +126,10 @@ export default () => {
             >
                 Convert Trace
             </Button>
+
+            <Group heading="Trace file size">
+                <strong>{prettyBytes(traceSize)}</strong>
+            </Group>
         </>
     );
 };
