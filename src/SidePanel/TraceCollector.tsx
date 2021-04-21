@@ -36,14 +36,21 @@
 
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger } from 'pc-nrfconnect-shared';
+import { getAppDir, Group, logger } from 'pc-nrfconnect-shared';
 
-import { convertTraceFile, getTrace, stopTrace } from '../nrfml/nrfml';
+import {
+    convertTraceFile,
+    getTrace,
+    NRFML_SINKS,
+    stopTrace,
+} from '../nrfml/nrfml';
 import { getNrfmlTaskId } from '../reducer';
 import { loadTraceFile } from '../utils/fileLoader';
 
 export default () => {
+    const [traceType, setTraceType] = useState(Object.keys(NRFML_SINKS)[0]);
     const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
@@ -68,7 +75,47 @@ export default () => {
     };
 
     return (
-        <div className="traceUpload">
+        <>
+            <Group heading="Trace file details">
+                <ButtonGroup className="trace-selector w-100">
+                    {Object.keys(NRFML_SINKS).map((sink: string) => (
+                        <Button
+                            variant={sink === traceType ? 'set' : 'unset'}
+                            onClick={() => setTraceType(sink)}
+                            key={sink}
+                        >
+                            {sink}
+                        </Button>
+                    ))}
+                </ButtonGroup>
+            </Group>
+
+            {tracing ? (
+                <Button
+                    className="w-100 secondary-btn start-stop"
+                    variant="secondary"
+                    onClick={stop}
+                >
+                    <img
+                        alt=""
+                        src={`${getAppDir()}/resources/stop-circle.svg`}
+                    />
+                    Stop tracing
+                </Button>
+            ) : (
+                <Button
+                    className="w-100 secondary-btn start-stop"
+                    variant="secondary"
+                    onClick={start}
+                >
+                    <img
+                        alt=""
+                        src={`${getAppDir()}/resources/play-circle.svg`}
+                    />
+                    Start tracing
+                </Button>
+            )}
+            <hr />
             <Button
                 className="w-100 secondary-btn"
                 variant="primary"
@@ -76,23 +123,6 @@ export default () => {
             >
                 Convert Trace
             </Button>
-            {tracing ? (
-                <Button
-                    className="w-100 secondary-btn"
-                    variant="primary"
-                    onClick={stop}
-                >
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn"
-                    variant="primary"
-                    onClick={start}
-                >
-                    Start tracing
-                </Button>
-            )}
-        </div>
+        </>
     );
 };

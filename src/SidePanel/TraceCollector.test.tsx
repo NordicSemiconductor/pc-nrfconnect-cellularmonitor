@@ -37,11 +37,11 @@
 import React from 'react';
 
 import { fireEvent, render } from '../utils/testUtils';
-import TraceConverter from './TraceConverter';
+import TraceCollector from './TraceCollector';
 
-describe('TraceConverter', () => {
+describe('TraceCollector', () => {
     it('should start tracing', async () => {
-        const screen = render(<TraceConverter />);
+        const screen = render(<TraceCollector />);
         fireEvent.click(screen.getByText('Start tracing'));
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);

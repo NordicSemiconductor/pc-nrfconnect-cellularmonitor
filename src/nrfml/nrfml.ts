@@ -58,6 +58,11 @@ const pluginsDir = path.join(
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
+export const NRFML_SINKS = {
+    pcap: 'nrfml-pcap-sink',
+    raw: 'nrfml-raw-file-sink',
+};
+
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
     getState
