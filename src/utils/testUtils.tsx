@@ -37,7 +37,12 @@
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
-import { applyMiddleware, createStore } from 'redux';
+import {
+    AnyAction,
+    applyMiddleware,
+    combineReducers,
+    createStore,
+} from 'redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -55,18 +60,25 @@ const getMockStore = () => {
     return configureMockStore(middlewares);
 };
 
+const createPreparedStore = (actions: AnyAction[]) => {
+    const store = createStore(
+        combineReducers({ app: reducer }),
+        applyMiddleware(thunk)
+    );
+    actions.forEach(store.dispatch);
+
+    return store;
+};
+
 const customRender = (
-    ui: React.ReactElement,
-    {
-        initialState,
-        store = createStore(reducer, initialState, applyMiddleware(thunk)),
-        ...options
-    }: any = {}
+    element: React.ReactElement,
+    actions: AnyAction[] = [],
+    ...options: any
 ) => {
     const Wrapper: FC = props => {
-        return <Provider store={store} {...props} />;
+        return <Provider store={createPreparedStore(actions)} {...props} />;
     };
-    return render(ui, { wrapper: Wrapper, ...options });
+    return render(element, { wrapper: Wrapper, ...options });
 };
 
 export * from '@testing-library/react';

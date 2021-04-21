@@ -39,17 +39,9 @@ import React from 'react';
 import { fireEvent, render } from '../utils/testUtils';
 import TraceConverter from './TraceConverter';
 
-const initialState = {
-    app: {
-        nrfmlTaskId: null,
-    },
-};
-
 describe('TraceConverter', () => {
     it('should start tracing', async () => {
-        const screen = render(<TraceConverter />, {
-            initialState,
-        });
+        const screen = render(<TraceConverter />);
         fireEvent.click(screen.getByText('Start tracing'));
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);

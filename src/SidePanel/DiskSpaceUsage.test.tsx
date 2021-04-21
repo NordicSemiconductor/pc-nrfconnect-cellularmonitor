@@ -54,15 +54,9 @@ jest.mock('check-disk-space', () => ({
         }),
 }));
 
-const initialState = {
-    app: {
-        traceSize: 0,
-    },
-};
-
 describe('Disk space usage', () => {
     it('should show something', async () => {
-        const screen = render(<DiskSpaceUsage />, { initialState });
+        const screen = render(<DiskSpaceUsage />);
         const diskSpaceString = `${prettyBytes(
             FREE
         )} available of ${prettyBytes(TOTAL)}`;
