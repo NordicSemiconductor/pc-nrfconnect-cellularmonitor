@@ -35,6 +35,7 @@
  */
 
 import React from 'react';
+import checkDiskSpace from 'check-disk-space';
 import prettyBytes from 'pretty-bytes';
 
 import { render } from '../utils/testUtils';
@@ -43,16 +44,19 @@ import DiskSpaceUsage from './DiskSpaceUsage';
 const FREE = 100;
 const TOTAL = 200;
 
-jest.mock('check-disk-space', () => ({
-    __esModule: true,
-    default: () =>
-        new Promise(resolve => {
-            resolve({
-                free: FREE,
-                size: TOTAL,
-            });
-        }),
-}));
+jest.mock('check-disk-space');
+
+const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
+    typeof checkDiskSpace
+>;
+mockedCheckDiskSpace.mockImplementation(() => {
+    return new Promise(resolve => {
+        resolve({
+            free: FREE,
+            size: TOTAL,
+        });
+    });
+});
 
 describe('Disk space usage', () => {
     it('should show something', async () => {
