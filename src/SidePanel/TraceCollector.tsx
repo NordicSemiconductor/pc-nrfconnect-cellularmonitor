@@ -43,8 +43,9 @@ import prettyBytes from 'pretty-bytes';
 
 import {
     convertTraceFile,
-    getTrace,
     NRFML_SINKS,
+    Sink,
+    startTrace,
     stopTrace,
 } from '../nrfml/nrfml';
 import { getNrfmlTaskId, getTraceSize } from '../reducer';
@@ -52,7 +53,7 @@ import { loadTraceFile } from '../utils/fileLoader';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
 export default () => {
-    const [traceType, setTraceType] = useState(Object.keys(NRFML_SINKS)[0]);
+    const [traceType, setTraceType] = useState<Sink>(NRFML_SINKS[0]);
     const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
@@ -69,7 +70,7 @@ export default () => {
 
     const start = () => {
         setTracing(true);
-        dispatch(getTrace());
+        dispatch(startTrace(traceType));
     };
 
     const stop = () => {
@@ -81,7 +82,7 @@ export default () => {
         <>
             <Group heading="Trace file details">
                 <ButtonGroup className="trace-selector w-100">
-                    {Object.keys(NRFML_SINKS).map((sink: string) => (
+                    {NRFML_SINKS.map((sink: Sink) => (
                         <Button
                             variant={sink === traceType ? 'set' : 'unset'}
                             onClick={() => setTraceType(sink)}
