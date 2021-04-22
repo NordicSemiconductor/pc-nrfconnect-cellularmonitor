@@ -42,7 +42,11 @@ import nrfml, {
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { setNrfmlTaskId, setTraceSize } from '../actions/traceActions';
+import {
+    setNrfmlTaskId,
+    setTracePath,
+    setTraceSize,
+} from '../actions/traceActions';
 import { getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
@@ -122,16 +126,16 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     setTraceSize(0);
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(appPath, 'newtraces', filename);
+    const sinkConfig =
+        sink === 'pcap'
+            ? pcapSinkConfig(filepath)
+            : rawFileSinkConfig(filepath);
     const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
             },
-            sinks: [
-                sink === 'pcap'
-                    ? pcapSinkConfig(filepath)
-                    : rawFileSinkConfig(filepath),
-            ],
+            sinks: [sinkConfig],
             sources: [
                 {
                     init_parameters: {
@@ -159,6 +163,9 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(setTracePath(sinkConfig.init_parameters.file_path!));
     dispatch(setNrfmlTaskId(taskId));
 };
 

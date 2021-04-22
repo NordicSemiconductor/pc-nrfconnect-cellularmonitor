@@ -34,10 +34,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
 const {
-    remote: { dialog },
+    remote: { dialog, shell },
 } = require('electron');
 
 const appPath = getAppDir();
@@ -69,3 +70,11 @@ const loadFile = async (filters: Filter[]) => {
         })) || [];
     return filename;
 };
+
+export const openInFolder = (filepath: string) =>
+    shell.showItemInFolder(filepath);
+
+export const getNameAndDirectory = (filepath: string) => [
+    path.basename(filepath),
+    path.dirname(filepath),
+];

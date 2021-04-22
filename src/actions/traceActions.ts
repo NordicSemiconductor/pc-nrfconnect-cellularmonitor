@@ -40,5 +40,6 @@ import { Modem } from '../modem/modem';
 import { TaskId } from '../nrfml/nrfml';
 
 export const setModem = createAction<Modem | null>('SET_MODEM');
+export const setTracePath = createAction<string>('SET_TRACE_PATH');
 export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
 export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
