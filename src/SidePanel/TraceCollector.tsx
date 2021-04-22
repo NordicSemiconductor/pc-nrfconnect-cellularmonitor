@@ -38,29 +38,22 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAppDir, Group, logger } from 'pc-nrfconnect-shared';
+import { Group, logger } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
-import {
-    convertTraceFile,
-    NRFML_SINKS,
-    Sink,
-    startTrace,
-    stopTrace,
-} from '../nrfml/nrfml';
-import { getNrfmlTaskId, getTracePath, getTraceSize } from '../reducer';
+import { convertTraceFile, NRFML_SINKS, Sink } from '../nrfml/nrfml';
+import { getTracePath, getTraceSize } from '../reducer';
 import {
     getNameAndDirectory,
     loadTraceFile,
     openInFolder,
 } from '../utils/fileLoader';
 import DiskSpaceUsage from './DiskSpaceUsage';
+import StartStopTrace from './StartStopTrace';
 
 export default () => {
-    const [traceType, setTraceType] = useState<Sink>(NRFML_SINKS[0]);
-    const [tracing, setTracing] = useState(false);
+    const [selectedSink, setSelectedSink] = useState<Sink>(NRFML_SINKS[0]);
     const dispatch = useDispatch();
-    const nrfmlTaskId = useSelector(getNrfmlTaskId);
     const tracePath = useSelector(getTracePath);
     const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
@@ -74,16 +67,6 @@ export default () => {
         dispatch(convertTraceFile(file));
     };
 
-    const start = () => {
-        setTracing(true);
-        dispatch(startTrace(traceType));
-    };
-
-    const stop = () => {
-        setTracing(false);
-        dispatch(stopTrace(nrfmlTaskId));
-    };
-
     const truncate = (str: string) =>
         `${str.substr(0, 20)}...${str.substr(str.length - 11, str.length)}`;
 
@@ -93,8 +76,8 @@ export default () => {
                 <ButtonGroup className="trace-selector w-100">
                     {NRFML_SINKS.map((sink: Sink) => (
                         <Button
-                            variant={sink === traceType ? 'set' : 'unset'}
-                            onClick={() => setTraceType(sink)}
+                            variant={sink === selectedSink ? 'set' : 'unset'}
+                            onClick={() => setSelectedSink(sink)}
                             key={sink}
                         >
                             {sink}
@@ -113,31 +96,7 @@ export default () => {
                 </Button>
             )}
             <DiskSpaceUsage />
-            {tracing ? (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={stop}
-                >
-                    <img
-                        alt=""
-                        src={`${getAppDir()}/resources/stop-circle.svg`}
-                    />
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={start}
-                >
-                    <img
-                        alt=""
-                        src={`${getAppDir()}/resources/play-circle.svg`}
-                    />
-                    Start tracing
-                </Button>
-            )}
+            <StartStopTrace sink={selectedSink} />
             {filename !== '' && (
                 <div className="trace-file-name">{filename}</div>
             )}

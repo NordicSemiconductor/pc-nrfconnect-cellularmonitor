@@ -34,34 +34,60 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import prettyBytes from 'pretty-bytes';
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { setTraceSize } from '../actions/traceActions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
+import { Sink, startTrace, stopTrace } from '../nrfml/nrfml';
+import { getNrfmlTaskId } from '../reducer';
 
-mockedCheckDiskSpace.mockImplementation(
-    () =>
-        new Promise(resolve => {
-            resolve({ free: 0, size: 0 });
-        })
-);
+type StartStopProps = {
+    sink: Sink;
+};
 
-describe('TraceCollector', () => {
-    it('should start tracing', async () => {
-        const screen = render(<TraceCollector />);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const stopButton = await screen.findByText('Stop tracing');
-        fireEvent.click(stopButton);
-        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
-    });
+export default ({ sink }: StartStopProps) => {
+    const dispatch = useDispatch();
+    const [tracing, setTracing] = useState(false);
+    const nrfmlTaskId = useSelector(getNrfmlTaskId);
 
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<TraceCollector />, [setTraceSize(traceSize)]);
-        expect(
-            await screen.findByText(`${prettyBytes(traceSize)} file size`)
-        ).toBeInTheDocument();
-    });
-});
+    const start = () => {
+        setTracing(true);
+        dispatch(startTrace(sink));
+    };
+
+    const stop = () => {
+        setTracing(false);
+        dispatch(stopTrace(nrfmlTaskId));
+    };
+
+    return (
+        <>
+            {tracing ? (
+                <Button
+                    className="w-100 secondary-btn start-stop"
+                    variant="secondary"
+                    onClick={stop}
+                >
+                    <img
+                        alt=""
+                        src={`${getAppDir()}/resources/stop-circle.svg`}
+                    />
+                    Stop tracing
+                </Button>
+            ) : (
+                <Button
+                    className="w-100 secondary-btn start-stop"
+                    variant="secondary"
+                    onClick={start}
+                >
+                    <img
+                        alt=""
+                        src={`${getAppDir()}/resources/play-circle.svg`}
+                    />
+                    Start tracing
+                </Button>
+            )}
+        </>
+    );
+};
