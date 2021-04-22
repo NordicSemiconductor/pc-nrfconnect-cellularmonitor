@@ -48,8 +48,12 @@ import {
     startTrace,
     stopTrace,
 } from '../nrfml/nrfml';
-import { getNrfmlTaskId, getTraceSize } from '../reducer';
-import { loadTraceFile } from '../utils/fileLoader';
+import { getNrfmlTaskId, getTracePath, getTraceSize } from '../reducer';
+import {
+    getNameAndDirectory,
+    loadTraceFile,
+    openInFolder,
+} from '../utils/fileLoader';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
 export default () => {
@@ -57,15 +61,17 @@ export default () => {
     const [tracing, setTracing] = useState(false);
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
+    const tracePath = useSelector(getTracePath);
+    const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
 
     const loadTrace = async () => {
-        const filename = await loadTraceFile();
-        if (!filename) {
+        const file = await loadTraceFile();
+        if (!file) {
             logger.error('Invalid file, please select a valid trace file');
             return;
         }
-        dispatch(convertTraceFile(filename));
+        dispatch(convertTraceFile(file));
     };
 
     const start = () => {
@@ -77,6 +83,9 @@ export default () => {
         setTracing(false);
         dispatch(stopTrace(nrfmlTaskId));
     };
+
+    const truncate = (str: string) =>
+        `${str.substr(0, 20)}...${str.substr(str.length - 11, str.length)}`;
 
     return (
         <>
@@ -93,6 +102,16 @@ export default () => {
                     ))}
                 </ButtonGroup>
             </Group>
+            {tracePath !== '' && (
+                <Button
+                    variant="link"
+                    className="trace-path"
+                    title={tracePath}
+                    onClick={() => openInFolder(tracePath)}
+                >
+                    {truncate(directory)}
+                </Button>
+            )}
             <DiskSpaceUsage />
             {tracing ? (
                 <Button
@@ -119,6 +138,12 @@ export default () => {
                     Start tracing
                 </Button>
             )}
+            {filename !== '' && (
+                <div className="trace-file-name">{filename}</div>
+            )}
+            <div className="trace-file-size">
+                {prettyBytes(traceSize)} file size
+            </div>
             <hr />
             <Button
                 className="w-100 secondary-btn"
@@ -127,10 +152,6 @@ export default () => {
             >
                 Convert Trace
             </Button>
-
-            <Group heading="Trace file size">
-                <strong>{prettyBytes(traceSize)}</strong>
-            </Group>
         </>
     );
 };
