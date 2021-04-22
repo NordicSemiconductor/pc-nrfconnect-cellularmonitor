@@ -43,11 +43,12 @@ import prettyBytes from 'pretty-bytes';
 
 import { convertTraceFile, NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import { getTracePath, getTraceSize } from '../reducer';
+import { truncateMiddle } from '../utils';
 import {
     getNameAndDirectory,
     loadTraceFile,
     openInFolder,
-} from '../utils/fileLoader';
+} from '../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import StartStopTrace from './StartStopTrace';
 
@@ -66,9 +67,6 @@ export default () => {
         }
         dispatch(convertTraceFile(file));
     };
-
-    const truncate = (str: string) =>
-        `${str.substr(0, 20)}...${str.substr(str.length - 11, str.length)}`;
 
     return (
         <>
@@ -92,7 +90,7 @@ export default () => {
                     title={tracePath}
                     onClick={() => openInFolder(tracePath)}
                 >
-                    {truncate(directory)}
+                    {truncateMiddle(directory)}
                 </Button>
             )}
             <DiskSpaceUsage />

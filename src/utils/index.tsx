@@ -34,47 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { logger, openUrl } from 'pc-nrfconnect-shared';
+/* eslint-disable import/prefer-default-export */
 
-import { loadPcapFile } from '../utils/fileUtils';
-import openInWireshark from '../utils/wireshark';
+const truncateMiddle = (str: string) =>
+    `${str.substr(0, 20)}...${str.substr(str.length - 11, str.length)}`;
 
-const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
-
-export default () => {
-    const loadPcap = async () => {
-        const filename = await loadPcapFile();
-        if (!filename) {
-            logger.error('Invalid file, please select a valid pcap file');
-            return;
-        }
-        openInWireshark(filename);
-    };
-
-    return (
-        <div className="wireshark">
-            <Button
-                className="w-100 secondary-btn"
-                style={{ marginTop: 8 }}
-                variant="primary"
-                onClick={loadPcap}
-            >
-                Open in Wireshark
-            </Button>
-            <Button
-                variant="link"
-                onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                style={{
-                    paddingLeft: 0,
-                    display: 'inline-block',
-                    textAlign: 'initial',
-                    marginTop: 4,
-                }}
-            >
-                Don&apos;t have Wireshark? Get it here
-            </Button>
-        </div>
-    );
-};
+export { truncateMiddle };
