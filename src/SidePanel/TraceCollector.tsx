@@ -74,6 +74,7 @@ export default () => {
                 <ButtonGroup className="trace-selector w-100">
                     {NRFML_SINKS.map((sink: Sink) => (
                         <Button
+                            // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
                             variant={sink === selectedSink ? 'set' : 'unset'}
                             onClick={() => setSelectedSink(sink)}
                             key={sink}
