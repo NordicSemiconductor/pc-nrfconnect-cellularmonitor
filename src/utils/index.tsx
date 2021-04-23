@@ -36,7 +36,17 @@
 
 /* eslint-disable import/prefer-default-export */
 
-const truncateMiddle = (str: string) =>
-    `${str.substr(0, 20)}...${str.substr(str.length - 11, str.length)}`;
+const truncateMiddle = (str: string, clipStart = 20, clipEnd = 11) => {
+    const clipStartWithEllipsis = clipStart + 3;
+    if (str.length <= clipStartWithEllipsis) {
+        return str;
+    }
+    const rightHandStartingPoint =
+        str.length - Math.min(clipEnd, str.length - clipStartWithEllipsis);
+    return `${str.substr(0, clipStart)}...${str.substr(
+        rightHandStartingPoint,
+        str.length
+    )}`;
+};
 
 export { truncateMiddle };
