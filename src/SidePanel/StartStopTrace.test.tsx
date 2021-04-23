@@ -35,54 +35,16 @@
  */
 
 import React from 'react';
-import prettyBytes from 'pretty-bytes';
 
-import { setTracePath, setTraceSize } from '../actions/traceActions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
+import { fireEvent, render } from '../utils/testUtils';
+import StartStopTrace from './StartStopTrace';
 
-mockedCheckDiskSpace.mockImplementation(
-    () =>
-        new Promise(resolve => {
-            resolve({ free: 0, size: 0 });
-        })
-);
-
-describe('TraceCollector', () => {
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<TraceCollector />, [setTraceSize(traceSize)]);
-        expect(
-            await screen.findByText(`${prettyBytes(traceSize)} file size`)
-        ).toBeInTheDocument();
-    });
-
-    it('should display the name of the trace', async () => {
-        const filePath = 'path/to/file.bin';
-        const screen = render(<TraceCollector />, [setTracePath(filePath)]);
-        expect(await screen.findByText('path/to')).toBeInTheDocument();
-        expect(await screen.findByText('file.bin')).toBeInTheDocument();
-    });
-
-    it('should store RAW as .bin', async () => {
-        const screen = render(<TraceCollector />);
-        fireEvent.click(screen.getByText('raw'));
+describe('Starting/stopping tracing', () => {
+    it('should start and stop pcap trace', async () => {
+        const screen = render(<StartStopTrace sink="pcap" />);
         fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.bin', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
-    it('should store PCAP as .pcap', async () => {
-        const screen = render(<TraceCollector />);
-        fireEvent.click(screen.getByText('pcap'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.pcap', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
+        const stopButton = await screen.findByText('Stop tracing');
+        fireEvent.click(stopButton);
+        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
     });
 });
