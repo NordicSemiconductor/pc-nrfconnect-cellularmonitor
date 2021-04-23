@@ -80,6 +80,7 @@ const createPreparedStore = (actions: AnyAction[]) => {
 const customRender = (
     element: React.ReactElement,
     actions: AnyAction[] = [],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...options: any
 ) => {
     const Wrapper: FC = props => {
