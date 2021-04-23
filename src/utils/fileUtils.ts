@@ -74,7 +74,11 @@ const loadFile = async (filters: Filter[]) => {
 export const openInFolder = (filepath: string) =>
     shell.showItemInFolder(filepath);
 
-export const getNameAndDirectory = (filepath: string) => [
+type FileName = string;
+type FileDirectory = string;
+type FileTuple = [FileName, FileDirectory];
+
+export const getNameAndDirectory = (filepath: string): FileTuple => [
     path.basename(filepath),
     path.dirname(filepath),
 ];

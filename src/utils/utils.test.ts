@@ -1,4 +1,12 @@
+import { getNameAndDirectory } from './fileUtils';
 import { truncateMiddle } from './index';
+
+test('get name and directory', () => {
+    expect(getNameAndDirectory('some/path/to/file.bin')).toStrictEqual([
+        'file.bin',
+        'some/path/to',
+    ]);
+});
 
 test('truncate string', () => {
     expect(
