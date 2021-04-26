@@ -11,6 +11,7 @@ steps:
     versionSpec: 14
 - script: |
     set -o errexit -o pipefail
+    npm i npm@6
     npm config set //npm.nordicsemi.no/:_authToken $(WAYLAND_NPM_TOKEN_INTERNAL)
     npm ci
     npm run lint
