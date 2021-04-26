@@ -3,6 +3,8 @@ trigger:
 - release/*
 pool:
   vmImage: 'Ubuntu-20.04'
+variables:
+- group: wayland
 steps:
 - task: NodeTool@0
   inputs:
