@@ -12,7 +12,6 @@ steps:
 - script: |
     set -o errexit -o pipefail
     echo "token=$(WAYLAND_GITHUB_PRIVATE_TOKEN)" > ~/.prebuild-installrc
-    npm i -g npm@6
     npm config set //npm.nordicsemi.no/:_authToken $(WAYLAND_NPM_TOKEN_INTERNAL)
     npm ci
     npm run lint

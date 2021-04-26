@@ -47,8 +47,7 @@ const store = mockStore(initialState);
 
 describe('nrfml', () => {
     it('should start converting', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        store.dispatch(convertTraceFile('somePath') as any);
+        store.dispatch(convertTraceFile('somePath'));
         expect(store.getActions()).toEqual([
             { type: 'SET_NRFML_TASK_ID', payload: 1 },
         ]);
