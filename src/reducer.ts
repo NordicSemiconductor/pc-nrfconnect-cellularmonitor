@@ -40,14 +40,16 @@ import { NrfConnectState } from 'pc-nrfconnect-shared';
 import {
     setModem,
     setNrfmlTaskId,
+    setSerialportPath,
     setTracePath,
     setTraceSize,
-} from './actions/traceActions';
+} from './actions';
 import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 
 export interface State {
     readonly modem: Modem | null;
+    serialportPath: string | null;
     tracePath: string;
     traceSize: number;
     nrfmlTaskId: TaskId | null;
@@ -58,11 +60,15 @@ const initialState: State = {
     tracePath: '',
     traceSize: 0,
     nrfmlTaskId: null,
+    serialportPath: null,
 };
 
 export default createReducer(initialState, {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
+    },
+    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
+        state.nrfmlTaskId = action.payload;
     },
     [setTracePath.type]: (state, action: PayloadAction<string>) => {
         state.tracePath = action.payload;
@@ -70,14 +76,15 @@ export default createReducer(initialState, {
     [setTraceSize.type]: (state, action: PayloadAction<number>) => {
         state.traceSize = action.payload;
     },
-    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
-        state.nrfmlTaskId = action.payload;
+    [setSerialportPath.type]: (state, action: PayloadAction<string>) => {
+        state.serialportPath = action.payload;
     },
 });
 
 export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
+export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;
+export const getSerialportPath = (state: RootState) => state.app.serialportPath;
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
-export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;

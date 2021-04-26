@@ -40,19 +40,13 @@ import nrfml, {
     RawFileInitParameters,
 } from 'nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDataDir, getAppDir } from 'pc-nrfconnect-shared';
 
-import {
-    setNrfmlTaskId,
-    setTracePath,
-    setTraceSize,
-} from '../actions/traceActions';
-import { getTraceSize } from '../reducer';
+import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
+import { getSerialportPath, getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
-
-const appPath = getAppDir();
 
 const pluginsDir = getPluginsDir();
 
@@ -100,7 +94,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                     name: 'nrfml-insight-source',
                     init_parameters: {
                         file_path: tracePath,
-                        db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        db_file_path: `${getAppDir()}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         chunk_size: CHUNK_SIZE,
                     },
                     config: {
@@ -126,7 +120,7 @@ const convertTraceFile = (tracePath: string): TAction => (
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     setTraceSize(0);
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-    const filepath = path.join(appPath, 'newtraces', filename);
+    const filepath = path.join(getAppDataDir(), filename);
     const sinkConfig =
         sink === 'pcap'
             ? pcapSinkConfig(filepath)
@@ -141,7 +135,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                 {
                     init_parameters: {
                         serialport: {
-                            path: 'COM5',
+                            path: getSerialportPath(getState())!,
                             settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
@@ -158,12 +152,14 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             if (err != null) {
                 console.error('err ', err);
             }
+            console.log('done tracing!');
         },
         progress => {
             console.log('progressing', progress);
             dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
+    console.log('taskId', taskId);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(setTracePath(sinkConfig.init_parameters.file_path!));

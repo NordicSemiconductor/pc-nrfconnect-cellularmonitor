@@ -39,7 +39,10 @@ import { createAction } from '@reduxjs/toolkit';
 import { Modem } from '../modem/modem';
 import { TaskId } from '../nrfml/nrfml';
 
+export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
 export const setModem = createAction<Modem | null>('SET_MODEM');
+export const setSerialportPath = createAction<string | null>(
+    'SET_SERIALPORT_PATH'
+);
 export const setTracePath = createAction<string>('SET_TRACE_PATH');
 export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');

@@ -37,7 +37,7 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { setTracePath, setTraceSize } from '../actions/traceActions';
+import { setTracePath, setTraceSize } from '../actions';
 import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
 import TraceCollector from './TraceCollector';
 
