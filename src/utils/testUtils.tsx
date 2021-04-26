@@ -36,7 +36,7 @@
 
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
-import { render } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/react';
 import checkDiskSpace from 'check-disk-space';
 import {
     AnyAction,
@@ -48,6 +48,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer from '../reducer';
+import { TDispatch } from '../thunk';
 
 jest.mock('check-disk-space');
 
@@ -64,7 +65,7 @@ jest.mock('pc-nrfconnect-shared', () => {
 
 const getMockStore = () => {
     const middlewares = [thunk];
-    return configureMockStore(middlewares);
+    return configureMockStore<unknown, TDispatch>(middlewares);
 };
 
 const createPreparedStore = (actions: AnyAction[]) => {
@@ -80,8 +81,7 @@ const createPreparedStore = (actions: AnyAction[]) => {
 const customRender = (
     element: React.ReactElement,
     actions: AnyAction[] = [],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    options: any = {}
+    options: RenderOptions = {}
 ) => {
     const Wrapper: FC = props => {
         return <Provider store={createPreparedStore(actions)} {...props} />;
