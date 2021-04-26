@@ -55,7 +55,7 @@
     "xterm-for-react": "^1.0.4"
   },
   "dependencies": {
-    "nrf-monitor-lib-js": "github:NordicPlayground/nrf-monitor-lib-js#v0.4.0"
+    "nrf-monitor-lib-js": "^0.4.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
