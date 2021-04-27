@@ -65,7 +65,7 @@ export default ({ sink }: StartStopProps) => {
         <>
             {tracing ? (
                 <Button
-                    className="w-100 secondary-btn start-stop"
+                    className="w-100 secondary-btn start-stop active-animation"
                     variant="secondary"
                     onClick={stop}
                 >
