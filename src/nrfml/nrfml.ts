@@ -40,10 +40,10 @@ import nrfml, {
     RawFileInitParameters,
 } from 'nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDataDir, getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getSerialPort, getTraceSize } from '../reducer';
+import { getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -117,9 +117,12 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setNrfmlTaskId(taskId));
 };
 
-const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
-    const serialPort = getSerialPort(getState());
+const startTrace = (sink: Sink, serialPort: string): TAction => (
+    dispatch,
+    getState
+) => {
     if (!serialPort) {
+        logger.error('Select serial port to start tracing');
         return;
     }
     setTraceSize(0);
@@ -163,7 +166,6 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
-    console.log('taskId', taskId);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(setTracePath(sinkConfig.init_parameters.file_path!));

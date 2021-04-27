@@ -37,7 +37,12 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { setTracePath, setTraceSize } from '../actions';
+import {
+    setAvailableSerialPorts,
+    setSerialPort,
+    setTracePath,
+    setTraceSize,
+} from '../actions';
 import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
 import TraceCollector from './TraceCollector';
 
@@ -48,10 +53,18 @@ mockedCheckDiskSpace.mockImplementation(
         })
 );
 
+const serialPortActions = [
+    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
+    setSerialPort('COM1'),
+];
+
 describe('TraceCollector', () => {
     it('should display the current trace size', async () => {
         const traceSize = 50;
-        const screen = render(<TraceCollector />, [setTraceSize(traceSize)]);
+        const screen = render(<TraceCollector />, [
+            setTraceSize(traceSize),
+            ...serialPortActions,
+        ]);
         expect(
             await screen.findByText(`${prettyBytes(traceSize)} file size`)
         ).toBeInTheDocument();
@@ -59,13 +72,16 @@ describe('TraceCollector', () => {
 
     it('should display the name of the trace', async () => {
         const filePath = 'path/to/file.bin';
-        const screen = render(<TraceCollector />, [setTracePath(filePath)]);
+        const screen = render(<TraceCollector />, [
+            setTracePath(filePath),
+            ...serialPortActions,
+        ]);
         expect(await screen.findByText('path/to')).toBeInTheDocument();
         expect(await screen.findByText('file.bin')).toBeInTheDocument();
     });
 
     it('should store RAW as .bin', async () => {
-        const screen = render(<TraceCollector />);
+        const screen = render(<TraceCollector />, serialPortActions);
         fireEvent.click(screen.getByText('raw'));
         fireEvent.click(screen.getByText('Start tracing'));
         expect(
@@ -76,8 +92,8 @@ describe('TraceCollector', () => {
     });
 
     it('should store PCAP as .pcap', async () => {
-        const screen = render(<TraceCollector />);
-        fireEvent.click(screen.getByText('pcap'));
+        const screen = render(<TraceCollector />, serialPortActions);
+        fireEvent.click(await screen.findByText('pcap'));
         fireEvent.click(screen.getByText('Start tracing'));
         expect(
             await screen.findByText('.pcap', {
