@@ -39,10 +39,8 @@ import { App } from 'pc-nrfconnect-shared';
 
 import Dashboard from './Dashboard/Dashboard';
 import DeviceSelector from './DeviceSelector';
-import GPS from './GPS/GPS';
 import reducer from './reducer';
 import SidePanel from './SidePanel/SidePanel';
-import Terminal from './Terminal/Terminal';
 
 import './index.scss';
 
@@ -52,10 +50,6 @@ export default () => (
         appReducer={reducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
-        panes={[
-            { name: 'Dashboard', Main: Dashboard },
-            { name: 'Terminal', Main: Terminal },
-            { name: 'GPS', Main: GPS },
-        ]}
+        panes={[{ name: 'Dashboard', Main: Dashboard }]}
     />
 );
