@@ -107,7 +107,7 @@ const convertTraceFile = (tracePath: string): TAction => (
             if (err != null) {
                 console.error('err ', err);
             }
-            console.log('Conversion complete');
+            logger.info(`Successfully converted ${filename} to .pcap`);
         },
         progress => {
             console.log('progressing', progress);
@@ -157,7 +157,9 @@ const startTrace = (sink: Sink, serialPort: string): TAction => (
         },
         err => {
             if (err != null) {
-                console.error('err ', err);
+                logger.error(
+                    'Error when starting trace. Make sure selected serialport is available'
+                );
             }
             console.log('done tracing!');
         },
