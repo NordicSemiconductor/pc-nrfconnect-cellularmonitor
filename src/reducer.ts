@@ -38,9 +38,10 @@ import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
+    setAvailableSerialPorts,
     setModem,
     setNrfmlTaskId,
-    setSerialportPath,
+    setSerialPort,
     setTracePath,
     setTraceSize,
 } from './actions';
@@ -49,10 +50,11 @@ import { TaskId } from './nrfml/nrfml';
 
 export interface State {
     readonly modem: Modem | null;
-    serialportPath: string | null;
+    serialPort: string | null;
     tracePath: string;
     traceSize: number;
     nrfmlTaskId: TaskId | null;
+    availableSerialPorts: string[];
 }
 
 const initialState: State = {
@@ -60,7 +62,8 @@ const initialState: State = {
     tracePath: '',
     traceSize: 0,
     nrfmlTaskId: null,
-    serialportPath: null,
+    serialPort: null,
+    availableSerialPorts: [],
 };
 
 export default createReducer(initialState, {
@@ -76,8 +79,14 @@ export default createReducer(initialState, {
     [setTraceSize.type]: (state, action: PayloadAction<number>) => {
         state.traceSize = action.payload;
     },
-    [setSerialportPath.type]: (state, action: PayloadAction<string>) => {
-        state.serialportPath = action.payload;
+    [setAvailableSerialPorts.type]: (
+        state,
+        action: PayloadAction<string[]>
+    ) => {
+        state.availableSerialPorts = action.payload;
+    },
+    [setSerialPort.type]: (state, action: PayloadAction<string>) => {
+        state.serialPort = action.payload;
     },
 });
 
@@ -85,6 +94,8 @@ export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
 export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;
-export const getSerialportPath = (state: RootState) => state.app.serialportPath;
+export const getSerialPort = (state: RootState) => state.app.serialPort;
+export const getAvailableSerialPorts = (state: RootState) =>
+    state.app.availableSerialPorts;
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;

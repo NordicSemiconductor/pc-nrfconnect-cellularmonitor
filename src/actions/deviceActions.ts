@@ -37,7 +37,7 @@
 import { Device, logger } from 'pc-nrfconnect-shared';
 
 import { TAction } from '../thunk';
-import { setSerialportPath } from '.';
+import { setAvailableSerialPorts, setSerialPort } from '.';
 
 const getSerialPorts = (device: Device): string[] =>
     Object.keys(device)
@@ -45,23 +45,18 @@ const getSerialPorts = (device: Device): string[] =>
         .map(key => device[key].path);
 
 export const closeDevice = (): TAction => async dispatch => {
-    dispatch(setSerialportPath(null));
+    dispatch(setAvailableSerialPorts([]));
     logger.info('Closing device');
-    // const modem = getModem(getState());
-    // if (modem) {
-    //     logger.info('Closing modem port');
-    //     modem.close(() => {
-    //         dispatch(setModem(null));
-    //     });
-    // }
 };
 
 export const openDevice = (device: Device): TAction => async dispatch => {
     await dispatch(closeDevice());
-    const serialports = getSerialPorts(device);
-    console.log(serialports);
+    const ports = getSerialPorts(device);
+    if (ports.length > 0) {
+        dispatch(setAvailableSerialPorts(ports));
+    }
     const path = device?.serialport?.path;
     if (path) {
-        dispatch(setSerialportPath(path));
+        dispatch(setSerialPort(path));
     }
 };

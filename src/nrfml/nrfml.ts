@@ -43,7 +43,7 @@ import path from 'path';
 import { getAppDataDir, getAppDir } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getSerialportPath, getTraceSize } from '../reducer';
+import { getSerialPort, getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -118,6 +118,10 @@ const convertTraceFile = (tracePath: string): TAction => (
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
+    const serialPort = getSerialPort(getState());
+    if (!serialPort) {
+        return;
+    }
     setTraceSize(0);
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(getAppDataDir(), filename);
@@ -135,7 +139,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                 {
                     init_parameters: {
                         serialport: {
-                            path: getSerialportPath(getState())!,
+                            path: serialPort,
                             settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
