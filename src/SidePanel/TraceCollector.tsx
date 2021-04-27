@@ -38,11 +38,11 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import { Group, logger } from 'pc-nrfconnect-shared';
+import { Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
 import { setSerialPort } from '../actions';
-import { convertTraceFile, NRFML_SINKS, Sink } from '../nrfml/nrfml';
+import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import {
     getAvailableSerialPorts,
     getSerialPort,
@@ -50,11 +50,7 @@ import {
     getTraceSize,
 } from '../reducer';
 import { truncateMiddle } from '../utils';
-import {
-    getNameAndDirectory,
-    loadTraceFile,
-    openInFolder,
-} from '../utils/fileUtils';
+import { getNameAndDirectory, openInFolder } from '../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import StartStopTrace from './StartStopTrace';
 
@@ -67,87 +63,67 @@ export default () => {
     const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
 
-    const loadTrace = async () => {
-        const file = await loadTraceFile();
-        if (!file) {
-            logger.error('Invalid file, please select a valid trace file');
-            return;
-        }
-        dispatch(convertTraceFile(file));
-    };
-
     const updateSerialPort = (port: string) => () =>
         dispatch(setSerialPort(port));
 
+    if (availableSerialPorts.length === 0) {
+        return <></>;
+    }
+
     return (
         <>
-            {availableSerialPorts.length > 0 && (
-                <>
-                    <div className="serialport-selection">
-                        {availableSerialPorts.map(port => (
-                            <div className="serialport-select" key={port}>
-                                <input
-                                    type="radio"
-                                    name="serialport-select"
-                                    id={`select-sp-${port}`}
-                                    value={port}
-                                    checked={port === selectedSerialPort}
-                                    onChange={updateSerialPort(port)}
-                                />
-                                <label htmlFor={`select-sp-${port}`}>
-                                    {port}
-                                </label>
-                            </div>
-                        ))}
-                        <div>
-                            Currently selected serialport:{' '}
-                            <strong>{selectedSerialPort}</strong>
-                        </div>
+            <div className="serialport-selection">
+                {availableSerialPorts.map(port => (
+                    <div className="serialport-select" key={port}>
+                        <input
+                            type="radio"
+                            name="serialport-select"
+                            id={`select-sp-${port}`}
+                            value={port}
+                            checked={port === selectedSerialPort}
+                            onChange={updateSerialPort(port)}
+                        />
+                        <label htmlFor={`select-sp-${port}`}>{port}</label>
                     </div>
-                    <Group heading="Trace file details">
-                        <ButtonGroup className="trace-selector w-100">
-                            {NRFML_SINKS.map((sink: Sink) => (
-                                <Button
-                                    // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
-                                    variant={
-                                        sink === selectedSink ? 'set' : 'unset'
-                                    }
-                                    onClick={() => setSelectedSink(sink)}
-                                    key={sink}
-                                >
-                                    {sink}
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </Group>
-                    {tracePath !== '' && (
+                ))}
+                <div>
+                    Currently selected serialport:{' '}
+                    <strong>{selectedSerialPort}</strong>
+                </div>
+            </div>
+            <Group heading="Trace file details">
+                <ButtonGroup className="trace-selector w-100">
+                    {NRFML_SINKS.map((sink: Sink) => (
                         <Button
-                            variant="link"
-                            className="trace-path"
-                            title={tracePath}
-                            onClick={() => openInFolder(tracePath)}
+                            // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
+                            variant={sink === selectedSink ? 'set' : 'unset'}
+                            onClick={() => setSelectedSink(sink)}
+                            key={sink}
                         >
-                            {truncateMiddle(directory)}
+                            {sink}
                         </Button>
-                    )}
-                    <DiskSpaceUsage />
-                    <StartStopTrace sink={selectedSink} />
-                    {filename !== '' && (
-                        <div className="trace-file-name">{filename}</div>
-                    )}
-                    <div className="trace-file-size">
-                        {prettyBytes(traceSize)} file size
-                    </div>
-                    <hr />
-                </>
+                    ))}
+                </ButtonGroup>
+            </Group>
+            {tracePath !== '' && (
+                <Button
+                    variant="link"
+                    className="trace-path"
+                    title={tracePath}
+                    onClick={() => openInFolder(tracePath)}
+                >
+                    {truncateMiddle(directory)}
+                </Button>
             )}
-            <Button
-                className="w-100 secondary-btn"
-                variant="primary"
-                onClick={loadTrace}
-            >
-                Convert Trace
-            </Button>
+            <DiskSpaceUsage />
+            <StartStopTrace sink={selectedSink} />
+            {filename !== '' && (
+                <div className="trace-file-name">{filename}</div>
+            )}
+            <div className="trace-file-size">
+                {prettyBytes(traceSize)} file size
+            </div>
+            <hr />
         </>
     );
 };
