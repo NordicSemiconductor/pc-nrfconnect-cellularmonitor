@@ -38,7 +38,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { logger, openUrl } from 'pc-nrfconnect-shared';
 
-import { loadPcapFile } from '../utils/fileLoader';
+import { loadPcapFile } from '../utils/fileUtils';
 import openInWireshark from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';

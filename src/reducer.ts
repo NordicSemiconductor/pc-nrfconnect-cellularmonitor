@@ -37,18 +37,25 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { setModem, setNrfmlTaskId, setTraceSize } from './actions/traceActions';
+import {
+    setModem,
+    setNrfmlTaskId,
+    setTracePath,
+    setTraceSize,
+} from './actions/traceActions';
 import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 
 export interface State {
     readonly modem: Modem | null;
+    tracePath: string;
     traceSize: number;
     nrfmlTaskId: TaskId | null;
 }
 
 const initialState: State = {
     modem: null,
+    tracePath: '',
     traceSize: 0,
     nrfmlTaskId: null,
 };
@@ -56,6 +63,9 @@ const initialState: State = {
 export default createReducer(initialState, {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
+    },
+    [setTracePath.type]: (state, action: PayloadAction<string>) => {
+        state.tracePath = action.payload;
     },
     [setTraceSize.type]: (state, action: PayloadAction<number>) => {
         state.traceSize = action.payload;
@@ -68,5 +78,6 @@ export default createReducer(initialState, {
 export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
+export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
 export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;

@@ -1,3 +1,63 @@
-.sidepanel {
+@import '~pc-nrfconnect-shared/styles';
+
+.side-panel {
     margin: 1rem 0;
+
+    .btn-set {
+        color: $gray-700;
+        background-color: $white;
+        border-color: $gray-700;
+    }
+    .btn-unset {
+        color: $white;
+        background-color: $gray-700;
+        border-color: $gray-700;
+    }
+
+    .trace-selector {
+        padding: 4px;
+        background-color: $gray-700;
+
+        button {
+            padding: 4px;
+            border-radius: 4px !important;
+            text-transform: uppercase;
+        }
+        .btn:disabled {
+            opacity: initial;
+        }
+    }
+
+    .trace-path {
+        text-align: left;
+        color: $gray-900;
+        padding: 0;
+        margin-top: 16px;
+    }
+
+    .trace-file-name {
+        margin-top: 16px;
+    }
+
+    .trace-file-size {
+        margin-top: 16px;
+    }
+
+    .start-stop {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 24px;
+
+        img {
+            height: 20px;
+            width: 20px;
+            margin-right: 8px;
+        }
+    }
+
+    .disk-space-container {
+        font-size: 12px;
+        margin-top: 16px;
+    }
 }

@@ -36,7 +36,8 @@
 
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
-import { render } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/react';
+import checkDiskSpace from 'check-disk-space';
 import {
     AnyAction,
     applyMiddleware,
@@ -47,6 +48,13 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer from '../reducer';
+import { TDispatch } from '../thunk';
+
+jest.mock('check-disk-space');
+
+const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
+    typeof checkDiskSpace
+>;
 
 jest.mock('pc-nrfconnect-shared', () => {
     return {
@@ -57,7 +65,7 @@ jest.mock('pc-nrfconnect-shared', () => {
 
 const getMockStore = () => {
     const middlewares = [thunk];
-    return configureMockStore(middlewares);
+    return configureMockStore<unknown, TDispatch>(middlewares);
 };
 
 const createPreparedStore = (actions: AnyAction[]) => {
@@ -73,7 +81,7 @@ const createPreparedStore = (actions: AnyAction[]) => {
 const customRender = (
     element: React.ReactElement,
     actions: AnyAction[] = [],
-    ...options: any
+    options: RenderOptions = {}
 ) => {
     const Wrapper: FC = props => {
         return <Provider store={createPreparedStore(actions)} {...props} />;
@@ -82,4 +90,4 @@ const customRender = (
 };
 
 export * from '@testing-library/react';
-export { customRender as render, getMockStore };
+export { customRender as render, getMockStore, mockedCheckDiskSpace };

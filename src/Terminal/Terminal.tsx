@@ -54,11 +54,7 @@ const TerminalComponent = () => {
     const xtermRef = useRef<XTerm | null>(null);
 
     const modem = useSelector(getModem);
-    const {
-        width,
-        height,
-        ref: resizeRef,
-    } = useResizeDetector<HTMLDivElement>();
+    const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {

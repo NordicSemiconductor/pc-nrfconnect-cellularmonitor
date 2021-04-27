@@ -47,7 +47,7 @@ const store = mockStore(initialState);
 
 describe('nrfml', () => {
     it('should start converting', () => {
-        store.dispatch(convertTraceFile('somePath') as any);
+        store.dispatch(convertTraceFile('somePath'));
         expect(store.getActions()).toEqual([
             { type: 'SET_NRFML_TASK_ID', payload: 1 },
         ]);

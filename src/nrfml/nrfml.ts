@@ -34,29 +34,53 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import nrfml from 'nrf-monitor-lib-js';
+import nrfml, {
+    getPluginsDir,
+    PcapInitParameters,
+    RawFileInitParameters,
+} from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { setNrfmlTaskId, setTraceSize } from '../actions/traceActions';
+import {
+    setNrfmlTaskId,
+    setTracePath,
+    setTraceSize,
+} from '../actions/traceActions';
 import { getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
-
-const os = require('os');
 
 export type TaskId = number;
 
 const appPath = getAppDir();
-const pluginsDir = path.join(
-    appPath,
-    'node_modules',
-    'nrf-monitor-lib-js',
-    'Release',
-    `${process.platform}-${os.arch()}`
-);
 
-const BUFFER_SIZE = 1;
+const pluginsDir = getPluginsDir();
+
+const BUFFER_SIZE = 10;
 const CHUNK_SIZE = 256;
+
+export const NRFML_SINKS = ['raw', 'pcap'] as const;
+
+export type Sink = typeof NRFML_SINKS[number];
+
+const pcapSinkConfig = (filepath: string): PcapInitParameters => {
+    return {
+        name: 'nrfml-pcap-sink',
+        init_parameters: {
+            file_path: `${filepath}.pcap`,
+        },
+    };
+};
+
+const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
+    return {
+        // @ts-ignore -- error in generated types in monitor-lib, this can be removed when fixed
+        name: 'nrfml-raw-file-sink',
+        init_parameters: {
+            file_path: `${filepath}.bin`,
+        },
+    };
+};
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -64,20 +88,13 @@ const convertTraceFile = (tracePath: string): TAction => (
 ) => {
     setTraceSize(0);
     const filename = path.basename(tracePath, '.bin');
-    const directory = path.dirname(tracePath);
+    const filepath = path.dirname(tracePath);
     const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
             },
-            sinks: [
-                {
-                    name: 'nrfml-pcap-sink',
-                    init_parameters: {
-                        file_path: `${directory}/${filename}.pcap`,
-                    },
-                },
-            ],
+            sinks: [pcapSinkConfig(path.join(filepath, filename))],
             sources: [
                 {
                     name: 'nrfml-insight-source',
@@ -96,6 +113,7 @@ const convertTraceFile = (tracePath: string): TAction => (
             if (err != null) {
                 console.error('err ', err);
             }
+            console.log('Conversion complete');
         },
         progress => {
             console.log('progressing', progress);
@@ -105,25 +123,20 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setNrfmlTaskId(taskId));
 };
 
-const getTrace = (): TAction => (dispatch, getState) => {
+const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     setTraceSize(0);
+    const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
+    const filepath = path.join(appPath, 'newtraces', filename);
+    const sinkConfig =
+        sink === 'pcap'
+            ? pcapSinkConfig(filepath)
+            : rawFileSinkConfig(filepath);
     const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: pluginsDir,
             },
-            sinks: [
-                {
-                    name: 'nrfml-pcap-sink',
-                    init_parameters: {
-                        file_path: path.join(
-                            appPath,
-                            'newtraces',
-                            'example.bin'
-                        ),
-                    },
-                },
-            ],
+            sinks: [sinkConfig],
             sources: [
                 {
                     init_parameters: {
@@ -131,9 +144,8 @@ const getTrace = (): TAction => (dispatch, getState) => {
                             path: 'COM5',
                             settings: '1000000D8S1PNFN',
                         },
-                        db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         extract_raw: true,
-                        chunk_size: 16,
+                        chunk_size: CHUNK_SIZE,
                     },
                     name: 'nrfml-insight-source',
                     config: {
@@ -152,6 +164,9 @@ const getTrace = (): TAction => (dispatch, getState) => {
             dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
         }
     );
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(setTracePath(sinkConfig.init_parameters.file_path!));
     dispatch(setNrfmlTaskId(taskId));
 };
 
@@ -161,4 +176,4 @@ const stopTrace = (taskId: TaskId | null): TAction => dispatch => {
     dispatch(setNrfmlTaskId(null));
 };
 
-export { convertTraceFile, getTrace, stopTrace };
+export { convertTraceFile, startTrace, stopTrace };

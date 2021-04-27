@@ -35,17 +35,16 @@
  */
 
 import React from 'react';
+import { SidePanel } from 'pc-nrfconnect-shared';
 
-import DiskSpaceUsage from './DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
+import TraceCollector from './TraceCollector';
 import Wireshark from './Wireshark';
 
 import './sidepanel.scss';
 
 export default () => (
-    <div className="sidepanel">
-        <TraceConverter />
+    <SidePanel className="side-panel">
+        <TraceCollector />
         <Wireshark />
-        <DiskSpaceUsage />
-    </div>
+    </SidePanel>
 );
