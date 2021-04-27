@@ -34,15 +34,15 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger } from 'pc-nrfconnect-shared';
+import { Device, logger, Serialport } from 'pc-nrfconnect-shared';
 
 import { TAction } from '../thunk';
 import { setAvailableSerialPorts, setSerialPort } from '.';
 
-const getSerialPorts = (device: Device): string[] =>
-    Object.keys(device)
-        .filter(key => key.startsWith('serialport'))
-        .map(key => device[key].path);
+const getSerialPorts = (device: Device) =>
+    Object.entries(device)
+        .filter(([key]) => key.startsWith('serialport'))
+        .map(([, value]: [string, Serialport]) => value.path);
 
 export const closeDevice = (): TAction => async dispatch => {
     dispatch(setAvailableSerialPorts([]));

@@ -117,7 +117,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setNrfmlTaskId(taskId));
 };
 
-const startTrace = (sink: Sink, serialPort: string): TAction => (
+const startTrace = (sink: Sink, serialPort: string | null): TAction => (
     dispatch,
     getState
 ) => {
