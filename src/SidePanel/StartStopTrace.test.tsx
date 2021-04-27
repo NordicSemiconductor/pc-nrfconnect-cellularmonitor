@@ -41,7 +41,7 @@ import StartStopTrace from './StartStopTrace';
 
 describe('Starting/stopping tracing', () => {
     it('should start and stop pcap trace', async () => {
-        const screen = render(<StartStopTrace sink="pcap" serialPort="COM1" />);
+        const screen = render(<StartStopTrace sink="pcap" />);
         fireEvent.click(screen.getByText('Start tracing'));
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);

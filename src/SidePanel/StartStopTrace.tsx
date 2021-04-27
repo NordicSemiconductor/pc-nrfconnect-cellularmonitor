@@ -44,17 +44,16 @@ import { getNrfmlTaskId } from '../reducer';
 
 type StartStopProps = {
     sink: Sink;
-    serialPort: string | null;
 };
 
-export default ({ sink, serialPort }: StartStopProps) => {
+export default ({ sink }: StartStopProps) => {
     const dispatch = useDispatch();
     const [tracing, setTracing] = useState(false);
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
 
     const start = () => {
         setTracing(true);
-        dispatch(startTrace(sink, serialPort));
+        dispatch(startTrace(sink));
     };
 
     const stop = () => {

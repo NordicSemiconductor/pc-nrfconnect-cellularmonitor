@@ -43,7 +43,7 @@ import path from 'path';
 import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getTraceSize } from '../reducer';
+import { getSerialPort, getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -117,10 +117,8 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setNrfmlTaskId(taskId));
 };
 
-const startTrace = (sink: Sink, serialPort: string | null): TAction => (
-    dispatch,
-    getState
-) => {
+const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
+    const serialPort = getSerialPort(getState());
     if (!serialPort) {
         logger.error('Select serial port to start tracing');
         return;

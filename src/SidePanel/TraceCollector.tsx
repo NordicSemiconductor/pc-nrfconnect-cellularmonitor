@@ -116,10 +116,7 @@ export default () => {
                 </Button>
             )}
             <DiskSpaceUsage />
-            <StartStopTrace
-                sink={selectedSink}
-                serialPort={selectedSerialPort}
-            />
+            <StartStopTrace sink={selectedSink} />
             {filename !== '' && (
                 <div className="trace-file-name">{filename}</div>
             )}
