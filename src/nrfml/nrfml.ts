@@ -40,19 +40,13 @@ import nrfml, {
     RawFileInitParameters,
 } from 'nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
-import {
-    setNrfmlTaskId,
-    setTracePath,
-    setTraceSize,
-} from '../actions/traceActions';
-import { getTraceSize } from '../reducer';
+import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
+import { getSerialPort, getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
-
-const appPath = getAppDir();
 
 const pluginsDir = getPluginsDir();
 
@@ -86,7 +80,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
     getState
 ) => {
-    setTraceSize(0);
+    dispatch(setTraceSize(0));
     const filename = path.basename(tracePath, '.bin');
     const filepath = path.dirname(tracePath);
     const taskId = nrfml.start(
@@ -100,7 +94,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                     name: 'nrfml-insight-source',
                     init_parameters: {
                         file_path: tracePath,
-                        db_file_path: `${appPath}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        db_file_path: `${getAppDir()}/traces/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         chunk_size: CHUNK_SIZE,
                     },
                     config: {
@@ -113,7 +107,7 @@ const convertTraceFile = (tracePath: string): TAction => (
             if (err != null) {
                 console.error('err ', err);
             }
-            console.log('Conversion complete');
+            logger.info(`Successfully converted ${filename} to .pcap`);
         },
         progress => {
             console.log('progressing', progress);
@@ -124,9 +118,14 @@ const convertTraceFile = (tracePath: string): TAction => (
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
-    setTraceSize(0);
+    const serialPort = getSerialPort(getState());
+    if (!serialPort) {
+        logger.error('Select serial port to start tracing');
+        return;
+    }
+    dispatch(setTraceSize(0));
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-    const filepath = path.join(appPath, 'newtraces', filename);
+    const filepath = path.join(getAppDataDir(), filename);
     const sinkConfig =
         sink === 'pcap'
             ? pcapSinkConfig(filepath)
@@ -141,7 +140,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                 {
                     init_parameters: {
                         serialport: {
-                            path: 'COM5',
+                            path: serialPort,
                             settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
@@ -156,8 +155,11 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         },
         err => {
             if (err != null) {
-                console.error('err ', err);
+                logger.error(
+                    'Error when starting trace. Make sure selected serialport is available'
+                );
             }
+            console.log('done tracing!');
         },
         progress => {
             console.log('progressing', progress);

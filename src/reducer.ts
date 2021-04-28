@@ -38,19 +38,23 @@ import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
+    setAvailableSerialPorts,
     setModem,
     setNrfmlTaskId,
+    setSerialPort,
     setTracePath,
     setTraceSize,
-} from './actions/traceActions';
+} from './actions';
 import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 
 export interface State {
     readonly modem: Modem | null;
+    serialPort: string | null;
     tracePath: string;
     traceSize: number;
     nrfmlTaskId: TaskId | null;
+    availableSerialPorts: string[];
 }
 
 const initialState: State = {
@@ -58,11 +62,16 @@ const initialState: State = {
     tracePath: '',
     traceSize: 0,
     nrfmlTaskId: null,
+    serialPort: null,
+    availableSerialPorts: [],
 };
 
 export default createReducer(initialState, {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
+    },
+    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
+        state.nrfmlTaskId = action.payload;
     },
     [setTracePath.type]: (state, action: PayloadAction<string>) => {
         state.tracePath = action.payload;
@@ -70,14 +79,23 @@ export default createReducer(initialState, {
     [setTraceSize.type]: (state, action: PayloadAction<number>) => {
         state.traceSize = action.payload;
     },
-    [setNrfmlTaskId.type]: (state, action: PayloadAction<TaskId>) => {
-        state.nrfmlTaskId = action.payload;
+    [setAvailableSerialPorts.type]: (
+        state,
+        action: PayloadAction<string[]>
+    ) => {
+        state.availableSerialPorts = action.payload;
+    },
+    [setSerialPort.type]: (state, action: PayloadAction<string>) => {
+        state.serialPort = action.payload;
     },
 });
 
 export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem;
+export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;
+export const getSerialPort = (state: RootState) => state.app.serialPort;
+export const getAvailableSerialPorts = (state: RootState) =>
+    state.app.availableSerialPorts;
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
-export const getNrfmlTaskId = (state: RootState) => state.app.nrfmlTaskId;

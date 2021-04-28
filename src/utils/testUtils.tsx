@@ -56,10 +56,13 @@ const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
     typeof checkDiskSpace
 >;
 
+export const mockedDataDir = '/mocked/data/dir';
+
 jest.mock('pc-nrfconnect-shared', () => {
     return {
         ...jest.requireActual('pc-nrfconnect-shared'),
-        getAppDir: () => '/mocked/data/dir',
+        getAppDir: () => mockedDataDir,
+        getAppDataDir: () => mockedDataDir,
     };
 });
 
