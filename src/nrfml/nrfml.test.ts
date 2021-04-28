@@ -35,21 +35,63 @@
  */
 
 import { getMockStore } from '../utils/testUtils';
-import { convertTraceFile } from './nrfml';
+import { convertTraceFile, startTrace } from './nrfml';
 
 const mockStore = getMockStore();
 
 const initialState = {
-    traceSize: 0,
+    app: {
+        traceSize: 0,
+        serialPort: 'COM1',
+    },
 };
 
 const store = mockStore(initialState);
 
 describe('nrfml', () => {
+    beforeEach(() => {
+        store.clearActions();
+    });
+
     it('should start converting', () => {
         store.dispatch(convertTraceFile('somePath'));
         expect(store.getActions()).toEqual([
+            { type: 'SET_TRACE_SIZE', payload: 0 },
             { type: 'SET_NRFML_TASK_ID', payload: 1 },
         ]);
+    });
+
+    describe('tracing', () => {
+        beforeEach(() => {
+            jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(
+                '2000-01-01T00:00:00.000Z'
+            );
+        });
+
+        it('should start tracing to pcap', () => {
+            store.dispatch(startTrace('pcap'));
+            expect(store.getActions()).toEqual([
+                { type: 'SET_TRACE_SIZE', payload: 0 },
+                {
+                    type: 'SET_TRACE_PATH',
+                    payload:
+                        '\\mocked\\data\\dir\\trace-2000-01-01T00-00-00.000Z.pcap',
+                },
+                { type: 'SET_NRFML_TASK_ID', payload: 1 },
+            ]);
+        });
+
+        it('should start tracing to raw binary', () => {
+            store.dispatch(startTrace('raw'));
+            expect(store.getActions()).toEqual([
+                { type: 'SET_TRACE_SIZE', payload: 0 },
+                {
+                    type: 'SET_TRACE_PATH',
+                    payload:
+                        '\\mocked\\data\\dir\\trace-2000-01-01T00-00-00.000Z.bin',
+                },
+                { type: 'SET_NRFML_TASK_ID', payload: 1 },
+            ]);
+        });
     });
 });
