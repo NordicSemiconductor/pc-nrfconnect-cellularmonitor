@@ -80,7 +80,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
     getState
 ) => {
-    setTraceSize(0);
+    dispatch(setTraceSize(0));
     const filename = path.basename(tracePath, '.bin');
     const filepath = path.dirname(tracePath);
     const taskId = nrfml.start(
@@ -123,7 +123,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         logger.error('Select serial port to start tracing');
         return;
     }
-    setTraceSize(0);
+    dispatch(setTraceSize(0));
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(getAppDataDir(), filename);
     const sinkConfig =
