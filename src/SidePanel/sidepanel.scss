@@ -73,4 +73,29 @@
             margin-right: 8px;
         }
     }
+
+    .btn.active-animation {
+        overflow: hidden;
+        position: relative;
+
+        &::after {
+            content: '';
+            background: $gray-700;
+            height: 2px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            animation: snake 4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+    }
+
+    @keyframes snake {
+        0% {
+            transform: translate(-100%);
+        }
+        100% {
+            transform: translate(100%);
+        }
+    }
 }

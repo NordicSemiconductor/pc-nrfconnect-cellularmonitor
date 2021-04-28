@@ -43,13 +43,22 @@ export default () => {
     const [freeSpace, setFreeSpace] = useState(0);
     const [totalSize, setTotalSize] = useState(0);
 
-    useEffect(() => {
+    const checkDisk = () =>
         checkDiskSpace(getAppDataDir())
             .then(({ free, size }) => {
                 setFreeSpace(free);
                 setTotalSize(size);
             })
             .catch(err => console.log(err));
+
+    useEffect(() => {
+        checkDisk();
+        const timerId = setInterval(() => {
+            checkDisk();
+        }, 5000);
+        return () => {
+            clearInterval(timerId);
+        };
     }, []);
 
     const isDiskspaceAvailable = freeSpace && totalSize;
