@@ -50,7 +50,7 @@ export type TaskId = number;
 
 const pluginsDir = getPluginsDir();
 
-const BUFFER_SIZE = 10;
+const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
 export const NRFML_SINKS = ['raw', 'pcap'] as const;
@@ -144,6 +144,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                             settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
+                        db_file_path: `${getAppDir()}/resources/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
                         chunk_size: CHUNK_SIZE,
                     },
                     name: 'nrfml-insight-source',
