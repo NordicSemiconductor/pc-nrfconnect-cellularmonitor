@@ -66,7 +66,7 @@ export default () => {
     const updateSerialPort = (port: string) => () =>
         dispatch(setSerialPort(port));
 
-    if (availableSerialPorts.length === 0) {
+    if (!selectedSerialPort) {
         return <></>;
     }
 

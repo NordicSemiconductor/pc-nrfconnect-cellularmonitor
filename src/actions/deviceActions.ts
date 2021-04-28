@@ -45,8 +45,9 @@ const getSerialPorts = (device: Device) =>
         .map(([, value]: [string, Serialport]) => value.path);
 
 export const closeDevice = (): TAction => async dispatch => {
-    dispatch(setAvailableSerialPorts([]));
     logger.info('Closing device');
+    dispatch(setAvailableSerialPorts([]));
+    dispatch(setSerialPort(null));
 };
 
 export const openDevice = (device: Device): TAction => async dispatch => {
