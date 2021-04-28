@@ -34,7 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getMockStore } from '../utils/testUtils';
+import path from 'path';
+
+import { getMockStore, mockedDataDir } from '../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
 
 const mockStore = getMockStore();
@@ -74,8 +76,10 @@ describe('nrfml', () => {
                 { type: 'SET_TRACE_SIZE', payload: 0 },
                 {
                     type: 'SET_TRACE_PATH',
-                    payload:
-                        '\\mocked\\data\\dir\\trace-2000-01-01T00-00-00.000Z.pcap',
+                    payload: path.join(
+                        mockedDataDir,
+                        'trace-2000-01-01T00-00-00.000Z.pcap'
+                    ),
                 },
                 { type: 'SET_NRFML_TASK_ID', payload: 1 },
             ]);
@@ -87,8 +91,10 @@ describe('nrfml', () => {
                 { type: 'SET_TRACE_SIZE', payload: 0 },
                 {
                     type: 'SET_TRACE_PATH',
-                    payload:
-                        '\\mocked\\data\\dir\\trace-2000-01-01T00-00-00.000Z.bin',
+                    payload: path.join(
+                        mockedDataDir,
+                        'trace-2000-01-01T00-00-00.000Z.bin'
+                    ),
                 },
                 { type: 'SET_NRFML_TASK_ID', payload: 1 },
             ]);
