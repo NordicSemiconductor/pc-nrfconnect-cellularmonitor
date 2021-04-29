@@ -37,34 +37,25 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
-import { setSerialPort } from '../actions';
 import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
-import {
-    getAvailableSerialPorts,
-    getSerialPort,
-    getTracePath,
-    getTraceSize,
-} from '../reducer';
+import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
 import { truncateMiddle } from '../utils';
 import { getNameAndDirectory, openInFolder } from '../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
+import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
 export default () => {
     const [selectedSink, setSelectedSink] = useState<Sink>(NRFML_SINKS[0]);
-    const dispatch = useDispatch();
     const tracePath = useSelector(getTracePath);
-    const availableSerialPorts = useSelector(getAvailableSerialPorts);
+
     const selectedSerialPort = useSelector(getSerialPort);
     const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
-
-    const updateSerialPort = (port: string) => () =>
-        dispatch(setSerialPort(port));
 
     if (!selectedSerialPort) {
         return <></>;
@@ -72,25 +63,7 @@ export default () => {
 
     return (
         <>
-            <div className="serialport-selection">
-                {availableSerialPorts.map(port => (
-                    <div className="serialport-select" key={port}>
-                        <input
-                            type="radio"
-                            name="serialport-select"
-                            id={`select-sp-${port}`}
-                            value={port}
-                            checked={port === selectedSerialPort}
-                            onChange={updateSerialPort(port)}
-                        />
-                        <label htmlFor={`select-sp-${port}`}>{port}</label>
-                    </div>
-                ))}
-                <div>
-                    Currently selected serialport:{' '}
-                    <strong>{selectedSerialPort}</strong>
-                </div>
-            </div>
+            <Serialports selectedSerialPort={selectedSerialPort} />
             <Group heading="Trace file details">
                 <ButtonGroup className="trace-selector w-100">
                     {NRFML_SINKS.map((sink: Sink) => (
