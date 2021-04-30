@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2020, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,68 +34,36 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { FC } from 'react';
-import { Provider } from 'react-redux';
-import { render, RenderOptions } from '@testing-library/react';
-import checkDiskSpace from 'check-disk-space';
-import {
-    AnyAction,
-    applyMiddleware,
-    combineReducers,
-    createStore,
-} from 'redux';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import React from 'react';
+import Button from 'react-bootstrap/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { logger } from 'pc-nrfconnect-shared';
 
-import reducer from '../reducer';
-import { TDispatch } from '../thunk';
+import { setDbFilePath } from '../actions';
+import { getDbFilePath } from '../reducer';
+import { loadGzFile } from '../utils/fileUtils';
 
-jest.mock('check-disk-space');
+export default () => {
+    const dispatch = useDispatch();
+    const dbFilePath = useSelector(getDbFilePath);
 
-const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
-    typeof checkDiskSpace
->;
-
-const mockedDataDir = '/mocked/data/dir';
-
-jest.mock('pc-nrfconnect-shared', () => {
-    return {
-        ...jest.requireActual('pc-nrfconnect-shared'),
-        getAppDir: () => '/mocked/data/dir',
-        getAppDataDir: () => '/mocked/data/dir',
+    const updateDbFilePath = async () => {
+        const database = await loadGzFile();
+        if (!database) {
+            logger.error(
+                'Invalid database file, please select a valid trace file'
+            );
+            return;
+        }
+        dispatch(setDbFilePath(database));
     };
-});
 
-const getMockStore = () => {
-    const middlewares = [thunk];
-    return configureMockStore<unknown, TDispatch>(middlewares);
-};
-
-const createPreparedStore = (actions: AnyAction[]) => {
-    const store = createStore(
-        combineReducers({ app: reducer }),
-        applyMiddleware(thunk)
+    return (
+        <>
+            <Button onClick={updateDbFilePath}>Set DB file</Button>
+            <div>
+                Current DB file: <span>{dbFilePath}</span>
+            </div>
+        </>
     );
-    actions.forEach(store.dispatch);
-
-    return store;
-};
-
-const customRender = (
-    element: React.ReactElement,
-    actions: AnyAction[] = [],
-    options: RenderOptions = {}
-) => {
-    const Wrapper: FC = props => {
-        return <Provider store={createPreparedStore(actions)} {...props} />;
-    };
-    return render(element, { wrapper: Wrapper, ...options });
-};
-
-export * from '@testing-library/react';
-export {
-    customRender as render,
-    getMockStore,
-    mockedCheckDiskSpace,
-    mockedDataDir,
 };

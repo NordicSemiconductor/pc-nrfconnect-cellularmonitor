@@ -48,6 +48,15 @@ type Filter = {
     extensions: string[];
 };
 
+export const loadGzFile = async () =>
+    loadFile([
+        {
+            name: 'Database',
+            extensions: ['gz'],
+        },
+        { name: 'All Files', extensions: ['*'] },
+    ]);
+
 export const loadTraceFile = async () =>
     loadFile([
         { name: 'Trace', extensions: ['bin'] },

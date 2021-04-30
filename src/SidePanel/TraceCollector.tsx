@@ -45,6 +45,7 @@ import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
 import { truncateMiddle } from '../utils';
 import { getNameAndDirectory, openInFolder } from '../utils/fileUtils';
+import DatabaseFileOverride from './DatabaseFileOverride';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
@@ -64,6 +65,7 @@ export default () => {
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
+            <DatabaseFileOverride />
             <Group heading="Trace file details">
                 <ButtonGroup className="trace-selector w-100">
                     {NRFML_SINKS.map((sink: Sink) => (

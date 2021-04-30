@@ -43,7 +43,7 @@ import path from 'path';
 import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getSerialPort, getTraceSize } from '../reducer';
+import { getDbFilePath, getSerialPort, getTraceSize } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -83,6 +83,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     dispatch(setTraceSize(0));
     const filename = path.basename(tracePath, '.bin');
     const filepath = path.dirname(tracePath);
+    const dbFilePath = getDbFilePath(getState());
     const taskId = nrfml.start(
         {
             config: {
@@ -94,7 +95,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                     name: 'nrfml-insight-source',
                     init_parameters: {
                         file_path: tracePath,
-                        db_file_path: `${getAppDir()}/resources/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        db_file_path: dbFilePath,
                         chunk_size: CHUNK_SIZE,
                     },
                     config: {
@@ -126,6 +127,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     dispatch(setTraceSize(0));
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(getAppDataDir(), filename);
+    const dbFilePath = getDbFilePath(getState());
     const sinkConfig =
         sink === 'pcap'
             ? pcapSinkConfig(filepath)
@@ -144,7 +146,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                             settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
-                        db_file_path: `${getAppDir()}/resources/trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz`,
+                        db_file_path: dbFilePath,
                         chunk_size: CHUNK_SIZE,
                     },
                     name: 'nrfml-insight-source',

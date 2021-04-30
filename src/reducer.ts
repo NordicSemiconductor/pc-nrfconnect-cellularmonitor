@@ -35,10 +35,12 @@
  */
 
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
+import path from 'path';
+import { getAppDir, NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
     setAvailableSerialPorts,
+    setDbFilePath,
     setModem,
     setNrfmlTaskId,
     setSerialPort,
@@ -55,6 +57,7 @@ export interface State {
     traceSize: number;
     nrfmlTaskId: TaskId | null;
     availableSerialPorts: string[];
+    dbFilePath: string;
 }
 
 const initialState: State = {
@@ -64,6 +67,11 @@ const initialState: State = {
     nrfmlTaskId: null,
     serialPort: null,
     availableSerialPorts: [],
+    dbFilePath: path.join(
+        getAppDir(),
+        'resources',
+        'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
+    ),
 };
 
 export default createReducer(initialState, {
@@ -88,6 +96,9 @@ export default createReducer(initialState, {
     [setSerialPort.type]: (state, action: PayloadAction<string>) => {
         state.serialPort = action.payload;
     },
+    [setDbFilePath.type]: (state, action: PayloadAction<string>) => {
+        state.dbFilePath = action.payload;
+    },
 });
 
 export type RootState = NrfConnectState<State>;
@@ -99,3 +110,4 @@ export const getAvailableSerialPorts = (state: RootState) =>
     state.app.availableSerialPorts;
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
+export const getDbFilePath = (state: RootState) => state.app.dbFilePath;
