@@ -36,7 +36,11 @@
 
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import path from 'path';
-import { getAppDir, NrfConnectState } from 'pc-nrfconnect-shared';
+import {
+    getAppDir,
+    getPersistentStore as store,
+    NrfConnectState,
+} from 'pc-nrfconnect-shared';
 
 import {
     setAvailableSerialPorts,
@@ -60,6 +64,12 @@ export interface State {
     dbFilePath: string;
 }
 
+export const DEFAULT_DB_FILE_PATH = path.join(
+    getAppDir(),
+    'resources',
+    'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
+);
+
 const initialState: State = {
     modem: null,
     tracePath: '',
@@ -67,11 +77,7 @@ const initialState: State = {
     nrfmlTaskId: null,
     serialPort: null,
     availableSerialPorts: [],
-    dbFilePath: path.join(
-        getAppDir(),
-        'resources',
-        'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
-    ),
+    dbFilePath: store().get('dbFilePath', DEFAULT_DB_FILE_PATH),
 };
 
 export default createReducer(initialState, {

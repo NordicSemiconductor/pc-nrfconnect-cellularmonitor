@@ -39,7 +39,11 @@
 import React, { useState } from 'react';
 import { Button, FormControl } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { CollapsibleGroup, logger } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    getPersistentStore as store,
+    logger,
+} from 'pc-nrfconnect-shared';
 
 import helpIcon from '../../resources/help-circle-outline.svg';
 import { setDbFilePath } from '../actions';
@@ -65,6 +69,7 @@ export default () => {
     const setNewPath = () => {
         dispatch(setDbFilePath(modifiedPath));
         logger.info(`Database path successfully updated to ${modifiedPath}`);
+        store().set('dbFilePath', modifiedPath);
     };
 
     return (
