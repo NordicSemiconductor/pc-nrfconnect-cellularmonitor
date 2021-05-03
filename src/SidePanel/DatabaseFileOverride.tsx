@@ -92,7 +92,7 @@ export default () => {
                         className=" w-100"
                         onClick={restoreDefault}
                     >
-                        Restore default
+                        Reset
                     </Button>
                 )}
             </div>
