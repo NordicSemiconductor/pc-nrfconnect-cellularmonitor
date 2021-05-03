@@ -1,3 +1,4 @@
 {
     "extends": "./node_modules/pc-nrfconnect-shared/config/tsconfig.json",
+    "include": ["./src/svg.d.ts"]
 }
