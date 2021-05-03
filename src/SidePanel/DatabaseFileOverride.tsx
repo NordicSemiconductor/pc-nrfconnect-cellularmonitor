@@ -111,12 +111,16 @@ export default () => {
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse
                 </Button>
-                {dbFilePath !== DEFAULT_DB_FILE_PATH && (
-                    <Button variant="secondary" onClick={restoreDefault}>
-                        Restore default
-                    </Button>
-                )}
             </div>
+            {dbFilePath !== DEFAULT_DB_FILE_PATH && (
+                <Button
+                    variant="secondary"
+                    className=" w-100"
+                    onClick={restoreDefault}
+                >
+                    Restore default
+                </Button>
+            )}
         </CollapsibleGroup>
     );
 };
