@@ -37,8 +37,9 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAppDir } from 'pc-nrfconnect-shared';
 
+import playSvg from '../../resources/play-circle.svg';
+import stopSvg from '../../resources/stop-circle.svg';
 import { Sink, startTrace, stopTrace } from '../nrfml/nrfml';
 import { getNrfmlTaskId } from '../reducer';
 
@@ -69,10 +70,7 @@ export default ({ sink }: StartStopProps) => {
                     variant="secondary"
                     onClick={stop}
                 >
-                    <img
-                        alt=""
-                        src={`${getAppDir()}/resources/stop-circle.svg`}
-                    />
+                    <img alt="" src={stopSvg} />
                     Stop tracing
                 </Button>
             ) : (
@@ -81,10 +79,7 @@ export default ({ sink }: StartStopProps) => {
                     variant="secondary"
                     onClick={start}
                 >
-                    <img
-                        alt=""
-                        src={`${getAppDir()}/resources/play-circle.svg`}
-                    />
+                    <img alt="" src={playSvg} />
                     Start tracing
                 </Button>
             )}
