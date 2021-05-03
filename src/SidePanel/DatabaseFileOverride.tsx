@@ -46,6 +46,7 @@ import { resetDbFilePath, setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
 import { loadGzFile } from '../utils/fileUtils';
 import { isDefaultDbFilePath } from '../utils/store';
+import FilePathLink from './FilePathLink';
 
 export default () => {
     const dispatch = useDispatch();
@@ -80,7 +81,7 @@ export default () => {
                     title="A database file is used to decode trace data"
                 />
             </div>
-            <div>{dbFilePath}</div>
+            <FilePathLink filePath={dbFilePath} />
             <div className="db-btn-group">
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse

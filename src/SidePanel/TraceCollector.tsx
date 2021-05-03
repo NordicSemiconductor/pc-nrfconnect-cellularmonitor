@@ -43,10 +43,10 @@ import prettyBytes from 'pretty-bytes';
 
 import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
-import { truncateMiddle } from '../utils';
-import { getNameAndDirectory, openInFolder } from '../utils/fileUtils';
+import { getNameAndDirectory } from '../utils/fileUtils';
 import DatabaseFileOverride from './DatabaseFileOverride';
 import DiskSpaceUsage from './DiskSpaceUsage';
+import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
@@ -80,14 +80,7 @@ export default () => {
                 </ButtonGroup>
             </Group>
             {tracePath !== '' && (
-                <Button
-                    variant="link"
-                    className="trace-path"
-                    title={tracePath}
-                    onClick={() => openInFolder(tracePath)}
-                >
-                    {truncateMiddle(directory)}
-                </Button>
+                <FilePathLink filePath={tracePath} displayPath={directory} />
             )}
             <DiskSpaceUsage />
             <StartStopTrace sink={selectedSink} />
