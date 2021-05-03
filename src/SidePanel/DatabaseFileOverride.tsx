@@ -36,24 +36,20 @@
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-import React, { useState } from 'react';
-import { Button, FormControl } from 'react-bootstrap';
+import React from 'react';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    CollapsibleGroup,
-    getPersistentStore as store,
-    logger,
-} from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, logger } from 'pc-nrfconnect-shared';
 
 import helpIcon from '../../resources/help-circle-outline.svg';
-import { setDbFilePath } from '../actions';
-import { DEFAULT_DB_FILE_PATH, getDbFilePath } from '../reducer';
+import { resetDbFilePath, setDbFilePath } from '../actions';
+import { getDbFilePath } from '../reducer';
 import { loadGzFile } from '../utils/fileUtils';
+import { isDefaultDbFilePath } from '../utils/store';
 
 export default () => {
     const dispatch = useDispatch();
     const dbFilePath = useSelector(getDbFilePath);
-    const [modifiedPath, setModifiedPath] = useState(dbFilePath);
 
     const updateDbFilePath = async () => {
         const dbPath = await loadGzFile();
@@ -63,22 +59,13 @@ export default () => {
             );
             return;
         }
-        setModifiedPath(dbPath);
-    };
-
-    const setNewPath = () => {
-        dispatch(setDbFilePath(modifiedPath));
-        logger.info(`Database path successfully updated to ${modifiedPath}`);
-        store().set('dbFilePath', modifiedPath);
+        dispatch(setDbFilePath(dbPath));
+        logger.info(`Database path successfully updated to ${dbPath}`);
     };
 
     const restoreDefault = () => {
-        setModifiedPath(DEFAULT_DB_FILE_PATH);
-        dispatch(setDbFilePath(DEFAULT_DB_FILE_PATH));
-        logger.info(
-            `Database path successfully updated to ${DEFAULT_DB_FILE_PATH}`
-        );
-        store().delete('dbFilePath');
+        dispatch(resetDbFilePath());
+        logger.info(`Database path successfully restored`);
     };
 
     return (
@@ -93,34 +80,21 @@ export default () => {
                     title="A database file is used to decode trace data"
                 />
             </div>
-            <FormControl
-                placeholder="Database path"
-                value={modifiedPath}
-                id="database-file-input"
-                title={dbFilePath}
-                onChange={e => setModifiedPath(e.target.value)}
-            />
+            <div>{dbFilePath}</div>
             <div className="db-btn-group">
-                <Button
-                    variant="primary"
-                    onClick={setNewPath}
-                    disabled={modifiedPath === dbFilePath}
-                >
-                    Update
-                </Button>
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse
                 </Button>
+                {isDefaultDbFilePath(dbFilePath) || (
+                    <Button
+                        variant="secondary"
+                        className=" w-100"
+                        onClick={restoreDefault}
+                    >
+                        Restore default
+                    </Button>
+                )}
             </div>
-            {dbFilePath !== DEFAULT_DB_FILE_PATH && (
-                <Button
-                    variant="secondary"
-                    className=" w-100"
-                    onClick={restoreDefault}
-                >
-                    Restore default
-                </Button>
-            )}
         </CollapsibleGroup>
     );
 };

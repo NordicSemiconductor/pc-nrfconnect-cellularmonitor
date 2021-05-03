@@ -35,14 +35,10 @@
  */
 
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import path from 'path';
-import {
-    getAppDir,
-    getPersistentStore as store,
-    NrfConnectState,
-} from 'pc-nrfconnect-shared';
+import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
+    resetDbFilePath,
     setAvailableSerialPorts,
     setDbFilePath,
     setModem,
@@ -53,6 +49,11 @@ import {
 } from './actions';
 import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
+import {
+    deleteDbFilePath as deletePersistedDbFilePath,
+    getDbFilePath as getPersistedDbFilePath,
+    setDbFilePath as setPersistedDbFilePath,
+} from './utils/store';
 
 export interface State {
     readonly modem: Modem | null;
@@ -64,23 +65,17 @@ export interface State {
     dbFilePath: string;
 }
 
-export const DEFAULT_DB_FILE_PATH = path.join(
-    getAppDir(),
-    'resources',
-    'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
-);
-
-const initialState: State = {
+const initialState = (): State => ({
     modem: null,
     tracePath: '',
     traceSize: 0,
     nrfmlTaskId: null,
     serialPort: null,
     availableSerialPorts: [],
-    dbFilePath: store().get('dbFilePath', DEFAULT_DB_FILE_PATH),
-};
+    dbFilePath: getPersistedDbFilePath(),
+});
 
-export default createReducer(initialState, {
+export default createReducer(initialState(), {
     [setModem.type]: (state, action: PayloadAction<Modem>) => {
         state.modem = action.payload;
     },
@@ -104,6 +99,11 @@ export default createReducer(initialState, {
     },
     [setDbFilePath.type]: (state, action: PayloadAction<string>) => {
         state.dbFilePath = action.payload;
+        setPersistedDbFilePath(action.payload);
+    },
+    [resetDbFilePath.type]: state => {
+        deletePersistedDbFilePath();
+        state.dbFilePath = getPersistedDbFilePath();
     },
 });
 

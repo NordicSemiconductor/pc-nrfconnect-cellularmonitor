@@ -34,18 +34,26 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction } from '@reduxjs/toolkit';
+import path from 'path';
+import { getAppDir, getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { Modem } from '../modem/modem';
-import { TaskId } from '../nrfml/nrfml';
+interface StoreSchema {
+    dbFilePath?: string;
+}
 
-export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
-export const setModem = createAction<Modem | null>('SET_MODEM');
-export const setSerialPort = createAction<string | null>('SET_SERIALPORT');
-export const setAvailableSerialPorts = createAction<string[]>(
-    'SET_AVAILABLE_SERIALPORTS'
+const DEFAULT_DB_FILE_PATH = path.join(
+    getAppDir(),
+    'resources',
+    'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
 );
-export const setTracePath = createAction<string>('SET_TRACE_PATH');
-export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setDbFilePath = createAction<string>('SET_DB_FILE_PATH');
-export const resetDbFilePath = createAction('RESET_DB_FILE_PATH');
+
+export const isDefaultDbFilePath = (dbFilePath: string) =>
+    dbFilePath === DEFAULT_DB_FILE_PATH;
+
+const DB_FILE_PATH = 'dbFilePath';
+
+export const getDbFilePath = () =>
+    store<StoreSchema>().get(DB_FILE_PATH, DEFAULT_DB_FILE_PATH);
+export const setDbFilePath = (dbFilePath: string) =>
+    store<StoreSchema>().set(DB_FILE_PATH, dbFilePath);
+export const deleteDbFilePath = () => store<StoreSchema>().delete(DB_FILE_PATH);
