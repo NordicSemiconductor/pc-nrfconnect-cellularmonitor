@@ -34,10 +34,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
+import React, { useState } from 'react';
+import { Button, FormControl } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, logger } from 'pc-nrfconnect-shared';
 
 import { setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
@@ -46,24 +48,46 @@ import { loadGzFile } from '../utils/fileUtils';
 export default () => {
     const dispatch = useDispatch();
     const dbFilePath = useSelector(getDbFilePath);
+    const [modifiedPath, setModifiedPath] = useState(dbFilePath);
 
     const updateDbFilePath = async () => {
-        const database = await loadGzFile();
-        if (!database) {
+        const dbPath = await loadGzFile();
+        if (!dbPath) {
             logger.error(
-                'Invalid database file, please select a valid trace file'
+                'Invalid database file, please select a valid database file'
             );
             return;
         }
-        dispatch(setDbFilePath(database));
+        setModifiedPath(dbPath);
+    };
+
+    const setNewPath = () => {
+        dispatch(setDbFilePath(modifiedPath));
+        logger.info(`Database path successfully updated to ${modifiedPath}`);
     };
 
     return (
-        <>
-            <Button onClick={updateDbFilePath}>Set DB file</Button>
-            <div>
-                Current DB file: <span>{dbFilePath}</span>
+        <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
+            <label htmlFor="database-file-input">Select database file</label>
+            <FormControl
+                placeholder="Database path"
+                value={modifiedPath}
+                id="database-file-input"
+                title={dbFilePath}
+                onChange={e => setModifiedPath(e.target.value)}
+            />
+            <div className="db-btn-group">
+                <Button
+                    variant="primary"
+                    onClick={setNewPath}
+                    disabled={modifiedPath === dbFilePath}
+                >
+                    Update
+                </Button>
+                <Button variant="secondary" onClick={updateDbFilePath}>
+                    Browse
+                </Button>
             </div>
-        </>
+        </CollapsibleGroup>
     );
 };

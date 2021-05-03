@@ -40,7 +40,7 @@ import nrfml, {
     RawFileInitParameters,
 } from 'nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
+import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort, getTraceSize } from '../reducer';

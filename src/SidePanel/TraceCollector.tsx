@@ -65,7 +65,6 @@ export default () => {
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
-            <DatabaseFileOverride />
             <Group heading="Trace file details">
                 <ButtonGroup className="trace-selector w-100">
                     {NRFML_SINKS.map((sink: Sink) => (
@@ -98,6 +97,7 @@ export default () => {
             <div className="trace-file-size">
                 {prettyBytes(traceSize)} file size
             </div>
+            <DatabaseFileOverride />
             <hr />
         </>
     );

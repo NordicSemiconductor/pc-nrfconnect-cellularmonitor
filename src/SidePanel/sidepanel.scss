@@ -74,6 +74,15 @@
         }
     }
 
+    .db-btn-group {
+        display: flex;
+        margin-bottom: 0;
+
+        button {
+            flex: 1;
+        }
+    }
+
     .btn.active-animation {
         overflow: hidden;
         position: relative;
