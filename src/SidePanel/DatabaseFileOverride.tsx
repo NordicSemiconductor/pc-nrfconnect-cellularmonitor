@@ -47,7 +47,7 @@ import {
 
 import helpIcon from '../../resources/help-circle-outline.svg';
 import { setDbFilePath } from '../actions';
-import { getDbFilePath } from '../reducer';
+import { DEFAULT_DB_FILE_PATH, getDbFilePath } from '../reducer';
 import { loadGzFile } from '../utils/fileUtils';
 
 export default () => {
@@ -70,6 +70,15 @@ export default () => {
         dispatch(setDbFilePath(modifiedPath));
         logger.info(`Database path successfully updated to ${modifiedPath}`);
         store().set('dbFilePath', modifiedPath);
+    };
+
+    const restoreDefault = () => {
+        setModifiedPath(DEFAULT_DB_FILE_PATH);
+        dispatch(setDbFilePath(DEFAULT_DB_FILE_PATH));
+        logger.info(
+            `Database path successfully updated to ${DEFAULT_DB_FILE_PATH}`
+        );
+        store().delete('dbFilePath');
     };
 
     return (
@@ -102,6 +111,11 @@ export default () => {
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse
                 </Button>
+                {dbFilePath !== DEFAULT_DB_FILE_PATH && (
+                    <Button variant="secondary" onClick={restoreDefault}>
+                        Restore default
+                    </Button>
+                )}
             </div>
         </CollapsibleGroup>
     );
