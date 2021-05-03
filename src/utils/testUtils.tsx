@@ -64,7 +64,7 @@ jest.mock('pc-nrfconnect-shared', () => {
         getAppDir: () => '/mocked/data/dir',
         getAppDataDir: () => '/mocked/data/dir',
         getPersistentStore: jest.fn().mockImplementation(() => ({
-            get: jest.fn(),
+            get: (_, defaultVal: unknown) => defaultVal,
             set: jest.fn(),
         })),
     };

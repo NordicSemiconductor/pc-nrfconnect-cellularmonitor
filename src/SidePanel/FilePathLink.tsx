@@ -52,15 +52,13 @@ export default ({
     clipStart,
     clipEnd,
     displayPath = filePath,
-}: FilePathLinkProps) => {
-    return (
-        <Button
-            variant="link"
-            className="filepath-link"
-            title={filePath}
-            onClick={() => openInFolder(filePath)}
-        >
-            {truncateMiddle(displayPath, clipStart, clipEnd)}
-        </Button>
-    );
-};
+}: FilePathLinkProps) => (
+    <Button
+        variant="link"
+        className="filepath-link"
+        title={filePath}
+        onClick={() => openInFolder(filePath)}
+    >
+        {truncateMiddle(displayPath, clipStart, clipEnd)}
+    </Button>
+);

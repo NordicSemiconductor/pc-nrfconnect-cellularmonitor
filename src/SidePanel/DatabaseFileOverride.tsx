@@ -66,7 +66,7 @@ export default () => {
 
     const restoreDefault = () => {
         dispatch(resetDbFilePath());
-        logger.info(`Database path successfully restored`);
+        logger.info(`Database path successfully reset to default value`);
     };
 
     return (
