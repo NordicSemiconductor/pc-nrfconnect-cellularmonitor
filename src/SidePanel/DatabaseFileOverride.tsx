@@ -41,6 +41,7 @@ import { Button, FormControl } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { CollapsibleGroup, logger } from 'pc-nrfconnect-shared';
 
+import helpIcon from '../../resources/help-circle-outline.svg';
 import { setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
 import { loadGzFile } from '../utils/fileUtils';
@@ -68,7 +69,16 @@ export default () => {
 
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
-            <label htmlFor="database-file-input">Select database file</label>
+            <div className="db-help-section">
+                <label htmlFor="database-file-input">
+                    Select database file
+                </label>
+                <img
+                    src={helpIcon}
+                    alt="Question mark"
+                    title="A database file is used to decode trace data"
+                />
+            </div>
             <FormControl
                 placeholder="Database path"
                 value={modifiedPath}

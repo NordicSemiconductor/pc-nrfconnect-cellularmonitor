@@ -83,6 +83,21 @@
         }
     }
 
+    .db-help-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+            margin-bottom: 0;
+        }
+
+        img {
+            height: 18px;
+            width: 18px;
+        }
+    }
+
     .btn.active-animation {
         overflow: hidden;
         position: relative;
