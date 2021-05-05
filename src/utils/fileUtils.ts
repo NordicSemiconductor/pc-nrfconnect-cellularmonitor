@@ -42,7 +42,7 @@ const { dialog, shell } = remote;
 
 const appPath = getAppDir();
 
-export const askForGzFile = async () =>
+export const askForGzFile = () =>
     askForFile([
         {
             name: 'Database',
@@ -51,27 +51,23 @@ export const askForGzFile = async () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const askForTraceFile = async () =>
+export const askForTraceFile = () =>
     askForFile([
         { name: 'Trace', extensions: ['bin'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const askForPcapFile = async () =>
+export const askForPcapFile = () =>
     askForFile([
         { name: 'PCAP', extensions: ['pcap'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-const askForFile = async (filters: FileFilter[]) => {
-    const {
-        filePaths: [filename],
-    } = await dialog.showOpenDialog({
+const askForFile = (filters: FileFilter[]) =>
+    dialog.showOpenDialogSync({
         defaultPath: appPath,
         filters,
-    });
-    return filename;
-};
+    })?.[0];
 
 export const openInFolder = (filepath: string) =>
     shell.showItemInFolder(filepath);

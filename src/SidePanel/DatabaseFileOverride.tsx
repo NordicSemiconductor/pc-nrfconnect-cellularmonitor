@@ -52,8 +52,8 @@ export default () => {
     const dispatch = useDispatch();
     const dbFilePath = useSelector(getDbFilePath);
 
-    const updateDbFilePath = async () => {
-        const dbPath = await askForGzFile();
+    const updateDbFilePath = () => {
+        const dbPath = askForGzFile();
         if (!dbPath) {
             logger.error(
                 'Invalid database file, please select a valid database file'

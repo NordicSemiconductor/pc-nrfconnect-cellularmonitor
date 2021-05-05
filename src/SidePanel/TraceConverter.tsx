@@ -9,8 +9,8 @@ import { askForTraceFile } from '../utils/fileUtils';
 export default () => {
     const dispatch = useDispatch();
 
-    const loadTrace = async () => {
-        const file = await askForTraceFile();
+    const loadTrace = () => {
+        const file = askForTraceFile();
         if (!file) {
             logger.error('Invalid file, please select a valid trace file');
             return;

@@ -44,8 +44,8 @@ import openInWireshark from '../utils/wireshark';
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
-    const loadPcap = async () => {
-        const filename = await askForPcapFile();
+    const loadPcap = () => {
+        const filename = askForPcapFile();
         if (!filename) {
             logger.error('Invalid file, please select a valid pcap file');
             return;
