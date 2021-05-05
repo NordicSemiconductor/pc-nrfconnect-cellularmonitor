@@ -34,14 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { exec } from 'child_process';
 import { logger } from 'pc-nrfconnect-shared';
-
-const { exec } = require('child_process');
 
 export default (filepath: string) =>
     exec(
         `"C:\\Program Files\\Wireshark\\Wireshark.exe" -r ${filepath}`,
-        (err: Error) => {
+        err => {
             if (err) {
                 logger.error(err);
             }

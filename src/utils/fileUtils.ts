@@ -34,22 +34,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { FileFilter, remote } from 'electron';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-const {
-    remote: { dialog, shell },
-} = require('electron');
+const { dialog, shell } = remote;
 
 const appPath = getAppDir();
 
-type Filter = {
-    name: string;
-    extensions: string[];
-};
-
-export const loadGzFile = async () =>
-    loadFile([
+export const askForGzFile = () =>
+    askForFile([
         {
             name: 'Database',
             extensions: ['gz'],
@@ -57,28 +51,23 @@ export const loadGzFile = async () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const loadTraceFile = async () =>
-    loadFile([
+export const askForTraceFile = () =>
+    askForFile([
         { name: 'Trace', extensions: ['bin'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const loadPcapFile = async () =>
-    loadFile([
+export const askForPcapFile = () =>
+    askForFile([
         { name: 'PCAP', extensions: ['pcap'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-const loadFile = async (filters: Filter[]) => {
-    const {
-        filePaths: [filename],
-    } =
-        (await dialog.showOpenDialog({
-            defaultPath: appPath,
-            filters,
-        })) || [];
-    return filename;
-};
+const askForFile = (filters: FileFilter[]) =>
+    dialog.showOpenDialogSync({
+        defaultPath: appPath,
+        filters,
+    })?.[0];
 
 export const openInFolder = (filepath: string) =>
     shell.showItemInFolder(filepath);
