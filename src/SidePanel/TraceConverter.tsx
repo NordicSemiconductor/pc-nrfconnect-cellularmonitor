@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
-import { logger } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../nrfml/nrfml';
 import { askForTraceFile } from '../utils/fileUtils';
@@ -11,11 +10,9 @@ export default () => {
 
     const loadTrace = () => {
         const file = askForTraceFile();
-        if (!file) {
-            logger.error('Invalid file, please select a valid trace file');
-            return;
+        if (file) {
+            dispatch(convertTraceFile(file));
         }
-        dispatch(convertTraceFile(file));
     };
 
     return (

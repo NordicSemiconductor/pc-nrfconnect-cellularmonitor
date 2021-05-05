@@ -36,7 +36,7 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { logger, openUrl } from 'pc-nrfconnect-shared';
+import { openUrl } from 'pc-nrfconnect-shared';
 
 import { askForPcapFile } from '../utils/fileUtils';
 import openInWireshark from '../utils/wireshark';
@@ -46,11 +46,9 @@ const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 export default () => {
     const loadPcap = () => {
         const filename = askForPcapFile();
-        if (!filename) {
-            logger.error('Invalid file, please select a valid pcap file');
-            return;
+        if (filename) {
+            openInWireshark(filename);
         }
-        openInWireshark(filename);
     };
 
     return (

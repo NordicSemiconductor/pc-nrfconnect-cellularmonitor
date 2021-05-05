@@ -54,14 +54,10 @@ export default () => {
 
     const updateDbFilePath = () => {
         const dbPath = askForGzFile();
-        if (!dbPath) {
-            logger.error(
-                'Invalid database file, please select a valid database file'
-            );
-            return;
+        if (dbPath) {
+            dispatch(setDbFilePath(dbPath));
+            logger.info(`Database path successfully updated to ${dbPath}`);
         }
-        dispatch(setDbFilePath(dbPath));
-        logger.info(`Database path successfully updated to ${dbPath}`);
     };
 
     const restoreDefault = () => {
