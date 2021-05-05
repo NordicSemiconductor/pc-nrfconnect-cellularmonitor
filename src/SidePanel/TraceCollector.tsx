@@ -38,7 +38,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
 import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
@@ -90,7 +90,9 @@ export default () => {
             <div className="trace-file-size">
                 {prettyBytes(traceSize)} file size
             </div>
-            <DatabaseFileOverride />
+            <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
+                <DatabaseFileOverride />
+            </CollapsibleGroup>
             <hr />
         </>
     );

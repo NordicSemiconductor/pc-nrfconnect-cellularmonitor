@@ -39,7 +39,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { CollapsibleGroup, logger } from 'pc-nrfconnect-shared';
+import { logger } from 'pc-nrfconnect-shared';
 
 import helpIcon from '../../resources/help-circle-outline.svg';
 import { resetDbFilePath, setDbFilePath } from '../actions';
@@ -70,7 +70,7 @@ export default () => {
     };
 
     return (
-        <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
+        <>
             <div className="db-help-section">
                 <label htmlFor="database-file-input">
                     Select database file
@@ -96,6 +96,6 @@ export default () => {
                     </Button>
                 )}
             </div>
-        </CollapsibleGroup>
+        </>
     );
 };

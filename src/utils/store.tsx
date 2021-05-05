@@ -50,10 +50,11 @@ const DEFAULT_DB_FILE_PATH = path.join(
 export const isDefaultDbFilePath = (dbFilePath: string) =>
     dbFilePath === DEFAULT_DB_FILE_PATH;
 
-const DB_FILE_PATH = 'dbFilePath';
+const DB_FILE_PATH_KEY = 'dbFilePath';
 
 export const getDbFilePath = () =>
-    store<StoreSchema>().get(DB_FILE_PATH, DEFAULT_DB_FILE_PATH);
+    store<StoreSchema>().get(DB_FILE_PATH_KEY, DEFAULT_DB_FILE_PATH);
 export const setDbFilePath = (dbFilePath: string) =>
-    store<StoreSchema>().set(DB_FILE_PATH, dbFilePath);
-export const deleteDbFilePath = () => store<StoreSchema>().delete(DB_FILE_PATH);
+    store<StoreSchema>().set(DB_FILE_PATH_KEY, dbFilePath);
+export const deleteDbFilePath = () =>
+    store<StoreSchema>().delete(DB_FILE_PATH_KEY);
