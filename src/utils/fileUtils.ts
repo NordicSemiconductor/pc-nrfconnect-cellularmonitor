@@ -66,11 +66,10 @@ export const askForPcapFile = async () =>
 const askForFile = async (filters: FileFilter[]) => {
     const {
         filePaths: [filename],
-    } =
-        (await dialog.showOpenDialog({
-            defaultPath: appPath,
-            filters,
-        })) || [];
+    } = await dialog.showOpenDialog({
+        defaultPath: appPath,
+        filters,
+    });
     return filename;
 };
 
