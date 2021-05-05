@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../nrfml/nrfml';
-import { loadTraceFile } from '../utils/fileUtils';
+import { askForTraceFile } from '../utils/fileUtils';
 
 export default () => {
     const dispatch = useDispatch();
 
     const loadTrace = async () => {
-        const file = await loadTraceFile();
+        const file = await askForTraceFile();
         if (!file) {
             logger.error('Invalid file, please select a valid trace file');
             return;

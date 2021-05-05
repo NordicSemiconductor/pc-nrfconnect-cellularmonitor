@@ -42,8 +42,8 @@ const { dialog, shell } = remote;
 
 const appPath = getAppDir();
 
-export const loadGzFile = async () =>
-    loadFile([
+export const askForGzFile = async () =>
+    askForFile([
         {
             name: 'Database',
             extensions: ['gz'],
@@ -51,19 +51,19 @@ export const loadGzFile = async () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const loadTraceFile = async () =>
-    loadFile([
+export const askForTraceFile = async () =>
+    askForFile([
         { name: 'Trace', extensions: ['bin'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const loadPcapFile = async () =>
-    loadFile([
+export const askForPcapFile = async () =>
+    askForFile([
         { name: 'PCAP', extensions: ['pcap'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-const loadFile = async (filters: FileFilter[]) => {
+const askForFile = async (filters: FileFilter[]) => {
     const {
         filePaths: [filename],
     } =

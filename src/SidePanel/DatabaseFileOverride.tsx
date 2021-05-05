@@ -44,7 +44,7 @@ import { logger } from 'pc-nrfconnect-shared';
 import helpIcon from '../../resources/help-circle-outline.svg';
 import { resetDbFilePath, setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
-import { loadGzFile } from '../utils/fileUtils';
+import { askForGzFile } from '../utils/fileUtils';
 import { isDefaultDbFilePath } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
@@ -53,7 +53,7 @@ export default () => {
     const dbFilePath = useSelector(getDbFilePath);
 
     const updateDbFilePath = async () => {
-        const dbPath = await loadGzFile();
+        const dbPath = await askForGzFile();
         if (!dbPath) {
             logger.error(
                 'Invalid database file, please select a valid database file'
