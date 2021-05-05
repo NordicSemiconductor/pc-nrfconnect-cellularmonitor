@@ -34,19 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { FileFilter, remote } from 'electron';
 import path from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-const {
-    remote: { dialog, shell },
-} = require('electron');
+const { dialog, shell } = remote;
 
 const appPath = getAppDir();
-
-type Filter = {
-    name: string;
-    extensions: string[];
-};
 
 export const loadGzFile = async () =>
     loadFile([
@@ -69,7 +63,7 @@ export const loadPcapFile = async () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-const loadFile = async (filters: Filter[]) => {
+const loadFile = async (filters: FileFilter[]) => {
     const {
         filePaths: [filename],
     } =
