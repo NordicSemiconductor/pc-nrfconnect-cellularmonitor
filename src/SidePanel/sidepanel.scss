@@ -28,7 +28,7 @@
         }
     }
 
-    .trace-path {
+    .filepath-link {
         text-align: left;
         color: $gray-900;
         padding: 0;
@@ -71,6 +71,30 @@
 
         input {
             margin-right: 8px;
+        }
+    }
+
+    .db-btn-group {
+        display: flex;
+        margin-bottom: 0;
+
+        button {
+            flex: 1;
+        }
+    }
+
+    .db-help-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+            margin-bottom: 0;
+        }
+
+        img {
+            height: 18px;
+            width: 18px;
         }
     }
 

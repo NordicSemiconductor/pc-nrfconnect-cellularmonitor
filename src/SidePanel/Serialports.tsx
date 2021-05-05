@@ -34,55 +34,43 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Group } from 'pc-nrfconnect-shared';
 
-import playSvg from '../../resources/play-circle.svg';
-import stopSvg from '../../resources/stop-circle.svg';
-import { Sink, startTrace, stopTrace } from '../nrfml/nrfml';
-import { getNrfmlTaskId } from '../reducer';
+import { setSerialPort } from '../actions';
+import { getAvailableSerialPorts } from '../reducer';
 
-type StartStopProps = {
-    sink: Sink;
+type SerialPortProps = {
+    selectedSerialPort: string;
 };
 
-export default ({ sink }: StartStopProps) => {
+export default ({ selectedSerialPort }: SerialPortProps) => {
     const dispatch = useDispatch();
-    const [tracing, setTracing] = useState(false);
-    const nrfmlTaskId = useSelector(getNrfmlTaskId);
+    const availableSerialPorts = useSelector(getAvailableSerialPorts);
 
-    const start = () => {
-        setTracing(true);
-        dispatch(startTrace(sink));
-    };
-
-    const stop = () => {
-        setTracing(false);
-        dispatch(stopTrace(nrfmlTaskId));
-    };
+    const updateSerialPort = (port: string) => () =>
+        dispatch(setSerialPort(port));
 
     return (
-        <>
-            {tracing ? (
-                <Button
-                    className="w-100 secondary-btn start-stop active-animation"
-                    variant="secondary"
-                    onClick={stop}
-                >
-                    <img alt="" src={stopSvg} />
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={start}
-                >
-                    <img alt="" src={playSvg} />
-                    Start tracing
-                </Button>
-            )}
-        </>
+        <Group heading="Serialport trace capture">
+            <div className="serialport-selection">
+                {availableSerialPorts.map(port => (
+                    <div className="serialport-select" key={port}>
+                        <input
+                            type="radio"
+                            name="serialport-select"
+                            id={`select-sp-${port}`}
+                            value={port}
+                            checked={port === selectedSerialPort}
+                            onChange={updateSerialPort(port)}
+                        />
+                        <label htmlFor={`select-sp-${port}`}>
+                            <strong>{port}</strong>
+                        </label>
+                    </div>
+                ))}
+            </div>
+        </Group>
     );
 };

@@ -34,55 +34,31 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch, useSelector } from 'react-redux';
 
-import playSvg from '../../resources/play-circle.svg';
-import stopSvg from '../../resources/stop-circle.svg';
-import { Sink, startTrace, stopTrace } from '../nrfml/nrfml';
-import { getNrfmlTaskId } from '../reducer';
+import { truncateMiddle } from '../utils';
+import { openInFolder } from '../utils/fileUtils';
 
-type StartStopProps = {
-    sink: Sink;
+type FilePathLinkProps = {
+    filePath: string;
+    displayPath?: string;
+    clipStart?: number;
+    clipEnd?: number;
 };
 
-export default ({ sink }: StartStopProps) => {
-    const dispatch = useDispatch();
-    const [tracing, setTracing] = useState(false);
-    const nrfmlTaskId = useSelector(getNrfmlTaskId);
-
-    const start = () => {
-        setTracing(true);
-        dispatch(startTrace(sink));
-    };
-
-    const stop = () => {
-        setTracing(false);
-        dispatch(stopTrace(nrfmlTaskId));
-    };
-
-    return (
-        <>
-            {tracing ? (
-                <Button
-                    className="w-100 secondary-btn start-stop active-animation"
-                    variant="secondary"
-                    onClick={stop}
-                >
-                    <img alt="" src={stopSvg} />
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={start}
-                >
-                    <img alt="" src={playSvg} />
-                    Start tracing
-                </Button>
-            )}
-        </>
-    );
-};
+export default ({
+    filePath,
+    clipStart,
+    clipEnd,
+    displayPath = filePath,
+}: FilePathLinkProps) => (
+    <Button
+        variant="link"
+        className="filepath-link"
+        title={filePath}
+        onClick={() => openInFolder(filePath)}
+    >
+        {truncateMiddle(displayPath, clipStart, clipEnd)}
+    </Button>
+);

@@ -56,13 +56,17 @@ const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
     typeof checkDiskSpace
 >;
 
-export const mockedDataDir = '/mocked/data/dir';
+const mockedDataDir = '/mocked/data/dir';
 
 jest.mock('pc-nrfconnect-shared', () => {
     return {
         ...jest.requireActual('pc-nrfconnect-shared'),
-        getAppDir: () => mockedDataDir,
-        getAppDataDir: () => mockedDataDir,
+        getAppDir: () => '/mocked/data/dir',
+        getAppDataDir: () => '/mocked/data/dir',
+        getPersistentStore: jest.fn().mockImplementation(() => ({
+            get: (_, defaultVal: unknown) => defaultVal,
+            set: jest.fn(),
+        })),
     };
 });
 
@@ -93,4 +97,9 @@ const customRender = (
 };
 
 export * from '@testing-library/react';
-export { customRender as render, getMockStore, mockedCheckDiskSpace };
+export {
+    customRender as render,
+    getMockStore,
+    mockedCheckDiskSpace,
+    mockedDataDir,
+};
