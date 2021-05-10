@@ -34,22 +34,30 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { openUrl } from 'pc-nrfconnect-shared';
 
 import { askForPcapFile } from '../utils/fileUtils';
-import openInWireshark from '../utils/wireshark';
+import { openInWireshark, shouldShowWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
+    const [shouldShow, setShouldShow] = useState(false);
+
     const loadPcap = () => {
         const filename = askForPcapFile();
         if (filename) {
             openInWireshark(filename);
         }
     };
+
+    shouldShowWireshark()
+        .then(() => setShouldShow(true))
+        .catch(() => setShouldShow(false));
+
+    if (!shouldShow) return <></>;
 
     return (
         <div className="wireshark">

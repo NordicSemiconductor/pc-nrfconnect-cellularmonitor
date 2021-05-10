@@ -35,14 +35,26 @@
  */
 
 import { exec } from 'child_process';
+import { access, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-export default (filepath: string) =>
-    exec(
-        `"C:\\Program Files\\Wireshark\\Wireshark.exe" -r ${filepath}`,
-        err => {
+const DEFAULT_WIRESHARK_LOCATION_WIN =
+    'C:\\Program Files\\Wireshark\\Wireshark.exe';
+
+export const shouldShowWireshark = () => {
+    return new Promise((resolve, reject) => {
+        access(DEFAULT_WIRESHARK_LOCATION_WIN, constants.F_OK, err => {
             if (err) {
-                logger.error(err);
+                reject(err);
             }
+            resolve(true);
+        });
+    });
+};
+
+export const openInWireshark = (filepath: string) =>
+    exec(`"${DEFAULT_WIRESHARK_LOCATION_WIN}" -r ${filepath}`, err => {
+        if (err) {
+            logger.error(err);
         }
-    );
+    });
