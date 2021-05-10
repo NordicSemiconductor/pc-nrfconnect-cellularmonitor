@@ -41,15 +41,12 @@ import { logger } from 'pc-nrfconnect-shared';
 const DEFAULT_WIRESHARK_LOCATION_WIN =
     'C:\\Program Files\\Wireshark\\Wireshark.exe';
 
-export const shouldShowWireshark = () => {
-    return new Promise((resolve, reject) => {
-        access(DEFAULT_WIRESHARK_LOCATION_WIN, constants.F_OK, err => {
-            if (err) {
-                reject(err);
-            }
-            resolve(true);
-        });
-    });
+export const shouldShowWireshark = (): Promise<boolean> => {
+    return new Promise(resolve =>
+        access(DEFAULT_WIRESHARK_LOCATION_WIN, constants.F_OK, err =>
+            resolve(!err)
+        )
+    );
 };
 
 export const openInWireshark = (filepath: string) =>

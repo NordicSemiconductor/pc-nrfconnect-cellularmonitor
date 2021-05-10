@@ -54,9 +54,7 @@ export default () => {
         }
     };
 
-    shouldShowWireshark()
-        .then(() => setShouldShow(true))
-        .catch(() => setShouldShow(false));
+    shouldShowWireshark().then(setShouldShow);
 
     return (
         <div className="wireshark">
@@ -80,7 +78,7 @@ export default () => {
                         marginTop: 4,
                     }}
                 >
-                    Don&apos;t have Wireshark? Get it here
+                    Wireshark not installed? Get it here
                 </Button>
             )}
         </div>
