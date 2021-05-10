@@ -143,7 +143,6 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                     init_parameters: {
                         serialport: {
                             path: serialPort,
-                            settings: '1000000D8S1PNFN',
                         },
                         extract_raw: true,
                         db_file_path: dbFilePath,
