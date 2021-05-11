@@ -15,7 +15,7 @@
   "main": "dist/bundle.js",
   "files": [
     "dist/",
-    "resources/icon.png",
+    "resources/*",
     "LICENSE"
   ],
   "scripts": {
