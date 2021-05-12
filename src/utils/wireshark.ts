@@ -35,14 +35,24 @@
  */
 
 import { exec } from 'child_process';
+import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-export default (filepath: string) =>
-    exec(
-        `"C:\\Program Files\\Wireshark\\Wireshark.exe" -r ${filepath}`,
-        err => {
-            if (err) {
-                logger.error(err);
-            }
+const DEFAULT_WIRESHARK_LOCATION_WIN =
+    'C:\\Program Files\\Wireshark\\Wireshark.exe';
+
+export const isWiresharkInstalled = () => {
+    try {
+        accessSync(DEFAULT_WIRESHARK_LOCATION_WIN, constants.F_OK);
+    } catch (err) {
+        return false;
+    }
+    return true;
+};
+
+export const openInWireshark = (filepath: string) =>
+    exec(`"${DEFAULT_WIRESHARK_LOCATION_WIN}" -r ${filepath}`, err => {
+        if (err) {
+            logger.error(err);
         }
-    );
+    });

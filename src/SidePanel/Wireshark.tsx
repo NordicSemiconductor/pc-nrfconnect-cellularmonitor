@@ -39,11 +39,13 @@ import Button from 'react-bootstrap/Button';
 import { openUrl } from 'pc-nrfconnect-shared';
 
 import { askForPcapFile } from '../utils/fileUtils';
-import openInWireshark from '../utils/wireshark';
+import { isWiresharkInstalled, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
+    if (!process.platform.startsWith('win')) return null; // temporary
+
     const loadPcap = () => {
         const filename = askForPcapFile();
         if (filename) {
@@ -51,28 +53,33 @@ export default () => {
         }
     };
 
+    const hasWireshark = isWiresharkInstalled();
+
     return (
         <div className="wireshark">
-            <Button
-                className="w-100 secondary-btn"
-                style={{ marginTop: 8 }}
-                variant="primary"
-                onClick={loadPcap}
-            >
-                Open in Wireshark
-            </Button>
-            <Button
-                variant="link"
-                onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                style={{
-                    paddingLeft: 0,
-                    display: 'inline-block',
-                    textAlign: 'initial',
-                    marginTop: 4,
-                }}
-            >
-                Don&apos;t have Wireshark? Get it here
-            </Button>
+            {hasWireshark ? (
+                <Button
+                    className="w-100 secondary-btn"
+                    style={{ marginTop: 8 }}
+                    variant="primary"
+                    onClick={loadPcap}
+                >
+                    Open in Wireshark
+                </Button>
+            ) : (
+                <Button
+                    variant="link"
+                    onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+                    style={{
+                        paddingLeft: 0,
+                        display: 'inline-block',
+                        textAlign: 'initial',
+                        marginTop: 4,
+                    }}
+                >
+                    Wireshark not installed? Get it here
+                </Button>
+            )}
         </div>
     );
 };
