@@ -36,11 +36,9 @@
 
 import { FileFilter, remote } from 'electron';
 import path from 'path';
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDataDir } from 'pc-nrfconnect-shared';
 
 const { dialog, shell } = remote;
-
-const appPath = getAppDir();
 
 export const askForGzFile = () =>
     askForFile([
@@ -65,7 +63,7 @@ export const askForPcapFile = () =>
 
 const askForFile = (filters: FileFilter[]) =>
     dialog.showOpenDialogSync({
-        defaultPath: appPath,
+        defaultPath: getAppDataDir(),
         filters,
     })?.[0];
 
