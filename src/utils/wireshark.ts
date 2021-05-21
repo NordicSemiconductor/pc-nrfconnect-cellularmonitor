@@ -35,26 +35,26 @@
  */
 
 import { exec, execSync } from 'child_process';
+import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-const WINDOWS_PROGRAM_PATH = `C:\\Program Files`;
-
-export const isWiresharkInstalled = (): string | undefined => {
+export const isWiresharkInstalled = (): string => {
     return process.platform === 'win32'
-        ? locateWiresharkOnWindows()
+        ? validateWiresharkLocationOnWindows()
         : locateWiresharkOnUnix();
 };
 
-const locateWiresharkOnWindows = () => {
+const validateWiresharkLocationOnWindows = () => {
+    const DEFAULT_WIRESHARK_LOCATION = `C:\\Program Files\\Wireshark\\Wireshark.exe`;
     try {
-        return execSync(
-            `where /r "${WINDOWS_PROGRAM_PATH}" wireshark`
-        ).toString();
+        accessSync(DEFAULT_WIRESHARK_LOCATION, constants.F_OK);
     } catch (err) {
         logger.info(
-            `Could not locate wireshark executable in ${WINDOWS_PROGRAM_PATH}`
+            `Could not locate wireshark executable in ${DEFAULT_WIRESHARK_LOCATION}`
         );
+        return '';
     }
+    return DEFAULT_WIRESHARK_LOCATION;
 };
 
 const locateWiresharkOnUnix = () => {
@@ -62,6 +62,7 @@ const locateWiresharkOnUnix = () => {
         return execSync(`which wireshark`).toString();
     } catch (err) {
         logger.info(`Could not locate wireshark executable`);
+        return '';
     }
 };
 

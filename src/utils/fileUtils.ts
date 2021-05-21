@@ -61,6 +61,12 @@ export const askForPcapFile = () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
+export const askForExecutableFile = () =>
+    askForFile([
+        { name: 'Executable', extensions: ['exe'] },
+        { name: 'All Files', extensions: ['*'] },
+    ]);
+
 const askForFile = (filters: FileFilter[]) =>
     dialog.showOpenDialogSync({
         defaultPath: getAppDataDir(),
