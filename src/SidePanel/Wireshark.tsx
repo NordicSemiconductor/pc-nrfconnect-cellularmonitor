@@ -44,25 +44,23 @@ import { isWiresharkInstalled, openInWireshark } from '../utils/wireshark';
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
-    if (!process.platform.startsWith('win')) return null; // temporary
-
-    const loadPcap = () => {
+    const loadPcap = (pathToWireshark: string) => () => {
         const filename = askForPcapFile();
         if (filename) {
-            openInWireshark(filename);
+            openInWireshark(filename, pathToWireshark);
         }
     };
 
-    const hasWireshark = isWiresharkInstalled();
+    const pathToWireshark = isWiresharkInstalled();
 
     return (
         <div className="wireshark">
-            {hasWireshark ? (
+            {pathToWireshark ? (
                 <Button
                     className="w-100 secondary-btn"
                     style={{ marginTop: 8 }}
                     variant="primary"
-                    onClick={loadPcap}
+                    onClick={loadPcap(pathToWireshark)}
                 >
                     Open in Wireshark
                 </Button>
