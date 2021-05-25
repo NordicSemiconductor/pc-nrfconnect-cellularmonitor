@@ -1,2 +1,6 @@
-## Unreleased
-Maintain a changelog here. If this is an official app, then the users will see it as release notes automatically in the launcher.
+## 0.0.2
+- Show Wireshark button on all platforms (not only on Windows, but also
+  on Linux and macOS).
+
+## 0.0.1
+- Initial internal release
