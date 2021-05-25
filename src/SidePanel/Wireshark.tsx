@@ -41,7 +41,7 @@ import { logger, openUrl } from 'pc-nrfconnect-shared';
 
 import { setWiresharkPath } from '../actions';
 import { getWiresharkPath } from '../reducer';
-import { askForExecutableFile, askForPcapFile } from '../utils/fileUtils';
+import { askForPcapFile, askForWiresharkExecutable } from '../utils/fileUtils';
 import { isWiresharkInstalled, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
@@ -63,7 +63,7 @@ export default () => {
     }
 
     const updateWiresharkLocation = () => {
-        const pathToWireshark = askForExecutableFile();
+        const pathToWireshark = askForWiresharkExecutable();
         if (pathToWireshark) {
             dispatch(setWiresharkPath(pathToWireshark));
             logger.info(

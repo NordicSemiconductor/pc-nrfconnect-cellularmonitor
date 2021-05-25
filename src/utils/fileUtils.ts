@@ -61,15 +61,30 @@ export const askForPcapFile = () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const askForExecutableFile = () =>
-    askForFile([
-        { name: 'Executable', extensions: ['exe'] },
-        { name: 'All Files', extensions: ['*'] },
-    ]);
+export const askForWiresharkExecutable = () => {
+    if (process.platform === 'darwin') {
+        return askForFile(
+            [
+                { name: 'Executable', extensions: ['app'] },
+                { name: 'All Files', extensions: ['*'] },
+            ],
+            `/Applications`
+        );
+    }
+    if (process.platform === 'win32') {
+        return askForFile(
+            [
+                { name: 'Executable', extensions: ['exe'] },
+                { name: 'All Files', extensions: ['*'] },
+            ],
+            `C:\\Program Files`
+        );
+    }
+};
 
-const askForFile = (filters: FileFilter[]) =>
+const askForFile = (filters: FileFilter[], defaultPath = getAppDataDir()) =>
     dialog.showOpenDialogSync({
-        defaultPath: getAppDataDir(),
+        defaultPath,
         filters,
     })?.[0];
 
