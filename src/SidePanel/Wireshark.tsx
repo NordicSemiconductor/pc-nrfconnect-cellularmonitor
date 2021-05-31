@@ -36,14 +36,20 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { openUrl } from 'pc-nrfconnect-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { logger, openUrl } from 'pc-nrfconnect-shared';
 
-import { askForPcapFile } from '../utils/fileUtils';
+import { setWiresharkPath } from '../actions';
+import { getWiresharkPath } from '../reducer';
+import { askForPcapFile, askForWiresharkExecutable } from '../utils/fileUtils';
 import { isWiresharkInstalled, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
+    const dispatch = useDispatch();
+    const pathToWiresharkExecutable = useSelector(getWiresharkPath);
+
     const loadPcap = (pathToWireshark: string) => () => {
         const filename = askForPcapFile();
         if (filename) {
@@ -51,32 +57,54 @@ export default () => {
         }
     };
 
-    const pathToWireshark = isWiresharkInstalled();
+    if (pathToWiresharkExecutable === '') {
+        const pathToWireshark = isWiresharkInstalled();
+        dispatch(setWiresharkPath(pathToWireshark));
+    }
+
+    const updateWiresharkLocation = () => {
+        const pathToWireshark = askForWiresharkExecutable();
+        if (pathToWireshark) {
+            dispatch(setWiresharkPath(pathToWireshark));
+            logger.info(
+                `Wireshark executable path successfully updated to ${pathToWireshark}`
+            );
+        }
+    };
 
     return (
         <div className="wireshark">
-            {pathToWireshark ? (
+            {pathToWiresharkExecutable ? (
                 <Button
                     className="w-100 secondary-btn"
                     style={{ marginTop: 8 }}
                     variant="primary"
-                    onClick={loadPcap(pathToWireshark)}
+                    onClick={loadPcap(pathToWiresharkExecutable)}
                 >
                     Open in Wireshark
                 </Button>
             ) : (
-                <Button
-                    variant="link"
-                    onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                    style={{
-                        paddingLeft: 0,
-                        display: 'inline-block',
-                        textAlign: 'initial',
-                        marginTop: 4,
-                    }}
-                >
-                    Wireshark not installed? Get it here
-                </Button>
+                <>
+                    <Button
+                        variant="light"
+                        className="w-100"
+                        onClick={updateWiresharkLocation}
+                    >
+                        Wireshark already installed? Click to select executable
+                    </Button>
+                    <Button
+                        variant="link"
+                        onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+                        style={{
+                            paddingLeft: 0,
+                            display: 'inline-block',
+                            textAlign: 'initial',
+                            marginTop: 4,
+                        }}
+                    >
+                        Or click here to install Wireshark
+                    </Button>
+                </>
             )}
         </div>
     );
