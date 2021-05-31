@@ -106,13 +106,12 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         err => {
             if (err != null) {
-                console.error('err ', err);
+                logger.error(`Failed to convert ${filename} to .pcap`);
             } else {
                 logger.info(`Successfully converted ${filename} to .pcap`);
             }
         },
         progress => {
-            console.log('progressing', progress);
             dispatch(setTraceSize(progress.data_offset));
         }
     );
@@ -162,10 +161,9 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                     'Error when starting trace. Make sure selected serialport is available'
                 );
             }
-            console.log('done tracing!');
+            logger.info('Finished tracing');
         },
         progress => {
-            console.log('progressing', progress);
             dispatch(setTraceSize(progress.data_offset));
         }
     );
