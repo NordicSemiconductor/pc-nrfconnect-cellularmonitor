@@ -107,8 +107,9 @@ const convertTraceFile = (tracePath: string): TAction => (
         err => {
             if (err != null) {
                 console.error('err ', err);
+            } else {
+                logger.info(`Successfully converted ${filename} to .pcap`);
             }
-            logger.info(`Successfully converted ${filename} to .pcap`);
         },
         progress => {
             console.log('progressing', progress);
