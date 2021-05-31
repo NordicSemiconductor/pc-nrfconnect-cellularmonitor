@@ -39,6 +39,7 @@ import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
     resetDbFilePath,
+    resetWiresharkPath,
     setAvailableSerialPorts,
     setDbFilePath,
     setModem,
@@ -46,13 +47,17 @@ import {
     setSerialPort,
     setTracePath,
     setTraceSize,
+    setWiresharkPath,
 } from './actions';
 import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
+    deleteWiresharkPath as deletePersistedWiresharkPath,
     getDbFilePath as getPersistedDbFilePath,
+    getWiresharkPath as getPersistedWiresharkPath,
     setDbFilePath as setPersistedDbFilePath,
+    setWiresharkPath as setPersistedWiresharkPath,
 } from './utils/store';
 
 export interface State {
@@ -63,6 +68,7 @@ export interface State {
     nrfmlTaskId: TaskId | null;
     availableSerialPorts: string[];
     dbFilePath: string;
+    wiresharkPath: string;
 }
 
 const initialState = (): State => ({
@@ -73,6 +79,7 @@ const initialState = (): State => ({
     serialPort: null,
     availableSerialPorts: [],
     dbFilePath: getPersistedDbFilePath(),
+    wiresharkPath: getPersistedWiresharkPath(),
 });
 
 export default createReducer(initialState(), {
@@ -105,6 +112,14 @@ export default createReducer(initialState(), {
         deletePersistedDbFilePath();
         state.dbFilePath = getPersistedDbFilePath();
     },
+    [setWiresharkPath.type]: (state, action: PayloadAction<string>) => {
+        state.wiresharkPath = action.payload;
+        setPersistedWiresharkPath(action.payload);
+    },
+    [resetWiresharkPath.type]: state => {
+        deletePersistedWiresharkPath();
+        state.dbFilePath = getPersistedWiresharkPath();
+    },
 });
 
 export type RootState = NrfConnectState<State>;
@@ -117,3 +132,4 @@ export const getAvailableSerialPorts = (state: RootState) =>
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
 export const getDbFilePath = (state: RootState) => state.app.dbFilePath;
+export const getWiresharkPath = (state: RootState) => state.app.wiresharkPath;

@@ -34,24 +34,50 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-const DEFAULT_WIRESHARK_LOCATION_WIN =
-    'C:\\Program Files\\Wireshark\\Wireshark.exe';
-
-export const isWiresharkInstalled = () => {
-    try {
-        accessSync(DEFAULT_WIRESHARK_LOCATION_WIN, constants.F_OK);
-    } catch (err) {
-        return false;
+export const isWiresharkInstalled = (): string => {
+    if (process.platform === 'win32') {
+        return validateWiresharkLocation(
+            `C:\\Program Files\\Wireshark\\Wireshark.exe`
+        );
     }
-    return true;
+    if (process.platform === 'darwin') {
+        return validateWiresharkLocation(`/Applications/Wireshark.app`);
+    }
+    if (process.platform === 'linux') {
+        return locateWiresharkOnLinux();
+    }
+
+    logger.info(
+        'Not able to locate Wireshark because your operating system is not supported.'
+    );
+    return '';
 };
 
-export const openInWireshark = (filepath: string) =>
-    exec(`"${DEFAULT_WIRESHARK_LOCATION_WIN}" -r ${filepath}`, err => {
+const validateWiresharkLocation = (location: string) => {
+    try {
+        accessSync(location, constants.F_OK);
+    } catch (err) {
+        logger.info(`Could not locate wireshark executable in ${location}`);
+        return '';
+    }
+    return location;
+};
+
+const locateWiresharkOnLinux = () => {
+    try {
+        return execSync(`which wireshark`).toString();
+    } catch (err) {
+        logger.info(`Could not locate Wireshark executable`);
+        return '';
+    }
+};
+
+export const openInWireshark = (filepath: string, pathToWireshark: string) =>
+    exec(`"${pathToWireshark}" -r ${filepath}`, err => {
         if (err) {
             logger.error(err);
         }
