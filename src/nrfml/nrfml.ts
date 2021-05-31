@@ -158,10 +158,11 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         err => {
             if (err != null) {
                 logger.error(
-                    'Error when starting trace. Make sure selected serialport is available'
+                    'Error when creating trace. Make sure selected serialport is available'
                 );
+            } else {
+                logger.info('Finished tracing');
             }
-            logger.info('Finished tracing');
         },
         progress => {
             dispatch(setTraceSize(progress.data_offset));
