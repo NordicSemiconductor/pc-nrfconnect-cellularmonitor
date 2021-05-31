@@ -43,7 +43,7 @@ import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getDbFilePath, getSerialPort, getTraceSize } from '../reducer';
+import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -113,7 +113,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         progress => {
             console.log('progressing', progress);
-            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(progress.data_offset));
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -166,7 +166,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         },
         progress => {
             console.log('progressing', progress);
-            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(progress.data_offset));
         }
     );
 
