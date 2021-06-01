@@ -47,6 +47,7 @@ export default () => (
     <SidePanel className="side-panel">
         <TraceCollector />
         <TraceConverter />
+        <hr />
         <Wireshark />
     </SidePanel>
 );
