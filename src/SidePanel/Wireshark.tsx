@@ -48,50 +48,65 @@ const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
     const dispatch = useDispatch();
-    const pathToWiresharkExecutable = useSelector(getWiresharkPath);
+    const storedPathToWireshark = useSelector(getWiresharkPath);
 
-    const loadPcap = (pathToWireshark: string) => () => {
-        const filename = askForPcapFile();
-        if (filename) {
-            openInWireshark(filename, pathToWireshark);
-        }
-    };
+    const pathToWireshark = isWiresharkInstalled(storedPathToWireshark);
 
-    if (pathToWiresharkExecutable === '') {
-        const pathToWireshark = isWiresharkInstalled();
+    if (pathToWireshark !== storedPathToWireshark) {
         dispatch(setWiresharkPath(pathToWireshark));
     }
 
+    const loadPcap = () => () => {
+        const filename = askForPcapFile();
+        if (filename) {
+            openInWireshark(filename, storedPathToWireshark);
+        }
+    };
+
     const updateWiresharkLocation = () => {
-        const pathToWireshark = askForWiresharkExecutable();
-        if (pathToWireshark) {
-            dispatch(setWiresharkPath(pathToWireshark));
+        const userDefinedPathToWireshark = askForWiresharkExecutable();
+        if (userDefinedPathToWireshark) {
+            dispatch(setWiresharkPath(userDefinedPathToWireshark));
             logger.info(
-                `Wireshark executable path successfully updated to ${pathToWireshark}`
+                `Wireshark executable path successfully updated to ${userDefinedPathToWireshark}`
             );
         }
     };
 
+    const getUpdatePathButton = (text: string) => (
+        <Button
+            variant="link"
+            className="w-100"
+            onClick={updateWiresharkLocation}
+            style={{
+                paddingLeft: 0,
+                display: 'inline-block',
+                textAlign: 'initial',
+            }}
+        >
+            {text}
+        </Button>
+    );
+
     return (
         <div className="wireshark">
-            {pathToWiresharkExecutable ? (
-                <Button
-                    className="w-100 secondary-btn"
-                    style={{ marginTop: 8 }}
-                    variant="primary"
-                    onClick={loadPcap(pathToWiresharkExecutable)}
-                >
-                    Open in Wireshark
-                </Button>
-            ) : (
+            {storedPathToWireshark ? (
                 <>
                     <Button
-                        variant="light"
-                        className="w-100"
-                        onClick={updateWiresharkLocation}
+                        className="w-100 secondary-btn"
+                        style={{ marginTop: 8 }}
+                        variant="primary"
+                        onClick={loadPcap()}
                     >
-                        Wireshark already installed? Click to select executable
+                        Open in Wireshark
                     </Button>
+                    {getUpdatePathButton(
+                        'Click here to select a different wireshark executable'
+                    )}
+                </>
+            ) : (
+                <>
+                    <p>Could not locate wireshark on your machine. </p>
                     <Button
                         variant="link"
                         onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
@@ -99,11 +114,13 @@ export default () => {
                             paddingLeft: 0,
                             display: 'inline-block',
                             textAlign: 'initial',
-                            marginTop: 4,
                         }}
                     >
-                        Or click here to install Wireshark
+                        Click here to install Wireshark
                     </Button>
+                    {getUpdatePathButton(
+                        'Or click here to manually set the executable'
+                    )}
                 </>
             )}
         </div>

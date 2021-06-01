@@ -38,14 +38,19 @@ import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-export const isWiresharkInstalled = (): string => {
+export const isWiresharkInstalled = (providedPath: string): string => {
+    if (providedPath && validateWiresharkLocation(providedPath)) {
+        return providedPath;
+    }
     if (process.platform === 'win32') {
         return validateWiresharkLocation(
             `C:\\Program Files\\Wireshark\\Wireshark.exe`
         );
     }
     if (process.platform === 'darwin') {
-        return validateWiresharkLocation(`/Applications/Wireshark.app`);
+        return validateWiresharkLocation(
+            `/Applications/Wireshark.app/Contents/MacOS/Wireshark`
+        );
     }
     if (process.platform === 'linux') {
         return locateWiresharkOnLinux();
