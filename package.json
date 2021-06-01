@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-cellularmonitor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Swiss army knife tool for nRF91 devices",
   "displayName": "Cellular Monitor",
   "repository": {

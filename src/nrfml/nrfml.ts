@@ -43,7 +43,7 @@ import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getDbFilePath, getSerialPort, getTraceSize } from '../reducer';
+import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
 
 export type TaskId = number;
@@ -106,13 +106,13 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         err => {
             if (err != null) {
-                console.error('err ', err);
+                logger.error(`Failed to convert ${filename} to .pcap`);
+            } else {
+                logger.info(`Successfully converted ${filename} to .pcap`);
             }
-            logger.info(`Successfully converted ${filename} to .pcap`);
         },
         progress => {
-            console.log('progressing', progress);
-            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(progress.data_offset));
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -158,14 +158,14 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         err => {
             if (err != null) {
                 logger.error(
-                    'Error when starting trace. Make sure selected serialport is available'
+                    'Error when creating trace. Make sure selected serialport is available'
                 );
+            } else {
+                logger.info('Finished tracing');
             }
-            console.log('done tracing!');
         },
         progress => {
-            console.log('progressing', progress);
-            dispatch(setTraceSize(getTraceSize(getState()) + CHUNK_SIZE));
+            dispatch(setTraceSize(progress.data_offset));
         }
     );
 
