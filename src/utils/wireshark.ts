@@ -48,9 +48,7 @@ export const isWiresharkInstalled = (providedPath: string): string => {
         );
     }
     if (process.platform === 'darwin') {
-        return validateWiresharkLocation(
-            `/Applications/Wireshark.app/Contents/MacOS/Wireshark`
-        );
+        return validateWiresharkLocation(`/Applications/Wireshark.app`);
     }
     if (process.platform === 'linux') {
         return locateWiresharkOnLinux();
