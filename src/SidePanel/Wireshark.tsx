@@ -58,8 +58,14 @@ export default () => {
 
     const loadPcap = () => () => {
         const filename = askForPcapFile();
+
+        const effectivePathToWireshark =
+            process.platform === 'darwin'
+                ? `${pathToWireshark}/Contents/MacOS/Wireshark`
+                : pathToWireshark;
+
         if (filename) {
-            openInWireshark(filename, storedPathToWireshark);
+            openInWireshark(filename, effectivePathToWireshark);
         }
     };
 
