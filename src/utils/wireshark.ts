@@ -82,7 +82,7 @@ const locateWiresharkOnLinux = () => {
 };
 
 export const openInWireshark = (filepath: string, pathToWireshark: string) =>
-    exec(`"${pathToWireshark}" -r ${filepath}`, err => {
+    exec(`'${pathToWireshark}' -r '${filepath}'`, err => {
         if (err) {
             logger.error(err);
         }
