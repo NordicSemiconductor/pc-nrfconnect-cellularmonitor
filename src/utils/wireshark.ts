@@ -38,37 +38,37 @@ import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-export const findWireshark = (providedPath: string | null) =>
-    validatedWiresharkLocation(providedPath) || defaultWiresharkLocation();
+export const findWireshark = (selectedPath: string | null) =>
+    validatedWiresharkPath(selectedPath) || defaultWiresharkPath();
 
-const validatedWiresharkLocation = (location: string | null) => {
-    if (location == null) {
+const validatedWiresharkPath = (path: string | null) => {
+    if (path == null) {
         return null;
     }
 
     try {
-        accessSync(location, constants.F_OK);
+        accessSync(path, constants.F_OK);
     } catch (err) {
-        logger.info(`Could not locate wireshark executable in ${location}`);
+        logger.info(`Could not locate wireshark executable in ${path}`);
         return null;
     }
 
     return process.platform !== 'darwin'
-        ? location
-        : `${location}/Contents/MacOS/Wireshark`;
+        ? path
+        : `${path}/Contents/MacOS/Wireshark`;
 };
 
-const defaultWiresharkLocation = () => {
+const defaultWiresharkPath = () => {
     if (process.platform === 'win32') {
-        return validatedWiresharkLocation(
+        return validatedWiresharkPath(
             `C:\\Program Files\\Wireshark\\Wireshark.exe`
         );
     }
     if (process.platform === 'darwin') {
-        return validatedWiresharkLocation(`/Applications/Wireshark.app`);
+        return validatedWiresharkPath(`/Applications/Wireshark.app`);
     }
     if (process.platform === 'linux') {
-        return locateWiresharkOnLinux();
+        return locateWiresharkPathOnLinux();
     }
 
     logger.info(
@@ -77,7 +77,7 @@ const defaultWiresharkLocation = () => {
     return null;
 };
 
-const locateWiresharkOnLinux = () => {
+const locateWiresharkPathOnLinux = () => {
     try {
         return execSync(`which wireshark`).toString();
     } catch (err) {
@@ -87,15 +87,15 @@ const locateWiresharkOnLinux = () => {
 };
 
 export const openInWireshark = (
-    filepath: string,
-    pathToWireshark: string | null
+    pcapPath: string,
+    wiresharkPath: string | null
 ) => {
-    if (pathToWireshark == null) {
+    if (wiresharkPath == null) {
         logger.error('No Wireshark executable found');
         return;
     }
 
-    return exec(`'${pathToWireshark}' -r '${filepath}'`, err => {
+    return exec(`'${wiresharkPath}' -r '${pcapPath}'`, err => {
         if (err) {
             logger.error(err);
         }

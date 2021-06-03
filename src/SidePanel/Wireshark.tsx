@@ -41,7 +41,7 @@ import { logger, openUrl } from 'pc-nrfconnect-shared';
 
 import { setWiresharkPath } from '../actions';
 import { getWiresharkPath } from '../reducer';
-import { askForPcapFile, askForWiresharkExecutable } from '../utils/fileUtils';
+import { askForPcapFile, askForWiresharkPath } from '../utils/fileUtils';
 import { findWireshark, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
@@ -49,12 +49,12 @@ const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
-    const updateWiresharkLocation = () => {
-        const userDefinedPathToWireshark = askForWiresharkExecutable();
-        if (userDefinedPathToWireshark) {
-            dispatch(setWiresharkPath(userDefinedPathToWireshark));
+    const updateWiresharkPath = () => {
+        const selectedWiresharkPath = askForWiresharkPath();
+        if (selectedWiresharkPath != null) {
+            dispatch(setWiresharkPath(selectedWiresharkPath));
             logger.info(
-                `Wireshark executable path successfully updated to ${userDefinedPathToWireshark}`
+                `Wireshark executable path successfully updated to ${selectedWiresharkPath}`
             );
         }
     };
@@ -63,7 +63,7 @@ const SelectWireshark: FC = ({ children }) => {
         <Button
             variant="link"
             className="w-100"
-            onClick={updateWiresharkLocation}
+            onClick={updateWiresharkPath}
             style={{
                 paddingLeft: 0,
                 display: 'inline-block',
@@ -76,19 +76,19 @@ const SelectWireshark: FC = ({ children }) => {
 };
 
 export default () => {
-    const storedPathToWireshark = useSelector(getWiresharkPath);
-    const pathToWireshark = findWireshark(storedPathToWireshark);
+    const selectedWiresharkPath = useSelector(getWiresharkPath);
+    const wiresharkPath = findWireshark(selectedWiresharkPath);
 
     const loadPcap = () => {
         const filename = askForPcapFile();
         if (filename) {
-            openInWireshark(filename, pathToWireshark);
+            openInWireshark(filename, wiresharkPath);
         }
     };
 
     return (
         <div className="wireshark">
-            {pathToWireshark != null ? (
+            {wiresharkPath != null ? (
                 <>
                     <Button
                         className="w-100 secondary-btn"
