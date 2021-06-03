@@ -52,7 +52,7 @@ export default () => {
     const storedPathToWireshark = useSelector(getWiresharkPath);
     const pathToWireshark = isWiresharkInstalled(storedPathToWireshark);
 
-    const loadPcap = () => () => {
+    const loadPcap = () => {
         const filename = askForPcapFile();
 
         const effectivePathToWireshark =
@@ -98,7 +98,7 @@ export default () => {
                         className="w-100 secondary-btn"
                         style={{ marginTop: 8 }}
                         variant="primary"
-                        onClick={loadPcap()}
+                        onClick={loadPcap}
                     >
                         Open in Wireshark
                     </Button>
