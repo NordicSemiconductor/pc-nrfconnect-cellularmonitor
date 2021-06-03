@@ -36,12 +36,21 @@
 
 import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
+import { join, sep } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 
-const DEFAULT_WINDOWS_WIRESHARK_PATH =
-    'C:\\Program Files\\Wireshark\\Wireshark.exe';
-const DEFAULT_MACOS_WIRESHARK_PATH = '/Applications/Wireshark.app';
-const MACOS_WIRESHARK_EXECUTABLE_IN_APP = 'Contents/MacOS/Wireshark';
+const DEFAULT_WINDOWS_WIRESHARK_PATH = join(
+    'C:',
+    'Program Files',
+    'Wireshark',
+    'Wireshark.exe'
+);
+const DEFAULT_MACOS_WIRESHARK_PATH = join(sep, 'Applications', 'Wireshark.app');
+const MACOS_WIRESHARK_EXECUTABLE_IN_APP = join(
+    'Contents',
+    'MacOS',
+    'Wireshark'
+);
 
 export const findWireshark = (selectedPath: string | null) =>
     validatedWiresharkPath(selectedPath) || defaultWiresharkPath();
@@ -60,7 +69,7 @@ const validatedWiresharkPath = (path: string | null) => {
 
     return process.platform !== 'darwin'
         ? path
-        : `${path}/${MACOS_WIRESHARK_EXECUTABLE_IN_APP}`;
+        : join(path, MACOS_WIRESHARK_EXECUTABLE_IN_APP);
 };
 
 const defaultWiresharkPath = () => {
