@@ -66,7 +66,7 @@ export interface State {
     nrfmlTaskId: TaskId | null;
     availableSerialPorts: string[];
     dbFilePath: string;
-    wiresharkPath: string;
+    wiresharkPath: string | null;
 }
 
 const initialState = (): State => ({

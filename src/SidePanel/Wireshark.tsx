@@ -86,7 +86,7 @@ export default () => {
 
     return (
         <div className="wireshark">
-            {pathToWireshark ? (
+            {pathToWireshark != null ? (
                 <>
                     <Button
                         className="w-100 secondary-btn"

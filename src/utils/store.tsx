@@ -38,8 +38,8 @@ import path from 'path';
 import { getAppDir, getPersistentStore as store } from 'pc-nrfconnect-shared';
 
 interface StoreSchema {
-    dbFilePath?: string;
-    wiresharkExecutablePath?: string;
+    dbFilePath: string;
+    wiresharkExecutablePath: string | null;
 }
 
 const DEFAULT_DB_FILE_PATH = path.join(
@@ -47,8 +47,6 @@ const DEFAULT_DB_FILE_PATH = path.join(
     'resources',
     'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
 );
-
-const DEFAULT_WIRESHARK_PATH = ``;
 
 export const isDefaultDbFilePath = (dbFilePath: string) =>
     dbFilePath === DEFAULT_DB_FILE_PATH;
@@ -64,9 +62,6 @@ export const deleteDbFilePath = () =>
     store<StoreSchema>().delete(DB_FILE_PATH_KEY);
 
 export const getWiresharkPath = () =>
-    store<StoreSchema>().get(
-        WIRESHARK_EXECUTABLE_PATH_KEY,
-        DEFAULT_WIRESHARK_PATH
-    );
+    store<StoreSchema>().get(WIRESHARK_EXECUTABLE_PATH_KEY, null);
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
