@@ -52,7 +52,10 @@ const validatedWiresharkLocation = (location: string) => {
         logger.info(`Could not locate wireshark executable in ${location}`);
         return '';
     }
-    return location;
+
+    return process.platform !== 'darwin'
+        ? location
+        : `${location}/Contents/MacOS/Wireshark`;
 };
 
 const defaultWiresharkLocation = () => {
