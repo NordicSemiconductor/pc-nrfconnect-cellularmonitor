@@ -38,10 +38,11 @@ import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
-export const isWiresharkInstalled = (providedPath: string): string => {
+export const findWireshark = (providedPath: string): string => {
     if (providedPath && validateWiresharkLocation(providedPath)) {
         return providedPath;
     }
+
     if (process.platform === 'win32') {
         return validateWiresharkLocation(
             `C:\\Program Files\\Wireshark\\Wireshark.exe`
