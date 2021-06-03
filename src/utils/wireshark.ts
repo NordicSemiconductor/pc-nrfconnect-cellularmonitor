@@ -38,6 +38,11 @@ import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { logger } from 'pc-nrfconnect-shared';
 
+const DEFAULT_WINDOWS_WIRESHARK_PATH =
+    'C:\\Program Files\\Wireshark\\Wireshark.exe';
+const DEFAULT_MACOS_WIRESHARK_PATH = '/Applications/Wireshark.app';
+const MACOS_WIRESHARK_EXECUTABLE_IN_APP = 'Contents/MacOS/Wireshark';
+
 export const findWireshark = (selectedPath: string | null) =>
     validatedWiresharkPath(selectedPath) || defaultWiresharkPath();
 
@@ -55,17 +60,15 @@ const validatedWiresharkPath = (path: string | null) => {
 
     return process.platform !== 'darwin'
         ? path
-        : `${path}/Contents/MacOS/Wireshark`;
+        : `${path}/${MACOS_WIRESHARK_EXECUTABLE_IN_APP}`;
 };
 
 const defaultWiresharkPath = () => {
     if (process.platform === 'win32') {
-        return validatedWiresharkPath(
-            `C:\\Program Files\\Wireshark\\Wireshark.exe`
-        );
+        return validatedWiresharkPath(DEFAULT_WINDOWS_WIRESHARK_PATH);
     }
     if (process.platform === 'darwin') {
-        return validatedWiresharkPath(`/Applications/Wireshark.app`);
+        return validatedWiresharkPath(DEFAULT_MACOS_WIRESHARK_PATH);
     }
     if (process.platform === 'linux') {
         return locateWiresharkPathOnLinux();
@@ -79,9 +82,9 @@ const defaultWiresharkPath = () => {
 
 const locateWiresharkPathOnLinux = () => {
     try {
-        return execSync(`which wireshark`).toString();
+        return execSync('which wireshark').toString();
     } catch (err) {
-        logger.debug(`Could not locate Wireshark executable`);
+        logger.debug('Could not locate Wireshark executable');
         return null;
     }
 };
