@@ -14,7 +14,9 @@ steps:
           echo "token=$(WAYLAND_GITHUB_PRIVATE_TOKEN)" > ~/.prebuild-installrc
           npm i -g npm@6
           npm config set //npm.nordicsemi.no/:_authToken $(WAYLAND_NPM_TOKEN_INTERNAL)
-          npm ci
+          npm ci || (echo Bummer, npm ci failed, let us try that again &&
+            npm ci || (echo Bummer, npm ci failed again, let us try that one last time &&
+            npm ci || (echo Real bummer, npm ci failed thrice, giving up now; false)))
           npm run lint
           npm run test
           npm run build
