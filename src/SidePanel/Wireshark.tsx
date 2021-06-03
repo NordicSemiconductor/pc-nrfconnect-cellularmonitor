@@ -48,13 +48,9 @@ const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 export default () => {
     const dispatch = useDispatch();
+
     const storedPathToWireshark = useSelector(getWiresharkPath);
-
     const pathToWireshark = isWiresharkInstalled(storedPathToWireshark);
-
-    if (pathToWireshark !== storedPathToWireshark) {
-        dispatch(setWiresharkPath(pathToWireshark));
-    }
 
     const loadPcap = () => () => {
         const filename = askForPcapFile();
@@ -96,7 +92,7 @@ export default () => {
 
     return (
         <div className="wireshark">
-            {storedPathToWireshark ? (
+            {pathToWireshark ? (
                 <>
                     <Button
                         className="w-100 secondary-btn"
