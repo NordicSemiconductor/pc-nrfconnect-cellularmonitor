@@ -70,5 +70,3 @@ export const getWiresharkPath = () =>
     );
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
-export const deleteWiresharkPath = () =>
-    store<StoreSchema>().delete(WIRESHARK_EXECUTABLE_PATH_KEY);

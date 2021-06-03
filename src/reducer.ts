@@ -39,7 +39,6 @@ import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
     resetDbFilePath,
-    resetWiresharkPath,
     setAvailableSerialPorts,
     setDbFilePath,
     setModem,
@@ -53,7 +52,6 @@ import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
-    deleteWiresharkPath as deletePersistedWiresharkPath,
     getDbFilePath as getPersistedDbFilePath,
     getWiresharkPath as getPersistedWiresharkPath,
     setDbFilePath as setPersistedDbFilePath,
@@ -115,10 +113,6 @@ export default createReducer(initialState(), {
     [setWiresharkPath.type]: (state, action: PayloadAction<string>) => {
         state.wiresharkPath = action.payload;
         setPersistedWiresharkPath(action.payload);
-    },
-    [resetWiresharkPath.type]: state => {
-        deletePersistedWiresharkPath();
-        state.dbFilePath = getPersistedWiresharkPath();
     },
 });
 

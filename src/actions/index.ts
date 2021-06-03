@@ -50,4 +50,3 @@ export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
 export const setDbFilePath = createAction<string>('SET_DB_FILE_PATH');
 export const resetDbFilePath = createAction('RESET_DB_FILE_PATH');
 export const setWiresharkPath = createAction<string>('SET_WIRESHARK_PATH');
-export const resetWiresharkPath = createAction('RESET_WIRESHARK_PATH');
