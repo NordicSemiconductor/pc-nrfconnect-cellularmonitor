@@ -57,18 +57,10 @@ const SelectWireshark: FC = ({ children }) => {
     };
 
     return (
-        <Button
-            variant="link"
-            className="w-100"
-            onClick={updateWiresharkPath}
-            style={{
-                paddingLeft: 0,
-                display: 'inline-block',
-                textAlign: 'initial',
-            }}
-        >
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a href="#" onClick={updateWiresharkPath} role="button">
             {children}
-        </Button>
+        </a>
     );
 };
 
@@ -88,34 +80,35 @@ export default () => {
             {wiresharkPath != null ? (
                 <>
                     <Button
-                        className="w-100 secondary-btn"
-                        style={{ marginTop: 8 }}
+                        className="w-100 mt-2 secondary-btn"
                         variant="primary"
                         onClick={loadPcap}
                     >
                         Open in Wireshark
                     </Button>
-                    <SelectWireshark>
-                        Click here to select a different wireshark executable
-                    </SelectWireshark>
+                    <div className="w-100 mt-2 text-center">
+                        <SelectWireshark>
+                            Or select a different Wireshark
+                        </SelectWireshark>
+                    </div>
                 </>
             ) : (
                 <>
-                    <p>Could not locate wireshark on your machine. </p>
-                    <Button
-                        variant="link"
-                        onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                        style={{
-                            paddingLeft: 0,
-                            display: 'inline-block',
-                            textAlign: 'initial',
-                        }}
-                    >
-                        Click here to install Wireshark
-                    </Button>
-                    <SelectWireshark>
-                        Or click here to manually set the executable
-                    </SelectWireshark>
+                    <h6>Wireshark not found</h6>
+                    <p>
+                        You can{' '}
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a
+                            href="#"
+                            onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+                        >
+                            download and install Wireshark
+                        </a>{' '}
+                        or{' '}
+                        <SelectWireshark>select the executable</SelectWireshark>{' '}
+                        if you already have it installed but in a location where
+                        this app currently does not find it.
+                    </p>
                 </>
             )}
         </div>
