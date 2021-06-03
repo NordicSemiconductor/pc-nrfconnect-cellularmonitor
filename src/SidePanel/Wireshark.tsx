@@ -37,7 +37,7 @@
 import React, { FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger, openUrl } from 'pc-nrfconnect-shared';
+import { openUrl } from 'pc-nrfconnect-shared';
 
 import { setWiresharkPath } from '../actions';
 import { getWiresharkPath } from '../reducer';
@@ -53,9 +53,6 @@ const SelectWireshark: FC = ({ children }) => {
         const selectedWiresharkPath = askForWiresharkPath();
         if (selectedWiresharkPath != null) {
             dispatch(setWiresharkPath(selectedWiresharkPath));
-            logger.info(
-                `Wireshark executable path successfully updated to ${selectedWiresharkPath}`
-            );
         }
     };
 

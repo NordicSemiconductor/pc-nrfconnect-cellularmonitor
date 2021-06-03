@@ -49,7 +49,7 @@ const validatedWiresharkPath = (path: string | null) => {
     try {
         accessSync(path, constants.X_OK);
     } catch (err) {
-        logger.info(`Could not locate wireshark executable in ${path}`);
+        logger.debug(`Could not locate wireshark executable in ${path}`);
         return null;
     }
 
@@ -71,8 +71,8 @@ const defaultWiresharkPath = () => {
         return locateWiresharkPathOnLinux();
     }
 
-    logger.info(
-        'Not able to locate Wireshark because your operating system is not supported.'
+    logger.error(
+        `Unable to locate Wireshark because your operating system '${process.platform}' is not supported.`
     );
     return null;
 };
@@ -81,7 +81,7 @@ const locateWiresharkPathOnLinux = () => {
     try {
         return execSync(`which wireshark`).toString();
     } catch (err) {
-        logger.info(`Could not locate Wireshark executable`);
+        logger.debug(`Could not locate Wireshark executable`);
         return null;
     }
 };
