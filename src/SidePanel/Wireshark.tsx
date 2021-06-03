@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger, openUrl } from 'pc-nrfconnect-shared';
@@ -46,18 +46,8 @@ import { findWireshark, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
-export default () => {
+const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
-
-    const storedPathToWireshark = useSelector(getWiresharkPath);
-    const pathToWireshark = findWireshark(storedPathToWireshark);
-
-    const loadPcap = () => {
-        const filename = askForPcapFile();
-        if (filename) {
-            openInWireshark(filename, pathToWireshark);
-        }
-    };
 
     const updateWiresharkLocation = () => {
         const userDefinedPathToWireshark = askForWiresharkExecutable();
@@ -69,7 +59,7 @@ export default () => {
         }
     };
 
-    const getUpdatePathButton = (text: string) => (
+    return (
         <Button
             variant="link"
             className="w-100"
@@ -80,9 +70,21 @@ export default () => {
                 textAlign: 'initial',
             }}
         >
-            {text}
+            {children}
         </Button>
     );
+};
+
+export default () => {
+    const storedPathToWireshark = useSelector(getWiresharkPath);
+    const pathToWireshark = findWireshark(storedPathToWireshark);
+
+    const loadPcap = () => {
+        const filename = askForPcapFile();
+        if (filename) {
+            openInWireshark(filename, pathToWireshark);
+        }
+    };
 
     return (
         <div className="wireshark">
@@ -96,9 +98,9 @@ export default () => {
                     >
                         Open in Wireshark
                     </Button>
-                    {getUpdatePathButton(
-                        'Click here to select a different wireshark executable'
-                    )}
+                    <SelectWireshark>
+                        Click here to select a different wireshark executable
+                    </SelectWireshark>
                 </>
             ) : (
                 <>
@@ -114,9 +116,9 @@ export default () => {
                     >
                         Click here to install Wireshark
                     </Button>
-                    {getUpdatePathButton(
-                        'Or click here to manually set the executable'
-                    )}
+                    <SelectWireshark>
+                        Or click here to manually set the executable
+                    </SelectWireshark>
                 </>
             )}
         </div>
