@@ -47,7 +47,7 @@ const validatedWiresharkPath = (path: string | null) => {
     }
 
     try {
-        accessSync(path, constants.F_OK);
+        accessSync(path, constants.X_OK);
     } catch (err) {
         logger.info(`Could not locate wireshark executable in ${path}`);
         return null;
