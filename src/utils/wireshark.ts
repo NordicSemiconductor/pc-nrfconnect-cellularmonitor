@@ -107,7 +107,7 @@ export const openInWireshark = (
         return;
     }
 
-    return exec(`'${wiresharkPath}' -r '${pcapPath}'`, err => {
+    return exec(`"${wiresharkPath}" -r "${pcapPath}"`, err => {
         if (err) {
             logger.error(err);
         }
