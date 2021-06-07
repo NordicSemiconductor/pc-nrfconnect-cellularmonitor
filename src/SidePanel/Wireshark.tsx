@@ -34,99 +34,81 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger, openUrl } from 'pc-nrfconnect-shared';
+import { openUrl } from 'pc-nrfconnect-shared';
 
 import { setWiresharkPath } from '../actions';
 import { getWiresharkPath } from '../reducer';
-import { askForPcapFile, askForWiresharkExecutable } from '../utils/fileUtils';
-import { isWiresharkInstalled, openInWireshark } from '../utils/wireshark';
+import { askForPcapFile, askForWiresharkPath } from '../utils/fileUtils';
+import { findWireshark, openInWireshark } from '../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
-export default () => {
+const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
-    const storedPathToWireshark = useSelector(getWiresharkPath);
 
-    const pathToWireshark = isWiresharkInstalled(storedPathToWireshark);
-
-    if (pathToWireshark !== storedPathToWireshark) {
-        dispatch(setWiresharkPath(pathToWireshark));
-    }
-
-    const loadPcap = () => () => {
-        const filename = askForPcapFile();
-
-        const effectivePathToWireshark =
-            process.platform === 'darwin'
-                ? `${pathToWireshark}/Contents/MacOS/Wireshark`
-                : pathToWireshark;
-
-        if (filename) {
-            openInWireshark(filename, effectivePathToWireshark);
+    const updateWiresharkPath = () => {
+        const selectedWiresharkPath = askForWiresharkPath();
+        if (selectedWiresharkPath != null) {
+            dispatch(setWiresharkPath(selectedWiresharkPath));
         }
     };
 
-    const updateWiresharkLocation = () => {
-        const userDefinedPathToWireshark = askForWiresharkExecutable();
-        if (userDefinedPathToWireshark) {
-            dispatch(setWiresharkPath(userDefinedPathToWireshark));
-            logger.info(
-                `Wireshark executable path successfully updated to ${userDefinedPathToWireshark}`
-            );
-        }
-    };
-
-    const getUpdatePathButton = (text: string) => (
-        <Button
-            variant="link"
-            className="w-100"
-            onClick={updateWiresharkLocation}
-            style={{
-                paddingLeft: 0,
-                display: 'inline-block',
-                textAlign: 'initial',
-            }}
-        >
-            {text}
-        </Button>
+    return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a href="#" onClick={updateWiresharkPath} role="button">
+            {children}
+        </a>
     );
+};
+
+export default () => {
+    const selectedWiresharkPath = useSelector(getWiresharkPath);
+    const wiresharkPath = findWireshark(selectedWiresharkPath);
+
+    const loadPcap = () => {
+        const filename = askForPcapFile();
+        if (filename) {
+            openInWireshark(filename, wiresharkPath);
+        }
+    };
 
     return (
         <div className="wireshark">
-            {storedPathToWireshark ? (
+            {wiresharkPath != null ? (
                 <>
                     <Button
-                        className="w-100 secondary-btn"
-                        style={{ marginTop: 8 }}
+                        className="w-100 mt-2 secondary-btn"
                         variant="primary"
-                        onClick={loadPcap()}
+                        onClick={loadPcap}
                     >
                         Open in Wireshark
                     </Button>
-                    {getUpdatePathButton(
-                        'Click here to select a different wireshark executable'
-                    )}
+                    <div className="w-100 mt-2 text-center">
+                        <SelectWireshark>
+                            Or select a different Wireshark
+                        </SelectWireshark>
+                    </div>
                 </>
             ) : (
                 <>
-                    <p>Could not locate wireshark on your machine. </p>
-                    <Button
-                        variant="link"
-                        onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                        style={{
-                            paddingLeft: 0,
-                            display: 'inline-block',
-                            textAlign: 'initial',
-                        }}
-                    >
-                        Click here to install Wireshark
-                    </Button>
-                    {getUpdatePathButton(
-                        'Or click here to manually set the executable'
-                    )}
+                    <h6>Wireshark not found</h6>
+                    <p>
+                        You can{' '}
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a
+                            href="#"
+                            onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+                        >
+                            download and install Wireshark
+                        </a>{' '}
+                        or{' '}
+                        <SelectWireshark>select the executable</SelectWireshark>{' '}
+                        if you already have it installed but in a location where
+                        this app currently does not find it.
+                    </p>
                 </>
             )}
         </div>

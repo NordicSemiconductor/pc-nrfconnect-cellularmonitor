@@ -61,7 +61,7 @@ export const askForPcapFile = () =>
         { name: 'All Files', extensions: ['*'] },
     ]);
 
-export const askForWiresharkExecutable = () => {
+export const askForWiresharkPath = () => {
     if (process.platform === 'darwin') {
         return askForFile(
             [
