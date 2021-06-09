@@ -34,40 +34,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { useEffect, useState } from 'react';
 
-import { setSerialPort } from '../actions';
-import { getAvailableSerialPorts } from '../reducer';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
+export const useDetectClick = (
+    element: React.MutableRefObject<HTMLElement | null>,
+    initialState: boolean
+) => {
+    const [isActive, setIsActive] = useState(initialState);
 
-type SerialPortProps = {
-    selectedSerialPort: string;
+    useEffect(() => {
+        const clickEvent = () => setIsActive(!isActive);
+
+        if (isActive) {
+            window.addEventListener('click', clickEvent);
+        }
+
+        return () => {
+            window.removeEventListener('click', clickEvent);
+        };
+    }, [isActive, element]);
+
+    return [isActive, setIsActive] as const;
 };
 
-export default ({ selectedSerialPort }: SerialPortProps) => {
-    const dispatch = useDispatch();
-    const availableSerialPorts = useSelector(getAvailableSerialPorts);
-
-    const updateSerialPort = (port: string) => () =>
-        dispatch(setSerialPort(port));
-
-    const serialPortSelect = availableSerialPorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
-
-    return (
-        <Group heading="Serialport trace capture">
-            <div className="serialport-selection">
-                <Dropdown title={selectedSerialPort}>
-                    {serialPortSelect}
-                </Dropdown>
-            </div>
-        </Group>
-    );
-};
+export default useDetectClick;

@@ -34,40 +34,59 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import React, { FC, useRef } from 'react';
+import FormLabel from 'react-bootstrap/FormLabel';
 
-import { setSerialPort } from '../actions';
-import { getAvailableSerialPorts } from '../reducer';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
+import chevron from './chevron.svg';
+import useDetectClick from './useDetectClick';
 
-type SerialPortProps = {
-    selectedSerialPort: string;
-};
+import './dropdown.scss';
 
-export default ({ selectedSerialPort }: SerialPortProps) => {
-    const dispatch = useDispatch();
-    const availableSerialPorts = useSelector(getAvailableSerialPorts);
+interface DropdownProps {
+    title: string;
+    id?: string;
+    disabled?: boolean;
+    label?: string;
+}
 
-    const updateSerialPort = (port: string) => () =>
-        dispatch(setSerialPort(port));
-
-    const serialPortSelect = availableSerialPorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
+const Dropdown: FC<DropdownProps> = ({
+    title,
+    id,
+    disabled,
+    label,
+    children,
+}) => {
+    const dropdownRef = useRef(null);
+    const [isActive, setIsActive] = useDetectClick(dropdownRef, false);
+    const onClick = () => setIsActive(!isActive);
 
     return (
-        <Group heading="Serialport trace capture">
-            <div className="serialport-selection">
-                <Dropdown title={selectedSerialPort}>
-                    {serialPortSelect}
-                </Dropdown>
+        <>
+            <FormLabel className="dropdown-label">{label}</FormLabel>
+            <div className="dropdown-container">
+                <button
+                    type="button"
+                    className={`dropdown-btn dropdown-btn-${
+                        isActive ? 'active' : 'inactive'
+                    }`}
+                    id={id}
+                    onClick={onClick}
+                    disabled={disabled}
+                >
+                    <span>{title}</span>
+                    <img src={chevron} alt="" />
+                </button>
+                <div
+                    ref={dropdownRef}
+                    className={`dropdown-content dropdown-${
+                        isActive ? 'active' : 'inactive'
+                    }`}
+                >
+                    {children}
+                </div>
             </div>
-        </Group>
+        </>
     );
 };
+
+export default Dropdown;

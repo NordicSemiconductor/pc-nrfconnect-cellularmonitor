@@ -35,39 +35,16 @@
  */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
 
-import { setSerialPort } from '../actions';
-import { getAvailableSerialPorts } from '../reducer';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
+interface DropdownItemProps {
+    title: string;
+    onSelect: () => void;
+}
 
-type SerialPortProps = {
-    selectedSerialPort: string;
-};
+const DropdownItem = ({ title, onSelect }: DropdownItemProps) => (
+    <button type="button" className="dropdown-item" onClick={onSelect}>
+        {title}
+    </button>
+);
 
-export default ({ selectedSerialPort }: SerialPortProps) => {
-    const dispatch = useDispatch();
-    const availableSerialPorts = useSelector(getAvailableSerialPorts);
-
-    const updateSerialPort = (port: string) => () =>
-        dispatch(setSerialPort(port));
-
-    const serialPortSelect = availableSerialPorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
-
-    return (
-        <Group heading="Serialport trace capture">
-            <div className="serialport-selection">
-                <Dropdown title={selectedSerialPort}>
-                    {serialPortSelect}
-                </Dropdown>
-            </div>
-        </Group>
-    );
-};
+export default DropdownItem;
