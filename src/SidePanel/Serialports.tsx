@@ -40,6 +40,7 @@ import { Group } from 'pc-nrfconnect-shared';
 
 import { setSerialPort } from '../actions';
 import { getAvailableSerialPorts } from '../reducer';
+import { Dropdown, DropdownItem } from '../Shared/Dropdown';
 
 type SerialPortProps = {
     selectedSerialPort: string;
@@ -52,24 +53,20 @@ export default ({ selectedSerialPort }: SerialPortProps) => {
     const updateSerialPort = (port: string) => () =>
         dispatch(setSerialPort(port));
 
+    const serialPortSelect = availableSerialPorts.map(port => (
+        <DropdownItem
+            key={port}
+            title={port}
+            onSelect={updateSerialPort(port)}
+        />
+    ));
+
     return (
         <Group heading="Serialport trace capture">
             <div className="serialport-selection">
-                {availableSerialPorts.map(port => (
-                    <div className="serialport-select" key={port}>
-                        <input
-                            type="radio"
-                            name="serialport-select"
-                            id={`select-sp-${port}`}
-                            value={port}
-                            checked={port === selectedSerialPort}
-                            onChange={updateSerialPort(port)}
-                        />
-                        <label htmlFor={`select-sp-${port}`}>
-                            <strong>{port}</strong>
-                        </label>
-                    </div>
-                ))}
+                <Dropdown title={selectedSerialPort}>
+                    {serialPortSelect}
+                </Dropdown>
             </div>
         </Group>
     );
