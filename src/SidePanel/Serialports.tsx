@@ -41,6 +41,7 @@ import { Group } from 'pc-nrfconnect-shared';
 import { setSerialPort } from '../actions';
 import { getAvailableSerialPorts } from '../reducer';
 import { Dropdown, DropdownItem } from '../Shared/Dropdown';
+import { truncateMiddle } from '../utils';
 
 type SerialPortProps = {
     selectedSerialPort: string;
@@ -64,7 +65,7 @@ export default ({ selectedSerialPort }: SerialPortProps) => {
     return (
         <Group heading="Serialport trace capture">
             <div className="serialport-selection">
-                <Dropdown title={selectedSerialPort}>
+                <Dropdown title={truncateMiddle(selectedSerialPort, 20, 8)}>
                     {serialPortSelect}
                 </Dropdown>
             </div>
