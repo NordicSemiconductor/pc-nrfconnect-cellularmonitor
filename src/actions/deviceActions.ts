@@ -44,14 +44,16 @@ const getSerialPorts = (device: Device) =>
         .filter(([key]) => key.startsWith('serialport'))
         .map(([, value]: [string, Serialport]) => value);
 
-export const closeDevice = (): TAction => async dispatch => {
+export const closeDevice = (): TAction => dispatch => {
     logger.info('Closing device');
     dispatch(setAvailableSerialPorts([]));
     dispatch(setSerialPort(null));
 };
 
-export const openDevice = (device: Device): TAction => async dispatch => {
-    await dispatch(closeDevice());
+export const openDevice = (device: Device): TAction => dispatch => {
+    // Reset serial port settings
+    dispatch(setAvailableSerialPorts([]));
+    dispatch(setSerialPort(null));
     const ports = getSerialPorts(device);
     if (ports.length > 0) {
         dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
