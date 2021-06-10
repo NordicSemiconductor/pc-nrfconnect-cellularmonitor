@@ -42,7 +42,7 @@ import { setAvailableSerialPorts, setSerialPort } from '.';
 const getSerialPorts = (device: Device) =>
     Object.entries(device)
         .filter(([key]) => key.startsWith('serialport'))
-        .map(([, value]: [string, Serialport]) => value.path);
+        .map(([, value]: [string, Serialport]) => value);
 
 export const closeDevice = (): TAction => async dispatch => {
     logger.info('Closing device');
@@ -54,10 +54,48 @@ export const openDevice = (device: Device): TAction => async dispatch => {
     await dispatch(closeDevice());
     const ports = getSerialPorts(device);
     if (ports.length > 0) {
-        dispatch(setAvailableSerialPorts(ports));
+        dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
     }
-    const path = device?.serialport?.path;
+    const port = pickSerialPort(ports);
+    const path = port ? port.path : device?.serialport?.path;
     if (path) {
         dispatch(setSerialPort(path));
+    } else {
+        logger.error("Couldn't identify serial port");
     }
+};
+
+// Prefer to use the serialport 8 property or fall back to the serialport 7 property
+const portPath = (serialPort: Serialport) =>
+    serialPort.path || serialPort.comName;
+
+/**
+ * Pick the serialport that should belong to the modem on PCA10090
+ * @param {Array<device>} serialports array of device-lister serialport objects
+ * @returns {object} the selected serialport object
+ */
+const pickSerialPort = (serialports: Serialport[]) => {
+    if (serialports.length === 1) {
+        return serialports[0];
+    }
+    switch (process.platform.slice(0, 3)) {
+        case 'win':
+            return serialports.find(s => {
+                if (s.pnpId) {
+                    return /MI_0[34]/.test(s.pnpId);
+                }
+                return false;
+            });
+        case 'lin':
+            return serialports.find(s => {
+                if (s.pnpId) {
+                    /-if0[34]$/.test(s.pnpId);
+                }
+                return false;
+            });
+        case 'dar':
+            return serialports.find(s => /5$/.test(portPath(s)));
+        default:
+    }
+    return undefined;
 };
