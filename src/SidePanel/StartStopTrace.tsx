@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -45,26 +45,27 @@ import { getNrfmlTaskId } from '../reducer';
 
 type StartStopProps = {
     sink: Sink;
+    isTracing: boolean;
+    setIsTracing: (isTracing: boolean) => void;
 };
 
-export default ({ sink }: StartStopProps) => {
+export default ({ sink, isTracing, setIsTracing }: StartStopProps) => {
     const dispatch = useDispatch();
-    const [tracing, setTracing] = useState(false);
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
 
     const start = () => {
-        setTracing(true);
+        setIsTracing(true);
         dispatch(startTrace(sink));
     };
 
     const stop = () => {
-        setTracing(false);
+        setIsTracing(false);
         dispatch(stopTrace(nrfmlTaskId));
     };
 
     return (
         <>
-            {tracing ? (
+            {isTracing ? (
                 <Button
                     className="w-100 secondary-btn start-stop active-animation"
                     variant="secondary"

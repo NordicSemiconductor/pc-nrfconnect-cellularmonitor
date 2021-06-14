@@ -101,4 +101,19 @@ describe('TraceCollector', () => {
             })
         ).toBeInTheDocument();
     });
+
+    it('should disable Sink selector while tracing', () => {
+        const screen = render(<TraceCollector />, serialPortActions);
+        fireEvent.click(screen.getByText('Start tracing'));
+        const sinkButton = screen.getByText('raw');
+        expect(sinkButton).toBeDisabled();
+    });
+
+    it('button text should reflect tracing state', async () => {
+        const screen = render(<TraceCollector />, serialPortActions);
+        fireEvent.click(screen.getByText('Start tracing'));
+        const stopButton = await screen.findByText('Stop tracing');
+        fireEvent.click(stopButton);
+        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+    });
 });
