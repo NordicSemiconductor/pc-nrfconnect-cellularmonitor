@@ -51,6 +51,7 @@ import StartStopTrace from './StartStopTrace';
 
 export default () => {
     const [selectedSink, setSelectedSink] = useState<Sink>(NRFML_SINKS[0]);
+    const [isTracing, setIsTracing] = useState(false);
     const tracePath = useSelector(getTracePath);
 
     const selectedSerialPort = useSelector(getSerialPort);
@@ -58,20 +59,25 @@ export default () => {
     const traceSize = useSelector(getTraceSize);
 
     if (!selectedSerialPort) {
-        return <></>;
+        return null;
     }
 
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
             <Group heading="Trace file details">
-                <ButtonGroup className="trace-selector w-100">
+                <ButtonGroup
+                    className={`trace-selector w-100 ${
+                        isTracing ? 'disabled' : ''
+                    }`}
+                >
                     {NRFML_SINKS.map((sink: Sink) => (
                         <Button
                             // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
                             variant={sink === selectedSink ? 'set' : 'unset'}
                             onClick={() => setSelectedSink(sink)}
                             key={sink}
+                            disabled={isTracing}
                         >
                             {sink}
                         </Button>
@@ -82,7 +88,11 @@ export default () => {
                 <FilePathLink filePath={tracePath} displayPath={directory} />
             )}
             <DiskSpaceUsage />
-            <StartStopTrace sink={selectedSink} />
+            <StartStopTrace
+                sink={selectedSink}
+                isTracing={isTracing}
+                setIsTracing={setIsTracing}
+            />
             {filename !== '' && (
                 <div className="trace-file-name">{filename}</div>
             )}
