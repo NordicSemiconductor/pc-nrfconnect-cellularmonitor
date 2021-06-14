@@ -34,31 +34,46 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger } from 'pc-nrfconnect-shared';
+import { Device, Serialport } from 'pc-nrfconnect-shared';
 
-import { TAction } from '../thunk';
-import { getSerialports, pickSerialport } from '../utils/serialport';
-import { setAvailableSerialPorts, setSerialPort } from '.';
+const getSerialports = (device: Device) =>
+    Object.entries(device)
+        .filter(([key]) => key.startsWith('serialport'))
+        .map(([, value]: [string, Serialport]) => value);
 
-export const closeDevice = (): TAction => dispatch => {
-    logger.info('Closing device');
-    dispatch(setAvailableSerialPorts([]));
-    dispatch(setSerialPort(null));
+/**
+ * Pick the serialport that should belong to the modem on PCA10090
+ * @param {Array<device>} serialports array of device-lister serialport objects
+ * @returns {object} the selected serialport object
+ */
+const pickSerialport = (serialports: Serialport[]) => {
+    if (serialports.length === 1) {
+        return serialports[0];
+    }
+    switch (process.platform.slice(0, 3)) {
+        case 'win':
+            return serialports.find(s => {
+                if (s.pnpId) {
+                    return /MI_0[34]/.test(s.pnpId);
+                }
+                return false;
+            });
+        case 'lin':
+            return serialports.find(s => {
+                if (s.pnpId) {
+                    /-if0[34]$/.test(s.pnpId);
+                }
+                return false;
+            });
+        case 'dar':
+            return serialports.find(s => /5$/.test(portPath(s)));
+        default:
+    }
+    return undefined;
 };
 
-export const openDevice = (device: Device): TAction => dispatch => {
-    // Reset serial port settings
-    dispatch(setAvailableSerialPorts([]));
-    dispatch(setSerialPort(null));
-    const ports = getSerialports(device);
-    if (ports.length > 0) {
-        dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
-    }
-    const port = pickSerialport(ports);
-    const path = port ? port.path : device?.serialport?.path;
-    if (path) {
-        dispatch(setSerialPort(path));
-    } else {
-        logger.error("Couldn't identify serial port");
-    }
-};
+// Prefer to use the serialport 8 property or fall back to the serialport 7 property
+const portPath = (serialPort: Serialport) =>
+    serialPort?.path || serialPort?.comName;
+
+export { getSerialports, pickSerialport };
