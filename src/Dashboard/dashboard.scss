@@ -1,0 +1,111 @@
+@import '~pc-nrfconnect-shared/src/variables';
+
+.carousel-item {
+    overflow-y: auto;   
+}
+
+// styling on scrollbar in dashboard pane
+.carousel-item::-webkit-scrollbar {
+    width: 10px;
+}
+.carousel-item::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px $gray-900;
+    border-radius: 10px;
+}
+.carousel-item::-webkit-scrollbar-thumb {
+    background:  $gray-600;
+    border-radius: 10px;
+}
+.carousel-item::-webkit-scrollbar-thumb:hover {
+    background: $gray-700;
+}
+.carousel-item::-webkit-scrollbar-corner {
+    background-color: $gray-900;
+}
+
+.dashboard {
+    display: grid;
+    grid-gap: 0.25em;
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr)); 
+    max-width: 81em;
+    grid-auto-rows: 1fr;
+}
+@media (min-width: 20em) {
+    .card {
+        grid-column: auto/ span 2;
+    }
+}
+@media only screen and (max-width: 860px) {
+    .card:nth-child(n) {
+        .info-icon .info{
+            right: 3em !important;
+        }
+        .info::after{
+            left: 100%;
+            border-color: transparent transparent transparent $tooltip-arrow-color;
+        }
+    }
+}
+@media only screen and (max-width: 1600px) {
+    .card:nth-child(3n) {
+        .info-icon .info{
+            right: 3em !important;
+        }
+        .info::after{
+            left: 100%;
+            border-color: transparent transparent transparent $tooltip-arrow-color;
+        }
+    }
+}
+@media only screen and (max-width: 1145px) {
+    .card:nth-child(2n) {
+        .info-icon .info{
+            right: 3em !important;
+        }
+        .info::after{
+            left: 100%;
+            border-color: transparent transparent transparent $tooltip-arrow-color;
+        }
+    }
+}
+
+.icon {
+    float: left;
+    font-size: 20px;
+    transform: translateY(-10%);
+}
+.info-icon {
+    float: right;
+    .info {
+        flex: 1;
+        flex-shrink: 0;
+        position: absolute;
+        top: 1em;
+        right: -16.5em;
+        padding: 8px;
+        width: $tooltip-max-width;
+        visibility: hidden;
+        background-color: $tooltip-bg;
+        border-color: $tooltip-bg;
+        border-radius: 5px;
+        color: $tooltip-color;
+        font-family: "Roboto-Regular";
+        font-size: 12px;
+        text-align: left;
+        z-index: 100;
+        opacity: $tooltip-opacity;
+    }
+    .info::after{
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: -5%;
+        border-width: $tooltip-arrow-width;
+        border-style: solid;
+        border-color: transparent $tooltip-arrow-color transparent transparent;
+    }
+}
+
+.info-icon:hover .info {
+    visibility: visible;
+}
