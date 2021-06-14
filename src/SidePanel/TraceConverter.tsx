@@ -18,7 +18,7 @@ export default () => {
     return (
         <Button
             className="w-100 secondary-btn"
-            variant="primary"
+            variant="secondary"
             onClick={loadTrace}
         >
             Convert Trace
