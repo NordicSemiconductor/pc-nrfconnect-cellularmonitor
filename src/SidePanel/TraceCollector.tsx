@@ -44,19 +44,27 @@ import prettyBytes from 'pretty-bytes';
 import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
 import { getNameAndDirectory } from '../utils/fileUtils';
+import { getTraceFileDetails, setTraceFileDetails } from '../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
 export default () => {
-    const [selectedSink, setSelectedSink] = useState<Sink>(NRFML_SINKS[0]);
     const [isTracing, setIsTracing] = useState(false);
+    const [selectedSink, setSelectedSink] = useState<Sink>(
+        getTraceFileDetails()
+    );
     const tracePath = useSelector(getTracePath);
 
     const selectedSerialPort = useSelector(getSerialPort);
     const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
+
+    const onclick = (sink: Sink) => () => {
+        setSelectedSink(sink);
+        setTraceFileDetails(sink);
+    };
 
     if (!selectedSerialPort) {
         return null;
@@ -75,7 +83,7 @@ export default () => {
                         <Button
                             // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
                             variant={sink === selectedSink ? 'set' : 'unset'}
-                            onClick={() => setSelectedSink(sink)}
+                            onClick={onclick(sink)}
                             key={sink}
                             disabled={isTracing}
                         >

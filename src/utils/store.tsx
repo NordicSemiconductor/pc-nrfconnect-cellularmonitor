@@ -37,9 +37,12 @@
 import path from 'path';
 import { getAppDir, getPersistentStore as store } from 'pc-nrfconnect-shared';
 
+import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
+
 interface StoreSchema {
     dbFilePath: string;
     wiresharkExecutablePath: string | null;
+    traceFileDetails: Sink;
 }
 
 const DEFAULT_DB_FILE_PATH = path.join(
@@ -53,6 +56,7 @@ export const isDefaultDbFilePath = (dbFilePath: string) =>
 
 const DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
+const TRACE_FILE_DETAILS = 'traceFileDetails';
 
 export const getDbFilePath = () =>
     store<StoreSchema>().get(DB_FILE_PATH_KEY, DEFAULT_DB_FILE_PATH);
@@ -65,3 +69,8 @@ export const getWiresharkPath = () =>
     store<StoreSchema>().get(WIRESHARK_EXECUTABLE_PATH_KEY, null);
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
+
+export const getTraceFileDetails = () =>
+    store<StoreSchema>().get(TRACE_FILE_DETAILS, NRFML_SINKS[0]);
+export const setTraceFileDetails = (details: Sink) =>
+    store<StoreSchema>().set(TRACE_FILE_DETAILS, details);
