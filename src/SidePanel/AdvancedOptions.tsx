@@ -35,20 +35,12 @@
  */
 
 import React from 'react';
-import { SidePanel } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
-import AdvancedOptions from './AdvancedOptions';
-import TraceCollector from './TraceCollector';
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
-
-import './sidepanel.scss';
+import DatabaseFileOverride from './DatabaseFileOverride';
 
 export default () => (
-    <SidePanel className="side-panel">
-        <TraceCollector />
-        <TraceConverter />
-        <Wireshark />
-        <AdvancedOptions />
-    </SidePanel>
+    <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
+        <DatabaseFileOverride />
+    </CollapsibleGroup>
 );

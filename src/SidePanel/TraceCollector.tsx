@@ -38,13 +38,12 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, Group } from 'pc-nrfconnect-shared';
+import { Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
 import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
 import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
 import { getNameAndDirectory } from '../utils/fileUtils';
-import DatabaseFileOverride from './DatabaseFileOverride';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
@@ -90,9 +89,6 @@ export default () => {
             <div className="trace-file-size">
                 {prettyBytes(traceSize)} file size
             </div>
-            <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
-                <DatabaseFileOverride />
-            </CollapsibleGroup>
             <hr />
         </>
     );
