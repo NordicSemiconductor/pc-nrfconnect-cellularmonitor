@@ -168,9 +168,11 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             dispatch(setTraceSize(progress.data_offset));
         }
     );
-
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    dispatch(setTracePath(sinkConfig.init_parameters.file_path!));
+    const tracePath = sinkConfig.init_parameters.file_path!;
+    logger.info(`Tracefile created: ${tracePath}`);
+
+    dispatch(setTracePath(tracePath));
     dispatch(setNrfmlTaskId(taskId));
 };
 

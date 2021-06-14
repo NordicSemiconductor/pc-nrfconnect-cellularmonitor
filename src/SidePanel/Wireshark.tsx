@@ -81,7 +81,7 @@ export default () => {
                 <>
                     <Button
                         className="w-100 mt-2 secondary-btn"
-                        variant="primary"
+                        variant="secondary"
                         onClick={loadPcap}
                     >
                         Open in Wireshark
