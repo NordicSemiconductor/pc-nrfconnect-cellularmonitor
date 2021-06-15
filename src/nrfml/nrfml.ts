@@ -34,47 +34,19 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import nrfml, {
-    getPluginsDir,
-    PcapInitParameters,
-    RawFileInitParameters,
-} from 'nrf-monitor-lib-js';
+import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
+import { getSinkConfig, pcapSinkConfig, Sink } from './sinks';
 
 export type TaskId = number;
 
-const pluginsDir = getPluginsDir();
-
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
-
-export const NRFML_SINKS = ['raw', 'pcap'] as const;
-
-export type Sink = typeof NRFML_SINKS[number];
-
-const pcapSinkConfig = (filepath: string): PcapInitParameters => {
-    return {
-        name: 'nrfml-pcap-sink',
-        init_parameters: {
-            file_path: `${filepath}.pcap`,
-        },
-    };
-};
-
-const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
-    return {
-        // @ts-ignore -- error in generated types in monitor-lib, this can be removed when fixed
-        name: 'nrfml-raw-file-sink',
-        init_parameters: {
-            file_path: `${filepath}.bin`,
-        },
-    };
-};
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -87,7 +59,7 @@ const convertTraceFile = (tracePath: string): TAction => (
     const taskId = nrfml.start(
         {
             config: {
-                plugins_directory: pluginsDir,
+                plugins_directory: getPluginsDir(),
             },
             sinks: [pcapSinkConfig(path.join(filepath, filename))],
             sources: [
@@ -128,14 +100,11 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(getAppDataDir(), filename);
     const dbFilePath = getDbFilePath(getState());
-    const sinkConfig =
-        sink === 'pcap'
-            ? pcapSinkConfig(filepath)
-            : rawFileSinkConfig(filepath);
+    const sinkConfig = getSinkConfig(sink, filepath);
     const taskId = nrfml.start(
         {
             config: {
-                plugins_directory: pluginsDir,
+                plugins_directory: getPluginsDir(),
             },
             sinks: [sinkConfig],
             sources: [

@@ -41,10 +41,10 @@ import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
 
-import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
+import { NRFML_SINKS, Sink } from '../nrfml/sinks';
 import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
 import { getNameAndDirectory } from '../utils/fileUtils';
-import { getTraceFileDetails, setTraceFileDetails } from '../utils/store';
+import { getSinkType, setSinkType } from '../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage';
 import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
@@ -52,18 +52,16 @@ import StartStopTrace from './StartStopTrace';
 
 export default () => {
     const [isTracing, setIsTracing] = useState(false);
-    const [selectedSink, setSelectedSink] = useState<Sink>(
-        getTraceFileDetails()
-    );
+    const [selectedSink, setSelectedSink] = useState<Sink>(getSinkType());
     const tracePath = useSelector(getTracePath);
 
     const selectedSerialPort = useSelector(getSerialPort);
     const [filename, directory] = getNameAndDirectory(tracePath);
     const traceSize = useSelector(getTraceSize);
 
-    const onclick = (sink: Sink) => () => {
+    const selectSink = (sink: Sink) => () => {
         setSelectedSink(sink);
-        setTraceFileDetails(sink);
+        setSinkType(sink);
     };
 
     if (!selectedSerialPort) {
@@ -83,7 +81,7 @@ export default () => {
                         <Button
                             // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
                             variant={sink === selectedSink ? 'set' : 'unset'}
-                            onClick={onclick(sink)}
+                            onClick={selectSink(sink)}
                             key={sink}
                             disabled={isTracing}
                         >

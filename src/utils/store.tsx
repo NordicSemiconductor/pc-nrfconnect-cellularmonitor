@@ -37,13 +37,23 @@
 import path from 'path';
 import { getAppDir, getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { NRFML_SINKS, Sink } from '../nrfml/nrfml';
+import { NRFML_SINKS, Sink } from '../nrfml/sinks';
+
+interface DevicePort {
+    [serialNumber: string]: string;
+}
 
 interface StoreSchema {
     dbFilePath: string;
     wiresharkExecutablePath: string | null;
     traceFileDetails: Sink;
+    serialPorts: DevicePort;
 }
+
+const DB_FILE_PATH_KEY = 'dbFilePath';
+const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
+const SINK_TYPE = 'sinkType';
+const SERIALPORTS = 'serialPorts';
 
 const DEFAULT_DB_FILE_PATH = path.join(
     getAppDir(),
@@ -53,10 +63,6 @@ const DEFAULT_DB_FILE_PATH = path.join(
 
 export const isDefaultDbFilePath = (dbFilePath: string) =>
     dbFilePath === DEFAULT_DB_FILE_PATH;
-
-const DB_FILE_PATH_KEY = 'dbFilePath';
-const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
-const TRACE_FILE_DETAILS = 'traceFileDetails';
 
 export const getDbFilePath = () =>
     store<StoreSchema>().get(DB_FILE_PATH_KEY, DEFAULT_DB_FILE_PATH);
@@ -70,7 +76,18 @@ export const getWiresharkPath = () =>
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
 
-export const getTraceFileDetails = () =>
-    store<StoreSchema>().get(TRACE_FILE_DETAILS, NRFML_SINKS[0]);
-export const setTraceFileDetails = (details: Sink) =>
-    store<StoreSchema>().set(TRACE_FILE_DETAILS, details);
+export const getSinkType = (): Sink =>
+    store<StoreSchema>().get(SINK_TYPE, NRFML_SINKS[0]);
+export const setSinkType = (sink: Sink) =>
+    store<StoreSchema>().set(SINK_TYPE, sink);
+
+const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
+export const getSerialPort = (serialNumber: string) => {
+    return serialPorts()[serialNumber];
+};
+
+export const setSerialPort = (serialNumber: string, port: string) =>
+    store<StoreSchema>().set(SERIALPORTS, {
+        ...serialPorts(),
+        [serialNumber]: port,
+    });
