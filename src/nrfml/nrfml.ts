@@ -112,7 +112,11 @@ const convertTraceFile = (tracePath: string): TAction => (
             }
         },
         progress => {
-            dispatch(setTraceSize(progress.data_offset));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.0, so we need to manually override this
+            const readRawData = (progress as any).data_offsets?.RAW_DATA;
+            if (readRawData != null) {
+                dispatch(setTraceSize(readRawData));
+            }
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -144,7 +148,6 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                         serialport: {
                             path: serialPort,
                         },
-                        extract_raw: true,
                         db_file_path: dbFilePath,
                         chunk_size: CHUNK_SIZE,
                     },
@@ -165,7 +168,11 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             }
         },
         progress => {
-            dispatch(setTraceSize(progress.data_offset));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.0, so we need to manually override this
+            const readRawData = (progress as any).data_offsets?.RAW_DATA;
+            if (readRawData != null) {
+                dispatch(setTraceSize(readRawData));
+            }
         }
     );
 

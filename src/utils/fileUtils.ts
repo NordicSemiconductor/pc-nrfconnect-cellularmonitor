@@ -43,8 +43,8 @@ const { dialog, shell } = remote;
 export const askForGzFile = () =>
     askForFile([
         {
-            name: 'Database',
-            extensions: ['gz'],
+            name: 'Trace Databases',
+            extensions: ['gz', 'json'],
         },
         { name: 'All Files', extensions: ['*'] },
     ]);
