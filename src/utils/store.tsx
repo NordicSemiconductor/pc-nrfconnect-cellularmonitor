@@ -58,7 +58,7 @@ const SERIALPORTS = 'serialPorts';
 const DEFAULT_DB_FILE_PATH = path.join(
     getAppDir(),
     'resources',
-    'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
+    'mfw_nrf9160_1.3.0_trace-db.json'
 );
 
 export const isDefaultDbFilePath = (dbFilePath: string) =>
