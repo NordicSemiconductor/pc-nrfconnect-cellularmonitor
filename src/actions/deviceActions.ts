@@ -37,7 +37,8 @@
 import { Device, logger } from 'pc-nrfconnect-shared';
 
 import { TAction } from '../thunk';
-import { getSerialports, pickSerialport } from '../utils/serialport';
+import { getSerialPorts, pickSerialPort } from '../utils/serialport';
+import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import { setAvailableSerialPorts, setSerialPort } from '.';
 
 export const closeDevice = (): TAction => dispatch => {
@@ -50,11 +51,16 @@ export const openDevice = (device: Device): TAction => dispatch => {
     // Reset serial port settings
     dispatch(setAvailableSerialPorts([]));
     dispatch(setSerialPort(null));
-    const ports = getSerialports(device);
+    const ports = getSerialPorts(device);
     if (ports.length > 0) {
         dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
     }
-    const port = pickSerialport(ports);
+    const persistedPath = getPersistedSerialPort(device.serialNumber);
+    if (persistedPath) {
+        dispatch(setSerialPort(persistedPath));
+        return;
+    }
+    const port = pickSerialPort(ports);
     const path = port ? port.path : device?.serialport?.path;
     if (path) {
         dispatch(setSerialPort(path));

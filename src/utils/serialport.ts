@@ -36,44 +36,43 @@
 
 import { Device, Serialport } from 'pc-nrfconnect-shared';
 
-const getSerialports = (device: Device) =>
+const getSerialPorts = (device: Device) =>
     Object.entries(device)
         .filter(([key]) => key.startsWith('serialport'))
         .map(([, value]: [string, Serialport]) => value);
 
 /**
  * Pick the serialport that should belong to the modem on PCA10090
- * @param {Array<device>} serialports array of device-lister serialport objects
+ * @param {Array<device>} ports array of device-lister serialport objects
  * @returns {object} the selected serialport object
  */
-const pickSerialport = (serialports: Serialport[]) => {
-    if (serialports.length === 1) {
-        return serialports[0];
+const pickSerialPort = (ports: Serialport[]) => {
+    if (ports.length === 1) {
+        return ports[0];
     }
     switch (process.platform.slice(0, 3)) {
         case 'win':
-            return serialports.find(s => {
+            return ports.find(s => {
                 if (s.pnpId) {
                     return /MI_0[34]/.test(s.pnpId);
                 }
                 return false;
             });
         case 'lin':
-            return serialports.find(s => {
+            return ports.find(s => {
                 if (s.pnpId) {
                     /-if0[34]$/.test(s.pnpId);
                 }
                 return false;
             });
         case 'dar':
-            return serialports.find(s => /5$/.test(portPath(s)));
+            return ports.find(s => /5$/.test(portPath(s)));
         default:
     }
     return undefined;
 };
 
 // Prefer to use the serialport 8 property or fall back to the serialport 7 property
-const portPath = (serialPort: Serialport) =>
-    serialPort?.path || serialPort?.comName;
+const portPath = (port: Serialport) => port?.path || port?.comName;
 
-export { getSerialports, pickSerialport };
+export { getSerialPorts, pickSerialPort };

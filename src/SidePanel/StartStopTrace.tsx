@@ -40,7 +40,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import playSvg from '../../resources/play-circle.svg';
 import stopSvg from '../../resources/stop-circle.svg';
-import { Sink, startTrace, stopTrace } from '../nrfml/nrfml';
+import { startTrace, stopTrace } from '../nrfml/nrfml';
+import { Sink } from '../nrfml/sinks';
 import { getNrfmlTaskId } from '../reducer';
 
 type StartStopProps = {

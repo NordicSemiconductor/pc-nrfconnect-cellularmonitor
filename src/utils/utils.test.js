@@ -1,6 +1,6 @@
 import { getNameAndDirectory } from './fileUtils';
 import { truncateMiddle } from './index';
-import { getSerialports } from './serialport';
+import { getSerialPorts } from './serialport';
 
 test('get name and directory', () => {
     expect(getNameAndDirectory('some/path/to/file.bin')).toStrictEqual([
@@ -35,6 +35,6 @@ test('get device serial ports', () => {
             path: 'testPath3',
         },
     };
-    const ports = getSerialports(device);
+    const ports = getSerialPorts(device);
     expect(ports.length).toBe(3);
 });

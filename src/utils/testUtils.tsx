@@ -38,6 +38,7 @@ import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { render, RenderOptions } from '@testing-library/react';
 import checkDiskSpace from 'check-disk-space';
+import deviceReducer from 'pc-nrfconnect-shared/src/Device/deviceReducer';
 import {
     AnyAction,
     applyMiddleware,
@@ -77,7 +78,7 @@ const getMockStore = () => {
 
 const createPreparedStore = (actions: AnyAction[]) => {
     const store = createStore(
-        combineReducers({ app: reducer }),
+        combineReducers({ device: deviceReducer, app: reducer }),
         applyMiddleware(thunk)
     );
     actions.forEach(store.dispatch);

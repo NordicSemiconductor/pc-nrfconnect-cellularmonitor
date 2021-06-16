@@ -34,45 +34,29 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { PcapInitParameters, RawFileInitParameters } from 'nrf-monitor-lib-js';
 
-import { setSerialPort } from '../actions';
-import { getAvailableSerialPorts, getSelectedSerialNumber } from '../reducer';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
-import { truncateMiddle } from '../utils';
-import { setSerialPort as persistSerialPort } from '../utils/store';
+export const NRFML_SINKS = ['raw', 'pcap'] as const;
+export type Sink = typeof NRFML_SINKS[number];
 
-type SerialPortProps = {
-    selectedSerialPort: string;
-};
-
-export default ({ selectedSerialPort }: SerialPortProps) => {
-    const dispatch = useDispatch();
-    const availablePorts = useSelector(getAvailableSerialPorts);
-    const serialNumber = useSelector(getSelectedSerialNumber);
-
-    const updateSerialPort = (port: string) => () => {
-        dispatch(setSerialPort(port));
-        persistSerialPort(serialNumber, port);
+export const pcapSinkConfig = (filepath: string): PcapInitParameters => {
+    return {
+        name: 'nrfml-pcap-sink',
+        init_parameters: {
+            file_path: `${filepath}.pcap`,
+        },
     };
-
-    const serialPortSelect = availablePorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
-
-    return (
-        <Group heading="Serialport trace capture">
-            <div className="serialport-selection">
-                <Dropdown title={truncateMiddle(selectedSerialPort, 20, 8)}>
-                    {serialPortSelect}
-                </Dropdown>
-            </div>
-        </Group>
-    );
 };
+
+const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
+    return {
+        // @ts-ignore -- error in generated types in monitor-lib, this can be removed when fixed
+        name: 'nrfml-raw-file-sink',
+        init_parameters: {
+            file_path: `${filepath}.bin`,
+        },
+    };
+};
+
+export const getSinkConfig = (sink: Sink, filepath: string) =>
+    sink === 'pcap' ? pcapSinkConfig(filepath) : rawFileSinkConfig(filepath);

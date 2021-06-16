@@ -60,10 +60,10 @@ import {
 
 export interface State {
     readonly modem: Modem | null;
-    serialPort: string | null;
     tracePath: string;
     traceSize: number;
     nrfmlTaskId: TaskId | null;
+    serialPort: string | null;
     availableSerialPorts: string[];
     dbFilePath: string;
     wiresharkPath: string | null;
@@ -127,3 +127,5 @@ export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
 export const getDbFilePath = (state: RootState) => state.app.dbFilePath;
 export const getWiresharkPath = (state: RootState) => state.app.wiresharkPath;
+export const getSelectedSerialNumber = (state: RootState) =>
+    state.device.selectedSerialNumber;
