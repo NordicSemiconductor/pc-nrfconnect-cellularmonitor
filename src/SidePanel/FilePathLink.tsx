@@ -36,29 +36,35 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import FormLabel from 'react-bootstrap/FormLabel';
 
 import { truncateMiddle } from '../utils';
 import { openInFolder } from '../utils/fileUtils';
 
 type FilePathLinkProps = {
     filePath: string;
-    displayPath?: string;
+    label?: string;
     clipStart?: number;
     clipEnd?: number;
+    displayPath?: string;
 };
 
 export default ({
     filePath,
+    label,
     clipStart,
     clipEnd,
     displayPath = filePath,
 }: FilePathLinkProps) => (
-    <Button
-        variant="link"
-        className="filepath-link"
-        title={filePath}
-        onClick={() => openInFolder(filePath)}
-    >
-        {truncateMiddle(displayPath, clipStart, clipEnd)}
-    </Button>
+    <div className="filepath-container">
+        {label && <FormLabel>{label}</FormLabel>}
+        <Button
+            variant="link"
+            className="filepath-link"
+            title={filePath}
+            onClick={() => openInFolder(filePath)}
+        >
+            {truncateMiddle(displayPath, clipStart, clipEnd)}
+        </Button>
+    </div>
 );

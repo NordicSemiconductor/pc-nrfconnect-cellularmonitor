@@ -37,6 +37,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 import prettyBytes from 'pretty-bytes';
@@ -71,7 +72,7 @@ export default () => {
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
-            <Group heading="Trace file details">
+            <Group heading="Trace file format">
                 <ButtonGroup
                     className={`trace-selector w-100 ${
                         isTracing ? 'disabled' : ''
@@ -90,21 +91,30 @@ export default () => {
                     ))}
                 </ButtonGroup>
             </Group>
-            {tracePath !== '' && (
-                <FilePathLink filePath={tracePath} displayPath={directory} />
-            )}
             <DiskSpaceUsage />
             <StartStopTrace
                 sink={selectedSink}
                 isTracing={isTracing}
                 setIsTracing={setIsTracing}
             />
-            {filename !== '' && (
-                <div className="trace-file-name">{filename}</div>
+            {tracePath !== '' && (
+                <FilePathLink
+                    label="Trace path"
+                    filePath={tracePath}
+                    displayPath={directory}
+                />
             )}
-            <div className="trace-file-size">
-                {prettyBytes(traceSize)} file size
-            </div>
+            {filename !== '' && (
+                <div className="filepath-container">
+                    <FormLabel>Filename</FormLabel>
+                    <div className="trace-file-name">{filename}</div>
+                </div>
+            )}
+            {tracePath !== '' && (
+                <div className="trace-file-size">
+                    {prettyBytes(traceSize)} file size
+                </div>
+            )}
             <hr />
         </>
     );

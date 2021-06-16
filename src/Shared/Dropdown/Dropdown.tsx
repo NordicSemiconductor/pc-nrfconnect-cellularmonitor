@@ -62,7 +62,7 @@ const Dropdown: FC<DropdownProps> = ({
 
     return (
         <>
-            <FormLabel className="dropdown-label">{label}</FormLabel>
+            {label && <FormLabel className="dropdown-label">{label}</FormLabel>}
             <div className="dropdown-container">
                 <button
                     type="button"
