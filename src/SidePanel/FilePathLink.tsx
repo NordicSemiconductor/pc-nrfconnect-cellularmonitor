@@ -43,7 +43,7 @@ import { openInFolder } from '../utils/fileUtils';
 
 type FilePathLinkProps = {
     filePath: string;
-    label?: string;
+    label?: JSX.Element | string;
     clipStart?: number;
     clipEnd?: number;
     displayPath?: string;
@@ -57,7 +57,7 @@ export default ({
     displayPath = filePath,
 }: FilePathLinkProps) => (
     <div className="filepath-container">
-        {label && <FormLabel>{label}</FormLabel>}
+        {label && <FormLabel className="w-100">{label}</FormLabel>}
         <Button
             variant="link"
             className="filepath-link"
