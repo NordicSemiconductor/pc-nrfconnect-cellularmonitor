@@ -37,7 +37,7 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { mockedCheckDiskSpace, render } from '../utils/testUtils';
+import { mockedCheckDiskSpace, render } from '../../utils/testUtils';
 import DiskSpaceUsage from './DiskSpaceUsage';
 
 const FREE = 100;

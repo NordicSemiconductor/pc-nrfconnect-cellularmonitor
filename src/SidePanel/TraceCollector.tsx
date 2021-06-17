@@ -40,13 +40,12 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
-import prettyBytes from 'pretty-bytes';
 
 import { NRFML_SINKS, Sink } from '../nrfml/sinks';
-import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
+import { getSerialPort, getTracePath } from '../reducer';
 import { getNameAndDirectory } from '../utils/fileUtils';
 import { getSinkType, setSinkType } from '../utils/store';
-import DiskSpaceUsage from './DiskSpaceUsage';
+import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
@@ -58,7 +57,6 @@ export default () => {
 
     const selectedSerialPort = useSelector(getSerialPort);
     const [filename, directory] = getNameAndDirectory(tracePath);
-    const traceSize = useSelector(getTraceSize);
 
     const selectSink = (sink: Sink) => () => {
         setSelectedSink(sink);
@@ -91,30 +89,27 @@ export default () => {
                     ))}
                 </ButtonGroup>
             </Group>
-            <DiskSpaceUsage />
             <StartStopTrace
                 sink={selectedSink}
                 isTracing={isTracing}
                 setIsTracing={setIsTracing}
             />
             {tracePath !== '' && (
-                <FilePathLink
-                    label="Save folder location"
-                    filePath={tracePath}
-                    displayPath={directory}
-                />
+                <>
+                    <FilePathLink
+                        label="Save folder location"
+                        filePath={tracePath}
+                        displayPath={directory}
+                    />
+                    <DiskSpaceUsage />
+
+                    <div className="filepath-container">
+                        <FormLabel>Filename</FormLabel>
+                        <div className="trace-file-name">{filename}</div>
+                    </div>
+                </>
             )}
-            {filename !== '' && (
-                <div className="filepath-container">
-                    <FormLabel>Filename</FormLabel>
-                    <div className="trace-file-name">{filename}</div>
-                </div>
-            )}
-            {tracePath !== '' && (
-                <div className="trace-file-size">
-                    {prettyBytes(traceSize)} file size
-                </div>
-            )}
+
             <hr />
         </>
     );
