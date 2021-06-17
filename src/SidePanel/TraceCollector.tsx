@@ -99,7 +99,7 @@ export default () => {
             />
             {tracePath !== '' && (
                 <FilePathLink
-                    label="Trace path"
+                    label="Save folder location"
                     filePath={tracePath}
                     displayPath={directory}
                 />
