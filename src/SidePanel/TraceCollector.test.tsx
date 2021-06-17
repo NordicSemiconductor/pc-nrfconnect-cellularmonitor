@@ -35,13 +35,11 @@
  */
 
 import React from 'react';
-import prettyBytes from 'pretty-bytes';
 
 import {
     setAvailableSerialPorts,
     setSerialPort,
     setTracePath,
-    setTraceSize,
 } from '../actions';
 import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
 import TraceCollector from './TraceCollector';
@@ -59,17 +57,6 @@ const serialPortActions = [
 ];
 
 describe('TraceCollector', () => {
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<TraceCollector />, [
-            setTraceSize(traceSize),
-            ...serialPortActions,
-        ]);
-        expect(
-            await screen.findByText(`${prettyBytes(traceSize)} file size`)
-        ).toBeInTheDocument();
-    });
-
     it('should display the name of the trace', async () => {
         const filePath = 'path/to/file.bin';
         const screen = render(<TraceCollector />, [
@@ -102,10 +89,10 @@ describe('TraceCollector', () => {
         ).toBeInTheDocument();
     });
 
-    it('should disable Sink selector while tracing', () => {
+    it('should disable Sink selector while tracing', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
         fireEvent.click(screen.getByText('Start tracing'));
-        const sinkButton = screen.getByText('raw');
+        const sinkButton = await screen.findByText('raw');
         expect(sinkButton).toBeDisabled();
     });
 
