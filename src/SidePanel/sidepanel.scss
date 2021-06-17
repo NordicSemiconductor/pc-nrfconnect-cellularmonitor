@@ -43,14 +43,15 @@
         width: 100%;
     }
 
-    .trace-file-name {
-        margin-top: 8px;
-        font-style: italic;
-    }
+    .trace-file-container {
+        border: 1px solid $gray-200;
+        padding: 8px;
+        margin-top: 4px;
 
-    .trace-file-size {
-        margin-top: 16px;
-        font-size: 14px;
+        label {
+            display: block;
+            color: $gray-400;
+        }
     }
 
     .start-stop {

@@ -13,12 +13,13 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         padding: 8px;
         border: 1px solid $gray-200;
 
         label {
             margin-bottom: 4px;
+            color: $gray-400;
         }
     }
 

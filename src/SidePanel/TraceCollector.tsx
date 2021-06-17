@@ -103,9 +103,9 @@ export default () => {
                     />
                     <DiskSpaceUsage />
 
-                    <div className="filepath-container">
+                    <div className="trace-file-container">
                         <FormLabel>Filename</FormLabel>
-                        <div className="trace-file-name">{filename}</div>
+                        <span className="trace-file-name">{filename}</span>
                     </div>
                 </>
             )}
