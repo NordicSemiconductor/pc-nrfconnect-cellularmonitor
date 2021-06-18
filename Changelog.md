@@ -1,5 +1,5 @@
 ## 0.0.3
--
+- Fixed: The file size while creating a PCAP tracefile is now also reported correctly.
 
 ## 0.0.2
 - Show Wireshark button on all platforms (not only on Windows, but also

@@ -84,10 +84,10 @@ const convertTraceFile = (tracePath: string): TAction => (
             }
         },
         progress => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.0, so we need to manually override this
-            const readRawData = (progress as any).data_offsets?.RAW_DATA;
-            if (readRawData != null) {
-                dispatch(setTraceSize(readRawData));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
+            const progressSize = (progress as any).data_offsets?.pcapng;
+            if (progressSize != null) {
+                dispatch(setTraceSize(progressSize));
             }
         }
     );
@@ -133,20 +133,23 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
                     'Error when creating trace. Make sure selected serialport is available'
                 );
             } else {
-                logger.info('Finished tracing');
+                logger.info('Finished tracefile');
             }
         },
         progress => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.0, so we need to manually override this
-            const readRawData = (progress as any).data_offsets?.RAW_DATA;
-            if (readRawData != null) {
-                dispatch(setTraceSize(readRawData));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
+            const traceSizes = (progress as any).data_offsets;
+
+            const traceSize =
+                sink === 'raw' ? traceSizes?.RAW_DATA : traceSizes?.pcapng;
+            if (traceSize != null) {
+                dispatch(setTraceSize(traceSize));
             }
         }
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const tracePath = sinkConfig.init_parameters.file_path!;
-    logger.info(`Tracefile created: ${tracePath}`);
+    logger.info(`Started tracefile: ${tracePath}`);
 
     dispatch(setTracePath(tracePath));
     dispatch(setNrfmlTaskId(taskId));
