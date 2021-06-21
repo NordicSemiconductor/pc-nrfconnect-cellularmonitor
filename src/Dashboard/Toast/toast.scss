@@ -1,0 +1,14 @@
+@import '~pc-nrfconnect-shared/styles';
+
+.toast {
+    &-container {
+        background-color: $nordic-blue;
+        color: white;
+        border: 1px solid $nordic-blue;
+    }
+
+    &-label {
+        font-weight: 700;
+        margin-right: 4px;
+    }
+}
