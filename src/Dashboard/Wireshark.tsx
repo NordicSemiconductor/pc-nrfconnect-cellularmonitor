@@ -80,7 +80,7 @@ export default () => {
             {wiresharkPath != null ? (
                 <>
                     <Button
-                        className="w-100 mt-2 secondary-btn"
+                        className="w-100 secondary-btn"
                         variant="secondary"
                         onClick={loadPcap}
                     >
@@ -88,7 +88,7 @@ export default () => {
                     </Button>
                     <div className="w-100 mt-2 text-center">
                         <SelectWireshark>
-                            Or select a different Wireshark
+                            Or select a different Wireshark executable
                         </SelectWireshark>
                     </div>
                 </>

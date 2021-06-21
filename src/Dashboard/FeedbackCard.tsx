@@ -37,6 +37,25 @@
 import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
+import TraceConverter from './TraceConverter';
+import Wireshark from './Wireshark';
+
 export default () => (
-    <Card title="Give us feedback">You help us by giving feedback</Card>
+    <Card title="Converting a trace">  <section>
+    <h5>Converting a trace</h5>
+    <p>
+        You can click on <b>Convert Raw Trace to PCAP</b>, select a raw
+        trace file (e.g. created by this app or the{' '}
+        <em>Trace Collector</em>) and convert it into a PCAP file, which
+        can then be opened e.g. in <em>Wireshark</em>.
+    </p>
+    <TraceConverter />
+</section>
+
+<section>
+    <h5>Open PCAP in Wireshark</h5>
+    <p>Open your PCAP traces in Wireshark to analyze them.</p>
+    <Wireshark />
+</section>
+    </Card>
 );

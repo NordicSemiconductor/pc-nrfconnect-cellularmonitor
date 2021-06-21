@@ -37,4 +37,4 @@
 import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
-export default () => <Card title="What's coming?">N/A</Card>;
+export default () => <Card title="What's coming?">GPS, terminal for communicating with modem</Card>;

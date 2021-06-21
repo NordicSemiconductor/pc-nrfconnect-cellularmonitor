@@ -42,7 +42,7 @@ import { logger } from 'pc-nrfconnect-shared';
 const DEFAULT_WINDOWS_WIRESHARK_PATH = join(
     'C:',
     'Program Files',
-    'Wireshark',
+    'Wireshark1',
     'Wireshark.exe'
 );
 const DEFAULT_MACOS_WIRESHARK_PATH = join(sep, 'Applications', 'Wireshark.app');

@@ -44,15 +44,17 @@ import UsageCard from './UsageCard';
 import './dashboard.scss';
 
 export default () => (
-    <div className="dashboard">
-        <Toast label="Experimental release!">
-            This is an experimental preview and it is subject to major redesigns
-            in the future
-        </Toast>
-        <div className="dashboard-cards">
-            <UsageCard />
-            <FeedbackCard />
-            <FutureCard />
+    <div className="dashboard-container">
+        <div className="dashboard">
+            <Toast label="Experimental release!">
+                This is an experimental preview and it is subject to major
+                redesigns in the future
+            </Toast>
+            <div className="dashboard-cards">
+                <UsageCard />
+                <FeedbackCard />
+                <FutureCard />
+            </div>
         </div>
     </div>
 );

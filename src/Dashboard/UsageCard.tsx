@@ -37,37 +37,26 @@
 import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
-import TraceConverter from './TraceConverter';
-import Wireshark from './Wireshark';
-
 export default () => (
-    <Card title="How to use this application">
-        <p>
-            Currently the app serves as a replacement for the old Trace
-            Collector app and has two main functions - creating or converting a
-            trace.
-        </p>
+    <Card title="Creating a trace">
+        <section>
+            <div>
+                Currently this application serves as a replacement for the old{' '}
+                <em>Trace Collector</em> app and has two main functionalities -
+                creating or converting a trace.
+            </div>
+        </section>
 
-        <h5>Creating a trace</h5>
-        <p>
-            When an nRF91 device is connected and runs an application as
-            described for the old Trace Collector app, you can select the device
-            after clicking &quot;Select device&quot; in the top left corner.
-        </p>
+        <section>
+            <h5>Creating a trace</h5>
+            <div>
+                When an <em>nRF91</em> device is connected and runs an
+                application as described for the <em>Trace Collector</em>, you
+                can select the device after clicking <b>Select device</b> in the
+                top left corner.
+            </div>
+        </section>
 
-        <h5>Converting a trace</h5>
-        <p>
-            You can click on &quot;Convert Raw Trace to PCAP&quot;, select a raw
-            trace file (e.g. created by this app or the old Trace Collector) and
-            convert it into a PCAP file, which can then be opened e.g. in
-            Wireshark.
-        </p>
-        <TraceConverter />
 
-        <br />
-        <br />
-        <h5>Wireshark</h5>
-        <p>Here you can open wireshark</p>
-        <Wireshark />
     </Card>
 );

@@ -70,7 +70,7 @@ export default () => {
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
-            <Group heading="Trace file format">
+            <Group heading="Trace output format">
                 <ButtonGroup
                     className={`trace-selector w-100 ${
                         isTracing ? 'disabled' : ''
@@ -97,7 +97,7 @@ export default () => {
             {tracePath !== '' && (
                 <>
                     <FilePathLink
-                        label="Save folder location"
+                        label="Trace output location (click to open)"
                         filePath={tracePath}
                         displayPath={directory}
                     />
