@@ -36,8 +36,23 @@
 
 import React from 'react';
 
+import FeedbackCard from './FeedbackCard';
+import FutureCard from './FutureCard';
+import Toast from './Toast/Toast';
+import UsageCard from './UsageCard';
+
 import './dashboard.scss';
 
-export default () => {
-    return <h3 className="title">Dashboard</h3>;
-};
+export default () => (
+    <div className="dashboard">
+        <Toast label="Experimental release!">
+            This is an experimental preview and it is subject to major redesigns
+            in the future
+        </Toast>
+        <div className="dashboard-cards">
+            <UsageCard />
+            <FeedbackCard />
+            <FutureCard />
+        </div>
+    </div>
+);

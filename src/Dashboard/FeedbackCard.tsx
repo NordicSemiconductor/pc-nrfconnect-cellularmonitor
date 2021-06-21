@@ -35,16 +35,8 @@
  */
 
 import React from 'react';
-import { SidePanel } from 'pc-nrfconnect-shared';
-
-import AdvancedOptions from './AdvancedOptions';
-import TraceCollector from './TraceCollector';
-
-import './sidepanel.scss';
+import { Card } from 'pc-nrfconnect-shared';
 
 export default () => (
-    <SidePanel className="side-panel">
-        <TraceCollector />
-        <AdvancedOptions />
-    </SidePanel>
+    <Card title="Give us feedback">You help us by giving feedback</Card>
 );

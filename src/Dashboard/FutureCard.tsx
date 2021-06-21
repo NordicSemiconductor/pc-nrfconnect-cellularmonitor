@@ -35,16 +35,6 @@
  */
 
 import React from 'react';
-import { SidePanel } from 'pc-nrfconnect-shared';
+import { Card } from 'pc-nrfconnect-shared';
 
-import AdvancedOptions from './AdvancedOptions';
-import TraceCollector from './TraceCollector';
-
-import './sidepanel.scss';
-
-export default () => (
-    <SidePanel className="side-panel">
-        <TraceCollector />
-        <AdvancedOptions />
-    </SidePanel>
-);
+export default () => <Card title="What's coming?">N/A</Card>;

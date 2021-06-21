@@ -21,7 +21,7 @@ export default () => {
             variant="secondary"
             onClick={loadTrace}
         >
-            Convert Trace
+            Convert Raw Trace to PCAP
         </Button>
     );
 };
