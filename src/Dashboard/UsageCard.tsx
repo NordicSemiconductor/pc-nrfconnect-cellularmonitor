@@ -40,6 +40,10 @@ import { Card } from 'pc-nrfconnect-shared';
 export default () => (
     <Card title="Creating a trace">
         <section>
+            <ol>
+                <li>Program modem firmware with tracing enabled according to <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html">this guide</a>.</li>
+
+            </ol>
             <div>
                 Currently this application serves as a replacement for the old{' '}
                 <em>Trace Collector</em> app and has two main functionalities -

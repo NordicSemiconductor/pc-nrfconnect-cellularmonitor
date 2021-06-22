@@ -3,6 +3,11 @@
 .side-panel {
     margin: 1rem 0;
 
+    .user-guide-link {
+        display: block;
+        padding-left: 0;
+    }
+
     .btn-set {
         color: $gray-700;
         background-color: $white;
