@@ -37,15 +37,15 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
-import prettyBytes from 'pretty-bytes';
 
 import { NRFML_SINKS, Sink } from '../nrfml/sinks';
-import { getSerialPort, getTracePath, getTraceSize } from '../reducer';
+import { getSerialPort, getTracePath } from '../reducer';
 import { getNameAndDirectory } from '../utils/fileUtils';
 import { getSinkType, setSinkType } from '../utils/store';
-import DiskSpaceUsage from './DiskSpaceUsage';
+import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import FilePathLink from './FilePathLink';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
@@ -57,7 +57,6 @@ export default () => {
 
     const selectedSerialPort = useSelector(getSerialPort);
     const [filename, directory] = getNameAndDirectory(tracePath);
-    const traceSize = useSelector(getTraceSize);
 
     const selectSink = (sink: Sink) => () => {
         setSelectedSink(sink);
@@ -71,7 +70,7 @@ export default () => {
     return (
         <>
             <Serialports selectedSerialPort={selectedSerialPort} />
-            <Group heading="Trace file details">
+            <Group heading="Trace file format">
                 <ButtonGroup
                     className={`trace-selector w-100 ${
                         isTracing ? 'disabled' : ''
@@ -90,21 +89,27 @@ export default () => {
                     ))}
                 </ButtonGroup>
             </Group>
-            {tracePath !== '' && (
-                <FilePathLink filePath={tracePath} displayPath={directory} />
-            )}
-            <DiskSpaceUsage />
             <StartStopTrace
                 sink={selectedSink}
                 isTracing={isTracing}
                 setIsTracing={setIsTracing}
             />
-            {filename !== '' && (
-                <div className="trace-file-name">{filename}</div>
+            {tracePath !== '' && (
+                <>
+                    <FilePathLink
+                        label="Save folder location"
+                        filePath={tracePath}
+                        displayPath={directory}
+                    />
+                    <DiskSpaceUsage />
+
+                    <div className="trace-file-container">
+                        <FormLabel>Filename</FormLabel>
+                        <span className="trace-file-name">{filename}</span>
+                    </div>
+                </>
             )}
-            <div className="trace-file-size">
-                {prettyBytes(traceSize)} file size
-            </div>
+
             <hr />
         </>
     );

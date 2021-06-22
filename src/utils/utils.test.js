@@ -12,7 +12,7 @@ test('get name and directory', () => {
 test('truncate string', () => {
     expect(
         truncateMiddle('some long string with more than 20 characters')
-    ).toBe('some long string wit... characters');
+    ).toBe('some long string wit...20 characters');
     expect(truncateMiddle('short string')).toBe('short string');
     expect(truncateMiddle('string with 20 chars')).toBe('string with 20 chars');
     expect(truncateMiddle('string with 23 chars 12')).toBe(

@@ -34,59 +34,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { FC, useRef } from 'react';
+import React from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
+import prettyBytes from 'pretty-bytes';
 
-import chevron from './chevron.svg';
-import useDetectClick from './useDetectClick';
-
-import './dropdown.scss';
-
-interface DropdownProps {
-    title: string;
-    id?: string;
-    disabled?: boolean;
-    label?: string;
-}
-
-const Dropdown: FC<DropdownProps> = ({
-    title,
-    id,
-    disabled,
-    label,
-    children,
-}) => {
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectClick(dropdownRef, false);
-    const onClick = () => setIsActive(!isActive);
-
-    return (
-        <>
-            {label && <FormLabel className="dropdown-label">{label}</FormLabel>}
-            <div className="dropdown-container">
-                <button
-                    type="button"
-                    className={`dropdown-btn dropdown-btn-${
-                        isActive ? 'active' : 'inactive'
-                    }`}
-                    id={id}
-                    onClick={onClick}
-                    disabled={disabled}
-                >
-                    <span>{title}</span>
-                    <img src={chevron} alt="" />
-                </button>
-                <div
-                    ref={dropdownRef}
-                    className={`dropdown-content dropdown-${
-                        isActive ? 'active' : 'inactive'
-                    }`}
-                >
-                    {children}
-                </div>
-            </div>
-        </>
-    );
+type DiskSpaceUsageBoxProps = {
+    label: string;
+    value: number | undefined;
 };
 
-export default Dropdown;
+export default ({ label, value }: DiskSpaceUsageBoxProps) => (
+    <div className="disk-space-box">
+        <FormLabel>{label}</FormLabel>
+        <span className="disk-space-value">
+            {value !== undefined ? prettyBytes(value) : 'Loading'}
+        </span>
+    </div>
+);

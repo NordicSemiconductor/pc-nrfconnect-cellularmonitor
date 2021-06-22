@@ -36,7 +36,7 @@
 
 /* eslint-disable import/prefer-default-export */
 
-const truncateMiddle = (str: string, clipStart = 20, clipEnd = 11) => {
+const truncateMiddle = (str: string, clipStart = 20, clipEnd = 13) => {
     const clipStartWithEllipsis = clipStart + 3;
     if (str.length <= clipStartWithEllipsis) {
         return str;

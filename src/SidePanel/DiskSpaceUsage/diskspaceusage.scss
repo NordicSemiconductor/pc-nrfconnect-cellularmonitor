@@ -1,0 +1,29 @@
+@import '~pc-nrfconnect-shared/styles';
+
+.disk-space {
+    &-container {
+        font-size: 12px;
+        margin-top: 16px;
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    &-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 8px;
+        border: 1px solid $gray-200;
+
+        label {
+            margin-bottom: 4px;
+            color: $gray-400;
+        }
+    }
+
+    &-value {
+        font-size: 14px;
+    }
+}

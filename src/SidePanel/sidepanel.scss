@@ -28,19 +28,30 @@
         }
     }
 
+    .filepath-container {
+        margin-top: 16px;
+    }
+
     .filepath-link {
         text-align: left;
-        color: $gray-900;
+        color: white;
         padding: 0;
-        margin-top: 16px;
+        background-color: $gray-700;
+        color: white;
+        padding: 5px 8px;
+        font-size: 12px;
+        width: 100%;
     }
 
-    .trace-file-name {
-        margin-top: 16px;
-    }
+    .trace-file-container {
+        border: 1px solid $gray-200;
+        padding: 8px;
+        margin-top: 4px;
 
-    .trace-file-size {
-        margin-top: 16px;
+        label {
+            display: block;
+            color: $gray-400;
+        }
     }
 
     .start-stop {
@@ -54,11 +65,6 @@
             width: 20px;
             margin-right: 8px;
         }
-    }
-
-    .disk-space-container {
-        font-size: 12px;
-        margin-top: 16px;
     }
 
     .serialport-select {

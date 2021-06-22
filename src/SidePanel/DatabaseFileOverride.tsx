@@ -65,19 +65,20 @@ export default () => {
         logger.info(`Database path successfully reset to default value`);
     };
 
+    const label = (
+        <div className="db-help-section">
+            <span>Override trace database</span>
+            <img
+                src={helpIcon}
+                alt="Question mark"
+                title="A trace database file is used to decode trace data"
+            />
+        </div>
+    );
+
     return (
         <>
-            <div className="db-help-section">
-                <label htmlFor="database-file-input">
-                    Select database file
-                </label>
-                <img
-                    src={helpIcon}
-                    alt="Question mark"
-                    title="A database file is used to decode trace data"
-                />
-            </div>
-            <FilePathLink filePath={dbFilePath} />
+            <FilePathLink filePath={dbFilePath} label={label} />
             <div className="db-btn-group">
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse
