@@ -54,7 +54,7 @@ export default () => (
                     firmware is one of the following versions:{' '}
                     <ul>
                         <li>1.1.4</li>
-                        <li>1.2.3</li> <li>1.2.4</li> <li>1.2.5</li>{' '}
+                        <li>1.2.3</li>
                         <li>1.3.0</li>
                     </ul>
                 </li>

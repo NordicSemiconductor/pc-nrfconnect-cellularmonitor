@@ -38,10 +38,10 @@ import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
-import FileInformation from './FileInformation';
 import Instructions from './Instructions';
 import TraceCollector from './TraceCollector';
 import TraceConverter from './TraceConverter';
+import TracefileInformation from './TracefileInformation';
 
 import './sidepanel.scss';
 
@@ -50,7 +50,7 @@ export default () => (
         <TraceCollector />
         <Instructions />
         <TraceConverter />
-        <FileInformation />
+        <TracefileInformation />
         <AdvancedOptions />
     </SidePanel>
 );

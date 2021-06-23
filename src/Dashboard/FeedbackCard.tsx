@@ -38,8 +38,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Card, openUrl } from 'pc-nrfconnect-shared';
 
+const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
+
 export default () => (
-    <Card title="Feedback & Coming Features">
+    <Card title="Feedback & Upcoming Features">
         <section>
             <p>
                 This app is currently in an early stage of development, and we
@@ -50,16 +52,14 @@ export default () => (
             <Button
                 className="secondary-btn w-100 mt-2"
                 variant="secondary"
-                onClick={() =>
-                    openUrl('mailto: cellular.monitor@nordicsemi.no')
-                }
-                title="cellular.monitor@nordicsemi.no"
+                onClick={() => openUrl(`mailto: ${NCD_EMAIL_ADDRESS}`)}
+                title={NCD_EMAIL_ADDRESS}
             >
                 Give feedback
             </Button>
         </section>
         <section>
-            <h5>Coming features</h5>
+            <h5>Upcoming features</h5>
             <p>
                 We plan to add several features to this app in the near future.
                 These features include:{' '}

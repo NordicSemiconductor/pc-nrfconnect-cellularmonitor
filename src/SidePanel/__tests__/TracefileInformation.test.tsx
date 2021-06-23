@@ -38,13 +38,15 @@ import React from 'react';
 
 import { setTracePath } from '../../actions';
 import { mockedCheckDiskSpace, render } from '../../utils/testUtils';
-import FileInformation from '../FileInformation';
+import TracefileInformation from '../TracefileInformation';
 
 describe('FileInformation', () => {
     it('should display the name of the trace', async () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
         const filePath = 'path/to/file.bin';
-        const screen = render(<FileInformation />, [setTracePath(filePath)]);
+        const screen = render(<TracefileInformation />, [
+            setTracePath(filePath),
+        ]);
         expect(await screen.findByText('path/to')).toBeInTheDocument();
         expect(await screen.findByText('file.bin')).toBeInTheDocument();
     });
