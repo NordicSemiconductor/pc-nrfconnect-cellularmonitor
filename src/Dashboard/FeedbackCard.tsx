@@ -37,25 +37,47 @@
 import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
-import TraceConverter from './TraceConverter';
 import Wireshark from './Wireshark';
 
 export default () => (
     <Card title="Converting a trace">
         <section>
             <p>
-                You can click on <b>Convert Raw Trace to PCAP</b>, select a raw
-                trace file (e.g. created by this app or the{' '}
-                <em>Trace Collector</em>) and convert it into a PCAP file, which
-                can then be opened e.g. in <em>Wireshark</em>.
+                You can click on <b>Convert Raw Trace to PCAP</b>, located in
+                the side panel, select a raw trace file (e.g. created by this
+                app or the <em>Trace Collector</em>) and convert it into a{' '}
+                <b>PCAP</b>
+                file, which can then be opened e.g. in <em>Wireshark</em>.
             </p>
-            <TraceConverter />
         </section>
 
         <section>
             <h5>Open PCAP in Wireshark</h5>
-            <p>Open your PCAP traces in Wireshark to analyze them.</p>
+            <p>
+                Open your <b>PCAP</b> traces in <em>Wireshark</em> to analyze
+                them.
+            </p>
             <Wireshark />
+        </section>
+
+        <section>
+            <h5>RAW vs PCAP</h5>
+            <p>
+                <b>RAW</b> files capture all traffic to and from the modem and
+                are larger than <b>PCAP</b> files. Some of the traffic is
+                proprietary to
+                <em>Nordic Semiconductor</em> and not publicly available.{' '}
+                <b>RAW</b> files are primarily used as an attachment if you need
+                assistance from
+                <em>Nordic Semiconductor</em> support.
+            </p>
+            <p>
+                <b>PCAP</b> files are used to open and inspect traffic details
+                in
+                <em>Wireshark</em>. <b>PCAP</b> files contain a subset of the
+                details of a <b>RAW</b>
+                file.
+            </p>
         </section>
     </Card>
 );

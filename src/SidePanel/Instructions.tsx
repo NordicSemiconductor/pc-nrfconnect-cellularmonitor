@@ -79,19 +79,20 @@ export default () => {
                 Getting started with Thingy:91
             </Button>
             <Button
-                className="mt-3 w-100 secondary-btn"
-                variant="set"
+                className="user-guide-link"
+                variant="link"
                 onClick={() => openUrl(urls.buy9160)}
             >
                 Buy nRF9160
             </Button>
             <Button
-                variant="set"
-                className="mt-3 w-100 secondary-btn"
+                variant="link"
+                className="user-guide-link"
                 onClick={() => openUrl(urls.buyThingy91)}
             >
                 Buy Thingy:91
             </Button>
+            <hr />
         </Group>
     );
 };

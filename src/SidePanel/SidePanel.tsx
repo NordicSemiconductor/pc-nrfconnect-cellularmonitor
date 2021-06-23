@@ -37,6 +37,7 @@
 import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
+import TraceConverter from '../Dashboard/TraceConverter';
 import AdvancedOptions from './AdvancedOptions';
 import FileInformation from './FileInformation';
 import Instructions from './Instructions';
@@ -48,6 +49,7 @@ export default () => (
     <SidePanel className="side-panel">
         <TraceCollector />
         <Instructions />
+        <TraceConverter />
         <FileInformation />
         <AdvancedOptions />
     </SidePanel>
