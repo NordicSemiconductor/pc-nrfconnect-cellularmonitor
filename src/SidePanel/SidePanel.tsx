@@ -38,6 +38,7 @@ import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
+import FileInformation from './FileInformation';
 import Instructions from './Instructions';
 import TraceCollector from './TraceCollector';
 
@@ -47,6 +48,7 @@ export default () => (
     <SidePanel className="side-panel">
         <TraceCollector />
         <Instructions />
+        <FileInformation />
         <AdvancedOptions />
     </SidePanel>
 );

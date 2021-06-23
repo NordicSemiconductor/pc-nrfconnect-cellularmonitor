@@ -94,14 +94,15 @@ const convertTraceFile = (tracePath: string): TAction => (
 ) => {
     dispatch(setTraceSize(0));
     const filename = path.basename(tracePath, '.bin');
-    const filepath = path.dirname(tracePath);
+    const directory = path.dirname(tracePath);
+    const filepath = path.join(directory, filename);
     const dbFilePath = getDbFilePath(getState());
     const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: getPluginsDir(),
             },
-            sinks: [pcapSinkConfig(path.join(filepath, filename))],
+            sinks: [pcapSinkConfig(filepath)],
             sources: [sourceConfig(dbFilePath, { file_path: tracePath })],
         },
         err => {
@@ -121,6 +122,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         }
     );
     dispatch(setNrfmlTaskId(taskId));
+    dispatch(setTracePath(filepath));
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
