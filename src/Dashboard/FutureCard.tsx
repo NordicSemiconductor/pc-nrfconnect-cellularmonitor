@@ -35,10 +35,46 @@
  */
 
 import React from 'react';
-import { Card } from 'pc-nrfconnect-shared';
+import Button from 'react-bootstrap/Button';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => (
     <Card title="Feedback & Coming Features">
-        GPS, terminal for communicating with modem
+        <section>
+            <p>
+                This app is currently in an early stage of development, and we
+                are very interested in receiving feedback on it to help us make
+                the app as useful as possible. So if you have any changes you
+                want made, please send us an email by clicking the button below.
+            </p>
+            <Button
+                className="secondary-btn w-100 mt-2"
+                variant="secondary"
+                onClick={() =>
+                    openUrl('mailto: cellular.monitor@nordicsemi.no')
+                }
+                title="cellular.monitor@nordicsemi.no"
+            >
+                Give feedback
+            </Button>
+        </section>
+        <section>
+            <h5>Coming features</h5>
+            <p>
+                We plan to add several features to this app in the near future.
+                These features include:{' '}
+            </p>
+            <ul>
+                <li>
+                    A terminal for communicating with the modem by AT-commands
+                    with its very own macro builder
+                </li>
+                <li>
+                    A dashboard to monitor various parameters such as RSSI,
+                    connectivity, data usage etc.
+                </li>
+                <li>GPS visualization</li>
+            </ul>
+        </section>
     </Card>
 );

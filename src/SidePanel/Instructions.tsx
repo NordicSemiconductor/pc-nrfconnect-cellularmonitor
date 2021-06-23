@@ -67,14 +67,14 @@ export default () => {
             <Button
                 className="user-guide-link"
                 variant="link"
-                onClick={() => openUrl(urls.gettingStarted)}
+                onClick={() => openUrl(urls.gettingStarted9160)}
             >
                 Getting started with nRF9160
             </Button>
             <Button
                 className="user-guide-link"
                 variant="link"
-                onClick={() => openUrl(urls.gettingStarted)}
+                onClick={() => openUrl(urls.gettingStartedThingy91)}
             >
                 Getting started with Thingy:91
             </Button>

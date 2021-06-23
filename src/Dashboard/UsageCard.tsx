@@ -64,8 +64,8 @@ export default () => (
                     detect the correct serialport to use, but this selection can
                     be overridden.
                     <p className="help-text">
-                        If the trace doesn&apos;t contain any data, a solution
-                        might be to switch to another serialport.
+                        If the created trace doesn&apos;t contain any data, a
+                        solution might be to switch to another serialport.
                     </p>
                 </li>
                 <li>
