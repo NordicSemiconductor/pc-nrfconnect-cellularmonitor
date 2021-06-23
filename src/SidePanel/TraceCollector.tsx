@@ -97,7 +97,7 @@ export default () => {
             {tracePath !== '' && (
                 <>
                     <FilePathLink
-                        label="Trace output location (click to open)"
+                        label="Trace output location"
                         filePath={tracePath}
                         displayPath={directory}
                     />

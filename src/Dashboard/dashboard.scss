@@ -53,6 +53,18 @@
         section:last-child {
             margin-bottom: 16px;
         }
+
+        section > ol {
+            padding-left: 16px;
+
+            li {
+                margin-bottom: 4px;
+            }
+        }
+
+        .help-text {
+            font-style: italic;
+        }
     }
 }
 @media (min-width: 20em) {

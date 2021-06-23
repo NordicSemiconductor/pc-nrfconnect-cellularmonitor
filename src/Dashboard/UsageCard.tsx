@@ -41,26 +41,13 @@ export default () => (
     <Card title="Creating a trace">
         <section>
             <ol>
-                <li>Program modem firmware with tracing enabled according to <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html">this guide</a>.</li>
-
+                <li>Program device with an application with tracing enabled according to <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html">this guide</a>.</li>
+                <li>If you want <b>PCAP</b> output, ensure that the modem firmware is one of the following versions: <ul><li>1.1.4</li><li>1.2.3</li> <li>1.2.4</li> <li>1.2.5</li> <li>1.3.0</li></ul></li>
+                <li>Select which serialport to collect the trace from. If you are on Windows or Linux the application will attempt to detect the correct serialport to use, but this selection can be overridden.
+                    <p className="help-text">If the trace doesn't contain any data, a solution might be to switch to another serialport.</p></li>
+                <li>Select the desired trace output format, either <b>RAW</b> or <b>PCAP</b>.</li>
+                <li>Click the <i>Start trace</i> button to begin collecting a trace in the selected format.</li>
             </ol>
-            <div>
-                Currently this application serves as a replacement for the old{' '}
-                <em>Trace Collector</em> app and has two main functionalities -
-                creating or converting a trace.
-            </div>
         </section>
-
-        <section>
-            <h5>Creating a trace</h5>
-            <div>
-                When an <em>nRF91</em> device is connected and runs an
-                application as described for the <em>Trace Collector</em>, you
-                can select the device after clicking <b>Select device</b> in the
-                top left corner.
-            </div>
-        </section>
-
-
     </Card>
 );
