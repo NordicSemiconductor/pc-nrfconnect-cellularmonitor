@@ -36,9 +36,9 @@
 
 import React from 'react';
 
-import { setAvailableSerialPorts, setSerialPort } from '../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
+import { setAvailableSerialPorts, setSerialPort } from '../../actions';
+import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import TraceCollector from '../TraceCollector';
 
 mockedCheckDiskSpace.mockImplementation(
     () =>

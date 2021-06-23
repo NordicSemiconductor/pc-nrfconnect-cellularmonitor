@@ -36,9 +36,9 @@
 
 import React from 'react';
 
-import { setAvailableSerialPorts, setSerialPort } from '../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import SidePanel from './SidePanel';
+import { setAvailableSerialPorts, setSerialPort } from '../../actions';
+import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import SidePanel from '../SidePanel';
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
