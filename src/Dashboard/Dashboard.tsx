@@ -36,10 +36,10 @@
 
 import React from 'react';
 
+import ConvertTraceCard from './ConvertTraceCard';
+import CreateTraceCard from './CreateTraceCard';
 import FeedbackCard from './FeedbackCard';
-import FutureCard from './FutureCard';
 import Toast from './Toast/Toast';
-import UsageCard from './UsageCard';
 
 import './dashboard.scss';
 
@@ -51,9 +51,9 @@ export default () => (
                 redesigns in the future
             </Toast>
             <div className="dashboard-cards">
-                <UsageCard />
+                <CreateTraceCard />
+                <ConvertTraceCard />
                 <FeedbackCard />
-                <FutureCard />
             </div>
         </div>
     </div>

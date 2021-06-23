@@ -35,36 +35,46 @@
  */
 
 import React from 'react';
-import { Card } from 'pc-nrfconnect-shared';
-
-import Wireshark from './Wireshark';
+import Button from 'react-bootstrap/Button';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => (
-    <Card title="Converting a trace">
+    <Card title="Feedback & Coming Features">
         <section>
-            You can click on <b>Convert Raw Trace to PCAP</b>, located in the
-            side panel, select a raw trace file (e.g. created by this app or the{' '}
-            <em>Trace Collector</em>) and convert it into a PCAP file, which can
-            then be opened e.g. in <em>Wireshark</em>.
-        </section>
-
-        <section>
-            <h5>RAW vs PCAP</h5>
             <p>
-                RAW files capture all traffic to and from the modem and are
-                larger than PCAP files. Some of the traffic is proprietary to
-                Nordic Semiconductor and not publicly available. RAW files are
-                primarily used as an attachment if you need assistance from
-                Nordic Semiconductor support.
+                This app is currently in an early stage of development, and we
+                are very interested in receiving feedback on it to help us make
+                the app as useful as possible. So if you have any changes you
+                want made, please send us an email by clicking the button below.
             </p>
-            <p>
-                PCAP files are used to open and inspect traffic details in{' '}
-                <em>Wireshark</em>. PCAP files contain a subset of the details
-                of a RAW file.
-            </p>
+            <Button
+                className="secondary-btn w-100 mt-2"
+                variant="secondary"
+                onClick={() =>
+                    openUrl('mailto: cellular.monitor@nordicsemi.no')
+                }
+                title="cellular.monitor@nordicsemi.no"
+            >
+                Give feedback
+            </Button>
         </section>
         <section>
-            <Wireshark />
+            <h5>Coming features</h5>
+            <p>
+                We plan to add several features to this app in the near future.
+                These features include:{' '}
+            </p>
+            <ul>
+                <li>
+                    A terminal for communicating with the modem by AT-commands
+                    with its very own macro builder
+                </li>
+                <li>
+                    A dashboard to monitor various parameters such as RSSI,
+                    connectivity, data usage etc.
+                </li>
+                <li>GPS visualization</li>
+            </ul>
         </section>
     </Card>
 );
