@@ -38,33 +38,37 @@ import React from 'react';
 
 import { setAvailableSerialPorts, setSerialPort } from '../actions';
 import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
-
-mockedCheckDiskSpace.mockImplementation(
-    () =>
-        new Promise(resolve => {
-            resolve({ free: 0, size: 0 });
-        })
-);
+import SidePanel from './SidePanel';
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setSerialPort('COM1'),
 ];
 
-describe('TraceCollector', () => {
-    it('should disable Sink selector while tracing', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const sinkButton = await screen.findByText('raw');
-        expect(sinkButton).toBeDisabled();
+describe('Sidepanel functionality', () => {
+    beforeEach(() => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
     });
 
-    it('button text should reflect tracing state', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
+    it('should store RAW as .bin', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(screen.getByText('raw'));
         fireEvent.click(screen.getByText('Start tracing'));
-        const stopButton = await screen.findByText('Stop tracing');
-        fireEvent.click(stopButton);
-        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+        expect(
+            await screen.findByText('.bin', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
+    });
+
+    it('should store PCAP as .pcap', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(await screen.findByText('pcap'));
+        fireEvent.click(screen.getByText('Start tracing'));
+        expect(
+            await screen.findByText('.pcap', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
     });
 });

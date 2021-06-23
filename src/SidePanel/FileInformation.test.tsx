@@ -36,35 +36,19 @@
 
 import React from 'react';
 
-import { setAvailableSerialPorts, setSerialPort } from '../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
+import { setTracePath } from '../actions';
+import { mockedCheckDiskSpace, render } from '../utils/testUtils';
+import FileInformation from './FileInformation';
 
-mockedCheckDiskSpace.mockImplementation(
-    () =>
-        new Promise(resolve => {
-            resolve({ free: 0, size: 0 });
-        })
-);
+const FREE = 100;
+const TOTAL = 200;
 
-const serialPortActions = [
-    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
-    setSerialPort('COM1'),
-];
-
-describe('TraceCollector', () => {
-    it('should disable Sink selector while tracing', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const sinkButton = await screen.findByText('raw');
-        expect(sinkButton).toBeDisabled();
-    });
-
-    it('button text should reflect tracing state', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const stopButton = await screen.findByText('Stop tracing');
-        fireEvent.click(stopButton);
-        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+describe('FileInformation', () => {
+    it('should display the name of the trace', async () => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        const filePath = 'path/to/file.bin';
+        const screen = render(<FileInformation />, [setTracePath(filePath)]);
+        expect(await screen.findByText('path/to')).toBeInTheDocument();
+        expect(await screen.findByText('file.bin')).toBeInTheDocument();
     });
 });
