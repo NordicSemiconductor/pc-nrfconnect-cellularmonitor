@@ -78,9 +78,10 @@ const convertTraceFile = (tracePath: string): TAction => (
         },
         err => {
             if (err != null) {
-                logger.error(`Failed to convert ${filename} to .pcap`);
+                logger.error(`Failed conversion to pcap: ${err.message}`);
+                logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
-                logger.info(`Successfully converted ${filename} to .pcap`);
+                logger.info(`Successfully converted ${filename} to pcap`);
             }
         },
         progress => {
@@ -130,8 +131,9 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
         err => {
             if (err != null) {
                 logger.error(
-                    'Error when creating trace. Make sure selected serialport is available'
+                    `Error when creating trace. Make sure selected serialport is not in use by another program: ${err.message}`
                 );
+                logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
                 logger.info('Finished tracefile');
             }
