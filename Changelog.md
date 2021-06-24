@@ -1,4 +1,7 @@
 ## 0.0.3
+- A trace DB matching the FW of the modem is now selected automatically.
+  For this, it is temporarily removed that users can select a different
+  trace DB themselves. This function will be added again in the future.
 - Fixed: The file size while creating a PCAP tracefile is now also reported correctly.
 
 ## 0.0.2

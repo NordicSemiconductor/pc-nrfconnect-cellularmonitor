@@ -39,6 +39,7 @@ import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
 import { InsightInitParameters } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort } from '../reducer';
@@ -50,6 +51,23 @@ export type TaskId = number;
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
+const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
+    '..',
+    '..',
+    'config',
+    'auto-detect-trace-db-config',
+];
+
+const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
+
+const autoDetectDbRootURL = pathToFileURL(
+    path.join(
+        getPluginsDir(),
+        ...AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR,
+        path.sep
+    )
+).toString();
+
 const sourceConfig = (
     dbFilePath: string,
     additionalInitParameters: Partial<InsightInitParameters['init_parameters']>
@@ -58,7 +76,14 @@ const sourceConfig = (
         name: 'nrfml-insight-source',
         init_parameters: {
             ...additionalInitParameters,
-            db_file_path: dbFilePath,
+            auto_detect_db_config: {
+                cache_directory: autoDetectDbCacheDirectory,
+                root: autoDetectDbRootURL,
+                update_cache: true,
+                // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
+                trace_db_locations: ['${root}/config.json'] as unknown[],
+            },
+            // db_file_path: dbFilePath,
             chunk_size: CHUNK_SIZE,
         },
         config: {
