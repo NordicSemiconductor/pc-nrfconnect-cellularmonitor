@@ -35,6 +35,8 @@
  */
 
 import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
+import { InsightInitParameters } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
@@ -47,6 +49,22 @@ export type TaskId = number;
 
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
+
+const sourceConfig = (
+    dbFilePath: string,
+    additionalInitParameters: Partial<InsightInitParameters['init_parameters']>
+) =>
+    ({
+        name: 'nrfml-insight-source',
+        init_parameters: {
+            ...additionalInitParameters,
+            db_file_path: dbFilePath,
+            chunk_size: CHUNK_SIZE,
+        },
+        config: {
+            buffer_size: BUFFER_SIZE,
+        },
+    } as const);
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -62,19 +80,7 @@ const convertTraceFile = (tracePath: string): TAction => (
                 plugins_directory: getPluginsDir(),
             },
             sinks: [pcapSinkConfig(path.join(filepath, filename))],
-            sources: [
-                {
-                    name: 'nrfml-insight-source',
-                    init_parameters: {
-                        file_path: tracePath,
-                        db_file_path: dbFilePath,
-                        chunk_size: CHUNK_SIZE,
-                    },
-                    config: {
-                        buffer_size: BUFFER_SIZE,
-                    },
-                },
-            ],
+            sources: [sourceConfig(dbFilePath, { file_path: tracePath })],
         },
         err => {
             if (err != null) {
@@ -113,19 +119,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             },
             sinks: [sinkConfig],
             sources: [
-                {
-                    init_parameters: {
-                        serialport: {
-                            path: serialPort,
-                        },
-                        db_file_path: dbFilePath,
-                        chunk_size: CHUNK_SIZE,
-                    },
-                    name: 'nrfml-insight-source',
-                    config: {
-                        buffer_size: BUFFER_SIZE,
-                    },
-                },
+                sourceConfig(dbFilePath, { serialport: { path: serialPort } }),
             ],
         },
         err => {
