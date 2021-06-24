@@ -38,6 +38,7 @@ import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
 export default () => (
+    // @ts-ignore: Wrong type definition in shared
     <Card title="Creating a trace">
         <section>
             <ol>
