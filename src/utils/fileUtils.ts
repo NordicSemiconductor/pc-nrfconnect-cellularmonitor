@@ -38,16 +38,21 @@ import { FileFilter, remote } from 'electron';
 import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 
+import { autoDetectDbRootFolder } from './store';
+
 const { dialog, shell } = remote;
 
 export const askForGzFile = () =>
-    askForFile([
-        {
-            name: 'Trace Databases',
-            extensions: ['gz', 'json'],
-        },
-        { name: 'All Files', extensions: ['*'] },
-    ]);
+    askForFile(
+        [
+            {
+                name: 'Trace Databases',
+                extensions: ['gz', 'json'],
+            },
+            { name: 'All Files', extensions: ['*'] },
+        ],
+        autoDetectDbRootFolder
+    );
 
 export const askForTraceFile = () =>
     askForFile([

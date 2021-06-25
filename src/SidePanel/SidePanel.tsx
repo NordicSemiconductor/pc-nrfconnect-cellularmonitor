@@ -37,7 +37,7 @@
 import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
-// import AdvancedOptions from './AdvancedOptions';
+import AdvancedOptions from './AdvancedOptions';
 import TraceCollector from './TraceCollector';
 import TraceConverter from './TraceConverter';
 import Wireshark from './Wireshark';
@@ -49,6 +49,6 @@ export default () => (
         <TraceCollector />
         <TraceConverter />
         <Wireshark />
-        {/* <AdvancedOptions /> */}
+        <AdvancedOptions />
     </SidePanel>
 );
