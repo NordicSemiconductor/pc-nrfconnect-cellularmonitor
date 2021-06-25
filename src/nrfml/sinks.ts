@@ -50,7 +50,7 @@ export const pcapSinkConfig = (filepath: string): PcapInitParameters => {
 
 const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
     return {
-        // @ts-ignore -- error in generated types in monitor-lib, this can be removed when fixed
+        // @ts-ignore -- error in generated types in monitor-lib. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib/pull/76 and can be removed here when that fix is merged and released
         name: 'nrfml-raw-file-sink',
         init_parameters: {
             file_path: `${filepath}.bin`,

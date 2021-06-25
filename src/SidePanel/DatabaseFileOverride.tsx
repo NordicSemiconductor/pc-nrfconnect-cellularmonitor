@@ -44,7 +44,7 @@ import { logger } from 'pc-nrfconnect-shared';
 import helpIcon from '../../resources/help-circle-outline.svg';
 import { resetDbFilePath, setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
-import { askForGzFile } from '../utils/fileUtils';
+import { askForTraceDbFile } from '../utils/fileUtils';
 import { isDefaultDbFilePath } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
@@ -53,7 +53,7 @@ export default () => {
     const dbFilePath = useSelector(getDbFilePath);
 
     const updateDbFilePath = () => {
-        const dbPath = askForGzFile();
+        const dbPath = askForTraceDbFile();
         if (dbPath) {
             dispatch(setDbFilePath(dbPath));
             logger.info(`Database path successfully updated to ${dbPath}`);

@@ -35,18 +35,58 @@
  */
 
 import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
+import { InsightInitParameters } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
+import { autoDetectDbRootFolder } from '../utils/store';
 import { getSinkConfig, pcapSinkConfig, Sink } from './sinks';
 
 export type TaskId = number;
 
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
+
+const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
+    '..',
+    '..',
+    'config',
+    'auto-detect-trace-db-config',
+];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Unused until we enable autodetection for the trace DB again
+const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Unused until we enable autodetection for the trace DB again
+const autoDetectDbRootURL = pathToFileURL(autoDetectDbRootFolder).toString();
+
+const sourceConfig = (
+    dbFilePath: string,
+    additionalInitParameters: Partial<InsightInitParameters['init_parameters']>
+) =>
+    ({
+        name: 'nrfml-insight-source',
+        init_parameters: {
+            ...additionalInitParameters,
+            // auto_detect_db_config: {
+            //     cache_directory: autoDetectDbCacheDirectory,
+            //     root: autoDetectDbRootURL,
+            //     update_cache: true,
+            //     // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
+            //     trace_db_locations: ['${root}/config.json'] as unknown[],
+            // },
+            db_file_path: dbFilePath,
+            chunk_size: CHUNK_SIZE,
+        },
+        config: {
+            buffer_size: BUFFER_SIZE,
+        },
+    } as const);
 
 const convertTraceFile = (tracePath: string): TAction => (
     dispatch,
@@ -62,29 +102,22 @@ const convertTraceFile = (tracePath: string): TAction => (
                 plugins_directory: getPluginsDir(),
             },
             sinks: [pcapSinkConfig(path.join(filepath, filename))],
-            sources: [
-                {
-                    name: 'nrfml-insight-source',
-                    init_parameters: {
-                        file_path: tracePath,
-                        db_file_path: dbFilePath,
-                        chunk_size: CHUNK_SIZE,
-                    },
-                    config: {
-                        buffer_size: BUFFER_SIZE,
-                    },
-                },
-            ],
+            sources: [sourceConfig(dbFilePath, { file_path: tracePath })],
         },
         err => {
             if (err != null) {
-                logger.error(`Failed to convert ${filename} to .pcap`);
+                logger.error(`Failed conversion to pcap: ${err.message}`);
+                logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
-                logger.info(`Successfully converted ${filename} to .pcap`);
+                logger.info(`Successfully converted ${filename} to pcap`);
             }
         },
         progress => {
-            dispatch(setTraceSize(progress.data_offset));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
+            const progressSize = (progress as any).data_offsets?.pcapng;
+            if (progressSize != null) {
+                dispatch(setTraceSize(progressSize));
+            }
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -108,38 +141,33 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             },
             sinks: [sinkConfig],
             sources: [
-                {
-                    init_parameters: {
-                        serialport: {
-                            path: serialPort,
-                        },
-                        extract_raw: true,
-                        db_file_path: dbFilePath,
-                        chunk_size: CHUNK_SIZE,
-                    },
-                    name: 'nrfml-insight-source',
-                    config: {
-                        buffer_size: BUFFER_SIZE,
-                    },
-                },
+                sourceConfig(dbFilePath, { serialport: { path: serialPort } }),
             ],
         },
         err => {
             if (err != null) {
                 logger.error(
-                    'Error when creating trace. Make sure selected serialport is available'
+                    `Error when creating trace. Make sure selected serialport is not in use by another program: ${err.message}`
                 );
+                logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
-                logger.info('Finished tracing');
+                logger.info('Finished tracefile');
             }
         },
         progress => {
-            dispatch(setTraceSize(progress.data_offset));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
+            const traceSizes = (progress as any).data_offsets;
+
+            const traceSize =
+                sink === 'raw' ? traceSizes?.RAW_DATA : traceSizes?.pcapng;
+            if (traceSize != null) {
+                dispatch(setTraceSize(traceSize));
+            }
         }
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const tracePath = sinkConfig.init_parameters.file_path!;
-    logger.info(`Tracefile created: ${tracePath}`);
+    logger.info(`Started tracefile: ${tracePath}`);
 
     dispatch(setTracePath(tracePath));
     dispatch(setNrfmlTaskId(taskId));

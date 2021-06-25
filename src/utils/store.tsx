@@ -34,8 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { getPluginsDir } from 'nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDir, getPersistentStore as store } from 'pc-nrfconnect-shared';
+import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
 import { NRFML_SINKS, Sink } from '../nrfml/sinks';
 
@@ -55,10 +56,22 @@ const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const SINK_TYPE = 'sinkType';
 const SERIALPORTS = 'serialPorts';
 
+const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
+    '..',
+    '..',
+    'config',
+    'auto-detect-trace-db-config',
+];
+
+export const autoDetectDbRootFolder = path.join(
+    getPluginsDir(),
+    ...AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR,
+    path.sep
+);
+
 const DEFAULT_DB_FILE_PATH = path.join(
-    getAppDir(),
-    'resources',
-    'trace_db_fcb82d0b-2da7-4610-9107-49b0043983a8.tar.gz'
+    autoDetectDbRootFolder,
+    'mfw_nrf9160_1.3.0_trace-db.json'
 );
 
 export const isDefaultDbFilePath = (dbFilePath: string) =>
