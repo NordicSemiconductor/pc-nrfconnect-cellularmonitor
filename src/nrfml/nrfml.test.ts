@@ -60,6 +60,7 @@ describe('nrfml', () => {
         expect(store.getActions()).toEqual([
             { type: 'SET_TRACE_SIZE', payload: 0 },
             { type: 'SET_NRFML_TASK_ID', payload: 1 },
+            { type: 'SET_TRACE_PATH', payload: 'somePath' },
         ]);
     });
 

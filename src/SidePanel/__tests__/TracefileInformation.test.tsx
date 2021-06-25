@@ -36,25 +36,18 @@
 
 import React from 'react';
 
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
+import { setTracePath } from '../../actions';
+import { mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import TracefileInformation from '../TracefileInformation';
 
-import './dashboard.scss';
-
-export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
-);
+describe('FileInformation', () => {
+    it('should display the name of the trace', async () => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        const filePath = 'path/to/file.bin';
+        const screen = render(<TracefileInformation />, [
+            setTracePath(filePath),
+        ]);
+        expect(await screen.findByText('path/to')).toBeInTheDocument();
+        expect(await screen.findByText('file.bin')).toBeInTheDocument();
+    });
+});

@@ -35,26 +35,44 @@
  */
 
 import React from 'react';
+import prettyBytes from 'pretty-bytes';
 
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
+import { setTraceSize } from '../../actions';
+import { mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import DiskSpaceUsage from '../DiskSpaceUsage/DiskSpaceUsage';
 
-import './dashboard.scss';
+const FREE = 100;
+const TOTAL = 200;
 
-export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
-);
+describe('Disk space usage', () => {
+    it('should display free and total disk space', async () => {
+        mockedCheckDiskSpace.mockImplementation(
+            () =>
+                new Promise(resolve => {
+                    resolve({
+                        free: FREE,
+                        size: TOTAL,
+                    });
+                })
+        );
+        const screen = render(<DiskSpaceUsage />);
+        expect(await screen.findByText(prettyBytes(FREE))).toBeInTheDocument();
+        expect(await screen.findByText(prettyBytes(TOTAL))).toBeInTheDocument();
+    });
+
+    it('should display loading message if disk is still unknown', async () => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        const screen = render(<DiskSpaceUsage />);
+        const loadingMessage = 'Loading';
+        const loadingBoxes = await screen.findAllByText(loadingMessage);
+        expect(loadingBoxes.length).toBe(2);
+    });
+
+    it('should display the current trace size', async () => {
+        const traceSize = 50;
+        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
+        expect(
+            await screen.findByText(prettyBytes(traceSize))
+        ).toBeInTheDocument();
+    });
+});

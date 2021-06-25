@@ -36,25 +36,39 @@
 
 import React from 'react';
 
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
+import { setAvailableSerialPorts, setSerialPort } from '../../actions';
+import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import SidePanel from '../SidePanel';
 
-import './dashboard.scss';
+const serialPortActions = [
+    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
+    setSerialPort('COM1'),
+];
 
-export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
-);
+describe('Sidepanel functionality', () => {
+    beforeEach(() => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+    });
+
+    it('should store RAW as .bin', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(screen.getByText('raw'));
+        fireEvent.click(screen.getByText('Start tracing'));
+        expect(
+            await screen.findByText('.bin', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
+    });
+
+    it('should store PCAP as .pcap', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(await screen.findByText('pcap'));
+        fireEvent.click(screen.getByText('Start tracing'));
+        expect(
+            await screen.findByText('.pcap', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
+    });
+});

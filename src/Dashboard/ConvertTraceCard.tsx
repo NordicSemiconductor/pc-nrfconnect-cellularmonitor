@@ -35,26 +35,37 @@
  */
 
 import React from 'react';
+import { Card } from 'pc-nrfconnect-shared';
 
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
-
-import './dashboard.scss';
+import Wireshark from './Wireshark';
 
 export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
+    // @ts-ignore: Wrong type definition in shared
+    <Card title="Converting a trace">
+        <section>
+            You can click on <b>Convert Raw Trace to PCAP</b>, located in the
+            side panel, select a raw trace file (e.g. created by this app or the{' '}
+            <em>Trace Collector</em>) and convert it into a PCAP file, which can
+            then be opened e.g. in <em>Wireshark</em>.
+        </section>
+
+        <section>
+            <h5>RAW vs PCAP</h5>
+            <p>
+                RAW files capture all traffic to and from the modem and are
+                larger than PCAP files. Some of the traffic is proprietary to
+                Nordic Semiconductor and not publicly available. RAW files are
+                primarily used as an attachment if you need assistance from
+                Nordic Semiconductor support.
+            </p>
+            <p>
+                PCAP files are used to open and inspect traffic details in{' '}
+                <em>Wireshark</em>. PCAP files contain a subset of the details
+                of a RAW file.
+            </p>
+        </section>
+        <section>
+            <Wireshark />
+        </section>
+    </Card>
 );

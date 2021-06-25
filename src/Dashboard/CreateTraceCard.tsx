@@ -35,26 +35,49 @@
  */
 
 import React from 'react';
-
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
-
-import './dashboard.scss';
+import { Card } from 'pc-nrfconnect-shared';
 
 export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
+    // @ts-ignore: Wrong type definition in shared
+    <Card title="Creating a trace">
+        <section>
+            <ol>
+                <li>
+                    Program device with an application with tracing enabled
+                    according to{' '}
+                    <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html">
+                        this guide
+                    </a>
+                    .
+                </li>
+                <li>
+                    If you want <b>PCAP</b> output, ensure that the modem
+                    firmware is one of the following versions:{' '}
+                    <ul>
+                        <li>1.1.4</li>
+                        <li>1.2.3</li>
+                        <li>1.3.0</li>
+                    </ul>
+                </li>
+                <li>
+                    Select which serialport to collect the trace from. If you
+                    are on Windows or Linux the application will attempt to
+                    detect the correct serialport to use, but this selection can
+                    be overridden.
+                    <p className="help-text">
+                        If the created trace doesn&apos;t contain any data, a
+                        solution might be to switch to another serialport.
+                    </p>
+                </li>
+                <li>
+                    Select the desired trace output format, either <b>RAW</b> or{' '}
+                    <b>PCAP</b>.
+                </li>
+                <li>
+                    Click the <i>Start trace</i> button to begin collecting a
+                    trace in the selected format.
+                </li>
+            </ol>
+        </section>
+    </Card>
 );

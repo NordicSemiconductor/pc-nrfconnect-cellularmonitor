@@ -1,7 +1,7 @@
 @import '~pc-nrfconnect-shared/src/variables';
 
 .carousel-item {
-    overflow-y: auto;   
+    overflow-y: auto;
 }
 
 // styling on scrollbar in dashboard pane
@@ -13,7 +13,7 @@
     border-radius: 10px;
 }
 .carousel-item::-webkit-scrollbar-thumb {
-    background:  $gray-600;
+    background: $gray-600;
     border-radius: 10px;
 }
 .carousel-item::-webkit-scrollbar-thumb:hover {
@@ -24,11 +24,49 @@
 }
 
 .dashboard {
+    display: flex;
+    flex-direction: column;
+    max-width: 88em;
+
+    &-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.dashboard-cards {
     display: grid;
-    grid-gap: 0.25em;
-    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr)); 
-    max-width: 81em;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
     grid-auto-rows: 1fr;
+    width: 100%;
+
+    .card {
+        height: 100%;
+        padding: 16px;
+
+        section:not(:last-child) {
+            margin-bottom: 32px;
+        }
+
+        section:last-child {
+            margin-bottom: 16px;
+        }
+
+        section > ol {
+            padding-left: 16px;
+
+            li {
+                margin-bottom: 4px;
+            }
+        }
+
+        .help-text {
+            font-style: italic;
+        }
+    }
 }
 @media (min-width: 20em) {
     .card {
@@ -37,34 +75,37 @@
 }
 @media only screen and (max-width: 860px) {
     .card:nth-child(n) {
-        .info-icon .info{
+        .info-icon .info {
             right: 3em !important;
         }
-        .info::after{
+        .info::after {
             left: 100%;
-            border-color: transparent transparent transparent $tooltip-arrow-color;
+            border-color: transparent transparent transparent
+                $tooltip-arrow-color;
         }
     }
 }
 @media only screen and (max-width: 1600px) {
     .card:nth-child(3n) {
-        .info-icon .info{
+        .info-icon .info {
             right: 3em !important;
         }
-        .info::after{
+        .info::after {
             left: 100%;
-            border-color: transparent transparent transparent $tooltip-arrow-color;
+            border-color: transparent transparent transparent
+                $tooltip-arrow-color;
         }
     }
 }
 @media only screen and (max-width: 1145px) {
     .card:nth-child(2n) {
-        .info-icon .info{
+        .info-icon .info {
             right: 3em !important;
         }
-        .info::after{
+        .info::after {
             left: 100%;
-            border-color: transparent transparent transparent $tooltip-arrow-color;
+            border-color: transparent transparent transparent
+                $tooltip-arrow-color;
         }
     }
 }
@@ -89,14 +130,14 @@
         border-color: $tooltip-bg;
         border-radius: 5px;
         color: $tooltip-color;
-        font-family: "Roboto-Regular";
+        font-family: 'Roboto-Regular';
         font-size: 12px;
         text-align: left;
         z-index: 100;
         opacity: $tooltip-opacity;
     }
-    .info::after{
-        content: "";
+    .info::after {
+        content: '';
         position: absolute;
         top: 8px;
         left: -5%;

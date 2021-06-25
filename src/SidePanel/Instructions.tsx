@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2018, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,61 +34,65 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { Group, openUrl } from 'pc-nrfconnect-shared';
 
-import { NRFML_SINKS, Sink } from '../nrfml/sinks';
 import { getSerialPort } from '../reducer';
-import { getSinkType, setSinkType } from '../utils/store';
-import Serialports from './Serialports';
-import StartStopTrace from './StartStopTrace';
+
+import './sidepanel.scss';
+
+const urls = {
+    gettingStarted9160:
+        'https://www.nordicsemi.com/Software-and-tools/Development-Kits/nRF9160-DK/GetStarted',
+    gettingStartedThingy91:
+        'https://www.nordicsemi.com/Software-and-tools/Prototyping-platforms/Nordic-Thingy-91/GetStarted',
+    buy9160:
+        'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nrf9160-DK&series_token=nRF9160',
+    buyThingy91:
+        'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nRF6943&series_token=nRF9160',
+};
 
 export default () => {
-    const [isTracing, setIsTracing] = useState(false);
-    const [selectedSink, setSelectedSink] = useState<Sink>(getSinkType());
-
     const selectedSerialPort = useSelector(getSerialPort);
 
-    const selectSink = (sink: Sink) => () => {
-        setSelectedSink(sink);
-        setSinkType(sink);
-    };
-
-    if (!selectedSerialPort) {
+    if (selectedSerialPort) {
         return null;
     }
 
     return (
-        <>
-            <Serialports selectedSerialPort={selectedSerialPort} />
-            <Group heading="Trace output format">
-                <ButtonGroup
-                    className={`trace-selector w-100 ${
-                        isTracing ? 'disabled' : ''
-                    }`}
-                >
-                    {NRFML_SINKS.map((sink: Sink) => (
-                        <Button
-                            // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
-                            variant={sink === selectedSink ? 'set' : 'unset'}
-                            onClick={selectSink(sink)}
-                            key={sink}
-                            disabled={isTracing}
-                        >
-                            {sink}
-                        </Button>
-                    ))}
-                </ButtonGroup>
-            </Group>
-            <StartStopTrace
-                sink={selectedSink}
-                isTracing={isTracing}
-                setIsTracing={setIsTracing}
-            />
+        <Group heading="Instructions">
+            <p>nRF9160 hardware is required to use this application.</p>
+            <Button
+                className="user-guide-link"
+                variant="link"
+                onClick={() => openUrl(urls.gettingStarted9160)}
+            >
+                Getting started with nRF9160
+            </Button>
+            <Button
+                className="user-guide-link"
+                variant="link"
+                onClick={() => openUrl(urls.gettingStartedThingy91)}
+            >
+                Getting started with Thingy:91
+            </Button>
+            <Button
+                className="user-guide-link"
+                variant="link"
+                onClick={() => openUrl(urls.buy9160)}
+            >
+                Buy nRF9160
+            </Button>
+            <Button
+                variant="link"
+                className="user-guide-link"
+                onClick={() => openUrl(urls.buyThingy91)}
+            >
+                Buy Thingy:91
+            </Button>
             <hr />
-        </>
+        </Group>
     );
 };

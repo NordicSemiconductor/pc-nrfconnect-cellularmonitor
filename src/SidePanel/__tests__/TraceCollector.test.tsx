@@ -36,13 +36,9 @@
 
 import React from 'react';
 
-import {
-    setAvailableSerialPorts,
-    setSerialPort,
-    setTracePath,
-} from '../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../utils/testUtils';
-import TraceCollector from './TraceCollector';
+import { setAvailableSerialPorts, setSerialPort } from '../../actions';
+import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
+import TraceCollector from '../TraceCollector';
 
 mockedCheckDiskSpace.mockImplementation(
     () =>
@@ -57,38 +53,6 @@ const serialPortActions = [
 ];
 
 describe('TraceCollector', () => {
-    it('should display the name of the trace', async () => {
-        const filePath = 'path/to/file.bin';
-        const screen = render(<TraceCollector />, [
-            setTracePath(filePath),
-            ...serialPortActions,
-        ]);
-        expect(await screen.findByText('path/to')).toBeInTheDocument();
-        expect(await screen.findByText('file.bin')).toBeInTheDocument();
-    });
-
-    it('should store RAW as .bin', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('raw'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.bin', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
-    it('should store PCAP as .pcap', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(await screen.findByText('pcap'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.pcap', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
     it('should disable Sink selector while tracing', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
         fireEvent.click(screen.getByText('Start tracing'));

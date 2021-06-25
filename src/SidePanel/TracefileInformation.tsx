@@ -34,61 +34,35 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import React from 'react';
+import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
 
-import { NRFML_SINKS, Sink } from '../nrfml/sinks';
-import { getSerialPort } from '../reducer';
-import { getSinkType, setSinkType } from '../utils/store';
-import Serialports from './Serialports';
-import StartStopTrace from './StartStopTrace';
+import { getTracePath } from '../reducer';
+import { getNameAndDirectory } from '../utils/fileUtils';
+import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
+import FilePathLink from './FilePathLink';
 
 export default () => {
-    const [isTracing, setIsTracing] = useState(false);
-    const [selectedSink, setSelectedSink] = useState<Sink>(getSinkType());
-
-    const selectedSerialPort = useSelector(getSerialPort);
-
-    const selectSink = (sink: Sink) => () => {
-        setSelectedSink(sink);
-        setSinkType(sink);
-    };
-
-    if (!selectedSerialPort) {
+    const tracePath = useSelector(getTracePath);
+    if (tracePath === '') {
         return null;
     }
+    const [filename, directory] = getNameAndDirectory(tracePath);
 
     return (
         <>
-            <Serialports selectedSerialPort={selectedSerialPort} />
-            <Group heading="Trace output format">
-                <ButtonGroup
-                    className={`trace-selector w-100 ${
-                        isTracing ? 'disabled' : ''
-                    }`}
-                >
-                    {NRFML_SINKS.map((sink: Sink) => (
-                        <Button
-                            // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
-                            variant={sink === selectedSink ? 'set' : 'unset'}
-                            onClick={selectSink(sink)}
-                            key={sink}
-                            disabled={isTracing}
-                        >
-                            {sink}
-                        </Button>
-                    ))}
-                </ButtonGroup>
-            </Group>
-            <StartStopTrace
-                sink={selectedSink}
-                isTracing={isTracing}
-                setIsTracing={setIsTracing}
+            <FilePathLink
+                label="Trace output location"
+                filePath={tracePath}
+                displayPath={directory}
             />
-            <hr />
+            <DiskSpaceUsage />
+
+            <div className="trace-file-container">
+                <FormLabel>Filename</FormLabel>
+                <span className="trace-file-name">{filename}</span>
+            </div>
         </>
     );
 };

@@ -35,44 +35,47 @@
  */
 
 import React from 'react';
-import prettyBytes from 'pretty-bytes';
+import Button from 'react-bootstrap/Button';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
-import { setTraceSize } from '../../actions';
-import { mockedCheckDiskSpace, render } from '../../utils/testUtils';
-import DiskSpaceUsage from './DiskSpaceUsage';
+const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
 
-const FREE = 100;
-const TOTAL = 200;
-
-describe('Disk space usage', () => {
-    it('should display free and total disk space', async () => {
-        mockedCheckDiskSpace.mockImplementation(
-            () =>
-                new Promise(resolve => {
-                    resolve({
-                        free: FREE,
-                        size: TOTAL,
-                    });
-                })
-        );
-        const screen = render(<DiskSpaceUsage />);
-        expect(await screen.findByText(prettyBytes(FREE))).toBeInTheDocument();
-        expect(await screen.findByText(prettyBytes(TOTAL))).toBeInTheDocument();
-    });
-
-    it('should display loading message if disk is still unknown', async () => {
-        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
-        const screen = render(<DiskSpaceUsage />);
-        const loadingMessage = 'Loading';
-        const loadingBoxes = await screen.findAllByText(loadingMessage);
-        expect(loadingBoxes.length).toBe(2);
-    });
-
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
-        expect(
-            await screen.findByText(prettyBytes(traceSize))
-        ).toBeInTheDocument();
-    });
-});
+export default () => (
+    // @ts-ignore: Wrong type definition in shared
+    <Card title="Feedback & Upcoming Features">
+        <section>
+            <p>
+                This app is currently in an early stage of development, and we
+                are very interested in receiving feedback on it to help us make
+                the app as useful as possible. So if you have any changes you
+                want made, please send us an email by clicking the button below.
+            </p>
+            <Button
+                className="secondary-btn w-100 mt-2"
+                variant="secondary"
+                onClick={() => openUrl(`mailto: ${NCD_EMAIL_ADDRESS}`)}
+                title={NCD_EMAIL_ADDRESS}
+            >
+                Give feedback
+            </Button>
+        </section>
+        <section>
+            <h5>Upcoming features</h5>
+            <p>
+                We plan to add several features to this app in the near future.
+                These features include:{' '}
+            </p>
+            <ul>
+                <li>
+                    A terminal for communicating with the modem by AT-commands
+                    with its very own macro builder
+                </li>
+                <li>
+                    A dashboard to monitor various parameters such as RSSI,
+                    connectivity, data usage etc.
+                </li>
+                <li>GPS visualization</li>
+            </ul>
+        </section>
+    </Card>
+);

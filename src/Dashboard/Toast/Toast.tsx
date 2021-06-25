@@ -33,28 +33,23 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// eslint-disable-next-line import/no-unresolved
+import React, { FC } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
-import React from 'react';
+import './toast.scss';
 
-import ConvertTraceCard from './ConvertTraceCard';
-import CreateTraceCard from './CreateTraceCard';
-import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
+type ToastProps = {
+    label?: string;
+};
 
-import './dashboard.scss';
+const Toast: FC<ToastProps> = ({ children, label }) => {
+    return (
+        <Alert variant="info" className="toast-container">
+            {label && <span className="toast-label">{label}</span>}
+            <span>{children}</span>
+        </Alert>
+    );
+};
 
-export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
-            </div>
-        </div>
-    </div>
-);
+export default Toast;

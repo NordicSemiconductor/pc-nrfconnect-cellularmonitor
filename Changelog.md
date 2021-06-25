@@ -1,3 +1,8 @@
+## 0.0.4
+- Added: Cards with information about usage of app and expected output 
+- Added: Instructions section in sidepanel containing links to getting 
+  started guides and purchasing
+
 ## 0.0.3
 - Fixed: The file size while creating a PCAP tracefile is now also reported correctly.
 

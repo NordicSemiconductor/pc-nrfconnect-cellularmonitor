@@ -49,6 +49,7 @@ interface StoreSchema {
     wiresharkExecutablePath: string | null;
     traceFileDetails: Sink;
     serialPorts: DevicePort;
+    showNotification: boolean;
 }
 
 const DB_FILE_PATH_KEY = 'dbFilePath';
