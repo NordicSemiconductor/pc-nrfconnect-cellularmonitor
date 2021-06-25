@@ -1,3 +1,6 @@
+## 0.0.4
+-
+
 ## 0.0.3
 - Fixed: The file size while creating a pcap tracefile is now also reported
   correctly.
