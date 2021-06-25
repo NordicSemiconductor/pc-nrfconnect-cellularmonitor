@@ -56,7 +56,6 @@ const DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const SINK_TYPE = 'sinkType';
 const SERIALPORTS = 'serialPorts';
-const SHOW_NOTIFICATION = 'showNotification';
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
     '..',
@@ -106,8 +105,3 @@ export const setSerialPort = (serialNumber: string, port: string) =>
         ...serialPorts(),
         [serialNumber]: port,
     });
-
-export const getShowNotification = (): boolean =>
-    store<StoreSchema>().get(SHOW_NOTIFICATION, true);
-export const setShowNotification = (showNotification: boolean): void =>
-    store<StoreSchema>().set(SHOW_NOTIFICATION, showNotification);

@@ -34,10 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // eslint-disable-next-line import/no-unresolved
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import Alert from 'react-bootstrap/Alert';
-
-import { getShowNotification, setShowNotification } from '../../utils/store';
 
 import './toast.scss';
 
@@ -46,24 +44,8 @@ type ToastProps = {
 };
 
 const Toast: FC<ToastProps> = ({ children, label }) => {
-    const [show, setShow] = useState(getShowNotification());
-
-    if (!show) {
-        return null;
-    }
-
-    const closeNotification = () => {
-        setShow(false);
-        setShowNotification(false);
-    };
-
     return (
-        <Alert
-            variant="info"
-            className="toast-container"
-            onClose={closeNotification}
-            dismissible
-        >
+        <Alert variant="info" className="toast-container">
             {label && <span className="toast-label">{label}</span>}
             <span>{children}</span>
         </Alert>
