@@ -52,13 +52,6 @@ export type TaskId = number;
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
-const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
-    '..',
-    '..',
-    'config',
-    'auto-detect-trace-db-config',
-];
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Unused until we enable autodetection for the trace DB again
 const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
 
@@ -122,7 +115,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         }
     );
     dispatch(setNrfmlTaskId(taskId));
-    dispatch(setTracePath(filepath));
+    dispatch(setTracePath(`${filepath}.pcap`));
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
