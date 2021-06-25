@@ -115,7 +115,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         }
     );
     dispatch(setNrfmlTaskId(taskId));
-    dispatch(setTracePath(filepath));
+    dispatch(setTracePath(`${filepath}.pcap`));
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
