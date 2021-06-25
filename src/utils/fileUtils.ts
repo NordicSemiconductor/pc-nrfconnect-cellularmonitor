@@ -42,7 +42,7 @@ import { autoDetectDbRootFolder } from './store';
 
 const { dialog, shell } = remote;
 
-export const askForGzFile = () =>
+export const askForTraceDbFile = () =>
     askForFile(
         [
             {
