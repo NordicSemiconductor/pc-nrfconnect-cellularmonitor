@@ -5,6 +5,11 @@
 
 ## 0.0.3
 - Fixed: The file size while creating a PCAP tracefile is now also reported correctly.
+- Updated styling of the side panel.
+- Persist which serial port was used the last time for a device.
+- Preselect the most likely serial port for getting the trace.
+- Show the advanced options in the side panel even if no device is connected.
+- Disable selecting a different trace file format while tracing is in progress.
 
 ## 0.0.2
 - Show Wireshark button on all platforms (not only on Windows, but also
