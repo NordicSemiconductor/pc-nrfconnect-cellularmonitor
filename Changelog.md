@@ -1,5 +1,5 @@
 ## 0.0.4
--
+- Disable the port selector while tracing
 
 ## 0.0.3
 - Fixed: The file size while creating a pcap tracefile is now also reported

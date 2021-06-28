@@ -63,7 +63,10 @@ export default () => {
 
     return (
         <>
-            <Serialports selectedSerialPort={selectedSerialPort} />
+            <Serialports
+                disabled={isTracing}
+                selectedSerialPort={selectedSerialPort}
+            />
             <Group heading="Trace output format">
                 <ButtonGroup
                     className={`trace-selector w-100 ${

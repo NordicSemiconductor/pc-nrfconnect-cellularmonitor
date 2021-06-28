@@ -45,10 +45,11 @@ import { truncateMiddle } from '../utils';
 import { setSerialPort as persistSerialPort } from '../utils/store';
 
 type SerialPortProps = {
+    disabled: boolean;
     selectedSerialPort: string;
 };
 
-export default ({ selectedSerialPort }: SerialPortProps) => {
+export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
     const serialNumber = useSelector(getSelectedSerialNumber);
@@ -69,7 +70,10 @@ export default ({ selectedSerialPort }: SerialPortProps) => {
     return (
         <Group heading="Serialport trace capture">
             <div className="serialport-selection">
-                <Dropdown title={truncateMiddle(selectedSerialPort, 20, 8)}>
+                <Dropdown
+                    disabled={disabled}
+                    title={truncateMiddle(selectedSerialPort, 20, 8)}
+                >
                     {serialPortSelect}
                 </Dropdown>
             </div>
