@@ -75,7 +75,7 @@ export default () => {
                 >
                     {NRFML_SINKS.map((sink: Sink) => (
                         <Button
-                            // @ts-ignore -- Doesn't seem to be an easy way to use custom variants with TS
+                            // @ts-expect-error -- Doesn't seem to be an easy way to use custom variants with TS
                             variant={sink === selectedSink ? 'set' : 'unset'}
                             onClick={selectSink(sink)}
                             key={sink}

@@ -41,7 +41,7 @@ import { Card, openUrl } from 'pc-nrfconnect-shared';
 const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
 
 export default () => (
-    // @ts-ignore: Wrong type definition in shared
+    // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
     <Card title="Feedback & Upcoming Features">
         <section>
             <p>
