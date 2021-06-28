@@ -41,22 +41,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import playSvg from '../../resources/play-circle.svg';
 import stopSvg from '../../resources/stop-circle.svg';
 import { startTrace, stopTrace } from '../nrfml/nrfml';
-import { Sink } from '../nrfml/sinks';
+import { TraceFormat } from '../nrfml/traceFormat';
 import { getNrfmlTaskId } from '../reducer';
 
 type StartStopProps = {
-    sink: Sink;
+    traceFormat: TraceFormat;
     isTracing: boolean;
     setIsTracing: (isTracing: boolean) => void;
 };
 
-export default ({ sink, isTracing, setIsTracing }: StartStopProps) => {
+export default ({ traceFormat, isTracing, setIsTracing }: StartStopProps) => {
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getNrfmlTaskId);
 
     const start = () => {
         setIsTracing(true);
-        dispatch(startTrace(sink));
+        dispatch(startTrace(traceFormat));
     };
 
     const stop = () => {

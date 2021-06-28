@@ -34,29 +34,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PcapInitParameters, RawFileInitParameters } from 'nrf-monitor-lib-js';
+export const TRACE_FORMATS = ['raw', 'pcap'] as const;
+export type TraceFormat = typeof TRACE_FORMATS[number];
 
-export const NRFML_SINKS = ['raw', 'pcap'] as const;
-export type Sink = typeof NRFML_SINKS[number];
+export const fileExtension = (format: TraceFormat) =>
+    format === 'pcap' ? '.pcap' : '.bin';
 
-export const pcapSinkConfig = (filepath: string): PcapInitParameters => {
-    return {
-        name: 'nrfml-pcap-sink',
-        init_parameters: {
-            file_path: `${filepath}.pcap`,
-        },
-    };
-};
-
-const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
-    return {
-        // @ts-ignore -- error in generated types in monitor-lib. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib/pull/76 and can be removed here when that fix is merged and released
-        name: 'nrfml-raw-file-sink',
-        init_parameters: {
-            file_path: `${filepath}.bin`,
-        },
-    };
-};
-
-export const getSinkConfig = (sink: Sink, filepath: string) =>
-    sink === 'pcap' ? pcapSinkConfig(filepath) : rawFileSinkConfig(filepath);
+export const sinkName = (format: TraceFormat) =>
+    format === 'pcap' ? 'nrfml-pcap-sink' : 'nrfml-raw-file-sink';
