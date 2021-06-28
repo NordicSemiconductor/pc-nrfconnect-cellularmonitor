@@ -113,11 +113,13 @@ const convertTraceFile = (sourcePath: string): TAction => (
             }
         },
         progress => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
-            const progressSize = (progress as any).data_offsets?.pcapng;
-            if (progressSize != null) {
-                dispatch(setTraceSize(progressSize));
-            }
+            progress.data_offsets
+                ?.filter(
+                    ({ path: progressPath }) => progressPath === destinationPath
+                )
+                .forEach(({ offset }) => {
+                    dispatch(setTraceSize(offset));
+                });
         }
     );
     dispatch(setNrfmlTaskId(taskId));
@@ -135,13 +137,13 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     }
     dispatch(setTraceSize(0));
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-    const filepath =
+    const filePath =
         path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
     const dbFilePath = getDbFilePath(getState());
 
     const sinkConfig = {
         name: sinkName(traceFormat),
-        init_parameters: { file_path: filepath },
+        init_parameters: { file_path: filePath },
     } as const;
 
     const taskId = nrfml.start(
@@ -163,21 +165,16 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
             }
         },
         progress => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- The type definition in nrf-monitor-lib-js is wrong in 0.5.1, so we need to manually override this. This is addressed in https://github.com/NordicPlayground/nrf-monitor-lib-js/pull/13 and this typecast can be removed when that fix is released
-            const traceSizes = (progress as any).data_offsets;
-
-            const traceSize =
-                traceFormat === 'raw'
-                    ? traceSizes?.RAW_DATA
-                    : traceSizes?.pcapng;
-            if (traceSize != null) {
-                dispatch(setTraceSize(traceSize));
-            }
+            progress.data_offsets
+                ?.filter(({ path: progressPath }) => progressPath === filePath)
+                .forEach(({ offset }) => {
+                    dispatch(setTraceSize(offset));
+                });
         }
     );
-    logger.info(`Started tracefile: ${filepath}`);
+    logger.info(`Started tracefile: ${filePath}`);
 
-    dispatch(setTracePath(filepath));
+    dispatch(setTracePath(filePath));
     dispatch(setNrfmlTaskId(taskId));
 };
 

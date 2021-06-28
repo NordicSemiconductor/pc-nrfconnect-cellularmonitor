@@ -1,5 +1,6 @@
 ## 0.0.4
 - Disable the port selector while tracing
+- Removed trace DBs for modem firmware 1.2.4 and 1.2.5
 
 ## 0.0.3
 - Fixed: The file size while creating a pcap tracefile is now also reported
