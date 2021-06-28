@@ -81,29 +81,29 @@ const sourceConfig = (
         },
     } as const);
 
-const convertTraceFile = (tracePath: string): TAction => (
+const convertTraceFile = (sourcePath: string): TAction => (
     dispatch,
     getState
 ) => {
     dispatch(setTraceSize(0));
-    const filename = path.basename(tracePath, '.bin');
-    const directory = path.dirname(tracePath);
-    const filepath = path.join(directory, filename);
+    const basename = path.basename(sourcePath, '.bin');
+    const directory = path.dirname(sourcePath);
+    const destinationPath = path.join(directory, basename);
     const dbFilePath = getDbFilePath(getState());
     const taskId = nrfml.start(
         {
             config: {
                 plugins_directory: getPluginsDir(),
             },
-            sinks: [pcapSinkConfig(filepath)],
-            sources: [sourceConfig(dbFilePath, { file_path: tracePath })],
+            sinks: [pcapSinkConfig(destinationPath)],
+            sources: [sourceConfig(dbFilePath, { file_path: sourcePath })],
         },
         err => {
             if (err != null) {
                 logger.error(`Failed conversion to pcap: ${err.message}`);
                 logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
-                logger.info(`Successfully converted ${filename} to pcap`);
+                logger.info(`Successfully converted ${basename} to pcap`);
             }
         },
         progress => {
@@ -115,7 +115,7 @@ const convertTraceFile = (tracePath: string): TAction => (
         }
     );
     dispatch(setNrfmlTaskId(taskId));
-    dispatch(setTracePath(`${filepath}.pcap`));
+    dispatch(setTracePath(`${destinationPath}.pcap`));
 };
 
 const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
