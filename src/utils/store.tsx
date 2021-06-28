@@ -38,24 +38,23 @@ import { getPluginsDir } from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { NRFML_SINKS, Sink } from '../nrfml/sinks';
+import { TRACE_FORMATS, TraceFormat } from '../nrfml/traceFormat';
 
 interface DevicePort {
     [serialNumber: string]: string;
 }
 
-interface StoreSchema {
-    dbFilePath: string;
-    wiresharkExecutablePath: string | null;
-    traceFileDetails: Sink;
-    serialPorts: DevicePort;
-    showNotification: boolean;
-}
-
 const DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
-const SINK_TYPE = 'sinkType';
+const TRACE_FORMAT = 'sinkType';
 const SERIALPORTS = 'serialPorts';
+
+interface StoreSchema {
+    [DB_FILE_PATH_KEY]: string;
+    [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
+    [TRACE_FORMAT]: TraceFormat;
+    [SERIALPORTS]: DevicePort;
+}
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
     '..',
@@ -90,10 +89,10 @@ export const getWiresharkPath = () =>
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
 
-export const getSinkType = (): Sink =>
-    store<StoreSchema>().get(SINK_TYPE, NRFML_SINKS[0]);
-export const setSinkType = (sink: Sink) =>
-    store<StoreSchema>().set(SINK_TYPE, sink);
+export const getTraceFormat = () =>
+    store<StoreSchema>().get(TRACE_FORMAT, TRACE_FORMATS[0]);
+export const setTraceFormat = (traceFormat: TraceFormat) =>
+    store<StoreSchema>().set(TRACE_FORMAT, traceFormat);
 
 const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
 export const getSerialPort = (serialNumber: string) => {

@@ -40,21 +40,26 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
-import { NRFML_SINKS, Sink } from '../nrfml/sinks';
+import { TRACE_FORMATS, TraceFormat } from '../nrfml/traceFormat';
 import { getSerialPort } from '../reducer';
-import { getSinkType, setSinkType } from '../utils/store';
+import {
+    getTraceFormat as getStoredTraceFormat,
+    setTraceFormat as setStoredTraceFormat,
+} from '../utils/store';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
 export default () => {
     const [isTracing, setIsTracing] = useState(false);
-    const [selectedSink, setSelectedSink] = useState<Sink>(getSinkType());
+    const [selectedTraceFormat, setSelectedTraceFormat] = useState<TraceFormat>(
+        getStoredTraceFormat()
+    );
 
     const selectedSerialPort = useSelector(getSerialPort);
 
-    const selectSink = (sink: Sink) => () => {
-        setSelectedSink(sink);
-        setSinkType(sink);
+    const selectTraceFormat = (format: TraceFormat) => () => {
+        setSelectedTraceFormat(format);
+        setStoredTraceFormat(format);
     };
 
     if (!selectedSerialPort) {
@@ -73,21 +78,23 @@ export default () => {
                         isTracing ? 'disabled' : ''
                     }`}
                 >
-                    {NRFML_SINKS.map((sink: Sink) => (
+                    {TRACE_FORMATS.map((format: TraceFormat) => (
                         <Button
                             // @ts-expect-error -- Doesn't seem to be an easy way to use custom variants with TS
-                            variant={sink === selectedSink ? 'set' : 'unset'}
-                            onClick={selectSink(sink)}
-                            key={sink}
+                            variant={
+                                format === selectedTraceFormat ? 'set' : 'unset'
+                            }
+                            onClick={selectTraceFormat(format)}
+                            key={format}
                             disabled={isTracing}
                         >
-                            {sink}
+                            {format}
                         </Button>
                     ))}
                 </ButtonGroup>
             </Group>
             <StartStopTrace
-                sink={selectedSink}
+                traceFormat={selectedTraceFormat}
                 isTracing={isTracing}
                 setIsTracing={setIsTracing}
             />

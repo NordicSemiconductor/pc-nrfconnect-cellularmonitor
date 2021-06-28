@@ -36,8 +36,8 @@
 
 import { PcapInitParameters, RawFileInitParameters } from 'nrf-monitor-lib-js';
 
-export const NRFML_SINKS = ['raw', 'pcap'] as const;
-export type Sink = typeof NRFML_SINKS[number];
+export const TRACE_FORMATS = ['raw', 'pcap'] as const;
+export type TraceFormat = typeof TRACE_FORMATS[number];
 
 export const pcapSinkConfig = (filepath: string): PcapInitParameters => {
     return {
@@ -58,5 +58,5 @@ const rawFileSinkConfig = (filepath: string): RawFileInitParameters => {
     };
 };
 
-export const getSinkConfig = (sink: Sink, filepath: string) =>
-    sink === 'pcap' ? pcapSinkConfig(filepath) : rawFileSinkConfig(filepath);
+export const getSinkConfig = (format: TraceFormat, filepath: string) =>
+    format === 'pcap' ? pcapSinkConfig(filepath) : rawFileSinkConfig(filepath);

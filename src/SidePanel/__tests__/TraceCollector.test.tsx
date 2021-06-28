@@ -53,11 +53,11 @@ const serialPortActions = [
 ];
 
 describe('TraceCollector', () => {
-    it('should disable Sink selector while tracing', async () => {
+    it('should disable Trace format selector while tracing', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
         fireEvent.click(screen.getByText('Start tracing'));
-        const sinkButton = await screen.findByText('raw');
-        expect(sinkButton).toBeDisabled();
+        const traceFormatButton = await screen.findByText('raw');
+        expect(traceFormatButton).toBeDisabled();
     });
 
     it('button text should reflect tracing state', async () => {

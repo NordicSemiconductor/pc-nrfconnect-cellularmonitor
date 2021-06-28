@@ -45,7 +45,7 @@ import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
 import { autoDetectDbRootFolder } from '../utils/store';
-import { getSinkConfig, pcapSinkConfig, Sink } from './sinks';
+import { getSinkConfig, pcapSinkConfig, TraceFormat } from './traceFormat';
 
 export type TaskId = number;
 
@@ -118,7 +118,10 @@ const convertTraceFile = (sourcePath: string): TAction => (
     dispatch(setTracePath(`${destinationPath}.pcap`));
 };
 
-const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
+const startTrace = (traceFormat: TraceFormat): TAction => (
+    dispatch,
+    getState
+) => {
     const serialPort = getSerialPort(getState());
     if (!serialPort) {
         logger.error('Select serial port to start tracing');
@@ -128,7 +131,7 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filepath = path.join(getAppDataDir(), filename);
     const dbFilePath = getDbFilePath(getState());
-    const sinkConfig = getSinkConfig(sink, filepath);
+    const sinkConfig = getSinkConfig(traceFormat, filepath);
     const taskId = nrfml.start(
         {
             config: {
@@ -154,7 +157,9 @@ const startTrace = (sink: Sink): TAction => (dispatch, getState) => {
             const traceSizes = (progress as any).data_offsets;
 
             const traceSize =
-                sink === 'raw' ? traceSizes?.RAW_DATA : traceSizes?.pcapng;
+                traceFormat === 'raw'
+                    ? traceSizes?.RAW_DATA
+                    : traceSizes?.pcapng;
             if (traceSize != null) {
                 dispatch(setTraceSize(traceSize));
             }
