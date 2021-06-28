@@ -45,7 +45,7 @@ import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
 import { autoDetectDbRootFolder } from '../utils/store';
-import { getSinkConfig, pcapSinkConfig, TraceFormat } from './traceFormat';
+import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 
 export type TaskId = number;
 
@@ -86,16 +86,22 @@ const convertTraceFile = (sourcePath: string): TAction => (
     getState
 ) => {
     dispatch(setTraceSize(0));
+    const destinationFormat = 'pcap';
     const basename = path.basename(sourcePath, '.bin');
     const directory = path.dirname(sourcePath);
-    const destinationPath = path.join(directory, basename);
+    const destinationPath =
+        path.join(directory, basename) + fileExtension(destinationFormat);
     const dbFilePath = getDbFilePath(getState());
+
+    const sinkConfig = {
+        name: sinkName(destinationFormat),
+        init_parameters: { file_path: destinationPath },
+    } as const;
+
     const taskId = nrfml.start(
         {
-            config: {
-                plugins_directory: getPluginsDir(),
-            },
-            sinks: [pcapSinkConfig(destinationPath)],
+            config: { plugins_directory: getPluginsDir() },
+            sinks: [sinkConfig],
             sources: [sourceConfig(dbFilePath, { file_path: sourcePath })],
         },
         err => {
@@ -115,7 +121,7 @@ const convertTraceFile = (sourcePath: string): TAction => (
         }
     );
     dispatch(setNrfmlTaskId(taskId));
-    dispatch(setTracePath(`${destinationPath}.pcap`));
+    dispatch(setTracePath(destinationPath));
 };
 
 const startTrace = (traceFormat: TraceFormat): TAction => (
@@ -129,14 +135,18 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     }
     dispatch(setTraceSize(0));
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-    const filepath = path.join(getAppDataDir(), filename);
+    const filepath =
+        path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
     const dbFilePath = getDbFilePath(getState());
-    const sinkConfig = getSinkConfig(traceFormat, filepath);
+
+    const sinkConfig = {
+        name: sinkName(traceFormat),
+        init_parameters: { file_path: filepath },
+    } as const;
+
     const taskId = nrfml.start(
         {
-            config: {
-                plugins_directory: getPluginsDir(),
-            },
+            config: { plugins_directory: getPluginsDir() },
             sinks: [sinkConfig],
             sources: [
                 sourceConfig(dbFilePath, { serialport: { path: serialPort } }),
@@ -165,11 +175,9 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
             }
         }
     );
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const tracePath = sinkConfig.init_parameters.file_path!;
-    logger.info(`Started tracefile: ${tracePath}`);
+    logger.info(`Started tracefile: ${filepath}`);
 
-    dispatch(setTracePath(tracePath));
+    dispatch(setTracePath(filepath));
     dispatch(setNrfmlTaskId(taskId));
 };
 
