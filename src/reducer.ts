@@ -65,7 +65,7 @@ export interface State {
     nrfmlTaskId: TaskId | null;
     serialPort: string | null;
     availableSerialPorts: string[];
-    dbFilePath: string;
+    dbFilePath?: string;
     wiresharkPath: string | null;
 }
 

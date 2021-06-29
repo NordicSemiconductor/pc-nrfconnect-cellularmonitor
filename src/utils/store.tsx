@@ -69,16 +69,13 @@ export const autoDetectDbRootFolder = path.join(
     path.sep
 );
 
-const DEFAULT_DB_FILE_PATH = path.join(
+export const DEFAULT_DB_FILE_PATH = path.join(
     autoDetectDbRootFolder,
     'mfw_nrf9160_1.3.0_trace-db.json'
 );
 
-export const isDefaultDbFilePath = (dbFilePath: string) =>
-    dbFilePath === DEFAULT_DB_FILE_PATH;
-
-export const getDbFilePath = () =>
-    store<StoreSchema>().get(DB_FILE_PATH_KEY, DEFAULT_DB_FILE_PATH);
+export const getDbFilePath = (): string | undefined =>
+    store<StoreSchema>().get(DB_FILE_PATH_KEY);
 export const setDbFilePath = (dbFilePath: string) =>
     store<StoreSchema>().set(DB_FILE_PATH_KEY, dbFilePath);
 export const deleteDbFilePath = () =>

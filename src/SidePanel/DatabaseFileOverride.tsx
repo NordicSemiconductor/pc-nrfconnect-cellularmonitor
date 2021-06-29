@@ -43,7 +43,7 @@ import helpIcon from '../../resources/help-circle-outline.svg';
 import { resetDbFilePath, setDbFilePath } from '../actions';
 import { getDbFilePath } from '../reducer';
 import { askForTraceDbFile } from '../utils/fileUtils';
-import { isDefaultDbFilePath } from '../utils/store';
+import { DEFAULT_DB_FILE_PATH } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
 export default () => {
@@ -76,12 +76,15 @@ export default () => {
 
     return (
         <>
-            <FilePathLink filePath={dbFilePath} label={label} />
+            <FilePathLink
+                filePath={dbFilePath ?? DEFAULT_DB_FILE_PATH}
+                label={label}
+            />
             <div className="db-btn-group">
                 <Button variant="secondary" onClick={updateDbFilePath}>
                     Browse
                 </Button>
-                {isDefaultDbFilePath(dbFilePath) || (
+                {dbFilePath == null || (
                     <Button
                         variant="secondary"
                         className=" w-100"
