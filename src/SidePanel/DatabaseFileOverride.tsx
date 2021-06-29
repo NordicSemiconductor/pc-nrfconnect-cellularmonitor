@@ -45,9 +45,16 @@ import { getManualDbFilePath } from '../reducer';
 import { askForTraceDbFile } from '../utils/fileUtils';
 import FilePathLink from './FilePathLink';
 
-export default () => {
+const HelpOnTraceDb = () => (
+    <img
+        src={helpIcon}
+        alt="Explain trace database"
+        title="A trace database file is used to decode trace data"
+    />
+);
+
+const SelectTraceDbManually = () => {
     const dispatch = useDispatch();
-    const manualDbFilePath = useSelector(getManualDbFilePath);
 
     const updateManualDbFilePath = () => {
         const manualDbPath = askForTraceDbFile();
@@ -59,65 +66,70 @@ export default () => {
         }
     };
 
-    const restoreDefault = () => {
+    return (
+        <Button
+            variant="secondary"
+            className="w-100"
+            onClick={updateManualDbFilePath}
+        >
+            Select Trace DB
+        </Button>
+    );
+};
+
+const SelectTraceDbAutomatically = () => {
+    const dispatch = useDispatch();
+
+    const selectTraceDbAutomatically = () => {
         dispatch(resetManualDbFilePath());
         logger.info(`Database path successfully reset to default value`);
     };
 
-    const label = (
-        <div className="db-help-section">
-            <span>Override trace database</span>
-            <img
-                src={helpIcon}
-                alt="Question mark"
-                title="A trace database file is used to decode trace data"
-            />
-        </div>
+    return (
+        <Button
+            variant="secondary"
+            className="w-100"
+            onClick={selectTraceDbAutomatically}
+        >
+            Autoselect Trace DB
+        </Button>
     );
+};
+
+const FilePathLabel = () => (
+    <div className="db-help-section">
+        <span>Override trace database</span>
+        <HelpOnTraceDb />
+    </div>
+);
+
+export default () => {
+    const manualDbFilePath = useSelector(getManualDbFilePath);
 
     if (manualDbFilePath == null) {
         return (
             <>
                 <div className="db-help-section">
                     <div>Trace database</div>
-                    <img
-                        src={helpIcon}
-                        alt="Explain trace database"
-                        title="A trace database file is used to decode trace data"
-                    />
+                    <HelpOnTraceDb />
                 </div>
                 <p>
                     A trace database matching the modem firmware of your device
                     is automatically chosen. You can also select one explicitly.
                 </p>
-                <Button
-                    variant="secondary"
-                    className="w-100"
-                    onClick={updateManualDbFilePath}
-                >
-                    Select Trace DB
-                </Button>
+                <SelectTraceDbManually />
             </>
         );
     }
 
     return (
         <>
-            <FilePathLink filePath={manualDbFilePath} label={label} />
-            <Button
-                variant="secondary"
-                className="w-100"
-                onClick={updateManualDbFilePath}
-            >
-                Select Trace DB
-            </Button>
-            <Button
-                variant="secondary"
-                className=" w-100"
-                onClick={restoreDefault}
-            >
-                Autoselect Trace DB
-            </Button>
+            <FilePathLink
+                filePath={manualDbFilePath}
+                label={<FilePathLabel />}
+            />
+            <SelectTraceDbManually />
+            <SelectTraceDbAutomatically />
         </>
     );
 };
