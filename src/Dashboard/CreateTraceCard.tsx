@@ -35,7 +35,8 @@
  */
 
 import React from 'react';
-import { Card } from 'pc-nrfconnect-shared';
+import Button from 'react-bootstrap/Button';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => (
     // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
@@ -45,9 +46,17 @@ export default () => (
                 <li>
                     Program device with an application with tracing enabled
                     according to{' '}
-                    <a href="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html">
+                    <Button
+                        variant="link"
+                        className="card-links"
+                        onClick={() =>
+                            openUrl(
+                                'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html'
+                            )
+                        }
+                    >
                         this guide
-                    </a>
+                    </Button>
                     .
                 </li>
                 <li>
