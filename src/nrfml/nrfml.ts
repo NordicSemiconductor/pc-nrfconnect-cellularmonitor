@@ -44,7 +44,7 @@ import { pathToFileURL } from 'url';
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getManualDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
-import { autoDetectDbRootFolder, DEFAULT_DB_FILE_PATH } from '../utils/store';
+import { autoDetectDbRootFolder } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 
 export type TaskId = number;
@@ -52,34 +52,39 @@ export type TaskId = number;
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Unused until we enable autodetection for the trace DB again
 const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Unused until we enable autodetection for the trace DB again
 const autoDetectDbRootURL = pathToFileURL(autoDetectDbRootFolder).toString();
 
 const sourceConfig = (
-    dbFilePath: string,
+    manualDbFilePath: string | undefined,
     additionalInitParameters: Partial<InsightInitParameters['init_parameters']>
-) =>
-    ({
+) => {
+    const initParameterForTraceDb =
+        manualDbFilePath != null
+            ? { db_file_path: manualDbFilePath }
+            : {
+                  auto_detect_db_config: {
+                      cache_directory: autoDetectDbCacheDirectory,
+                      root: autoDetectDbRootURL,
+                      update_cache: true,
+                      // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
+                      trace_db_locations: ['${root}/config.json'] as unknown[],
+                  },
+              };
+
+    return {
         name: 'nrfml-insight-source',
         init_parameters: {
             ...additionalInitParameters,
-            // auto_detect_db_config: {
-            //     cache_directory: autoDetectDbCacheDirectory,
-            //     root: autoDetectDbRootURL,
-            //     update_cache: true,
-            //     // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
-            //     trace_db_locations: ['${root}/config.json'] as unknown[],
-            // },
-            db_file_path: dbFilePath,
+            ...initParameterForTraceDb,
             chunk_size: CHUNK_SIZE,
         },
         config: {
             buffer_size: BUFFER_SIZE,
         },
-    } as const);
+    } as const;
+};
 
 const convertTraceFile = (sourcePath: string): TAction => (
     dispatch,
@@ -91,18 +96,23 @@ const convertTraceFile = (sourcePath: string): TAction => (
     const directory = path.dirname(sourcePath);
     const destinationPath =
         path.join(directory, basename) + fileExtension(destinationFormat);
-    const dbFilePath = getManualDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
+    const manualDbFilePath = getManualDbFilePath(getState());
 
     const sinkConfig = {
         name: sinkName(destinationFormat),
         init_parameters: { file_path: destinationPath },
     } as const;
 
+    let detectedModemFwUuid: unknown;
+    let detectedTraceDB: unknown;
+
     const taskId = nrfml.start(
         {
             config: { plugins_directory: getPluginsDir() },
             sinks: [sinkConfig],
-            sources: [sourceConfig(dbFilePath, { file_path: sourcePath })],
+            sources: [
+                sourceConfig(manualDbFilePath, { file_path: sourcePath }),
+            ],
         },
         err => {
             if (err != null) {
@@ -113,6 +123,24 @@ const convertTraceFile = (sourcePath: string): TAction => (
             }
         },
         progress => {
+            if (
+                progress.meta?.modem_db_uuid != null &&
+                detectedModemFwUuid !== progress.meta?.modem_db_uuid
+            ) {
+                detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                logger.info(
+                    `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                );
+            }
+
+            if (
+                progress.meta?.modem_db_path != null &&
+                detectedTraceDB !== progress.meta?.modem_db_path
+            ) {
+                detectedTraceDB = progress.meta?.modem_db_path;
+                logger.info(`Using trace DB ${detectedTraceDB}`);
+            }
+
             progress.data_offsets
                 ?.filter(
                     ({ path: progressPath }) => progressPath === destinationPath
@@ -139,19 +167,24 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filePath =
         path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
-    const dbFilePath = getManualDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
+    const manualDbFilePath = getManualDbFilePath(getState());
 
     const sinkConfig = {
         name: sinkName(traceFormat),
         init_parameters: { file_path: filePath },
     } as const;
 
+    let detectedModemFwUuid: unknown;
+    let detectedTraceDB: unknown;
+
     const taskId = nrfml.start(
         {
             config: { plugins_directory: getPluginsDir() },
             sinks: [sinkConfig],
             sources: [
-                sourceConfig(dbFilePath, { serialport: { path: serialPort } }),
+                sourceConfig(manualDbFilePath, {
+                    serialport: { path: serialPort },
+                }),
             ],
         },
         err => {
@@ -163,6 +196,24 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
             }
         },
         progress => {
+            if (
+                progress.meta?.modem_db_uuid != null &&
+                detectedModemFwUuid !== progress.meta?.modem_db_uuid
+            ) {
+                detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                logger.info(
+                    `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                );
+            }
+
+            if (
+                progress.meta?.modem_db_path != null &&
+                detectedTraceDB !== progress.meta?.modem_db_path
+            ) {
+                detectedTraceDB = progress.meta?.modem_db_path;
+                logger.info(`Using trace DB ${detectedTraceDB}`);
+            }
+
             progress.data_offsets
                 ?.filter(({ path: progressPath }) => progressPath === filePath)
                 .forEach(({ offset }) => {

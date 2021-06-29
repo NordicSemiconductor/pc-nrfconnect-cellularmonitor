@@ -43,7 +43,6 @@ import helpIcon from '../../resources/help-circle-outline.svg';
 import { resetManualDbFilePath, setManualDbFilePath } from '../actions';
 import { getManualDbFilePath } from '../reducer';
 import { askForTraceDbFile } from '../utils/fileUtils';
-import { DEFAULT_DB_FILE_PATH } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
 export default () => {
@@ -76,26 +75,49 @@ export default () => {
         </div>
     );
 
+    if (manualDbFilePath == null) {
+        return (
+            <>
+                <div className="db-help-section">
+                    <div>Trace database</div>
+                    <img
+                        src={helpIcon}
+                        alt="Explain trace database"
+                        title="A trace database file is used to decode trace data"
+                    />
+                </div>
+                <p>
+                    A trace database matching the modem firmware of your device
+                    is automatically chosen. You can also select one explicitly.
+                </p>
+                <Button
+                    variant="secondary"
+                    className="w-100"
+                    onClick={updateManualDbFilePath}
+                >
+                    Select Trace DB
+                </Button>
+            </>
+        );
+    }
+
     return (
         <>
-            <FilePathLink
-                filePath={manualDbFilePath ?? DEFAULT_DB_FILE_PATH}
-                label={label}
-            />
-            <div className="db-btn-group">
-                <Button variant="secondary" onClick={updateManualDbFilePath}>
-                    Browse
-                </Button>
-                {manualDbFilePath == null || (
-                    <Button
-                        variant="secondary"
-                        className=" w-100"
-                        onClick={restoreDefault}
-                    >
-                        Reset
-                    </Button>
-                )}
-            </div>
+            <FilePathLink filePath={manualDbFilePath} label={label} />
+            <Button
+                variant="secondary"
+                className="w-100"
+                onClick={updateManualDbFilePath}
+            >
+                Select Trace DB
+            </Button>
+            <Button
+                variant="secondary"
+                className=" w-100"
+                onClick={restoreDefault}
+            >
+                Autoselect Trace DB
+            </Button>
         </>
     );
 };
