@@ -40,26 +40,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
 import helpIcon from '../../resources/help-circle-outline.svg';
-import { resetDbFilePath, setDbFilePath } from '../actions';
-import { getDbFilePath } from '../reducer';
+import { resetManualDbFilePath, setManualDbFilePath } from '../actions';
+import { getManualDbFilePath } from '../reducer';
 import { askForTraceDbFile } from '../utils/fileUtils';
 import { DEFAULT_DB_FILE_PATH } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
 export default () => {
     const dispatch = useDispatch();
-    const dbFilePath = useSelector(getDbFilePath);
+    const manualDbFilePath = useSelector(getManualDbFilePath);
 
-    const updateDbFilePath = () => {
-        const dbPath = askForTraceDbFile();
-        if (dbPath) {
-            dispatch(setDbFilePath(dbPath));
-            logger.info(`Database path successfully updated to ${dbPath}`);
+    const updateManualDbFilePath = () => {
+        const manualDbPath = askForTraceDbFile();
+        if (manualDbPath) {
+            dispatch(setManualDbFilePath(manualDbPath));
+            logger.info(
+                `Database path successfully updated to ${manualDbPath}`
+            );
         }
     };
 
     const restoreDefault = () => {
-        dispatch(resetDbFilePath());
+        dispatch(resetManualDbFilePath());
         logger.info(`Database path successfully reset to default value`);
     };
 
@@ -77,14 +79,14 @@ export default () => {
     return (
         <>
             <FilePathLink
-                filePath={dbFilePath ?? DEFAULT_DB_FILE_PATH}
+                filePath={manualDbFilePath ?? DEFAULT_DB_FILE_PATH}
                 label={label}
             />
             <div className="db-btn-group">
-                <Button variant="secondary" onClick={updateDbFilePath}>
+                <Button variant="secondary" onClick={updateManualDbFilePath}>
                     Browse
                 </Button>
-                {dbFilePath == null || (
+                {manualDbFilePath == null || (
                     <Button
                         variant="secondary"
                         className=" w-100"

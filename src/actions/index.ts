@@ -47,6 +47,8 @@ export const setAvailableSerialPorts = createAction<string[]>(
 );
 export const setTracePath = createAction<string>('SET_TRACE_PATH');
 export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setDbFilePath = createAction<string>('SET_DB_FILE_PATH');
-export const resetDbFilePath = createAction('RESET_DB_FILE_PATH');
+export const setManualDbFilePath = createAction<string>(
+    'SET_MANUAL_DB_FILE_PATH'
+);
+export const resetManualDbFilePath = createAction('RESET_MANUAL_DB_FILE_PATH');
 export const setWiresharkPath = createAction<string>('SET_WIRESHARK_PATH');

@@ -42,7 +42,7 @@ import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getDbFilePath, getSerialPort } from '../reducer';
+import { getManualDbFilePath, getSerialPort } from '../reducer';
 import { TAction } from '../thunk';
 import { autoDetectDbRootFolder, DEFAULT_DB_FILE_PATH } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
@@ -91,7 +91,7 @@ const convertTraceFile = (sourcePath: string): TAction => (
     const directory = path.dirname(sourcePath);
     const destinationPath =
         path.join(directory, basename) + fileExtension(destinationFormat);
-    const dbFilePath = getDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
+    const dbFilePath = getManualDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
 
     const sinkConfig = {
         name: sinkName(destinationFormat),
@@ -139,7 +139,7 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
     const filePath =
         path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
-    const dbFilePath = getDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
+    const dbFilePath = getManualDbFilePath(getState()) ?? DEFAULT_DB_FILE_PATH;
 
     const sinkConfig = {
         name: sinkName(traceFormat),

@@ -44,13 +44,13 @@ interface DevicePort {
     [serialNumber: string]: string;
 }
 
-const DB_FILE_PATH_KEY = 'dbFilePath';
+const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const TRACE_FORMAT = 'sinkType';
 const SERIALPORTS = 'serialPorts';
 
 interface StoreSchema {
-    [DB_FILE_PATH_KEY]: string;
+    [MANUAL_DB_FILE_PATH_KEY]: string;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMAT]: TraceFormat;
     [SERIALPORTS]: DevicePort;
@@ -74,12 +74,12 @@ export const DEFAULT_DB_FILE_PATH = path.join(
     'mfw_nrf9160_1.3.0_trace-db.json'
 );
 
-export const getDbFilePath = (): string | undefined =>
-    store<StoreSchema>().get(DB_FILE_PATH_KEY);
-export const setDbFilePath = (dbFilePath: string) =>
-    store<StoreSchema>().set(DB_FILE_PATH_KEY, dbFilePath);
+export const getManualDbFilePath = (): string | undefined =>
+    store<StoreSchema>().get(MANUAL_DB_FILE_PATH_KEY);
+export const setManualDbFilePath = (manualDbFilePath: string) =>
+    store<StoreSchema>().set(MANUAL_DB_FILE_PATH_KEY, manualDbFilePath);
 export const deleteDbFilePath = () =>
-    store<StoreSchema>().delete(DB_FILE_PATH_KEY);
+    store<StoreSchema>().delete(MANUAL_DB_FILE_PATH_KEY);
 
 export const getWiresharkPath = () =>
     store<StoreSchema>().get(WIRESHARK_EXECUTABLE_PATH_KEY, null);
