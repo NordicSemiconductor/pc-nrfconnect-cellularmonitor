@@ -34,25 +34,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import nrfml, { ModuleVersion } from 'nrf-monitor-lib-js';
+import { logger } from 'pc-nrfconnect-shared';
 
-import Dashboard from './Dashboard/Dashboard';
-import DeviceSelector from './DeviceSelector';
-import reducer from './reducer';
-import SidePanel from './SidePanel/SidePanel';
-import logLibVersions from './utils/logLibVersions';
+const version = (module: ModuleVersion) => {
+    switch (module.version_format) {
+        case 'NRFML_VERSION_FORMAT_INCREMENTAL':
+            return module.incremental;
+        case 'NRFML_VERSION_FORMAT_STRING':
+            return module.string;
+        case 'NRFML_VERSION_FORMAT_SEMANTIC':
+            return `${module.semver.major}.${module.semver.minor}.${module.semver.patch}`;
+    }
+};
 
-import './index.scss';
+const describe = (module: ModuleVersion) =>
+    `${module.module_name} ${version(module)}`;
 
-logLibVersions();
+export default async () => {
+    const { modules } = await nrfml.apiVersion();
 
-export default () => (
-    <App
-        reportUsageData
-        appReducer={reducer}
-        deviceSelect={<DeviceSelector />}
-        sidePanel={<SidePanel />}
-        panes={[{ name: 'Dashboard', Main: Dashboard }]}
-    />
-);
+    if (modules.length > 0) {
+        logger.debug('Lib module versions:');
+        modules.forEach(module => logger.debug(`- ${describe(module)}`));
+    }
+};
