@@ -156,9 +156,7 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
         },
         err => {
             if (err != null) {
-                logger.error(
-                    `Error when creating trace. Make sure selected serialport is not in use by another program: ${err.message}`
-                );
+                logger.error(`Error when creating trace: ${err.message}`);
                 logger.debug(`Full error: ${JSON.stringify(err)}`);
             } else {
                 logger.info('Finished tracefile');
