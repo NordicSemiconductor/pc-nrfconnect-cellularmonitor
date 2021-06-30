@@ -53,6 +53,6 @@ export default () => (
         appReducer={reducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
-        panes={[{ name: 'Dashboard', Main: Dashboard }]}
+        panes={[{ name: 'Trace Collector', Main: Dashboard }]}
     />
 );
