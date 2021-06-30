@@ -2,6 +2,7 @@
 - Disable the port selector while tracing
 - Removed trace DBs for modem firmware 1.2.4 and 1.2.5
 - Automatically select the trace DB matching the modem FW.
+- App renamed to make the experimental state and scope more clear.
 
 ## 0.0.3
 - Fixed: The file size while creating a pcap tracefile is now also reported

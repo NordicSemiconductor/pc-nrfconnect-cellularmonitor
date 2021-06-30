@@ -1,8 +1,8 @@
 {
-  "name": "pc-nrfconnect-cellularmonitor",
+  "name": "pc-nrfconnect-tracecollector-preview",
   "version": "0.0.4-pre1",
-  "description": "Swiss army knife tool for nRF91 devices",
-  "displayName": "Cellular Monitor",
+  "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
+  "displayName": "Experimental Trace Collector V2 preview",
   "repository": {
     "type": "git",
     "url": "https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor.git"
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "npm": "^6.14.13",
-    "nrf-monitor-lib-js": "0.5.5"
+    "nrf-monitor-lib-js": "0.5.6"
   },
   "bundledDependencies": [
     "nrf-monitor-lib-js"
