@@ -40,57 +40,96 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
 import helpIcon from '../../resources/help-circle-outline.svg';
-import { resetDbFilePath, setDbFilePath } from '../actions';
-import { getDbFilePath } from '../reducer';
+import { resetManualDbFilePath, setManualDbFilePath } from '../actions';
+import { getManualDbFilePath } from '../reducer';
 import { askForTraceDbFile } from '../utils/fileUtils';
-import { isDefaultDbFilePath } from '../utils/store';
 import FilePathLink from './FilePathLink';
 
-export default () => {
-    const dispatch = useDispatch();
-    const dbFilePath = useSelector(getDbFilePath);
+const HelpOnTraceDb = () => (
+    <img
+        src={helpIcon}
+        alt="Explain trace database"
+        title="A trace database file is used to decode trace data"
+    />
+);
 
-    const updateDbFilePath = () => {
-        const dbPath = askForTraceDbFile();
-        if (dbPath) {
-            dispatch(setDbFilePath(dbPath));
-            logger.info(`Database path successfully updated to ${dbPath}`);
+const SelectTraceDbManually = () => {
+    const dispatch = useDispatch();
+
+    const updateManualDbFilePath = () => {
+        const manualDbPath = askForTraceDbFile();
+        if (manualDbPath) {
+            dispatch(setManualDbFilePath(manualDbPath));
+            logger.info(
+                `Database path successfully updated to ${manualDbPath}`
+            );
         }
     };
 
-    const restoreDefault = () => {
-        dispatch(resetDbFilePath());
+    return (
+        <Button
+            variant="secondary"
+            className="w-100"
+            onClick={updateManualDbFilePath}
+        >
+            Select Trace DB
+        </Button>
+    );
+};
+
+const SelectTraceDbAutomatically = () => {
+    const dispatch = useDispatch();
+
+    const selectTraceDbAutomatically = () => {
+        dispatch(resetManualDbFilePath());
         logger.info(`Database path successfully reset to default value`);
     };
 
-    const label = (
-        <div className="db-help-section">
-            <span>Override trace database</span>
-            <img
-                src={helpIcon}
-                alt="Question mark"
-                title="A trace database file is used to decode trace data"
-            />
-        </div>
+    return (
+        <Button
+            variant="secondary"
+            className="w-100"
+            onClick={selectTraceDbAutomatically}
+        >
+            Autoselect Trace DB
+        </Button>
     );
+};
+
+const FilePathLabel = () => (
+    <div className="db-help-section">
+        <span>Override trace database</span>
+        <HelpOnTraceDb />
+    </div>
+);
+
+export default () => {
+    const manualDbFilePath = useSelector(getManualDbFilePath);
+
+    if (manualDbFilePath == null) {
+        return (
+            <>
+                <div className="db-help-section">
+                    <div>Trace database</div>
+                    <HelpOnTraceDb />
+                </div>
+                <p>
+                    A trace database matching the modem firmware of your device
+                    is automatically chosen. You can also select one explicitly.
+                </p>
+                <SelectTraceDbManually />
+            </>
+        );
+    }
 
     return (
         <>
-            <FilePathLink filePath={dbFilePath} label={label} />
-            <div className="db-btn-group">
-                <Button variant="secondary" onClick={updateDbFilePath}>
-                    Browse
-                </Button>
-                {isDefaultDbFilePath(dbFilePath) || (
-                    <Button
-                        variant="secondary"
-                        className=" w-100"
-                        onClick={restoreDefault}
-                    >
-                        Reset
-                    </Button>
-                )}
-            </div>
+            <FilePathLink
+                filePath={manualDbFilePath}
+                label={<FilePathLabel />}
+            />
+            <SelectTraceDbManually />
+            <SelectTraceDbAutomatically />
         </>
     );
 };

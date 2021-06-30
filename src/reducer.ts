@@ -38,9 +38,9 @@ import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
 import {
-    resetDbFilePath,
+    resetManualDbFilePath,
     setAvailableSerialPorts,
-    setDbFilePath,
+    setManualDbFilePath,
     setModem,
     setNrfmlTaskId,
     setSerialPort,
@@ -52,9 +52,9 @@ import { Modem } from './modem/modem';
 import { TaskId } from './nrfml/nrfml';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
-    getDbFilePath as getPersistedDbFilePath,
+    getManualDbFilePath as getPersistedManualDbFilePath,
     getWiresharkPath as getPersistedWiresharkPath,
-    setDbFilePath as setPersistedDbFilePath,
+    setManualDbFilePath as setPersistedManualDbFilePath,
     setWiresharkPath as setPersistedWiresharkPath,
 } from './utils/store';
 
@@ -65,7 +65,7 @@ export interface State {
     nrfmlTaskId: TaskId | null;
     serialPort: string | null;
     availableSerialPorts: string[];
-    dbFilePath: string;
+    manualDbFilePath?: string;
     wiresharkPath: string | null;
 }
 
@@ -76,7 +76,7 @@ const initialState = (): State => ({
     nrfmlTaskId: null,
     serialPort: null,
     availableSerialPorts: [],
-    dbFilePath: getPersistedDbFilePath(),
+    manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
 });
 
@@ -102,13 +102,13 @@ export default createReducer(initialState(), {
     [setSerialPort.type]: (state, action: PayloadAction<string>) => {
         state.serialPort = action.payload;
     },
-    [setDbFilePath.type]: (state, action: PayloadAction<string>) => {
-        state.dbFilePath = action.payload;
-        setPersistedDbFilePath(action.payload);
+    [setManualDbFilePath.type]: (state, action: PayloadAction<string>) => {
+        state.manualDbFilePath = action.payload;
+        setPersistedManualDbFilePath(action.payload);
     },
-    [resetDbFilePath.type]: state => {
+    [resetManualDbFilePath.type]: state => {
         deletePersistedDbFilePath();
-        state.dbFilePath = getPersistedDbFilePath();
+        state.manualDbFilePath = getPersistedManualDbFilePath();
     },
     [setWiresharkPath.type]: (state, action: PayloadAction<string>) => {
         state.wiresharkPath = action.payload;
@@ -125,7 +125,8 @@ export const getAvailableSerialPorts = (state: RootState) =>
     state.app.availableSerialPorts;
 export const getTracePath = (state: RootState) => state.app.tracePath;
 export const getTraceSize = (state: RootState) => state.app.traceSize;
-export const getDbFilePath = (state: RootState) => state.app.dbFilePath;
+export const getManualDbFilePath = (state: RootState) =>
+    state.app.manualDbFilePath;
 export const getWiresharkPath = (state: RootState) => state.app.wiresharkPath;
 export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
