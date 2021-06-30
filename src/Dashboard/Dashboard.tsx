@@ -47,8 +47,8 @@ export default () => (
     <div className="dashboard-container">
         <div className="dashboard">
             <Toast label="Experimental release!">
-                This is an experimental preview and it is subject to major
-                redesigns in the future
+                This is an unsupported, experimental preview and it is subject
+                to major redesigns in the future.
             </Toast>
             <div className="dashboard-cards">
                 <CreateTraceCard />
