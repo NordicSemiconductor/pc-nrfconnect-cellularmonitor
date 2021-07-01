@@ -58,6 +58,7 @@ const autoDetectDbRootURL = pathToFileURL(autoDetectDbRootFolder).toString();
 
 const sourceConfig = (
     manualDbFilePath: string | undefined,
+    useTraceDB: boolean,
     additionalInitParameters: Partial<InsightInitParameters['init_parameters']>
 ) => {
     const initParameterForTraceDb =
@@ -77,7 +78,7 @@ const sourceConfig = (
         name: 'nrfml-insight-source',
         init_parameters: {
             ...additionalInitParameters,
-            ...initParameterForTraceDb,
+            ...(useTraceDB ? initParameterForTraceDb : {}),
             chunk_size: CHUNK_SIZE,
         },
         config: {
@@ -111,7 +112,7 @@ const convertTraceFile = (sourcePath: string): TAction => (
             config: { plugins_directory: getPluginsDir() },
             sinks: [sinkConfig],
             sources: [
-                sourceConfig(manualDbFilePath, { file_path: sourcePath }),
+                sourceConfig(manualDbFilePath, true, { file_path: sourcePath }),
             ],
         },
         err => {
@@ -182,7 +183,7 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
             config: { plugins_directory: getPluginsDir() },
             sinks: [sinkConfig],
             sources: [
-                sourceConfig(manualDbFilePath, {
+                sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
                     serialport: { path: serialPort },
                 }),
             ],
