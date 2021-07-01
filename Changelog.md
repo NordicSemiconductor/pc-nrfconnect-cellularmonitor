@@ -1,4 +1,6 @@
 ## 0.0.5
+- Fix problem when stopping tracing.
+- Updated trace DBs
 
 ## 0.0.4
 - Disable the port selector while tracing
