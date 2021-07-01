@@ -35,6 +35,7 @@
  */
 
 import nrfml, { ModuleVersion } from 'nrf-monitor-lib-js';
+import nrfMonitorLibJsPackageJson from 'nrf-monitor-lib-js/package.json';
 import { logger } from 'pc-nrfconnect-shared';
 
 const version = (module: ModuleVersion) => {
@@ -58,4 +59,8 @@ export default async () => {
         logger.debug('Lib module versions:');
         modules.forEach(module => logger.debug(`- ${describe(module)}`));
     }
+
+    logger.debug(
+        `- ${nrfMonitorLibJsPackageJson.name} ${nrfMonitorLibJsPackageJson.version}`
+    );
 };
