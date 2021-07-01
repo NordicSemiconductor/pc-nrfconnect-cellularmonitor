@@ -1,4 +1,8 @@
 ## 0.0.5
+- Fix problem when stopping tracing.
+- Updated trace DBs
+- Fix: Create a raw trace failed without a matching trace DB,
+  even though a trace DB should not be necessary for a raw trace.
 
 ## 0.0.4
 - Disable the port selector while tracing
