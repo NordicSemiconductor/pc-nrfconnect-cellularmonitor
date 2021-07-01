@@ -1,3 +1,5 @@
+## 0.0.6
+
 ## 0.0.5
 - Fix problem when stopping tracing.
 - Updated trace DBs
