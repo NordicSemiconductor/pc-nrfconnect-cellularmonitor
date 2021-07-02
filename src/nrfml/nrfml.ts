@@ -175,8 +175,8 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
         init_parameters: { file_path: filePath },
     } as const;
 
-    let detectedModemFwUuid: unknown;
-    let detectedTraceDB: unknown;
+    let detectedModemFwUuid: unknown = '';
+    let detectedTraceDB: unknown = '';
 
     const taskId = nrfml.start(
         {
