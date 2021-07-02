@@ -34,8 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Group, openUrl } from 'pc-nrfconnect-shared';
 
@@ -44,15 +45,30 @@ import { getSerialPort } from '../reducer';
 import './sidepanel.scss';
 
 const urls = {
-    gettingStarted9160:
-        'https://www.nordicsemi.com/Software-and-tools/Development-Kits/nRF9160-DK/GetStarted',
-    gettingStartedThingy91:
-        'https://www.nordicsemi.com/Software-and-tools/Prototyping-platforms/Nordic-Thingy-91/GetStarted',
-    buy9160:
+    infoOnDk:
+        'https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk',
+    infoOnThingy:
+        'https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91',
+    buyDk:
         'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nrf9160-DK&series_token=nRF9160',
-    buyThingy91:
+    buyThingy:
         'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nRF6943&series_token=nRF9160',
 };
+
+const Link: FC<{ onClick: () => void }> = ({ children, onClick }) => (
+    <a
+        role="link"
+        tabIndex={0}
+        onClick={onClick}
+        onKeyDown={e => {
+            if (e.key === 'Enter') {
+                onClick();
+            }
+        }}
+    >
+        {children}
+    </a>
+);
 
 export default () => {
     const selectedSerialPort = useSelector(getSerialPort);
@@ -63,35 +79,30 @@ export default () => {
 
     return (
         <Group heading="Instructions">
-            <p>nRF9160 hardware is required to use this application.</p>
-            <Button
-                className="user-guide-link"
-                variant="link"
-                onClick={() => openUrl(urls.gettingStarted9160)}
-            >
-                Getting started with nRF9160
-            </Button>
-            <Button
-                className="user-guide-link"
-                variant="link"
-                onClick={() => openUrl(urls.gettingStartedThingy91)}
-            >
-                Getting started with Thingy:91
-            </Button>
-            <Button
-                className="user-guide-link"
-                variant="link"
-                onClick={() => openUrl(urls.buy9160)}
-            >
-                Buy nRF9160
-            </Button>
-            <Button
-                variant="link"
-                className="user-guide-link"
-                onClick={() => openUrl(urls.buyThingy91)}
-            >
-                Buy Thingy:91
-            </Button>
+            <p>
+                nRF9160 hardware is required to use this application. We
+                recommend our{' '}
+                <Link onClick={() => openUrl(urls.infoOnDk)}>
+                    nRF9160 development kit
+                </Link>{' '}
+                or
+                <Link onClick={() => openUrl(urls.infoOnThingy)}>
+                    Thingy:91
+                </Link>
+                :
+            </p>
+            <ul>
+                <li>
+                    <Link onClick={() => openUrl(urls.buyDk)}>
+                        Buy nRF9160 DK
+                    </Link>
+                </li>
+                <li>
+                    <Link onClick={() => openUrl(urls.buyThingy)}>
+                        Buy Thingy:91
+                    </Link>
+                </li>
+            </ul>
             <hr />
         </Group>
     );

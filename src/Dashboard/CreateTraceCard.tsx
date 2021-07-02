@@ -69,8 +69,9 @@ export default () => (
                     </ul>
                 </li>
                 <li>
-                    Select which serialport to collect the trace from. If you
-                    are on Windows or Linux the application will attempt to
+                    Attach the device, select it in the upper left corner and
+                    then select which serialport to collect the trace from. If
+                    you are on Windows or Linux the application will attempt to
                     detect the correct serialport to use, but this selection can
                     be overridden.
                     <p className="help-text">

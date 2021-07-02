@@ -48,7 +48,8 @@ export default () => (
                 This app is currently in an early stage of development, and we
                 are very interested in receiving feedback on it to help us make
                 the app as useful as possible. So if you have any changes you
-                want made, please send us an email by clicking the button below.
+                want made, please send us an email to{' '}
+                <b>ncd-noreply@nordicsemi.no</b> by clicking the button below.
             </p>
             <Button
                 className="secondary-btn w-100 mt-2"
@@ -60,21 +61,20 @@ export default () => (
             </Button>
         </section>
         <section>
-            <h5>Upcoming features</h5>
-            <p>
-                We plan to add several features to this app in the near future.
-                These features include:{' '}
-            </p>
+            <h5>Known bugs</h5>
+            <p>We are aware of at least these problems: </p>
             <ul>
                 <li>
-                    A terminal for communicating with the modem by AT-commands
-                    with its very own macro builder
+                    Starting a trace from a device and quickly stopping again
+                    can crash the app. Workaround: Do not do it or restart the
+                    app.
                 </li>
                 <li>
-                    A dashboard to monitor various parameters such as RSSI,
-                    connectivity, data usage etc.
+                    Starting a PCAP trace from a device and stopping before the
+                    message “Detected modem firmware with UUID …” appears in the
+                    log can freeze the app. Workarund: Wait long enough or
+                    restart the app.
                 </li>
-                <li>GPS visualization</li>
             </ul>
         </section>
     </Card>
