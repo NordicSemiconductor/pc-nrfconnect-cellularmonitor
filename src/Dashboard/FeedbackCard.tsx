@@ -48,7 +48,8 @@ export default () => (
                 This app is currently in an early stage of development, and we
                 are very interested in receiving feedback on it to help us make
                 the app as useful as possible. So if you have any changes you
-                want made, please send us an email by clicking the button below.
+                want made, please send us an email to{' '}
+                <b>ncd-noreply@nordicsemi.no</b> by clicking the button below.
             </p>
             <Button
                 className="secondary-btn w-100 mt-2"

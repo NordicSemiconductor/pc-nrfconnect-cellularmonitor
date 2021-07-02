@@ -44,9 +44,9 @@ export default () => (
     <Card title="Converting a trace">
         <section>
             You can click on <b>Convert Raw Trace to PCAP</b>, located in the
-            side panel, select a raw trace file (e.g. created by this app or the{' '}
-            <em>Trace Collector</em>) and convert it into a PCAP file, which can
-            then be opened e.g. in <em>Wireshark</em>.
+            side panel, select a raw trace file (e.g. created by this app or the
+            original <em>Trace Collector</em>) and convert it into a PCAP file,
+            which can then be opened e.g. in <em>Wireshark</em>.
         </section>
 
         <section>
@@ -61,7 +61,7 @@ export default () => (
             <p>
                 PCAP files are used to open and inspect traffic details in{' '}
                 <em>Wireshark</em>. PCAP files contain a subset of the details
-                of a RAW file.
+                of a RAW file, such as IP traffic and AT commands.
             </p>
         </section>
         <section>
