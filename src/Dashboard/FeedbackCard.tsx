@@ -42,7 +42,7 @@ const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
 
 export default () => (
     // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
-    <Card title="Feedback & Upcoming Features">
+    <Card title="Feedback">
         <section>
             <p>
                 This app is currently in an early stage of development, and we
@@ -59,23 +59,6 @@ export default () => (
             >
                 Give feedback
             </Button>
-        </section>
-        <section>
-            <h5>Known bugs</h5>
-            <p>We are aware of at least these problems: </p>
-            <ul>
-                <li>
-                    Starting a trace from a device and quickly stopping again
-                    can crash the app. Workaround: Do not do it or restart the
-                    app.
-                </li>
-                <li>
-                    Starting a PCAP trace from a device and stopping before the
-                    message “Detected modem firmware with UUID …” appears in the
-                    log can freeze the app. Workarund: Wait long enough or
-                    restart the app.
-                </li>
-            </ul>
         </section>
     </Card>
 );
