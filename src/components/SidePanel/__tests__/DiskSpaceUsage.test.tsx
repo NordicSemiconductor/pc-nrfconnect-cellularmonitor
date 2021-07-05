@@ -37,7 +37,7 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { setTraceSize } from '../../../actions';
+import { setTraceSize } from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
 import DiskSpaceUsage from '../DiskSpaceUsage/DiskSpaceUsage';
 

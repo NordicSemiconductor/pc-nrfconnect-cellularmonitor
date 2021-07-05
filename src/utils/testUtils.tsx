@@ -48,7 +48,7 @@ import {
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import reducer from '../reducer';
+import reducer from '../reducers';
 import { TDispatch } from '../thunk';
 
 jest.mock('check-disk-space');

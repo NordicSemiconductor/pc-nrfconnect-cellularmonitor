@@ -69,7 +69,7 @@ export const autoDetectDbRootFolder = path.join(
     path.sep
 );
 
-export const getManualDbFilePath = (): string | undefined =>
+export const getManualDbFilePath = () =>
     store<StoreSchema>().get(MANUAL_DB_FILE_PATH_KEY);
 export const setManualDbFilePath = (manualDbFilePath: string) =>
     store<StoreSchema>().set(MANUAL_DB_FILE_PATH_KEY, manualDbFilePath);
@@ -90,7 +90,6 @@ const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
 export const getSerialPort = (serialNumber: string) => {
     return serialPorts()[serialNumber];
 };
-
 export const setSerialPort = (serialNumber: string, port: string) =>
     store<StoreSchema>().set(SERIALPORTS, {
         ...serialPorts(),

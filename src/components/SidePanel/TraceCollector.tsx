@@ -40,8 +40,8 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
+import { getSerialPort } from '../../features/tracing/traceSlice';
 import { TRACE_FORMATS, TraceFormat } from '../../nrfml/traceFormat';
-import { getSerialPort } from '../../reducer';
 import {
     getTraceFormat as getStoredTraceFormat,
     setTraceFormat as setStoredTraceFormat,

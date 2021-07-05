@@ -2,8 +2,8 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { getSerialPort } from '../../features/tracing/traceSlice';
 import { convertTraceFile } from '../../nrfml/nrfml';
-import { getSerialPort } from '../../reducer';
 import { askForTraceFile } from '../../utils/fileUtils';
 
 export default () => {

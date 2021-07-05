@@ -34,21 +34,19 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createAction } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 
-import { Modem } from '../modem/modem';
-import { TaskId } from '../nrfml/nrfml';
+import modemReducer, { ModemState } from './features/modem/modemSlice';
+import traceReducer, { TraceState } from './features/tracing/traceSlice';
 
-export const setNrfmlTaskId = createAction<TaskId | null>('SET_NRFML_TASK_ID');
-export const setModem = createAction<Modem | null>('SET_MODEM');
-export const setSerialPort = createAction<string | null>('SET_SERIALPORT');
-export const setAvailableSerialPorts = createAction<string[]>(
-    'SET_AVAILABLE_SERIALPORTS'
-);
-export const setTracePath = createAction<string>('SET_TRACE_PATH');
-export const setTraceSize = createAction<number>('SET_TRACE_SIZE');
-export const setManualDbFilePath = createAction<string>(
-    'SET_MANUAL_DB_FILE_PATH'
-);
-export const resetManualDbFilePath = createAction('RESET_MANUAL_DB_FILE_PATH');
-export const setWiresharkPath = createAction<string>('SET_WIRESHARK_PATH');
+export type RootState = {
+    app: {
+        modem: ModemState;
+        trace: TraceState;
+    };
+};
+
+export default combineReducers({
+    modem: modemReducer,
+    trace: traceReducer,
+});

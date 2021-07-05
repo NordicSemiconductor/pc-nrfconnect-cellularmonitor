@@ -36,10 +36,13 @@
 
 import { Device, logger } from 'pc-nrfconnect-shared';
 
+import {
+    setAvailableSerialPorts,
+    setSerialPort,
+} from '../features/tracing/traceSlice';
 import { TAction } from '../thunk';
 import { getSerialPorts, pickSerialPort } from '../utils/serialport';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
-import { setAvailableSerialPorts, setSerialPort } from '.';
 
 export const closeDevice = (): TAction => dispatch => {
     logger.info('Closing device');
