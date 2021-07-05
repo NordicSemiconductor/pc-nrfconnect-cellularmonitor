@@ -36,35 +36,55 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import FormLabel from 'react-bootstrap/FormLabel';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { truncateMiddle } from '../utils';
-import { openInFolder } from '../utils/fileUtils';
+import playSvg from '../../../resources/play-circle.svg';
+import stopSvg from '../../../resources/stop-circle.svg';
+import { startTrace, stopTrace } from '../../nrfml/nrfml';
+import { TraceFormat } from '../../nrfml/traceFormat';
+import { getNrfmlTaskId } from '../../reducer';
 
-type FilePathLinkProps = {
-    filePath: string;
-    label?: JSX.Element | string;
-    clipStart?: number;
-    clipEnd?: number;
-    displayPath?: string;
+type StartStopProps = {
+    traceFormat: TraceFormat;
+    isTracing: boolean;
+    setIsTracing: (isTracing: boolean) => void;
 };
 
-export default ({
-    filePath,
-    label,
-    clipStart,
-    clipEnd,
-    displayPath = filePath,
-}: FilePathLinkProps) => (
-    <div className="filepath-container">
-        {label && <FormLabel className="w-100">{label}</FormLabel>}
-        <Button
-            variant="link"
-            className="filepath-link"
-            title={filePath}
-            onClick={() => openInFolder(filePath)}
-        >
-            {truncateMiddle(displayPath, clipStart, clipEnd)}
-        </Button>
-    </div>
-);
+export default ({ traceFormat, isTracing, setIsTracing }: StartStopProps) => {
+    const dispatch = useDispatch();
+    const nrfmlTaskId = useSelector(getNrfmlTaskId);
+
+    const start = () => {
+        setIsTracing(true);
+        dispatch(startTrace(traceFormat));
+    };
+
+    const stop = () => {
+        setIsTracing(false);
+        dispatch(stopTrace(nrfmlTaskId));
+    };
+
+    return (
+        <>
+            {isTracing ? (
+                <Button
+                    className="w-100 secondary-btn start-stop active-animation"
+                    variant="secondary"
+                    onClick={stop}
+                >
+                    <img alt="" src={stopSvg} />
+                    Stop tracing
+                </Button>
+            ) : (
+                <Button
+                    className="w-100 secondary-btn start-stop"
+                    variant="secondary"
+                    onClick={start}
+                >
+                    <img alt="" src={playSvg} />
+                    Start tracing
+                </Button>
+            )}
+        </>
+    );
+};

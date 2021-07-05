@@ -35,36 +35,44 @@
  */
 
 import React from 'react';
+import prettyBytes from 'pretty-bytes';
 
-import { setAvailableSerialPorts, setSerialPort } from '../../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
-import TraceCollector from '../TraceCollector';
+import { setTraceSize } from '../../../actions';
+import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
+import DiskSpaceUsage from '../DiskSpaceUsage/DiskSpaceUsage';
 
-mockedCheckDiskSpace.mockImplementation(
-    () =>
-        new Promise(resolve => {
-            resolve({ free: 0, size: 0 });
-        })
-);
+const FREE = 100;
+const TOTAL = 200;
 
-const serialPortActions = [
-    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
-    setSerialPort('COM1'),
-];
-
-describe('TraceCollector', () => {
-    it('should disable Trace format selector while tracing', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const traceFormatButton = await screen.findByText('raw');
-        expect(traceFormatButton).toBeDisabled();
+describe('Disk space usage', () => {
+    it('should display free and total disk space', async () => {
+        mockedCheckDiskSpace.mockImplementation(
+            () =>
+                new Promise(resolve => {
+                    resolve({
+                        free: FREE,
+                        size: TOTAL,
+                    });
+                })
+        );
+        const screen = render(<DiskSpaceUsage />);
+        expect(await screen.findByText(prettyBytes(FREE))).toBeInTheDocument();
+        expect(await screen.findByText(prettyBytes(TOTAL))).toBeInTheDocument();
     });
 
-    it('button text should reflect tracing state', async () => {
-        const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const stopButton = await screen.findByText('Stop tracing');
-        fireEvent.click(stopButton);
-        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+    it('should display loading message if disk is still unknown', async () => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        const screen = render(<DiskSpaceUsage />);
+        const loadingMessage = 'Loading';
+        const loadingBoxes = await screen.findAllByText(loadingMessage);
+        expect(loadingBoxes.length).toBe(2);
+    });
+
+    it('should display the current trace size', async () => {
+        const traceSize = 50;
+        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
+        expect(
+            await screen.findByText(prettyBytes(traceSize))
+        ).toBeInTheDocument();
     });
 });

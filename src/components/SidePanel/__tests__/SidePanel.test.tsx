@@ -35,56 +35,44 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { useDispatch, useSelector } from 'react-redux';
 
-import playSvg from '../../resources/play-circle.svg';
-import stopSvg from '../../resources/stop-circle.svg';
-import { startTrace, stopTrace } from '../nrfml/nrfml';
-import { TraceFormat } from '../nrfml/traceFormat';
-import { getNrfmlTaskId } from '../reducer';
+import { setAvailableSerialPorts, setSerialPort } from '../../../actions';
+import {
+    fireEvent,
+    mockedCheckDiskSpace,
+    render,
+} from '../../../utils/testUtils';
+import SidePanel from '../SidePanel';
 
-type StartStopProps = {
-    traceFormat: TraceFormat;
-    isTracing: boolean;
-    setIsTracing: (isTracing: boolean) => void;
-};
+const serialPortActions = [
+    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
+    setSerialPort('COM1'),
+];
 
-export default ({ traceFormat, isTracing, setIsTracing }: StartStopProps) => {
-    const dispatch = useDispatch();
-    const nrfmlTaskId = useSelector(getNrfmlTaskId);
+describe('Sidepanel functionality', () => {
+    beforeEach(() => {
+        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+    });
 
-    const start = () => {
-        setIsTracing(true);
-        dispatch(startTrace(traceFormat));
-    };
+    it('should store RAW as .bin', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(screen.getByText('raw'));
+        fireEvent.click(screen.getByText('Start tracing'));
+        expect(
+            await screen.findByText('.bin', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
+    });
 
-    const stop = () => {
-        setIsTracing(false);
-        dispatch(stopTrace(nrfmlTaskId));
-    };
-
-    return (
-        <>
-            {isTracing ? (
-                <Button
-                    className="w-100 secondary-btn start-stop active-animation"
-                    variant="secondary"
-                    onClick={stop}
-                >
-                    <img alt="" src={stopSvg} />
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={start}
-                >
-                    <img alt="" src={playSvg} />
-                    Start tracing
-                </Button>
-            )}
-        </>
-    );
-};
+    it('should store PCAP as .pcap', async () => {
+        const screen = render(<SidePanel />, serialPortActions);
+        fireEvent.click(await screen.findByText('pcap'));
+        fireEvent.click(screen.getByText('Start tracing'));
+        expect(
+            await screen.findByText('.pcapng', {
+                exact: false,
+            })
+        ).toBeInTheDocument();
+    });
+});

@@ -39,10 +39,10 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
-import helpIcon from '../../resources/help-circle-outline.svg';
-import { resetManualDbFilePath, setManualDbFilePath } from '../actions';
-import { getManualDbFilePath } from '../reducer';
-import { askForTraceDbFile } from '../utils/fileUtils';
+import helpIcon from '../../../resources/help-circle-outline.svg';
+import { resetManualDbFilePath, setManualDbFilePath } from '../../actions';
+import { getManualDbFilePath } from '../../reducer';
+import { askForTraceDbFile } from '../../utils/fileUtils';
 import FilePathLink from './FilePathLink';
 
 const HelpOnTraceDb = () => (

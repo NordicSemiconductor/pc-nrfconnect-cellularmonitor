@@ -34,49 +34,44 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import checkDiskSpace from 'check-disk-space';
+import { getAppDataDir } from 'pc-nrfconnect-shared';
 
-import { setSerialPort } from '../actions';
-import { getAvailableSerialPorts, getSelectedSerialNumber } from '../reducer';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
-import { truncateMiddle } from '../utils';
-import { setSerialPort as persistSerialPort } from '../utils/store';
+import { getTraceSize } from '../../../reducer';
+import DiskSpaceUsageBox from './DiskSpaceUsageBox';
 
-type SerialPortProps = {
-    disabled: boolean;
-    selectedSerialPort: string;
-};
+import './diskspaceusage.scss';
 
-export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
-    const dispatch = useDispatch();
-    const availablePorts = useSelector(getAvailableSerialPorts);
-    const serialNumber = useSelector(getSelectedSerialNumber);
+export default () => {
+    const [freeSpace, setFreeSpace] = useState<number | undefined>();
+    const [totalSize, setTotalSize] = useState<number | undefined>();
+    const traceSize = useSelector(getTraceSize);
 
-    const updateSerialPort = (port: string) => () => {
-        dispatch(setSerialPort(port));
-        persistSerialPort(serialNumber, port);
-    };
+    const checkDisk = () =>
+        checkDiskSpace(getAppDataDir())
+            .then(({ free, size }) => {
+                setFreeSpace(free);
+                setTotalSize(size);
+            })
+            .catch(err => console.log(err));
 
-    const serialPortSelect = availablePorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
+    useEffect(() => {
+        checkDisk();
+        const timerId = setInterval(() => {
+            checkDisk();
+        }, 5000);
+        return () => {
+            clearInterval(timerId);
+        };
+    }, []);
 
     return (
-        <Group heading="Serialport trace capture">
-            <div className="serialport-selection">
-                <Dropdown
-                    disabled={disabled}
-                    title={truncateMiddle(selectedSerialPort, 20, 8)}
-                >
-                    {serialPortSelect}
-                </Dropdown>
-            </div>
-        </Group>
+        <div className="disk-space-container">
+            <DiskSpaceUsageBox label="Disk" value={totalSize} />
+            <DiskSpaceUsageBox label="Free" value={freeSpace} />
+            <DiskSpaceUsageBox label="File" value={traceSize} />
+        </div>
     );
 };
