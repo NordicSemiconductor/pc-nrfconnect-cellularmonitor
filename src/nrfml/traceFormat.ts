@@ -38,7 +38,7 @@ export const TRACE_FORMATS = ['raw', 'pcap'] as const;
 export type TraceFormat = typeof TRACE_FORMATS[number];
 
 export const fileExtension = (format: TraceFormat) =>
-    format === 'pcap' ? '.pcap' : '.bin';
+    format === 'pcap' ? '.pcapng' : '.bin';
 
 export const sinkName = (format: TraceFormat) =>
     format === 'pcap' ? 'nrfml-pcap-sink' : 'nrfml-raw-file-sink';
