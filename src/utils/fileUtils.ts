@@ -62,7 +62,7 @@ export const askForTraceFile = () =>
 
 export const askForPcapFile = () =>
     askForFile([
-        { name: 'PCAP', extensions: ['pcap'] },
+        { name: 'PCAP', extensions: ['pcapng'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 

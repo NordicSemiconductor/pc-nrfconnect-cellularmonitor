@@ -66,7 +66,7 @@ describe('Sidepanel functionality', () => {
         fireEvent.click(await screen.findByText('pcap'));
         fireEvent.click(screen.getByText('Start tracing'));
         expect(
-            await screen.findByText('.pcap', {
+            await screen.findByText('.pcapng', {
                 exact: false,
             })
         ).toBeInTheDocument();

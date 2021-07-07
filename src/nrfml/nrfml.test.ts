@@ -60,7 +60,7 @@ describe('nrfml', () => {
         expect(store.getActions()).toEqual([
             { type: 'SET_TRACE_SIZE', payload: 0 },
             { type: 'SET_NRFML_TASK_ID', payload: 1 },
-            { type: 'SET_TRACE_PATH', payload: 'somePath.pcap' },
+            { type: 'SET_TRACE_PATH', payload: 'somePath.pcapng' },
         ]);
     });
 
@@ -79,7 +79,7 @@ describe('nrfml', () => {
                     type: 'SET_TRACE_PATH',
                     payload: path.join(
                         mockedDataDir,
-                        'trace-2000-01-01T00-00-00.000Z.pcap'
+                        'trace-2000-01-01T00-00-00.000Z.pcapng'
                     ),
                 },
                 { type: 'SET_NRFML_TASK_ID', payload: 1 },
