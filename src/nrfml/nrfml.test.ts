@@ -46,8 +46,10 @@ const SET_TASK_ID_ACTION = 'trace/setTaskId';
 
 const initialState = {
     app: {
-        traceSize: 0,
-        serialPort: 'COM1',
+        trace: {
+            traceSize: 0,
+            serialPort: 'COM1',
+        },
     },
 };
 
