@@ -38,7 +38,7 @@ import { getPluginsDir } from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { TRACE_FORMATS, TraceFormat } from '../nrfml/traceFormat';
+import { TRACE_FORMATS, TraceFormat } from '../features/tracing/traceFormat';
 
 interface DevicePort {
     [serialNumber: string]: string;
@@ -69,7 +69,7 @@ export const autoDetectDbRootFolder = path.join(
     path.sep
 );
 
-export const getManualDbFilePath = (): string | undefined =>
+export const getManualDbFilePath = () =>
     store<StoreSchema>().get(MANUAL_DB_FILE_PATH_KEY);
 export const setManualDbFilePath = (manualDbFilePath: string) =>
     store<StoreSchema>().set(MANUAL_DB_FILE_PATH_KEY, manualDbFilePath);
@@ -90,7 +90,6 @@ const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
 export const getSerialPort = (serialNumber: string) => {
     return serialPorts()[serialNumber];
 };
-
 export const setSerialPort = (serialNumber: string, port: string) =>
     store<StoreSchema>().set(SERIALPORTS, {
         ...serialPorts(),

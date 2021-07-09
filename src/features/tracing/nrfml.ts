@@ -41,11 +41,16 @@ import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
-import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
-import { getManualDbFilePath, getSerialPort } from '../reducer';
-import { TAction } from '../thunk';
-import { autoDetectDbRootFolder } from '../utils/store';
+import { TAction } from '../../thunk';
+import { autoDetectDbRootFolder } from '../../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
+import {
+    getManualDbFilePath,
+    getSerialPort,
+    setTaskId,
+    setTracePath,
+    setTraceSize,
+} from './traceSlice';
 
 export type TaskId = number;
 
@@ -151,7 +156,7 @@ const convertTraceFile = (sourcePath: string): TAction => (
                 });
         }
     );
-    dispatch(setNrfmlTaskId(taskId));
+    dispatch(setTaskId(taskId));
     dispatch(setTracePath(destinationPath));
 };
 
@@ -225,13 +230,13 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     logger.info(`Started tracefile: ${filePath}`);
 
     dispatch(setTracePath(filePath));
-    dispatch(setNrfmlTaskId(taskId));
+    dispatch(setTaskId(taskId));
 };
 
 const stopTrace = (taskId: TaskId | null): TAction => dispatch => {
     if (taskId === null) return;
     nrfml.stop(taskId);
-    dispatch(setNrfmlTaskId(null));
+    dispatch(setTaskId(null));
 };
 
 export { convertTraceFile, startTrace, stopTrace };

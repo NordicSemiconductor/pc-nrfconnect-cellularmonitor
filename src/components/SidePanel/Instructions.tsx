@@ -40,7 +40,7 @@ import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Group, openUrl } from 'pc-nrfconnect-shared';
 
-import { getSerialPort } from '../../reducer';
+import { getSerialPort } from '../../features/tracing/traceSlice';
 
 import './sidepanel.scss';
 

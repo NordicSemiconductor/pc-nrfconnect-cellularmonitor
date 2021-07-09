@@ -40,7 +40,7 @@ import { App } from 'pc-nrfconnect-shared';
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import SidePanel from './components/SidePanel/SidePanel';
-import reducer from './reducer';
+import reducer from './reducers';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';

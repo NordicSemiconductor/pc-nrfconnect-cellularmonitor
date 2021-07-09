@@ -36,7 +36,10 @@
 
 import React from 'react';
 
-import { setAvailableSerialPorts, setSerialPort } from '../../../actions';
+import {
+    setAvailableSerialPorts,
+    setSerialPort,
+} from '../../../features/tracing/traceSlice';
 import {
     fireEvent,
     mockedCheckDiskSpace,

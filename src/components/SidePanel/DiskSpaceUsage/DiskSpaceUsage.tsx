@@ -39,7 +39,7 @@ import { useSelector } from 'react-redux';
 import checkDiskSpace from 'check-disk-space';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 
-import { getTraceSize } from '../../../reducer';
+import { getTraceSize } from '../../../features/tracing/traceSlice';
 import DiskSpaceUsageBox from './DiskSpaceUsageBox';
 
 import './diskspaceusage.scss';

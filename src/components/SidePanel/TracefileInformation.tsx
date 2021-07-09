@@ -38,7 +38,7 @@ import React from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 
-import { getTracePath } from '../../reducer';
+import { getTracePath } from '../../features/tracing/traceSlice';
 import { getNameAndDirectory } from '../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import FilePathLink from './FilePathLink';

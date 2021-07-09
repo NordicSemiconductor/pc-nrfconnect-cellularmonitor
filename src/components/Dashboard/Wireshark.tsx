@@ -39,8 +39,10 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { openUrl } from 'pc-nrfconnect-shared';
 
-import { setWiresharkPath } from '../../actions';
-import { getWiresharkPath } from '../../reducer';
+import {
+    getWiresharkPath,
+    setWiresharkPath,
+} from '../../features/tracing/traceSlice';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
 import { findWireshark, openInWireshark } from '../../utils/wireshark';
 

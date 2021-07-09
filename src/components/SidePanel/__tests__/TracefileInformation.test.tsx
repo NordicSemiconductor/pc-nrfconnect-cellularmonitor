@@ -36,7 +36,7 @@
 
 import React from 'react';
 
-import { setTracePath } from '../../../actions';
+import { setTracePath } from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
 import TracefileInformation from '../TracefileInformation';
 

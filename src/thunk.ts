@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
-import { RootState } from './reducer';
+import { RootState } from './reducers';
 
 export type TAction = ThunkAction<void, RootState, null, AnyAction>;
 export type TDispatch = ThunkDispatch<RootState, null, AnyAction>;

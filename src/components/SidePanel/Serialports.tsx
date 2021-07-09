@@ -38,11 +38,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
-import { setSerialPort } from '../../actions';
 import {
     getAvailableSerialPorts,
     getSelectedSerialNumber,
-} from '../../reducer';
+    setSerialPort,
+} from '../../features/tracing/traceSlice';
 import { truncateMiddle } from '../../utils';
 import { setSerialPort as persistSerialPort } from '../../utils/store';
 import { Dropdown, DropdownItem } from '../Shared/Dropdown';
