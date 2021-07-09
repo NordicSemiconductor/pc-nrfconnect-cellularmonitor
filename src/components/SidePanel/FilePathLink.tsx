@@ -35,34 +35,36 @@
  */
 
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import FormLabel from 'react-bootstrap/FormLabel';
-import { useSelector } from 'react-redux';
 
-import { getTracePath } from '../reducer';
-import { getNameAndDirectory } from '../utils/fileUtils';
-import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
-import FilePathLink from './FilePathLink';
+import { truncateMiddle } from '../../utils';
+import { openInFolder } from '../../utils/fileUtils';
 
-export default () => {
-    const tracePath = useSelector(getTracePath);
-    if (tracePath === '') {
-        return null;
-    }
-    const [filename, directory] = getNameAndDirectory(tracePath);
-
-    return (
-        <>
-            <FilePathLink
-                label="Trace output location"
-                filePath={tracePath}
-                displayPath={directory}
-            />
-            <DiskSpaceUsage />
-
-            <div className="trace-file-container">
-                <FormLabel>Filename</FormLabel>
-                <span className="trace-file-name">{filename}</span>
-            </div>
-        </>
-    );
+type FilePathLinkProps = {
+    filePath: string;
+    label?: JSX.Element | string;
+    clipStart?: number;
+    clipEnd?: number;
+    displayPath?: string;
 };
+
+export default ({
+    filePath,
+    label,
+    clipStart,
+    clipEnd,
+    displayPath = filePath,
+}: FilePathLinkProps) => (
+    <div className="filepath-container">
+        {label && <FormLabel className="w-100">{label}</FormLabel>}
+        <Button
+            variant="link"
+            className="filepath-link"
+            title={filePath}
+            onClick={() => openInFolder(filePath)}
+        >
+            {truncateMiddle(displayPath, clipStart, clipEnd)}
+        </Button>
+    </div>
+);

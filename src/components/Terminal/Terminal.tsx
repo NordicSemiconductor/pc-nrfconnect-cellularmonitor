@@ -42,9 +42,9 @@ import * as ansi from 'ansi-escapes';
 import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
-import useFitAddon from '../hooks/useFitAddon';
-import { Response } from '../modem/modem';
-import { getModem } from '../reducer';
+import useFitAddon from '../../hooks/useFitAddon';
+import { Response } from '../../modem/modem';
+import { getModem } from '../../reducer';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';

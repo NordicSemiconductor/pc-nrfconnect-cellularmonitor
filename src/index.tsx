@@ -37,10 +37,10 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
-import Dashboard from './Dashboard/Dashboard';
-import DeviceSelector from './DeviceSelector';
+import Dashboard from './components/Dashboard/Dashboard';
+import DeviceSelector from './components/DeviceSelector';
+import SidePanel from './components/SidePanel/SidePanel';
 import reducer from './reducer';
-import SidePanel from './SidePanel/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';

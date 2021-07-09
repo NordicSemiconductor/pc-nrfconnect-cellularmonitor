@@ -35,40 +35,34 @@
  */
 
 import React from 'react';
+import FormLabel from 'react-bootstrap/FormLabel';
+import { useSelector } from 'react-redux';
 
-import { setAvailableSerialPorts, setSerialPort } from '../../actions';
-import { fireEvent, mockedCheckDiskSpace, render } from '../../utils/testUtils';
-import SidePanel from '../SidePanel';
+import { getTracePath } from '../../reducer';
+import { getNameAndDirectory } from '../../utils/fileUtils';
+import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
+import FilePathLink from './FilePathLink';
 
-const serialPortActions = [
-    setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
-    setSerialPort('COM1'),
-];
+export default () => {
+    const tracePath = useSelector(getTracePath);
+    if (tracePath === '') {
+        return null;
+    }
+    const [filename, directory] = getNameAndDirectory(tracePath);
 
-describe('Sidepanel functionality', () => {
-    beforeEach(() => {
-        mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
-    });
+    return (
+        <>
+            <FilePathLink
+                label="Trace output location"
+                filePath={tracePath}
+                displayPath={directory}
+            />
+            <DiskSpaceUsage />
 
-    it('should store RAW as .bin', async () => {
-        const screen = render(<SidePanel />, serialPortActions);
-        fireEvent.click(screen.getByText('raw'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.bin', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
-    it('should store PCAP as .pcap', async () => {
-        const screen = render(<SidePanel />, serialPortActions);
-        fireEvent.click(await screen.findByText('pcap'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.pcapng', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-});
+            <div className="trace-file-container">
+                <FormLabel>Filename</FormLabel>
+                <span className="trace-file-name">{filename}</span>
+            </div>
+        </>
+    );
+};
