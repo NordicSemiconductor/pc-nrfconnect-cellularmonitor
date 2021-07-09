@@ -1,3 +1,7 @@
+## 0.0.9
+### Added
+- User Guide section with link to introductory video
+
 ## 0.0.8
 ### Bugfixes
 - Use version 0.5.8 of nrf-monitor-lib-js which should fix the following known issues:

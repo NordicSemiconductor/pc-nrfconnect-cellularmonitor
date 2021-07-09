@@ -39,10 +39,11 @@ import Button from 'react-bootstrap/Button';
 import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
+const USER_GUIDE_VIDEO = 'https://www.youtube.com/watch?v=8kB5XA5a2pI';
 
 export default () => (
     // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
-    <Card title="Feedback">
+    <Card title="Feedback & User Guide">
         <section>
             <p>
                 This app is currently in an early stage of development, and we
@@ -54,11 +55,26 @@ export default () => (
             <Button
                 className="secondary-btn w-100 mt-2"
                 variant="secondary"
-                onClick={() => openUrl(`mailto: ${NCD_EMAIL_ADDRESS}`)}
-                title={NCD_EMAIL_ADDRESS}
+                onClick={() => openUrl(`mailto:${NCD_EMAIL_ADDRESS}`)}
+                title={`mailto:${NCD_EMAIL_ADDRESS}`}
             >
                 Give feedback
             </Button>
+        </section>
+        <section>
+            <h5>User guide</h5>
+            Click{' '}
+            <Button
+                variant="link"
+                className="card-links"
+                title={USER_GUIDE_VIDEO}
+                onClick={() => openUrl(USER_GUIDE_VIDEO)}
+            >
+                here
+            </Button>{' '}
+            for a short introductory video showing how to use the{' '}
+            <b>Trace Collector v2</b> for recording modem traces and how to
+            generate files for Wireshark.
         </section>
     </Card>
 );
