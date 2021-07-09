@@ -40,12 +40,12 @@ import { combineReducers } from 'redux';
 import modemReducer, { ModemState } from './features/modem/modemSlice';
 import traceReducer, { TraceState } from './features/tracing/traceSlice';
 
-type State = {
+type AppState = {
     modem: ModemState;
     trace: TraceState;
 };
 
-export type RootState = NrfConnectState<State>;
+export type RootState = NrfConnectState<AppState>;
 
 export default combineReducers({
     modem: modemReducer,
