@@ -36,7 +36,7 @@
 
 import path from 'path';
 
-import { getMockStore, mockedDataDir } from '../utils/testUtils';
+import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
 
 const mockStore = getMockStore();

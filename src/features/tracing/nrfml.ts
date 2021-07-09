@@ -41,16 +41,16 @@ import path from 'path';
 import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
+import { TAction } from '../../thunk';
+import { autoDetectDbRootFolder } from '../../utils/store';
+import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 import {
     getManualDbFilePath,
     getSerialPort,
     setTaskId,
     setTracePath,
     setTraceSize,
-} from '../features/tracing/traceSlice';
-import { TAction } from '../thunk';
-import { autoDetectDbRootFolder } from '../utils/store';
-import { fileExtension, sinkName, TraceFormat } from './traceFormat';
+} from './traceSlice';
 
 export type TaskId = number;
 

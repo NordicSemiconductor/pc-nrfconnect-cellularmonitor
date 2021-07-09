@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { Modem } from '../../modem/modem';
+import { Modem } from './modem';
 
 export interface ModemState {
     readonly modem: Modem | null;

@@ -40,9 +40,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import playSvg from '../../../resources/play-circle.svg';
 import stopSvg from '../../../resources/stop-circle.svg';
+import { startTrace, stopTrace } from '../../features/tracing/nrfml';
+import { TraceFormat } from '../../features/tracing/traceFormat';
 import { getTaskId } from '../../features/tracing/traceSlice';
-import { startTrace, stopTrace } from '../../nrfml/nrfml';
-import { TraceFormat } from '../../nrfml/traceFormat';
 
 type StartStopProps = {
     traceFormat: TraceFormat;

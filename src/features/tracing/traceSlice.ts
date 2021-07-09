@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { TaskId } from '../../nrfml/nrfml';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
@@ -9,6 +8,7 @@ import {
     setManualDbFilePath as setPersistedManualDbFilePath,
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
+import { TaskId } from './nrfml';
 
 export interface TraceState {
     tracePath: string;

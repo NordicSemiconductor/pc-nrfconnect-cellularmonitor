@@ -38,7 +38,7 @@ import { getPluginsDir } from 'nrf-monitor-lib-js';
 import path from 'path';
 import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { TRACE_FORMATS, TraceFormat } from '../nrfml/traceFormat';
+import { TRACE_FORMATS, TraceFormat } from '../features/tracing/traceFormat';
 
 interface DevicePort {
     [serialNumber: string]: string;
