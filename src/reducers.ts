@@ -34,17 +34,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
 import modemReducer, { ModemState } from './features/modem/modemSlice';
 import traceReducer, { TraceState } from './features/tracing/traceSlice';
 
-export type RootState = {
-    app: {
-        modem: ModemState;
-        trace: TraceState;
-    };
+type State = {
+    modem: ModemState;
+    trace: TraceState;
 };
+
+export type RootState = NrfConnectState<State>;
 
 export default combineReducers({
     modem: modemReducer,

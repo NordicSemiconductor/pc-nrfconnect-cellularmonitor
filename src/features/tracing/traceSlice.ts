@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
 
+import { RootState } from '../../reducers';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
@@ -34,7 +34,7 @@ const traceSlice = createSlice({
     name: 'trace',
     initialState: initialState(),
     reducers: {
-        setTaskId: (state, action: PayloadAction<TaskId>) => {
+        setTaskId: (state, action: PayloadAction<TaskId | null>) => {
             state.taskId = action.payload;
         },
         setTracePath: (state, action: PayloadAction<string>) => {
@@ -63,12 +63,6 @@ const traceSlice = createSlice({
         },
     },
 });
-
-type State = {
-    trace: TraceState;
-};
-
-export type RootState = NrfConnectState<State>;
 
 export const getTaskId = (state: RootState) => state.app.trace.taskId;
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;

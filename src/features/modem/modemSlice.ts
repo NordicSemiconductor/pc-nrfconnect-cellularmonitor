@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NrfConnectState } from 'pc-nrfconnect-shared';
 
+import { RootState } from '../../reducers';
 import { Modem } from './modem';
 
 export interface ModemState {
@@ -20,12 +20,6 @@ const modemSlice = createSlice({
         },
     },
 });
-
-type State = {
-    modem: ModemState;
-};
-
-export type RootState = NrfConnectState<State>;
 
 export const getModem = (state: RootState) => state.app.modem.modem;
 
