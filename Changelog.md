@@ -1,3 +1,7 @@
+## 0.0.10 - 2021-08-02
+### Fixed
+- PCAP was not showing received SIBs.
+
 ## 0.0.9 - 2021-07-09
 ### Added
 - User Guide section with link to introductory video.
