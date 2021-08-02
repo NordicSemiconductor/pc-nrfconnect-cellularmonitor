@@ -1,6 +1,9 @@
 ## 0.0.10 - 2021-08-02
 ### Fixed
 - PCAP was not showing received SIBs.
+### Changed
+- App size is reduced.
+- Packet timestamp base is local computer time.
 
 ## 0.0.9 - 2021-07-09
 ### Added
