@@ -43,7 +43,7 @@ import nrfml, {
 import { InsightInitParameters, Sinks } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
-import { deviceInfo} from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
+import { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
@@ -189,7 +189,7 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     const destinationFormat = 'pcap';
     const sinks: Sinks = [];
     const name = sinkName(destinationFormat);
-    const info = deviceInfo(selectedDevice);
+    const info = deviceInfo(selectedDevice ?? {});
 
     if (name === 'nrfml-pcap-sink') {
         sinks.push(<PcapInitParameters>{
@@ -198,7 +198,7 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
                 file_path: filePath,
                 os_name: process.platform,
                 application_name: 'Trace Collector V2 preview',
-                hw_name: `${info.name} ${selectedDevice?.boardVersion}`,
+                hw_name: `${info?.name} ${selectedDevice?.boardVersion}`,
             },
         });
     }
