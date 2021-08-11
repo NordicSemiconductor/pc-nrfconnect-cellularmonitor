@@ -4,7 +4,7 @@
 ### Changed
 - App size is reduced.
 - Packet timestamp base is local computer time.
-- Update nrf-monitor-lib-js to 0.5.13
+- Add more information to pcap-headers showing application and hardware info
 
 ## 0.0.9 - 2021-07-09
 ### Added
