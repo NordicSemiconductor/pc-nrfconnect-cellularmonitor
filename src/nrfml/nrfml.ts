@@ -34,11 +34,15 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
-import { InsightInitParameters } from 'nrf-monitor-lib-js/config/configuration';
+import nrfml, {
+    getPluginsDir,
+    PcapInitParameters,
+    RawFileInitParameters,
+} from 'nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved,prettier/prettier
+import { InsightInitParameters, Sinks } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
-import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
@@ -48,7 +52,6 @@ import { autoDetectDbRootFolder } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 
 export type TaskId = number;
-
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
 
@@ -99,10 +102,15 @@ const convertTraceFile = (sourcePath: string): TAction => (
         path.join(directory, basename) + fileExtension(destinationFormat);
     const manualDbFilePath = getManualDbFilePath(getState());
 
-    const sinkConfig = {
-        name: sinkName(destinationFormat),
-        init_parameters: { file_path: destinationPath },
-    } as const;
+    const nameOfSink = sinkName(destinationFormat);
+    const sink = <PcapInitParameters>{
+        name: nameOfSink,
+        init_parameters: {
+            file_path: destinationPath,
+            os_name: process.platform,
+            application_name: 'Trace Collector V2 preview',
+        },
+    };
 
     let detectedModemFwUuid: unknown;
     let detectedTraceDB: unknown;
@@ -110,7 +118,7 @@ const convertTraceFile = (sourcePath: string): TAction => (
     const taskId = nrfml.start(
         {
             config: { plugins_directory: getPluginsDir() },
-            sinks: [sinkConfig],
+            sinks: [sink],
             sources: [
                 sourceConfig(manualDbFilePath, true, { file_path: sourcePath }),
             ],
@@ -169,19 +177,44 @@ const startTrace = (traceFormat: TraceFormat): TAction => (
     const filePath =
         path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
     const manualDbFilePath = getManualDbFilePath(getState());
+    const state = getState();
 
-    const sinkConfig = {
-        name: sinkName(traceFormat),
-        init_parameters: { file_path: filePath },
-    } as const;
+    // Typing in shared is wrong, do this meanwhile
+    // Task is created in trello to get this fixed in shared
+    // 'devices' is not an array, but an object
+    const selectedDevice = ((state.device.devices as unknown) as {
+        [key: string]: Device;
+    })[state.device.selectedSerialNumber];
 
+    const destinationFormat = 'pcap';
+    const sinks: Sinks = [];
+    const name = sinkName(destinationFormat);
+
+    if (name === 'nrfml-pcap-sink') {
+        sinks.push(<PcapInitParameters>{
+            name,
+            init_parameters: {
+                file_path: filePath,
+                os_name: process.platform,
+                application_name: 'Trace Collector V2 preview',
+                hw_name: `${selectedDevice?.nickname} ${selectedDevice?.boardVersion}`,
+            },
+        });
+    }
+
+    if (name === 'nrfml-raw-file-sink') {
+        sinks.push(<RawFileInitParameters>{
+            name,
+            init_parameters: { file_path: filePath },
+        });
+    }
     let detectedModemFwUuid: unknown = '';
     let detectedTraceDB: unknown = '';
 
     const taskId = nrfml.start(
         {
             config: { plugins_directory: getPluginsDir() },
-            sinks: [sinkConfig],
+            sinks,
             sources: [
                 sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
                     serialport: { path: serialPort },
