@@ -47,24 +47,26 @@ export const closeDevice = (): TAction => dispatch => {
     dispatch(setSerialPort(null));
 };
 
-export const openDevice = (device: Device): TAction => dispatch => {
-    // Reset serial port settings
-    dispatch(setAvailableSerialPorts([]));
-    dispatch(setSerialPort(null));
-    const ports = getSerialPorts(device);
-    if (ports.length > 0) {
-        dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
-    }
-    const persistedPath = getPersistedSerialPort(device.serialNumber);
-    if (persistedPath) {
-        dispatch(setSerialPort(persistedPath));
-        return;
-    }
-    const port = pickSerialPort(ports);
-    const path = port ? port.path : device?.serialport?.path;
-    if (path) {
-        dispatch(setSerialPort(path));
-    } else {
-        logger.error("Couldn't identify serial port");
-    }
-};
+export const openDevice =
+    (device: Device): TAction =>
+    dispatch => {
+        // Reset serial port settings
+        dispatch(setAvailableSerialPorts([]));
+        dispatch(setSerialPort(null));
+        const ports = getSerialPorts(device);
+        if (ports.length > 0) {
+            dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
+        }
+        const persistedPath = getPersistedSerialPort(device.serialNumber);
+        if (persistedPath) {
+            dispatch(setSerialPort(persistedPath));
+            return;
+        }
+        const port = pickSerialPort(ports);
+        const path = port ? port.path : device?.serialport?.path;
+        if (path) {
+            dispatch(setSerialPort(path));
+        } else {
+            logger.error("Couldn't identify serial port");
+        }
+    };

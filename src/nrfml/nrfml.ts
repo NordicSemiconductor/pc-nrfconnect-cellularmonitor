@@ -42,8 +42,8 @@ import nrfml, {
 // eslint-disable-next-line import/no-unresolved,prettier/prettier
 import { InsightInitParameters, Sinks } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
-import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
-import { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
+// eslint-disable-next-line prettier/prettier
+import { Device, deviceInfo, getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
@@ -91,181 +91,189 @@ const sourceConfig = (
     } as const;
 };
 
-const convertTraceFile = (sourcePath: string): TAction => (
-    dispatch,
-    getState
-) => {
-    dispatch(setTraceSize(0));
-    const destinationFormat = 'pcap';
-    const basename = path.basename(sourcePath, '.bin');
-    const directory = path.dirname(sourcePath);
-    const destinationPath =
-        path.join(directory, basename) + fileExtension(destinationFormat);
-    const manualDbFilePath = getManualDbFilePath(getState());
+const convertTraceFile =
+    (sourcePath: string): TAction =>
+    (dispatch, getState) => {
+        dispatch(setTraceSize(0));
+        const destinationFormat = 'pcap';
+        const basename = path.basename(sourcePath, '.bin');
+        const directory = path.dirname(sourcePath);
+        const destinationPath =
+            path.join(directory, basename) + fileExtension(destinationFormat);
+        const manualDbFilePath = getManualDbFilePath(getState());
 
-    const sink = <PcapInitParameters>{
-        name: sinkName(destinationFormat),
-        init_parameters: {
-            file_path: destinationPath,
-            os_name: process.platform,
-            application_name: 'Trace Collector V2 preview',
-        },
-    };
-
-    let detectedModemFwUuid: unknown;
-    let detectedTraceDB: unknown;
-
-    const taskId = nrfml.start(
-        {
-            config: { plugins_directory: getPluginsDir() },
-            sinks: [sink],
-            sources: [
-                sourceConfig(manualDbFilePath, true, { file_path: sourcePath }),
-            ],
-        },
-        err => {
-            if (err != null) {
-                logger.error(`Failed conversion to pcap: ${err.message}`);
-                logger.debug(`Full error: ${JSON.stringify(err)}`);
-            } else {
-                logger.info(`Successfully converted ${basename} to pcap`);
-            }
-        },
-        progress => {
-            if (
-                progress.meta?.modem_db_uuid != null &&
-                detectedModemFwUuid !== progress.meta?.modem_db_uuid
-            ) {
-                detectedModemFwUuid = progress.meta?.modem_db_uuid;
-                logger.info(
-                    `Detected modem firmware with UUID ${detectedModemFwUuid}`
-                );
-            }
-
-            if (
-                progress.meta?.modem_db_path != null &&
-                detectedTraceDB !== progress.meta?.modem_db_path
-            ) {
-                detectedTraceDB = progress.meta?.modem_db_path;
-                logger.info(`Using trace DB ${detectedTraceDB}`);
-            }
-
-            progress.data_offsets
-                ?.filter(
-                    ({ path: progressPath }) => progressPath === destinationPath
-                )
-                .forEach(({ offset }) => {
-                    dispatch(setTraceSize(offset));
-                });
-        }
-    );
-    dispatch(setNrfmlTaskId(taskId));
-    dispatch(setTracePath(destinationPath));
-};
-
-const startTrace = (traceFormat: TraceFormat): TAction => (
-    dispatch,
-    getState
-) => {
-    const serialPort = getSerialPort(getState());
-    if (!serialPort) {
-        logger.error('Select serial port to start tracing');
-        return;
-    }
-    dispatch(setTraceSize(0));
-    const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-    const filePath =
-        path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
-    const manualDbFilePath = getManualDbFilePath(getState());
-    const state = getState();
-
-    // Typing in shared is wrong, do this meanwhile
-    // Task is created in trello to get this fixed in shared
-    // 'devices' is not an array, but an object
-    const selectedDevice = ((state.device.devices as unknown) as {
-        [key: string]: Device;
-    })[state.device.selectedSerialNumber];
-
-    const destinationFormat = 'pcap';
-    const sinks: Sinks = [];
-    const name = sinkName(destinationFormat);
-    const info = deviceInfo(selectedDevice ?? {});
-
-    if (name === 'nrfml-pcap-sink') {
-        sinks.push(<PcapInitParameters>{
-            name,
+        const sink = <PcapInitParameters>{
+            name: sinkName(destinationFormat),
             init_parameters: {
-                file_path: filePath,
+                file_path: destinationPath,
                 os_name: process.platform,
                 application_name: 'Trace Collector V2 preview',
-                hw_name: `${info?.name} ${selectedDevice?.boardVersion}`,
             },
-        });
-    }
+        };
 
-    if (name === 'nrfml-raw-file-sink') {
-        sinks.push(<RawFileInitParameters>{
-            name,
-            init_parameters: { file_path: filePath },
-        });
-    }
-    let detectedModemFwUuid: unknown = '';
-    let detectedTraceDB: unknown = '';
+        let detectedModemFwUuid: unknown;
+        let detectedTraceDB: unknown;
 
-    const taskId = nrfml.start(
-        {
-            config: { plugins_directory: getPluginsDir() },
-            sinks,
-            sources: [
-                sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
-                    serialport: { path: serialPort },
-                }),
-            ],
-        },
-        err => {
-            if (err != null) {
-                logger.error(`Error when creating trace: ${err.message}`);
-                logger.debug(`Full error: ${JSON.stringify(err)}`);
-            } else {
-                logger.info('Finished tracefile');
+        const taskId = nrfml.start(
+            {
+                config: { plugins_directory: getPluginsDir() },
+                sinks: [sink],
+                sources: [
+                    sourceConfig(manualDbFilePath, true, {
+                        file_path: sourcePath,
+                    }),
+                ],
+            },
+            err => {
+                if (err != null) {
+                    logger.error(`Failed conversion to pcap: ${err.message}`);
+                    logger.debug(`Full error: ${JSON.stringify(err)}`);
+                } else {
+                    logger.info(`Successfully converted ${basename} to pcap`);
+                }
+            },
+            progress => {
+                if (
+                    progress.meta?.modem_db_uuid != null &&
+                    detectedModemFwUuid !== progress.meta?.modem_db_uuid
+                ) {
+                    detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                    logger.info(
+                        `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                    );
+                }
+
+                if (
+                    progress.meta?.modem_db_path != null &&
+                    detectedTraceDB !== progress.meta?.modem_db_path
+                ) {
+                    detectedTraceDB = progress.meta?.modem_db_path;
+                    logger.info(`Using trace DB ${detectedTraceDB}`);
+                }
+
+                progress.data_offsets
+                    ?.filter(
+                        ({ path: progressPath }) =>
+                            progressPath === destinationPath
+                    )
+                    .forEach(({ offset }) => {
+                        dispatch(setTraceSize(offset));
+                    });
             }
-        },
-        progress => {
-            if (
-                progress.meta?.modem_db_uuid != null &&
-                detectedModemFwUuid !== progress.meta?.modem_db_uuid
-            ) {
-                detectedModemFwUuid = progress.meta?.modem_db_uuid;
-                logger.info(
-                    `Detected modem firmware with UUID ${detectedModemFwUuid}`
-                );
-            }
+        );
+        dispatch(setNrfmlTaskId(taskId));
+        dispatch(setTracePath(destinationPath));
+    };
 
-            if (
-                progress.meta?.modem_db_path != null &&
-                detectedTraceDB !== progress.meta?.modem_db_path
-            ) {
-                detectedTraceDB = progress.meta?.modem_db_path;
-                logger.info(`Using trace DB ${detectedTraceDB}`);
-            }
-
-            progress.data_offsets
-                ?.filter(({ path: progressPath }) => progressPath === filePath)
-                .forEach(({ offset }) => {
-                    dispatch(setTraceSize(offset));
-                });
+const startTrace =
+    (traceFormat: TraceFormat): TAction =>
+    (dispatch, getState) => {
+        const serialPort = getSerialPort(getState());
+        if (!serialPort) {
+            logger.error('Select serial port to start tracing');
+            return;
         }
-    );
-    logger.info(`Started tracefile: ${filePath}`);
+        dispatch(setTraceSize(0));
+        const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
+        const filePath =
+            path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
+        const manualDbFilePath = getManualDbFilePath(getState());
+        const state = getState();
 
-    dispatch(setTracePath(filePath));
-    dispatch(setNrfmlTaskId(taskId));
-};
+        // Typing in shared is wrong, do this meanwhile
+        // Task is created in trello to get this fixed in shared
+        // 'devices' is not an array, but an object
+        const selectedDevice = (
+            state.device.devices as unknown as {
+                [key: string]: Device;
+            }
+        )[state.device.selectedSerialNumber];
 
-const stopTrace = (taskId: TaskId | null): TAction => dispatch => {
-    if (taskId === null) return;
-    nrfml.stop(taskId);
-    dispatch(setNrfmlTaskId(null));
-};
+        const destinationFormat = 'pcap';
+        const sinks: Sinks = [];
+        const name = sinkName(destinationFormat);
+
+        if (name === 'nrfml-pcap-sink') {
+            const info = deviceInfo(selectedDevice ?? {});
+            console.log(info.icon);
+            sinks.push(<PcapInitParameters>{
+                name,
+                init_parameters: {
+                    file_path: filePath,
+                    os_name: process.platform,
+                    application_name: 'Trace Collector V2 preview',
+                    hw_name: `${info?.name} ${selectedDevice?.boardVersion}`,
+                },
+            });
+        }
+
+        if (name === 'nrfml-raw-file-sink') {
+            sinks.push(<RawFileInitParameters>{
+                name,
+                init_parameters: { file_path: filePath },
+            });
+        }
+        let detectedModemFwUuid: unknown = '';
+        let detectedTraceDB: unknown = '';
+
+        const taskId = nrfml.start(
+            {
+                config: { plugins_directory: getPluginsDir() },
+                sinks,
+                sources: [
+                    sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
+                        serialport: { path: serialPort },
+                    }),
+                ],
+            },
+            err => {
+                if (err != null) {
+                    logger.error(`Error when creating trace: ${err.message}`);
+                    logger.debug(`Full error: ${JSON.stringify(err)}`);
+                } else {
+                    logger.info('Finished tracefile');
+                }
+            },
+            progress => {
+                if (
+                    progress.meta?.modem_db_uuid != null &&
+                    detectedModemFwUuid !== progress.meta?.modem_db_uuid
+                ) {
+                    detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                    logger.info(
+                        `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                    );
+                }
+
+                if (
+                    progress.meta?.modem_db_path != null &&
+                    detectedTraceDB !== progress.meta?.modem_db_path
+                ) {
+                    detectedTraceDB = progress.meta?.modem_db_path;
+                    logger.info(`Using trace DB ${detectedTraceDB}`);
+                }
+
+                progress.data_offsets
+                    ?.filter(
+                        ({ path: progressPath }) => progressPath === filePath
+                    )
+                    .forEach(({ offset }) => {
+                        dispatch(setTraceSize(offset));
+                    });
+            }
+        );
+        logger.info(`Started tracefile: ${filePath}`);
+
+        dispatch(setTracePath(filePath));
+        dispatch(setNrfmlTaskId(taskId));
+    };
+
+const stopTrace =
+    (taskId: TaskId | null): TAction =>
+    dispatch => {
+        if (taskId === null) return;
+        nrfml.stop(taskId);
+        dispatch(setNrfmlTaskId(null));
+    };
 
 export { convertTraceFile, startTrace, stopTrace };

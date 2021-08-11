@@ -40,7 +40,6 @@ import { Card } from 'pc-nrfconnect-shared';
 import Wireshark from './Wireshark';
 
 export default () => (
-    // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
     <Card title="Converting a trace">
         <section>
             You can click on <b>Convert Raw Trace to PCAP</b>, located in the
