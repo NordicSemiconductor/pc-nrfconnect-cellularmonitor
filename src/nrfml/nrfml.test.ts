@@ -46,6 +46,9 @@ const initialState = {
         traceSize: 0,
         serialPort: 'COM1',
     },
+    device: {
+        devices: {},
+    },
 };
 
 const store = mockStore(initialState);
