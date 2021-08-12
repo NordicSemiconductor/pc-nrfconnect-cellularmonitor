@@ -42,7 +42,7 @@ import nrfml, {
 import {
     InsightInitParameters,
     Sinks,
-    // eslint-disable-next-line import/no-unresolved
+    // eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
 } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
