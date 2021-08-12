@@ -1,6 +1,6 @@
 ## 0.0.11
 ### Added
-- PCAP-headers showing application and hardware info
+- Capture file properties to PCAP files: Hardware, OS and application
 ### Fixed
 - Bug which caused conversion to `.pcap` to fail sporadically
 
