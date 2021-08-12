@@ -55,6 +55,8 @@ import { TAction } from '../thunk';
 import { autoDetectDbRootFolder } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 
+const { displayName: appName } = require('../../package.json');
+
 export type TaskId = number;
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
@@ -110,7 +112,7 @@ const convertTraceFile =
             init_parameters: {
                 file_path: destinationPath,
                 os_name: process.platform,
-                application_name: 'Trace Collector V2 preview',
+                application_name: appName,
             },
         };
 
@@ -202,7 +204,7 @@ const startTrace =
                 init_parameters: {
                     file_path: filePath,
                     os_name: process.platform,
-                    application_name: 'Trace Collector V2 preview',
+                    application_name: appName,
                     hw_name: `${info?.name} ${selectedDevice?.boardVersion}`,
                 },
             });
