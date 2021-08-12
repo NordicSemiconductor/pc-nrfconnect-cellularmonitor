@@ -42,6 +42,7 @@ const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
 const USER_GUIDE_VIDEO = 'https://www.youtube.com/watch?v=8kB5XA5a2pI';
 
 export default () => (
+    // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
     <Card title="Feedback & User Guide">
         <section>
             <p>

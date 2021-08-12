@@ -39,6 +39,7 @@ import Button from 'react-bootstrap/Button';
 import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => (
+    // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
     <Card title="Creating a trace">
         <section>
             <ol>

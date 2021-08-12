@@ -1,10 +1,13 @@
+## 0.0.11
+### Added
+- PCAP-headers showing application and hardware info
+
 ## 0.0.10 - 2021-08-02
 ### Fixed
 - PCAP was not showing received SIBs.
 ### Changed
 - App size is reduced.
 - Packet timestamp base is local computer time.
-- Add more information to pcap-headers showing application and hardware info
 
 ## 0.0.9 - 2021-07-09
 ### Added

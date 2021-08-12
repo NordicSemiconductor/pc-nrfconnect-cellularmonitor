@@ -39,11 +39,14 @@ import nrfml, {
     PcapInitParameters,
     RawFileInitParameters,
 } from 'nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved,prettier/prettier
-import { InsightInitParameters, Sinks } from 'nrf-monitor-lib-js/config/configuration';
+import {
+    InsightInitParameters,
+    Sinks,
+    // eslint-disable-next-line import/no-unresolved
+} from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
-// eslint-disable-next-line prettier/prettier
-import { Device, deviceInfo, getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
@@ -180,9 +183,8 @@ const startTrace =
         const manualDbFilePath = getManualDbFilePath(getState());
         const state = getState();
 
-        // Typing in shared is wrong, do this meanwhile
-        // Task is created in trello to get this fixed in shared
-        // 'devices' is not an array, but an object
+        // Typing in shared is wrong, 'devices' is not an array, but an object
+        // Can be removed when shared is updated to 4.28.3 or later
         const selectedDevice = (
             state.device.devices as unknown as {
                 [key: string]: Device;
@@ -195,7 +197,6 @@ const startTrace =
 
         if (name === 'nrfml-pcap-sink') {
             const info = deviceInfo(selectedDevice ?? {});
-            console.log(info.icon);
             sinks.push(<PcapInitParameters>{
                 name,
                 init_parameters: {

@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-tracecollector-preview",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
   "displayName": "Trace Collector V2 preview",
   "repository": {
@@ -44,7 +44,7 @@
     "ansi-escapes": "^4.3.1",
     "check-disk-space": "^2.1.0",
     "electron": "8.2.5",
-    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v4.28.3",
+    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v4.27.3",
     "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
     "pretty-bytes": "^5.6.0",
     "react": "16.13.1",
