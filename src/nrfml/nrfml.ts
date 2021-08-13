@@ -34,16 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import nrfml, {
-    getPluginsDir,
-    PcapInitParameters,
-    RawFileInitParameters,
-} from 'nrf-monitor-lib-js';
-import {
-    InsightInitParameters,
-    Sinks,
-    // eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
-} from 'nrf-monitor-lib-js/config/configuration';
+import nrfml, { getPluginsDir } from 'nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
+import { InsightInitParameters } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
@@ -96,6 +89,28 @@ const sourceConfig = (
     } as const;
 };
 
+const describeDevice = (device: Device) =>
+    `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
+
+const additionalPcapProperties = (format: TraceFormat, device?: Device) => {
+    if (format === 'raw') return {};
+
+    return {
+        os_name: process.platform,
+        application_name: appName,
+        hw_name: device != null ? describeDevice(device) : undefined,
+    };
+};
+
+const sinkConfig = (format: TraceFormat, filePath: string, device?: Device) =>
+    ({
+        name: sinkName(format),
+        init_parameters: {
+            file_path: filePath,
+            ...additionalPcapProperties(format, device),
+        },
+    } as const);
+
 const convertTraceFile =
     (sourcePath: string): TAction =>
     (dispatch, getState) => {
@@ -107,22 +122,13 @@ const convertTraceFile =
             path.join(directory, basename) + fileExtension(destinationFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
-        const sink = <PcapInitParameters>{
-            name: sinkName(destinationFormat),
-            init_parameters: {
-                file_path: destinationPath,
-                os_name: process.platform,
-                application_name: appName,
-            },
-        };
-
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
 
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sink],
+                sinks: [sinkConfig(destinationFormat, destinationPath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -170,9 +176,6 @@ const convertTraceFile =
         dispatch(setTracePath(destinationPath));
     };
 
-const describeDevice = (device: Device) =>
-    `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
-
 const startTrace =
     (traceFormat: TraceFormat): TAction =>
     (dispatch, getState) => {
@@ -187,38 +190,19 @@ const startTrace =
             path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
-        const device = selectedDevice(getState());
-
-        const destinationFormat = 'pcap';
-        const sinks: Sinks = [];
-        const name = sinkName(destinationFormat);
-
-        if (name === 'nrfml-pcap-sink') {
-            sinks.push(<PcapInitParameters>{
-                name,
-                init_parameters: {
-                    file_path: filePath,
-                    os_name: process.platform,
-                    application_name: appName,
-                    hw_name:
-                        device != null ? describeDevice(device) : undefined,
-                },
-            });
-        }
-
-        if (name === 'nrfml-raw-file-sink') {
-            sinks.push(<RawFileInitParameters>{
-                name,
-                init_parameters: { file_path: filePath },
-            });
-        }
         let detectedModemFwUuid: unknown = '';
         let detectedTraceDB: unknown = '';
 
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks,
+                sinks: [
+                    sinkConfig(
+                        traceFormat,
+                        filePath,
+                        selectedDevice(getState())
+                    ),
+                ],
                 sources: [
                     sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
                         serialport: { path: serialPort },
