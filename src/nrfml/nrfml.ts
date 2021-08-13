@@ -189,7 +189,7 @@ const startTrace =
         // Can be removed when shared is updated to 4.28.3 or later
         const selectedDevice = (
             state.device.devices as unknown as {
-                [key: string]: Device;
+                [key: string]: Device | undefined;
             }
         )[state.device.selectedSerialNumber];
 
@@ -198,14 +198,17 @@ const startTrace =
         const name = sinkName(destinationFormat);
 
         if (name === 'nrfml-pcap-sink') {
-            const info = deviceInfo(selectedDevice ?? {});
+            const deviceName =
+                selectedDevice != null
+                    ? deviceInfo(selectedDevice).name
+                    : 'unknown';
             sinks.push(<PcapInitParameters>{
                 name,
                 init_parameters: {
                     file_path: filePath,
                     os_name: process.platform,
                     application_name: appName,
-                    hw_name: `${info?.name} ${selectedDevice?.boardVersion}`,
+                    hw_name: `${deviceName} ${selectedDevice?.boardVersion}`,
                 },
             });
         }
