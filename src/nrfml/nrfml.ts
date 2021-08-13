@@ -46,11 +46,11 @@ import {
 } from 'nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
-import { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
 import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getManualDbFilePath, getSerialPort } from '../reducer';
+import { deviceInfo } from '../shouldBeInShared';
 import { TAction } from '../thunk';
 import { autoDetectDbRootFolder } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
