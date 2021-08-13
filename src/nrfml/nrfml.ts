@@ -170,6 +170,9 @@ const convertTraceFile =
         dispatch(setTracePath(destinationPath));
     };
 
+const describeDevice = (device: Device) =>
+    `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
+
 const startTrace =
     (traceFormat: TraceFormat): TAction =>
     (dispatch, getState) => {
@@ -198,17 +201,16 @@ const startTrace =
         const name = sinkName(destinationFormat);
 
         if (name === 'nrfml-pcap-sink') {
-            const deviceName =
-                selectedDevice != null
-                    ? deviceInfo(selectedDevice).name
-                    : 'unknown';
             sinks.push(<PcapInitParameters>{
                 name,
                 init_parameters: {
                     file_path: filePath,
                     os_name: process.platform,
                     application_name: appName,
-                    hw_name: `${deviceName} ${selectedDevice?.boardVersion}`,
+                    hw_name:
+                        selectedDevice != null
+                            ? describeDevice(selectedDevice)
+                            : undefined,
                 },
             });
         }
