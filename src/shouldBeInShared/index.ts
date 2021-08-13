@@ -34,5 +34,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// eslint-disable-next-line import/prefer-default-export
+import { Device } from 'pc-nrfconnect-shared';
+
+import { RootState } from '../reducer';
+
+// DeviceInfo will be exported since shared v4.28.3
 export { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
+
+// selectedDevice is found in pc-nrfconnect-shared/src/Device/deviceReducer but not exported by shared yet
+export const selectedDevice = (state: RootState) =>
+    (
+        state.device.devices as unknown as {
+            [key: string]: Device | undefined;
+        }
+    )[state.device.selectedSerialNumber];

@@ -50,7 +50,7 @@ import { pathToFileURL } from 'url';
 
 import { setNrfmlTaskId, setTracePath, setTraceSize } from '../actions';
 import { getManualDbFilePath, getSerialPort } from '../reducer';
-import { deviceInfo } from '../shouldBeInShared';
+import { deviceInfo, selectedDevice } from '../shouldBeInShared';
 import { TAction } from '../thunk';
 import { autoDetectDbRootFolder } from '../utils/store';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
@@ -186,15 +186,8 @@ const startTrace =
         const filePath =
             path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
-        const state = getState();
 
-        // Typing in shared is wrong, 'devices' is not an array, but an object
-        // Can be removed when shared is updated to 4.28.3 or later
-        const selectedDevice = (
-            state.device.devices as unknown as {
-                [key: string]: Device | undefined;
-            }
-        )[state.device.selectedSerialNumber];
+        const device = selectedDevice(getState());
 
         const destinationFormat = 'pcap';
         const sinks: Sinks = [];
@@ -208,9 +201,7 @@ const startTrace =
                     os_name: process.platform,
                     application_name: appName,
                     hw_name:
-                        selectedDevice != null
-                            ? describeDevice(selectedDevice)
-                            : undefined,
+                        device != null ? describeDevice(device) : undefined,
                 },
             });
         }
