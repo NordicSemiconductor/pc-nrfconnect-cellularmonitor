@@ -1,6 +1,6 @@
 # nRF Connect Cellular Monitor
 
-[![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/pc-nrfconnect-cellularmonitor?branchName=master)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=XXX&branchName=master)
+[![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/pc-nrfconnect-cellularmonitor?branchName=master)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=65&branchName=master)
 [![License](https://img.shields.io/badge/license-Modified%20BSD%20License-blue.svg)](LICENSE)
 
 *nRF Connect Cellular Monitor* is a tool that...
