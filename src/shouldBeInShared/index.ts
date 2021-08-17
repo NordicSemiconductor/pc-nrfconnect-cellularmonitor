@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2017, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,39 +34,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger } from 'pc-nrfconnect-shared';
+import { Device } from 'pc-nrfconnect-shared';
 
-import { TAction } from '../thunk';
-import { getSerialPorts, pickSerialPort } from '../utils/serialport';
-import { getSerialPort as getPersistedSerialPort } from '../utils/store';
-import { setAvailableSerialPorts, setSerialPort } from '.';
+import { RootState } from '../reducer';
 
-export const closeDevice = (): TAction => dispatch => {
-    logger.info('Closing device');
-    dispatch(setAvailableSerialPorts([]));
-    dispatch(setSerialPort(null));
-};
+// DeviceInfo will be exported since shared v4.28.3
+export { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
 
-export const openDevice =
-    (device: Device): TAction =>
-    dispatch => {
-        // Reset serial port settings
-        dispatch(setAvailableSerialPorts([]));
-        dispatch(setSerialPort(null));
-        const ports = getSerialPorts(device);
-        if (ports.length > 0) {
-            dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
+// selectedDevice is found in pc-nrfconnect-shared/src/Device/deviceReducer but not exported by shared yet
+export const selectedDevice = (state: RootState) =>
+    (
+        state.device.devices as unknown as {
+            [key: string]: Device | undefined;
         }
-        const persistedPath = getPersistedSerialPort(device.serialNumber);
-        if (persistedPath) {
-            dispatch(setSerialPort(persistedPath));
-            return;
-        }
-        const port = pickSerialPort(ports);
-        const path = port ? port.path : device?.serialport?.path;
-        if (path) {
-            dispatch(setSerialPort(path));
-        } else {
-            logger.error("Couldn't identify serial port");
-        }
-    };
+    )[state.device.selectedSerialNumber];

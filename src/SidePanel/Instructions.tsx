@@ -49,8 +49,7 @@ const urls = {
         'https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk',
     infoOnThingy:
         'https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91',
-    buyDk:
-        'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nrf9160-DK&series_token=nRF9160',
+    buyDk: 'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nrf9160-DK&series_token=nRF9160',
     buyThingy:
         'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nRF6943&series_token=nRF9160',
 };

@@ -1,3 +1,9 @@
+## 0.0.11
+### Added
+- Capture file properties to PCAP files: Hardware, OS and application.
+### Fixed
+- Bug which caused conversion to `.pcap` to fail sporadically.
+
 ## 0.0.10 - 2021-08-02
 ### Fixed
 - PCAP was not showing received SIBs.
