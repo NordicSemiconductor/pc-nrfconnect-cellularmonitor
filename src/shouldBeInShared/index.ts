@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 - 2021, Nordic Semiconductor ASA
+/* Copyright (c) 2015 - 2017, Nordic Semiconductor ASA
  *
  * All rights reserved.
  *
@@ -34,47 +34,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { Card, openUrl } from 'pc-nrfconnect-shared';
+import { Device } from 'pc-nrfconnect-shared';
 
-const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
-const USER_GUIDE_VIDEO = 'https://www.youtube.com/watch?v=8kB5XA5a2pI';
+import { RootState } from '../reducers';
 
-export default () => (
-    // @ts-expect-error: Wrong type definition in shared -- is corrected in shared 4.28.1
-    <Card title="Feedback & User Guide">
-        <section>
-            <p>
-                This app is currently in an early stage of development, and we
-                are very interested in receiving feedback on it to help us make
-                the app as useful as possible. So if you have any changes you
-                want made, please send us an email to{' '}
-                <b>ncd-noreply@nordicsemi.no</b> by clicking the button below.
-            </p>
-            <Button
-                className="secondary-btn w-100 mt-2"
-                variant="secondary"
-                onClick={() => openUrl(`mailto:${NCD_EMAIL_ADDRESS}`)}
-                title={`mailto:${NCD_EMAIL_ADDRESS}`}
-            >
-                Give feedback
-            </Button>
-        </section>
-        <section>
-            <h5>User guide</h5>
-            Click{' '}
-            <Button
-                variant="link"
-                className="card-links"
-                title={USER_GUIDE_VIDEO}
-                onClick={() => openUrl(USER_GUIDE_VIDEO)}
-            >
-                here
-            </Button>{' '}
-            for a short introductory video showing how to use the{' '}
-            <b>Trace Collector v2</b> for recording modem traces and how to
-            generate files for Wireshark.
-        </section>
-    </Card>
-);
+// DeviceInfo will be exported since shared v4.28.3
+export { deviceInfo } from 'pc-nrfconnect-shared/src/Device/deviceInfo/deviceInfo';
+
+// selectedDevice is found in pc-nrfconnect-shared/src/Device/deviceReducer but not exported by shared yet
+export const selectedDevice = (state: RootState) =>
+    (
+        state.device.devices as unknown as {
+            [key: string]: Device | undefined;
+        }
+    )[state.device.selectedSerialNumber];

@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-tracecollector-preview",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
   "displayName": "Trace Collector V2 preview",
   "repository": {
@@ -35,7 +35,7 @@
     "@reduxjs/toolkit": "^1.5.0",
     "@testing-library/react": "^11.2.6",
     "@types/node": "12.20.12",
-    "@types/react": "^16.14.4",
+    "@types/react": "16.14.4",
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "7.1.16",
     "@types/redux-mock-store": "^1.0.2",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "npm": "^6.14.13",
-    "nrf-monitor-lib-js": "0.5.8"
+    "nrf-monitor-lib-js": "0.5.13"
   },
   "bundledDependencies": [
     "nrf-monitor-lib-js"
