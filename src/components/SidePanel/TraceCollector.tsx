@@ -41,7 +41,10 @@ import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
 import { TRACE_FORMATS, TraceFormat } from '../../features/tracing/traceFormat';
-import { getSerialPort } from '../../features/tracing/traceSlice';
+import {
+    getIsTraceRunning,
+    getSerialPort,
+} from '../../features/tracing/traceSlice';
 import {
     getTraceFormat as getStoredTraceFormat,
     setTraceFormat as setStoredTraceFormat,
@@ -50,7 +53,7 @@ import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
 export default () => {
-    const [isTracing, setIsTracing] = useState(false);
+    const isTracing = useSelector(getIsTraceRunning);
     const [selectedTraceFormat, setSelectedTraceFormat] = useState<TraceFormat>(
         getStoredTraceFormat()
     );
@@ -96,7 +99,6 @@ export default () => {
             <StartStopTrace
                 traceFormat={selectedTraceFormat}
                 isTracing={isTracing}
-                setIsTracing={setIsTracing}
             />
             <hr />
         </>

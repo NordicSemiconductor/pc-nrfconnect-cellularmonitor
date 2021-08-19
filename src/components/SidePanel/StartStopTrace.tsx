@@ -47,20 +47,17 @@ import { getTaskId } from '../../features/tracing/traceSlice';
 type StartStopProps = {
     traceFormat: TraceFormat;
     isTracing: boolean;
-    setIsTracing: (isTracing: boolean) => void;
 };
 
-export default ({ traceFormat, isTracing, setIsTracing }: StartStopProps) => {
+export default ({ traceFormat, isTracing }: StartStopProps) => {
     const dispatch = useDispatch();
     const nrfmlTaskId = useSelector(getTaskId);
 
     const start = () => {
-        setIsTracing(true);
         dispatch(startTrace(traceFormat));
     };
 
     const stop = () => {
-        setIsTracing(false);
         dispatch(stopTrace(nrfmlTaskId));
     };
 

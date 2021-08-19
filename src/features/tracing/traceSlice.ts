@@ -65,6 +65,8 @@ const traceSlice = createSlice({
 });
 
 export const getTaskId = (state: RootState) => state.app.trace.taskId;
+export const getIsTraceRunning = (state: RootState) =>
+    state.app.trace.taskId != null;
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
