@@ -42,15 +42,15 @@ import playSvg from '../../../resources/play-circle.svg';
 import stopSvg from '../../../resources/stop-circle.svg';
 import { startTrace, stopTrace } from '../../features/tracing/nrfml';
 import { TraceFormat } from '../../features/tracing/traceFormat';
-import { getTaskId } from '../../features/tracing/traceSlice';
+import { getIsTracing, getTaskId } from '../../features/tracing/traceSlice';
 
 type StartStopProps = {
     traceFormat: TraceFormat;
-    isTracing: boolean;
 };
 
-export default ({ traceFormat, isTracing }: StartStopProps) => {
+export default ({ traceFormat }: StartStopProps) => {
     const dispatch = useDispatch();
+    const isTracing = useSelector(getIsTracing);
     const nrfmlTaskId = useSelector(getTaskId);
 
     const start = () => {
