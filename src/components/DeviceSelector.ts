@@ -35,7 +35,13 @@
  */
 
 import { connect } from 'react-redux';
-import { Device, DeviceSelector, logger } from 'pc-nrfconnect-shared';
+import {
+    Device,
+    DeviceListing,
+    DeviceSelector,
+    DeviceSelectorProps,
+    logger,
+} from 'pc-nrfconnect-shared';
 
 import { closeDevice, openDevice } from '../actions/deviceActions';
 import { TDispatch } from '../thunk';
@@ -45,7 +51,7 @@ import { TDispatch } from '../thunk';
  * The config format is described on
  * https://github.com/NordicSemiconductor/nrf-device-lister-js.
  */
-const deviceListing = {
+const deviceListing: DeviceListing = {
     nordicUsb: true,
     serialport: true,
     jlink: true,
@@ -79,7 +85,7 @@ const mapState = () => ({
  * Note that the callbacks releaseCurrentDevice and onDeviceIsReady
  * are only invoked, if a deviceSetup is defined.
  */
-const mapDispatch = (dispatch: TDispatch) => ({
+const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
     onDeviceSelected: (device: Device) => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
         dispatch(openDevice(device));
