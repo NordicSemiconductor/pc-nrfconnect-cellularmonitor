@@ -91,7 +91,7 @@ const defaultWiresharkPath = () => {
 
 const locateWiresharkPathOnLinux = () => {
     try {
-        return execSync('which wireshark').toString();
+        return execSync('which wireshark').toString().trim();
     } catch (err) {
         logger.debug('Could not locate Wireshark executable');
         return null;
