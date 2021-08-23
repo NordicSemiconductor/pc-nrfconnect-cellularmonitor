@@ -1,3 +1,7 @@
+## Unreleased
+### Fixed
+- Not able to launch wireshark on Linux
+
 ## 0.0.11
 ### Added
 - Capture file properties to PCAP files: Hardware, OS and application.
