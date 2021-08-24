@@ -1,8 +1,9 @@
-## 0.0.11
+## 0.0.11 - 2021-08-23
 ### Added
 - Capture file properties to PCAP files: Hardware, OS and application.
 ### Fixed
 - Bug which caused conversion to `.pcap` to fail sporadically.
+- Not able to launch wireshark on Linux.
 
 ## 0.0.10 - 2021-08-02
 ### Fixed
