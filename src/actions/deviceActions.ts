@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger } from 'pc-nrfconnect-shared';
+import { Device, logger, Serialport } from 'pc-nrfconnect-shared';
 
 import { stopTrace } from '../features/tracing/nrfml';
 import {
@@ -43,7 +43,6 @@ import {
     setSerialPort,
 } from '../features/tracing/traceSlice';
 import { TAction } from '../thunk';
-import { getSerialPorts, pickSerialPort } from '../utils/serialport';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 
 export const closeDevice = (): TAction => (dispatch, getState) => {
@@ -60,20 +59,30 @@ export const openDevice =
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = getSerialPorts(device);
-        if (ports.length > 0) {
-            dispatch(setAvailableSerialPorts(ports.map(port => port.path)));
+        const ports = device.serialPorts as unknown as Serialport[];
+        if (ports && ports.length > 0) {
+            dispatch(setAvailableSerialPorts(ports.map(port => port.comName)));
         }
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = pickSerialPort(ports);
-        const path = port ? port.path : device?.serialport?.path;
+        const port = autoSelectPort(ports);
+        const path = port ? port.comName : device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
         } else {
             logger.error("Couldn't identify serial port");
         }
     };
+
+/**
+ * Pick the serialport that should belong to the modem on PCA10090.
+ * nrf-device-lib-js should ensure that the order of serialport objects is
+ * deterministic and that the last port in the array is the one used for modem trace.
+ * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
+ * @returns {object} the selected serialport object
+ */
+const autoSelectPort = (ports: Serialport[] | undefined) =>
+    ports && ports[ports.length - 1];
