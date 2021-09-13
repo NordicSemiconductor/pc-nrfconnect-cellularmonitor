@@ -34,7 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Device, logger, Serialport } from 'pc-nrfconnect-shared';
+import { SerialPort } from '@nordicsemiconductor/nrf-device-lib-js';
+import { Device, logger } from 'pc-nrfconnect-shared';
 
 import { stopTrace } from '../features/tracing/nrfml';
 import {
@@ -59,9 +60,11 @@ export const openDevice =
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = device.serialPorts as unknown as Serialport[];
-        if (ports && ports.length > 0) {
-            dispatch(setAvailableSerialPorts(ports.map(port => port.comName)));
+        const ports = device.serialPorts;
+        if (ports?.length > 0) {
+            dispatch(
+                setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
+            );
         }
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
@@ -69,7 +72,7 @@ export const openDevice =
             return;
         }
         const port = autoSelectPort(ports);
-        const path = port ? port.comName : device?.serialport?.comName;
+        const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
         } else {
@@ -82,7 +85,6 @@ export const openDevice =
  * nrf-device-lib-js should ensure that the order of serialport objects is
  * deterministic and that the last port in the array is the one used for modem trace.
  * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
- * @returns {object} the selected serialport object
+ * @returns {SerialPort} the selected serialport object
  */
-const autoSelectPort = (ports: Serialport[] | undefined) =>
-    ports && ports[ports.length - 1];
+const autoSelectPort = (ports: SerialPort[]) => ports?.slice(-1)[0];
