@@ -34,8 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import nrfml, { ModuleVersion } from 'nrf-monitor-lib-js';
-import nrfMonitorLibJsPackageJson from 'nrf-monitor-lib-js/package.json';
+import nrfml, { ModuleVersion } from '@nordicsemiconductor/nrf-monitor-lib-js';
+import nrfMonitorLibJsPackageJson from '@nordicsemiconductor/nrf-monitor-lib-js/package.json';
 import { logger } from 'pc-nrfconnect-shared';
 
 const version = (module: ModuleVersion) => {
