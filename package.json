@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "npm": "^6.14.13",
-    "@nordicsemiconductor/nrf-monitor-lib-js": "0.5.15"
+    "@nordicsemiconductor/nrf-monitor-lib-js": "0.5.16"
   },
   "bundledDependencies": [
     "@nordicsemiconductor/nrf-monitor-lib-js"
