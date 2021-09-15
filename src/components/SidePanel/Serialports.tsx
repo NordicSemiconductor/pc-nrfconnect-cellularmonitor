@@ -36,7 +36,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { Dropdown, Group } from 'pc-nrfconnect-shared';
 
 import {
     getAvailableSerialPorts,
@@ -45,7 +45,6 @@ import {
 } from '../../features/tracing/traceSlice';
 import { truncateMiddle } from '../../utils';
 import { setSerialPort as persistSerialPort } from '../../utils/store';
-import { Dropdown, DropdownItem } from '../Shared/Dropdown';
 
 type SerialPortProps = {
     disabled: boolean;
@@ -62,23 +61,17 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
         persistSerialPort(serialNumber, port);
     };
 
-    const serialPortSelect = availablePorts.map(port => (
-        <DropdownItem
-            key={port}
-            title={port}
-            onSelect={updateSerialPort(port)}
-        />
-    ));
-
     return (
         <Group heading="Serialport trace capture">
             <div className="serialport-selection">
                 <Dropdown
                     disabled={disabled}
-                    title={truncateMiddle(selectedSerialPort, 20, 8)}
-                >
-                    {serialPortSelect}
-                </Dropdown>
+                    onSelect={updateSerialPort}
+                    defaultIndex={availablePorts.indexOf(selectedSerialPort)}
+                    items={availablePorts.map(port =>
+                        truncateMiddle(port, 20, 8)
+                    )}
+                />
             </div>
         </Group>
     );
