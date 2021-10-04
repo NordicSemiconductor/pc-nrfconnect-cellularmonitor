@@ -1,26 +1,14 @@
 @import '~pc-nrfconnect-shared/src/variables';
+@import '~pc-nrfconnect-shared/styles';
 
 .carousel-item {
     overflow-y: auto;
+    padding-right: 1em;
+    @include scrollbars-helper($gray-100, $gray-500, $gray-500);
 }
 
-// styling on scrollbar in dashboard pane
-.carousel-item::-webkit-scrollbar {
-    width: 10px;
-}
-.carousel-item::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 2px $gray-900;
-    border-radius: 10px;
-}
-.carousel-item::-webkit-scrollbar-thumb {
-    background: $gray-600;
-    border-radius: 10px;
-}
-.carousel-item::-webkit-scrollbar-thumb:hover {
-    background: $gray-700;
-}
-.carousel-item::-webkit-scrollbar-corner {
-    background-color: $gray-900;
+.core19-app-content .core19-main-and-log .core19-main-container {
+    margin-right: 0;
 }
 
 .dashboard {
