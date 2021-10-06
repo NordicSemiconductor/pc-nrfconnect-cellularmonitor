@@ -5,21 +5,21 @@
  */
 
 import React from 'react';
+import { Alert } from 'pc-nrfconnect-shared/src/Alert/Alert';
 
 import ConvertTraceCard from './ConvertTraceCard';
 import CreateTraceCard from './CreateTraceCard';
 import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
 
 import './dashboard.scss';
 
 export default () => (
     <div className="dashboard-container">
         <div className="dashboard">
-            <Toast label="Experimental release!">
+            <Alert variant="info" label="Experimental release!">
                 This is an unsupported, experimental preview and it is subject
                 to major redesigns in the future.
-            </Toast>
+            </Alert>
             <div className="dashboard-cards">
                 <CreateTraceCard />
                 <ConvertTraceCard />
