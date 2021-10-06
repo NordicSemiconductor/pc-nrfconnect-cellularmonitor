@@ -1,3 +1,8 @@
+## 0.1.0
+### Changed
+- Establish compatibility with nRF Connect for Desktop 3.8
+- Align scrollbar design with other apps
+
 ## 0.0.11 - 2021-08-23
 ### Added
 - Capture file properties to PCAP files: Hardware, OS and application.
