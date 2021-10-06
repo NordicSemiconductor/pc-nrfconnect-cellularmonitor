@@ -1,4 +1,4 @@
-## 0.1.0
+## Unreleased
 ### Fixed
 - Issue where tracing was not stopped when device was ejected
 
