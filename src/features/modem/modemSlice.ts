@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../../reducers';
