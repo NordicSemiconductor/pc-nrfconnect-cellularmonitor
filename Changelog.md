@@ -1,4 +1,7 @@
 ## 0.1.0
+### Fixed
+- Issue where tracing was not stopped when device was ejected
+
 ### Changed
 - Establish compatibility with nRF Connect for Desktop 3.8
 - Align scrollbar design with other apps
