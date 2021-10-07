@@ -26,7 +26,7 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
     const availablePorts = useSelector(getAvailableSerialPorts);
     const serialNumber = useSelector(getSelectedSerialNumber);
 
-    const updateSerialPort = (port: string) => () => {
+    const updateSerialPort = (port: string) => {
         dispatch(setSerialPort(port));
         persistSerialPort(serialNumber, port);
     };
