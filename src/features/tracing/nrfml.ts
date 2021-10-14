@@ -117,6 +117,7 @@ const convertTraceFile =
                 } else {
                     logger.info(`Successfully converted ${basename} to pcap`);
                 }
+                dispatch(setTaskId(null));
             },
             progress => {
                 if (
