@@ -9,6 +9,7 @@ import { App } from 'pc-nrfconnect-shared';
 
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
+import DocumentationSections from './components/DocumentationSection';
 import SidePanel from './components/SidePanel/SidePanel';
 import reducer from './reducers';
 import logLibVersions from './utils/logLibVersions';
@@ -24,5 +25,6 @@ export default () => (
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
         panes={[{ name: 'Trace Collector', Main: Dashboard }]}
+        documentation={DocumentationSections}
     />
 );
