@@ -1,4 +1,7 @@
 ## Unreleased
+### Added
+- Trace database for modem firmware 1.3.1
+
 ### Fixed
 - Issue where tracing was not stopped when device was ejected
 
