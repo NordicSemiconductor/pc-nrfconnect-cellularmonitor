@@ -11,6 +11,7 @@ import { DocumentationSection } from 'pc-nrfconnect-shared';
 
 const DocumentationSections = [
     <DocumentationSection
+        key="infocenter"
         linkLabel="Go to Infocenter"
         link="https://infocenter.nordicsemi.com/topic/ug_trace_collector/UG/trace_collector/intro.html"
     >
