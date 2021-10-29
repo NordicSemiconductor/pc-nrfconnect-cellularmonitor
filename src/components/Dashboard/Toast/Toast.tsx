@@ -11,11 +11,20 @@ import './toast.scss';
 
 type ToastProps = {
     label?: string;
+    variant?:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'light'
+        | 'dark';
 };
 
-const Toast: FC<ToastProps> = ({ children, label }) => {
+const Toast: FC<ToastProps> = ({ children, label, variant = 'info' }) => {
     return (
-        <Alert variant="info" className="toast-container">
+        <Alert variant={variant} className="toast-container">
             {label && <span className="toast-label">{label}</span>}
             <span>{children}</span>
         </Alert>
