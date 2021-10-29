@@ -11,15 +11,35 @@ import './toast.scss';
 
 type ToastProps = {
     label?: string;
+    variant?:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'light'
+        | 'dark';
+    dismissible?: boolean;
+    onClose?: () => void;
 };
 
-const Toast: FC<ToastProps> = ({ children, label }) => {
-    return (
-        <Alert variant="info" className="toast-container">
-            {label && <span className="toast-label">{label}</span>}
-            <span>{children}</span>
-        </Alert>
-    );
-};
+const Toast: FC<ToastProps> = ({
+    children,
+    label,
+    variant = 'info',
+    dismissible = false,
+    onClose,
+}) => (
+    <Alert
+        variant={variant}
+        className="toast-container"
+        dismissible={dismissible}
+        onClose={onClose}
+    >
+        {label && <span className="toast-label">{label}</span>}
+        <span>{children}</span>
+    </Alert>
+);
 
 export default Toast;

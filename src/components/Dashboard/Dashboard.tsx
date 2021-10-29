@@ -5,7 +5,13 @@
  */
 
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import { openUrl } from 'pc-nrfconnect-shared';
 
+import {
+    getHideNrfCommandLineAlert,
+    persistHideNrfCommandLineAlert,
+} from '../../utils/store';
 import ConvertTraceCard from './ConvertTraceCard';
 import CreateTraceCard from './CreateTraceCard';
 import FeedbackCard from './FeedbackCard';
@@ -13,18 +19,48 @@ import Toast from './Toast/Toast';
 
 import './dashboard.scss';
 
-export default () => (
-    <div className="dashboard-container">
-        <div className="dashboard">
-            <Toast label="Experimental release!">
-                This is an unsupported, experimental preview and it is subject
-                to major redesigns in the future.
-            </Toast>
-            <div className="dashboard-cards">
-                <CreateTraceCard />
-                <ConvertTraceCard />
-                <FeedbackCard />
+const NRF_COMMAND_LINE_TOOL_URL =
+    'https://www.nordicsemi.com/Products/Development-tools/nrf-command-line-tools/download';
+
+export default () => {
+    const [hideNrfCmdLineAlert, setHideNrfCmdLineAlert] = React.useState(
+        getHideNrfCommandLineAlert()
+    );
+
+    return (
+        <div className="dashboard-container">
+            <div className="dashboard">
+                <Toast label="Experimental release!">
+                    This is an unsupported, experimental preview and it is
+                    subject to major redesigns in the future.
+                </Toast>
+                {!hideNrfCmdLineAlert && (
+                    <Toast
+                        variant="warning"
+                        dismissible
+                        onClose={() => {
+                            setHideNrfCmdLineAlert(true);
+                            persistHideNrfCommandLineAlert();
+                        }}
+                    >
+                        Please ensure that you have
+                        <Button
+                            variant="link"
+                            className="alert-links"
+                            title={NRF_COMMAND_LINE_TOOL_URL}
+                            onClick={() => openUrl(NRF_COMMAND_LINE_TOOL_URL)}
+                        >
+                            nRF Command Line Tools
+                        </Button>
+                        version 10.15.0 or newer installed
+                    </Toast>
+                )}
+                <div className="dashboard-cards">
+                    <CreateTraceCard />
+                    <ConvertTraceCard />
+                    <FeedbackCard />
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};

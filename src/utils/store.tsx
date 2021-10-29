@@ -18,6 +18,7 @@ const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const TRACE_FORMAT = 'sinkType';
 const SERIALPORTS = 'serialPorts';
+const HIDE_NRF_CMD_LINE_ALERT = 'hideNrfCmdLineAlert';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string;
@@ -65,3 +66,8 @@ export const setSerialPort = (serialNumber: string, port: string) =>
         ...serialPorts(),
         [serialNumber]: port,
     });
+
+export const getHideNrfCommandLineAlert = () =>
+    store<StoreSchema>().get(HIDE_NRF_CMD_LINE_ALERT, false);
+export const persistHideNrfCommandLineAlert = () =>
+    store<StoreSchema>().set(HIDE_NRF_CMD_LINE_ALERT, true);
