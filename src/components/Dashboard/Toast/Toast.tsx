@@ -20,15 +20,26 @@ type ToastProps = {
         | 'info'
         | 'light'
         | 'dark';
+    dismissible?: boolean;
+    onClose?: () => void;
 };
 
-const Toast: FC<ToastProps> = ({ children, label, variant = 'info' }) => {
-    return (
-        <Alert variant={variant} className="toast-container">
-            {label && <span className="toast-label">{label}</span>}
-            <span>{children}</span>
-        </Alert>
-    );
-};
+const Toast: FC<ToastProps> = ({
+    children,
+    label,
+    variant = 'info',
+    dismissible = false,
+    onClose,
+}) => (
+    <Alert
+        variant={variant}
+        className="toast-container"
+        dismissible={dismissible}
+        onClose={onClose}
+    >
+        {label && <span className="toast-label">{label}</span>}
+        <span>{children}</span>
+    </Alert>
+);
 
 export default Toast;
