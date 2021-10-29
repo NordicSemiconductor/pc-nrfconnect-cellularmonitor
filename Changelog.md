@@ -2,6 +2,7 @@
 ### Added
 - Trace database for modem firmware 1.3.1
 - Documentation Section to `About` pane
+- Alert message pointing to latest version of `nRF Command Line Tools`
 
 ### Fixed
 - Issue where tracing was not stopped when device was ejected
