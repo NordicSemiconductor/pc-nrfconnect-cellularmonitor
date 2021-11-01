@@ -1,4 +1,4 @@
-## Unreleased
+## 0.1.0 - 2021-11-01
 ### Added
 - Trace database for modem firmware 1.3.1
 - Documentation Section to `About` pane
