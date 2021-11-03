@@ -6,7 +6,7 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { openUrl } from 'pc-nrfconnect-shared';
+import { Alert, openUrl } from 'pc-nrfconnect-shared';
 
 import {
     getHideNrfCommandLineAlert,
@@ -15,7 +15,6 @@ import {
 import ConvertTraceCard from './ConvertTraceCard';
 import CreateTraceCard from './CreateTraceCard';
 import FeedbackCard from './FeedbackCard';
-import Toast from './Toast/Toast';
 
 import './dashboard.scss';
 
@@ -30,18 +29,18 @@ export default () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard">
-                <Toast label="Experimental release!">
+                <Alert variant="info" label="Experimental release!">
                     This is an unsupported, experimental preview and it is
                     subject to major redesigns in the future.
-                </Toast>
+                </Alert>
                 {!hideNrfCmdLineAlert && (
-                    <Toast
-                        variant="warning"
-                        dismissible
+                    <Alert
+                        dismissable
                         onClose={() => {
                             setHideNrfCmdLineAlert(true);
                             persistHideNrfCommandLineAlert();
                         }}
+                        variant="warning"
                     >
                         Please ensure that you have
                         <Button
@@ -53,7 +52,7 @@ export default () => {
                             nRF Command Line Tools
                         </Button>
                         version 10.15.0 or newer installed
-                    </Toast>
+                    </Alert>
                 )}
                 <div className="dashboard-cards">
                     <CreateTraceCard />
