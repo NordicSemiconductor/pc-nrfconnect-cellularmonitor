@@ -24,12 +24,17 @@ type SerialPortProps = {
 export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
-    const serialNumber = useSelector(getSelectedSerialNumber);
+    const serialNumber = useSelector(getSelectedSerialNumber) ?? '';
 
-    const updateSerialPort = (port: string) => () => {
+    const updateSerialPort = ({ value: port }: { value: string }) => {
         dispatch(setSerialPort(port));
         persistSerialPort(serialNumber, port);
     };
+
+    const dropdownItems = availablePorts.map(port => ({
+        label: truncateMiddle(port, 20, 8),
+        value: port as string,
+    }));
 
     return (
         <Group heading="Serialport trace capture">
@@ -38,9 +43,7 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
                     disabled={disabled}
                     onSelect={updateSerialPort}
                     defaultIndex={availablePorts.indexOf(selectedSerialPort)}
-                    items={availablePorts.map(port =>
-                        truncateMiddle(port, 20, 8)
-                    )}
+                    items={dropdownItems}
                 />
             </div>
         </Group>

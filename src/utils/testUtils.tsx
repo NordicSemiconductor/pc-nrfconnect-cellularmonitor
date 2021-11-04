@@ -8,7 +8,7 @@ import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { render, RenderOptions } from '@testing-library/react';
 import checkDiskSpace from 'check-disk-space';
-import deviceReducer from 'pc-nrfconnect-shared/src/Device/deviceReducer';
+import { reducer as deviceReducer } from 'pc-nrfconnect-shared/src/Device/deviceSlice';
 import {
     AnyAction,
     applyMiddleware,

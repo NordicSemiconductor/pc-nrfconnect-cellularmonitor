@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-tracecollector-preview",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
   "displayName": "Trace Collector V2 preview",
   "repository": {
@@ -10,7 +10,7 @@
   "author": "Nordic Semiconductor ASA",
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
-    "nrfconnect": "^3.7.0"
+    "nrfconnect": "^3.8.0"
   },
   "main": "dist/bundle.js",
   "files": [
@@ -32,7 +32,7 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "@nordicsemiconductor/nrf-device-lib-js": "^0.3.12",
+    "@nordicsemiconductor/nrf-device-lib-js": "^0.3.14",
     "@reduxjs/toolkit": "^1.5.0",
     "@testing-library/react": "^11.2.6",
     "@types/node": "^16.9.1",
@@ -45,7 +45,8 @@
     "ansi-escapes": "^4.3.1",
     "check-disk-space": "^2.1.0",
     "electron": "13.1.9",
-    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#master",
+    "electron-store": "^5.2.0",
+    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.6.4",
     "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
     "pretty-bytes": "^5.6.0",
     "react": "16.13.1",
@@ -59,7 +60,7 @@
   },
   "dependencies": {
     "npm": "^6.14.13",
-    "@nordicsemiconductor/nrf-monitor-lib-js": "0.5.16"
+    "@nordicsemiconductor/nrf-monitor-lib-js": "0.5.18"
   },
   "bundledDependencies": [
     "@nordicsemiconductor/nrf-monitor-lib-js"
