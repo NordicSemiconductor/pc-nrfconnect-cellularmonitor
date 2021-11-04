@@ -17,4 +17,4 @@ export const selectedDevice = (state: RootState) =>
         state.device.devices as unknown as {
             [key: string]: Device | undefined;
         }
-    )[state.device.selectedSerialNumber];
+    )[state.device.selectedSerialNumber ?? ''];

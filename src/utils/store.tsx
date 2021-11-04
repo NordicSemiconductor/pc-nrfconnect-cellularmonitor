@@ -25,6 +25,7 @@ interface StoreSchema {
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMAT]: TraceFormat;
     [SERIALPORTS]: DevicePort;
+    [HIDE_NRF_CMD_LINE_ALERT]: boolean;
 }
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
