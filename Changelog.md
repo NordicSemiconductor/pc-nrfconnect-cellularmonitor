@@ -1,15 +1,19 @@
+## Unreleased
+### Changed
+- Use new icon set.
+
 ## 0.1.0 - 2021-11-01
 ### Added
-- Trace database for modem firmware 1.3.1
-- Documentation Section to `About` pane
-- Alert message pointing to latest version of `nRF Command Line Tools`
+- Trace database for modem firmware 1.3.1.
+- Documentation Section to `About` pane.
+- Alert message pointing to latest version of `nRF Command Line Tools`.
 
 ### Fixed
-- Issue where tracing was not stopped when device was ejected
+- Issue where tracing was not stopped when device was ejected.
 
 ### Changed
-- Establish compatibility with nRF Connect for Desktop 3.8
-- Align scrollbar design with other apps
+- Establish compatibility with nRF Connect for Desktop 3.8.
+- Align scrollbar design with other apps.
 
 ## 0.0.11 - 2021-08-23
 ### Added
