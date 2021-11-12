@@ -24,6 +24,7 @@ export interface TraceState {
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     wiresharkPath: string | null;
+    detectingTraceDb: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -34,6 +35,7 @@ const initialState = (): TraceState => ({
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
+    detectingTraceDb: false,
 });
 
 const traceSlice = createSlice({
@@ -67,6 +69,9 @@ const traceSlice = createSlice({
             state.wiresharkPath = action.payload;
             setPersistedWiresharkPath(action.payload);
         },
+        setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
+            state.detectingTraceDb = action.payload;
+        },
     },
 });
 
@@ -84,6 +89,8 @@ export const getWiresharkPath = (state: RootState) =>
     state.app.trace.wiresharkPath;
 export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
+export const getDetectingTraceDb = (state: RootState) =>
+    state.app.trace.detectingTraceDb;
 
 export const {
     setTaskId,
@@ -94,6 +101,7 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setWiresharkPath,
+    setDetectingTraceDb,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

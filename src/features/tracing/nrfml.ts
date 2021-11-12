@@ -18,6 +18,7 @@ import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 import {
     getManualDbFilePath,
     getSerialPort,
+    setDetectingTraceDb,
     setTaskId,
     setTracePath,
     setTraceSize,
@@ -181,6 +182,9 @@ const startTrace =
         const filePath =
             path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
+        if (!manualDbFilePath) {
+            dispatch(setDetectingTraceDb(true));
+        }
 
         let detectedModemFwUuid: unknown = '';
         let detectedTraceDB: unknown = '';
@@ -217,6 +221,7 @@ const startTrace =
                     );
 
                     detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
+                    dispatch(setDetectingTraceDb(false));
                 }
 
                 progress.data_offsets
