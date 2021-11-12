@@ -120,22 +120,24 @@ const convertTraceFile =
                 dispatch(setTaskId(null));
             },
             progress => {
-                if (
-                    progress.meta?.modem_db_uuid != null &&
-                    detectedModemFwUuid !== progress.meta?.modem_db_uuid
-                ) {
-                    detectedModemFwUuid = progress.meta?.modem_db_uuid;
-                    logger.info(
-                        `Detected modem firmware with UUID ${detectedModemFwUuid}`
-                    );
-                }
+                if (!manualDbFilePath) {
+                    if (
+                        progress.meta?.modem_db_uuid != null &&
+                        detectedModemFwUuid !== progress.meta?.modem_db_uuid
+                    ) {
+                        detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                        logger.info(
+                            `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                        );
+                    }
 
-                if (
-                    progress.meta?.modem_db_path != null &&
-                    detectedTraceDB !== progress.meta?.modem_db_path
-                ) {
-                    detectedTraceDB = progress.meta?.modem_db_path;
-                    logger.info(`Using trace DB ${detectedTraceDB}`);
+                    if (
+                        progress.meta?.modem_db_path != null &&
+                        detectedTraceDB !== progress.meta?.modem_db_path
+                    ) {
+                        detectedTraceDB = progress.meta?.modem_db_path;
+                        logger.info(`Using trace DB ${detectedTraceDB}`);
+                    }
                 }
 
                 progress.data_offsets
@@ -194,22 +196,24 @@ const startTrace =
                 }
             },
             progress => {
-                if (
-                    progress.meta?.modem_db_uuid != null &&
-                    detectedModemFwUuid !== progress.meta?.modem_db_uuid
-                ) {
-                    detectedModemFwUuid = progress.meta?.modem_db_uuid;
-                    logger.info(
-                        `Detected modem firmware with UUID ${detectedModemFwUuid}`
-                    );
-                }
+                if (!manualDbFilePath) {
+                    if (
+                        progress.meta?.modem_db_uuid != null &&
+                        detectedModemFwUuid !== progress.meta?.modem_db_uuid
+                    ) {
+                        detectedModemFwUuid = progress.meta?.modem_db_uuid;
+                        logger.info(
+                            `Detected modem firmware with UUID ${detectedModemFwUuid}`
+                        );
+                    }
 
-                if (
-                    progress.meta?.modem_db_path != null &&
-                    detectedTraceDB !== progress.meta?.modem_db_path
-                ) {
-                    detectedTraceDB = progress.meta?.modem_db_path;
-                    logger.info(`Using trace DB ${detectedTraceDB}`);
+                    if (
+                        progress.meta?.modem_db_path != null &&
+                        detectedTraceDB !== progress.meta?.modem_db_path
+                    ) {
+                        detectedTraceDB = progress.meta?.modem_db_path;
+                        logger.info(`Using trace DB ${detectedTraceDB}`);
+                    }
                 }
 
                 progress.data_offsets
