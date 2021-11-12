@@ -49,7 +49,7 @@ export default () => {
                 <Spinner />
                 &nbsp;
                 <Button
-                    variant="outline-primary"
+                    variant="secondary"
                     onClick={() => {
                         dispatch(stopTrace(nrfmlTaskId));
                         dispatch(setDetectingTraceDb(false));
