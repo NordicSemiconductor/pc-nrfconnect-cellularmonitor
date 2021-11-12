@@ -23,32 +23,25 @@ export default () => {
     const detectingTraceDb = useSelector(getDetectingTraceDb);
 
     return (
-        <Modal
-            show={detectingTraceDb}
-            onHide={() => {
-                dispatch(setDetectingTraceDb(false));
-            }}
-            backdrop="static"
-            size="lg"
-        >
+        <Modal show={detectingTraceDb} backdrop="static" size="lg">
             <Modal.Header closeButton>
                 <Modal.Title data-testid="title">
-                    <h3>Detecting modem fw version</h3>
+                    <h4>Detecting modem fw version</h4>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <p>
                     Starting trace and auto-detecting trace database for parsing
-                    data. This usually takes a few seconds.
+                    data. This might take some time.
                 </p>
                 <ul className="trace-db-dialog-list">
                     <li>
-                        TIP! You can manually select a trace database to speed
-                        up the process.
+                        TIP! You can manually select a trace database in the
+                        Advanced Options section to skip this step.
                     </li>
                     <li>
                         TIP! Press the reset button on your development kit if
-                        the process hangs.
+                        the process is taking a long time.
                     </li>
                 </ul>
             </Modal.Body>
