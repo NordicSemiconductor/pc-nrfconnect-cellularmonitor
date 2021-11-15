@@ -182,7 +182,7 @@ const startTrace =
         const filePath =
             path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
-        if (!manualDbFilePath) {
+        if (!manualDbFilePath && traceFormat === 'pcap') {
             dispatch(setDetectingTraceDb(true));
         }
 

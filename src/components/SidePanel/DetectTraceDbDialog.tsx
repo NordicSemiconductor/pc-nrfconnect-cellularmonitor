@@ -24,7 +24,7 @@ export default () => {
 
     return (
         <Modal show={detectingTraceDb} backdrop="static" size="lg">
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title data-testid="title">
                     <h4>Detecting modem fw version</h4>
                 </Modal.Title>
