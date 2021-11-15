@@ -72,7 +72,6 @@ describe('nrfml', () => {
             store.dispatch(startTrace('raw'));
             expect(store.getActions()).toEqual([
                 { type: setTraceSize.type, payload: 0 },
-                { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTracePath.type,
                     payload: path.join(
