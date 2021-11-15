@@ -52,7 +52,7 @@ describe('Sidepanel functionality', () => {
         ).toBeInTheDocument();
     });
 
-    describe('Autodetect modem FW dialog', () => {
+    describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
             const screen = render(<SidePanel />, serialPortActions);
             fireEvent.click(await screen.findByText('pcap'));
