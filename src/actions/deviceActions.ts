@@ -11,6 +11,7 @@ import { stopTrace } from '../features/tracing/nrfml';
 import {
     getTaskId,
     setAvailableSerialPorts,
+    setDetectingTraceDb,
     setSerialPort,
 } from '../features/tracing/traceSlice';
 import { TAction } from '../thunk';
@@ -22,6 +23,7 @@ export const closeDevice = (): TAction => (dispatch, getState) => {
     dispatch(setSerialPort(null));
     const taskId = getTaskId(getState());
     dispatch(stopTrace(taskId));
+    dispatch(setDetectingTraceDb(false));
 };
 
 export const openDevice =
