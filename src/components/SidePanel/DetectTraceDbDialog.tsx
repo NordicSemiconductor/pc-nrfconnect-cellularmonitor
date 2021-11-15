@@ -10,23 +10,29 @@ import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'pc-nrfconnect-shared';
 
-import { stopTrace } from '../../features/tracing/nrfml';
 import {
     getDetectingTraceDb,
-    getTaskId,
     setDetectingTraceDb,
 } from '../../features/tracing/traceSlice';
 
 export default () => {
     const dispatch = useDispatch();
-    const nrfmlTaskId = useSelector(getTaskId);
     const detectingTraceDb = useSelector(getDetectingTraceDb);
 
+    if (!detectingTraceDb) return null;
+
     return (
-        <Modal show={detectingTraceDb} backdrop="static" size="lg">
-            <Modal.Header>
+        <Modal
+            show={detectingTraceDb}
+            backdrop="static"
+            size="lg"
+            onHide={() => {
+                dispatch(setDetectingTraceDb(false));
+            }}
+        >
+            <Modal.Header closeButton>
                 <Modal.Title data-testid="title">
-                    <h4>Detecting modem fw version</h4>
+                    <h4>Detecting modem firmware version</h4>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -51,11 +57,10 @@ export default () => {
                 <Button
                     variant="secondary"
                     onClick={() => {
-                        dispatch(stopTrace(nrfmlTaskId));
                         dispatch(setDetectingTraceDb(false));
                     }}
                 >
-                    Cancel
+                    Close
                 </Button>
             </Modal.Footer>
         </Modal>

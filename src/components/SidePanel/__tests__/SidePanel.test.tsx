@@ -72,32 +72,18 @@ describe('Sidepanel functionality', () => {
             expect(modal).not.toBeInTheDocument();
         });
 
-        it('clicking Hide should close dialog but not stop tracing', async () => {
+        it('clicking Close should close dialog but not stop tracing', async () => {
             const screen = render(<SidePanel />, serialPortActions);
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
                 await screen.queryByText('Detecting modem firmware version')
             ).toBeInTheDocument();
-            fireEvent.click(await screen.findByText('Hide'));
+            fireEvent.click((await screen.findAllByText('Close'))[0]);
             expect(
                 await screen.queryByText('Detecting modem firmware version')
             ).not.toBeInTheDocument();
             expect(screen.getByText('Stop tracing')).toBeInTheDocument();
-        });
-
-        it('clicking Stop trace should close dialog but not stop tracing', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
-            expect(
-                await screen.queryByText('Detecting modem firmware version')
-            ).toBeInTheDocument();
-            fireEvent.click(await screen.findByText('Stop trace'));
-            expect(
-                await screen.queryByText('Detecting modem firmware version')
-            ).not.toBeInTheDocument();
-            expect(screen.getByText('Start tracing')).toBeInTheDocument();
         });
 
         it('should hide dialog when fw is detected', async () => {
