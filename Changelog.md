@@ -1,4 +1,6 @@
 ## Unreleased
+### Added
+- Dialog window alerting users that we are trying to autodetect modem firmware version.
 ### Changed
 - Use new icon set.
 

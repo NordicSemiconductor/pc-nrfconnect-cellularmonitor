@@ -16,6 +16,7 @@ import {
     getTraceFormat as getStoredTraceFormat,
     setTraceFormat as setStoredTraceFormat,
 } from '../../utils/store';
+import DetectTraceDbDialog from './DetectTraceDbDialog';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 
@@ -64,6 +65,7 @@ export default () => {
                 </ButtonGroup>
             </Group>
             <StartStopTrace traceFormat={selectedTraceFormat} />
+            <DetectTraceDbDialog />
             <hr />
         </>
     );
