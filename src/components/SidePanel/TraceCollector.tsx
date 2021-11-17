@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { TraceFormat } from '../../features/tracing/traceFormat';
 import { getIsTracing, getSerialPort } from '../../features/tracing/traceSlice';
-import { getTraceFormat as getStoredTraceFormat } from '../../utils/store';
+import { getTraceFormats as getStoredTraceFormats } from '../../utils/store';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
 import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
@@ -17,9 +17,9 @@ import TraceFormatSelector from './TraceFormatSelector';
 
 export default () => {
     const isTracing = useSelector(getIsTracing);
-    const [selectedTraceFormat, setSelectedTraceFormat] = useState<TraceFormat>(
-        getStoredTraceFormat()
-    );
+    const [selectedTraceFormats, setSelectedTraceFormats] = useState<
+        TraceFormat[]
+    >(getStoredTraceFormats());
 
     const selectedSerialPort = useSelector(getSerialPort);
 
@@ -34,11 +34,11 @@ export default () => {
                 selectedSerialPort={selectedSerialPort}
             />
             <TraceFormatSelector
-                selectedTraceFormat={selectedTraceFormat}
-                setSelectedTraceFormat={setSelectedTraceFormat}
+                selectedTraceFormats={selectedTraceFormats}
+                setSelectedTraceFormats={setSelectedTraceFormats}
                 isTracing={isTracing}
             />
-            <StartStopTrace traceFormat={selectedTraceFormat} />
+            <StartStopTrace traceFormats={selectedTraceFormats} />
             <DetectTraceDbDialog />
             <hr />
         </>

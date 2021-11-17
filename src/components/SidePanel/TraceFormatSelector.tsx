@@ -9,23 +9,32 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { Group } from 'pc-nrfconnect-shared';
 
-import { TRACE_FORMATS, TraceFormat } from '../../features/tracing/traceFormat';
-import { setTraceFormat as setStoredTraceFormat } from '../../utils/store';
+import {
+    ALL_TRACE_FORMATS,
+    TraceFormat,
+} from '../../features/tracing/traceFormat';
+import { setTraceFormats as setStoredTraceFormats } from '../../utils/store';
 
 interface TraceFormatSelectorProps {
     isTracing: boolean;
-    selectedTraceFormat: TraceFormat;
-    setSelectedTraceFormat: (format: TraceFormat) => void;
+    selectedTraceFormats: TraceFormat[];
+    setSelectedTraceFormats: (formats: TraceFormat[]) => void;
 }
 
 export default ({
     isTracing,
-    selectedTraceFormat,
-    setSelectedTraceFormat,
+    selectedTraceFormats,
+    setSelectedTraceFormats,
 }: TraceFormatSelectorProps) => {
     const selectTraceFormat = (format: TraceFormat) => () => {
-        setSelectedTraceFormat(format);
-        setStoredTraceFormat(format);
+        let newFormats;
+        if (selectedTraceFormats.includes(format)) {
+            newFormats = selectedTraceFormats.filter(f => f !== format);
+        } else {
+            newFormats = [...selectedTraceFormats, format];
+        }
+        setSelectedTraceFormats(newFormats);
+        setStoredTraceFormats(newFormats);
     };
 
     return (
@@ -35,11 +44,13 @@ export default ({
                     isTracing ? 'disabled' : ''
                 }`}
             >
-                {TRACE_FORMATS.map((format: TraceFormat) => (
+                {ALL_TRACE_FORMATS.map((format: TraceFormat) => (
                     <Button
                         // @ts-expect-error -- Doesn't seem to be an easy way to use custom variants with TS
                         variant={
-                            format === selectedTraceFormat ? 'set' : 'unset'
+                            selectedTraceFormats.includes(format)
+                                ? 'set'
+                                : 'unset'
                         }
                         onClick={selectTraceFormat(format)}
                         key={format}

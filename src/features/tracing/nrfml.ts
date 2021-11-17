@@ -170,13 +170,15 @@ const convertTraceFile =
     };
 
 const startTrace =
-    (traceFormat: TraceFormat): TAction =>
+    (traceFormats: TraceFormat[]): TAction =>
     (dispatch, getState) => {
         const serialPort = getSerialPort(getState());
         if (!serialPort) {
             logger.error('Select serial port to start tracing');
             return;
         }
+        console.log('traceFormats', traceFormats);
+        const traceFormat = traceFormats[0];
         dispatch(setTraceSize(0));
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
         const filePath =
