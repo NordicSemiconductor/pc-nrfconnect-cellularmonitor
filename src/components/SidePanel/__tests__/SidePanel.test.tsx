@@ -129,4 +129,15 @@ describe('Sidepanel functionality', () => {
             expect(modal).not.toBeInTheDocument();
         });
     });
+
+    describe('multiple sinks', () => {
+        it('should show file details for multiple sinks', async () => {
+            const screen = render(<SidePanel />, serialPortActions);
+            fireEvent.click(await screen.findByText('raw'));
+            fireEvent.click(await screen.findByText('pcap'));
+            fireEvent.click(screen.getByText('Start tracing'));
+            expect(true).toBe(false);
+            // also write or update tests to verify that data is only shown for the selected sinks
+        });
+    });
 });

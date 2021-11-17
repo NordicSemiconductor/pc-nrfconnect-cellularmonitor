@@ -30,6 +30,12 @@ const serialPortActions = [
 ];
 
 describe('TraceCollector', () => {
+    it('should disable Start button if no trace formats are selected', () => {
+        const screen = render(<TraceCollector />, serialPortActions);
+        const startButton = screen.getByText('Start tracing');
+        expect(startButton).toBeDisabled();
+    });
+
     it('should disable Trace format selector while tracing', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
         const traceFormatButton = await screen.findByText('raw');
