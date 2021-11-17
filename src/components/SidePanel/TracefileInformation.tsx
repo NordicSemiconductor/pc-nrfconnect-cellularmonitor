@@ -29,20 +29,17 @@ export default () => {
         directory = dir;
         return (
             <div className="trace-file-container" key={trace.format}>
-                <div
-                    className="trace-file-name-wrapper"
-                    onClick={() => openInFolder(trace.path)}
-                >
+                <div className="trace-filename-wrapper">
                     <FormLabel>{`${trace.format.toUpperCase()} file name`}</FormLabel>
-                    <span className="trace-file-name">
-                        {truncateMiddle(filename, 10, 10)}
+                    <span
+                        className="trace-filename"
+                        onClick={() => openInFolder(trace.path)}
+                        title={filename}
+                    >
+                        {truncateMiddle(filename, 5, 12)}
                     </span>
                 </div>
-                <div className="trace-file-size" />
-                <FormLabel>{`${trace.format.toUpperCase()} file name`}</FormLabel>
-                <span className="trace-file-name">
-                    <DiskSpaceUsageBox label="File size" value={trace.size} />
-                </span>
+                <DiskSpaceUsageBox label="File size" value={trace.size} />
             </div>
         );
     });
@@ -52,12 +49,11 @@ export default () => {
             <DiskSpaceUsage />
             {traceDetails}
             <Button
-                className="w-100 secondary-btn"
+                className="w-100 secondary-btn btn-size-small"
                 variant="secondary"
                 onClick={() => {
                     openInFolder(directory);
                 }}
-                style={{ height: 24, padding: 0, fontSize: 12, marginTop: 8 }}
             >
                 Open folder location
             </Button>

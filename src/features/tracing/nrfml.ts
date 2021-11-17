@@ -200,6 +200,7 @@ const startTrace =
 
         let detectedModemFwUuid: unknown = '';
         let detectedTraceDB: unknown = '';
+        let progressCallbackCounter = 0;
 
         const taskId = nrfml.start(
             {
@@ -238,6 +239,13 @@ const startTrace =
                     dispatch(setDetectingTraceDb(false));
                 }
 
+                /*
+                    This callback is triggered quite often, and it can negatively affect the
+                    performance, so it should be fine to only process every nth sample. The offset
+                    property received from nrfml is accumulated size, so we don't lose any data this way
+                */
+                progressCallbackCounter += 1;
+                if (progressCallbackCounter % 30 !== 0) return;
                 try {
                     const newTraceData = traceData.map(trace => {
                         if (!progress.data_offsets) return trace;

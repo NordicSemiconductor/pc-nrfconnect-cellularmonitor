@@ -20,6 +20,13 @@
         border-color: $gray-700;
     }
 
+    .btn-size-small {
+        height: 24px;
+        padding: 0;
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
     .trace-selector {
         padding: 4px;
         background-color: $gray-700;
@@ -54,13 +61,31 @@
     }
 
     .trace-file-container {
-        border: 1px solid $gray-200;
-        padding: 8px;
         margin-top: 4px;
+        display: flex;
 
         label {
             display: block;
             color: $gray-400;
+        }
+
+        .disk-space-box {
+            flex: 1;
+            margin-left: 4px;
+        }
+    }
+
+    .trace-filename-wrapper {
+        border: 1px solid $gray-200;
+        padding: 8px;
+        flex: 2;
+    }
+
+    .trace-filename {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
         }
     }
 
