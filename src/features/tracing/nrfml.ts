@@ -116,21 +116,25 @@ function detectModemFwUuid(
 const convertTraceFile =
     (sourcePath: string): TAction =>
     (dispatch, getState) => {
-        dispatch(setTraceSize(0));
-        const destinationFormat = 'pcap';
+        const traceFormat: TraceFormat = 'pcap';
         const basename = path.basename(sourcePath, '.bin');
         const directory = path.dirname(sourcePath);
         const destinationPath =
-            path.join(directory, basename) + fileExtension(destinationFormat);
+            path.join(directory, basename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
+        const traceData: TraceData = {
+            format: traceFormat,
+            size: 0,
+            path: destinationPath,
+        };
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
 
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig(destinationFormat, destinationPath)],
+                sinks: [sinkConfig(traceFormat, destinationPath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -162,12 +166,14 @@ const convertTraceFile =
                             progressPath === destinationPath
                     )
                     .forEach(({ offset }) => {
-                        dispatch(setTraceSize(offset));
+                        dispatch(
+                            setTraceData([{ ...traceData, size: offset }])
+                        );
                     });
             }
         );
         dispatch(setTaskId(taskId));
-        dispatch(setTracePath(destinationPath));
+        dispatch(setTraceData([traceData]));
     };
 
 const startTrace =
