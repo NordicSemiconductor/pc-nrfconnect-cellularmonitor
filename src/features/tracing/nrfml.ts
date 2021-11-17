@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 /*
  * Copyright (c) 2015 Nordic Semiconductor ASA
  *
@@ -172,8 +171,8 @@ const convertTraceFile =
                     });
             }
         );
-        dispatch(setTaskId(taskId));
         dispatch(setTraceData([traceData]));
+        dispatch(setTaskId(taskId));
     };
 
 const startTrace =

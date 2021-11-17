@@ -23,7 +23,7 @@ interface TraceFormatSelectorProps {
 
 export default ({
     isTracing,
-    selectedTraceFormats,
+    selectedTraceFormats = [],
     setSelectedTraceFormats,
 }: TraceFormatSelectorProps) => {
     const selectTraceFormat = (format: TraceFormat) => () => {

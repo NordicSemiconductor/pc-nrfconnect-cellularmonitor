@@ -8,19 +8,14 @@ import path from 'path';
 
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
-import {
-    setDetectingTraceDb,
-    setTaskId,
-    setTracePath,
-    setTraceSize,
-} from './traceSlice';
+import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
 
 const mockStore = getMockStore();
 
 const initialState = {
     app: {
         trace: {
-            traceSize: 0,
+            traceData: [],
             serialPort: 'COM1',
         },
     },
@@ -39,9 +34,17 @@ describe('nrfml', () => {
     it('should start converting', () => {
         store.dispatch(convertTraceFile('somePath.bin'));
         expect(store.getActions()).toEqual([
-            { type: setTraceSize.type, payload: 0 },
+            {
+                type: setTraceData.type,
+                payload: [
+                    {
+                        format: 'pcap',
+                        size: 0,
+                        path: 'somePath.pcapng',
+                    },
+                ],
+            },
             { type: setTaskId.type, payload: 1 },
-            { type: setTracePath.type, payload: 'somePath.pcapng' },
         ]);
     });
 
@@ -53,31 +56,41 @@ describe('nrfml', () => {
         });
 
         it('should start tracing to pcap', () => {
-            store.dispatch(startTrace('pcap'));
+            store.dispatch(startTrace(['pcap']));
             expect(store.getActions()).toEqual([
-                { type: setTraceSize.type, payload: 0 },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
-                    type: setTracePath.type,
-                    payload: path.join(
-                        mockedDataDir,
-                        'trace-2000-01-01T00-00-00.000Z.pcapng'
-                    ),
+                    type: setTraceData.type,
+                    payload: [
+                        {
+                            format: 'pcap',
+                            size: 0,
+                            path: path.join(
+                                mockedDataDir,
+                                'trace-2000-01-01T00-00-00.000Z.pcapng'
+                            ),
+                        },
+                    ],
                 },
                 { type: setTaskId.type, payload: 1 },
             ]);
         });
 
         it('should start tracing to raw binary', () => {
-            store.dispatch(startTrace('raw'));
+            store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
-                { type: setTraceSize.type, payload: 0 },
                 {
-                    type: setTracePath.type,
-                    payload: path.join(
-                        mockedDataDir,
-                        'trace-2000-01-01T00-00-00.000Z.bin'
-                    ),
+                    type: setTraceData.type,
+                    payload: [
+                        {
+                            format: 'raw',
+                            size: 0,
+                            path: path.join(
+                                mockedDataDir,
+                                'trace-2000-01-01T00-00-00.000Z.bin'
+                            ),
+                        },
+                    ],
                 },
                 { type: setTaskId.type, payload: 1 },
             ]);

@@ -7,7 +7,6 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { setTraceSize } from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
 import DiskSpaceUsage from '../DiskSpaceUsage/DiskSpaceUsage';
 
@@ -36,13 +35,5 @@ describe('Disk space usage', () => {
         const loadingMessage = 'Loading';
         const loadingBoxes = await screen.findAllByText(loadingMessage);
         expect(loadingBoxes.length).toBe(2);
-    });
-
-    it('should display the current trace size', async () => {
-        const traceSize = 50;
-        const screen = render(<DiskSpaceUsage />, [setTraceSize(traceSize)]);
-        expect(
-            await screen.findByText(prettyBytes(traceSize))
-        ).toBeInTheDocument();
     });
 });

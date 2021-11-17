@@ -18,7 +18,7 @@ type StartStopProps = {
     traceFormats: TraceFormat[];
 };
 
-export default ({ traceFormats }: StartStopProps) => {
+export default ({ traceFormats = [] }: StartStopProps) => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const nrfmlTaskId = useSelector(getTaskId);
