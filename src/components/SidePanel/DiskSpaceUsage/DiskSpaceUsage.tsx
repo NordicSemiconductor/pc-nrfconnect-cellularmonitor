@@ -5,11 +5,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import checkDiskSpace from 'check-disk-space';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 
-import { getTraceSize } from '../../../features/tracing/traceSlice';
 import DiskSpaceUsageBox from './DiskSpaceUsageBox';
 
 import './diskspaceusage.scss';
@@ -17,7 +15,6 @@ import './diskspaceusage.scss';
 export default () => {
     const [freeSpace, setFreeSpace] = useState<number | undefined>();
     const [totalSize, setTotalSize] = useState<number | undefined>();
-    const traceSize = useSelector(getTraceSize);
 
     const checkDisk = () =>
         checkDiskSpace(getAppDataDir())
@@ -41,7 +38,6 @@ export default () => {
         <div className="disk-space-container">
             <DiskSpaceUsageBox label="Disk" value={totalSize} />
             <DiskSpaceUsageBox label="Free" value={freeSpace} />
-            <DiskSpaceUsageBox label="File" value={traceSize} />
         </div>
     );
 };

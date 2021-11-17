@@ -11,7 +11,7 @@ import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
 import TraceCollector from './TraceCollector';
 import TraceConverter from './TraceConverter';
-import TracefileInformation from './TracefileInformation';
+import TraceFileInformation from './TraceFileInformation';
 
 import './sidepanel.scss';
 
@@ -20,7 +20,7 @@ export default () => (
         <TraceCollector />
         <Instructions />
         <TraceConverter />
-        <TracefileInformation />
+        <TraceFileInformation />
         <AdvancedOptions />
     </SidePanel>
 );

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /*
  * Copyright (c) 2015 Nordic Semiconductor ASA
  *
@@ -20,8 +21,8 @@ import {
     getSerialPort,
     setDetectingTraceDb,
     setTaskId,
-    setTracePath,
-    setTraceSize,
+    setTraceData,
+    TraceData,
 } from './traceSlice';
 
 const { displayName: appName } = require('../../../package.json');
@@ -177,14 +178,23 @@ const startTrace =
             logger.error('Select serial port to start tracing');
             return;
         }
-        console.log('traceFormats', traceFormats);
-        const traceFormat = traceFormats[0];
-        dispatch(setTraceSize(0));
+        const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const filePath =
-            path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
+        const traceData: TraceData[] = [];
+        const sinkConfigs = traceFormats.map(format => {
+            const filePath =
+                path.join(getAppDataDir(), filename) + fileExtension(format);
+            traceData.push({
+                format,
+                path: filePath,
+                size: 0,
+            });
+            return sinkConfig(format, filePath, device);
+        });
+
         const manualDbFilePath = getManualDbFilePath(getState());
-        if (!manualDbFilePath && traceFormat === 'pcap') {
+
+        if (!manualDbFilePath && traceFormats.includes('pcap')) {
             dispatch(setDetectingTraceDb(true));
         }
 
@@ -194,17 +204,15 @@ const startTrace =
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [
-                    sinkConfig(
-                        traceFormat,
-                        filePath,
-                        selectedDevice(getState())
-                    ),
-                ],
+                sinks: sinkConfigs,
                 sources: [
-                    sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
-                        serialport: { path: serialPort },
-                    }),
+                    sourceConfig(
+                        manualDbFilePath,
+                        traceFormats.includes('pcap'),
+                        {
+                            serialport: { path: serialPort },
+                        }
+                    ),
                 ],
             },
             err => {
@@ -216,7 +224,11 @@ const startTrace =
                 }
             },
             progress => {
-                if (!manualDbFilePath) {
+                if (
+                    !manualDbFilePath &&
+                    !detectedModemFwUuid &&
+                    !detectedTraceDB
+                ) {
                     detectedModemFwUuid = detectModemFwUuid(
                         progress,
                         detectedModemFwUuid
@@ -226,18 +238,30 @@ const startTrace =
                     dispatch(setDetectingTraceDb(false));
                 }
 
-                progress.data_offsets
-                    ?.filter(
-                        ({ path: progressPath }) => progressPath === filePath
-                    )
-                    .forEach(({ offset }) => {
-                        dispatch(setTraceSize(offset));
+                try {
+                    const newTraceData = traceData.map(trace => {
+                        if (!progress.data_offsets) return trace;
+                        const index = progress.data_offsets.findIndex(
+                            data => trace.path === data.path
+                        );
+                        const dataOffset = progress.data_offsets[index];
+                        return {
+                            ...trace,
+                            size: dataOffset ? dataOffset.offset : trace.size,
+                        };
                     });
+                    dispatch(setTraceData(newTraceData));
+                } catch (err) {
+                    logger.debug(
+                        `Error in progress callback, discarding sample ${JSON.stringify(
+                            err
+                        )}`
+                    );
+                }
             }
         );
-        logger.info(`Started tracefile: ${filePath}`);
-
-        dispatch(setTracePath(filePath));
+        logger.info('Started tracefile');
+        dispatch(setTraceData(traceData));
         dispatch(setTaskId(taskId));
     };
 
