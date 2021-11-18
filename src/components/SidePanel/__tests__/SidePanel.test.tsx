@@ -30,28 +30,6 @@ describe('Sidepanel functionality', () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
     });
 
-    it('should store RAW as .bin', async () => {
-        const screen = render(<SidePanel />, serialPortActions);
-        fireEvent.click(screen.getByText('raw'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.bin', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
-    it('should store PCAP as .pcap', async () => {
-        const screen = render(<SidePanel />, serialPortActions);
-        fireEvent.click(await screen.findByText('pcap'));
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(
-            await screen.findByText('.pcapng', {
-                exact: false,
-            })
-        ).toBeInTheDocument();
-    });
-
     describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
             const screen = render(<SidePanel />, serialPortActions);
@@ -136,8 +114,48 @@ describe('Sidepanel functionality', () => {
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
-            expect(true).toBe(false);
-            // also write or update tests to verify that data is only shown for the selected sinks
+            expect(
+                await screen.queryByText('.bin', {
+                    exact: false,
+                })
+            ).toBeInTheDocument();
+            expect(
+                await screen.findByText('.pcapng', {
+                    exact: false,
+                })
+            ).toBeInTheDocument();
+        });
+
+        it('should store RAW as .bin', async () => {
+            const screen = render(<SidePanel />, serialPortActions);
+            fireEvent.click(screen.getByText('raw'));
+            fireEvent.click(screen.getByText('Start tracing'));
+            expect(
+                await screen.queryByText('.bin', {
+                    exact: false,
+                })
+            ).toBeInTheDocument();
+            expect(
+                await screen.queryByText('.pcapng', {
+                    exact: false,
+                })
+            ).not.toBeInTheDocument();
+        });
+
+        it('should store PCAP as .pcap', async () => {
+            const screen = render(<SidePanel />, serialPortActions);
+            fireEvent.click(await screen.findByText('pcap'));
+            fireEvent.click(screen.getByText('Start tracing'));
+            expect(
+                await screen.findByText('.pcapng', {
+                    exact: false,
+                })
+            ).toBeInTheDocument();
+            expect(
+                await screen.queryByText('.bin', {
+                    exact: false,
+                })
+            ).not.toBeInTheDocument();
         });
     });
 });
