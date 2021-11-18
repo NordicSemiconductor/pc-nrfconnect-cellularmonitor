@@ -23,10 +23,12 @@
 .trace-file-container {
     margin-top: 4px;
     display: flex;
+    margin-bottom: 4px !important;
 
     label {
         display: block;
         color: $gray-400;
+        margin-bottom: 0;
     }
 
     .disk-space-box {

@@ -11,6 +11,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
+import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
 import { getTraceData } from '../../../features/tracing/traceSlice';
 import { truncateMiddle } from '../../../utils';
@@ -46,7 +47,7 @@ export default () => {
     });
 
     return (
-        <>
+        <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
             <DiskSpaceUsage />
             {traceDetails}
             <Button
@@ -58,6 +59,6 @@ export default () => {
             >
                 Open folder location
             </Button>
-        </>
+        </CollapsibleGroup>
     );
 };

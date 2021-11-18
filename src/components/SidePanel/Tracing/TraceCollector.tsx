@@ -43,7 +43,6 @@ export default () => {
             />
             <StartStopTrace traceFormats={selectedTraceFormats} />
             <DetectTraceDbDialog />
-            <hr />
         </>
     );
 };
