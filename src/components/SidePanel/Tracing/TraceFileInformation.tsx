@@ -12,9 +12,9 @@ import Button from 'react-bootstrap/Button';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 
-import { getTraceData } from '../../features/tracing/traceSlice';
-import { truncateMiddle } from '../../utils';
-import { getNameAndDirectory, openInFolder } from '../../utils/fileUtils';
+import { getTraceData } from '../../../features/tracing/traceSlice';
+import { truncateMiddle } from '../../../utils';
+import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 

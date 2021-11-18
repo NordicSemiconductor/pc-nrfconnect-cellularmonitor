@@ -15,7 +15,7 @@ import {
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
-import TraceCollector from '../TraceCollector';
+import TraceCollector from '../Tracing/TraceCollector';
 
 mockedCheckDiskSpace.mockImplementation(
     () =>

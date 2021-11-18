@@ -7,11 +7,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { TraceFormat } from '../../features/tracing/traceFormat';
-import { getIsTracing, getSerialPort } from '../../features/tracing/traceSlice';
-import { getTraceFormats as getStoredTraceFormats } from '../../utils/store';
+import { TraceFormat } from '../../../features/tracing/traceFormat';
+import {
+    getIsTracing,
+    getSerialPort,
+} from '../../../features/tracing/traceSlice';
+import { getTraceFormats as getStoredTraceFormats } from '../../../utils/store';
+import Serialports from '../Serialports';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
-import Serialports from './Serialports';
 import StartStopTrace from './StartStopTrace';
 import TraceFormatSelector from './TraceFormatSelector';
 

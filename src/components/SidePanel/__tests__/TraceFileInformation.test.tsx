@@ -8,7 +8,7 @@ import React from 'react';
 
 import { setTraceData, TraceData } from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
-import TraceFileInformation from '../TraceFileInformation';
+import TraceFileInformation from '../Tracing/TraceFileInformation';
 
 describe('FileInformation', () => {
     it('should display the name and size of the trace', async () => {

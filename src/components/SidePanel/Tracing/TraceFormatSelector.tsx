@@ -12,8 +12,8 @@ import { Group } from 'pc-nrfconnect-shared';
 import {
     ALL_TRACE_FORMATS,
     TraceFormat,
-} from '../../features/tracing/traceFormat';
-import { setTraceFormats as setStoredTraceFormats } from '../../utils/store';
+} from '../../../features/tracing/traceFormat';
+import { setTraceFormats as setStoredTraceFormats } from '../../../utils/store';
 
 interface TraceFormatSelectorProps {
     isTracing: boolean;
