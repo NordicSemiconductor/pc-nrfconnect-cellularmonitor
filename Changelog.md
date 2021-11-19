@@ -1,6 +1,7 @@
 ## Unreleased
 ### Added
 - Dialog window alerting users that we are trying to autodetect modem firmware version.
+- Option to select multiple output file formats for the same trace.
 ### Changed
 - Use new icon set.
 
