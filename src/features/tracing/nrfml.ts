@@ -91,7 +91,8 @@ const additionalLiveTraceProperties = (format: TraceFormat) => {
     if (format !== 'live') return {};
 
     return {
-        start_process: DEFAULT_WINDOWS_WIRESHARK_PATH,
+        start_process:
+            '"C:\\Program Files\\Wireshark\\Wireshark.exe" -i\\\\.\\pipe\\wireshark -k',
     };
 };
 
