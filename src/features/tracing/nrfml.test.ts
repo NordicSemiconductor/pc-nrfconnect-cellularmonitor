@@ -7,7 +7,7 @@
 import path from 'path';
 
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
-import { convertTraceFile, startTrace } from './nrfml';
+import { convertTraceFile, sinkConfig, startTrace } from './nrfml';
 import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
 
 const mockStore = getMockStore();
@@ -94,6 +94,48 @@ describe('nrfml', () => {
                 },
                 { type: setTaskId.type, payload: 1 },
             ]);
+        });
+    });
+
+    describe('sink configuration', () => {
+        beforeAll(() => {
+            Object.defineProperty(process, 'platform', { value: 'MockOS' });
+        });
+
+        it('should return proper configuration for raw trace', () => {
+            const rawConfig = sinkConfig('raw', 'some/path');
+            expect(rawConfig).toEqual({
+                name: 'nrfml-raw-file-sink',
+                init_parameters: {
+                    file_path: 'some/path',
+                },
+            });
+        });
+
+        it('should return proper configuration for live trace', () => {
+            const liveConfig = sinkConfig('live', '');
+            expect(liveConfig).toEqual({
+                name: 'nrfml-wireshark-named-pipe-sink',
+                init_parameters: {
+                    application_name: 'Trace Collector V2 preview',
+                    hw_name: undefined,
+                    os_name: 'MockOS',
+                    start_process: 'wireshark',
+                },
+            });
+        });
+
+        it('should return proper configuration for pcap trace', () => {
+            const pcapConfig = sinkConfig('pcap', 'some/path');
+            expect(pcapConfig).toEqual({
+                name: 'nrfml-pcap-sink',
+                init_parameters: {
+                    application_name: 'Trace Collector V2 preview',
+                    hw_name: undefined,
+                    os_name: 'MockOS',
+                    file_path: 'some/path',
+                },
+            });
         });
     });
 });

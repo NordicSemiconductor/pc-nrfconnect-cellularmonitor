@@ -14,6 +14,7 @@ import { pathToFileURL } from 'url';
 import { deviceInfo, selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
 import { autoDetectDbRootFolder } from '../../utils/store';
+import { DEFAULT_WINDOWS_WIRESHARK_PATH } from '../../utils/wireshark';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 import {
     getManualDbFilePath,
@@ -68,8 +69,16 @@ const sourceConfig = (
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
 
+const fileProperties = (format: TraceFormat, filePath: string) => {
+    if (!['raw', 'pcap'].includes(format)) return {};
+
+    return {
+        file_path: filePath,
+    };
+};
+
 const additionalPcapProperties = (format: TraceFormat, device?: Device) => {
-    if (format === 'raw') return {};
+    if (!['live', 'pcap'].includes(format)) return {};
 
     return {
         os_name: process.platform,
@@ -78,12 +87,25 @@ const additionalPcapProperties = (format: TraceFormat, device?: Device) => {
     };
 };
 
-const sinkConfig = (format: TraceFormat, filePath: string, device?: Device) =>
+const additionalLiveTraceProperties = (format: TraceFormat) => {
+    if (format !== 'live') return {};
+
+    return {
+        start_process: DEFAULT_WINDOWS_WIRESHARK_PATH,
+    };
+};
+
+export const sinkConfig = (
+    format: TraceFormat,
+    filePath: string,
+    device?: Device
+) =>
     ({
         name: sinkName(format),
         init_parameters: {
-            file_path: filePath,
+            ...fileProperties(format, filePath),
             ...additionalPcapProperties(format, device),
+            ...additionalLiveTraceProperties(format),
         },
     } as const);
 
@@ -188,7 +210,10 @@ const startTrace =
         const traceData: TraceData[] = [];
         const sinkConfigs = traceFormats.map(format => {
             const filePath =
-                path.join(getAppDataDir(), filename) + fileExtension(format);
+                format !== 'live'
+                    ? path.join(getAppDataDir(), filename) +
+                      fileExtension(format)
+                    : '';
             traceData.push({
                 format,
                 path: filePath,
