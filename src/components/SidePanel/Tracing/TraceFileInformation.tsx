@@ -8,7 +8,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup } from 'pc-nrfconnect-shared';
@@ -21,14 +20,12 @@ import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
 export default () => {
     const traceData = useSelector(getTraceData);
-    let directory: string;
     if (traceData.length === 0) {
         return null;
     }
 
     const traceDetails = traceData.map(trace => {
-        const [filename, dir] = getNameAndDirectory(trace.path);
-        directory = dir;
+        const [filename] = getNameAndDirectory(trace.path);
         return (
             <div className="trace-file-container" key={trace.format}>
                 <div className="trace-filename-wrapper">
@@ -50,15 +47,6 @@ export default () => {
         <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
             <DiskSpaceUsage />
             {traceDetails}
-            <Button
-                className="w-100 secondary-btn btn-size-small"
-                variant="secondary"
-                onClick={() => {
-                    openInFolder(directory);
-                }}
-            >
-                Open folder location
-            </Button>
         </CollapsibleGroup>
     );
 };
