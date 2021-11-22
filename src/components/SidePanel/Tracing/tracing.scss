@@ -59,10 +59,7 @@
 
 .trace-filename {
     cursor: pointer;
-
-    &:hover {
-        text-decoration: underline;
-    }
+    text-decoration: underline;
 }
 
 .start-stop {
