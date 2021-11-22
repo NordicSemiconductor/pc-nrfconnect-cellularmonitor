@@ -59,8 +59,8 @@
     "xterm-for-react": "^1.0.4"
   },
   "dependencies": {
-    "npm": "^6.14.13",
-    "@nordicsemiconductor/nrf-monitor-lib-js": "0.5.18"
+    "@nordicsemiconductor/nrf-monitor-lib-js": "^0.6.0",
+    "npm": "^6.14.13"
   },
   "bundledDependencies": [
     "@nordicsemiconductor/nrf-monitor-lib-js"
