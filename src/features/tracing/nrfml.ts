@@ -6,7 +6,13 @@
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
-import { InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import {
+    InsightInitParameters,
+    PcapInitParameters,
+    RawFileInitParameters,
+    Sinks,
+    WiresharkNamedPipeInitParameters,
+} from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
@@ -72,7 +78,10 @@ const sourceConfig = (
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
 
-const fileProperties = (format: TraceFormat, filePath: string) => {
+const fileProperties = (
+    format: TraceFormat,
+    filePath: string
+): Partial<(PcapInitParameters | RawFileInitParameters)['init_parameters']> => {
     if (!['raw', 'pcap'].includes(format)) return {};
 
     return {
@@ -80,7 +89,10 @@ const fileProperties = (format: TraceFormat, filePath: string) => {
     };
 };
 
-const additionalPcapProperties = (format: TraceFormat, device?: Device) => {
+const additionalPcapProperties = (
+    format: TraceFormat,
+    device?: Device
+): Partial<PcapInitParameters['init_parameters']> => {
     if (!['live', 'pcap'].includes(format)) return {};
 
     return {
@@ -90,7 +102,9 @@ const additionalPcapProperties = (format: TraceFormat, device?: Device) => {
     };
 };
 
-const additionalLiveTraceProperties = (format: TraceFormat) => {
+const additionalLiveTraceProperties = (
+    format: TraceFormat
+): Partial<WiresharkNamedPipeInitParameters['init_parameters']> => {
     if (format !== 'live') return {};
 
     return {
@@ -110,7 +124,7 @@ export const sinkConfig = (
             ...additionalPcapProperties(format, device),
             ...additionalLiveTraceProperties(format),
         },
-    } as const);
+    } as Sinks[number]);
 
 function detectTraceDB(progress: nrfml.Progress, detectedTraceDB: unknown) {
     if (
