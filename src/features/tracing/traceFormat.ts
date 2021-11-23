@@ -52,11 +52,11 @@ export const sinkConfig = {
                 ...additionalPcapProperties(device),
             },
         } as const),
-    live: (filePath: string, device?: Device) =>
+    live: (filePath: string, device?: Device, wiresharkPath?: string | null) =>
         ({
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
-                start_process: `"${defaultWiresharkPath()}"`,
+                start_process: `"${wiresharkPath ?? defaultWiresharkPath()}"`,
                 ...additionalPcapProperties(device),
             },
         } as const),

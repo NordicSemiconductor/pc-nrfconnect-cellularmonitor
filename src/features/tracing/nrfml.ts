@@ -20,6 +20,7 @@ import {
 import {
     getManualDbFilePath,
     getSerialPort,
+    getWiresharkPath,
     setDetectingTraceDb,
     setTaskId,
     setTraceData,
@@ -102,18 +103,23 @@ const startTrace =
         const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
         const traceData: TraceData[] = [];
+        let wiresharkPath: string | null;
+        let filePath = '';
         const sinkConfigs = traceFormats.map(format => {
-            const filePath =
-                format !== 'live'
-                    ? path.join(getAppDataDir(), filename) +
-                      fileExtension(format)
-                    : '';
+            if (format === 'live') {
+                wiresharkPath = getWiresharkPath(getState());
+            } else {
+                filePath =
+                    path.join(getAppDataDir(), filename) +
+                    fileExtension(format);
+            }
+
             traceData.push({
                 format,
                 path: filePath,
                 size: 0,
             });
-            return sinkConfig[format](filePath, device);
+            return sinkConfig[format](filePath, device, wiresharkPath);
         });
 
         const manualDbFilePath = getManualDbFilePath(getState());
