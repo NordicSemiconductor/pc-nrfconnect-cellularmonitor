@@ -46,6 +46,11 @@ export default () => {
                         Advanced Options section to skip this step.
                     </li>
                     <li>
+                        TIP! Ensure that the correct serialport is selected, and
+                        that the modem firmware on the device is one of the
+                        supported firmwares.
+                    </li>
+                    <li>
                         TIP! Press the reset button on your development kit if
                         the process is taking a long time.
                     </li>
