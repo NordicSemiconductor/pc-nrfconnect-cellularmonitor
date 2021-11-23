@@ -256,6 +256,10 @@ const startTrace =
                 } else {
                     logger.info('Finished tracefile');
                 }
+                // stop tracing if Completed callback is called and we are only doing live tracing
+                if (traceFormats.length === 1 && traceFormats[0] === 'live') {
+                    dispatch(stopTrace(taskId));
+                }
             },
             progress => {
                 if (
