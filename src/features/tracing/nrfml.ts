@@ -35,6 +35,9 @@ const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
 
 const autoDetectDbRootURL = pathToFileURL(autoDetectDbRootFolder).toString();
 
+const requiresTraceDb = (formats: TraceFormat[]) =>
+    formats.includes('pcap') || formats.includes('live');
+
 const sourceConfig = (
     manualDbFilePath: string | undefined,
     useTraceDB: boolean,
@@ -91,8 +94,7 @@ const additionalLiveTraceProperties = (format: TraceFormat) => {
     if (format !== 'live') return {};
 
     return {
-        start_process:
-            '"C:\\Program Files\\Wireshark\\Wireshark.exe" -i\\\\.\\pipe\\wireshark -k',
+        start_process: `"${DEFAULT_WINDOWS_WIRESHARK_PATH}"`,
     };
 };
 
@@ -225,7 +227,7 @@ const startTrace =
 
         const manualDbFilePath = getManualDbFilePath(getState());
 
-        if (!manualDbFilePath && traceFormats.includes('pcap')) {
+        if (!manualDbFilePath && requiresTraceDb(traceFormats)) {
             dispatch(setDetectingTraceDb(true));
         }
 
@@ -240,7 +242,7 @@ const startTrace =
                 sources: [
                     sourceConfig(
                         manualDbFilePath,
-                        traceFormats.includes('pcap'),
+                        requiresTraceDb(traceFormats),
                         {
                             serialport: { path: serialPort },
                         }
