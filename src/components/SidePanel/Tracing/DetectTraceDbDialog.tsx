@@ -26,9 +26,7 @@ export default () => {
             show={detectingTraceDb}
             backdrop="static"
             size="lg"
-            onHide={() => {
-                dispatch(setDetectingTraceDb(false));
-            }}
+            onHide={() => dispatch(setDetectingTraceDb(false))}
         >
             <Modal.Header closeButton>
                 <Modal.Title data-testid="title">
@@ -61,9 +59,7 @@ export default () => {
                 &nbsp;
                 <Button
                     variant="secondary"
-                    onClick={() => {
-                        dispatch(setDetectingTraceDb(false));
-                    }}
+                    onClick={() => dispatch(setDetectingTraceDb(false))}
                 >
                     Close
                 </Button>

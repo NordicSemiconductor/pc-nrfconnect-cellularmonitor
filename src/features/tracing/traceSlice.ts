@@ -15,7 +15,7 @@ import {
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
 import { TaskId } from './nrfml';
-import { TraceFormat } from './traceFormat';
+import { TraceFormat } from './sinks';
 
 export interface TraceData {
     format: TraceFormat;

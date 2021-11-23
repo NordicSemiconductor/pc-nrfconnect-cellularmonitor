@@ -8,7 +8,7 @@ import path from 'path';
 
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
-import { sinkConfig } from './traceFormat';
+import { sinkConfig } from './sinks';
 import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
 
 jest.mock('../../utils/wireshark', () => ({

@@ -7,13 +7,17 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
 import {
     ALL_TRACE_FORMATS,
     TraceFormat,
-} from '../../../features/tracing/traceFormat';
+} from '../../../features/tracing/sinks';
+import { getWiresharkPath } from '../../../features/tracing/traceSlice';
 import { setTraceFormats as setStoredTraceFormats } from '../../../utils/store';
+import { findWireshark } from '../../../utils/wireshark';
+import Wireshark from '../../Dashboard/Wireshark';
 
 interface TraceFormatSelectorProps {
     isTracing: boolean;
@@ -26,6 +30,9 @@ export default ({
     selectedTraceFormats = [],
     setSelectedTraceFormats,
 }: TraceFormatSelectorProps) => {
+    const selectedWiresharkPath = useSelector(getWiresharkPath);
+    const wiresharkPath = findWireshark(selectedWiresharkPath);
+
     const selectTraceFormat = (format: TraceFormat) => () => {
         let newFormats;
         if (selectedTraceFormats.includes(format)) {
@@ -36,6 +43,9 @@ export default ({
         setSelectedTraceFormats(newFormats);
         setStoredTraceFormats(newFormats);
     };
+
+    const showWiresharkWarning =
+        selectedTraceFormats.includes('live') && !wiresharkPath;
 
     return (
         <Group heading="Trace output format">
@@ -60,6 +70,15 @@ export default ({
                     </Button>
                 ))}
             </ButtonGroup>
+            {showWiresharkWarning && (
+                <div className="text-danger warning-box">
+                    <p>
+                        LIVE tracing is selected, but no Wireshark installation
+                        found. LIVE tracing will not work.
+                    </p>
+                    <Wireshark />
+                </div>
+            )}
         </Group>
     );
 };

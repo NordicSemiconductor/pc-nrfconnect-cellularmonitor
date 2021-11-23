@@ -10,13 +10,13 @@ import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import { selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
-import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
 import {
     fileExtension,
     requiresTraceDb,
     sinkConfig,
     TraceFormat,
-} from './traceFormat';
+} from './sinks';
+import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
 import {
     getManualDbFilePath,
     getSerialPort,
