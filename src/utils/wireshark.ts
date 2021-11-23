@@ -42,7 +42,7 @@ const validatedWiresharkPath = (path: string | null) => {
         : join(path, MACOS_WIRESHARK_EXECUTABLE_IN_APP);
 };
 
-const defaultWiresharkPath = () => {
+export const defaultWiresharkPath = () => {
     if (process.platform === 'win32') {
         return validatedWiresharkPath(DEFAULT_WINDOWS_WIRESHARK_PATH);
     }

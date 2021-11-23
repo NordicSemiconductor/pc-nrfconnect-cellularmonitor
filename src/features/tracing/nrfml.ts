@@ -14,7 +14,7 @@ import { pathToFileURL } from 'url';
 import { deviceInfo, selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
 import { autoDetectDbRootFolder } from '../../utils/store';
-import { DEFAULT_WINDOWS_WIRESHARK_PATH } from '../../utils/wireshark';
+import { defaultWiresharkPath } from '../../utils/wireshark';
 import { fileExtension, sinkName, TraceFormat } from './traceFormat';
 import {
     getManualDbFilePath,
@@ -94,7 +94,7 @@ const additionalLiveTraceProperties = (format: TraceFormat) => {
     if (format !== 'live') return {};
 
     return {
-        start_process: `"${DEFAULT_WINDOWS_WIRESHARK_PATH}"`,
+        start_process: `"${defaultWiresharkPath()}"`,
     };
 };
 
