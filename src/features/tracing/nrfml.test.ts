@@ -10,6 +10,12 @@ import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, sinkConfig, startTrace } from './nrfml';
 import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
 
+jest.mock('../../utils/wireshark', () => ({
+    defaultWiresharkPath: () => {
+        return 'default/path/to/wireshark';
+    },
+}));
+
 const mockStore = getMockStore();
 
 const initialState = {
@@ -120,7 +126,7 @@ describe('nrfml', () => {
                     application_name: 'Trace Collector V2 preview',
                     hw_name: undefined,
                     os_name: 'MockOS',
-                    start_process: 'wireshark',
+                    start_process: '"default/path/to/wireshark"',
                 },
             });
         });
