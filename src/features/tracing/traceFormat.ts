@@ -19,14 +19,3 @@ export const fileExtension = (format: TraceFormat) => {
             );
     }
 };
-
-export const sinkName = (format: TraceFormat) => {
-    switch (format) {
-        case 'raw':
-            return 'nrfml-raw-file-sink';
-        case 'pcap':
-            return 'nrfml-pcap-sink';
-        case 'live':
-            return 'nrfml-wireshark-named-pipe-sink';
-    }
-};

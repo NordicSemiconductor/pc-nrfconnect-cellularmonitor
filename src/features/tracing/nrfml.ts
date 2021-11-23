@@ -6,13 +6,7 @@
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved -- Because this is a pure typescript type import which eslint does not understand correctly yet. This can be removed either when we start to use eslint-import-resolver-typescript in shared of expose this type in a better way from nrf-monitor-lib-js
-import {
-    InsightInitParameters,
-    PcapInitParameters,
-    RawFileInitParameters,
-    Sinks,
-    WiresharkNamedPipeInitParameters,
-} from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { Device, getAppDataDir, logger } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
@@ -21,7 +15,7 @@ import { deviceInfo, selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
 import { autoDetectDbRootFolder } from '../../utils/store';
 import { defaultWiresharkPath } from '../../utils/wireshark';
-import { fileExtension, sinkName, TraceFormat } from './traceFormat';
+import { fileExtension, TraceFormat } from './traceFormat';
 import {
     getManualDbFilePath,
     getSerialPort,
@@ -78,53 +72,37 @@ const sourceConfig = (
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
 
-const fileProperties = (
-    format: TraceFormat,
-    filePath: string
-): Partial<(PcapInitParameters | RawFileInitParameters)['init_parameters']> => {
-    if (!['raw', 'pcap'].includes(format)) return {};
+const additionalPcapProperties = (device?: Device) => ({
+    os_name: process.platform,
+    application_name: appName,
+    hw_name: device != null ? describeDevice(device) : undefined,
+});
 
-    return {
-        file_path: filePath,
-    };
+export const sinkConfig = {
+    raw: (filePath: string) =>
+        ({
+            name: 'nrfml-raw-file-sink',
+            init_parameters: {
+                file_path: filePath,
+            },
+        } as const),
+    pcap: (filePath: string, device?: Device) =>
+        ({
+            name: 'nrfml-pcap-sink',
+            init_parameters: {
+                file_path: filePath,
+                ...additionalPcapProperties(device),
+            },
+        } as const),
+    live: (filePath: string, device?: Device) =>
+        ({
+            name: 'nrfml-wireshark-named-pipe-sink',
+            init_parameters: {
+                start_process: `"${defaultWiresharkPath()}"`,
+                ...additionalPcapProperties(device),
+            },
+        } as const),
 };
-
-const additionalPcapProperties = (
-    format: TraceFormat,
-    device?: Device
-): Partial<PcapInitParameters['init_parameters']> => {
-    if (!['live', 'pcap'].includes(format)) return {};
-
-    return {
-        os_name: process.platform,
-        application_name: appName,
-        hw_name: device != null ? describeDevice(device) : undefined,
-    };
-};
-
-const additionalLiveTraceProperties = (
-    format: TraceFormat
-): Partial<WiresharkNamedPipeInitParameters['init_parameters']> => {
-    if (format !== 'live') return {};
-
-    return {
-        start_process: `"${defaultWiresharkPath()}"`,
-    };
-};
-
-export const sinkConfig = (
-    format: TraceFormat,
-    filePath: string,
-    device?: Device
-) =>
-    ({
-        name: sinkName(format),
-        init_parameters: {
-            ...fileProperties(format, filePath),
-            ...additionalPcapProperties(format, device),
-            ...additionalLiveTraceProperties(format),
-        },
-    } as Sinks[number]);
 
 function detectTraceDB(progress: nrfml.Progress, detectedTraceDB: unknown) {
     if (
@@ -172,7 +150,7 @@ const convertTraceFile =
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig(traceFormat, destinationPath)],
+                sinks: [sinkConfig[traceFormat](destinationPath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -236,7 +214,7 @@ const startTrace =
                 path: filePath,
                 size: 0,
             });
-            return sinkConfig(format, filePath, device);
+            return sinkConfig[format](filePath, device);
         });
 
         const manualDbFilePath = getManualDbFilePath(getState());

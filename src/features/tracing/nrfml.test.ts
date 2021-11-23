@@ -103,7 +103,7 @@ describe('nrfml', () => {
         });
 
         it('should return proper configuration for raw trace', () => {
-            const rawConfig = sinkConfig('raw', 'some/path');
+            const rawConfig = sinkConfig.raw('some/path');
             expect(rawConfig).toEqual({
                 name: 'nrfml-raw-file-sink',
                 init_parameters: {
@@ -113,7 +113,7 @@ describe('nrfml', () => {
         });
 
         it('should return proper configuration for live trace', () => {
-            const liveConfig = sinkConfig('live', '');
+            const liveConfig = sinkConfig.live('');
             expect(liveConfig).toEqual({
                 name: 'nrfml-wireshark-named-pipe-sink',
                 init_parameters: {
@@ -126,7 +126,7 @@ describe('nrfml', () => {
         });
 
         it('should return proper configuration for pcap trace', () => {
-            const pcapConfig = sinkConfig('pcap', 'some/path');
+            const pcapConfig = sinkConfig.pcap('some/path');
             expect(pcapConfig).toEqual({
                 name: 'nrfml-pcap-sink',
                 init_parameters: {
