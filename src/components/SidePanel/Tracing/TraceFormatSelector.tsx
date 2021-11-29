@@ -33,7 +33,6 @@ export default ({
 }: TraceFormatSelectorProps) => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
-
     const selectTraceFormat = (format: TraceFormat) => () => {
         let newFormats;
         if (selectedTraceFormats.includes(format)) {

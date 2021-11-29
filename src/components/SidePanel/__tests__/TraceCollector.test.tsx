@@ -15,7 +15,10 @@ import {
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
+import * as wireshark from '../../../utils/wireshark';
 import TraceCollector from '../Tracing/TraceCollector';
+
+jest.mock('../../../utils/wireshark');
 
 mockedCheckDiskSpace.mockImplementation(
     () =>
@@ -52,5 +55,33 @@ describe('TraceCollector', () => {
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);
         expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+    });
+
+    describe('wireshark installation', () => {
+        beforeEach(() => {
+            jest.resetAllMocks();
+        });
+
+        it('should display warning if wireshark is not installed and live tracing is selected', async () => {
+            jest.spyOn(wireshark, 'findWireshark').mockReturnValue(null);
+            const screen = render(<TraceCollector />, [...serialPortActions]);
+            const traceFormatButton = await screen.findByText('live');
+            fireEvent.click(traceFormatButton);
+            expect(
+                await screen.findByText('Wireshark not detected')
+            ).toBeInTheDocument();
+        });
+
+        it('should not display warning if wireshark is installed and live tracing is selected', async () => {
+            jest.spyOn(wireshark, 'findWireshark').mockReturnValue(
+                'path/to/wireshark'
+            );
+            const screen = render(<TraceCollector />, [...serialPortActions]);
+            const traceFormatButton = await screen.findByText('live');
+            fireEvent.click(traceFormatButton);
+            expect(
+                await screen.queryByText('Wireshark not detected')
+            ).not.toBeInTheDocument();
+        });
     });
 });
