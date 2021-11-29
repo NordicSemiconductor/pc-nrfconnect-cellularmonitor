@@ -29,10 +29,14 @@ const SelectWireshark: FC = ({ children }) => {
     };
 
     return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a href="#" onClick={updateWiresharkPath} role="button">
+        <Button
+            onClick={updateWiresharkPath}
+            role="button"
+            variant="link"
+            className="card-links"
+        >
             {children}
-        </a>
+        </Button>
     );
 };
 
@@ -69,13 +73,13 @@ export default () => {
                     <h6>Wireshark not found</h6>
                     <p>
                         You can{' '}
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a
-                            href="#"
+                        <Button
+                            variant="link"
+                            className="card-links"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
                         >
                             download and install Wireshark
-                        </a>{' '}
+                        </Button>{' '}
                         or{' '}
                         <SelectWireshark>select the executable</SelectWireshark>{' '}
                         if you already have it installed but in a location where
