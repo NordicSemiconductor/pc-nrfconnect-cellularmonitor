@@ -18,14 +18,12 @@ const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
-const HIDE_NRF_CMD_LINE_ALERT = 'hideNrfCmdLineAlert';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMATS]: TraceFormat[];
     [SERIALPORTS]: DevicePort;
-    [HIDE_NRF_CMD_LINE_ALERT]: boolean;
 }
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
@@ -67,8 +65,3 @@ export const setSerialPort = (serialNumber: string, port: string) =>
         ...serialPorts(),
         [serialNumber]: port,
     });
-
-export const getHideNrfCommandLineAlert = () =>
-    store<StoreSchema>().get(HIDE_NRF_CMD_LINE_ALERT, false);
-export const persistHideNrfCommandLineAlert = () =>
-    store<StoreSchema>().set(HIDE_NRF_CMD_LINE_ALERT, true);
