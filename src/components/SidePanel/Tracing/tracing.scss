@@ -85,8 +85,24 @@
 }
 
 .warning-box {
-    background: white;
-    border: 1px solid #ccc;
+    display: flex;
+    border: 1px solid $gray-200;
     padding: 8px;
-    margin-top: -8px;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+
+    img {
+        margin-right: 12px;
+    }
+
+    p {
+        margin-bottom: 0;
+
+        button {
+            font-size: 12px;
+            text-decoration: underline;
+            color: $gray-700;
+        }
+    }
 }

@@ -18,6 +18,10 @@ import { findWireshark, openInWireshark } from '../../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
+type WiresharkProps = {
+    extendedDescription?: boolean;
+};
+
 const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
@@ -40,7 +44,7 @@ const SelectWireshark: FC = ({ children }) => {
     );
 };
 
-export default () => {
+export default ({ extendedDescription = false }: WiresharkProps) => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
 
@@ -70,20 +74,23 @@ export default () => {
                 </>
             ) : (
                 <>
-                    <h6>Wireshark not found</h6>
+                    <h6>Wireshark not detected</h6>
                     <p>
-                        You can{' '}
+                        {extendedDescription && (
+                            <span>
+                                Wireshark is required for live streaming trace
+                                output.
+                            </span>
+                        )}
                         <Button
                             variant="link"
                             className="card-links"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
                         >
-                            download and install Wireshark
+                            Install Wireshark
                         </Button>{' '}
-                        or{' '}
-                        <SelectWireshark>select the executable</SelectWireshark>{' '}
-                        if you already have it installed but in a location where
-                        this app currently does not find it.
+                        or manually{' '}
+                        <SelectWireshark>specify install path</SelectWireshark>.
                     </p>
                 </>
             )}

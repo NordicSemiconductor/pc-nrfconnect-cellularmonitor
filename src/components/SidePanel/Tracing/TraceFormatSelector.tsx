@@ -10,6 +10,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useSelector } from 'react-redux';
 import { Group } from 'pc-nrfconnect-shared';
 
+import alertSvg from '../../../../resources/alert.svg';
 import {
     ALL_TRACE_FORMATS,
     TraceFormat,
@@ -71,12 +72,9 @@ export default ({
                 ))}
             </ButtonGroup>
             {showWiresharkWarning && (
-                <div className="text-danger warning-box">
-                    <p>
-                        LIVE tracing is selected, but no Wireshark installation
-                        found. LIVE tracing will not work.
-                    </p>
-                    <Wireshark />
+                <div className="warning-box">
+                    <img alt="" src={alertSvg} />
+                    <Wireshark extendedDescription />
                 </div>
             )}
         </Group>
