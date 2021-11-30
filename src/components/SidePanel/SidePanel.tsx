@@ -9,18 +9,19 @@ import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
-import TraceCollector from './TraceCollector';
-import TraceConverter from './TraceConverter';
-import TracefileInformation from './TracefileInformation';
+import TraceCollector from './Tracing/TraceCollector';
+import TraceConverter from './Tracing/TraceConverter';
+import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
+import './Tracing/tracing.scss';
 
 export default () => (
     <SidePanel className="side-panel">
         <TraceCollector />
         <Instructions />
         <TraceConverter />
-        <TracefileInformation />
+        <TraceFileInformation />
         <AdvancedOptions />
     </SidePanel>
 );

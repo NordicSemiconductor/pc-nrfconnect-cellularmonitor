@@ -15,10 +15,16 @@ import {
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
 import { TaskId } from './nrfml';
+import { TraceFormat } from './traceFormat';
+
+export interface TraceData {
+    format: TraceFormat;
+    path: string;
+    size: number;
+}
 
 export interface TraceState {
-    tracePath: string;
-    traceSize: number;
+    traceData: TraceData[];
     taskId: TaskId | null;
     serialPort: string | null;
     availableSerialPorts: string[];
@@ -28,8 +34,7 @@ export interface TraceState {
 }
 
 const initialState = (): TraceState => ({
-    tracePath: '',
-    traceSize: 0,
+    traceData: [],
     taskId: null,
     serialPort: null,
     availableSerialPorts: [],
@@ -45,11 +50,8 @@ const traceSlice = createSlice({
         setTaskId: (state, action: PayloadAction<TaskId | null>) => {
             state.taskId = action.payload;
         },
-        setTracePath: (state, action: PayloadAction<string>) => {
-            state.tracePath = action.payload;
-        },
-        setTraceSize: (state, action: PayloadAction<number>) => {
-            state.traceSize = action.payload;
+        setTraceData: (state, action: PayloadAction<TraceData[]>) => {
+            state.traceData = action.payload;
         },
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
             state.availableSerialPorts = action.payload;
@@ -81,8 +83,7 @@ export const getIsTracing = (state: RootState) =>
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
-export const getTracePath = (state: RootState) => state.app.trace.tracePath;
-export const getTraceSize = (state: RootState) => state.app.trace.traceSize;
+export const getTraceData = (state: RootState) => state.app.trace.traceData;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
 export const getWiresharkPath = (state: RootState) =>
@@ -94,8 +95,7 @@ export const getDetectingTraceDb = (state: RootState) =>
 
 export const {
     setTaskId,
-    setTracePath,
-    setTraceSize,
+    setTraceData,
     setSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,

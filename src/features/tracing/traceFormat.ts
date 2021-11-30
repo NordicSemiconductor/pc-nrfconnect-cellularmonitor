@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-export const TRACE_FORMATS = ['raw', 'pcap'] as const;
-export type TraceFormat = typeof TRACE_FORMATS[number];
+export const ALL_TRACE_FORMATS = ['raw', 'pcap'] as const;
+export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
 
 export const fileExtension = (format: TraceFormat) =>
     format === 'pcap' ? '.pcapng' : '.bin';

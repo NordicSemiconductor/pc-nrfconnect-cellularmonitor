@@ -9,29 +9,11 @@
 .side-panel {
     margin: 1rem 0;
 
-    .btn-set {
-        color: $gray-700;
-        background-color: $white;
-        border-color: $gray-700;
-    }
-    .btn-unset {
-        color: $white;
-        background-color: $gray-700;
-        border-color: $gray-700;
-    }
-
-    .trace-selector {
-        padding: 4px;
-        background-color: $gray-700;
-
-        button {
-            padding: 4px;
-            border-radius: 4px !important;
-            text-transform: uppercase;
-        }
-        .btn:disabled {
-            opacity: initial;
-        }
+    .btn-size-small {
+        height: 24px;
+        padding: 0;
+        font-size: 12px;
+        margin-top: 8px;
     }
 
     .filepath-container {
@@ -51,30 +33,6 @@
         padding: 5px 8px;
         font-size: 12px;
         width: 100%;
-    }
-
-    .trace-file-container {
-        border: 1px solid $gray-200;
-        padding: 8px;
-        margin-top: 4px;
-
-        label {
-            display: block;
-            color: $gray-400;
-        }
-    }
-
-    .start-stop {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 24px;
-
-        img {
-            height: 20px;
-            width: 20px;
-            margin-right: 8px;
-        }
     }
 
     .serialport-select {
@@ -128,14 +86,5 @@
         100% {
             transform: translate(100%);
         }
-    }
-}
-
-.trace-db-dialog-list {
-    list-style: none;
-    padding-left: 0;
-
-    li {
-        font-size: 11px;
     }
 }

@@ -8,23 +8,23 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
-import playSvg from '../../../resources/play-circle.svg';
-import stopSvg from '../../../resources/stop-circle.svg';
-import { startTrace, stopTrace } from '../../features/tracing/nrfml';
-import { TraceFormat } from '../../features/tracing/traceFormat';
-import { getIsTracing, getTaskId } from '../../features/tracing/traceSlice';
+import playSvg from '../../../../resources/play-circle.svg';
+import stopSvg from '../../../../resources/stop-circle.svg';
+import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
+import { TraceFormat } from '../../../features/tracing/traceFormat';
+import { getIsTracing, getTaskId } from '../../../features/tracing/traceSlice';
 
 type StartStopProps = {
-    traceFormat: TraceFormat;
+    traceFormats: TraceFormat[];
 };
 
-export default ({ traceFormat }: StartStopProps) => {
+export default ({ traceFormats = [] }: StartStopProps) => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const nrfmlTaskId = useSelector(getTaskId);
 
     const start = () => {
-        dispatch(startTrace(traceFormat));
+        dispatch(startTrace(traceFormats));
     };
 
     const stop = () => {
@@ -47,6 +47,7 @@ export default ({ traceFormat }: StartStopProps) => {
                     className="w-100 secondary-btn start-stop"
                     variant="secondary"
                     onClick={start}
+                    disabled={traceFormats.length === 0}
                 >
                     <img alt="" src={playSvg} />
                     Start tracing

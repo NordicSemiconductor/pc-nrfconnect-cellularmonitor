@@ -13,7 +13,7 @@ import { Spinner } from 'pc-nrfconnect-shared';
 import {
     getDetectingTraceDb,
     setDetectingTraceDb,
-} from '../../features/tracing/traceSlice';
+} from '../../../features/tracing/traceSlice';
 
 export default () => {
     const dispatch = useDispatch();

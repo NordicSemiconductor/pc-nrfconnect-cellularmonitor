@@ -15,7 +15,7 @@ import {
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
-import TraceCollector from '../TraceCollector';
+import TraceCollector from '../Tracing/TraceCollector';
 
 mockedCheckDiskSpace.mockImplementation(
     () =>
@@ -30,15 +30,24 @@ const serialPortActions = [
 ];
 
 describe('TraceCollector', () => {
+    it('should disable Start button if no trace formats are selected', () => {
+        const screen = render(<TraceCollector />, serialPortActions);
+        const startButton = screen.getByText('Start tracing');
+        expect(startButton).toBeDisabled();
+    });
+
     it('should disable Trace format selector while tracing', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
-        fireEvent.click(screen.getByText('Start tracing'));
         const traceFormatButton = await screen.findByText('raw');
+        fireEvent.click(traceFormatButton);
+        fireEvent.click(screen.getByText('Start tracing'));
         expect(traceFormatButton).toBeDisabled();
     });
 
     it('button text should reflect tracing state', async () => {
         const screen = render(<TraceCollector />, serialPortActions);
+        const traceFormatButton = await screen.findByText('raw');
+        fireEvent.click(traceFormatButton);
         fireEvent.click(screen.getByText('Start tracing'));
         const stopButton = await screen.findByText('Stop tracing');
         fireEvent.click(stopButton);

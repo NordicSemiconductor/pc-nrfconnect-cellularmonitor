@@ -8,7 +8,10 @@ import { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import path from 'path';
 import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { TRACE_FORMATS, TraceFormat } from '../features/tracing/traceFormat';
+import {
+    ALL_TRACE_FORMATS,
+    TraceFormat,
+} from '../features/tracing/traceFormat';
 
 interface DevicePort {
     [serialNumber: string]: string;
@@ -16,14 +19,14 @@ interface DevicePort {
 
 const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
-const TRACE_FORMAT = 'sinkType';
+const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
 const HIDE_NRF_CMD_LINE_ALERT = 'hideNrfCmdLineAlert';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
-    [TRACE_FORMAT]: TraceFormat;
+    [TRACE_FORMATS]: TraceFormat[];
     [SERIALPORTS]: DevicePort;
     [HIDE_NRF_CMD_LINE_ALERT]: boolean;
 }
@@ -53,10 +56,10 @@ export const getWiresharkPath = () =>
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
 
-export const getTraceFormat = () =>
-    store<StoreSchema>().get(TRACE_FORMAT, TRACE_FORMATS[0]);
-export const setTraceFormat = (traceFormat: TraceFormat) =>
-    store<StoreSchema>().set(TRACE_FORMAT, traceFormat);
+export const getTraceFormats = () =>
+    store<StoreSchema>().get(TRACE_FORMATS, [ALL_TRACE_FORMATS[0]]);
+export const setTraceFormats = (traceFormats: TraceFormat[]) =>
+    store<StoreSchema>().set(TRACE_FORMATS, traceFormats);
 
 const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
 export const getSerialPort = (serialNumber: string) => {

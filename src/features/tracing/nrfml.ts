@@ -20,8 +20,8 @@ import {
     getSerialPort,
     setDetectingTraceDb,
     setTaskId,
-    setTracePath,
-    setTraceSize,
+    setTraceData,
+    TraceData,
 } from './traceSlice';
 
 const { displayName: appName } = require('../../../package.json');
@@ -115,21 +115,25 @@ function detectModemFwUuid(
 const convertTraceFile =
     (sourcePath: string): TAction =>
     (dispatch, getState) => {
-        dispatch(setTraceSize(0));
-        const destinationFormat = 'pcap';
+        const traceFormat: TraceFormat = 'pcap';
         const basename = path.basename(sourcePath, '.bin');
         const directory = path.dirname(sourcePath);
         const destinationPath =
-            path.join(directory, basename) + fileExtension(destinationFormat);
+            path.join(directory, basename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
+        const traceData: TraceData = {
+            format: traceFormat,
+            size: 0,
+            path: destinationPath,
+        };
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
 
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig(destinationFormat, destinationPath)],
+                sinks: [sinkConfig(traceFormat, destinationPath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -161,48 +165,60 @@ const convertTraceFile =
                             progressPath === destinationPath
                     )
                     .forEach(({ offset }) => {
-                        dispatch(setTraceSize(offset));
+                        dispatch(
+                            setTraceData([{ ...traceData, size: offset }])
+                        );
                     });
             }
         );
+        dispatch(setTraceData([traceData]));
         dispatch(setTaskId(taskId));
-        dispatch(setTracePath(destinationPath));
     };
 
 const startTrace =
-    (traceFormat: TraceFormat): TAction =>
+    (traceFormats: TraceFormat[]): TAction =>
     (dispatch, getState) => {
         const serialPort = getSerialPort(getState());
         if (!serialPort) {
             logger.error('Select serial port to start tracing');
             return;
         }
-        dispatch(setTraceSize(0));
+        const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const filePath =
-            path.join(getAppDataDir(), filename) + fileExtension(traceFormat);
+        const traceData: TraceData[] = [];
+        const sinkConfigs = traceFormats.map(format => {
+            const filePath =
+                path.join(getAppDataDir(), filename) + fileExtension(format);
+            traceData.push({
+                format,
+                path: filePath,
+                size: 0,
+            });
+            return sinkConfig(format, filePath, device);
+        });
+
         const manualDbFilePath = getManualDbFilePath(getState());
-        if (!manualDbFilePath && traceFormat === 'pcap') {
+
+        if (!manualDbFilePath && traceFormats.includes('pcap')) {
             dispatch(setDetectingTraceDb(true));
         }
 
         let detectedModemFwUuid: unknown = '';
         let detectedTraceDB: unknown = '';
+        let progressCallbackCounter = 0;
 
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [
-                    sinkConfig(
-                        traceFormat,
-                        filePath,
-                        selectedDevice(getState())
-                    ),
-                ],
+                sinks: sinkConfigs,
                 sources: [
-                    sourceConfig(manualDbFilePath, traceFormat === 'pcap', {
-                        serialport: { path: serialPort },
-                    }),
+                    sourceConfig(
+                        manualDbFilePath,
+                        traceFormats.includes('pcap'),
+                        {
+                            serialport: { path: serialPort },
+                        }
+                    ),
                 ],
             },
             err => {
@@ -214,7 +230,11 @@ const startTrace =
                 }
             },
             progress => {
-                if (!manualDbFilePath) {
+                if (
+                    !manualDbFilePath &&
+                    !detectedModemFwUuid &&
+                    !detectedTraceDB
+                ) {
                     detectedModemFwUuid = detectModemFwUuid(
                         progress,
                         detectedModemFwUuid
@@ -224,18 +244,37 @@ const startTrace =
                     dispatch(setDetectingTraceDb(false));
                 }
 
-                progress.data_offsets
-                    ?.filter(
-                        ({ path: progressPath }) => progressPath === filePath
-                    )
-                    .forEach(({ offset }) => {
-                        dispatch(setTraceSize(offset));
+                /*
+                    This callback is triggered quite often, and it can negatively affect the
+                    performance, so it should be fine to only process every nth sample. The offset
+                    property received from nrfml is accumulated size, so we don't lose any data this way
+                */
+                progressCallbackCounter += 1;
+                if (progressCallbackCounter % 30 !== 0) return;
+                try {
+                    const newTraceData = traceData.map(trace => {
+                        if (!progress.data_offsets) return trace;
+                        const index = progress.data_offsets.findIndex(
+                            data => trace.path === data.path
+                        );
+                        const dataOffset = progress.data_offsets[index];
+                        return {
+                            ...trace,
+                            size: dataOffset ? dataOffset.offset : trace.size,
+                        };
                     });
+                    dispatch(setTraceData(newTraceData));
+                } catch (err) {
+                    logger.debug(
+                        `Error in progress callback, discarding sample ${JSON.stringify(
+                            err
+                        )}`
+                    );
+                }
             }
         );
-        logger.info(`Started tracefile: ${filePath}`);
-
-        dispatch(setTracePath(filePath));
+        logger.info('Started tracefile');
+        dispatch(setTraceData(traceData));
         dispatch(setTaskId(taskId));
     };
 

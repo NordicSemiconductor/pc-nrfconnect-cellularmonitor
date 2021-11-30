@@ -12,7 +12,8 @@
         margin-top: 16px;
         display: grid;
         column-gap: 4px;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 4px !important;
     }
 
     &-box {
@@ -20,11 +21,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        padding: 8px;
+        padding: 4px 8px;
         border: 1px solid $gray-200;
 
         label {
-            margin-bottom: 4px;
+            margin-bottom: 0;
             color: $gray-400;
         }
     }
