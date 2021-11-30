@@ -21,12 +21,14 @@ import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
 export default () => {
     const traceData = useSelector(getTraceData);
-    if (traceData.length === 0) {
+
+    const noTraceData = traceData.length === 0;
+    const onlyDoingLiveTracing =
+        traceData.length === 1 && traceData[0].format === 'live';
+
+    if (noTraceData || onlyDoingLiveTracing) {
         return null;
     }
-    const formats = traceData.map(trace => trace.format);
-    // If we only do live tracing, we don't want to show disk space usage
-    if (formats.length === 1 && formats[0] === 'live') return null;
 
     const traceDetails = traceData.map(trace => {
         if (trace.format === 'live') return null;
