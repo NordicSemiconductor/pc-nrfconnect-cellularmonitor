@@ -9,7 +9,7 @@ import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 
-export const DEFAULT_WINDOWS_WIRESHARK_PATH = join(
+const DEFAULT_WINDOWS_WIRESHARK_PATH = join(
     'C:',
     'Program Files',
     'Wireshark',
