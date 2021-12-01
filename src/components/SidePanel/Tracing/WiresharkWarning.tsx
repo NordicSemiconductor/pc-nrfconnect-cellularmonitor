@@ -26,7 +26,7 @@ export default ({ selectedTraceFormats }: WiresharkWarningProps) => {
 
     return (
         <div className="wireshark-warning">
-            <span className="mdi mdi-alert mdi-24px" />
+            <span className="mdi mdi-alert mdi-24px wireshark-warning-icon" />
             <Wireshark extendedDescription />
         </div>
     );

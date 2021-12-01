@@ -9,7 +9,6 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'pc-nrfconnect-shared';
 
-import helpIcon from '../../../resources/help-circle-outline.svg';
 import {
     getManualDbFilePath,
     resetManualDbFilePath,
@@ -19,9 +18,8 @@ import { askForTraceDbFile } from '../../utils/fileUtils';
 import FilePathLink from './FilePathLink';
 
 const HelpOnTraceDb = () => (
-    <img
-        src={helpIcon}
-        alt="Explain trace database"
+    <span
+        className="mdi mdi-help-circle-outline advanced-options-help"
         title="A trace database file is used to decode trace data"
     />
 );

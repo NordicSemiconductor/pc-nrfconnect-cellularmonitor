@@ -67,10 +67,12 @@
     align-items: center;
     justify-content: center;
     margin-top: 24px;
+    padding: 0;
+    height: 34px;
 
-    img {
-        height: 20px;
-        width: 20px;
+    span {
+        color: $gray-700;
+        font-size: 20px;
         margin-right: 8px;
     }
 }
@@ -92,7 +94,7 @@
     align-items: center;
     font-size: 12px;
 
-    span {
+    .wireshark-warning-icon {
         margin-right: 12px;
     }
 

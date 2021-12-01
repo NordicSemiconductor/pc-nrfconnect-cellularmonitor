@@ -8,8 +8,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
-import playSvg from '../../../../resources/play-circle.svg';
-import stopSvg from '../../../../resources/stop-circle.svg';
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
 import { TraceFormat } from '../../../features/tracing/sinks';
 import { getIsTracing, getTaskId } from '../../../features/tracing/traceSlice';
@@ -39,7 +37,7 @@ export default ({ traceFormats = [] }: StartStopProps) => {
                     variant="secondary"
                     onClick={stop}
                 >
-                    <img alt="" src={stopSvg} />
+                    <span className="mdi mdi-stop-circle" />
                     Stop tracing
                 </Button>
             ) : (
@@ -49,7 +47,7 @@ export default ({ traceFormats = [] }: StartStopProps) => {
                     onClick={start}
                     disabled={traceFormats.length === 0}
                 >
-                    <img alt="" src={playSvg} />
+                    <span className="mdi mdi-play-circle" />
                     Start tracing
                 </Button>
             )}
