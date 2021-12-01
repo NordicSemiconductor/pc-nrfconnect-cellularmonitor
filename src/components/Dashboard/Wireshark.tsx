@@ -18,6 +18,10 @@ import { findWireshark, openInWireshark } from '../../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
+type WiresharkProps = {
+    extendedDescription?: boolean;
+};
+
 const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
@@ -29,14 +33,18 @@ const SelectWireshark: FC = ({ children }) => {
     };
 
     return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a href="#" onClick={updateWiresharkPath} role="button">
+        <Button
+            onClick={updateWiresharkPath}
+            role="button"
+            variant="link"
+            className="card-links"
+        >
             {children}
-        </a>
+        </Button>
     );
 };
 
-export default () => {
+export default ({ extendedDescription = false }: WiresharkProps) => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
 
@@ -66,20 +74,23 @@ export default () => {
                 </>
             ) : (
                 <>
-                    <h6>Wireshark not found</h6>
+                    <h6>Wireshark not detected</h6>
                     <p>
-                        You can{' '}
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a
-                            href="#"
+                        {extendedDescription && (
+                            <span>
+                                Wireshark is required for live streaming trace
+                                output.
+                            </span>
+                        )}
+                        <Button
+                            variant="link"
+                            className="card-links"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
                         >
-                            download and install Wireshark
-                        </a>{' '}
-                        or{' '}
-                        <SelectWireshark>select the executable</SelectWireshark>{' '}
-                        if you already have it installed but in a location where
-                        this app currently does not find it.
+                            Install Wireshark
+                        </Button>{' '}
+                        or manually{' '}
+                        <SelectWireshark>specify install path</SelectWireshark>.
                     </p>
                 </>
             )}

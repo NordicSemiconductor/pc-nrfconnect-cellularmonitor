@@ -26,9 +26,7 @@ export default () => {
             show={detectingTraceDb}
             backdrop="static"
             size="lg"
-            onHide={() => {
-                dispatch(setDetectingTraceDb(false));
-            }}
+            onHide={() => dispatch(setDetectingTraceDb(false))}
         >
             <Modal.Header closeButton>
                 <Modal.Title data-testid="title">
@@ -46,6 +44,11 @@ export default () => {
                         Advanced Options section to skip this step.
                     </li>
                     <li>
+                        TIP! Ensure that the correct serialport is selected, and
+                        that the modem firmware on the device is one of the
+                        supported firmwares.
+                    </li>
+                    <li>
                         TIP! Press the reset button on your development kit if
                         the process is taking a long time.
                     </li>
@@ -56,9 +59,7 @@ export default () => {
                 &nbsp;
                 <Button
                     variant="secondary"
-                    onClick={() => {
-                        dispatch(setDetectingTraceDb(false));
-                    }}
+                    onClick={() => dispatch(setDetectingTraceDb(false))}
                 >
                     Close
                 </Button>

@@ -23,8 +23,12 @@ export default () => {
     if (traceData.length === 0) {
         return null;
     }
+    const formats = traceData.map(trace => trace.format);
+    // If we only do live tracing, we don't want to show disk space usage
+    if (formats.length === 1 && formats[0] === 'live') return null;
 
     const traceDetails = traceData.map(trace => {
+        if (trace.format === 'live') return null;
         const [filename] = getNameAndDirectory(trace.path);
         return (
             <div className="trace-file-container" key={trace.format}>

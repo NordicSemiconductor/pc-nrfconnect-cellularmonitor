@@ -2,6 +2,7 @@
 ### Added
 - Dialog window alerting users that we are trying to autodetect modem firmware version.
 - Option to select multiple output file formats for the same trace.
+- Named pipe functionality. Users can now Live stream pcap data in Wireshark if it's installed.
 ### Changed
 - Use new icon set.
 
