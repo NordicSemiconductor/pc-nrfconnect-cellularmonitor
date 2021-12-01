@@ -84,7 +84,7 @@
     }
 }
 
-.warning-box {
+.wireshark-warning {
     display: flex;
     border: 1px solid $gray-200;
     padding: 8px;
@@ -92,7 +92,7 @@
     align-items: center;
     font-size: 12px;
 
-    img {
+    span {
         margin-right: 12px;
     }
 
