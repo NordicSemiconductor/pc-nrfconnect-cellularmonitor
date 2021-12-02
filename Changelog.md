@@ -1,3 +1,7 @@
+## 0.2.1
+### Fixed
+- Issue where application would crash on macOS if trace was first stopped, then Wireshark closed.
+
 ## 0.2.0 - 2021-12-02
 ### Added
 - Dialog window alerting users that we are trying to autodetect modem firmware version.
