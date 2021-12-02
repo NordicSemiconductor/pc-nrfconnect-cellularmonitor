@@ -11,9 +11,11 @@ import { convertTraceFile, startTrace } from './nrfml';
 import { sinkConfig } from './sinks';
 import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
 
+const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
+
 jest.mock('../../utils/wireshark', () => ({
     defaultWiresharkPath: () => {
-        return 'default/path/to/wireshark';
+        return MOCKED_DEFAULT_WIRESHARK_PATH;
     },
 }));
 
@@ -127,7 +129,7 @@ describe('nrfml', () => {
                     application_name: 'Trace Collector V2 preview',
                     hw_name: undefined,
                     os_name: 'MockOS',
-                    start_process: '"default/path/to/wireshark"',
+                    start_process: MOCKED_DEFAULT_WIRESHARK_PATH,
                 },
             });
         });

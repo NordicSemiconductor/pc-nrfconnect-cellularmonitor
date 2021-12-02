@@ -56,7 +56,7 @@ export const sinkConfig = {
         ({
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
-                start_process: `"${wiresharkPath ?? defaultWiresharkPath()}"`,
+                start_process: `${wiresharkPath ?? defaultWiresharkPath()}`,
                 ...additionalPcapProperties(device),
             },
         } as const),
