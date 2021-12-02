@@ -1,4 +1,4 @@
-## Unreleased
+## 0.2.0 - 2021-12-02
 ### Added
 - Dialog window alerting users that we are trying to autodetect modem firmware version.
 - Option to select multiple output file formats for the same trace.
