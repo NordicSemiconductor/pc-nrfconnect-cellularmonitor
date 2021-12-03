@@ -1,4 +1,4 @@
-## 0.2.1
+## 0.2.1 - 2021-12-03
 ### Fixed
 - Issue where application would crash on macOS if trace was first stopped, then Wireshark closed.
 
