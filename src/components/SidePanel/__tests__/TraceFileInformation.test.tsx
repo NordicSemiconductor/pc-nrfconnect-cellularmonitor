@@ -6,7 +6,10 @@
 
 import React from 'react';
 
-import { setTraceData, TraceData } from '../../../features/tracing/traceSlice';
+import {
+    setTraceData,
+    TraceProgress,
+} from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
 import TraceFileInformation from '../Tracing/TraceFileInformation';
 
@@ -14,7 +17,7 @@ describe('FileInformation', () => {
     it('should display the name and size of the trace', async () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
         const filePath = 'path/to/file.bin';
-        const traceData: TraceData = {
+        const traceData: TraceProgress = {
             format: 'raw',
             path: filePath,
             size: 1000,

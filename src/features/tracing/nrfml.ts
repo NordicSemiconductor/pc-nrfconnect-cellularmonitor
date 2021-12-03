@@ -26,7 +26,7 @@ import {
     setDetectingTraceDb,
     setTaskId,
     setTraceData,
-    TraceData,
+    TraceProgress,
 } from './traceSlice';
 
 export type TaskId = number;
@@ -41,7 +41,7 @@ const convertTraceFile =
             path.join(directory, basename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
-        const traceData: TraceData = {
+        const traceData: TraceProgress = {
             format: traceFormat,
             size: 0,
             path: destinationPath,
@@ -109,7 +109,7 @@ const startTrace =
         }
         const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const traceData: TraceData[] = [];
+        const traceData: TraceProgress[] = [];
         let wiresharkPath: string | null;
         let filePath = '';
         const sinkConfigs = traceFormats.map(format => {

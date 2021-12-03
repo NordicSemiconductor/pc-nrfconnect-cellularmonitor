@@ -12,14 +12,17 @@ import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup, usageData } from 'pc-nrfconnect-shared';
 
-import { getTraceData, TraceData } from '../../../features/tracing/traceSlice';
+import {
+    getTraceData,
+    TraceProgress,
+} from '../../../features/tracing/traceSlice';
 import EventAction from '../../../usageDataActions';
 import { truncateMiddle } from '../../../utils';
 import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
-const TraceFileName: FC<{ trace: TraceData }> = ({ trace }) => {
+const TraceFileName: FC<{ trace: TraceProgress }> = ({ trace }) => {
     const [filename] = getNameAndDirectory(trace.path);
 
     return (
@@ -42,7 +45,7 @@ const TraceFileName: FC<{ trace: TraceData }> = ({ trace }) => {
     );
 };
 
-const TraceFileDetails: FC<{ trace: TraceData }> = ({ trace }) => {
+const TraceFileDetails: FC<{ trace: TraceProgress }> = ({ trace }) => {
     if (trace.format === 'live') {
         return null;
     }

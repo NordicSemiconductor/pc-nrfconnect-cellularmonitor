@@ -17,14 +17,14 @@ import {
 import { TaskId } from './nrfml';
 import { TraceFormat } from './sinks';
 
-export interface TraceData {
+export interface TraceProgress {
     format: TraceFormat;
     path: string;
     size: number;
 }
 
 export interface TraceState {
-    traceData: TraceData[];
+    traceData: TraceProgress[];
     taskId: TaskId | null;
     serialPort: string | null;
     availableSerialPorts: string[];
@@ -50,7 +50,7 @@ const traceSlice = createSlice({
         setTaskId: (state, action: PayloadAction<TaskId | null>) => {
             state.taskId = action.payload;
         },
-        setTraceData: (state, action: PayloadAction<TraceData[]>) => {
+        setTraceData: (state, action: PayloadAction<TraceProgress[]>) => {
             state.traceData = action.payload;
         },
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
