@@ -24,8 +24,9 @@ import {
     getSerialPort,
     getWiresharkPath,
     setDetectingTraceDb,
-    setTaskId,
-    setTraceData,
+    setTraceIsStarted,
+    setTraceIsStopped,
+    setTraceProgress,
     TraceProgress,
 } from './traceSlice';
 
@@ -41,11 +42,6 @@ const convertTraceFile =
             path.join(directory, basename) + fileExtension(traceFormat);
         const manualDbFilePath = getManualDbFilePath(getState());
 
-        const traceData: TraceProgress = {
-            format: traceFormat,
-            size: 0,
-            path: destinationPath,
-        };
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
@@ -71,7 +67,7 @@ const convertTraceFile =
                 } else {
                     logger.info(`Successfully converted ${basename} to pcap`);
                 }
-                dispatch(setTaskId(null));
+                dispatch(setTraceIsStopped());
             },
             progress => {
                 if (!manualDbFilePath) {
@@ -83,20 +79,27 @@ const convertTraceFile =
                     detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
                 }
 
-                progress.data_offsets
-                    ?.filter(
-                        ({ path: progressPath }) =>
-                            progressPath === destinationPath
-                    )
-                    .forEach(({ offset }) => {
-                        dispatch(
-                            setTraceData([{ ...traceData, size: offset }])
-                        );
-                    });
+                progress.data_offsets?.forEach(progressItem => {
+                    dispatch(
+                        setTraceProgress({
+                            path: progressItem.path,
+                            size: progressItem.offset,
+                        })
+                    );
+                });
             }
         );
-        dispatch(setTraceData([traceData]));
-        dispatch(setTaskId(taskId));
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: [
+                    {
+                        format: traceFormat,
+                        path: destinationPath,
+                    },
+                ],
+            })
+        );
     };
 
 const startTrace =
@@ -109,7 +112,7 @@ const startTrace =
         }
         const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const traceData: TraceProgress[] = [];
+        const progressConfigs: Pick<TraceProgress, 'format' | 'path'>[] = [];
         let wiresharkPath: string | null;
         let filePath = '';
         const sinkConfigs = traceFormats.map(format => {
@@ -121,10 +124,9 @@ const startTrace =
                     fileExtension(format);
             }
 
-            traceData.push({
+            progressConfigs.push({
                 format,
                 path: filePath,
-                size: 0,
             });
             usageData.sendUsageData(sinkEvent(format));
             return sinkConfig[format](filePath, device, wiresharkPath);
@@ -189,18 +191,14 @@ const startTrace =
                 progressCallbackCounter += 1;
                 if (progressCallbackCounter % 30 !== 0) return;
                 try {
-                    const newTraceData = traceData.map(trace => {
-                        if (!progress.data_offsets) return trace;
-                        const index = progress.data_offsets.findIndex(
-                            data => trace.path === data.path
+                    progress?.data_offsets?.forEach(progressItem => {
+                        dispatch(
+                            setTraceProgress({
+                                path: progressItem.path,
+                                size: progressItem.offset,
+                            })
                         );
-                        const dataOffset = progress.data_offsets[index];
-                        return {
-                            ...trace,
-                            size: dataOffset ? dataOffset.offset : trace.size,
-                        };
                     });
-                    dispatch(setTraceData(newTraceData));
                 } catch (err) {
                     logger.debug(
                         `Error in progress callback, discarding sample ${JSON.stringify(
@@ -211,8 +209,12 @@ const startTrace =
             }
         );
         logger.info('Started tracefile');
-        dispatch(setTraceData(traceData));
-        dispatch(setTaskId(taskId));
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs,
+            })
+        );
     };
 
 const stopTrace =
@@ -221,7 +223,7 @@ const stopTrace =
         if (taskId === null) return;
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
-        dispatch(setTaskId(null));
+        dispatch(setTraceIsStopped());
     };
 
 export { convertTraceFile, startTrace, stopTrace };

@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import { CollapsibleGroup, usageData } from 'pc-nrfconnect-shared';
 
 import {
-    getTraceData,
+    getTraceProgress,
     TraceProgress,
 } from '../../../features/tracing/traceSlice';
 import EventAction from '../../../usageDataActions';
@@ -22,20 +22,20 @@ import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
-const TraceFileName: FC<{ trace: TraceProgress }> = ({ trace }) => {
-    const [filename] = getNameAndDirectory(trace.path);
+const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
+    const [filename] = getNameAndDirectory(progress.path);
 
     return (
         <div className="trace-filename-wrapper">
-            <FormLabel>{`${trace.format.toUpperCase()} file name`}</FormLabel>
+            <FormLabel>{`${progress.format.toUpperCase()} file name`}</FormLabel>
             <span
                 className="trace-filename"
                 onClick={() => {
                     usageData.sendUsageData(
                         EventAction.OPEN_FILE_DIRECTORY,
-                        trace.format
+                        progress.format
                     );
-                    openInFolder(trace.path);
+                    openInFolder(progress.path);
                 }}
                 title={filename}
             >
@@ -45,35 +45,38 @@ const TraceFileName: FC<{ trace: TraceProgress }> = ({ trace }) => {
     );
 };
 
-const TraceFileDetails: FC<{ trace: TraceProgress }> = ({ trace }) => {
-    if (trace.format === 'live') {
+const TraceFileDetails: FC<{ progress: TraceProgress }> = ({ progress }) => {
+    if (progress.format === 'live') {
         return null;
     }
 
     return (
         <div className="trace-file-container">
-            <TraceFileName trace={trace} />
-            <DiskSpaceUsageBox label="File size" value={trace.size} />
+            <TraceFileName progress={progress} />
+            <DiskSpaceUsageBox label="File size" value={progress.size} />
         </div>
     );
 };
 
 export default () => {
-    const traceData = useSelector(getTraceData);
+    const progress = useSelector(getTraceProgress);
 
-    const noTraceData = traceData.length === 0;
+    const noProgressData = progress.length === 0;
     const onlyDoingLiveTracing =
-        traceData.length === 1 && traceData[0].format === 'live';
+        progress.length === 1 && progress[0].format === 'live';
 
-    if (noTraceData || onlyDoingLiveTracing) {
+    if (noProgressData || onlyDoingLiveTracing) {
         return null;
     }
 
     return (
         <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
             <DiskSpaceUsage />
-            {traceData.map(trace => (
-                <TraceFileDetails key={trace.format} trace={trace} />
+            {progress.map(progressItem => (
+                <TraceFileDetails
+                    key={progressItem.format}
+                    progress={progressItem}
+                />
             ))}
         </CollapsibleGroup>
     );

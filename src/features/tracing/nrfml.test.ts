@@ -9,7 +9,7 @@ import path from 'path';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
 import { sinkConfig } from './sinks';
-import { setDetectingTraceDb, setTaskId, setTraceData } from './traceSlice';
+import { setDetectingTraceDb, setTraceIsStarted } from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
@@ -44,16 +44,17 @@ describe('nrfml', () => {
         store.dispatch(convertTraceFile('somePath.bin'));
         expect(store.getActions()).toEqual([
             {
-                type: setTraceData.type,
-                payload: [
-                    {
-                        format: 'pcap',
-                        size: 0,
-                        path: 'somePath.pcapng',
-                    },
-                ],
+                type: setTraceIsStarted.type,
+                payload: {
+                    taskId: 1,
+                    progressConfigs: [
+                        {
+                            format: 'pcap',
+                            path: 'somePath.pcapng',
+                        },
+                    ],
+                },
             },
-            { type: setTaskId.type, payload: 1 },
         ]);
     });
 
@@ -69,19 +70,20 @@ describe('nrfml', () => {
             expect(store.getActions()).toEqual([
                 { type: setDetectingTraceDb.type, payload: true },
                 {
-                    type: setTraceData.type,
-                    payload: [
-                        {
-                            format: 'pcap',
-                            size: 0,
-                            path: path.join(
-                                mockedDataDir,
-                                'trace-2000-01-01T00-00-00.000Z.pcapng'
-                            ),
-                        },
-                    ],
+                    type: setTraceIsStarted.type,
+                    payload: {
+                        taskId: 1,
+                        progressConfigs: [
+                            {
+                                format: 'pcap',
+                                path: path.join(
+                                    mockedDataDir,
+                                    'trace-2000-01-01T00-00-00.000Z.pcapng'
+                                ),
+                            },
+                        ],
+                    },
                 },
-                { type: setTaskId.type, payload: 1 },
             ]);
         });
 
@@ -89,19 +91,20 @@ describe('nrfml', () => {
             store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
                 {
-                    type: setTraceData.type,
-                    payload: [
-                        {
-                            format: 'raw',
-                            size: 0,
-                            path: path.join(
-                                mockedDataDir,
-                                'trace-2000-01-01T00-00-00.000Z.bin'
-                            ),
-                        },
-                    ],
+                    type: setTraceIsStarted.type,
+                    payload: {
+                        taskId: 1,
+                        progressConfigs: [
+                            {
+                                format: 'raw',
+                                path: path.join(
+                                    mockedDataDir,
+                                    'trace-2000-01-01T00-00-00.000Z.bin'
+                                ),
+                            },
+                        ],
+                    },
                 },
-                { type: setTaskId.type, payload: 1 },
             ]);
         });
     });

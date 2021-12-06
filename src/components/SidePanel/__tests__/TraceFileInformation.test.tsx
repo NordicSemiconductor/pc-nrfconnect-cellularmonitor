@@ -7,8 +7,8 @@
 import React from 'react';
 
 import {
-    setTraceData,
-    TraceProgress,
+    setTraceIsStarted,
+    setTraceProgress,
 } from '../../../features/tracing/traceSlice';
 import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
 import TraceFileInformation from '../Tracing/TraceFileInformation';
@@ -17,13 +17,12 @@ describe('FileInformation', () => {
     it('should display the name and size of the trace', async () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
         const filePath = 'path/to/file.bin';
-        const traceData: TraceProgress = {
-            format: 'raw',
-            path: filePath,
-            size: 1000,
-        };
         const screen = render(<TraceFileInformation />, [
-            setTraceData([traceData]),
+            setTraceIsStarted({
+                taskId: 1,
+                progressConfigs: [{ format: 'raw', path: filePath }],
+            }),
+            setTraceProgress({ path: filePath, size: 1000 }),
         ]);
         expect(await screen.findByText('file.bin')).toBeInTheDocument();
         expect(await screen.findByText('1 kB')).toBeInTheDocument();
