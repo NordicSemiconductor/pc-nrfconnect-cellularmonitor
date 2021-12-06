@@ -12,7 +12,7 @@ import { Group } from 'pc-nrfconnect-shared';
 import {
     ALL_TRACE_FORMATS,
     TraceFormat,
-} from '../../../features/tracing/sinks';
+} from '../../../features/tracing/formats';
 import { setTraceFormats as setStoredTraceFormats } from '../../../utils/store';
 import WiresharkWarning from './WiresharkWarning';
 

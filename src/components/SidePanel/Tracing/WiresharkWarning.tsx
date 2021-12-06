@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { TraceFormat } from '../../../features/tracing/sinks';
+import { TraceFormat } from '../../../features/tracing/formats';
 import { getWiresharkPath } from '../../../features/tracing/traceSlice';
 import { findWireshark } from '../../../utils/wireshark';
 import Wireshark from '../../Dashboard/Wireshark';

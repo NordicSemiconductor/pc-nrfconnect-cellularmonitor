@@ -7,33 +7,10 @@
 import { Device } from 'pc-nrfconnect-shared';
 
 import { deviceInfo } from '../../shouldBeInShared';
-import EventAction from '../../usageDataActions';
 import { defaultWiresharkPath } from '../../utils/wireshark';
+import { fileExtension, TraceFormat } from './formats';
 
 const { displayName: appName } = require('../../../package.json');
-
-export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live'] as const;
-export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
-
-const fileExtension = (format: TraceFormat) => {
-    switch (format) {
-        case 'raw':
-            return '.bin';
-        case 'pcap':
-            return '.pcapng';
-        default:
-            throw new Error(
-                `Unknown format ${format} does not have associated file extension`
-            );
-    }
-};
-
-export const sinkEvent = (format: TraceFormat) =>
-    ({
-        raw: EventAction.RAW_TRACE,
-        pcap: EventAction.PCAP_TRACE,
-        live: EventAction.LIVE_TRACE,
-    }[format] ?? EventAction.UNKNOWN_TRACE);
 
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
@@ -44,7 +21,7 @@ const additionalPcapProperties = (device?: Device) => ({
     hw_name: device != null ? describeDevice(device) : undefined,
 });
 
-export const sinkConfig = (
+export default (
     format: TraceFormat,
     extensionlessFilePath: string,
     device?: Device,
@@ -83,15 +60,3 @@ export const sinkConfig = (
         `Unknown format ${format} does not have an associated sink config`
     );
 };
-
-export const progressConfig = (
-    format: TraceFormat,
-    extensionlessFilePath: string
-) => ({
-    format,
-    path:
-        format === 'live' ? '' : extensionlessFilePath + fileExtension(format),
-});
-
-export const requiresTraceDb = (formats: TraceFormat[]) =>
-    formats.includes('pcap') || formats.includes('live');

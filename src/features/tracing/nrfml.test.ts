@@ -8,7 +8,7 @@ import path from 'path';
 
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
-import { sinkConfig } from './sinks';
+import sinkConfig from './sinkConfig';
 import { setDetectingTraceDb, setTraceIsStarted } from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';

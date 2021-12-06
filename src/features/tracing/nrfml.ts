@@ -14,10 +14,10 @@ import EventAction from '../../usageDataActions';
 import {
     progressConfig,
     requiresTraceDb,
-    sinkConfig,
     sinkEvent,
     TraceFormat,
-} from './sinks';
+} from './formats';
+import sinkConfig from './sinkConfig';
 import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
 import {
     getManualDbFilePath,

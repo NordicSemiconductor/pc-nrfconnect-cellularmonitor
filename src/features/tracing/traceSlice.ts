@@ -14,8 +14,8 @@ import {
     setManualDbFilePath as setPersistedManualDbFilePath,
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
+import { TraceFormat } from './formats';
 import { TaskId } from './nrfml';
-import { TraceFormat } from './sinks';
 
 export interface TraceProgress {
     format: TraceFormat;

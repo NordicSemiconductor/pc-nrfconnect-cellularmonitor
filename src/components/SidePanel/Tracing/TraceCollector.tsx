@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { TraceFormat } from '../../../features/tracing/sinks';
+import { TraceFormat } from '../../../features/tracing/formats';
 import {
     getIsTracing,
     getSerialPort,

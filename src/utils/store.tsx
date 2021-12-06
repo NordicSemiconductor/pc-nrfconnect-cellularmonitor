@@ -8,7 +8,7 @@ import { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import path from 'path';
 import { getPersistentStore as store } from 'pc-nrfconnect-shared';
 
-import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/sinks';
+import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
 
 interface DevicePort {
     [serialNumber: string]: string;
