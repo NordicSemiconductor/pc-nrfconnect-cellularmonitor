@@ -47,7 +47,7 @@ const convertTraceFile =
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig[traceFormat](extensionlessFilePath)],
+                sinks: [sinkConfig(traceFormat, extensionlessFilePath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -109,7 +109,8 @@ const startTrace =
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
         const extensionlessFilePath = path.join(getAppDataDir(), filename);
         const sinkConfigs = traceFormats.map(format =>
-            sinkConfig[format](
+            sinkConfig(
+                format,
                 extensionlessFilePath,
                 device,
                 getWiresharkPath(getState())

@@ -44,34 +44,44 @@ const additionalPcapProperties = (device?: Device) => ({
     hw_name: device != null ? describeDevice(device) : undefined,
 });
 
-export const sinkConfig = {
-    raw: (extensionlessFilePath: string) =>
-        ({
+export const sinkConfig = (
+    format: TraceFormat,
+    extensionlessFilePath: string,
+    device?: Device,
+    wiresharkPath?: string | null
+) => {
+    if (format === 'raw') {
+        return {
             name: 'nrfml-raw-file-sink',
             init_parameters: {
-                file_path: extensionlessFilePath + fileExtension('raw'),
+                file_path: extensionlessFilePath + fileExtension(format),
             },
-        } as const),
-    pcap: (extensionlessFilePath: string, device?: Device) =>
-        ({
+        } as const;
+    }
+
+    if (format === 'pcap') {
+        return {
             name: 'nrfml-pcap-sink',
             init_parameters: {
-                file_path: extensionlessFilePath + fileExtension('pcap'),
+                file_path: extensionlessFilePath + fileExtension(format),
                 ...additionalPcapProperties(device),
             },
-        } as const),
-    live: (
-        _extensionlessFilePath: string,
-        device?: Device,
-        wiresharkPath?: string | null
-    ) =>
-        ({
+        } as const;
+    }
+
+    if (format === 'live') {
+        return {
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
                 start_process: `${wiresharkPath ?? defaultWiresharkPath()}`,
                 ...additionalPcapProperties(device),
             },
-        } as const),
+        } as const;
+    }
+
+    throw new Error(
+        `Unknown format ${format} does not have an associated sink config`
+    );
 };
 
 export const progressConfig = (
