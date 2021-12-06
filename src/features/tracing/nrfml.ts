@@ -12,7 +12,7 @@ import { selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {
-    fileExtension,
+    progressConfig,
     requiresTraceDb,
     sinkConfig,
     sinkEvent,
@@ -37,8 +37,7 @@ const convertTraceFile =
         const traceFormat: TraceFormat = 'pcap';
         const basename = path.basename(sourcePath, '.bin');
         const directory = path.dirname(sourcePath);
-        const destinationPath =
-            path.join(directory, basename) + fileExtension(traceFormat);
+        const extensionlessFilePath = path.join(directory, basename);
         const manualDbFilePath = getManualDbFilePath(getState());
 
         let detectedModemFwUuid: unknown;
@@ -48,7 +47,7 @@ const convertTraceFile =
         const taskId = nrfml.start(
             {
                 config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig[traceFormat](destinationPath)],
+                sinks: [sinkConfig[traceFormat](extensionlessFilePath)],
                 sources: [
                     sourceConfig(manualDbFilePath, true, {
                         file_path: sourcePath,
@@ -92,10 +91,7 @@ const convertTraceFile =
             setTraceIsStarted({
                 taskId,
                 progressConfigs: [
-                    {
-                        format: traceFormat,
-                        path: destinationPath,
-                    },
+                    progressConfig(traceFormat, extensionlessFilePath),
                 ],
             })
         );
@@ -112,28 +108,16 @@ const startTrace =
         const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
         const extensionlessFilePath = path.join(getAppDataDir(), filename);
-        const sinkConfigs = traceFormats.map(format => {
-            let wiresharkPath: string | null = null;
-            let filePath = '';
-            if (format === 'live') {
-                wiresharkPath = getWiresharkPath(getState());
-            } else {
-                filePath = extensionlessFilePath + fileExtension(format);
-            }
-
-            return sinkConfig[format](filePath, device, wiresharkPath);
-        });
-        const progressConfigs = traceFormats.map(format => {
-            let filePath = '';
-            if (format !== 'live') {
-                filePath = extensionlessFilePath + fileExtension(format);
-            }
-
-            return {
-                format,
-                path: filePath,
-            };
-        });
+        const sinkConfigs = traceFormats.map(format =>
+            sinkConfig[format](
+                extensionlessFilePath,
+                device,
+                getWiresharkPath(getState())
+            )
+        );
+        const progressConfigs = traceFormats.map(format =>
+            progressConfig(format, extensionlessFilePath)
+        );
         traceFormats.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });

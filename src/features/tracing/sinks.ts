@@ -15,7 +15,7 @@ const { displayName: appName } = require('../../../package.json');
 export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live'] as const;
 export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
 
-export const fileExtension = (format: TraceFormat) => {
+const fileExtension = (format: TraceFormat) => {
     switch (format) {
         case 'raw':
             return '.bin';
@@ -45,22 +45,26 @@ const additionalPcapProperties = (device?: Device) => ({
 });
 
 export const sinkConfig = {
-    raw: (filePath: string) =>
+    raw: (extensionlessFilePath: string) =>
         ({
             name: 'nrfml-raw-file-sink',
             init_parameters: {
-                file_path: filePath,
+                file_path: extensionlessFilePath + fileExtension('raw'),
             },
         } as const),
-    pcap: (filePath: string, device?: Device) =>
+    pcap: (extensionlessFilePath: string, device?: Device) =>
         ({
             name: 'nrfml-pcap-sink',
             init_parameters: {
-                file_path: filePath,
+                file_path: extensionlessFilePath + fileExtension('pcap'),
                 ...additionalPcapProperties(device),
             },
         } as const),
-    live: (filePath: string, device?: Device, wiresharkPath?: string | null) =>
+    live: (
+        _extensionlessFilePath: string,
+        device?: Device,
+        wiresharkPath?: string | null
+    ) =>
         ({
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
@@ -69,6 +73,15 @@ export const sinkConfig = {
             },
         } as const),
 };
+
+export const progressConfig = (
+    format: TraceFormat,
+    extensionlessFilePath: string
+) => ({
+    format,
+    path:
+        format === 'live' ? '' : extensionlessFilePath + fileExtension(format),
+});
 
 export const requiresTraceDb = (formats: TraceFormat[]) =>
     formats.includes('pcap') || formats.includes('live');

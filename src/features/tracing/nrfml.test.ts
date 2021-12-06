@@ -119,7 +119,7 @@ describe('nrfml', () => {
             expect(rawConfig).toEqual({
                 name: 'nrfml-raw-file-sink',
                 init_parameters: {
-                    file_path: 'some/path',
+                    file_path: 'some/path.bin',
                 },
             });
         });
@@ -145,7 +145,7 @@ describe('nrfml', () => {
                     application_name: 'Trace Collector V2 preview',
                     hw_name: undefined,
                     os_name: 'MockOS',
-                    file_path: 'some/path',
+                    file_path: 'some/path.pcapng',
                 },
             });
         });
