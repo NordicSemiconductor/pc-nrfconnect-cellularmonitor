@@ -27,7 +27,6 @@ import {
     setTraceIsStarted,
     setTraceIsStopped,
     setTraceProgress,
-    TraceProgress,
 } from './traceSlice';
 
 export type TaskId = number;
@@ -112,24 +111,31 @@ const startTrace =
         }
         const device = selectedDevice(getState());
         const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const progressConfigs: Pick<TraceProgress, 'format' | 'path'>[] = [];
-        let wiresharkPath: string | null;
-        let filePath = '';
+        const extensionlessFilePath = path.join(getAppDataDir(), filename);
         const sinkConfigs = traceFormats.map(format => {
+            let wiresharkPath: string | null = null;
+            let filePath = '';
             if (format === 'live') {
                 wiresharkPath = getWiresharkPath(getState());
             } else {
-                filePath =
-                    path.join(getAppDataDir(), filename) +
-                    fileExtension(format);
+                filePath = extensionlessFilePath + fileExtension(format);
             }
 
-            progressConfigs.push({
+            return sinkConfig[format](filePath, device, wiresharkPath);
+        });
+        const progressConfigs = traceFormats.map(format => {
+            let filePath = '';
+            if (format !== 'live') {
+                filePath = extensionlessFilePath + fileExtension(format);
+            }
+
+            return {
                 format,
                 path: filePath,
-            });
+            };
+        });
+        traceFormats.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
-            return sinkConfig[format](filePath, device, wiresharkPath);
         });
 
         const manualDbFilePath = getManualDbFilePath(getState());
