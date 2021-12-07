@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Device } from 'pc-nrfconnect-shared';
+import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../reducers';
-import { deviceInfo, selectedDevice } from '../../shouldBeInShared';
 import { defaultWiresharkPath } from '../../utils/wireshark';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
