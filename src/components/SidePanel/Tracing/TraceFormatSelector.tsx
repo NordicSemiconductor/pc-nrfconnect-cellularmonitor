@@ -47,7 +47,6 @@ export default ({
             >
                 {ALL_TRACE_FORMATS.map((format: TraceFormat) => (
                     <Button
-                        // @ts-expect-error -- Doesn't seem to be an easy way to use custom variants with TS
                         variant={
                             selectedTraceFormats.includes(format)
                                 ? 'set'
