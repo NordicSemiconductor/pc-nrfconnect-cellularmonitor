@@ -58,7 +58,11 @@ const convertTraceFile =
                 ],
             },
             err => {
-                if (err != null) {
+                if (err.error_code === 100) {
+                    logger.error(
+                        'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
+                    );
+                } else if (err != null) {
                     logger.error(`Failed conversion to pcap: ${err.message}`);
                     logger.debug(`Full error: ${JSON.stringify(err)}`);
                 } else {
