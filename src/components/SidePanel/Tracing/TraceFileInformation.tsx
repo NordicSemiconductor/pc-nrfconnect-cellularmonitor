@@ -45,27 +45,17 @@ const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
     );
 };
 
-const TraceFileDetails: FC<{ progress: TraceProgress }> = ({ progress }) => {
-    if (progress.format === 'live') {
-        return null;
-    }
-
-    return (
-        <div className="trace-file-container">
-            <TraceFileName progress={progress} />
-            <DiskSpaceUsageBox label="File size" value={progress.size} />
-        </div>
-    );
-};
+const TraceFileDetails: FC<{ progress: TraceProgress }> = ({ progress }) => (
+    <div className="trace-file-container">
+        <TraceFileName progress={progress} />
+        <DiskSpaceUsageBox label="File size" value={progress.size} />
+    </div>
+);
 
 export default () => {
     const progress = useSelector(getTraceProgress);
 
-    const noProgressData = progress.length === 0;
-    const onlyDoingLiveTracing =
-        progress.length === 1 && progress[0].format === 'live';
-
-    if (noProgressData || onlyDoingLiveTracing) {
+    if (progress.length === 0) {
         return null;
     }
 

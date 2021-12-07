@@ -34,6 +34,4 @@ const extensionlessFilePath = (source: SourceFormat) => {
 };
 
 export default (source: SourceFormat, format: TraceFormat) =>
-    format === 'live'
-        ? ''
-        : extensionlessFilePath(source) + fileExtension(format);
+    extensionlessFilePath(source) + fileExtension(format);
