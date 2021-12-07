@@ -114,6 +114,42 @@ describe('nrfml', () => {
                 },
             ]);
         });
+
+        it('does not create a progress config for live traces', () => {
+            store.dispatch(startTrace(['raw', 'live']));
+            expect(store.getActions()).toEqual([
+                { type: setDetectingTraceDb.type, payload: true },
+                {
+                    type: setTraceIsStarted.type,
+                    payload: {
+                        taskId: 1,
+                        progressConfigs: [
+                            {
+                                format: 'raw',
+                                path: path.join(
+                                    mockedDataDir,
+                                    'trace-2000-01-01T00-00-00.000Z.bin'
+                                ),
+                            },
+                        ],
+                    },
+                },
+            ]);
+        });
+
+        it('does not create a progress config for live traces', () => {
+            store.dispatch(startTrace(['live']));
+            expect(store.getActions()).toEqual([
+                { type: setDetectingTraceDb.type, payload: true },
+                {
+                    type: setTraceIsStarted.type,
+                    payload: {
+                        taskId: 1,
+                        progressConfigs: [],
+                    },
+                },
+            ]);
+        });
     });
 
     describe('sink configuration', () => {

@@ -19,6 +19,8 @@ export const sinkEvent = (format: TraceFormat) =>
 export const requiresTraceDb = (formats: TraceFormat[]) =>
     formats.includes('pcap') || formats.includes('live');
 
+export const hasProgress = (format: TraceFormat) => format !== 'live';
+
 export type SourceFormat =
     | {
           type: 'file';

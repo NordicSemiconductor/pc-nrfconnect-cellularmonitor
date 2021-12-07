@@ -13,6 +13,7 @@ import { RootState } from '../../reducers';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {
+    hasProgress,
     requiresTraceDb,
     sinkEvent,
     SourceFormat,
@@ -50,7 +51,7 @@ const traceConfig = ({
         sinks: sinks.map(format => sinkConfig(state, source, format)),
     },
 
-    progressConfigs: sinks.map(format => ({
+    progressConfigs: sinks.filter(hasProgress).map(format => ({
         format,
         path: sinkFile(source, format),
     })),
