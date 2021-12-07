@@ -7,17 +7,16 @@
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
-import modemReducer, { ModemState } from './features/modem/modemSlice';
-import traceReducer, { TraceState } from './features/tracing/traceSlice';
+import modemReducer from './features/modem/modemSlice';
+import traceReducer from './features/tracing/traceSlice';
 
-type AppState = {
-    modem: ModemState;
-    trace: TraceState;
-};
+type AppState = ReturnType<typeof appReducer>;
 
 export type RootState = NrfConnectState<AppState>;
 
-export default combineReducers({
+const appReducer = combineReducers({
     modem: modemReducer,
     trace: traceReducer,
 });
+
+export default appReducer;

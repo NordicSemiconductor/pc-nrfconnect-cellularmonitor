@@ -9,7 +9,7 @@ import { testUtils } from 'pc-nrfconnect-shared';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import reducer from '../reducers';
+import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
 
 jest.mock('check-disk-space');
@@ -35,7 +35,7 @@ const getMockStore = () => {
     return configureMockStore<unknown, TDispatch>(middlewares);
 };
 
-const render = testUtils.render(reducer);
+const render = testUtils.render(appReducer);
 
 export * from '@testing-library/react';
 export { render, getMockStore, mockedCheckDiskSpace, mockedDataDir };

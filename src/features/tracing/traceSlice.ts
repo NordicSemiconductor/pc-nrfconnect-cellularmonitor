@@ -6,7 +6,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../reducers';
+import { RootState } from '../../appReducer';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
@@ -23,7 +23,7 @@ export interface TraceProgress {
     size: number;
 }
 
-export interface TraceState {
+interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;
     serialPort: string | null;

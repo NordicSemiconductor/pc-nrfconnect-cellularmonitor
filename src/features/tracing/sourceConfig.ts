@@ -8,7 +8,7 @@ import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
-import { RootState } from '../../reducers';
+import { RootState } from '../../appReducer';
 import { autoDetectDbRootFolder } from '../../utils/store';
 import { requiresTraceDb, SourceFormat, TraceFormat } from './formats';
 import { getManualDbFilePath } from './traceSlice';

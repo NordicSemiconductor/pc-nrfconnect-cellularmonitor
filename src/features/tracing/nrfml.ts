@@ -9,7 +9,7 @@ import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
-import { RootState } from '../../reducers';
+import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {

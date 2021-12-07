@@ -6,7 +6,7 @@
 
 import { testUtils } from 'pc-nrfconnect-shared';
 
-import appReducer from '../../reducers';
+import appReducer from '../../appReducer';
 import {
     getIsTracing,
     getTaskId,

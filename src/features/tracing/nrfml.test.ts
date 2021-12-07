@@ -7,7 +7,7 @@
 import path from 'path';
 import { testUtils } from 'pc-nrfconnect-shared';
 
-import reducers from '../../reducers';
+import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
@@ -153,7 +153,7 @@ describe('nrfml', () => {
     });
 
     describe('sink configuration', () => {
-        const state = testUtils.rootReducer(reducers)(undefined, {
+        const state = testUtils.rootReducer(appReducer)(undefined, {
             type: '@INIT',
         });
 
