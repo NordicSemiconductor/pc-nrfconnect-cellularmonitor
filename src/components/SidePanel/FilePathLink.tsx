@@ -13,7 +13,7 @@ import { openInFolder } from '../../utils/fileUtils';
 
 type FilePathLinkProps = {
     filePath: string;
-    label?: JSX.Element | string;
+    label?: React.ReactElement | string;
     clipStart?: number;
     clipEnd?: number;
     displayPath?: string;
