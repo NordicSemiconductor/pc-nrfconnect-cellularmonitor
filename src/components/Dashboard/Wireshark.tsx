@@ -29,7 +29,7 @@ const SelectWireshark: FC = ({ children }) => {
     const updateWiresharkPath = () => {
         const selectedWiresharkPath = askForWiresharkPath();
         if (selectedWiresharkPath != null) {
-            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK, undefined);
+            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
             dispatch(setWiresharkPath(selectedWiresharkPath));
         }
     };

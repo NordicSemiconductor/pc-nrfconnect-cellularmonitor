@@ -48,7 +48,7 @@ const convertTraceFile =
         };
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
-        usageData.sendUsageData(EventAction.CONVERT_TRACE, undefined);
+        usageData.sendUsageData(EventAction.CONVERT_TRACE);
 
         const taskId = nrfml.start(
             {
@@ -126,7 +126,7 @@ const startTrace =
                 path: filePath,
                 size: 0,
             });
-            usageData.sendUsageData(sinkEvent(format), undefined);
+            usageData.sendUsageData(sinkEvent(format));
             return sinkConfig[format](filePath, device, wiresharkPath);
         });
 
@@ -220,7 +220,7 @@ const stopTrace =
     dispatch => {
         if (taskId === null) return;
         nrfml.stop(taskId);
-        usageData.sendUsageData(EventAction.STOP_TRACE, undefined);
+        usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTaskId(null));
     };
 

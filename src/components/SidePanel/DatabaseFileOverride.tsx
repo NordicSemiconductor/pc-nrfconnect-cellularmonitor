@@ -32,10 +32,7 @@ const SelectTraceDbManually = () => {
         const manualDbPath = askForTraceDbFile();
         if (manualDbPath) {
             dispatch(setManualDbFilePath(manualDbPath));
-            usageData.sendUsageData(
-                EventAction.SET_TRACE_DB_MANUALLY,
-                undefined
-            );
+            usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
             logger.info(
                 `Database path successfully updated to ${manualDbPath}`
             );
