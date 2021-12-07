@@ -20,7 +20,7 @@ const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
 
 interface StoreSchema {
-    [MANUAL_DB_FILE_PATH_KEY]: string;
+    [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMATS]: TraceFormat[];
     [SERIALPORTS]: DevicePort;

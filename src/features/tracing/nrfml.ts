@@ -5,24 +5,25 @@
  */
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
-import path from 'path';
-import { getAppDataDir, logger, usageData } from 'pc-nrfconnect-shared';
+// eslint-disable-next-line import/no-unresolved
+import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { logger, usageData } from 'pc-nrfconnect-shared';
 
-import { selectedDevice } from '../../shouldBeInShared';
+import { RootState } from '../../reducers';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {
-    progressConfig,
     requiresTraceDb,
     sinkEvent,
+    SourceFormat,
     TraceFormat,
 } from './formats';
 import sinkConfig from './sinkConfig';
-import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
+import sinkFile from './sinkFile';
+import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
-    getWiresharkPath,
     setDetectingTraceDb,
     setTraceIsStarted,
     setTraceIsStopped,
@@ -31,29 +32,70 @@ import {
 
 export type TaskId = number;
 
-const convertTraceFile =
-    (sourcePath: string): TAction =>
-    (dispatch, getState) => {
-        const traceFormat: TraceFormat = 'pcap';
-        const basename = path.basename(sourcePath, '.bin');
-        const directory = path.dirname(sourcePath);
-        const extensionlessFilePath = path.join(directory, basename);
-        const manualDbFilePath = getManualDbFilePath(getState());
+const traceConfig = ({
+    state,
+    source,
+    sinks,
+}: {
+    state: RootState;
+    source: SourceFormat;
+    sinks: TraceFormat[];
+}) => ({
+    isDetectingTraceDb:
+        getManualDbFilePath(state) == null && requiresTraceDb(sinks),
 
+    nrfmlConfig: {
+        config: { plugins_directory: getPluginsDir() },
+        sources: [sourceConfig(state, source, sinks)] as Sources,
+        sinks: sinks.map(format => sinkConfig(state, source, format)),
+    },
+
+    progressConfigs: sinks.map(format => ({
+        format,
+        path: sinkFile(source, format),
+    })),
+});
+
+function detectTraceDB(progress: nrfml.Progress, detectedTraceDB: unknown) {
+    if (
+        progress.meta?.modem_db_path != null &&
+        detectedTraceDB !== progress.meta?.modem_db_path
+    ) {
+        detectedTraceDB = progress.meta?.modem_db_path;
+        logger.info(`Using trace DB ${detectedTraceDB}`);
+    }
+    return detectedTraceDB;
+}
+
+function detectModemFwUuid(
+    progress: nrfml.Progress,
+    detectedModemFwUuid: unknown
+) {
+    if (
+        progress.meta?.modem_db_uuid != null &&
+        detectedModemFwUuid !== progress.meta?.modem_db_uuid
+    ) {
+        detectedModemFwUuid = progress.meta?.modem_db_uuid;
+        logger.info(`Detected modem firmware with UUID ${detectedModemFwUuid}`);
+    }
+    return detectedModemFwUuid;
+}
+
+export const convertTraceFile =
+    (path: string): TAction =>
+    (dispatch, getState) => {
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
 
+        const config = traceConfig({
+            state: getState(),
+            source: { type: 'file', path },
+            sinks: ['pcap'],
+        });
+
         const taskId = nrfml.start(
-            {
-                config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig(traceFormat, extensionlessFilePath)],
-                sources: [
-                    sourceConfig(manualDbFilePath, true, {
-                        file_path: sourcePath,
-                    }),
-                ],
-            },
+            config.nrfmlConfig,
             err => {
                 if (err?.error_code === 100) {
                     logger.error(
@@ -63,12 +105,12 @@ const convertTraceFile =
                     logger.error(`Failed conversion to pcap: ${err.message}`);
                     logger.debug(`Full error: ${JSON.stringify(err)}`);
                 } else {
-                    logger.info(`Successfully converted ${basename} to pcap`);
+                    logger.info(`Successfully converted ${path} to pcap`);
                 }
                 dispatch(setTraceIsStopped());
             },
             progress => {
-                if (!manualDbFilePath) {
+                if (config.isDetectingTraceDb) {
                     detectedModemFwUuid = detectModemFwUuid(
                         progress,
                         detectedModemFwUuid
@@ -90,42 +132,30 @@ const convertTraceFile =
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: [
-                    progressConfig(traceFormat, extensionlessFilePath),
-                ],
+                progressConfigs: config.progressConfigs,
             })
         );
     };
 
-const startTrace =
-    (traceFormats: TraceFormat[]): TAction =>
+export const startTrace =
+    (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
-        const serialPort = getSerialPort(getState());
-        if (!serialPort) {
+        const port = getSerialPort(getState());
+        if (!port) {
             logger.error('Select serial port to start tracing');
             return;
         }
-        const device = selectedDevice(getState());
-        const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const extensionlessFilePath = path.join(getAppDataDir(), filename);
-        const sinkConfigs = traceFormats.map(format =>
-            sinkConfig(
-                format,
-                extensionlessFilePath,
-                device,
-                getWiresharkPath(getState())
-            )
-        );
-        const progressConfigs = traceFormats.map(format =>
-            progressConfig(format, extensionlessFilePath)
-        );
-        traceFormats.forEach(format => {
+        sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
-        const manualDbFilePath = getManualDbFilePath(getState());
+        const config = traceConfig({
+            state: getState(),
+            source: { type: 'device', port },
+            sinks,
+        });
 
-        if (!manualDbFilePath && requiresTraceDb(traceFormats)) {
+        if (config.isDetectingTraceDb) {
             dispatch(setDetectingTraceDb(true));
         }
 
@@ -134,19 +164,7 @@ const startTrace =
         let progressCallbackCounter = 0;
 
         const taskId = nrfml.start(
-            {
-                config: { plugins_directory: getPluginsDir() },
-                sinks: sinkConfigs,
-                sources: [
-                    sourceConfig(
-                        manualDbFilePath,
-                        requiresTraceDb(traceFormats),
-                        {
-                            serialport: { path: serialPort },
-                        }
-                    ),
-                ],
-            },
+            config.nrfmlConfig,
             err => {
                 if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
@@ -155,13 +173,13 @@ const startTrace =
                     logger.info('Finished tracefile');
                 }
                 // stop tracing if Completed callback is called and we are only doing live tracing
-                if (traceFormats.length === 1 && traceFormats[0] === 'live') {
+                if (sinks.length === 1 && sinks[0] === 'live') {
                     dispatch(stopTrace(taskId));
                 }
             },
             progress => {
                 if (
-                    !manualDbFilePath &&
+                    config.isDetectingTraceDb &&
                     !detectedModemFwUuid &&
                     !detectedTraceDB
                 ) {
@@ -203,12 +221,12 @@ const startTrace =
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs,
+                progressConfigs: config.progressConfigs,
             })
         );
     };
 
-const stopTrace =
+export const stopTrace =
     (taskId: TaskId | null): TAction =>
     dispatch => {
         if (taskId === null) return;
@@ -216,5 +234,3 @@ const stopTrace =
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
-
-export { convertTraceFile, startTrace, stopTrace };

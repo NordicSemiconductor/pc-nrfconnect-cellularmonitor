@@ -5,7 +5,9 @@
  */
 
 import path from 'path';
+import { testUtils } from 'pc-nrfconnect-shared';
 
+import reducers from '../../reducers';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
@@ -17,6 +19,11 @@ jest.mock('../../utils/wireshark', () => ({
     defaultWiresharkPath: () => {
         return MOCKED_DEFAULT_WIRESHARK_PATH;
     },
+}));
+
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => mockedDataDir,
 }));
 
 const mockStore = getMockStore();
@@ -110,12 +117,20 @@ describe('nrfml', () => {
     });
 
     describe('sink configuration', () => {
+        const state = testUtils.rootReducer(reducers)(undefined, {
+            type: '@INIT',
+        });
+
         beforeAll(() => {
             Object.defineProperty(process, 'platform', { value: 'MockOS' });
         });
 
         it('should return proper configuration for raw trace', () => {
-            const rawConfig = sinkConfig('raw', 'some/path');
+            const rawConfig = sinkConfig(
+                state,
+                { type: 'file', path: 'some/path.bin' },
+                'raw'
+            );
             expect(rawConfig).toEqual({
                 name: 'nrfml-raw-file-sink',
                 init_parameters: {
@@ -125,7 +140,11 @@ describe('nrfml', () => {
         });
 
         it('should return proper configuration for live trace', () => {
-            const liveConfig = sinkConfig('live', '');
+            const liveConfig = sinkConfig(
+                state,
+                { type: 'file', path: 'some/path.bin' },
+                'live'
+            );
             expect(liveConfig).toEqual({
                 name: 'nrfml-wireshark-named-pipe-sink',
                 init_parameters: {
@@ -138,7 +157,11 @@ describe('nrfml', () => {
         });
 
         it('should return proper configuration for pcap trace', () => {
-            const pcapConfig = sinkConfig('pcap', 'some/path');
+            const pcapConfig = sinkConfig(
+                state,
+                { type: 'file', path: 'some/path.bin' },
+                'pcap'
+            );
             expect(pcapConfig).toEqual({
                 name: 'nrfml-pcap-sink',
                 init_parameters: {

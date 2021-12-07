@@ -6,9 +6,12 @@
 
 import { Device } from 'pc-nrfconnect-shared';
 
-import { deviceInfo } from '../../shouldBeInShared';
+import { RootState } from '../../reducers';
+import { deviceInfo, selectedDevice } from '../../shouldBeInShared';
 import { defaultWiresharkPath } from '../../utils/wireshark';
-import { fileExtension, TraceFormat } from './formats';
+import { SourceFormat, TraceFormat } from './formats';
+import sinkFile from './sinkFile';
+import { getWiresharkPath } from './traceSlice';
 
 const { displayName: appName } = require('../../../package.json');
 
@@ -22,16 +25,15 @@ const additionalPcapProperties = (device?: Device) => ({
 });
 
 export default (
-    format: TraceFormat,
-    extensionlessFilePath: string,
-    device?: Device,
-    wiresharkPath?: string | null
+    state: RootState,
+    source: SourceFormat,
+    format: TraceFormat
 ) => {
     if (format === 'raw') {
         return {
             name: 'nrfml-raw-file-sink',
             init_parameters: {
-                file_path: extensionlessFilePath + fileExtension(format),
+                file_path: sinkFile(source, format),
             },
         } as const;
     }
@@ -40,8 +42,8 @@ export default (
         return {
             name: 'nrfml-pcap-sink',
             init_parameters: {
-                file_path: extensionlessFilePath + fileExtension(format),
-                ...additionalPcapProperties(device),
+                file_path: sinkFile(source, format),
+                ...additionalPcapProperties(selectedDevice(state)),
             },
         } as const;
     }
@@ -50,8 +52,11 @@ export default (
         return {
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
-                start_process: `${wiresharkPath ?? defaultWiresharkPath()}`,
-                ...additionalPcapProperties(device),
+                start_process:
+                    getWiresharkPath(state) ??
+                    defaultWiresharkPath() ??
+                    'WIRESHARK NOT FOUND',
+                ...additionalPcapProperties(selectedDevice(state)),
             },
         } as const;
     }
