@@ -10,9 +10,10 @@
 import React from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, usageData } from 'pc-nrfconnect-shared';
 
 import { getTraceData } from '../../../features/tracing/traceSlice';
+import EventAction from '../../../usageDataActions';
 import { truncateMiddle } from '../../../utils';
 import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
@@ -36,7 +37,13 @@ export default () => {
                     <FormLabel>{`${trace.format.toUpperCase()} file name`}</FormLabel>
                     <span
                         className="trace-filename"
-                        onClick={() => openInFolder(trace.path)}
+                        onClick={() => {
+                            usageData.sendUsageData(
+                                EventAction.OPEN_FILE_DIRECTORY,
+                                trace.format
+                            );
+                            openInFolder(trace.path);
+                        }}
                         title={filename}
                     >
                         {truncateMiddle(filename, 5, 12)}

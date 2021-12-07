@@ -7,13 +7,14 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger } from 'pc-nrfconnect-shared';
+import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import {
     getManualDbFilePath,
     resetManualDbFilePath,
     setManualDbFilePath,
 } from '../../features/tracing/traceSlice';
+import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
 import FilePathLink from './FilePathLink';
 
@@ -31,6 +32,10 @@ const SelectTraceDbManually = () => {
         const manualDbPath = askForTraceDbFile();
         if (manualDbPath) {
             dispatch(setManualDbFilePath(manualDbPath));
+            usageData.sendUsageData(
+                EventAction.SET_TRACE_DB_MANUALLY,
+                undefined
+            );
             logger.info(
                 `Database path successfully updated to ${manualDbPath}`
             );

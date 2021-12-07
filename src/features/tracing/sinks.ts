@@ -7,6 +7,7 @@
 import { Device } from 'pc-nrfconnect-shared';
 
 import { deviceInfo } from '../../shouldBeInShared';
+import EventAction from '../../usageDataActions';
 import { defaultWiresharkPath } from '../../utils/wireshark';
 
 const { displayName: appName } = require('../../../package.json');
@@ -24,6 +25,19 @@ export const fileExtension = (format: TraceFormat) => {
             throw new Error(
                 `Unknown format ${format} does not have associated file extension`
             );
+    }
+};
+
+export const sinkEvent = (format: TraceFormat) => {
+    switch (format) {
+        case 'raw':
+            return EventAction.RAW_TRACE;
+        case 'pcap':
+            return EventAction.PCAP_TRACE;
+        case 'live':
+            return EventAction.LIVE_TRACE;
+        default:
+            return EventAction.UNKNOWN_TRACE;
     }
 };
 

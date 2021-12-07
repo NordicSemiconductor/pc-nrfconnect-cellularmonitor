@@ -7,12 +7,13 @@
 import React, { FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { openUrl } from 'pc-nrfconnect-shared';
+import { openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import {
     getWiresharkPath,
     setWiresharkPath,
 } from '../../features/tracing/traceSlice';
+import EventAction from '../../usageDataActions';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
 import { findWireshark, openInWireshark } from '../../utils/wireshark';
 
@@ -28,6 +29,7 @@ const SelectWireshark: FC = ({ children }) => {
     const updateWiresharkPath = () => {
         const selectedWiresharkPath = askForWiresharkPath();
         if (selectedWiresharkPath != null) {
+            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK, undefined);
             dispatch(setWiresharkPath(selectedWiresharkPath));
         }
     };
