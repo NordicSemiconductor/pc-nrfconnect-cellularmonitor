@@ -28,18 +28,12 @@ export const fileExtension = (format: TraceFormat) => {
     }
 };
 
-export const sinkEvent = (format: TraceFormat) => {
-    switch (format) {
-        case 'raw':
-            return EventAction.RAW_TRACE;
-        case 'pcap':
-            return EventAction.PCAP_TRACE;
-        case 'live':
-            return EventAction.LIVE_TRACE;
-        default:
-            return EventAction.UNKNOWN_TRACE;
-    }
-};
+export const sinkEvent = (format: TraceFormat) =>
+    ({
+        raw: EventAction.RAW_TRACE,
+        pcap: EventAction.PCAP_TRACE,
+        live: EventAction.LIVE_TRACE,
+    }[format] ?? EventAction.UNKNOWN_TRACE);
 
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
