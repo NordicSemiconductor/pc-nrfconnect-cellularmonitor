@@ -32,49 +32,35 @@ import {
 
 export type TaskId = number;
 
-const traceConfig = ({
-    state,
-    source,
-    sinks,
-}: {
-    state: RootState;
-    source: SourceFormat;
-    sinks: TraceFormat[];
-}) => ({
-    isDetectingTraceDb:
-        getManualDbFilePath(state) == null && requiresTraceDb(sinks),
+const nrfmlConfig = (
+    state: RootState,
+    source: SourceFormat,
+    sinks: TraceFormat[]
+) => ({
+    config: { plugins_directory: getPluginsDir() },
+    sources: [sourceConfig(state, source, sinks)] as Sources,
+    sinks: sinks.map(format => sinkConfig(state, source, format)),
+});
 
-    nrfmlConfig: {
-        config: { plugins_directory: getPluginsDir() },
-        sources: [sourceConfig(state, source, sinks)] as Sources,
-        sinks: sinks.map(format => sinkConfig(state, source, format)),
-    },
-
-    progressConfigs: sinks.filter(hasProgress).map(format => ({
+const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
+    sinks.filter(hasProgress).map(format => ({
         format,
         path: sinkFile(source, format),
-    })),
-});
+    }));
 
 export const convertTraceFile =
     (path: string): TAction =>
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
+        const source: SourceFormat = { type: 'file', path };
+        const sinks = ['pcap' as TraceFormat];
 
-        const config = traceConfig({
-            state: getState(),
-            source: { type: 'file', path },
-            sinks: ['pcap'],
-        });
-
-        const progressCallback = makeProgressCallback(dispatch, {
-            detectingTraceDb: config.isDetectingTraceDb,
-            displayDetectingTraceDbMessage: false,
-            throttleUpdatingProgress: false,
-        });
+        const state = getState();
+        const isDetectingTraceDb =
+            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
 
         const taskId = nrfml.start(
-            config.nrfmlConfig,
+            nrfmlConfig(state, source, sinks),
             err => {
                 if (err?.error_code === 100) {
                     logger.error(
@@ -88,12 +74,16 @@ export const convertTraceFile =
                 }
                 dispatch(setTraceIsStopped());
             },
-            progressCallback
+            makeProgressCallback(dispatch, {
+                detectingTraceDb: isDetectingTraceDb,
+                displayDetectingTraceDbMessage: false,
+                throttleUpdatingProgress: false,
+            })
         );
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: config.progressConfigs,
+                progressConfigs: progressConfigs(source, sinks),
             })
         );
     };
@@ -101,29 +91,23 @@ export const convertTraceFile =
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
+        const state = getState();
         const port = getSerialPort(getState());
         if (!port) {
             logger.error('Select serial port to start tracing');
             return;
         }
+        const source: SourceFormat = { type: 'device', port };
+
         sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
-        const config = traceConfig({
-            state: getState(),
-            source: { type: 'device', port },
-            sinks,
-        });
-
-        const progressCallback = makeProgressCallback(dispatch, {
-            detectingTraceDb: config.isDetectingTraceDb,
-            displayDetectingTraceDbMessage: config.isDetectingTraceDb,
-            throttleUpdatingProgress: true,
-        });
+        const isDetectingTraceDb =
+            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
 
         const taskId = nrfml.start(
-            config.nrfmlConfig,
+            nrfmlConfig(state, source, sinks),
             err => {
                 if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
@@ -136,13 +120,17 @@ export const startTrace =
                     dispatch(stopTrace(taskId));
                 }
             },
-            progressCallback
+            makeProgressCallback(dispatch, {
+                detectingTraceDb: isDetectingTraceDb,
+                displayDetectingTraceDbMessage: isDetectingTraceDb,
+                throttleUpdatingProgress: true,
+            })
         );
         logger.info('Started tracefile');
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: config.progressConfigs,
+                progressConfigs: progressConfigs(source, sinks),
             })
         );
     };
