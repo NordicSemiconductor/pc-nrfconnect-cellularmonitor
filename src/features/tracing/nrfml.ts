@@ -19,16 +19,15 @@ import {
     SourceFormat,
     TraceFormat,
 } from './formats';
+import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
-    setDetectingTraceDb,
     setTraceIsStarted,
     setTraceIsStopped,
-    setTraceProgress,
 } from './traceSlice';
 
 export type TaskId = number;
@@ -57,42 +56,21 @@ const traceConfig = ({
     })),
 });
 
-function detectTraceDB(progress: nrfml.Progress, detectedTraceDB: unknown) {
-    if (
-        progress.meta?.modem_db_path != null &&
-        detectedTraceDB !== progress.meta?.modem_db_path
-    ) {
-        detectedTraceDB = progress.meta?.modem_db_path;
-        logger.info(`Using trace DB ${detectedTraceDB}`);
-    }
-    return detectedTraceDB;
-}
-
-function detectModemFwUuid(
-    progress: nrfml.Progress,
-    detectedModemFwUuid: unknown
-) {
-    if (
-        progress.meta?.modem_db_uuid != null &&
-        detectedModemFwUuid !== progress.meta?.modem_db_uuid
-    ) {
-        detectedModemFwUuid = progress.meta?.modem_db_uuid;
-        logger.info(`Detected modem firmware with UUID ${detectedModemFwUuid}`);
-    }
-    return detectedModemFwUuid;
-}
-
 export const convertTraceFile =
     (path: string): TAction =>
     (dispatch, getState) => {
-        let detectedModemFwUuid: unknown;
-        let detectedTraceDB: unknown;
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
 
         const config = traceConfig({
             state: getState(),
             source: { type: 'file', path },
             sinks: ['pcap'],
+        });
+
+        const progressCallback = makeProgressCallback(dispatch, {
+            detectingTraceDb: config.isDetectingTraceDb,
+            displayDetectingTraceDbMessage: false,
+            throttleUpdatingProgress: false,
         });
 
         const taskId = nrfml.start(
@@ -110,25 +88,7 @@ export const convertTraceFile =
                 }
                 dispatch(setTraceIsStopped());
             },
-            progress => {
-                if (config.isDetectingTraceDb) {
-                    detectedModemFwUuid = detectModemFwUuid(
-                        progress,
-                        detectedModemFwUuid
-                    );
-
-                    detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
-                }
-
-                progress.data_offsets?.forEach(progressItem => {
-                    dispatch(
-                        setTraceProgress({
-                            path: progressItem.path,
-                            size: progressItem.offset,
-                        })
-                    );
-                });
-            }
+            progressCallback
         );
         dispatch(
             setTraceIsStarted({
@@ -156,13 +116,11 @@ export const startTrace =
             sinks,
         });
 
-        if (config.isDetectingTraceDb) {
-            dispatch(setDetectingTraceDb(true));
-        }
-
-        let detectedModemFwUuid: unknown = '';
-        let detectedTraceDB: unknown = '';
-        let progressCallbackCounter = 0;
+        const progressCallback = makeProgressCallback(dispatch, {
+            detectingTraceDb: config.isDetectingTraceDb,
+            displayDetectingTraceDbMessage: config.isDetectingTraceDb,
+            throttleUpdatingProgress: true,
+        });
 
         const taskId = nrfml.start(
             config.nrfmlConfig,
@@ -178,45 +136,7 @@ export const startTrace =
                     dispatch(stopTrace(taskId));
                 }
             },
-            progress => {
-                if (
-                    config.isDetectingTraceDb &&
-                    !detectedModemFwUuid &&
-                    !detectedTraceDB
-                ) {
-                    detectedModemFwUuid = detectModemFwUuid(
-                        progress,
-                        detectedModemFwUuid
-                    );
-
-                    detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
-                    dispatch(setDetectingTraceDb(false));
-                }
-
-                /*
-                    This callback is triggered quite often, and it can negatively affect the
-                    performance, so it should be fine to only process every nth sample. The offset
-                    property received from nrfml is accumulated size, so we don't lose any data this way
-                */
-                progressCallbackCounter += 1;
-                if (progressCallbackCounter % 30 !== 0) return;
-                try {
-                    progress?.data_offsets?.forEach(progressItem => {
-                        dispatch(
-                            setTraceProgress({
-                                path: progressItem.path,
-                                size: progressItem.offset,
-                            })
-                        );
-                    });
-                } catch (err) {
-                    logger.debug(
-                        `Error in progress callback, discarding sample ${JSON.stringify(
-                            err
-                        )}`
-                    );
-                }
-            }
+            progressCallback
         );
         logger.info('Started tracefile');
         dispatch(
