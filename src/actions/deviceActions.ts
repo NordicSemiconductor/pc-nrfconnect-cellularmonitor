@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { SerialPort } from '@nordicsemiconductor/nrf-device-lib-js';
+import { SerialPort } from '@nordicsemiconductor/nrf-device-lib-js'; // eslint-disable-line import/no-unresolved -- This is only importing a type and TypeScript can handle this
 import { Device, logger } from 'pc-nrfconnect-shared';
 
 import { stopTrace } from '../features/tracing/nrfml';

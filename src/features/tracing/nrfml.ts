@@ -6,14 +6,16 @@
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import path from 'path';
-import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
+import { getAppDataDir, logger, usageData } from 'pc-nrfconnect-shared';
 
 import { selectedDevice } from '../../shouldBeInShared';
 import { TAction } from '../../thunk';
+import EventAction from '../../usageDataActions';
 import {
     fileExtension,
     requiresTraceDb,
     sinkConfig,
+    sinkEvent,
     TraceFormat,
 } from './sinks';
 import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
@@ -46,6 +48,7 @@ const convertTraceFile =
         };
         let detectedModemFwUuid: unknown;
         let detectedTraceDB: unknown;
+        usageData.sendUsageData(EventAction.CONVERT_TRACE);
 
         const taskId = nrfml.start(
             {
@@ -123,6 +126,7 @@ const startTrace =
                 path: filePath,
                 size: 0,
             });
+            usageData.sendUsageData(sinkEvent(format));
             return sinkConfig[format](filePath, device, wiresharkPath);
         });
 
@@ -216,6 +220,7 @@ const stopTrace =
     dispatch => {
         if (taskId === null) return;
         nrfml.stop(taskId);
+        usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTaskId(null));
     };
 

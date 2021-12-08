@@ -7,6 +7,7 @@
 import { Device } from 'pc-nrfconnect-shared';
 
 import { deviceInfo } from '../../shouldBeInShared';
+import EventAction from '../../usageDataActions';
 import { defaultWiresharkPath } from '../../utils/wireshark';
 
 const { displayName: appName } = require('../../../package.json');
@@ -26,6 +27,13 @@ export const fileExtension = (format: TraceFormat) => {
             );
     }
 };
+
+export const sinkEvent = (format: TraceFormat) =>
+    ({
+        raw: EventAction.RAW_TRACE,
+        pcap: EventAction.PCAP_TRACE,
+        live: EventAction.LIVE_TRACE,
+    }[format] ?? EventAction.UNKNOWN_TRACE);
 
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
