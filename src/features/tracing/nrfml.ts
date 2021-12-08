@@ -61,7 +61,7 @@ const convertTraceFile =
                 ],
             },
             err => {
-                if (err.error_code === 100) {
+                if (err?.error_code === 100) {
                     logger.error(
                         'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
                     );
