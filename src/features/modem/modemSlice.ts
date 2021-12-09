@@ -6,10 +6,10 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../reducers';
+import { RootState } from '../../appReducer';
 import { Modem } from './modem';
 
-export interface ModemState {
+interface ModemState {
     readonly modem: Modem | null;
 }
 

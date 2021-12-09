@@ -6,7 +6,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../reducers';
+import { RootState } from '../../appReducer';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
@@ -14,17 +14,17 @@ import {
     setManualDbFilePath as setPersistedManualDbFilePath,
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
+import { TraceFormat } from './formats';
 import { TaskId } from './nrfml';
-import { TraceFormat } from './sinks';
 
-export interface TraceData {
+export interface TraceProgress {
     format: TraceFormat;
     path: string;
     size: number;
 }
 
-export interface TraceState {
-    traceData: TraceData[];
+interface TraceState {
+    traceProgress: TraceProgress[];
     taskId: TaskId | null;
     serialPort: string | null;
     availableSerialPorts: string[];
@@ -34,7 +34,7 @@ export interface TraceState {
 }
 
 const initialState = (): TraceState => ({
-    traceData: [],
+    traceProgress: [],
     taskId: null,
     serialPort: null,
     availableSerialPorts: [],
@@ -47,12 +47,34 @@ const traceSlice = createSlice({
     name: 'trace',
     initialState: initialState(),
     reducers: {
-        setTaskId: (state, action: PayloadAction<TaskId | null>) => {
-            state.taskId = action.payload;
+        setTraceIsStarted: (
+            state,
+            action: PayloadAction<{
+                taskId: TaskId;
+                progressConfigs: Pick<TraceProgress, 'format' | 'path'>[];
+            }>
+        ) => {
+            state.taskId = action.payload.taskId;
+            state.traceProgress = action.payload.progressConfigs.map(sink => ({
+                ...sink,
+                size: 0,
+            }));
         },
-        setTraceData: (state, action: PayloadAction<TraceData[]>) => {
-            state.traceData = action.payload;
+        setTraceIsStopped: state => {
+            state.taskId = null;
         },
+        setTraceProgress: (
+            state,
+            action: PayloadAction<Pick<TraceProgress, 'path' | 'size'>>
+        ) => {
+            const progressToUpdate = state.traceProgress.find(
+                progress => progress.path === action.payload.path
+            );
+            if (progressToUpdate != null) {
+                progressToUpdate.size = action.payload.size;
+            }
+        },
+
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
             state.availableSerialPorts = action.payload;
         },
@@ -83,7 +105,8 @@ export const getIsTracing = (state: RootState) =>
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
-export const getTraceData = (state: RootState) => state.app.trace.traceData;
+export const getTraceProgress = (state: RootState) =>
+    state.app.trace.traceProgress;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
 export const getWiresharkPath = (state: RootState) =>
@@ -94,8 +117,9 @@ export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
 
 export const {
-    setTaskId,
-    setTraceData,
+    setTraceIsStarted,
+    setTraceIsStopped,
+    setTraceProgress,
     setSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,

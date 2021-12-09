@@ -21,6 +21,11 @@ import TraceCollector from '../Tracing/TraceCollector';
 
 jest.mock('../../../utils/wireshark');
 
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => '',
+}));
+
 mockedCheckDiskSpace.mockImplementation(
     () =>
         new Promise(resolve => {

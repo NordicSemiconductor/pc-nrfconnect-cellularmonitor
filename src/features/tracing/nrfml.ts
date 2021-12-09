@@ -5,63 +5,64 @@
  */
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
-import path from 'path';
-import { getAppDataDir, logger, usageData } from 'pc-nrfconnect-shared';
+// eslint-disable-next-line import/no-unresolved
+import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { logger, usageData } from 'pc-nrfconnect-shared';
 
-import { selectedDevice } from '../../shouldBeInShared';
+import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {
-    fileExtension,
+    hasProgress,
     requiresTraceDb,
-    sinkConfig,
     sinkEvent,
+    SourceFormat,
     TraceFormat,
-} from './sinks';
-import { detectModemFwUuid, detectTraceDB, sourceConfig } from './sources';
+} from './formats';
+import makeProgressCallback from './makeProgressCallback';
+import sinkConfig from './sinkConfig';
+import sinkFile from './sinkFile';
+import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
-    getWiresharkPath,
-    setDetectingTraceDb,
-    setTaskId,
-    setTraceData,
-    TraceData,
+    setTraceIsStarted,
+    setTraceIsStopped,
 } from './traceSlice';
 
 export type TaskId = number;
 
-const convertTraceFile =
-    (sourcePath: string): TAction =>
-    (dispatch, getState) => {
-        const traceFormat: TraceFormat = 'pcap';
-        const basename = path.basename(sourcePath, '.bin');
-        const directory = path.dirname(sourcePath);
-        const destinationPath =
-            path.join(directory, basename) + fileExtension(traceFormat);
-        const manualDbFilePath = getManualDbFilePath(getState());
+const nrfmlConfig = (
+    state: RootState,
+    source: SourceFormat,
+    sinks: TraceFormat[]
+) => ({
+    config: { plugins_directory: getPluginsDir() },
+    sources: [sourceConfig(state, source, sinks)] as Sources,
+    sinks: sinks.map(format => sinkConfig(state, source, format)),
+});
 
-        const traceData: TraceData = {
-            format: traceFormat,
-            size: 0,
-            path: destinationPath,
-        };
-        let detectedModemFwUuid: unknown;
-        let detectedTraceDB: unknown;
+const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
+    sinks.filter(hasProgress).map(format => ({
+        format,
+        path: sinkFile(source, format),
+    }));
+
+export const convertTraceFile =
+    (path: string): TAction =>
+    (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
+        const source: SourceFormat = { type: 'file', path };
+        const sinks = ['pcap' as TraceFormat];
+
+        const state = getState();
+        const isDetectingTraceDb =
+            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
 
         const taskId = nrfml.start(
-            {
-                config: { plugins_directory: getPluginsDir() },
-                sinks: [sinkConfig[traceFormat](destinationPath)],
-                sources: [
-                    sourceConfig(manualDbFilePath, true, {
-                        file_path: sourcePath,
-                    }),
-                ],
-            },
+            nrfmlConfig(state, source, sinks),
             err => {
-                if (err.error_code === 100) {
+                if (err?.error_code === 100) {
                     logger.error(
                         'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
                     );
@@ -69,91 +70,44 @@ const convertTraceFile =
                     logger.error(`Failed conversion to pcap: ${err.message}`);
                     logger.debug(`Full error: ${JSON.stringify(err)}`);
                 } else {
-                    logger.info(`Successfully converted ${basename} to pcap`);
+                    logger.info(`Successfully converted ${path} to pcap`);
                 }
-                dispatch(setTaskId(null));
+                dispatch(setTraceIsStopped());
             },
-            progress => {
-                if (!manualDbFilePath) {
-                    detectedModemFwUuid = detectModemFwUuid(
-                        progress,
-                        detectedModemFwUuid
-                    );
-
-                    detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
-                }
-
-                progress.data_offsets
-                    ?.filter(
-                        ({ path: progressPath }) =>
-                            progressPath === destinationPath
-                    )
-                    .forEach(({ offset }) => {
-                        dispatch(
-                            setTraceData([{ ...traceData, size: offset }])
-                        );
-                    });
-            }
+            makeProgressCallback(dispatch, {
+                detectingTraceDb: isDetectingTraceDb,
+                displayDetectingTraceDbMessage: false,
+                throttleUpdatingProgress: false,
+            })
         );
-        dispatch(setTraceData([traceData]));
-        dispatch(setTaskId(taskId));
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: progressConfigs(source, sinks),
+            })
+        );
     };
 
-const startTrace =
-    (traceFormats: TraceFormat[]): TAction =>
+export const startTrace =
+    (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
-        const serialPort = getSerialPort(getState());
-        if (!serialPort) {
+        const state = getState();
+        const port = getSerialPort(state);
+        if (!port) {
             logger.error('Select serial port to start tracing');
             return;
         }
-        const device = selectedDevice(getState());
-        const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
-        const traceData: TraceData[] = [];
-        let wiresharkPath: string | null;
-        let filePath = '';
-        const sinkConfigs = traceFormats.map(format => {
-            if (format === 'live') {
-                wiresharkPath = getWiresharkPath(getState());
-            } else {
-                filePath =
-                    path.join(getAppDataDir(), filename) +
-                    fileExtension(format);
-            }
+        const source: SourceFormat = { type: 'device', port };
 
-            traceData.push({
-                format,
-                path: filePath,
-                size: 0,
-            });
+        sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
-            return sinkConfig[format](filePath, device, wiresharkPath);
         });
 
-        const manualDbFilePath = getManualDbFilePath(getState());
-
-        if (!manualDbFilePath && requiresTraceDb(traceFormats)) {
-            dispatch(setDetectingTraceDb(true));
-        }
-
-        let detectedModemFwUuid: unknown = '';
-        let detectedTraceDB: unknown = '';
-        let progressCallbackCounter = 0;
+        const isDetectingTraceDb =
+            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
 
         const taskId = nrfml.start(
-            {
-                config: { plugins_directory: getPluginsDir() },
-                sinks: sinkConfigs,
-                sources: [
-                    sourceConfig(
-                        manualDbFilePath,
-                        requiresTraceDb(traceFormats),
-                        {
-                            serialport: { path: serialPort },
-                        }
-                    ),
-                ],
-            },
+            nrfmlConfig(state, source, sinks),
             err => {
                 if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
@@ -162,66 +116,30 @@ const startTrace =
                     logger.info('Finished tracefile');
                 }
                 // stop tracing if Completed callback is called and we are only doing live tracing
-                if (traceFormats.length === 1 && traceFormats[0] === 'live') {
+                if (sinks.length === 1 && sinks[0] === 'live') {
                     dispatch(stopTrace(taskId));
                 }
             },
-            progress => {
-                if (
-                    !manualDbFilePath &&
-                    !detectedModemFwUuid &&
-                    !detectedTraceDB
-                ) {
-                    detectedModemFwUuid = detectModemFwUuid(
-                        progress,
-                        detectedModemFwUuid
-                    );
-
-                    detectedTraceDB = detectTraceDB(progress, detectedTraceDB);
-                    dispatch(setDetectingTraceDb(false));
-                }
-
-                /*
-                    This callback is triggered quite often, and it can negatively affect the
-                    performance, so it should be fine to only process every nth sample. The offset
-                    property received from nrfml is accumulated size, so we don't lose any data this way
-                */
-                progressCallbackCounter += 1;
-                if (progressCallbackCounter % 30 !== 0) return;
-                try {
-                    const newTraceData = traceData.map(trace => {
-                        if (!progress.data_offsets) return trace;
-                        const index = progress.data_offsets.findIndex(
-                            data => trace.path === data.path
-                        );
-                        const dataOffset = progress.data_offsets[index];
-                        return {
-                            ...trace,
-                            size: dataOffset ? dataOffset.offset : trace.size,
-                        };
-                    });
-                    dispatch(setTraceData(newTraceData));
-                } catch (err) {
-                    logger.debug(
-                        `Error in progress callback, discarding sample ${JSON.stringify(
-                            err
-                        )}`
-                    );
-                }
-            }
+            makeProgressCallback(dispatch, {
+                detectingTraceDb: isDetectingTraceDb,
+                displayDetectingTraceDbMessage: isDetectingTraceDb,
+                throttleUpdatingProgress: true,
+            })
         );
         logger.info('Started tracefile');
-        dispatch(setTraceData(traceData));
-        dispatch(setTaskId(taskId));
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: progressConfigs(source, sinks),
+            })
+        );
     };
 
-const stopTrace =
+export const stopTrace =
     (taskId: TaskId | null): TAction =>
     dispatch => {
         if (taskId === null) return;
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
-        dispatch(setTaskId(null));
+        dispatch(setTraceIsStopped());
     };
-
-export { convertTraceFile, startTrace, stopTrace };

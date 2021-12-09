@@ -8,8 +8,8 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { TraceFormat } from '../../../features/tracing/formats';
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
-import { TraceFormat } from '../../../features/tracing/sinks';
 import { getIsTracing, getTaskId } from '../../../features/tracing/traceSlice';
 
 type StartStopProps = {
