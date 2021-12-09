@@ -92,7 +92,7 @@ export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
         const state = getState();
-        const port = getSerialPort(getState());
+        const port = getSerialPort(state);
         if (!port) {
             logger.error('Select serial port to start tracing');
             return;
