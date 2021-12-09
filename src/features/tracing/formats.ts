@@ -29,4 +29,5 @@ export type SourceFormat =
     | {
           type: 'device';
           port: string;
+          startTime: Date;
       };

@@ -97,7 +97,11 @@ export const startTrace =
             logger.error('Select serial port to start tracing');
             return;
         }
-        const source: SourceFormat = { type: 'device', port };
+        const source: SourceFormat = {
+            type: 'device',
+            port,
+            startTime: new Date(),
+        };
 
         sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));

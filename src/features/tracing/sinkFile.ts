@@ -29,7 +29,9 @@ const extensionlessFilePath = (source: SourceFormat) => {
         return path.join(directory, basename);
     }
 
-    const filename = `trace-${new Date().toISOString().replace(/:/g, '-')}`;
+    const filename = `trace-${source.startTime
+        .toISOString()
+        .replace(/:/g, '-')}`;
     return path.join(getAppDataDir(), filename);
 };
 
