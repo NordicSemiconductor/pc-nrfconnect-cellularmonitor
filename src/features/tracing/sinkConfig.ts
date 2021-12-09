@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { join } from 'path';
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
@@ -60,7 +61,12 @@ export default (
         } as const;
     }
 
-    throw new Error(
-        `Unknown format ${format} does not have an associated sink config`
-    );
+    if (format === 'opp') {
+        return {
+            name: 'nrfml-tshark-sink',
+            init_parameters: {
+                tshark_directory: join('C:', 'Program Files', 'Wireshark'),
+            },
+        };
+    }
 };

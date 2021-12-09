@@ -26,6 +26,7 @@ import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
+    setOPPData,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -103,15 +104,17 @@ export const startTrace =
             startTime: new Date(),
         };
 
-        sinks.forEach(format => {
+        // we want to do use tshark/opp sinks in the background of every trace
+        const sinksWithOpp = ['opp', ...sinks] as TraceFormat[];
+        sinksWithOpp.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
         const isDetectingTraceDb =
-            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
+            getManualDbFilePath(state) == null && requiresTraceDb(sinksWithOpp);
 
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, sinksWithOpp),
             err => {
                 if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
@@ -128,7 +131,16 @@ export const startTrace =
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
                 throttleUpdatingProgress: true,
-            })
+            }),
+            () => {},
+            jsonData => {
+                try {
+                    const oppData = jsonData[0].online_power_profiler;
+                    dispatch(setOPPData(oppData));
+                } catch (err) {
+                    console.log('oops, got err', err);
+                }
+            }
         );
         logger.info('Started tracefile');
         dispatch(

@@ -48,7 +48,9 @@ const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
     );
 };
 
-const TraceFileDetails: FC<{ progress: TraceProgress }> = ({ progress }) => (
+export const TraceFileDetails: FC<{ progress: TraceProgress }> = ({
+    progress,
+}) => (
     <div className="trace-file-container">
         <TraceFileName progress={progress} />
         <DiskSpaceUsageBox label="File size" value={progress.size} />

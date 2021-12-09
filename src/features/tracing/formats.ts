@@ -6,7 +6,7 @@
 
 import EventAction from '../../usageDataActions';
 
-export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live'] as const;
+export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live', 'opp'] as const;
 export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
 
 export const sinkEvent = (format: TraceFormat) =>
@@ -14,10 +14,13 @@ export const sinkEvent = (format: TraceFormat) =>
         raw: EventAction.RAW_TRACE,
         pcap: EventAction.PCAP_TRACE,
         live: EventAction.LIVE_TRACE,
+        opp: 'opp_trace',
     }[format] ?? EventAction.UNKNOWN_TRACE);
 
 export const requiresTraceDb = (formats: TraceFormat[]) =>
-    formats.includes('pcap') || formats.includes('live');
+    formats.includes('pcap') ||
+    formats.includes('live') ||
+    formats.includes('opp');
 
 export const hasProgress = (format: TraceFormat) => format !== 'live';
 

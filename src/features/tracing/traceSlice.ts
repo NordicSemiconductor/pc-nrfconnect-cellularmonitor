@@ -31,6 +31,7 @@ interface TraceState {
     manualDbFilePath?: string;
     wiresharkPath: string | null;
     detectingTraceDb: boolean;
+    oppData: JSON | null;
 }
 
 const initialState = (): TraceState => ({
@@ -41,6 +42,7 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
     detectingTraceDb: false,
+    oppData: null,
 });
 
 const traceSlice = createSlice({
@@ -96,6 +98,9 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
+        setOPPData: (state, action: PayloadAction<JSON>) => {
+            state.oppData = action.payload;
+        },
     },
 });
 
@@ -115,6 +120,7 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
+export const getOppData = (state: RootState) => state.app.trace.oppData;
 
 export const {
     setTraceIsStarted,
@@ -126,6 +132,7 @@ export const {
     resetManualDbFilePath,
     setWiresharkPath,
     setDetectingTraceDb,
+    setOPPData,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;
