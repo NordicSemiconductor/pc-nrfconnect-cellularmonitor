@@ -7,8 +7,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import FormLabel from 'react-bootstrap/FormLabel';
+import { truncateMiddle } from 'pc-nrfconnect-shared';
 
-import { truncateMiddle } from '../../utils';
 import { openInFolder } from '../../utils/fileUtils';
 
 type FilePathLinkProps = {

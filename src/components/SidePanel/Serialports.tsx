@@ -6,14 +6,13 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, Group } from 'pc-nrfconnect-shared';
+import { Dropdown, Group, truncateMiddle } from 'pc-nrfconnect-shared';
 
 import {
     getAvailableSerialPorts,
     getSelectedSerialNumber,
     setSerialPort,
 } from '../../features/tracing/traceSlice';
-import { truncateMiddle } from '../../utils';
 import { setSerialPort as persistSerialPort } from '../../utils/store';
 
 type SerialPortProps = {

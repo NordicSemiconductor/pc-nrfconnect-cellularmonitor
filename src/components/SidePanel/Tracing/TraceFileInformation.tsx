@@ -10,14 +10,17 @@
 import React, { FC } from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, usageData } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    truncateMiddle,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
 import {
     getTraceProgress,
     TraceProgress,
 } from '../../../features/tracing/traceSlice';
 import EventAction from '../../../usageDataActions';
-import { truncateMiddle } from '../../../utils';
 import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';

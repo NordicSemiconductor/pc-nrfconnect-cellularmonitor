@@ -45,7 +45,7 @@
     "check-disk-space": "^2.1.0",
     "electron": "13.1.9",
     "electron-store": "^5.2.0",
-    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.9.0",
+    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.11.0",
     "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
     "pretty-bytes": "^5.6.0",
     "react": "16.13.1",
