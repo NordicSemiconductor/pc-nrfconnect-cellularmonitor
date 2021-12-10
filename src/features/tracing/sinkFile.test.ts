@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import path from 'path';
+
 import createSinkFile from './sinkFile';
 
 jest.mock('pc-nrfconnect-shared', () => ({
@@ -18,7 +20,7 @@ describe('sink file names', () => {
             'pcap'
         );
 
-        expect(sinkFile).toBe('some/file.pcapng');
+        expect(sinkFile).toBe(path.join('some', 'file.pcapng'));
     });
 
     it('is for device sources based on the start time, resilient to passing time', done => {
@@ -29,7 +31,11 @@ describe('sink file names', () => {
             'raw'
         );
         expect(sinkFile).toBe(
-            `data/dir/trace-${startTime.toISOString().replace(/:/g, '-')}.bin`
+            path.join(
+                'data',
+                'dir',
+                `trace-${startTime.toISOString().replace(/:/g, '-')}.bin`
+            )
         );
 
         setTimeout(() => {
@@ -38,9 +44,11 @@ describe('sink file names', () => {
                 'raw'
             );
             expect(sinkFileAfter10Milliseconds).toBe(
-                `data/dir/trace-${startTime
-                    .toISOString()
-                    .replace(/:/g, '-')}.bin`
+                path.join(
+                    'data',
+                    'dir',
+                    `trace-${startTime.toISOString().replace(/:/g, '-')}.bin`
+                )
             );
             done();
         }, 10);
