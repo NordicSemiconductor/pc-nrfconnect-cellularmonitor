@@ -70,7 +70,7 @@ type FileName = string;
 type FileDirectory = string;
 type FileTuple = [FileName, FileDirectory];
 
-export const getNameAndDirectory = (filepath: string): FileTuple => [
-    path.basename(filepath),
-    path.dirname(filepath),
-];
+export const getNameAndDirectory = (
+    filepath: string,
+    ext?: string
+): FileTuple => [path.basename(filepath, ext), path.dirname(filepath)];

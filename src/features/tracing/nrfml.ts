@@ -7,11 +7,14 @@
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { writeFile } from 'fs';
+import { join } from 'path';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
+import { getNameAndDirectory } from '../../utils/fileUtils';
 import {
     hasProgress,
     requiresTraceDb,
@@ -27,6 +30,7 @@ import {
     getManualDbFilePath,
     getSerialPort,
     setOPPData,
+    setOPPFilePath,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -100,17 +104,24 @@ export const extractPowerData =
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
-                console.log('err', err);
                 dispatch(setTraceIsStopped());
             },
             () => {},
             () => {},
             jsonData => {
-                console.log('got oppData', jsonData);
                 try {
+                    logger.info(
+                        `Successfully extracted power calculator data from ${path}`
+                    );
                     const oppData = jsonData[0].online_power_profiler;
-                    dispatch(setOPPData(oppData));
+                    // dispatch(setOPPData(oppData));
                     dispatch(stopTrace(taskId));
+                    const [base, filePath] = getNameAndDirectory(path, '.bin');
+                    const oppJsonPath = join(filePath, `${base}.json`);
+                    writeFile(oppJsonPath, JSON.stringify(oppData), () => {
+                        logger.info(`Created file ${oppJsonPath}`);
+                        dispatch(setOPPFilePath(oppJsonPath));
+                    });
                 } catch (err) {
                     console.log('oops, got err', err);
                 }

@@ -6,20 +6,26 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { remote } from 'electron';
 import { writeFile } from 'fs';
 import { join } from 'path';
 import { CollapsibleGroup, getAppDataDir, openUrl } from 'pc-nrfconnect-shared';
 
-import { getOppData, getSerialPort } from '../../features/tracing/traceSlice';
+import {
+    getOppData,
+    getOppFilePath,
+    getSerialPort,
+    setOPPFilePath,
+} from '../../features/tracing/traceSlice';
 import { TraceFileDetails } from './Tracing/TraceFileInformation';
 
 export default () => {
+    const dispatch = useDispatch();
     const selectedSerialPort = useSelector(getSerialPort);
 
     const oppData = useSelector(getOppData);
-    const [oppFile, setOppFile] = React.useState<string | undefined>();
+    const oppFilePath = useSelector(getOppFilePath);
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
@@ -33,31 +39,22 @@ export default () => {
         });
         if (canceled || !filePath) return;
         writeFile(filePath, JSON.stringify(oppData), () => {
-            setOppFile(filePath);
+            dispatch(setOPPFilePath(filePath));
         });
     };
 
-    if (!(selectedSerialPort || oppData)) {
+    if (!(selectedSerialPort || oppData || oppFilePath)) {
         return null;
     }
 
     return (
-        <CollapsibleGroup heading="Power Calculator" defaultCollapsed>
-            {oppData == null ? (
-                <Button variant="secondary" disabled className="w-100">
-                    Waiting for power data...
-                </Button>
-            ) : (
-                <Button variant="secondary" className="w-100" onClick={onSave}>
-                    Save power estimation data
-                </Button>
-            )}
-            {oppFile != null && (
+        <CollapsibleGroup heading="Power Calculator" defaultCollapsed={false}>
+            {oppFilePath != null ? (
                 <div className="opp-result-wrapper">
                     <TraceFileDetails
                         progress={{
                             format: 'opp',
-                            path: oppFile,
+                            path: oppFilePath,
                         }}
                         label="Power calculator data"
                         truncate={false}
@@ -74,6 +71,22 @@ export default () => {
                         Open Online Power Profiler
                     </Button>
                 </div>
+            ) : (
+                <>
+                    {oppData == null ? (
+                        <Button variant="secondary" disabled className="w-100">
+                            Waiting for power data...
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="secondary"
+                            className="w-100"
+                            onClick={onSave}
+                        >
+                            Save power estimation data
+                        </Button>
+                    )}
+                </>
             )}
         </CollapsibleGroup>
     );
