@@ -20,7 +20,7 @@ import { TaskId } from './nrfml';
 export interface TraceProgress {
     format: TraceFormat;
     path: string;
-    size: number;
+    size?: number;
 }
 
 interface TraceState {

@@ -25,7 +25,10 @@ import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
-const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
+const TraceFileName: FC<{ progress: TraceProgress; truncate: boolean }> = ({
+    progress,
+    truncate,
+}) => {
     const [filename] = getNameAndDirectory(progress.path);
 
     return (
@@ -42,18 +45,21 @@ const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
                 }}
                 title={filename}
             >
-                {truncateMiddle(filename, 5, 12)}
+                {truncate ? truncateMiddle(filename, 5, 12) : filename}
             </span>
         </div>
     );
 };
 
-export const TraceFileDetails: FC<{ progress: TraceProgress }> = ({
-    progress,
-}) => (
+export const TraceFileDetails: FC<{
+    progress: TraceProgress;
+    truncate?: boolean;
+}> = ({ progress, truncate = true }) => (
     <div className="trace-file-container">
-        <TraceFileName progress={progress} />
-        <DiskSpaceUsageBox label="File size" value={progress.size} />
+        <TraceFileName progress={progress} truncate={truncate} />
+        {progress.size != null && (
+            <DiskSpaceUsageBox label="File size" value={progress.size} />
+        )}
     </div>
 );
 

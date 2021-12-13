@@ -12,22 +12,34 @@ import { writeFile } from 'fs';
 import { join } from 'path';
 import { CollapsibleGroup, getAppDataDir, openUrl } from 'pc-nrfconnect-shared';
 
-import { getOppData } from '../../features/tracing/traceSlice';
+import { getOppData, getSerialPort } from '../../features/tracing/traceSlice';
 import { TraceFileDetails } from './Tracing/TraceFileInformation';
 
 export default () => {
+    const selectedSerialPort = useSelector(getSerialPort);
+
     const oppData = useSelector(getOppData);
     const [oppFile, setOppFile] = React.useState<string | undefined>();
+
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
             defaultPath: join(getAppDataDir(), 'power-profiler-data.json'),
+            filters: [
+                {
+                    name: 'JSON',
+                    extensions: ['json'],
+                },
+            ],
         });
         if (canceled || !filePath) return;
         writeFile(filePath, JSON.stringify(oppData), () => {
-            console.log('finished writing file');
             setOppFile(filePath);
         });
     };
+
+    if (!(selectedSerialPort || oppData)) {
+        return null;
+    }
 
     return (
         <CollapsibleGroup heading="Power Profiler Data" defaultCollapsed>
@@ -45,9 +57,9 @@ export default () => {
                     <TraceFileDetails
                         progress={{
                             format: 'opp',
-                            size: 100,
                             path: oppFile,
                         }}
+                        truncate={false}
                     />
                     <Button
                         variant="secondary"
