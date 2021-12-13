@@ -57,8 +57,7 @@ export const convertTraceFile =
         const sinks = ['pcap' as TraceFormat];
 
         const state = getState();
-        const isDetectingTraceDb =
-            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
+        const isDetectingTraceDb = getManualDbFilePath(state) == null;
 
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -86,6 +85,36 @@ export const convertTraceFile =
                 taskId,
                 progressConfigs: progressConfigs(source, sinks),
             })
+        );
+    };
+
+export const extractPowerData =
+    (path: string): TAction =>
+    (dispatch, getState) => {
+        usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
+        const source: SourceFormat = { type: 'file', path };
+        const sinks = ['opp' as TraceFormat];
+
+        const state = getState();
+        // const isDetectingTraceDb = getManualDbFilePath(state) == null;
+        const taskId = nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            err => {
+                console.log('err', err);
+                dispatch(setTraceIsStopped());
+            },
+            () => {},
+            () => {},
+            jsonData => {
+                console.log('got oppData', jsonData);
+                try {
+                    const oppData = jsonData[0].online_power_profiler;
+                    dispatch(setOPPData(oppData));
+                    dispatch(stopTrace(taskId));
+                } catch (err) {
+                    console.log('oops, got err', err);
+                }
+            }
         );
     };
 

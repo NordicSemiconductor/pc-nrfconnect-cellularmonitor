@@ -10,6 +10,7 @@ enum EventAction {
     LIVE_TRACE = 'Starting Live trace',
     UNKNOWN_TRACE = 'Unknown trace',
     CONVERT_TRACE = 'Convert trace',
+    EXTRACT_POWER_DATA = 'Extract power data',
     STOP_TRACE = 'Stopping trace',
     OPEN_IN_WIRESHARK = 'Open in Wireshark',
     SET_TRACE_DB_MANUALLY = 'Set trace db manually',
