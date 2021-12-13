@@ -23,7 +23,7 @@ export default () => {
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
-            defaultPath: join(getAppDataDir(), 'power-estimation-data.json'),
+            defaultPath: join(getAppDataDir(), 'power-calculator-data.json'),
             filters: [
                 {
                     name: 'JSON',
@@ -42,7 +42,7 @@ export default () => {
     }
 
     return (
-        <CollapsibleGroup heading="Power Estimation" defaultCollapsed>
+        <CollapsibleGroup heading="Power Calculator" defaultCollapsed>
             {oppData == null ? (
                 <Button variant="secondary" disabled className="w-100">
                     Waiting for power data...
@@ -53,13 +53,13 @@ export default () => {
                 </Button>
             )}
             {oppFile != null && (
-                <>
+                <div className="opp-result-wrapper">
                     <TraceFileDetails
                         progress={{
                             format: 'opp',
                             path: oppFile,
                         }}
-                        label="Power estimation data"
+                        label="Power calculator data"
                         truncate={false}
                     />
                     <Button
@@ -73,7 +73,7 @@ export default () => {
                     >
                         Open Online Power Profiler
                     </Button>
-                </>
+                </div>
             )}
         </CollapsibleGroup>
     );

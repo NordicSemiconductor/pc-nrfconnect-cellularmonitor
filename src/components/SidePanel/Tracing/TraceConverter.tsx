@@ -45,14 +45,14 @@ export default () => {
                 variant="secondary"
                 onClick={loadTrace}
             >
-                Convert Raw Trace to PCAP
+                Convert RAW trace to PCAP
             </Button>
             <Button
                 className="w-100 secondary-btn"
                 variant="secondary"
                 onClick={getPowerData}
             >
-                Extract power data from Raw Trace
+                Get power data from RAW
             </Button>
         </>
     );

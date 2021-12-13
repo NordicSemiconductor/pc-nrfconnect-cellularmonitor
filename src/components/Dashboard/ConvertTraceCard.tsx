@@ -12,7 +12,7 @@ import Wireshark from './Wireshark';
 export default () => (
     <Card title="Converting a trace">
         <section>
-            You can click on <b>Convert Raw Trace to PCAP</b>, located in the
+            You can click on <b>Convert RAW trace to PCAP</b>, located in the
             side panel, select a raw trace file (e.g. created by this app or the
             original <em>Trace Collector</em>) and convert it into a PCAP file,
             which can then be opened e.g. in <em>Wireshark</em>.
