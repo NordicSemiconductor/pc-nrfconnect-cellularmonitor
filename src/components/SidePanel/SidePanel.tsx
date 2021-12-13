@@ -11,7 +11,6 @@ import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
 import PowerProfilerParams from './PowerProfilerParams';
 import TraceCollector from './Tracing/TraceCollector';
-import TraceConverter from './Tracing/TraceConverter';
 import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
@@ -21,7 +20,6 @@ export default () => (
     <SidePanel className="side-panel">
         <TraceCollector />
         <Instructions />
-        <TraceConverter />
         <TraceFileInformation />
         <PowerProfilerParams />
         <AdvancedOptions />

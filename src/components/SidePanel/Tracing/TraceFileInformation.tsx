@@ -24,6 +24,7 @@ import EventAction from '../../../usageDataActions';
 import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
+import TraceConverter from './TraceConverter';
 
 const TraceFileName: FC<{
     progress: TraceProgress;
@@ -72,13 +73,10 @@ export const TraceFileDetails: FC<{
 export default () => {
     const progress = useSelector(getTraceProgress);
 
-    if (progress.length === 0) {
-        return null;
-    }
-
     return (
         <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
-            <DiskSpaceUsage />
+            <TraceConverter />
+            {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails
                     key={progressItem.format}

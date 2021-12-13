@@ -8,10 +8,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    convertTraceFile,
-    extractPowerData,
-} from '../../../features/tracing/nrfml';
+import { convertTraceFile } from '../../../features/tracing/nrfml';
 import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
@@ -31,29 +28,13 @@ export default () => {
         }
     };
 
-    const getPowerData = () => {
-        const file = askForTraceFile();
-        if (file) {
-            dispatch(extractPowerData(file));
-        }
-    };
-
     return (
-        <>
-            <Button
-                className="w-100 secondary-btn"
-                variant="secondary"
-                onClick={loadTrace}
-            >
-                Convert RAW trace to PCAP
-            </Button>
-            <Button
-                className="w-100 secondary-btn"
-                variant="secondary"
-                onClick={getPowerData}
-            >
-                Get power data from RAW
-            </Button>
-        </>
+        <Button
+            className="w-100 secondary-btn"
+            variant="secondary"
+            onClick={loadTrace}
+        >
+            Convert RAW trace to PCAP
+        </Button>
     );
 };
