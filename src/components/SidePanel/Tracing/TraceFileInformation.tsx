@@ -25,15 +25,20 @@ import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
-const TraceFileName: FC<{ progress: TraceProgress; truncate: boolean }> = ({
-    progress,
-    truncate,
-}) => {
+const TraceFileName: FC<{
+    progress: TraceProgress;
+    truncate: boolean;
+    label?: string;
+}> = ({ progress, truncate, label }) => {
     const [filename] = getNameAndDirectory(progress.path);
 
     return (
         <div className="trace-filename-wrapper">
-            <FormLabel>{`${progress.format.toUpperCase()} file name`}</FormLabel>
+            <FormLabel>
+                {label != null
+                    ? label
+                    : `${progress.format.toUpperCase()} file name`}
+            </FormLabel>
             <span
                 className="trace-filename"
                 onClick={() => {
@@ -54,9 +59,10 @@ const TraceFileName: FC<{ progress: TraceProgress; truncate: boolean }> = ({
 export const TraceFileDetails: FC<{
     progress: TraceProgress;
     truncate?: boolean;
-}> = ({ progress, truncate = true }) => (
+    label?: string;
+}> = ({ progress, label, truncate = true }) => (
     <div className="trace-file-container">
-        <TraceFileName progress={progress} truncate={truncate} />
+        <TraceFileName progress={progress} truncate={truncate} label={label} />
         {progress.size != null && (
             <DiskSpaceUsageBox label="File size" value={progress.size} />
         )}
