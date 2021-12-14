@@ -159,7 +159,9 @@ export const startTrace =
         });
 
         const isDetectingTraceDb =
-            getManualDbFilePath(state) == null && requiresTraceDb(sinksWithOpp);
+            getManualDbFilePath(state) == null &&
+            !(sinks.length === 1 && sinks[0] === 'raw') && // if we originally only do RAW trace, we do not show dialog
+            requiresTraceDb(sinksWithOpp);
 
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinksWithOpp),
