@@ -100,31 +100,33 @@ export const extractPowerData =
         const sinks = ['opp' as TraceFormat];
 
         const state = getState();
-        // const isDetectingTraceDb = getManualDbFilePath(state) == null;
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
+                if (err != null) {
+                    logger.error(
+                        `Failed to get power calculator data: ${err.message}`
+                    );
+                    logger.debug(`Full error: ${JSON.stringify(err)}`);
+                } else {
+                    logger.info(
+                        `Successfully extracted power calculator data from ${path}`
+                    );
+                }
                 dispatch(setTraceIsStopped());
             },
             () => {},
             () => {},
             jsonData => {
-                try {
-                    logger.info(
-                        `Successfully extracted power calculator data from ${path}`
-                    );
-                    const oppData = jsonData[0].online_power_profiler;
-                    // dispatch(setOPPData(oppData));
-                    dispatch(stopTrace(taskId));
-                    const [base, filePath] = getNameAndDirectory(path, '.bin');
-                    const oppJsonPath = join(filePath, `${base}.json`);
-                    writeFile(oppJsonPath, JSON.stringify(oppData), () => {
-                        logger.info(`Created file ${oppJsonPath}`);
-                        dispatch(setOPPFilePath(oppJsonPath));
-                    });
-                } catch (err) {
-                    console.log('oops, got err', err);
-                }
+                // @ts-ignore -- wrong typings from nrfml-js
+                const oppData = jsonData[0]?.onlinePowerProfiler;
+                dispatch(stopTrace(taskId));
+                const [base, filePath] = getNameAndDirectory(path, '.bin');
+                const oppJsonPath = join(filePath, `${base}.json`);
+                writeFile(oppJsonPath, JSON.stringify(oppData), () => {
+                    logger.info(`Created file ${oppJsonPath}`);
+                    dispatch(setOPPFilePath(oppJsonPath));
+                });
             }
         );
     };
@@ -174,12 +176,9 @@ export const startTrace =
             }),
             () => {},
             jsonData => {
-                try {
-                    const oppData = jsonData[0].online_power_profiler;
-                    dispatch(setOPPData(oppData));
-                } catch (err) {
-                    console.log('oops, got err', err);
-                }
+                // @ts-ignore -- wrong typings from nrfml-js
+                const oppData = jsonData[0]?.onlinePowerProfiler;
+                dispatch(setOPPData(oppData));
             }
         );
         logger.info('Started tracefile');

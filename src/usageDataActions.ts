@@ -8,6 +8,7 @@ enum EventAction {
     RAW_TRACE = 'Starting Raw trace',
     PCAP_TRACE = 'Starting Pcap trace',
     LIVE_TRACE = 'Starting Live trace',
+    OPP_TRACE = 'Getting OPP params',
     UNKNOWN_TRACE = 'Unknown trace',
     CONVERT_TRACE = 'Convert trace',
     EXTRACT_POWER_DATA = 'Extract power data',

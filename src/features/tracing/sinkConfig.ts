@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { join } from 'path';
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
@@ -61,12 +60,10 @@ export default (
         } as const;
     }
 
-    if (format === 'opp') {
-        return {
-            name: 'nrfml-tshark-sink',
-            init_parameters: {
-                tshark_directory: join('C:', 'Program Files', 'Wireshark'),
-            },
-        };
-    }
+    return {
+        name: 'nrfml-tshark-sink',
+        init_parameters: {
+            opp_json_object_key: 'onlinePowerProfiler',
+        },
+    } as const;
 };
