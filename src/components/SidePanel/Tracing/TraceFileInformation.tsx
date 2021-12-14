@@ -81,7 +81,7 @@ export default () => {
 
     return (
         <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
-            <TraceConverter />
+            {!isDeviceSelected && <TraceConverter />}
             {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails

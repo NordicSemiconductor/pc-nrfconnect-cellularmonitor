@@ -6,19 +6,12 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
-import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
-    const isDeviceSelected = useSelector(getSerialPort);
-
-    if (isDeviceSelected) {
-        return null;
-    }
-
     const dispatch = useDispatch();
 
     const loadTrace = () => {
