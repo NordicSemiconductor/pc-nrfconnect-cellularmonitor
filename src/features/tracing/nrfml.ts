@@ -29,8 +29,8 @@ import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
-    setOPPData,
-    setOPPFilePath,
+    setPowerEstimationData,
+    setPowerEstimationFilePath,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -119,14 +119,20 @@ export const extractPowerData =
             () => {},
             jsonData => {
                 // @ts-ignore -- wrong typings from nrfml-js
-                const oppData = jsonData[0]?.onlinePowerProfiler;
+                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+                if (!powerEstimationData) return;
+
                 dispatch(stopTrace(taskId));
                 const [base, filePath] = getNameAndDirectory(path, '.bin');
-                const oppJsonPath = join(filePath, `${base}.json`);
-                writeFile(oppJsonPath, JSON.stringify(oppData), () => {
-                    logger.info(`Created file ${oppJsonPath}`);
-                    dispatch(setOPPFilePath(oppJsonPath));
-                });
+                const pathToNewFile = join(filePath, `${base}.json`);
+                writeFile(
+                    pathToNewFile,
+                    JSON.stringify(powerEstimationData),
+                    () => {
+                        logger.info(`Created file ${pathToNewFile}`);
+                        dispatch(setPowerEstimationFilePath(pathToNewFile));
+                    }
+                );
             }
         );
     };
@@ -177,8 +183,8 @@ export const startTrace =
             () => {},
             jsonData => {
                 // @ts-ignore -- wrong typings from nrfml-js
-                const oppData = jsonData[0]?.onlinePowerProfiler;
-                dispatch(setOPPData(oppData));
+                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+                dispatch(setPowerEstimationData(powerEstimationData));
             }
         );
         logger.info('Started tracefile');

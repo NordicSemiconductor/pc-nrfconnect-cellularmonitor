@@ -14,10 +14,10 @@ import { CollapsibleGroup, getAppDataDir, openUrl } from 'pc-nrfconnect-shared';
 
 import { extractPowerData } from '../../features/tracing/nrfml';
 import {
-    getOppData,
-    getOppFilePath,
+    getPowerEstimationData,
+    getPowerEstimationFilePath,
     getSerialPort,
-    setOPPFilePath,
+    setPowerEstimationFilePath,
 } from '../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../utils/fileUtils';
 import { TraceFileDetails } from './Tracing/TraceFileInformation';
@@ -26,8 +26,8 @@ export default () => {
     const dispatch = useDispatch();
     const isDeviceSelected = !!useSelector(getSerialPort);
 
-    const oppData = useSelector(getOppData);
-    const oppFilePath = useSelector(getOppFilePath);
+    const powerEstimationData = useSelector(getPowerEstimationData);
+    const powerEstimationFilePath = useSelector(getPowerEstimationFilePath);
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
@@ -40,8 +40,8 @@ export default () => {
             ],
         });
         if (canceled || !filePath) return;
-        writeFile(filePath, JSON.stringify(oppData), () => {
-            dispatch(setOPPFilePath(filePath));
+        writeFile(filePath, JSON.stringify(powerEstimationData), () => {
+            dispatch(setPowerEstimationFilePath(filePath));
         });
     };
 
@@ -64,7 +64,7 @@ export default () => {
                 </Button>
             ) : (
                 <>
-                    {oppData == null ? (
+                    {powerEstimationData == null ? (
                         <Button
                             variant="secondary"
                             disabled
@@ -85,12 +85,12 @@ export default () => {
                     )}
                 </>
             )}
-            {oppFilePath != null && (
+            {powerEstimationFilePath != null && (
                 <div className="opp-result-wrapper">
                     <TraceFileDetails
                         progress={{
                             format: 'opp',
-                            path: oppFilePath,
+                            path: powerEstimationFilePath,
                         }}
                         label="Power calculator data"
                         truncate={false}

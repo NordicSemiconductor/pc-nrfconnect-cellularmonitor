@@ -31,8 +31,8 @@ interface TraceState {
     manualDbFilePath?: string;
     wiresharkPath: string | null;
     detectingTraceDb: boolean;
-    oppData: JSON | null;
-    oppFilePath: string | null;
+    powerEstimationData: JSON | null;
+    powerEstimationFilePath: string | null;
 }
 
 const initialState = (): TraceState => ({
@@ -43,8 +43,8 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
     detectingTraceDb: false,
-    oppData: null,
-    oppFilePath: null,
+    powerEstimationData: null,
+    powerEstimationFilePath: null,
 });
 
 const traceSlice = createSlice({
@@ -100,11 +100,11 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        setOPPData: (state, action: PayloadAction<JSON>) => {
-            state.oppData = action.payload;
+        setPowerEstimationData: (state, action: PayloadAction<JSON>) => {
+            state.powerEstimationData = action.payload;
         },
-        setOPPFilePath: (state, action: PayloadAction<string>) => {
-            state.oppFilePath = action.payload;
+        setPowerEstimationFilePath: (state, action: PayloadAction<string>) => {
+            state.powerEstimationFilePath = action.payload;
         },
     },
 });
@@ -125,8 +125,10 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
-export const getOppData = (state: RootState) => state.app.trace.oppData;
-export const getOppFilePath = (state: RootState) => state.app.trace.oppFilePath;
+export const getPowerEstimationData = (state: RootState) =>
+    state.app.trace.powerEstimationData;
+export const getPowerEstimationFilePath = (state: RootState) =>
+    state.app.trace.powerEstimationFilePath;
 
 export const {
     setTraceIsStarted,
@@ -138,8 +140,8 @@ export const {
     resetManualDbFilePath,
     setWiresharkPath,
     setDetectingTraceDb,
-    setOPPData,
-    setOPPFilePath,
+    setPowerEstimationData,
+    setPowerEstimationFilePath,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;
