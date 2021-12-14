@@ -104,7 +104,7 @@ describe('TraceCollector', () => {
             expect(nrfml.start).toHaveBeenCalled();
             // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
             const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(1);
+            expect(args.sinks.length).toBe(2); // raw + opp which is always added in the background
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -116,7 +116,7 @@ describe('TraceCollector', () => {
             expect(nrfml.start).toHaveBeenCalled();
             // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
             const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(2);
+            expect(args.sinks.length).toBe(3); // raw + opp which is always added in the background
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -129,7 +129,7 @@ describe('TraceCollector', () => {
             expect(nrfml.start).toHaveBeenCalled();
             // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
             const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(3);
+            expect(args.sinks.length).toBe(4); // raw + opp which is always added in the background
         });
     });
 });

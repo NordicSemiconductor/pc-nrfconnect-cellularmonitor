@@ -22,7 +22,8 @@ export const requiresTraceDb = (formats: TraceFormat[]) =>
     formats.includes('live') ||
     formats.includes('opp');
 
-export const hasProgress = (format: TraceFormat) => format !== 'live';
+export const hasProgress = (format: TraceFormat) =>
+    format !== 'live' && format !== 'opp';
 
 export type SourceFormat =
     | {
