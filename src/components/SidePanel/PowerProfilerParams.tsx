@@ -69,7 +69,7 @@ export default () => {
                             variant="secondary"
                             disabled
                             className="w-100"
-                            title="Start trace to extract data for power calculation"
+                            title="Click Start trace to get power estimation data from trace"
                         >
                             Waiting for power data...
                         </Button>
@@ -78,6 +78,7 @@ export default () => {
                             variant="secondary"
                             className="w-100"
                             onClick={onSave}
+                            title="Save power estimation data to file"
                         >
                             Save power estimation data
                         </Button>
