@@ -118,7 +118,7 @@ export const extractPowerData =
             () => {},
             () => {},
             jsonData => {
-                // @ts-ignore -- wrong typings from nrfml-js
+                // @ts-ignore -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
                 if (!powerEstimationData) return;
 
@@ -184,7 +184,7 @@ export const startTrace =
             }),
             () => {},
             jsonData => {
-                // @ts-ignore -- wrong typings from nrfml-js
+                // @ts-ignore -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
                 dispatch(setPowerEstimationData(powerEstimationData));
             }

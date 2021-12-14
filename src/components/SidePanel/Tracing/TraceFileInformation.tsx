@@ -23,6 +23,10 @@ import {
 } from '../../../features/tracing/traceSlice';
 import EventAction from '../../../usageDataActions';
 import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
+import {
+    getCollapseTraceDetailsSection,
+    setCollapseTraceDetailsSection,
+} from '../../../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 import TraceConverter from './TraceConverter';
@@ -80,7 +84,13 @@ export default () => {
     }
 
     return (
-        <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
+        <CollapsibleGroup
+            heading="Trace Details"
+            defaultCollapsed={getCollapseTraceDetailsSection()}
+            onToggled={isNowExpanded =>
+                setCollapseTraceDetailsSection(!isNowExpanded)
+            }
+        >
             {!isDeviceSelected && <TraceConverter />}
             {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (

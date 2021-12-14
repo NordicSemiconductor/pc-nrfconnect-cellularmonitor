@@ -18,12 +18,16 @@ const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
 const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
+const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
+const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMATS]: TraceFormat[];
     [SERIALPORTS]: DevicePort;
+    [COLLAPSE_POWER_SECTION]: boolean;
+    [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
 }
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
@@ -65,3 +69,18 @@ export const setSerialPort = (serialNumber: string, port: string) =>
         ...serialPorts(),
         [serialNumber]: port,
     });
+
+export const getCollapsePowerSection = () =>
+    store<StoreSchema>().get(COLLAPSE_POWER_SECTION, false);
+export const setCollapsePowerSection = (collapsePowerSection: boolean) =>
+    store<StoreSchema>().set(COLLAPSE_POWER_SECTION, collapsePowerSection);
+
+export const getCollapseTraceDetailsSection = () =>
+    store<StoreSchema>().get(COLLAPSE_TRACE_DETAILS_SECTION, false);
+export const setCollapseTraceDetailsSection = (
+    collapseTraceDetailsSection: boolean
+) =>
+    store<StoreSchema>().set(
+        COLLAPSE_TRACE_DETAILS_SECTION,
+        collapseTraceDetailsSection
+    );

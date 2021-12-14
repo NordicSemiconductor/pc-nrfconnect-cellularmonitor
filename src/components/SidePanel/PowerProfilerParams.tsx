@@ -20,6 +20,10 @@ import {
     setPowerEstimationFilePath,
 } from '../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../utils/fileUtils';
+import {
+    getCollapsePowerSection,
+    setCollapsePowerSection,
+} from '../../utils/store';
 import { TraceFileDetails } from './Tracing/TraceFileInformation';
 
 export default () => {
@@ -53,7 +57,11 @@ export default () => {
     };
 
     return (
-        <CollapsibleGroup heading="Power Calculator" defaultCollapsed={false}>
+        <CollapsibleGroup
+            heading="Power Calculator"
+            defaultCollapsed={getCollapsePowerSection()}
+            onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
+        >
             {!isDeviceSelected ? (
                 <Button
                     className="w-100 secondary-btn"
