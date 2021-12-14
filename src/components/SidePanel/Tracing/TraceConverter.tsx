@@ -13,9 +13,9 @@ import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
-    const selectedSerialPort = useSelector(getSerialPort);
+    const isDeviceSelected = useSelector(getSerialPort);
 
-    if (selectedSerialPort) {
+    if (isDeviceSelected) {
         return null;
     }
 

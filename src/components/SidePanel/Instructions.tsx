@@ -45,9 +45,9 @@ const Link: FC<{ onClick: () => void; url: string }> = ({
 );
 
 export default () => {
-    const selectedSerialPort = useSelector(getSerialPort);
+    const isDeviceSelected = useSelector(getSerialPort);
 
-    if (selectedSerialPort) {
+    if (isDeviceSelected) {
         return null;
     }
 

@@ -17,6 +17,7 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import {
+    getSerialPort,
     getTraceProgress,
     TraceProgress,
 } from '../../../features/tracing/traceSlice';
@@ -72,6 +73,11 @@ export const TraceFileDetails: FC<{
 
 export default () => {
     const progress = useSelector(getTraceProgress);
+    const isDeviceSelected = !!useSelector(getSerialPort);
+
+    if (isDeviceSelected && progress.length === 0) {
+        return null;
+    }
 
     return (
         <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
