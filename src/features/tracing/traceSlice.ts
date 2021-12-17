@@ -31,7 +31,7 @@ interface TraceState {
     manualDbFilePath?: string;
     wiresharkPath: string | null;
     detectingTraceDb: boolean;
-    powerEstimationData: JSON | null;
+    powerEstimationData: Record<string, unknown> | null;
     powerEstimationFilePath: string | null;
 }
 
@@ -100,7 +100,10 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        setPowerEstimationData: (state, action: PayloadAction<JSON>) => {
+        setPowerEstimationData: (
+            state,
+            action: PayloadAction<Record<string, unknown>>
+        ) => {
             state.powerEstimationData = action.payload;
         },
         setPowerEstimationFilePath: (state, action: PayloadAction<string>) => {

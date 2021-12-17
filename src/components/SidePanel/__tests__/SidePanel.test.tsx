@@ -179,12 +179,20 @@ describe('Sidepanel functionality', () => {
                     callback = jsonCb;
                 }
             );
-            const screen = render(<SidePanel />, serialPortActions);
+
             const waitingText = 'Waiting for power data...';
+            const screen = render(<SidePanel />, serialPortActions);
             expect(screen.getByText(waitingText)).toBeInTheDocument();
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
+
+            // Ensure that we call nrfml.start with the correct amount of sinks
             expect(nrfml.start).toHaveBeenCalled();
+            // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
+            const args = nrfml.start.mock.calls[0][0];
+            expect(args.sinks.length).toBe(2); // raw + opp which is always added in the background
+
+            // Invoke the JSON callback to test the remainder of the initial flow
             // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
             callback([
                 {
