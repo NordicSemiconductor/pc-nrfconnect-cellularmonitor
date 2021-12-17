@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved
+import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import checkDiskSpace from 'check-disk-space';
 import { testUtils } from 'pc-nrfconnect-shared';
 import configureMockStore from 'redux-mock-store';
@@ -11,6 +14,52 @@ import thunk from 'redux-thunk';
 
 import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
+
+type CallbackName = 'complete' | 'progress' | 'data' | 'json';
+
+type CallbackType<T> = T extends 'complete'
+    ? nrfml.CompleteCallback
+    : T extends 'progress'
+    ? nrfml.ProgressCallback
+    : T extends 'data'
+    ? nrfml.DataCallback
+    : T extends 'json'
+    ? nrfml.JsonCallback
+    : never;
+
+function getNrfmlCallback<T extends CallbackName>(
+    callbackType: T
+): Promise<CallbackType<T>> {
+    let callback: CallbackType<T>;
+    return new Promise(resolve => {
+        // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
+        nrfml.start.mockImplementationOnce(
+            (
+                _: Configuration,
+                completeCb: nrfml.CompleteCallback,
+                progressCb: nrfml.ProgressCallback,
+                dataCb: nrfml.DataCallback,
+                jsonCb: nrfml.JsonCallback
+            ) => {
+                switch (callbackType) {
+                    case 'complete':
+                        callback = completeCb as CallbackType<T>;
+                        break;
+                    case 'progress':
+                        callback = progressCb as CallbackType<T>;
+                        break;
+                    case 'data':
+                        callback = dataCb as CallbackType<T>;
+                        break;
+                    case 'json':
+                        callback = jsonCb as CallbackType<T>;
+                        break;
+                }
+                resolve(callback);
+            }
+        );
+    });
+}
 
 jest.mock('check-disk-space');
 
@@ -38,4 +87,10 @@ const getMockStore = () => {
 const render = testUtils.render(appReducer);
 
 export * from '@testing-library/react';
-export { render, getMockStore, mockedCheckDiskSpace, mockedDataDir };
+export {
+    render,
+    getMockStore,
+    mockedCheckDiskSpace,
+    mockedDataDir,
+    getNrfmlCallback,
+};

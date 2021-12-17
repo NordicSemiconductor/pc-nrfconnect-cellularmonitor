@@ -5,15 +5,12 @@
  */
 
 import React from 'react';
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved
-import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 
 import {
     setPowerEstimationData,
     setSerialPort,
 } from '../../features/tracing/traceSlice';
-import { fireEvent, render } from '../../utils/testUtils';
+import { fireEvent, getNrfmlCallback, render } from '../../utils/testUtils';
 import PowerProfilerParams from './PowerProfilerParams';
 
 const mockedFileName = 'mockedPowerData';
@@ -48,19 +45,8 @@ describe('Power profile params', () => {
 
     describe('without device connected', () => {
         it('should save file and display link', async () => {
-            let callback: nrfml.JsonCallback;
-            // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
-            await nrfml.start.mockImplementationOnce(
-                (
-                    config: Configuration,
-                    errCb: nrfml.CompleteCallback,
-                    progressCb: nrfml.ProgressCallback,
-                    dataCb: nrfml.DataCallback,
-                    jsonCb: nrfml.JsonCallback
-                ) => {
-                    callback = jsonCb;
-                }
-            );
+            const nrfmlJsonPromise = getNrfmlCallback('json');
+
             const screen = render(<PowerProfilerParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
@@ -68,8 +54,8 @@ describe('Power profile params', () => {
             expect(extractButton).toBeInTheDocument();
             fireEvent.click(extractButton);
 
-            // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
-            callback([
+            const nrfmlJsonCallback = await nrfmlJsonPromise;
+            nrfmlJsonCallback([
                 {
                     onlinePowerProfiler: {
                         test: 'data',

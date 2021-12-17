@@ -6,8 +6,6 @@
 
 import React from 'react';
 import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved
-import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 
 import {
     setAvailableSerialPorts,
@@ -15,6 +13,7 @@ import {
 } from '../../../features/tracing/traceSlice';
 import {
     fireEvent,
+    getNrfmlCallback,
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
@@ -70,8 +69,7 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should hide dialog when fw is detected', async () => {
-            let callback: nrfml.ProgressCallback;
-            const progress = {
+            const PROGRESS = {
                 meta: {
                     modem_db_path: 'foo',
                     modem_db_uuid: '123',
@@ -85,16 +83,7 @@ describe('Sidepanel functionality', () => {
                 duration_ms: 100,
             };
 
-            // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
-            await nrfml.start.mockImplementationOnce(
-                (
-                    config: Configuration,
-                    errCb: nrfml.CompleteCallback,
-                    progressCb: nrfml.ProgressCallback
-                ) => {
-                    callback = progressCb;
-                }
-            );
+            const nrfmlProgressPromise = getNrfmlCallback('progress');
 
             const screen = render(<SidePanel />, serialPortActions);
             fireEvent.click(await screen.findByText('pcap'));
@@ -102,9 +91,8 @@ describe('Sidepanel functionality', () => {
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
-
-            // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
-            callback(progress);
+            const nrfmlProgressCallback = await nrfmlProgressPromise;
+            nrfmlProgressCallback(PROGRESS);
 
             const modal = screen.queryByText(
                 'Detecting modem firmware version'
@@ -166,20 +154,7 @@ describe('Sidepanel functionality', () => {
 
     describe('Online Power Profiler flow', () => {
         it('should start fetching opp params in the background', async () => {
-            let callback: nrfml.JsonCallback;
-            // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
-            await nrfml.start.mockImplementationOnce(
-                (
-                    config: Configuration,
-                    errCb: nrfml.CompleteCallback,
-                    progressCb: nrfml.ProgressCallback,
-                    dataCb: nrfml.DataCallback,
-                    jsonCb: nrfml.JsonCallback
-                ) => {
-                    callback = jsonCb;
-                }
-            );
-
+            const nrfmlJsonPromise = getNrfmlCallback('json');
             const waitingText = 'Waiting for power data...';
             const screen = render(<SidePanel />, serialPortActions);
             expect(screen.getByText(waitingText)).toBeInTheDocument();
@@ -192,9 +167,10 @@ describe('Sidepanel functionality', () => {
             const args = nrfml.start.mock.calls[0][0];
             expect(args.sinks.length).toBe(2); // raw + opp which is always added in the background
 
+            const nrfmlJsonCallback = await nrfmlJsonPromise;
+
             // Invoke the JSON callback to test the remainder of the initial flow
-            // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
-            callback([
+            nrfmlJsonCallback([
                 {
                     onlinePowerProfiler: {
                         test: 'data',
