@@ -1,4 +1,6 @@
 ## Unreleased
+### Added
+- Functionality to extract parameters used for the `Online Power Profiler` tool. These parameters either be gotten from the device trace or from an existing trace file.
 ### Changed
 - More descriptive error message when trace conversion fails.
 
