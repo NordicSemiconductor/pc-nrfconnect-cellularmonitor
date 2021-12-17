@@ -163,4 +163,40 @@ describe('Sidepanel functionality', () => {
             ).not.toBeInTheDocument();
         });
     });
+
+    describe('opp', () => {
+        it('should start fetching opp params in the background', async () => {
+            let callback: nrfml.JsonCallback;
+            // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
+            await nrfml.start.mockImplementationOnce(
+                (
+                    config: Configuration,
+                    errCb: nrfml.CompleteCallback,
+                    progressCb: nrfml.ProgressCallback,
+                    dataCb: nrfml.DataCallback,
+                    jsonCb: nrfml.JsonCallback
+                ) => {
+                    callback = jsonCb;
+                }
+            );
+            const screen = render(<SidePanel />, serialPortActions);
+            const waitingText = 'Waiting for power data...';
+            expect(screen.getByText(waitingText)).toBeInTheDocument();
+            fireEvent.click(await screen.findByText('raw'));
+            fireEvent.click(screen.getByText('Start tracing'));
+            expect(nrfml.start).toHaveBeenCalled();
+            // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
+            callback([
+                {
+                    onlinePowerProfiler: {
+                        test: 'data',
+                    },
+                },
+            ]);
+            expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
+            expect(
+                screen.getByText('Save power estimation data')
+            ).toBeInTheDocument();
+        });
+    });
 });
