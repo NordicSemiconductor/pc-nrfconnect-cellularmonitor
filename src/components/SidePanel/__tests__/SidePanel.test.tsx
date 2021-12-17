@@ -164,7 +164,7 @@ describe('Sidepanel functionality', () => {
         });
     });
 
-    describe('opp', () => {
+    describe('Online Power Profiler flow', () => {
         it('should start fetching opp params in the background', async () => {
             let callback: nrfml.JsonCallback;
             // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
