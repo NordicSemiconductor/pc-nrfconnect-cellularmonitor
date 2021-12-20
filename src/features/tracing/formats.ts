@@ -17,11 +17,6 @@ export const sinkEvent = (format: TraceFormat) =>
         opp: EventAction.OPP_TRACE,
     }[format] ?? EventAction.UNKNOWN_TRACE);
 
-export const requiresTraceDb = (formats: TraceFormat[]) =>
-    formats.includes('pcap') ||
-    formats.includes('live') ||
-    formats.includes('opp');
-
 export const hasProgress = (format: TraceFormat) =>
     format !== 'live' && format !== 'opp';
 

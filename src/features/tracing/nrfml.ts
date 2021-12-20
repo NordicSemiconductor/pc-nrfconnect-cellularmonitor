@@ -15,13 +15,7 @@ import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import { getNameAndDirectory } from '../../utils/fileUtils';
-import {
-    hasProgress,
-    requiresTraceDb,
-    sinkEvent,
-    SourceFormat,
-    TraceFormat,
-} from './formats';
+import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
@@ -44,7 +38,7 @@ const nrfmlConfig = (
     sinks: TraceFormat[]
 ) => ({
     config: { plugins_directory: getPluginsDir() },
-    sources: [sourceConfig(state, source, sinks)] as Sources,
+    sources: [sourceConfig(state, source)] as Sources,
     sinks: sinks.map(format => sinkConfig(state, source, format)),
 });
 
@@ -179,8 +173,7 @@ export const startTrace =
 
         const isDetectingTraceDb =
             getManualDbFilePath(state) == null &&
-            !(sinks.length === 1 && sinks[0] === 'raw') && // if we originally only do RAW trace, we do not show dialog
-            requiresTraceDb(sinksWithOpp);
+            !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinksWithOpp),
