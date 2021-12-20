@@ -146,6 +146,12 @@ export const extractPowerData =
                 );
             }
         );
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: progressConfigs(source, sinks),
+            })
+        );
     };
 
 export const startTrace =

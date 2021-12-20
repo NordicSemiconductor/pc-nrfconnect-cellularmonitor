@@ -17,6 +17,7 @@ import {
     getPowerEstimationData,
     getPowerEstimationFilePath,
     getSerialPort,
+    getTaskId,
     setPowerEstimationFilePath,
 } from '../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../utils/fileUtils';
@@ -30,6 +31,7 @@ export default () => {
     const dispatch = useDispatch();
     const isDeviceSelected = !!useSelector(getSerialPort);
 
+    const isRunning = !!useSelector(getTaskId);
     const powerEstimationData = useSelector(getPowerEstimationData);
     const powerEstimationFilePath = useSelector(getPowerEstimationFilePath);
 
@@ -67,8 +69,9 @@ export default () => {
                     className="w-100 secondary-btn"
                     variant="secondary"
                     onClick={getPowerData}
+                    disabled={isRunning}
                 >
-                    Get power data from RAW
+                    {isRunning ? 'Fetching data...' : 'Get power data from RAW'}
                 </Button>
             ) : (
                 <>

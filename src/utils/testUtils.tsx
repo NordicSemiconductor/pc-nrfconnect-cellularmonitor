@@ -56,6 +56,7 @@ function getNrfmlCallback<T extends CallbackName>(
                         break;
                 }
                 resolve(callback);
+                return 1; // mocked task id
             }
         );
     });

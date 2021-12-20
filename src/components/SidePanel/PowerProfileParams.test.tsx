@@ -56,7 +56,6 @@ describe('Power profile params', () => {
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
-            expect(extractButton).toBeInTheDocument();
             fireEvent.click(extractButton);
 
             const nrfmlJsonCallback = await nrfmlJsonPromise;
@@ -81,7 +80,6 @@ describe('Power profile params', () => {
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
-            expect(extractButton).toBeInTheDocument();
             fireEvent.click(extractButton);
 
             const nrfmlCompleteCallback = await nrfmlCompletePromise;
@@ -89,6 +87,25 @@ describe('Power profile params', () => {
             // @ts-ignore -- wrong typing
             nrfmlCompleteCallback();
             assertLogErrorCB();
+        });
+
+        it('should indicate loading state', async () => {
+            const nrfmlCompletePromise = getNrfmlCallback('complete');
+
+            const screen = render(<PowerProfilerParams />);
+            const extractButton = await screen.findByText(
+                'Get power data from RAW'
+            );
+            fireEvent.click(extractButton);
+            expect(screen.queryByText('Fetching data...')).toBeInTheDocument();
+
+            const nrfmlCompleteCallback = await nrfmlCompletePromise;
+
+            // @ts-ignore -- wrong typing
+            nrfmlCompleteCallback();
+            expect(
+                screen.queryByText('Fetching data...')
+            ).not.toBeInTheDocument();
         });
     });
 });
