@@ -109,6 +109,10 @@ const traceSlice = createSlice({
         setPowerEstimationFilePath: (state, action: PayloadAction<string>) => {
             state.powerEstimationFilePath = action.payload;
         },
+        resetPowerEstimationParams: state => {
+            state.powerEstimationData = null;
+            state.powerEstimationFilePath = null;
+        },
     },
 });
 
@@ -145,6 +149,7 @@ export const {
     setDetectingTraceDb,
     setPowerEstimationData,
     setPowerEstimationFilePath,
+    resetPowerEstimationParams,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

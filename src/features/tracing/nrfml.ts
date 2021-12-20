@@ -29,6 +29,7 @@ import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
+    resetPowerEstimationParams,
     setPowerEstimationData,
     setPowerEstimationFilePath,
     setTraceIsStarted,
@@ -96,6 +97,10 @@ export const extractPowerData =
     (path: string): TAction =>
     (dispatch, getState) => {
         let gotPowerEstimationData = false;
+        dispatch(resetPowerEstimationParams());
+        logger.info(
+            `Attempting to extract power estimation data from file ${path}`
+        );
         usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
         const source: SourceFormat = { type: 'file', path };
         const sinks = ['opp' as TraceFormat];
@@ -160,6 +165,8 @@ export const startTrace =
 
         // we want to do use tshark/opp sinks in the background of every trace
         const sinksWithOpp = ['opp', ...sinks] as TraceFormat[];
+        dispatch(resetPowerEstimationParams());
+
         sinksWithOpp.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
