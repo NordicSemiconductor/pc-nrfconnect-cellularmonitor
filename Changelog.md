@@ -1,6 +1,8 @@
 ## Unreleased
 ### Added
-- Functionality to extract parameters used for the `Online Power Profiler` tool. These parameters either be gotten from the device trace or from an existing trace file.
+- Extract data for the
+  [`Online Power Profiler`](https://devzone.nordicsemi.com/power/). Can be
+  gotten from the device while tracing or from an existing raw trace file.
 ### Changed
 - More descriptive error message when trace conversion fails.
 
