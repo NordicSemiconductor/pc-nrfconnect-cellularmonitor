@@ -35,7 +35,7 @@ export default () => {
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
-            defaultPath: join(getAppDataDir(), 'power-calculator-data.json'),
+            defaultPath: join(getAppDataDir(), 'power-estimation-data.json'),
             filters: [
                 {
                     name: 'JSON',
@@ -58,7 +58,7 @@ export default () => {
 
     return (
         <CollapsibleGroup
-            heading="Power Calculator"
+            heading="Power Estimator"
             defaultCollapsed={getCollapsePowerSection()}
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >
@@ -100,7 +100,7 @@ export default () => {
                             format: 'opp',
                             path: powerEstimationFilePath,
                         }}
-                        label="Power calculator data"
+                        label="Power estimator data"
                         truncate={false}
                     />
                     <Button
@@ -112,7 +112,7 @@ export default () => {
                             )
                         }
                     >
-                        Open Online Power Profiler
+                        Open Online Power Estimator
                     </Button>
                 </div>
             )}
