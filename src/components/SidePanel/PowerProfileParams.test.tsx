@@ -10,7 +10,12 @@ import {
     setPowerEstimationData,
     setSerialPort,
 } from '../../features/tracing/traceSlice';
-import { fireEvent, getNrfmlCallback, render } from '../../utils/testUtils';
+import {
+    assertErrorWasLogged,
+    fireEvent,
+    getNrfmlCallback,
+    render,
+} from '../../utils/testUtils';
 import PowerProfilerParams from './PowerProfilerParams';
 
 const mockedFileName = 'mockedPowerData';
@@ -66,6 +71,24 @@ describe('Power profile params', () => {
             expect(
                 await screen.findByText(`${mockedFileName}.json`)
             ).toBeInTheDocument();
+        });
+
+        it('should report error if jsonCB is not invoked before completedCB', async () => {
+            const nrfmlCompletePromise = getNrfmlCallback('complete');
+            const assertLogErrorCB = assertErrorWasLogged();
+
+            const screen = render(<PowerProfilerParams />);
+            const extractButton = await screen.findByText(
+                'Get power data from RAW'
+            );
+            expect(extractButton).toBeInTheDocument();
+            fireEvent.click(extractButton);
+
+            const nrfmlCompleteCallback = await nrfmlCompletePromise;
+
+            // @ts-ignore -- wrong typing
+            nrfmlCompleteCallback();
+            assertLogErrorCB();
         });
     });
 });

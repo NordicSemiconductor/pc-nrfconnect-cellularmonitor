@@ -95,6 +95,7 @@ export const convertTraceFile =
 export const extractPowerData =
     (path: string): TAction =>
     (dispatch, getState) => {
+        let gotPowerEstimationData = false;
         usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
         const source: SourceFormat = { type: 'file', path };
         const sinks = ['opp' as TraceFormat];
@@ -103,14 +104,18 @@ export const extractPowerData =
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
-                if (err != null) {
+                if (!gotPowerEstimationData) {
                     logger.error(
-                        `Failed to get power calculator data: ${err.message}`
+                        'Failed to get power estimation data, file may not contain requisite data'
+                    );
+                } else if (err != null) {
+                    logger.error(
+                        `Failed to get power estimation data: ${err.message}`
                     );
                     logger.debug(`Full error: ${JSON.stringify(err)}`);
                 } else {
                     logger.info(
-                        `Successfully extracted power calculator data from ${path}`
+                        `Successfully extracted power estimation data from ${path}`
                     );
                 }
                 dispatch(setTraceIsStopped());
@@ -121,6 +126,7 @@ export const extractPowerData =
                 // @ts-ignore -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
                 if (!powerEstimationData) return;
+                gotPowerEstimationData = true;
 
                 dispatch(stopTrace(taskId));
                 const [base, filePath] = getNameAndDirectory(path, '.bin');

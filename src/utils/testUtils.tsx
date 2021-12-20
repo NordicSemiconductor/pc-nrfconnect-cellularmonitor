@@ -8,7 +8,7 @@ import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import checkDiskSpace from 'check-disk-space';
-import { testUtils } from 'pc-nrfconnect-shared';
+import { logger, testUtils } from 'pc-nrfconnect-shared';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -79,6 +79,11 @@ jest.mock('pc-nrfconnect-shared', () => ({
     })),
 }));
 
+const assertErrorWasLogged = () => {
+    jest.spyOn(logger, 'error');
+    return () => expect(logger.error).toHaveBeenCalled();
+};
+
 const getMockStore = () => {
     const middlewares = [thunk];
     return configureMockStore<unknown, TDispatch>(middlewares);
@@ -93,4 +98,5 @@ export {
     mockedCheckDiskSpace,
     mockedDataDir,
     getNrfmlCallback,
+    assertErrorWasLogged,
 };

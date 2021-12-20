@@ -19,11 +19,6 @@ import {
 } from '../../../utils/testUtils';
 import SidePanel from '../SidePanel';
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
-    getAppDataDir: () => '',
-}));
-
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setSerialPort('COM1'),
