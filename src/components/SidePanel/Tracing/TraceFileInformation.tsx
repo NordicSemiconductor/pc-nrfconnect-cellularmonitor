@@ -41,9 +41,7 @@ const TraceFileName: FC<{
     return (
         <div className="trace-filename-wrapper">
             <FormLabel>
-                {label != null
-                    ? label
-                    : `${progress.format.toUpperCase()} file name`}
+                {label ?? `${progress.format.toUpperCase()} file name`}
             </FormLabel>
             <span
                 className="trace-filename"
