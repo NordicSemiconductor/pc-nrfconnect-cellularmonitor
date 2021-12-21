@@ -45,7 +45,9 @@
     "check-disk-space": "^2.1.0",
     "electron": "13.1.9",
     "electron-store": "^5.2.0",
-    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.11.0",
+    "jest-canvas-mock": "^2.3.1",
+    "jest-fetch-mock": "^3.0.3",
+    "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.14.0",
     "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
     "pretty-bytes": "^5.6.0",
     "react": "16.13.1",
@@ -59,7 +61,10 @@
   },
   "dependencies": {
     "@nordicsemiconductor/nrf-monitor-lib-js": "^0.6.4",
-    "npm": "^6.14.13"
+    "dangerously-set-html-content": "^1.0.9",
+    "ify-loader": "^1.1.0",
+    "npm": "^6.14.13",
+    "plotly.js": "^2.8.3"
   },
   "bundledDependencies": [
     "@nordicsemiconductor/nrf-monitor-lib-js"

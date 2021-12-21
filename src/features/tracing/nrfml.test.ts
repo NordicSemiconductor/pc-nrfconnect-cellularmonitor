@@ -9,13 +9,10 @@ import { testUtils } from 'pc-nrfconnect-shared';
 
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
+import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
-import {
-    resetPowerEstimationParams,
-    setDetectingTraceDb,
-    setTraceIsStarted,
-} from './traceSlice';
+import { setDetectingTraceDb, setTraceIsStarted } from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 

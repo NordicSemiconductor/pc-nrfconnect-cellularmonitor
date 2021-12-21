@@ -148,8 +148,8 @@ describe('Sidepanel functionality', () => {
         });
     });
 
-    describe('Online Power Profiler flow', () => {
-        it('should start fetching opp params in the background', async () => {
+    describe('Power Estimation flow', () => {
+        it('should start fetching power estimation params in the background', async () => {
             const callbacks = getNrfmlCallbacks();
             const waitingText = 'Waiting for power data...';
             const screen = render(<SidePanel />, serialPortActions);
@@ -165,8 +165,7 @@ describe('Sidepanel functionality', () => {
             const { jsonCallback } = await callbacks;
 
             // Invoke the JSON callback to test the remainder of the initial flow
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            jsonCallback!([
+            await jsonCallback!([
                 {
                     onlinePowerProfiler: {
                         test: 'data',

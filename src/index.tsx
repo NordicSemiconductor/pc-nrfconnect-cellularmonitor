@@ -11,6 +11,7 @@ import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
+import PowerEstimation from './components/PowerEstimation/PowerEstimation';
 import SidePanel from './components/SidePanel/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
@@ -24,7 +25,10 @@ export default () => (
         appReducer={appReducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
-        panes={[{ name: 'Trace Collector', Main: Dashboard }]}
+        panes={[
+            { name: 'Trace Collector', Main: Dashboard },
+            { name: 'Power Estimator', Main: PowerEstimation },
+        ]}
         documentation={DocumentationSections}
     />
 );

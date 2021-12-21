@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
+.power-estimation-container {
+    hr {
+        display: none;
+    }
+
+    br {
+        display: none;
+    }
+}
+
+.details-box-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: white;
+    padding: 12px;
+
+    .details-box {
+        width: 280px;
+        border-radius: 3px;
+        padding: 12px;
+    }
+
+    b {
+        font-size: 14px;
+    }
+}
+
+#details-box-totals {
+    border: 0px;
+    font-size: 13px;
+}
+
+#opp-export-import {
+    display: none;
+}
+
+#opp-preset {
+    display: none;
+}
+
+.opp-result-wrapper {
+    .trace-file-container {
+        margin-top: 0;
+    }
+
+    .trace-filename-wrapper {
+        margin-bottom: 4px;
+    }
+}
+
+.power-estimation-error {
+    color: red;
+}

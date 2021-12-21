@@ -9,7 +9,7 @@ import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
-import PowerProfilerParams from './PowerProfilerParams';
+import PowerEstimationParams from './PowerEstimationParams';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
 
@@ -21,7 +21,7 @@ export default () => (
         <TraceCollector />
         <Instructions />
         <TraceFileInformation />
-        <PowerProfilerParams />
+        <PowerEstimationParams />
         <AdvancedOptions />
     </SidePanel>
 );
