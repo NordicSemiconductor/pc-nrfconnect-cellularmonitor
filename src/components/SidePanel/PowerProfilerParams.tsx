@@ -25,7 +25,7 @@ import {
     getCollapsePowerSection,
     setCollapsePowerSection,
 } from '../../utils/store';
-import { TraceFileDetails } from './Tracing/TraceFileInformation';
+import TraceFileDetails from './Tracing/TraceFileDetails';
 
 export default () => {
     const dispatch = useDispatch();
