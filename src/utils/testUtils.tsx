@@ -27,7 +27,7 @@ type CallbackType<T> = T extends 'complete'
     ? nrfml.JsonCallback
     : never;
 
-function getNrfmlCallback<T extends CallbackName>(
+export function getNrfmlCallback<T extends CallbackName>(
     callbackType: T
 ): Promise<CallbackType<T>> {
     let callback: CallbackType<T>;
@@ -64,11 +64,11 @@ function getNrfmlCallback<T extends CallbackName>(
 
 jest.mock('check-disk-space');
 
-const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
+export const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
     typeof checkDiskSpace
 >;
 
-const mockedDataDir = '/mocked/data/dir';
+export const mockedDataDir = '/mocked/data/dir';
 
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
@@ -80,24 +80,16 @@ jest.mock('pc-nrfconnect-shared', () => ({
     })),
 }));
 
-const assertErrorWasLogged = () => {
+export const assertErrorWasLogged = () => {
     jest.spyOn(logger, 'error');
     return () => expect(logger.error).toHaveBeenCalled();
 };
 
-const getMockStore = () => {
+export const getMockStore = () => {
     const middlewares = [thunk];
     return configureMockStore<unknown, TDispatch>(middlewares);
 };
 
-const render = testUtils.render(appReducer);
+export const render = testUtils.render(appReducer);
 
 export * from '@testing-library/react';
-export {
-    render,
-    getMockStore,
-    mockedCheckDiskSpace,
-    mockedDataDir,
-    getNrfmlCallback,
-    assertErrorWasLogged,
-};
