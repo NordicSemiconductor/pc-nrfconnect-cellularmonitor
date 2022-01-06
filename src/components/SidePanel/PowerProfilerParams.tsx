@@ -27,6 +27,8 @@ import {
 } from '../../utils/store';
 import TraceFileDetails from './Tracing/TraceFileDetails';
 
+import './powerProfilerParams.scss';
+
 const GetPowerDataFromFile = () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
