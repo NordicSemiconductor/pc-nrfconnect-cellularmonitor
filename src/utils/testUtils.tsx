@@ -46,6 +46,27 @@ export const getNrfmlCallbacks = () => {
     });
 };
 
+export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
+    expect(mockedNrfmlStart).toBeCalledWith(
+        expect.objectContaining({
+            sinks: expect.arrayContaining(
+                sinkNames.map(sinkName =>
+                    expect.objectContaining({
+                        name: sinkName,
+                    })
+                )
+            ),
+        }),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function)
+    );
+
+    const args = mockedNrfmlStart.mock.calls[0][0];
+    expect(args.sinks).toHaveLength(sinkNames.length); // raw + pcap + live + opp which is always added in the background
+};
+
 jest.mock('check-disk-space');
 
 export const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<

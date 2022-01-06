@@ -11,10 +11,10 @@ import {
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
+    expectNrfmlStartCalledWithSinks,
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
-    mockedNrfmlStart,
     render,
 } from '../../../utils/testUtils';
 import SidePanel from '../SidePanel';
@@ -27,6 +27,7 @@ const serialPortActions = [
 describe('Sidepanel functionality', () => {
     beforeEach(() => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        jest.clearAllMocks();
     });
 
     describe('DetectTraceDbDialog', () => {
@@ -156,11 +157,10 @@ describe('Sidepanel functionality', () => {
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            // Ensure that we call nrfml.start with the correct amount of sinks
-            expect(mockedNrfmlStart).toHaveBeenCalled();
-
-            const args = mockedNrfmlStart.mock.calls[0][0];
-            expect(args.sinks?.length).toBe(2); // raw + opp which is always added in the background
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-tshark-sink',
+                'nrfml-raw-file-sink'
+            );
 
             const { jsonCallback } = await callbacks;
 

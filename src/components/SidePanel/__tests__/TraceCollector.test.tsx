@@ -11,9 +11,9 @@ import {
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
+    expectNrfmlStartCalledWithSinks,
     fireEvent,
     mockedCheckDiskSpace,
-    mockedNrfmlStart,
     render,
 } from '../../../utils/testUtils';
 import * as wireshark from '../../../utils/wireshark';
@@ -96,9 +96,10 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(mockedNrfmlStart).toHaveBeenCalled();
-            const args = mockedNrfmlStart.mock.calls[0][0];
-            expect(args.sinks?.length).toBe(2); // raw + opp which is always added in the background
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-tshark-sink'
+            );
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -107,9 +108,11 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(mockedNrfmlStart).toHaveBeenCalled();
-            const args = mockedNrfmlStart.mock.calls[0][0];
-            expect(args.sinks?.length).toBe(3); // raw + opp which is always added in the background
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-pcap-sink',
+                'nrfml-tshark-sink'
+            );
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -119,9 +122,12 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('live'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(mockedNrfmlStart).toHaveBeenCalled();
-            const args = mockedNrfmlStart.mock.calls[0][0];
-            expect(args.sinks?.length).toBe(4); // raw + opp which is always added in the background
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-pcap-sink',
+                'nrfml-tshark-sink',
+                'nrfml-wireshark-named-pipe-sink'
+            );
         });
     });
 });
