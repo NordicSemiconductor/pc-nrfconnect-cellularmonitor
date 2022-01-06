@@ -33,11 +33,11 @@ import TraceConverter from './TraceConverter';
 
 const TraceFileName: FC<{
     progress: TraceProgress;
-    truncate: boolean;
+    truncate?: boolean;
     label?: string;
 }> = ({
     progress,
-    truncate,
+    truncate = false,
     label = `${progress.format.toUpperCase()} file name`,
 }) => {
     const [filename] = getNameAndDirectory(progress.path);
@@ -66,7 +66,7 @@ export const TraceFileDetails: FC<{
     progress: TraceProgress;
     truncate?: boolean;
     label?: string;
-}> = ({ progress, label, truncate = true }) => (
+}> = ({ progress, label, truncate }) => (
     <div className="trace-file-container">
         <TraceFileName progress={progress} truncate={truncate} label={label} />
         {progress.size != null && (
@@ -97,6 +97,7 @@ export default () => {
                 <TraceFileDetails
                     key={progressItem.format}
                     progress={progressItem}
+                    truncate
                 />
             ))}
         </CollapsibleGroup>

@@ -104,7 +104,6 @@ export default () => {
                             path: powerEstimationFilePath,
                         }}
                         label="Power estimator data"
-                        truncate={false}
                     />
                     <Button
                         variant="secondary"
