@@ -84,7 +84,7 @@ describe('Power profile params', () => {
 
             const nrfmlCompleteCallback = await nrfmlCompletePromise;
 
-            // @ts-ignore -- wrong typing
+            // @ts-expect-error -- wrong typing
             nrfmlCompleteCallback();
             assertLogErrorCB();
         });
@@ -101,7 +101,7 @@ describe('Power profile params', () => {
 
             const nrfmlCompleteCallback = await nrfmlCompletePromise;
 
-            // @ts-ignore -- wrong typing
+            // @ts-expect-error -- wrong typing
             nrfmlCompleteCallback();
             expect(
                 screen.queryByText('Fetching data...')
