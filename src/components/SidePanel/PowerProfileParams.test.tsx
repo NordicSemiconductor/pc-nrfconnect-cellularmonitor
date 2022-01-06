@@ -34,7 +34,7 @@ jest.mock('electron', () => ({
 
 describe('Power profile params', () => {
     describe('with device connected', () => {
-        it('should show file link after file is saved', async () => {
+        it('shows file link after file is saved', async () => {
             const screen = render(<PowerProfilerParams />, [
                 setPowerEstimationData({ test: 'data' }),
                 setSerialPort('COM1'),
