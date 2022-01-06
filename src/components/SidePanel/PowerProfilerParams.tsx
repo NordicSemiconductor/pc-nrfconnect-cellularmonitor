@@ -74,7 +74,7 @@ const SavePowerDataFromRunningTrace = () => {
     const powerDataExists = powerEstimationData != null;
     const title = powerDataExists
         ? 'Save power estimation data to file'
-        : 'Click Start trace to get power estimation data from trace';
+        : 'Click Start tracing to get power estimation data from trace';
     const label = powerDataExists
         ? 'Save power estimation data'
         : 'Waiting for power data...';
