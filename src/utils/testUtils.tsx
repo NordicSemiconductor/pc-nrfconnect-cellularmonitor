@@ -4,21 +4,76 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
+// eslint-disable-next-line import/no-unresolved
+import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import checkDiskSpace from 'check-disk-space';
-import { testUtils } from 'pc-nrfconnect-shared';
+import { logger, testUtils } from 'pc-nrfconnect-shared';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
 
+export const mockedNrfmlStart = nrfml.start as jest.MockedFunction<
+    typeof nrfml.start
+>;
+
+export const getNrfmlCallbacks = () => {
+    return new Promise<{
+        completeCallback: nrfml.CompleteCallback;
+        progressCallback: nrfml.ProgressCallback;
+        dataCallback?: nrfml.DataCallback;
+        jsonCallback?: nrfml.JsonCallback;
+    }>(resolve => {
+        mockedNrfmlStart.mockImplementationOnce(
+            (
+                _: Configuration,
+                completeCallback: nrfml.CompleteCallback,
+                progressCallback: nrfml.ProgressCallback,
+                dataCallback?: nrfml.DataCallback,
+                jsonCallback?: nrfml.JsonCallback
+            ) => {
+                resolve({
+                    completeCallback,
+                    progressCallback,
+                    dataCallback,
+                    jsonCallback,
+                });
+                return 1; // mocked task id
+            }
+        );
+    });
+};
+
+export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
+    expect(mockedNrfmlStart).toBeCalledWith(
+        expect.objectContaining({
+            sinks: expect.arrayContaining(
+                sinkNames.map(sinkName =>
+                    expect.objectContaining({
+                        name: sinkName,
+                    })
+                )
+            ),
+        }),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function)
+    );
+
+    const args = mockedNrfmlStart.mock.calls[0][0];
+    expect(args.sinks).toHaveLength(sinkNames.length); // raw + pcap + live + opp which is always added in the background
+};
+
 jest.mock('check-disk-space');
 
-const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
+export const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
     typeof checkDiskSpace
 >;
 
-const mockedDataDir = '/mocked/data/dir';
+export const mockedDataDir = '/mocked/data/dir';
 
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
@@ -30,12 +85,16 @@ jest.mock('pc-nrfconnect-shared', () => ({
     })),
 }));
 
-const getMockStore = () => {
+export const assertErrorWasLogged = () => {
+    jest.spyOn(logger, 'error');
+    return () => expect(logger.error).toHaveBeenCalled();
+};
+
+export const getMockStore = () => {
     const middlewares = [thunk];
     return configureMockStore<unknown, TDispatch>(middlewares);
 };
 
-const render = testUtils.render(appReducer);
+export const render = testUtils.render(appReducer);
 
 export * from '@testing-library/react';
-export { render, getMockStore, mockedCheckDiskSpace, mockedDataDir };

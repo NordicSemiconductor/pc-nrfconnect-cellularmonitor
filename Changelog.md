@@ -1,4 +1,8 @@
 ## Unreleased
+### Added
+- Extract data for the
+  [`Online Power Profiler`](https://devzone.nordicsemi.com/power/). Can be
+  gotten from the device while tracing or from an existing raw trace file.
 ### Changed
 - More descriptive error message when trace conversion fails.
 

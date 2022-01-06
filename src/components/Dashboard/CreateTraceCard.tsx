@@ -54,7 +54,7 @@ export default () => (
                     <b>PCAP</b>.
                 </li>
                 <li>
-                    Click the <i>Start trace</i> button to begin collecting a
+                    Click the <i>Start tracing</i> button to begin collecting a
                     trace in the selected format.
                 </li>
             </ol>

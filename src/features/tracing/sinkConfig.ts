@@ -60,6 +60,16 @@ export default (
         } as const;
     }
 
+    if (format === 'opp') {
+        return {
+            name: 'nrfml-tshark-sink',
+            init_parameters: {
+                opp_json_object_key: 'onlinePowerProfiler',
+                sleep: true,
+            },
+        } as const;
+    }
+
     throw new Error(
         `Unknown format ${format} does not have an associated sink config`
     );

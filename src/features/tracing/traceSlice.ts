@@ -20,7 +20,7 @@ import { TaskId } from './nrfml';
 export interface TraceProgress {
     format: TraceFormat;
     path: string;
-    size: number;
+    size?: number;
 }
 
 interface TraceState {
@@ -31,6 +31,8 @@ interface TraceState {
     manualDbFilePath?: string;
     wiresharkPath: string | null;
     detectingTraceDb: boolean;
+    powerEstimationData: Record<string, unknown> | null;
+    powerEstimationFilePath: string | null;
 }
 
 const initialState = (): TraceState => ({
@@ -41,6 +43,8 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
     detectingTraceDb: false,
+    powerEstimationData: null,
+    powerEstimationFilePath: null,
 });
 
 const traceSlice = createSlice({
@@ -96,13 +100,30 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
+        setPowerEstimationData: (
+            state,
+            action: PayloadAction<Record<string, unknown>>
+        ) => {
+            state.powerEstimationData = action.payload;
+        },
+        setPowerEstimationFilePath: (state, action: PayloadAction<string>) => {
+            state.powerEstimationFilePath = action.payload;
+        },
+        resetPowerEstimationParams: state => {
+            state.powerEstimationData = null;
+            state.powerEstimationFilePath = null;
+        },
     },
 });
 
 export const getTaskId = (state: RootState) => state.app.trace.taskId;
 export const getIsTracing = (state: RootState) =>
     state.app.trace.taskId != null;
+
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
+export const getIsDeviceSelected = (state: RootState) =>
+    state.app.trace.serialPort != null;
+
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
 export const getTraceProgress = (state: RootState) =>
@@ -115,6 +136,10 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
+export const getPowerEstimationData = (state: RootState) =>
+    state.app.trace.powerEstimationData;
+export const getPowerEstimationFilePath = (state: RootState) =>
+    state.app.trace.powerEstimationFilePath;
 
 export const {
     setTraceIsStarted,
@@ -126,6 +151,9 @@ export const {
     resetManualDbFilePath,
     setWiresharkPath,
     setDetectingTraceDb,
+    setPowerEstimationData,
+    setPowerEstimationFilePath,
+    resetPowerEstimationParams,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

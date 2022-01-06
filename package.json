@@ -10,7 +10,7 @@
   "author": "Nordic Semiconductor ASA",
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
-    "nrfconnect": "^3.8.0"
+    "nrfconnect": "^3.9.2"
   },
   "main": "dist/bundle.js",
   "files": [
@@ -58,7 +58,7 @@
     "xterm-for-react": "^1.0.4"
   },
   "dependencies": {
-    "@nordicsemiconductor/nrf-monitor-lib-js": "^0.6.3",
+    "@nordicsemiconductor/nrf-monitor-lib-js": "^0.6.4",
     "npm": "^6.14.13"
   },
   "bundledDependencies": [

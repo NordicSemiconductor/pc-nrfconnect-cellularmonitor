@@ -4,71 +4,45 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-
-import React, { FC } from 'react';
-import FormLabel from 'react-bootstrap/FormLabel';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-    CollapsibleGroup,
-    truncateMiddle,
-    usageData,
-} from 'pc-nrfconnect-shared';
+import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
 import {
+    getIsDeviceSelected,
     getTraceProgress,
-    TraceProgress,
 } from '../../../features/tracing/traceSlice';
-import EventAction from '../../../usageDataActions';
-import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
+import {
+    getCollapseTraceDetailsSection,
+    setCollapseTraceDetailsSection,
+} from '../../../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
-import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
-
-const TraceFileName: FC<{ progress: TraceProgress }> = ({ progress }) => {
-    const [filename] = getNameAndDirectory(progress.path);
-
-    return (
-        <div className="trace-filename-wrapper">
-            <FormLabel>{`${progress.format.toUpperCase()} file name`}</FormLabel>
-            <span
-                className="trace-filename"
-                onClick={() => {
-                    usageData.sendUsageData(
-                        EventAction.OPEN_FILE_DIRECTORY,
-                        progress.format
-                    );
-                    openInFolder(progress.path);
-                }}
-                title={filename}
-            >
-                {truncateMiddle(filename, 5, 12)}
-            </span>
-        </div>
-    );
-};
-
-const TraceFileDetails: FC<{ progress: TraceProgress }> = ({ progress }) => (
-    <div className="trace-file-container">
-        <TraceFileName progress={progress} />
-        <DiskSpaceUsageBox label="File size" value={progress.size} />
-    </div>
-);
+import TraceConverter from './TraceConverter';
+import TraceFileDetails from './TraceFileDetails';
 
 export default () => {
     const progress = useSelector(getTraceProgress);
+    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
-    if (progress.length === 0) {
+    if (isDeviceSelected && progress.length === 0) {
         return null;
     }
 
     return (
-        <CollapsibleGroup heading="Trace Details" defaultCollapsed={false}>
-            <DiskSpaceUsage />
+        <CollapsibleGroup
+            heading="Trace Details"
+            defaultCollapsed={getCollapseTraceDetailsSection()}
+            onToggled={isNowExpanded =>
+                setCollapseTraceDetailsSection(!isNowExpanded)
+            }
+        >
+            {!isDeviceSelected && <TraceConverter />}
+            {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails
                     key={progressItem.format}
                     progress={progressItem}
+                    truncate
                 />
             ))}
         </CollapsibleGroup>

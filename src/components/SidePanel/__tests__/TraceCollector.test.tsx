@@ -5,13 +5,13 @@
  */
 
 import React from 'react';
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 
 import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
+    expectNrfmlStartCalledWithSinks,
     fireEvent,
     mockedCheckDiskSpace,
     render,
@@ -20,11 +20,6 @@ import * as wireshark from '../../../utils/wireshark';
 import TraceCollector from '../Tracing/TraceCollector';
 
 jest.mock('../../../utils/wireshark');
-
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
-    getAppDataDir: () => '',
-}));
 
 mockedCheckDiskSpace.mockImplementation(
     () =>
@@ -101,10 +96,10 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(nrfml.start).toHaveBeenCalled();
-            // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
-            const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(1);
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-tshark-sink'
+            );
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -113,10 +108,11 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(nrfml.start).toHaveBeenCalled();
-            // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
-            const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(2);
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-pcap-sink',
+                'nrfml-tshark-sink'
+            );
         });
 
         it('should call nrfml start with selected sink configurations as arguments', async () => {
@@ -126,10 +122,12 @@ describe('TraceCollector', () => {
             fireEvent.click(await screen.findByText('live'));
             fireEvent.click(screen.getByText('Start tracing'));
 
-            expect(nrfml.start).toHaveBeenCalled();
-            // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
-            const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(3);
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-raw-file-sink',
+                'nrfml-pcap-sink',
+                'nrfml-tshark-sink',
+                'nrfml-wireshark-named-pipe-sink'
+            );
         });
     });
 });

@@ -6,19 +6,12 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
-import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
-    const selectedSerialPort = useSelector(getSerialPort);
-
-    if (selectedSerialPort) {
-        return null;
-    }
-
     const dispatch = useDispatch();
 
     const loadTrace = () => {
@@ -34,7 +27,7 @@ export default () => {
             variant="secondary"
             onClick={loadTrace}
         >
-            Convert Raw Trace to PCAP
+            Convert RAW trace to PCAP
         </Button>
     );
 };

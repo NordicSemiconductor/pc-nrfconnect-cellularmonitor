@@ -5,25 +5,19 @@
  */
 
 import React from 'react';
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved
-import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 
 import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
+    expectNrfmlStartCalledWithSinks,
     fireEvent,
+    getNrfmlCallbacks,
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
 import SidePanel from '../SidePanel';
-
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
-    getAppDataDir: () => '',
-}));
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
@@ -33,6 +27,7 @@ const serialPortActions = [
 describe('Sidepanel functionality', () => {
     beforeEach(() => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
+        jest.clearAllMocks();
     });
 
     describe('DetectTraceDbDialog', () => {
@@ -70,8 +65,7 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should hide dialog when fw is detected', async () => {
-            let callback: nrfml.ProgressCallback;
-            const progress = {
+            const PROGRESS = {
                 meta: {
                     modem_db_path: 'foo',
                     modem_db_uuid: '123',
@@ -85,16 +79,7 @@ describe('Sidepanel functionality', () => {
                 duration_ms: 100,
             };
 
-            // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
-            await nrfml.start.mockImplementationOnce(
-                (
-                    config: Configuration,
-                    errCb: nrfml.CompleteCallback,
-                    progressCb: nrfml.ProgressCallback
-                ) => {
-                    callback = progressCb;
-                }
-            );
+            const callbacks = getNrfmlCallbacks();
 
             const screen = render(<SidePanel />, serialPortActions);
             fireEvent.click(await screen.findByText('pcap'));
@@ -102,9 +87,8 @@ describe('Sidepanel functionality', () => {
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
-
-            // @ts-ignore -- ts wrongly complains that callback is used before it is assigned which is wrong
-            callback(progress);
+            const { progressCallback } = await callbacks;
+            progressCallback(PROGRESS);
 
             const modal = screen.queryByText(
                 'Detecting modem firmware version'
@@ -161,6 +145,38 @@ describe('Sidepanel functionality', () => {
                     exact: false,
                 })
             ).not.toBeInTheDocument();
+        });
+    });
+
+    describe('Online Power Profiler flow', () => {
+        it('should start fetching opp params in the background', async () => {
+            const callbacks = getNrfmlCallbacks();
+            const waitingText = 'Waiting for power data...';
+            const screen = render(<SidePanel />, serialPortActions);
+            expect(screen.getByText(waitingText)).toBeInTheDocument();
+            fireEvent.click(await screen.findByText('raw'));
+            fireEvent.click(screen.getByText('Start tracing'));
+
+            expectNrfmlStartCalledWithSinks(
+                'nrfml-tshark-sink',
+                'nrfml-raw-file-sink'
+            );
+
+            const { jsonCallback } = await callbacks;
+
+            // Invoke the JSON callback to test the remainder of the initial flow
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            jsonCallback!([
+                {
+                    onlinePowerProfiler: {
+                        test: 'data',
+                    },
+                },
+            ]);
+            expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
+            expect(
+                screen.getByText('Save power estimation data')
+            ).toBeInTheDocument();
         });
     });
 });

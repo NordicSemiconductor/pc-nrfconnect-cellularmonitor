@@ -45,7 +45,9 @@ export default ({
                     isTracing ? 'disabled' : ''
                 }`}
             >
-                {ALL_TRACE_FORMATS.map((format: TraceFormat) => (
+                {ALL_TRACE_FORMATS.filter(
+                    (format: TraceFormat) => format !== 'opp'
+                ).map((format: TraceFormat) => (
                     <Button
                         variant={
                             selectedTraceFormats.includes(format)

@@ -7,18 +7,15 @@
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { writeFile } from 'fs';
+import { join } from 'path';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
-import {
-    hasProgress,
-    requiresTraceDb,
-    sinkEvent,
-    SourceFormat,
-    TraceFormat,
-} from './formats';
+import { getNameAndDirectory } from '../../utils/fileUtils';
+import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
@@ -26,6 +23,9 @@ import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
+    resetPowerEstimationParams,
+    setPowerEstimationData,
+    setPowerEstimationFilePath,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -38,7 +38,7 @@ const nrfmlConfig = (
     sinks: TraceFormat[]
 ) => ({
     config: { plugins_directory: getPluginsDir() },
-    sources: [sourceConfig(state, source, sinks)] as Sources,
+    sources: [sourceConfig(state, source)] as Sources,
     sinks: sinks.map(format => sinkConfig(state, source, format)),
 });
 
@@ -56,8 +56,7 @@ export const convertTraceFile =
         const sinks = ['pcap' as TraceFormat];
 
         const state = getState();
-        const isDetectingTraceDb =
-            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
+        const isDetectingTraceDb = getManualDbFilePath(state) == null;
 
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -88,6 +87,67 @@ export const convertTraceFile =
         );
     };
 
+export const extractPowerData =
+    (path: string): TAction =>
+    (dispatch, getState) => {
+        let gotPowerEstimationData = false;
+        dispatch(resetPowerEstimationParams());
+        logger.info(
+            `Attempting to extract power estimation data from file ${path}`
+        );
+        usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
+        const source: SourceFormat = { type: 'file', path };
+        const sinks = ['opp' as TraceFormat];
+
+        const state = getState();
+        const taskId = nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            err => {
+                if (!gotPowerEstimationData) {
+                    logger.error(
+                        'Failed to get power estimation data, file may not contain requisite data'
+                    );
+                } else if (err != null) {
+                    logger.error(
+                        `Failed to get power estimation data: ${err.message}`
+                    );
+                    logger.debug(`Full error: ${JSON.stringify(err)}`);
+                } else {
+                    logger.info(
+                        `Successfully extracted power estimation data from ${path}`
+                    );
+                }
+                dispatch(setTraceIsStopped());
+            },
+            () => {},
+            () => {},
+            jsonData => {
+                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
+                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+                if (!powerEstimationData) return;
+                gotPowerEstimationData = true;
+
+                dispatch(stopTrace(taskId));
+                const [base, filePath] = getNameAndDirectory(path, '.bin');
+                const pathToNewFile = join(filePath, `${base}.json`);
+                writeFile(
+                    pathToNewFile,
+                    JSON.stringify(powerEstimationData),
+                    () => {
+                        logger.info(`Created file ${pathToNewFile}`);
+                        dispatch(setPowerEstimationFilePath(pathToNewFile));
+                    }
+                );
+            }
+        );
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: progressConfigs(source, sinks),
+            })
+        );
+    };
+
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
@@ -103,15 +163,20 @@ export const startTrace =
             startTime: new Date(),
         };
 
-        sinks.forEach(format => {
+        // we want to do use tshark/opp sinks in the background of every trace
+        const sinksWithOpp = ['opp', ...sinks] as TraceFormat[];
+        dispatch(resetPowerEstimationParams());
+
+        sinksWithOpp.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
         const isDetectingTraceDb =
-            getManualDbFilePath(state) == null && requiresTraceDb(sinks);
+            getManualDbFilePath(state) == null &&
+            !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, sinksWithOpp),
             err => {
                 if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
@@ -128,7 +193,13 @@ export const startTrace =
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
                 throttleUpdatingProgress: true,
-            })
+            }),
+            () => {},
+            jsonData => {
+                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
+                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+                dispatch(setPowerEstimationData(powerEstimationData));
+            }
         );
         logger.info('Started tracefile');
         dispatch(

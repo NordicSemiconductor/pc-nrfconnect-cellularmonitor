@@ -10,7 +10,7 @@ import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Group, openUrl } from 'pc-nrfconnect-shared';
 
-import { getSerialPort } from '../../features/tracing/traceSlice';
+import { getIsDeviceSelected } from '../../features/tracing/traceSlice';
 
 import './sidepanel.scss';
 
@@ -45,9 +45,9 @@ const Link: FC<{ onClick: () => void; url: string }> = ({
 );
 
 export default () => {
-    const selectedSerialPort = useSelector(getSerialPort);
+    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
-    if (selectedSerialPort) {
+    if (isDeviceSelected) {
         return null;
     }
 

@@ -10,7 +10,7 @@ import { pathToFileURL } from 'url';
 
 import { RootState } from '../../appReducer';
 import { autoDetectDbRootFolder } from '../../utils/store';
-import { requiresTraceDb, SourceFormat, TraceFormat } from './formats';
+import { SourceFormat } from './formats';
 import { getManualDbFilePath } from './traceSlice';
 
 const BUFFER_SIZE = 1;
@@ -33,21 +33,14 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
               },
           };
 
-export default (
-    state: RootState,
-    source: SourceFormat,
-    sinks: TraceFormat[]
-) => ({
+export default (state: RootState, source: SourceFormat) => ({
     name: 'nrfml-insight-source',
     init_parameters: {
         ...(source.type === 'file'
             ? { file_path: source.path }
             : { serialport: { path: source.port } }),
 
-        ...(requiresTraceDb(sinks)
-            ? initParameterForTraceDb(getManualDbFilePath(state))
-            : {}),
-
+        ...initParameterForTraceDb(getManualDbFilePath(state)),
         chunk_size: CHUNK_SIZE,
     },
     config: {
