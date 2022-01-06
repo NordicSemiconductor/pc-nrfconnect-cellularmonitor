@@ -15,52 +15,33 @@ import thunk from 'redux-thunk';
 import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
 
-type CallbackName = 'complete' | 'progress' | 'data' | 'json';
-
-type CallbackType<T> = T extends 'complete'
-    ? nrfml.CompleteCallback
-    : T extends 'progress'
-    ? nrfml.ProgressCallback
-    : T extends 'data'
-    ? nrfml.DataCallback
-    : T extends 'json'
-    ? nrfml.JsonCallback
-    : never;
-
-export function getNrfmlCallback<T extends CallbackName>(
-    callbackType: T
-): Promise<CallbackType<T>> {
-    let callback: CallbackType<T>;
-    return new Promise(resolve => {
+export const getNrfmlCallbacks = () => {
+    return new Promise<{
+        completeCallback: nrfml.CompleteCallback;
+        progressCallback: nrfml.ProgressCallback;
+        dataCallback: nrfml.DataCallback;
+        jsonCallback: nrfml.JsonCallback;
+    }>(resolve => {
         // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
         nrfml.start.mockImplementationOnce(
             (
                 _: Configuration,
-                completeCb: nrfml.CompleteCallback,
-                progressCb: nrfml.ProgressCallback,
-                dataCb: nrfml.DataCallback,
-                jsonCb: nrfml.JsonCallback
+                completeCallback: nrfml.CompleteCallback,
+                progressCallback: nrfml.ProgressCallback,
+                dataCallback: nrfml.DataCallback,
+                jsonCallback: nrfml.JsonCallback
             ) => {
-                switch (callbackType) {
-                    case 'complete':
-                        callback = completeCb as CallbackType<T>;
-                        break;
-                    case 'progress':
-                        callback = progressCb as CallbackType<T>;
-                        break;
-                    case 'data':
-                        callback = dataCb as CallbackType<T>;
-                        break;
-                    case 'json':
-                        callback = jsonCb as CallbackType<T>;
-                        break;
-                }
-                resolve(callback);
+                resolve({
+                    completeCallback,
+                    progressCallback,
+                    dataCallback,
+                    jsonCallback,
+                });
                 return 1; // mocked task id
             }
         );
     });
-}
+};
 
 jest.mock('check-disk-space');
 

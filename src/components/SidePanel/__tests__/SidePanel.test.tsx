@@ -13,7 +13,7 @@ import {
 } from '../../../features/tracing/traceSlice';
 import {
     fireEvent,
-    getNrfmlCallback,
+    getNrfmlCallbacks,
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
@@ -78,7 +78,7 @@ describe('Sidepanel functionality', () => {
                 duration_ms: 100,
             };
 
-            const nrfmlProgressPromise = getNrfmlCallback('progress');
+            const callbacks = getNrfmlCallbacks();
 
             const screen = render(<SidePanel />, serialPortActions);
             fireEvent.click(await screen.findByText('pcap'));
@@ -86,8 +86,8 @@ describe('Sidepanel functionality', () => {
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
-            const nrfmlProgressCallback = await nrfmlProgressPromise;
-            nrfmlProgressCallback(PROGRESS);
+            const { progressCallback } = await callbacks;
+            progressCallback(PROGRESS);
 
             const modal = screen.queryByText(
                 'Detecting modem firmware version'
@@ -149,7 +149,7 @@ describe('Sidepanel functionality', () => {
 
     describe('Online Power Profiler flow', () => {
         it('should start fetching opp params in the background', async () => {
-            const nrfmlJsonPromise = getNrfmlCallback('json');
+            const callbacks = getNrfmlCallbacks();
             const waitingText = 'Waiting for power data...';
             const screen = render(<SidePanel />, serialPortActions);
             expect(screen.getByText(waitingText)).toBeInTheDocument();
@@ -162,10 +162,10 @@ describe('Sidepanel functionality', () => {
             const args = nrfml.start.mock.calls[0][0];
             expect(args.sinks.length).toBe(2); // raw + opp which is always added in the background
 
-            const nrfmlJsonCallback = await nrfmlJsonPromise;
+            const { jsonCallback } = await callbacks;
 
             // Invoke the JSON callback to test the remainder of the initial flow
-            nrfmlJsonCallback([
+            jsonCallback([
                 {
                     onlinePowerProfiler: {
                         test: 'data',

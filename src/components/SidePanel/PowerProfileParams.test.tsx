@@ -13,7 +13,7 @@ import {
 import {
     assertErrorWasLogged,
     fireEvent,
-    getNrfmlCallback,
+    getNrfmlCallbacks,
     render,
 } from '../../utils/testUtils';
 import PowerProfilerParams from './PowerProfilerParams';
@@ -50,7 +50,7 @@ describe('Power profile params', () => {
 
     describe('without device connected', () => {
         it('should save file and display link', async () => {
-            const nrfmlJsonPromise = getNrfmlCallback('json');
+            const callbacks = getNrfmlCallbacks();
 
             const screen = render(<PowerProfilerParams />);
             const extractButton = await screen.findByText(
@@ -58,8 +58,8 @@ describe('Power profile params', () => {
             );
             fireEvent.click(extractButton);
 
-            const nrfmlJsonCallback = await nrfmlJsonPromise;
-            nrfmlJsonCallback([
+            const { jsonCallback } = await callbacks;
+            jsonCallback([
                 {
                     onlinePowerProfiler: {
                         test: 'data',
@@ -73,7 +73,7 @@ describe('Power profile params', () => {
         });
 
         it('should report error if jsonCB is not invoked before completedCB', async () => {
-            const nrfmlCompletePromise = getNrfmlCallback('complete');
+            const callbacks = getNrfmlCallbacks();
             const assertLogErrorCB = assertErrorWasLogged();
 
             const screen = render(<PowerProfilerParams />);
@@ -82,15 +82,15 @@ describe('Power profile params', () => {
             );
             fireEvent.click(extractButton);
 
-            const nrfmlCompleteCallback = await nrfmlCompletePromise;
+            const { completeCallback } = await callbacks;
 
             // @ts-expect-error -- wrong typing
-            nrfmlCompleteCallback();
+            completeCallback();
             assertLogErrorCB();
         });
 
         it('should indicate loading state', async () => {
-            const nrfmlCompletePromise = getNrfmlCallback('complete');
+            const callbacks = getNrfmlCallbacks();
 
             const screen = render(<PowerProfilerParams />);
             const extractButton = await screen.findByText(
@@ -99,10 +99,10 @@ describe('Power profile params', () => {
             fireEvent.click(extractButton);
             expect(screen.queryByText('Fetching data...')).toBeInTheDocument();
 
-            const nrfmlCompleteCallback = await nrfmlCompletePromise;
+            const { completeCallback } = await callbacks;
 
             // @ts-expect-error -- wrong typing
-            nrfmlCompleteCallback();
+            completeCallback();
             expect(
                 screen.queryByText('Fetching data...')
             ).not.toBeInTheDocument();
