@@ -35,14 +35,16 @@ const TraceFileName: FC<{
     progress: TraceProgress;
     truncate: boolean;
     label?: string;
-}> = ({ progress, truncate, label }) => {
+}> = ({
+    progress,
+    truncate,
+    label = `${progress.format.toUpperCase()} file name`,
+}) => {
     const [filename] = getNameAndDirectory(progress.path);
 
     return (
         <div className="trace-filename-wrapper">
-            <FormLabel>
-                {label ?? `${progress.format.toUpperCase()} file name`}
-            </FormLabel>
+            <FormLabel>{label}</FormLabel>
             <span
                 className="trace-filename"
                 onClick={() => {
