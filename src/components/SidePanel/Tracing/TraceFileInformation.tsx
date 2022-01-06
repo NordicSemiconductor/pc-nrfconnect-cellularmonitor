@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
 import {
-    getSerialPort,
+    getIsDeviceSelected,
     getTraceProgress,
 } from '../../../features/tracing/traceSlice';
 import {
@@ -22,7 +22,7 @@ import TraceFileDetails from './TraceFileDetails';
 
 export default () => {
     const progress = useSelector(getTraceProgress);
-    const isDeviceSelected = !!useSelector(getSerialPort);
+    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
     if (isDeviceSelected && progress.length === 0) {
         return null;

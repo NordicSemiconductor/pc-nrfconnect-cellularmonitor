@@ -119,7 +119,11 @@ const traceSlice = createSlice({
 export const getTaskId = (state: RootState) => state.app.trace.taskId;
 export const getIsTracing = (state: RootState) =>
     state.app.trace.taskId != null;
+
 export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
+export const getIsDeviceSelected = (state: RootState) =>
+    state.app.trace.serialPort != null;
+
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
 export const getTraceProgress = (state: RootState) =>
