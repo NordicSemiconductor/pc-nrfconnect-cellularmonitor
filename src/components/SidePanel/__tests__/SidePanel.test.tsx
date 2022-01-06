@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 
 import {
     setAvailableSerialPorts,
@@ -15,6 +14,7 @@ import {
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
+    mockedNrfmlStart,
     render,
 } from '../../../utils/testUtils';
 import SidePanel from '../SidePanel';
@@ -157,15 +157,16 @@ describe('Sidepanel functionality', () => {
             fireEvent.click(screen.getByText('Start tracing'));
 
             // Ensure that we call nrfml.start with the correct amount of sinks
-            expect(nrfml.start).toHaveBeenCalled();
-            // @ts-ignore -- ts doesn't know that nrfml.start has been mocked
-            const args = nrfml.start.mock.calls[0][0];
-            expect(args.sinks.length).toBe(2); // raw + opp which is always added in the background
+            expect(mockedNrfmlStart).toHaveBeenCalled();
+
+            const args = mockedNrfmlStart.mock.calls[0][0];
+            expect(args.sinks?.length).toBe(2); // raw + opp which is always added in the background
 
             const { jsonCallback } = await callbacks;
 
             // Invoke the JSON callback to test the remainder of the initial flow
-            jsonCallback([
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            jsonCallback!([
                 {
                     onlinePowerProfiler: {
                         test: 'data',

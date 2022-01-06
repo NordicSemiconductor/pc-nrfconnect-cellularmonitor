@@ -59,7 +59,8 @@ describe('Power profile params', () => {
             fireEvent.click(extractButton);
 
             const { jsonCallback } = await callbacks;
-            jsonCallback([
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            jsonCallback!([
                 {
                     onlinePowerProfiler: {
                         test: 'data',

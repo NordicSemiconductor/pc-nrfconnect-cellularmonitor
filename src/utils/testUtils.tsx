@@ -15,21 +15,24 @@ import thunk from 'redux-thunk';
 import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
 
+export const mockedNrfmlStart = nrfml.start as jest.MockedFunction<
+    typeof nrfml.start
+>;
+
 export const getNrfmlCallbacks = () => {
     return new Promise<{
         completeCallback: nrfml.CompleteCallback;
         progressCallback: nrfml.ProgressCallback;
-        dataCallback: nrfml.DataCallback;
-        jsonCallback: nrfml.JsonCallback;
+        dataCallback?: nrfml.DataCallback;
+        jsonCallback?: nrfml.JsonCallback;
     }>(resolve => {
-        // @ts-ignore -- ts doesn't understand that nrfml.start is a mock fn
-        nrfml.start.mockImplementationOnce(
+        mockedNrfmlStart.mockImplementationOnce(
             (
                 _: Configuration,
                 completeCallback: nrfml.CompleteCallback,
                 progressCallback: nrfml.ProgressCallback,
-                dataCallback: nrfml.DataCallback,
-                jsonCallback: nrfml.JsonCallback
+                dataCallback?: nrfml.DataCallback,
+                jsonCallback?: nrfml.JsonCallback
             ) => {
                 resolve({
                     completeCallback,
