@@ -27,13 +27,33 @@ import {
 } from '../../utils/store';
 import TraceFileDetails from './Tracing/TraceFileDetails';
 
-export default () => {
+const GetPowerDataFromFile = () => {
+    const dispatch = useDispatch();
+    const isTracing = useSelector(getIsTracing);
+
+    const getPowerData = () => {
+        const file = askForTraceFile();
+        if (file) {
+            dispatch(extractPowerData(file));
+        }
+    };
+
+    return (
+        <Button
+            className="w-100 secondary-btn"
+            variant="secondary"
+            onClick={getPowerData}
+            disabled={isTracing}
+        >
+            {isTracing ? 'Fetching data...' : 'Get power data from RAW'}
+        </Button>
+    );
+};
+
+const SavePowerDataFromRunningTrace = () => {
     const dispatch = useDispatch();
 
-    const isDeviceSelected = useSelector(getIsDeviceSelected);
-    const isTracing = useSelector(getIsTracing);
     const powerEstimationData = useSelector(getPowerEstimationData);
-    const powerEstimationFilePath = useSelector(getPowerEstimationFilePath);
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
@@ -51,12 +71,60 @@ export default () => {
         });
     };
 
-    const getPowerData = () => {
-        const file = askForTraceFile();
-        if (file) {
-            dispatch(extractPowerData(file));
-        }
-    };
+    const powerDataExists = powerEstimationData != null;
+    const title = powerDataExists
+        ? 'Save power estimation data to file'
+        : 'Click Start trace to get power estimation data from trace';
+    const label = powerDataExists
+        ? 'Save power estimation data'
+        : 'Waiting for power data...';
+
+    return (
+        <Button
+            variant="secondary"
+            disabled={!powerDataExists}
+            className="w-100"
+            title={title}
+            onClick={onSave}
+        >
+            {label}
+        </Button>
+    );
+};
+
+const PowerEstimationDataInfo = () => {
+    const powerEstimationFilePath = useSelector(getPowerEstimationFilePath);
+
+    if (powerEstimationFilePath == null) {
+        return null;
+    }
+
+    return (
+        <div className="opp-result-wrapper">
+            <TraceFileDetails
+                progress={{
+                    format: 'opp',
+                    path: powerEstimationFilePath,
+                }}
+                label="Power estimator data"
+            />
+            <Button
+                variant="secondary"
+                className="w-100"
+                onClick={() =>
+                    openUrl(
+                        'https://devzone.nordicsemi.com/power/w/opp/3/online-power-profiler-for-lte'
+                    )
+                }
+            >
+                Open Online Power Estimator
+            </Button>
+        </div>
+    );
+};
+
+export default () => {
+    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
     return (
         <CollapsibleGroup
@@ -64,60 +132,12 @@ export default () => {
             defaultCollapsed={getCollapsePowerSection()}
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >
-            {!isDeviceSelected ? (
-                <Button
-                    className="w-100 secondary-btn"
-                    variant="secondary"
-                    onClick={getPowerData}
-                    disabled={isTracing}
-                >
-                    {isTracing ? 'Fetching data...' : 'Get power data from RAW'}
-                </Button>
+            {isDeviceSelected ? (
+                <SavePowerDataFromRunningTrace />
             ) : (
-                <>
-                    {powerEstimationData == null ? (
-                        <Button
-                            variant="secondary"
-                            disabled
-                            className="w-100"
-                            title="Click Start trace to get power estimation data from trace"
-                        >
-                            Waiting for power data...
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="secondary"
-                            className="w-100"
-                            onClick={onSave}
-                            title="Save power estimation data to file"
-                        >
-                            Save power estimation data
-                        </Button>
-                    )}
-                </>
+                <GetPowerDataFromFile />
             )}
-            {powerEstimationFilePath != null && (
-                <div className="opp-result-wrapper">
-                    <TraceFileDetails
-                        progress={{
-                            format: 'opp',
-                            path: powerEstimationFilePath,
-                        }}
-                        label="Power estimator data"
-                    />
-                    <Button
-                        variant="secondary"
-                        className="w-100"
-                        onClick={() =>
-                            openUrl(
-                                'https://devzone.nordicsemi.com/power/w/opp/3/online-power-profiler-for-lte'
-                            )
-                        }
-                    >
-                        Open Online Power Estimator
-                    </Button>
-                </div>
-            )}
+            <PowerEstimationDataInfo />
         </CollapsibleGroup>
     );
 };
