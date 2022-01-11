@@ -63,6 +63,7 @@ describe('Power Estimation pane', () => {
 
         const { jsonCallback } = await callbacks;
         fetchMock.mockRejectOnce(new Error('request failed'));
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await jsonCallback!([
             {
                 onlinePowerProfiler: {
@@ -89,6 +90,7 @@ describe('Power Estimation pane', () => {
 
         const { jsonCallback } = await callbacks;
         fetchMock.mockResponseOnce('<h1>Request was successful</h1>');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await jsonCallback!([
             {
                 onlinePowerProfiler: {
