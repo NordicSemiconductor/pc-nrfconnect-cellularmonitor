@@ -235,9 +235,8 @@ const fetchPowerEstimationChart = async (
     dispatch: TDispatch
 ) => {
     try {
-        await postForm(powerEstimationData).then(html => {
-            dispatch(setRenderedHtml(html));
-        });
+        const html = await postForm(powerEstimationData);
+        dispatch(setRenderedHtml(html));
     } catch (err) {
         logger.error(
             `Request to ${CHART_URL} failed. Check network connection.`
