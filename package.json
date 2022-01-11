@@ -34,7 +34,8 @@
   "devDependencies": {
     "@reduxjs/toolkit": "^1.5.0",
     "@testing-library/react": "^11.2.6",
-    "@types/node": "^16.9.1",
+    "@types/node": "15.14.1",
+    "@types/plotly.js": "^1.54.19",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "7.1.16",
@@ -45,7 +46,6 @@
     "check-disk-space": "^2.1.0",
     "electron": "13.1.9",
     "electron-store": "^5.2.0",
-    "jest-canvas-mock": "^2.3.1",
     "jest-fetch-mock": "^3.0.3",
     "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v5.14.0",
     "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
