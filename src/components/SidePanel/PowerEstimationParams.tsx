@@ -45,7 +45,7 @@ const GetPowerDataFromFile = () => {
 
     return (
         <Button
-            className="w-100 secondary-btn"
+            className="w-100 secondary-btn btn-sm"
             variant="secondary"
             onClick={getPowerData}
             disabled={isTracing}
@@ -88,7 +88,7 @@ const SavePowerDataFromRunningTrace = () => {
         <Button
             variant="secondary"
             disabled={!powerDataExists}
-            className="w-100"
+            className="w-100 btn-sm"
             title={title}
             onClick={onSave}
         >
@@ -115,7 +115,7 @@ const PowerEstimationDataInfo = () => {
             />
             <Button
                 variant="secondary"
-                className="w-100"
+                className="w-100 btn-sm"
                 onClick={() => openUrl(OPE_URL)}
             >
                 Open Online Power Estimator

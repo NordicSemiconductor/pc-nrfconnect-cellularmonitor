@@ -42,7 +42,7 @@ const SelectTraceDbManually = () => {
     return (
         <Button
             variant="secondary"
-            className="w-100"
+            className="w-100 btn-sm"
             onClick={updateManualDbFilePath}
         >
             Select Trace DB
@@ -61,7 +61,7 @@ const SelectTraceDbAutomatically = () => {
     return (
         <Button
             variant="secondary"
-            className="w-100"
+            className="w-100 btn-sm"
             onClick={selectTraceDbAutomatically}
         >
             Autoselect Trace DB

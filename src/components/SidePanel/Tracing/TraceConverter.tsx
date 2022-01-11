@@ -23,7 +23,7 @@ export default () => {
 
     return (
         <Button
-            className="w-100 secondary-btn"
+            className="w-100 secondary-btn btn-sm"
             variant="secondary"
             onClick={loadTrace}
         >
