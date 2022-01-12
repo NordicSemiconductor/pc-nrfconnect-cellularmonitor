@@ -42,9 +42,7 @@ describe('Power Estimation pane', () => {
     it('should display loading message when no data has been received', () => {
         const screen = render(<PowerEstimation />);
         expect(
-            screen.getByText(
-                'Waiting for data, start trace to get power estimation data.'
-            )
+            screen.getByText('Start a trace to capture live power estimate')
         ).toBeInTheDocument();
     });
 
@@ -72,7 +70,7 @@ describe('Power Estimation pane', () => {
             },
         ]);
         expect(fetchMock).toHaveBeenCalled();
-        expect(screen.getByText('An error occured')).toBeInTheDocument();
+        expect(screen.getByText('Error!')).toBeInTheDocument();
         assertLogErrorCB();
     });
 
