@@ -7,6 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
+import { Alert } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
@@ -20,26 +21,23 @@ export default () => {
     const html = useSelector(getRenderedHtml);
     const hasError = useSelector(errorOccured);
 
-    if (hasError) {
-        return (
-            <div>
-                <p className="power-estimation-error">An error occured</p>
-            </div>
-        );
-    }
-    if (!html) {
-        return (
-            <div className="power-estimation-loading">
-                Start a trace to capture live power estimate
-            </div>
-        );
-    }
-
     window.Plotly = Plotly;
 
     return (
         <div className="power-estimation-container">
-            <InnerHTML html={html} />
+            {hasError && (
+                <Alert variant="danger" label="Error!">
+                    Could not complete network request, see log for more
+                    details.
+                </Alert>
+            )}
+            {html ? (
+                <InnerHTML html={html} />
+            ) : (
+                <div className="power-estimation-landing">
+                    Start a trace to capture live power estimate
+                </div>
+            )}
         </div>
     );
 };

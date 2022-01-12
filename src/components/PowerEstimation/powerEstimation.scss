@@ -6,15 +6,19 @@
 
 @import '~pc-nrfconnect-shared/styles';
 
-.power-estimation-loading {
+.power-estimation-landing {
     color: $gray-700;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    flex: 1;
 }
 
 .power-estimation-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
     hr {
         display: none;
     }
