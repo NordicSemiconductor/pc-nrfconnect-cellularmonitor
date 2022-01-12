@@ -29,10 +29,8 @@ export default () => {
     }
     if (!html) {
         return (
-            <div>
-                <p>
-                    Waiting for data, start trace to get power estimation data.
-                </p>
+            <div className="power-estimation-loading">
+                Start a trace to capture live power estimate
             </div>
         );
     }

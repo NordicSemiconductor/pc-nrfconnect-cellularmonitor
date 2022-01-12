@@ -4,6 +4,16 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+@import '~pc-nrfconnect-shared/styles';
+
+.power-estimation-loading {
+    color: $gray-700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .power-estimation-container {
     hr {
         display: none;
