@@ -35,7 +35,8 @@ export default () => {
                 <InnerHTML html={html} />
             ) : (
                 <div className="power-estimation-landing">
-                    Start a trace to capture live power estimate
+                    Start a trace to capture live power estimate or read from
+                    existing trace file
                 </div>
             )}
         </div>
