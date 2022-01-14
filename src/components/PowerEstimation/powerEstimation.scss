@@ -14,11 +14,27 @@
     flex: 1;
 }
 
+.opp-result-wrapper {
+    .trace-file-container {
+        margin-top: 0;
+    }
+
+    .trace-filename-wrapper {
+        margin-bottom: 4px;
+    }
+}
+
 .power-estimation-container {
     height: 100%;
     display: flex;
     flex-direction: column;
 
+    & > div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    // For OPP server-rendered html
     hr {
         display: none;
     }
@@ -30,25 +46,34 @@
 
 .details-box-container {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    order: 1;
+    margin-top: 12px;
     background: white;
-    padding: 12px;
+    padding: 4px 12px 8px 12px;
+    gap: 32px;
 
     .details-box {
         width: 280px;
-        border-radius: 3px;
         padding: 12px;
     }
 
     b {
-        font-size: 14px;
+        text-transform: uppercase;
+        font-size: 13px;
+        display: inline-block;
+        margin-top: 8px;
+        font-weight: 500;
+    }
+
+    td {
+        font-size: 13px;
     }
 }
 
+// For OPP server-rendered html
 #details-box-totals {
     border: 0px;
-    font-size: 13px;
 }
 
 #opp-export-import {
@@ -57,18 +82,4 @@
 
 #opp-preset {
     display: none;
-}
-
-.opp-result-wrapper {
-    .trace-file-container {
-        margin-top: 0;
-    }
-
-    .trace-filename-wrapper {
-        margin-bottom: 4px;
-    }
-}
-
-.power-estimation-error {
-    color: red;
 }
