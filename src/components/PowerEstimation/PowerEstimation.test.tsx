@@ -42,7 +42,9 @@ describe('Power Estimation pane', () => {
     it('should display loading message when no data has been received', () => {
         const screen = render(<PowerEstimation />);
         expect(
-            screen.getByText('Start a trace to capture live power estimate')
+            screen.getByText(
+                'Start a trace to capture live power estimate or read from existing trace file'
+            )
         ).toBeInTheDocument();
     });
 
@@ -58,7 +60,6 @@ describe('Power Estimation pane', () => {
         );
         fireEvent.click(await screen.findByText('raw'));
         fireEvent.click(screen.getByText('Start tracing'));
-
         const { jsonCallback } = await callbacks;
         fetchMock.mockRejectOnce(new Error('request failed'));
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

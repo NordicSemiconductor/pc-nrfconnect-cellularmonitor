@@ -18,7 +18,7 @@ import {
 import './powerEstimation.scss';
 
 export default () => {
-    const html = useSelector(getRenderedHtml);
+    const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(errorOccured);
 
     window.Plotly = Plotly;
@@ -31,8 +31,8 @@ export default () => {
                     details.
                 </Alert>
             )}
-            {html ? (
-                <InnerHTML html={html} />
+            {oppHtml ? (
+                <InnerHTML html={oppHtml} />
             ) : (
                 <div className="power-estimation-landing">
                     Start a trace to capture live power estimate or read from
