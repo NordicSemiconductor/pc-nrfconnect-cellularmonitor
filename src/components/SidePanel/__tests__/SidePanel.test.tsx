@@ -5,11 +5,6 @@
  */
 
 import React from 'react';
-import {
-    setCurrentPane,
-    testUtils as sharedTestUtils,
-} from 'pc-nrfconnect-shared';
-import { reducer as appReducer } from 'pc-nrfconnect-shared/src/App/appLayout';
 
 import {
     setAvailableSerialPorts,
@@ -24,8 +19,6 @@ import {
     render,
 } from '../../../utils/testUtils';
 import SidePanel from '../SidePanel';
-
-const { dispatchTo } = sharedTestUtils;
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),

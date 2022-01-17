@@ -27,7 +27,7 @@ export default () => (
         sidePanel={<SidePanel />}
         panes={[
             { name: 'Trace Collector', Main: Dashboard },
-            { name: 'Power Estimator', Main: PowerEstimation },
+            { name: 'Power Estimation', Main: PowerEstimation },
         ]}
         documentation={DocumentationSections}
     />
