@@ -23,8 +23,8 @@ import {
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
-    setErrorOccured as setPowerEstimationErrorOccured,
     setFilePath as setPowerEstimationFilePath,
+    setHasError as setPowerEstimationErrorOccured,
     setRenderedHtml,
 } from '../powerEstimation/powerEstimationSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';

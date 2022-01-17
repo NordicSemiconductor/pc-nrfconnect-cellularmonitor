@@ -13,14 +13,14 @@ interface PowerEstimationState {
     data: OnlinePowerEstimatorParams | null;
     filePath: string | null;
     renderedHtml: string | null;
-    errorOccured: boolean;
+    hasError: boolean;
 }
 
 const initialState: PowerEstimationState = {
     data: null,
     filePath: null,
     renderedHtml: null,
-    errorOccured: false,
+    hasError: false,
 };
 
 const powerEstimationSlice = createSlice({
@@ -37,13 +37,13 @@ const powerEstimationSlice = createSlice({
             state.data = null;
             state.filePath = null;
             state.renderedHtml = null;
-            state.errorOccured = false;
+            state.hasError = false;
         },
         setRenderedHtml: (state, action: PayloadAction<string>) => {
             state.renderedHtml = action.payload;
         },
-        setErrorOccured: (state, action: PayloadAction<boolean>) => {
-            state.errorOccured = action.payload;
+        setHasError: (state, action: PayloadAction<boolean>) => {
+            state.hasError = action.payload;
         },
     },
 });
@@ -53,15 +53,15 @@ export const getFilePath = (state: RootState) =>
     state.app.powerEstimation.filePath;
 export const getRenderedHtml = (state: RootState) =>
     state.app.powerEstimation.renderedHtml;
-export const errorOccured = (state: RootState) =>
-    state.app.powerEstimation.errorOccured;
+export const hasError = (state: RootState) =>
+    state.app.powerEstimation.hasError;
 
 export const {
     setData,
     setFilePath,
     resetParams,
     setRenderedHtml,
-    setErrorOccured,
+    setHasError,
 } = powerEstimationSlice.actions;
 
 export default powerEstimationSlice.reducer;

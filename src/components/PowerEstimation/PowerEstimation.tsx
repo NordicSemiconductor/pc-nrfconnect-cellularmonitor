@@ -11,8 +11,8 @@ import { Alert, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
-    errorOccured,
     getRenderedHtml,
+    hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
 import EventAction from '../../usageDataActions';
 import { isPowerEstimationPane } from '../../utils/panes';
@@ -21,7 +21,7 @@ import './powerEstimation.scss';
 
 export default () => {
     const oppHtml = useSelector(getRenderedHtml);
-    const hasError = useSelector(errorOccured);
+    const hasError = useSelector(powerEstimationError);
     const powerEstimationPane = useSelector(isPowerEstimationPane);
 
     window.Plotly = Plotly;
