@@ -10,7 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { remote } from 'electron';
 import { writeFile } from 'fs';
 import { join } from 'path';
-import { CollapsibleGroup, getAppDataDir, openUrl } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    getAppDataDir,
+    openUrl,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
 import { OPE_URL } from '../../features/powerEstimation/onlinePowerEstimator';
 import {
@@ -23,6 +28,7 @@ import {
     getIsDeviceSelected,
     getIsTracing,
 } from '../../features/tracing/traceSlice';
+import EventAction from '../../usageDataActions';
 import { askForTraceFile } from '../../utils/fileUtils';
 import {
     getCollapsePowerSection,
@@ -116,7 +122,10 @@ const PowerEstimationDataInfo = () => {
             <Button
                 variant="secondary"
                 className="w-100 btn-sm"
-                onClick={() => openUrl(OPE_URL)}
+                onClick={() => {
+                    usageData.sendUsageData(EventAction.VISIT_OPP);
+                    openUrl(OPE_URL);
+                }}
             >
                 Open Online Power Estimator
             </Button>

@@ -4,24 +4,32 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
-import { Alert } from 'pc-nrfconnect-shared';
+import { Alert, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
     errorOccured,
     getRenderedHtml,
 } from '../../features/powerEstimation/powerEstimationSlice';
+import EventAction from '../../usageDataActions';
+import { isPowerEstimationPane } from '../../utils/panes';
 
 import './powerEstimation.scss';
 
 export default () => {
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(errorOccured);
+    const powerEstimationPane = useSelector(isPowerEstimationPane);
 
     window.Plotly = Plotly;
+
+    useEffect(() => {
+        if (!powerEstimationPane) return;
+        usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
+    }, [powerEstimationPane]);
 
     return (
         <div className="power-estimation-container">
