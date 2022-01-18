@@ -18,7 +18,10 @@ import {
     mockedCurrentPane,
     render,
 } from '../../../utils/testUtils';
-import SidePanel from '../SidePanel';
+import {
+    PowerEstimationSidePanel,
+    TraceCollectorSidePanel,
+} from '../SidePanel';
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
@@ -33,7 +36,10 @@ describe('Sidepanel functionality', () => {
 
     describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -42,7 +48,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should not show dialog when tracing to RAW', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
             const modal = screen.queryByText(
@@ -52,7 +61,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -82,7 +94,10 @@ describe('Sidepanel functionality', () => {
 
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -100,7 +115,10 @@ describe('Sidepanel functionality', () => {
 
     describe('multiple sinks', () => {
         it('should show file details for multiple sinks', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
@@ -117,7 +135,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should store RAW as .bin', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(screen.getByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -133,7 +154,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should store PCAP as .pcap', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -152,7 +176,15 @@ describe('Sidepanel functionality', () => {
     describe('Power Estimation flow', () => {
         it('should start fetching power estimation params in the background', async () => {
             const callbacks = getNrfmlCallbacks();
-            const screen = render(<SidePanel />, serialPortActions);
+            const waitingText = 'Waiting for power data...';
+            const screen = render(
+                <>
+                    <PowerEstimationSidePanel />
+                    <TraceCollectorSidePanel />
+                </>,
+                serialPortActions
+            );
+            expect(screen.getByText(waitingText)).toBeInTheDocument();
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
             expectNrfmlStartCalledWithSinks(
@@ -170,8 +202,6 @@ describe('Sidepanel functionality', () => {
             consequences, and unmounting and doing a new render doesn't work either.
             */
 
-            // const waitingText = 'Waiting for power data...';
-            // expect(await screen.findByText(waitingText)).toBeInTheDocument();
             const { jsonCallback } = await callbacks;
             // Invoke the JSON callback to test the remainder of the initial flow
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -186,7 +216,7 @@ describe('Sidepanel functionality', () => {
             expect(
                 await screen.findByText('Save power estimation data')
             ).toBeInTheDocument();
-            // expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
+            expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
         });
     });
 });

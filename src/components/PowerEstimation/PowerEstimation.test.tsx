@@ -20,7 +20,10 @@ import {
     mockedCheckDiskSpace,
     render,
 } from '../../utils/testUtils';
-import SidePanel from '../SidePanel/SidePanel';
+import {
+    PowerEstimationSidePanel,
+    TraceCollectorSidePanel,
+} from '../SidePanel/SidePanel';
 import PowerEstimation from './PowerEstimation';
 
 enableFetchMocks();
@@ -53,7 +56,8 @@ describe('Power Estimation pane', () => {
         const callbacks = getNrfmlCallbacks();
         const screen = render(
             <>
-                <SidePanel />
+                <TraceCollectorSidePanel />
+                <PowerEstimationSidePanel />
                 <PowerEstimation />
             </>,
             serialPortActions
@@ -79,7 +83,8 @@ describe('Power Estimation pane', () => {
         const callbacks = getNrfmlCallbacks();
         const screen = render(
             <>
-                <SidePanel />
+                <TraceCollectorSidePanel />
+                <PowerEstimationSidePanel />
                 <PowerEstimation />
             </>,
             serialPortActions

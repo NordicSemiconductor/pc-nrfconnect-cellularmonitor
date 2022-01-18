@@ -5,10 +5,8 @@
  */
 
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
-import { isPowerEstimationPane, isTraceCollectorPane } from '../../utils/panes';
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
 import PowerEstimationParams from './PowerEstimationParams';
@@ -18,21 +16,17 @@ import TraceFileInformation from './Tracing/TraceFileInformation';
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
 
-export default () => {
-    const traceCollectorPane = useSelector(isTraceCollectorPane);
-    const powerEstimationPane = useSelector(isPowerEstimationPane);
+export const PowerEstimationSidePanel = () => (
+    <SidePanel>
+        <PowerEstimationParams />
+    </SidePanel>
+);
 
-    return (
-        <SidePanel className="side-panel">
-            {traceCollectorPane && (
-                <>
-                    <Instructions />
-                    <TraceCollector />
-                    <TraceFileInformation />
-                    <AdvancedOptions />
-                </>
-            )}
-            {powerEstimationPane && <PowerEstimationParams />}
-        </SidePanel>
-    );
-};
+export const TraceCollectorSidePanel = () => (
+    <SidePanel className="side-panel">
+        <Instructions />
+        <TraceCollector />
+        <TraceFileInformation />
+        <AdvancedOptions />
+    </SidePanel>
+);
