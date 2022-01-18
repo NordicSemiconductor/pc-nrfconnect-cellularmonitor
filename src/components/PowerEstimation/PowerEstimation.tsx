@@ -7,7 +7,11 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
-import { Alert, usageData } from 'pc-nrfconnect-shared';
+import {
+    Alert,
+    currentPane as getCurrentPane,
+    usageData,
+} from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
@@ -15,21 +19,21 @@ import {
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
 import EventAction from '../../usageDataActions';
-import { isPowerEstimationPane } from '../../utils/panes';
 
 import './powerEstimation.scss';
 
 export default () => {
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
-    const powerEstimationPane = useSelector(isPowerEstimationPane);
+    // @ts-expect-error -- this works, so not sure what ts expects here
+    const currentPane = useSelector(getCurrentPane);
 
     window.Plotly = Plotly;
 
     useEffect(() => {
-        if (!powerEstimationPane) return;
+        if (currentPane !== 1) return;
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
-    }, [powerEstimationPane]);
+    }, [currentPane]);
 
     return (
         <div className="power-estimation-container">
