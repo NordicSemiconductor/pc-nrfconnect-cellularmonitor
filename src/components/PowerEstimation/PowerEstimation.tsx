@@ -18,6 +18,7 @@ import {
     getRenderedHtml,
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
+import panes from '../../panes';
 import EventAction from '../../usageDataActions';
 
 import './powerEstimation.scss';
@@ -28,12 +29,16 @@ export default () => {
     // @ts-expect-error -- this works, so not sure what ts expects here
     const currentPane = useSelector(getCurrentPane);
 
+    const powerEstimationPane = panes.findIndex(
+        pane => pane.name === 'Power Estimation'
+    );
+
     window.Plotly = Plotly;
 
     useEffect(() => {
-        if (currentPane !== 1) return;
+        if (currentPane !== powerEstimationPane) return;
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
-    }, [currentPane]);
+    }, [currentPane, powerEstimationPane]);
 
     return (
         <div className="power-estimation-container">
