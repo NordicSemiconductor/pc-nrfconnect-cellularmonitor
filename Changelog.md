@@ -1,4 +1,4 @@
-## Unreleased
+## 0.3.0
 ### Added
 - Extract data for the
   [`Online Power Profiler`](https://devzone.nordicsemi.com/power/). Can be
