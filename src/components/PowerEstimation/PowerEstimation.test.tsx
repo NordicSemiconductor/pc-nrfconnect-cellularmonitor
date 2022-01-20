@@ -43,7 +43,7 @@ describe('Power Estimation pane', () => {
     });
 
     it('should display loading message when no data has been received', () => {
-        const screen = render(<PowerEstimation />);
+        const screen = render(<PowerEstimation active />);
         expect(
             screen.getByText(
                 'Start a trace to capture live power estimate or read from existing trace file'
@@ -58,7 +58,7 @@ describe('Power Estimation pane', () => {
             <>
                 <TraceCollectorSidePanel />
                 <PowerEstimationSidePanel />
-                <PowerEstimation />
+                <PowerEstimation active />
             </>,
             serialPortActions
         );
@@ -85,7 +85,7 @@ describe('Power Estimation pane', () => {
             <>
                 <TraceCollectorSidePanel />
                 <PowerEstimationSidePanel />
-                <PowerEstimation />
+                <PowerEstimation active />
             </>,
             serialPortActions
         );

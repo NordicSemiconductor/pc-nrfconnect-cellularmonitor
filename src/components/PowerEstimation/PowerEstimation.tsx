@@ -7,38 +7,26 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
-import {
-    Alert,
-    currentPane as getCurrentPane,
-    usageData,
-} from 'pc-nrfconnect-shared';
+import { Alert, PaneProps, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
     getRenderedHtml,
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
-import panes from '../../panes';
 import EventAction from '../../usageDataActions';
 
 import './powerEstimation.scss';
 
-export default () => {
+export default ({ active }: PaneProps) => {
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
-    // @ts-expect-error -- this works, so not sure what ts expects here
-    const currentPane = useSelector(getCurrentPane);
-
-    const powerEstimationPane = panes.findIndex(
-        pane => pane.name === 'Power Estimation'
-    );
-
     window.Plotly = Plotly;
 
     useEffect(() => {
-        if (currentPane !== powerEstimationPane) return;
+        if (!active) return;
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
-    }, [currentPane, powerEstimationPane]);
+    }, [active]);
 
     return (
         <div className="power-estimation-container">
