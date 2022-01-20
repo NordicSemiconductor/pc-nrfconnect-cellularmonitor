@@ -9,19 +9,24 @@ import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
-import PowerProfilerParams from './PowerProfilerParams';
+import PowerEstimationParams from './PowerEstimationParams';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
 
-export default () => (
+export const PowerEstimationSidePanel = () => (
+    <SidePanel>
+        <PowerEstimationParams />
+    </SidePanel>
+);
+
+export const TraceCollectorSidePanel = () => (
     <SidePanel className="side-panel">
-        <TraceCollector />
         <Instructions />
+        <TraceCollector />
         <TraceFileInformation />
-        <PowerProfilerParams />
         <AdvancedOptions />
     </SidePanel>
 );

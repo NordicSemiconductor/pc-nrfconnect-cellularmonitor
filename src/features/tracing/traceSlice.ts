@@ -31,8 +31,6 @@ interface TraceState {
     manualDbFilePath?: string;
     wiresharkPath: string | null;
     detectingTraceDb: boolean;
-    powerEstimationData: Record<string, unknown> | null;
-    powerEstimationFilePath: string | null;
 }
 
 const initialState = (): TraceState => ({
@@ -43,8 +41,6 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     wiresharkPath: getPersistedWiresharkPath(),
     detectingTraceDb: false,
-    powerEstimationData: null,
-    powerEstimationFilePath: null,
 });
 
 const traceSlice = createSlice({
@@ -100,19 +96,6 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        setPowerEstimationData: (
-            state,
-            action: PayloadAction<Record<string, unknown>>
-        ) => {
-            state.powerEstimationData = action.payload;
-        },
-        setPowerEstimationFilePath: (state, action: PayloadAction<string>) => {
-            state.powerEstimationFilePath = action.payload;
-        },
-        resetPowerEstimationParams: state => {
-            state.powerEstimationData = null;
-            state.powerEstimationFilePath = null;
-        },
     },
 });
 
@@ -136,10 +119,6 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
-export const getPowerEstimationData = (state: RootState) =>
-    state.app.trace.powerEstimationData;
-export const getPowerEstimationFilePath = (state: RootState) =>
-    state.app.trace.powerEstimationFilePath;
 
 export const {
     setTraceIsStarted,
@@ -151,9 +130,6 @@ export const {
     resetManualDbFilePath,
     setWiresharkPath,
     setDetectingTraceDb,
-    setPowerEstimationData,
-    setPowerEstimationFilePath,
-    resetPowerEstimationParams,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

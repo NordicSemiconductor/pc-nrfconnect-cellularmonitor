@@ -15,9 +15,13 @@ import {
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
+    mockedCurrentPane,
     render,
 } from '../../../utils/testUtils';
-import SidePanel from '../SidePanel';
+import {
+    PowerEstimationSidePanel,
+    TraceCollectorSidePanel,
+} from '../SidePanel';
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
@@ -32,7 +36,10 @@ describe('Sidepanel functionality', () => {
 
     describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -41,7 +48,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should not show dialog when tracing to RAW', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
             const modal = screen.queryByText(
@@ -51,7 +61,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -81,7 +94,10 @@ describe('Sidepanel functionality', () => {
 
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -99,7 +115,10 @@ describe('Sidepanel functionality', () => {
 
     describe('multiple sinks', () => {
         it('should show file details for multiple sinks', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
@@ -116,7 +135,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should store RAW as .bin', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(screen.getByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -132,7 +154,10 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should store PCAP as .pcap', async () => {
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <TraceCollectorSidePanel />,
+                serialPortActions
+            );
             fireEvent.click(await screen.findByText('pcap'));
             fireEvent.click(screen.getByText('Start tracing'));
             expect(
@@ -148,35 +173,50 @@ describe('Sidepanel functionality', () => {
         });
     });
 
-    describe('Online Power Profiler flow', () => {
-        it('should start fetching opp params in the background', async () => {
+    describe('Power Estimation flow', () => {
+        it('should start fetching power estimation params in the background', async () => {
             const callbacks = getNrfmlCallbacks();
             const waitingText = 'Waiting for power data...';
-            const screen = render(<SidePanel />, serialPortActions);
+            const screen = render(
+                <>
+                    <PowerEstimationSidePanel />
+                    <TraceCollectorSidePanel />
+                </>,
+                serialPortActions
+            );
             expect(screen.getByText(waitingText)).toBeInTheDocument();
             fireEvent.click(await screen.findByText('raw'));
             fireEvent.click(screen.getByText('Start tracing'));
-
             expectNrfmlStartCalledWithSinks(
                 'nrfml-tshark-sink',
                 'nrfml-raw-file-sink'
             );
 
-            const { jsonCallback } = await callbacks;
+            mockedCurrentPane.mockReturnValue(1); // Emulate PowerEstimation pane
 
+            /*
+            Currently missing a good solution to test cross-pane functionality.
+            So we unfortunately have to comment out some checks, testing the transition
+            between waiting for data and when we have data, because we are
+            not able to re-render properly. `screen.rerender` seems to have unintended
+            consequences, and unmounting and doing a new render doesn't work either.
+            */
+
+            const { jsonCallback } = await callbacks;
             // Invoke the JSON callback to test the remainder of the initial flow
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            jsonCallback!([
+            await jsonCallback!([
                 {
                     onlinePowerProfiler: {
-                        test: 'data',
+                        crdx_len: 'data',
                     },
                 },
             ]);
-            expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
+
             expect(
-                screen.getByText('Save power estimation data')
+                await screen.findByText('Save power estimation data')
             ).toBeInTheDocument();
+            expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
         });
     });
 });

@@ -8,10 +8,9 @@ import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
-import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
-import SidePanel from './components/SidePanel/SidePanel';
+import panes from './panes';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';
@@ -23,8 +22,8 @@ export default () => (
         reportUsageData
         appReducer={appReducer}
         deviceSelect={<DeviceSelector />}
-        sidePanel={<SidePanel />}
-        panes={[{ name: 'Trace Collector', Main: Dashboard }]}
+        sidePanel={<div />}
+        panes={panes}
         documentation={DocumentationSections}
     />
 );

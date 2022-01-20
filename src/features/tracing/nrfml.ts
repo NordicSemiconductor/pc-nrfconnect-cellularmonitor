@@ -12,9 +12,21 @@ import { join } from 'path';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
-import { TAction } from '../../thunk';
+import { TAction, TDispatch } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import { getNameAndDirectory } from '../../utils/fileUtils';
+import {
+    CHART_URL,
+    OnlinePowerEstimatorParams,
+    postForm,
+} from '../powerEstimation/onlinePowerEstimator';
+import {
+    resetParams as resetPowerEstimationParams,
+    setData as setPowerEstimationData,
+    setFilePath as setPowerEstimationFilePath,
+    setHasError as setPowerEstimationErrorOccured,
+    setRenderedHtml,
+} from '../powerEstimation/powerEstimationSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
@@ -23,9 +35,6 @@ import sourceConfig from './sourceConfig';
 import {
     getManualDbFilePath,
     getSerialPort,
-    resetPowerEstimationParams,
-    setPowerEstimationData,
-    setPowerEstimationFilePath,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -126,6 +135,7 @@ export const extractPowerData =
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
                 if (!powerEstimationData) return;
                 gotPowerEstimationData = true;
+                fetchPowerEstimationChart(powerEstimationData, dispatch);
 
                 dispatch(stopTrace(taskId));
                 const [base, filePath] = getNameAndDirectory(path, '.bin');
@@ -195,9 +205,10 @@ export const startTrace =
                 throttleUpdatingProgress: true,
             }),
             () => {},
-            jsonData => {
+            async jsonData => {
                 // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+                await fetchPowerEstimationChart(powerEstimationData, dispatch);
                 dispatch(setPowerEstimationData(powerEstimationData));
             }
         );
@@ -218,3 +229,18 @@ export const stopTrace =
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
+
+const fetchPowerEstimationChart = async (
+    powerEstimationData: OnlinePowerEstimatorParams,
+    dispatch: TDispatch
+) => {
+    try {
+        const html = await postForm(powerEstimationData);
+        dispatch(setRenderedHtml(html));
+    } catch (err) {
+        logger.error(
+            `Request to ${CHART_URL} failed. Check network connection.`
+        );
+        dispatch(setPowerEstimationErrorOccured(true));
+    }
+};

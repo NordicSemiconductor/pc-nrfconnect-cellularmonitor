@@ -6,17 +6,15 @@
 
 import React from 'react';
 
-import {
-    setPowerEstimationData,
-    setSerialPort,
-} from '../../features/tracing/traceSlice';
+import { setData as setPowerEstimationData } from '../../../features/powerEstimation/powerEstimationSlice';
+import { setSerialPort } from '../../../features/tracing/traceSlice';
 import {
     assertErrorWasLogged,
     fireEvent,
     getNrfmlCallbacks,
     render,
-} from '../../utils/testUtils';
-import PowerProfilerParams from './PowerProfilerParams';
+} from '../../../utils/testUtils';
+import PowerEstimationParams from '../PowerEstimationParams';
 
 const mockedFileName = 'mockedPowerData';
 
@@ -35,8 +33,8 @@ jest.mock('electron', () => ({
 describe('Power profile params', () => {
     describe('with device connected', () => {
         it('shows file link after file is saved', async () => {
-            const screen = render(<PowerProfilerParams />, [
-                setPowerEstimationData({ test: 'data' }),
+            const screen = render(<PowerEstimationParams />, [
+                setPowerEstimationData({ cdrx_len: 'data' }),
                 setSerialPort('COM1'),
             ]);
             const saveButton = await screen.findByText(
@@ -52,7 +50,7 @@ describe('Power profile params', () => {
         it('should save file and display link', async () => {
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(<PowerProfilerParams />);
+            const screen = render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
@@ -77,7 +75,7 @@ describe('Power profile params', () => {
             const callbacks = getNrfmlCallbacks();
             const assertLogErrorCB = assertErrorWasLogged();
 
-            const screen = render(<PowerProfilerParams />);
+            const screen = render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
@@ -93,7 +91,7 @@ describe('Power profile params', () => {
         it('should indicate loading state', async () => {
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(<PowerProfilerParams />);
+            const screen = render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );

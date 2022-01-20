@@ -16,6 +16,8 @@ enum EventAction {
     OPEN_IN_WIRESHARK = 'Open in Wireshark',
     SET_TRACE_DB_MANUALLY = 'Set trace db manually',
     OPEN_FILE_DIRECTORY = 'Open file directory',
+    VISIT_OPP = 'Visit OPP website',
+    POWER_ESTIMATION_PANE = 'Open Power Estimation pane',
 }
 
 export default EventAction;

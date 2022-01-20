@@ -10,16 +10,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { remote } from 'electron';
 import { writeFile } from 'fs';
 import { join } from 'path';
-import { CollapsibleGroup, getAppDataDir, openUrl } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    getAppDataDir,
+    openUrl,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
+import { OPE_URL } from '../../features/powerEstimation/onlinePowerEstimator';
+import {
+    getData,
+    getFilePath,
+    setFilePath,
+} from '../../features/powerEstimation/powerEstimationSlice';
 import { extractPowerData } from '../../features/tracing/nrfml';
 import {
     getIsDeviceSelected,
     getIsTracing,
-    getPowerEstimationData,
-    getPowerEstimationFilePath,
-    setPowerEstimationFilePath,
 } from '../../features/tracing/traceSlice';
+import EventAction from '../../usageDataActions';
 import { askForTraceFile } from '../../utils/fileUtils';
 import {
     getCollapsePowerSection,
@@ -27,7 +36,7 @@ import {
 } from '../../utils/store';
 import TraceFileDetails from './Tracing/TraceFileDetails';
 
-import './powerProfilerParams.scss';
+import '../PowerEstimation/powerEstimation.scss';
 
 const GetPowerDataFromFile = () => {
     const dispatch = useDispatch();
@@ -42,7 +51,7 @@ const GetPowerDataFromFile = () => {
 
     return (
         <Button
-            className="w-100 secondary-btn"
+            className="w-100 secondary-btn btn-sm"
             variant="secondary"
             onClick={getPowerData}
             disabled={isTracing}
@@ -55,7 +64,7 @@ const GetPowerDataFromFile = () => {
 const SavePowerDataFromRunningTrace = () => {
     const dispatch = useDispatch();
 
-    const powerEstimationData = useSelector(getPowerEstimationData);
+    const powerData = useSelector(getData);
 
     const onSave = async () => {
         const { filePath, canceled } = await remote.dialog.showSaveDialog({
@@ -68,12 +77,12 @@ const SavePowerDataFromRunningTrace = () => {
             ],
         });
         if (canceled || !filePath) return;
-        writeFile(filePath, JSON.stringify(powerEstimationData), () => {
-            dispatch(setPowerEstimationFilePath(filePath));
+        writeFile(filePath, JSON.stringify(powerData), () => {
+            dispatch(setFilePath(filePath));
         });
     };
 
-    const powerDataExists = powerEstimationData != null;
+    const powerDataExists = powerData != null;
     const title = powerDataExists
         ? 'Save power estimation data to file'
         : 'Click Start tracing to get power estimation data from trace';
@@ -85,7 +94,7 @@ const SavePowerDataFromRunningTrace = () => {
         <Button
             variant="secondary"
             disabled={!powerDataExists}
-            className="w-100"
+            className="w-100 btn-sm"
             title={title}
             onClick={onSave}
         >
@@ -95,7 +104,7 @@ const SavePowerDataFromRunningTrace = () => {
 };
 
 const PowerEstimationDataInfo = () => {
-    const powerEstimationFilePath = useSelector(getPowerEstimationFilePath);
+    const powerEstimationFilePath = useSelector(getFilePath);
 
     if (powerEstimationFilePath == null) {
         return null;
@@ -108,16 +117,15 @@ const PowerEstimationDataInfo = () => {
                     format: 'opp',
                     path: powerEstimationFilePath,
                 }}
-                label="Power estimator data"
+                label="Power estimation data"
             />
             <Button
                 variant="secondary"
-                className="w-100"
-                onClick={() =>
-                    openUrl(
-                        'https://devzone.nordicsemi.com/power/w/opp/3/online-power-profiler-for-lte'
-                    )
-                }
+                className="w-100 btn-sm"
+                onClick={() => {
+                    usageData.sendUsageData(EventAction.VISIT_OPP);
+                    openUrl(OPE_URL);
+                }}
             >
                 Open Online Power Estimator
             </Button>
@@ -130,7 +138,7 @@ export default () => {
 
     return (
         <CollapsibleGroup
-            heading="Power Estimator"
+            heading="Power Estimation"
             defaultCollapsed={getCollapsePowerSection()}
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >

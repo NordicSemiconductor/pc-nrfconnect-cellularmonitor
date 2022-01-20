@@ -82,7 +82,7 @@ export default (
             property received from nrfml is accumulated size, so we don't lose any data this way
         */
         progressCallbackCounter += 1;
-        if (progressCallbackCounter % 30 !== 0 && throttleUpdatingProgress)
+        if (progressCallbackCounter % 20 !== 0 && throttleUpdatingProgress)
             return;
         try {
             progress?.data_offsets?.forEach(progressItem => {
