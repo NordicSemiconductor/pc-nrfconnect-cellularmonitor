@@ -8,9 +8,14 @@ import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
+import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
-import panes from './panes';
+import PowerEstimation from './components/PowerEstimation/PowerEstimation';
+import {
+    PowerEstimationSidePanel,
+    TraceCollectorSidePanel,
+} from './components/SidePanel/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';
@@ -23,7 +28,18 @@ export default () => (
         appReducer={appReducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<div />}
-        panes={panes}
+        panes={[
+            {
+                name: 'Trace Collector',
+                Main: Dashboard,
+                SidePanel: TraceCollectorSidePanel,
+            },
+            {
+                name: 'Power Estimation',
+                Main: PowerEstimation,
+                SidePanel: PowerEstimationSidePanel,
+            },
+        ]}
         documentation={DocumentationSections}
     />
 );
