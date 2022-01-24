@@ -19,7 +19,7 @@ import {
 } from '../../../utils/testUtils';
 import TraceCollector from '../Tracing/TraceCollector';
 
-jest.mock('../../../utils/wireshark');
+jest.mock('../../../features/wireshark/wireshark');
 
 mockedCheckDiskSpace.mockImplementation(
     () =>

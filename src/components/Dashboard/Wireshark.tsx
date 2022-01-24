@@ -10,13 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import {
-    getWiresharkPath,
-    setWiresharkPath,
-} from '../../features/tracing/traceSlice';
-import {
     findWireshark,
     openInWireshark,
 } from '../../features/wireshark/wireshark';
+import {
+    getWiresharkPath,
+    setWiresharkPath,
+} from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
 

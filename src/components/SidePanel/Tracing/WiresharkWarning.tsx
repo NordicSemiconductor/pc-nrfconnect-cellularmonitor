@@ -8,8 +8,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { TraceFormat } from '../../../features/tracing/formats';
-import { getWiresharkPath } from '../../../features/tracing/traceSlice';
 import { findWireshark } from '../../../features/wireshark/wireshark';
+import { getWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import Wireshark from '../../Dashboard/Wireshark';
 
 interface WiresharkWarningProps {
