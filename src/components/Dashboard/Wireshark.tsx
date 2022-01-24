@@ -13,9 +13,12 @@ import {
     getWiresharkPath,
     setWiresharkPath,
 } from '../../features/tracing/traceSlice';
+import {
+    findWireshark,
+    openInWireshark,
+} from '../../features/wireshark/wireshark';
 import EventAction from '../../usageDataActions';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
-import { findWireshark, openInWireshark } from '../../utils/wireshark';
 
 const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 

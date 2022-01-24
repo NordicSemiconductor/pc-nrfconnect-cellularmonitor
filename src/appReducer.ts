@@ -10,6 +10,7 @@ import { combineReducers } from 'redux';
 import modemReducer from './features/modem/modemSlice';
 import powerEstimationReducer from './features/powerEstimation/powerEstimationSlice';
 import traceReducer from './features/tracing/traceSlice';
+import wiresharkReducer from './features/wireshark/wiresharkSlice';
 
 type AppState = ReturnType<typeof appReducer>;
 
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
     modem: modemReducer,
     trace: traceReducer,
     powerEstimation: powerEstimationReducer,
+    wireshark: wiresharkReducer,
 });
 
 export default appReducer;

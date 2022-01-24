@@ -188,7 +188,11 @@ export const startTrace =
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinksWithOpp),
             err => {
-                if (err != null) {
+                if (err !== null && err.message.includes('tshark')) {
+                    logger.warn(
+                        'tshark not found from path or default installation location, cannot get power estimation parameters.'
+                    );
+                } else if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
                     logger.debug(`Full error: ${JSON.stringify(err)}`);
                 } else {

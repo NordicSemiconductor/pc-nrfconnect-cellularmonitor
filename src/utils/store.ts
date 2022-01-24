@@ -16,6 +16,7 @@ interface DevicePort {
 
 const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
 const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
+const TSHARK_EXECUTABLE_PATH_KEY = 'tsharkExecutablePath';
 const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
 const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
@@ -24,6 +25,7 @@ const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
     [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
+    [TSHARK_EXECUTABLE_PATH_KEY]: string | null;
     [TRACE_FORMATS]: TraceFormat[];
     [SERIALPORTS]: DevicePort;
     [COLLAPSE_POWER_SECTION]: boolean;
@@ -54,6 +56,11 @@ export const getWiresharkPath = () =>
     store<StoreSchema>().get(WIRESHARK_EXECUTABLE_PATH_KEY, null);
 export const setWiresharkPath = (wiresharkPath: string) =>
     store<StoreSchema>().set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
+
+export const getTsharkPath = () =>
+    store<StoreSchema>().get(TSHARK_EXECUTABLE_PATH_KEY, null);
+export const setTsharkPath = (tsharkPath: string) =>
+    store<StoreSchema>().set(TSHARK_EXECUTABLE_PATH_KEY, tsharkPath);
 
 export const getTraceFormats = () =>
     store<StoreSchema>().get(TRACE_FORMATS, [ALL_TRACE_FORMATS[0]]);

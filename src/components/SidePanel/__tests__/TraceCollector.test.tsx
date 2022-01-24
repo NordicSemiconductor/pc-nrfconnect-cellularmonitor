@@ -10,13 +10,13 @@ import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
+import * as wireshark from '../../../features/wireshark/wireshark';
 import {
     expectNrfmlStartCalledWithSinks,
     fireEvent,
     mockedCheckDiskSpace,
     render,
 } from '../../../utils/testUtils';
-import * as wireshark from '../../../utils/wireshark';
 import TraceCollector from '../Tracing/TraceCollector';
 
 jest.mock('../../../utils/wireshark');

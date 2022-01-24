@@ -7,7 +7,7 @@
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
-import { defaultWiresharkPath } from '../../utils/wireshark';
+import { defaultWiresharkPath } from '../wireshark/wireshark';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
 import { getWiresharkPath } from './traceSlice';
