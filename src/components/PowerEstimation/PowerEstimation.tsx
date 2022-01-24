@@ -15,6 +15,7 @@ import {
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
 import EventAction from '../../usageDataActions';
+import Tshark from '../Wireshark/Tshark';
 
 import './powerEstimation.scss';
 
@@ -39,10 +40,13 @@ export default ({ active }: PaneProps) => {
             {oppHtml ? (
                 <InnerHTML html={oppHtml} />
             ) : (
-                <div className="power-estimation-landing">
-                    Start a trace to capture live power estimate or read from
-                    existing trace file
-                </div>
+                <>
+                    <div className="power-estimation-landing">
+                        Start a trace to capture live power estimate or read
+                        from existing trace file
+                    </div>
+                    <Tshark />
+                </>
             )}
         </div>
     );

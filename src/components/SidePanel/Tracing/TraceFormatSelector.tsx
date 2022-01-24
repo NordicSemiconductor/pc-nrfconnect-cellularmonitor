@@ -14,7 +14,7 @@ import {
     TraceFormat,
 } from '../../../features/tracing/formats';
 import { setTraceFormats as setStoredTraceFormats } from '../../../utils/store';
-import WiresharkWarning from './WiresharkWarning';
+import WiresharkWarning from '../../Wireshark/WiresharkWarning';
 
 interface TraceFormatSelectorProps {
     isTracing: boolean;

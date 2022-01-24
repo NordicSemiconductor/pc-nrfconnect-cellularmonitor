@@ -9,6 +9,8 @@ import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 
+export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
+
 type Shark = 'wireshark' | 'tshark';
 
 const DEFAULT_WINDOWS_WIRESHARK_FOLDER = join(

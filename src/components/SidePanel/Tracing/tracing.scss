@@ -85,26 +85,3 @@
         font-size: 11px;
     }
 }
-
-.wireshark-warning {
-    display: flex;
-    border: 1px solid $gray-200;
-    padding: 8px;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
-
-    .wireshark-warning-icon {
-        margin-right: 12px;
-    }
-
-    p {
-        margin-bottom: 0;
-
-        button {
-            font-size: 12px;
-            text-decoration: underline;
-            color: $gray-700;
-        }
-    }
-}
