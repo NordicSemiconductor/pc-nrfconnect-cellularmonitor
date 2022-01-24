@@ -27,6 +27,8 @@ import {
     setHasError as setPowerEstimationErrorOccured,
     setRenderedHtml,
 } from '../powerEstimation/powerEstimationSlice';
+import { findTshark } from '../wireshark/wireshark';
+import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
@@ -172,12 +174,14 @@ export const startTrace =
             port,
             startTime: new Date(),
         };
-
-        // we want to do use tshark/opp sinks in the background of every trace
-        const sinksWithOpp = ['opp', ...sinks] as TraceFormat[];
+        let allSinks = sinks;
+        const selectedTsharkPath = getTsharkPath(getState());
+        if (findTshark(selectedTsharkPath)) {
+            allSinks = ['opp', ...allSinks] as TraceFormat[];
+        }
         dispatch(resetPowerEstimationParams());
 
-        sinksWithOpp.forEach(format => {
+        allSinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
@@ -186,7 +190,7 @@ export const startTrace =
             !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinksWithOpp),
+            nrfmlConfig(state, source, allSinks),
             err => {
                 if (err !== null && err.message.includes('tshark')) {
                     logger.warn(
