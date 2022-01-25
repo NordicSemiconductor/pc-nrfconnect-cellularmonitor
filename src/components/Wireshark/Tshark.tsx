@@ -35,8 +35,8 @@ const SelectTshark: FC = ({ children }) => {
         <Button
             onClick={updateTsharkPath}
             role="button"
-            variant="link"
-            className="card-links"
+            variant="secondary"
+            className="tshark-btn"
         >
             {children}
         </Button>
@@ -47,24 +47,22 @@ export default () => {
     const selectedTsharkPath = useSelector(getTsharkPath);
     const tsharkPath = findTshark(selectedTsharkPath);
 
-    if (tsharkPath != null) return;
+    if (tsharkPath != null) return null;
 
     return (
         <div className="tshark">
-            <h6>Tshark not detected</h6>
-            <p>
-                <span>
-                    Tshark is required for to get power parameters from network.
-                </span>
-                <Button
-                    variant="link"
-                    className="card-links"
-                    onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                >
-                    Install Tshark (via Wireshark)
-                </Button>{' '}
-                or manually <SelectTshark>specify install path</SelectTshark>.
-            </p>
+            <h5>tshark not detected</h5>
+            <span>
+                tshark is required to get power parameters from network.
+            </span>
+            <Button
+                variant="secondary"
+                className="tshark-btn"
+                onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+            >
+                Install tshark (via Wireshark)
+            </Button>
+            <SelectTshark>Specify install path</SelectTshark>.
         </div>
     );
 };
