@@ -6,17 +6,11 @@
 
 import React, { FC } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { openUrl, usageData } from 'pc-nrfconnect-shared';
 
-import {
-    findTshark,
-    WIRESHARK_DOWNLOAD_URL,
-} from '../../features/wireshark/wireshark';
-import {
-    getTsharkPath,
-    setTsharkPath,
-} from '../../features/wireshark/wiresharkSlice';
+import { WIRESHARK_DOWNLOAD_URL } from '../../features/wireshark/wireshark';
+import { setTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
 import { askForWiresharkPath } from '../../utils/fileUtils';
 
@@ -44,11 +38,6 @@ const SelectTshark: FC = ({ children }) => {
 };
 
 export default () => {
-    const selectedTsharkPath = useSelector(getTsharkPath);
-    const tsharkPath = findTshark(selectedTsharkPath);
-
-    if (tsharkPath != null) return null;
-
     return (
         <div className="tshark">
             <h5>tshark not detected</h5>
