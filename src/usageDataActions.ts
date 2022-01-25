@@ -14,6 +14,8 @@ enum EventAction {
     EXTRACT_POWER_DATA = 'Extract power data',
     STOP_TRACE = 'Stopping trace',
     OPEN_IN_WIRESHARK = 'Open in Wireshark',
+    SET_WIRESHARK_PATH = 'Set Wireshark path',
+    SET_TSHARK_PATH = 'Set Tshark path',
     SET_TRACE_DB_MANUALLY = 'Set trace db manually',
     OPEN_FILE_DIRECTORY = 'Open file directory',
     VISIT_OPP = 'Visit OPP website',

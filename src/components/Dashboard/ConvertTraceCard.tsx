@@ -7,7 +7,7 @@
 import React from 'react';
 import { Card } from 'pc-nrfconnect-shared';
 
-import Wireshark from './Wireshark';
+import Wireshark from '../Wireshark/Wireshark';
 
 export default () => (
     <Card title="Converting a trace">

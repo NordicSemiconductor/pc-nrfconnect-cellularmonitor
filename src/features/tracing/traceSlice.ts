@@ -10,9 +10,7 @@ import { RootState } from '../../appReducer';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
-    getWiresharkPath as getPersistedWiresharkPath,
     setManualDbFilePath as setPersistedManualDbFilePath,
-    setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
 import { TraceFormat } from './formats';
 import { TaskId } from './nrfml';
@@ -29,7 +27,6 @@ interface TraceState {
     serialPort: string | null;
     availableSerialPorts: string[];
     manualDbFilePath?: string;
-    wiresharkPath: string | null;
     detectingTraceDb: boolean;
 }
 
@@ -39,7 +36,6 @@ const initialState = (): TraceState => ({
     serialPort: null,
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
-    wiresharkPath: getPersistedWiresharkPath(),
     detectingTraceDb: false,
 });
 
@@ -89,10 +85,6 @@ const traceSlice = createSlice({
             deletePersistedDbFilePath();
             state.manualDbFilePath = getPersistedManualDbFilePath();
         },
-        setWiresharkPath: (state, action: PayloadAction<string>) => {
-            state.wiresharkPath = action.payload;
-            setPersistedWiresharkPath(action.payload);
-        },
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
@@ -113,8 +105,6 @@ export const getTraceProgress = (state: RootState) =>
     state.app.trace.traceProgress;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
-export const getWiresharkPath = (state: RootState) =>
-    state.app.trace.wiresharkPath;
 export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
@@ -128,7 +118,6 @@ export const {
     setAvailableSerialPorts,
     setManualDbFilePath,
     resetManualDbFilePath,
-    setWiresharkPath,
     setDetectingTraceDb,
 } = traceSlice.actions;
 

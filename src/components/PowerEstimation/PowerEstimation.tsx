@@ -14,13 +14,20 @@ import {
     getRenderedHtml,
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
+import { findTshark } from '../../features/wireshark/wireshark';
+import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
+import { Tshark } from '../Wireshark/Tshark';
 
 import './powerEstimation.scss';
 
 export default ({ active }: PaneProps) => {
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
+
+    const selectedTsharkPath = useSelector(getTsharkPath);
+    const isTsharkInstalled = !!findTshark(selectedTsharkPath);
+
     window.Plotly = Plotly;
 
     useEffect(() => {
@@ -40,8 +47,14 @@ export default ({ active }: PaneProps) => {
                 <InnerHTML html={oppHtml} />
             ) : (
                 <div className="power-estimation-landing">
-                    Start a trace to capture live power estimate or read from
-                    existing trace file
+                    {isTsharkInstalled ? (
+                        <p>
+                            Start a trace to capture live power estimate or read
+                            from existing trace file
+                        </p>
+                    ) : (
+                        <Tshark />
+                    )}
                 </div>
             )}
         </div>

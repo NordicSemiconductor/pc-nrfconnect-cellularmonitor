@@ -10,6 +10,7 @@ import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
+import * as wireshark from '../../../features/wireshark/wireshark';
 import {
     expectNrfmlStartCalledWithSinks,
     fireEvent,
@@ -22,6 +23,8 @@ import {
     PowerEstimationSidePanel,
     TraceCollectorSidePanel,
 } from '../SidePanel';
+
+jest.mock('../../../features/wireshark/wireshark');
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
@@ -175,6 +178,9 @@ describe('Sidepanel functionality', () => {
 
     describe('Power Estimation flow', () => {
         it('should start fetching power estimation params in the background', async () => {
+            jest.spyOn(wireshark, 'findTshark').mockReturnValue(
+                'path/to/tshark'
+            );
             const callbacks = getNrfmlCallbacks();
             const waitingText = 'Waiting for power data...';
             const screen = render(

@@ -7,10 +7,10 @@
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
-import { defaultWiresharkPath } from '../../utils/wireshark';
+import { defaultSharkPath } from '../wireshark/wireshark';
+import { getTsharkPath, getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
-import { getWiresharkPath } from './traceSlice';
 
 const { displayName: appName } = require('../../../package.json');
 
@@ -53,7 +53,7 @@ export default (
             init_parameters: {
                 start_process:
                     getWiresharkPath(state) ??
-                    defaultWiresharkPath() ??
+                    defaultSharkPath('wireshark') ??
                     'WIRESHARK NOT FOUND',
                 ...additionalPcapProperties(selectedDevice(state)),
             },
@@ -67,6 +67,7 @@ export default (
                 opp_json_object_key: 'onlinePowerProfiler',
                 sleep: true,
             },
+            tshark_directory: getTsharkPath(state),
         } as const;
     }
 

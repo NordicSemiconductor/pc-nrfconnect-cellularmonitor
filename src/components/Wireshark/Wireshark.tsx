@@ -10,14 +10,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import {
+    findWireshark,
+    openInWireshark,
+    WIRESHARK_DOWNLOAD_URL,
+} from '../../features/wireshark/wireshark';
+import {
     getWiresharkPath,
     setWiresharkPath,
-} from '../../features/tracing/traceSlice';
+} from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
-import { findWireshark, openInWireshark } from '../../utils/wireshark';
 
-const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
+import './wireshark.scss';
 
 type WiresharkProps = {
     extendedDescription?: boolean;
@@ -29,7 +33,7 @@ const SelectWireshark: FC = ({ children }) => {
     const updateWiresharkPath = () => {
         const selectedWiresharkPath = askForWiresharkPath();
         if (selectedWiresharkPath != null) {
-            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
+            usageData.sendUsageData(EventAction.SET_WIRESHARK_PATH);
             dispatch(setWiresharkPath(selectedWiresharkPath));
         }
     };
@@ -53,6 +57,7 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
     const loadPcap = () => {
         const filename = askForPcapFile();
         if (filename) {
+            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
             openInWireshark(filename, wiresharkPath);
         }
     };

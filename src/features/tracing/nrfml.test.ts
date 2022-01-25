@@ -16,9 +16,12 @@ import { setDetectingTraceDb, setTraceIsStarted } from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
-jest.mock('../../utils/wireshark', () => ({
-    defaultWiresharkPath: () => {
+jest.mock('../wireshark/wireshark', () => ({
+    defaultSharkPath: () => {
         return MOCKED_DEFAULT_WIRESHARK_PATH;
+    },
+    findTshark: () => {
+        return 'path/to/tshark';
     },
 }));
 
@@ -35,6 +38,7 @@ const initialState = {
             traceData: [],
             serialPort: 'COM1',
         },
+        wireshark: {},
     },
     device: {
         devices: {},
