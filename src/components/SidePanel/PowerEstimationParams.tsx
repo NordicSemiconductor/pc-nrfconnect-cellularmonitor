@@ -28,6 +28,8 @@ import {
     getIsDeviceSelected,
     getIsTracing,
 } from '../../features/tracing/traceSlice';
+import { findTshark } from '../../features/wireshark/wireshark';
+import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
 import { askForTraceFile } from '../../utils/fileUtils';
 import {
@@ -42,6 +44,9 @@ const GetPowerDataFromFile = () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
 
+    const selectedTsharkPath = useSelector(getTsharkPath);
+    const isTsharkInstalled = !!findTshark(selectedTsharkPath);
+
     const getPowerData = () => {
         const file = askForTraceFile();
         if (file) {
@@ -54,7 +59,12 @@ const GetPowerDataFromFile = () => {
             className="w-100 secondary-btn btn-sm"
             variant="secondary"
             onClick={getPowerData}
-            disabled={isTracing}
+            disabled={isTracing || !isTsharkInstalled}
+            title={
+                isTsharkInstalled
+                    ? ''
+                    : 'tshark is not installed, cannot get power data'
+            }
         >
             {isTracing ? 'Fetching data...' : 'Get power data from RAW'}
         </Button>
