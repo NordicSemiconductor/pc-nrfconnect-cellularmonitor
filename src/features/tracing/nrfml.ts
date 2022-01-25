@@ -174,14 +174,9 @@ export const startTrace =
             port,
             startTime: new Date(),
         };
-        let allSinks = sinks;
-        const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath)) {
-            allSinks = ['opp', ...allSinks] as TraceFormat[];
-        }
         dispatch(resetPowerEstimationParams());
 
-        allSinks.forEach(format => {
+        sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
@@ -189,8 +184,13 @@ export const startTrace =
             getManualDbFilePath(state) == null &&
             !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
+        const selectedTsharkPath = getTsharkPath(getState());
+        if (findTshark(selectedTsharkPath)) {
+            sinks.push('opp');
+        }
+
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, allSinks),
+            nrfmlConfig(state, source, sinks),
             err => {
                 if (err !== null && err.message.includes('tshark')) {
                     logger.warn(
