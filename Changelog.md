@@ -4,6 +4,7 @@
   [`Online Power Profiler`](https://devzone.nordicsemi.com/power/). Can be
   gotten from the device while tracing or from an existing raw trace file.
 - Display chart and parameters from the `Online Power Profiler` service the new `Power Estimation` pane.
+- Assist users to get `tshark` installed if it is not present.
 ### Changed
 - More descriptive error message when trace conversion fails.
 

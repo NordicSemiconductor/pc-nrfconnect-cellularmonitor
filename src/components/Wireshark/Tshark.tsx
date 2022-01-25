@@ -37,7 +37,7 @@ const SelectTshark: FC = ({ children }) => {
     );
 };
 
-export default () => {
+export const Tshark = () => {
     return (
         <div className="tshark">
             <h5>tshark not detected</h5>

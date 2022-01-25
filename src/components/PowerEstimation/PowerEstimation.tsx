@@ -17,7 +17,7 @@ import {
 import { findTshark } from '../../features/wireshark/wireshark';
 import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
-import Tshark from '../Wireshark/Tshark';
+import { Tshark } from '../Wireshark/Tshark';
 
 import './powerEstimation.scss';
 
