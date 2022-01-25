@@ -13,6 +13,7 @@ import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../features/tracing/traceSlice';
+import * as wireshark from '../../features/wireshark/wireshark';
 import {
     assertErrorWasLogged,
     fireEvent,
@@ -25,6 +26,8 @@ import {
     TraceCollectorSidePanel,
 } from '../SidePanel/SidePanel';
 import PowerEstimation from './PowerEstimation';
+
+jest.mock('../../features/wireshark/wireshark');
 
 enableFetchMocks();
 
@@ -43,12 +46,19 @@ describe('Power Estimation pane', () => {
     });
 
     it('should display loading message when no data has been received', () => {
+        jest.spyOn(wireshark, 'findTshark').mockReturnValue('path/to/tshark');
         const screen = render(<PowerEstimation active />);
         expect(
             screen.getByText(
                 'Start a trace to capture live power estimate or read from existing trace file'
             )
         ).toBeInTheDocument();
+    });
+
+    it('should show tshark warning if tshark is not installed', () => {
+        jest.spyOn(wireshark, 'findTshark').mockReturnValue(null);
+        const screen = render(<PowerEstimation active />);
+        expect(screen.getByText('tshark not detected')).toBeInTheDocument();
     });
 
     it('should display error message if network request fails', async () => {

@@ -40,9 +40,6 @@ export const findWireshark = (selectedPath: string | null) =>
     validatedSharkPath('wireshark', selectedPath) ||
     defaultSharkPath('wireshark');
 
-export const findTireshark = (selectedPath: string | null) =>
-    validatedSharkPath('tshark', selectedPath) || defaultSharkPath('tshark');
-
 export const findTshark = (selectedPath: string | null) =>
     validatedSharkPath('tshark', selectedPath) || defaultSharkPath('tshark');
 

@@ -8,6 +8,7 @@ import React from 'react';
 
 import { setData as setPowerEstimationData } from '../../../features/powerEstimation/powerEstimationSlice';
 import { setSerialPort } from '../../../features/tracing/traceSlice';
+import * as wireshark from '../../../features/wireshark/wireshark';
 import {
     assertErrorWasLogged,
     fireEvent,
@@ -16,6 +17,7 @@ import {
 } from '../../../utils/testUtils';
 import PowerEstimationParams from '../PowerEstimationParams';
 
+jest.mock('../../../features/wireshark/wireshark');
 const mockedFileName = 'mockedPowerData';
 
 jest.mock('electron', () => ({
@@ -31,6 +33,10 @@ jest.mock('electron', () => ({
 }));
 
 describe('Power profile params', () => {
+    beforeEach(() => {
+        jest.spyOn(wireshark, 'findTshark').mockReturnValue('path/to/tshark');
+    });
+
     describe('with device connected', () => {
         it('shows file link after file is saved', async () => {
             const screen = render(<PowerEstimationParams />, [
