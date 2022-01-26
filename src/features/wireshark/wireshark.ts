@@ -23,11 +23,7 @@ const DEFAULT_WINDOWS_PATHS = {
     tshark: join(DEFAULT_WINDOWS_WIRESHARK_FOLDER, 'tshark.exe'),
 };
 
-const DEFAULT_MACOS_WIRESHARK_FOLDER = join(sep, 'Applications');
-const DEFAULT_MAC_PATHS = {
-    wireshark: join(DEFAULT_MACOS_WIRESHARK_FOLDER, 'Wireshark.app'),
-    tshark: join(DEFAULT_MACOS_WIRESHARK_FOLDER, 'tshark.app'),
-};
+const DEFAULT_MAC_WIRESHARK_FOLDER = join(sep, 'Applications', 'Wireshark.app');
 
 const MACOS_WIRESHARK_EXECUTABLE_IN_APP = join(
     'Contents',
@@ -70,7 +66,7 @@ export const defaultSharkPath = (shark: Shark) => {
         return validatedSharkPath(shark, DEFAULT_WINDOWS_PATHS[shark]);
     }
     if (process.platform === 'darwin') {
-        return validatedSharkPath(shark, DEFAULT_MAC_PATHS[shark]);
+        return validatedSharkPath(shark, DEFAULT_MAC_WIRESHARK_FOLDER);
     }
     if (process.platform === 'linux') {
         return locateSharkPathOnLinux(shark);
