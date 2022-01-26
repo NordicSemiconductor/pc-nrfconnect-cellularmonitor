@@ -25,12 +25,8 @@ const DEFAULT_WINDOWS_PATHS = {
 
 const DEFAULT_MAC_WIRESHARK_FOLDER = join(sep, 'Applications', 'Wireshark.app');
 
-const MACOS_WIRESHARK_EXECUTABLE_IN_APP = join(
-    'Contents',
-    'MacOS',
-    'Wireshark'
-);
-const MACOS_TSHARK_EXECUTABLE_IN_APP = join('Contents', 'MacOS', 'tshark');
+const macOSExecutableWithinAppFolder = (shark: Shark) =>
+    join('Contents', 'MacOS', shark === 'wireshark' ? 'Wireshark' : 'tshark');
 
 export const findWireshark = (selectedPath: string | null) =>
     validatedSharkPath('wireshark', selectedPath) ||
@@ -53,12 +49,7 @@ const validatedSharkPath = (shark: Shark, path: string | null) => {
 
     return process.platform !== 'darwin'
         ? path
-        : join(
-              path,
-              shark === 'wireshark'
-                  ? MACOS_WIRESHARK_EXECUTABLE_IN_APP
-                  : MACOS_TSHARK_EXECUTABLE_IN_APP
-          );
+        : join(path, macOSExecutableWithinAppFolder(shark));
 };
 
 export const defaultSharkPath = (shark: Shark) => {
