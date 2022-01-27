@@ -101,15 +101,18 @@ const SavePowerDataFromRunningTrace = () => {
         : 'Waiting for power data...';
 
     return (
-        <Button
-            variant="secondary"
-            disabled={!powerDataExists}
-            className="w-100 btn-sm"
-            title={title}
-            onClick={onSave}
-        >
-            {label}
-        </Button>
+        <>
+            <Button
+                variant="secondary"
+                disabled={!powerDataExists}
+                className="w-100 btn-sm"
+                title={title}
+                onClick={onSave}
+            >
+                {label}
+            </Button>
+            {!powerDataExists && <span>{title}</span>}
+        </>
     );
 };
 
@@ -129,16 +132,6 @@ const PowerEstimationDataInfo = () => {
                 }}
                 label="Power estimation data"
             />
-            <Button
-                variant="secondary"
-                className="w-100 btn-sm"
-                onClick={() => {
-                    usageData.sendUsageData(EventAction.VISIT_OPP);
-                    openUrl(OPE_URL);
-                }}
-            >
-                Open Online Power Estimator
-            </Button>
         </div>
     );
 };
@@ -158,6 +151,22 @@ export default () => {
                 <GetPowerDataFromFile />
             )}
             <PowerEstimationDataInfo />
+            <Button
+                variant="secondary"
+                className="w-100 btn-sm"
+                onClick={() => {
+                    usageData.sendUsageData(EventAction.VISIT_OPP);
+                    openUrl(OPE_URL);
+                }}
+            >
+                Open Online Power Profiler
+            </Button>
+            <p>
+                Currently this app only supports display the chart from the
+                Online Power Profiler, to toggle settings like
+                enabling/disabling GPS, PSM etc, visit the Online Power
+                Profiler.
+            </p>
         </CollapsibleGroup>
     );
 };

@@ -82,3 +82,33 @@
 #opp-preset {
     display: none;
 }
+
+.opp-params {
+    &-form {
+        display: flex;
+        gap: 12px;
+
+        #sel_submit {
+            display: none;
+        }
+    }
+
+    &-group {
+        background: white;
+        padding: 8px;
+
+        &-header {
+            h3 {
+                font-size: 16px;
+            }
+        }
+    }
+
+    &-input {
+        &-header {
+            h3 {
+                font-size: 14px;
+            }
+        }
+    }
+}

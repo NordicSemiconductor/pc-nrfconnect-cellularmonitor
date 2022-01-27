@@ -138,7 +138,7 @@ export const extractPowerData =
                 if (!powerEstimationData) return;
                 gotPowerEstimationData = true;
                 fetchPowerEstimationChart(powerEstimationData, dispatch);
-
+                dispatch(setPowerEstimationData(powerEstimationData));
                 dispatch(stopTrace(taskId));
                 const [base, filePath] = getNameAndDirectory(path, '.bin');
                 const pathToNewFile = join(filePath, `${base}.json`);

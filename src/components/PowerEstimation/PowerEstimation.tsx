@@ -5,11 +5,12 @@
  */
 
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
 import { Alert, PaneProps, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
+import { updatePowerData } from '../../features/powerEstimation/onlinePowerEstimator';
 import {
     getRenderedHtml,
     hasError as powerEstimationError,
@@ -22,6 +23,7 @@ import { Tshark } from '../Wireshark/Tshark';
 import './powerEstimation.scss';
 
 export default ({ active }: PaneProps) => {
+    const dispatch = useDispatch();
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
 
@@ -34,6 +36,24 @@ export default ({ active }: PaneProps) => {
         if (!active) return;
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
     }, [active]);
+
+    const updatePowerEstimationData = (key: string) => (event: Event) => {
+        const { target } = event;
+        dispatch(updatePowerData(key, target.checked ? 'on' : 'False'));
+        // const { checked } = event.target;
+        // console.log('value', value);
+    };
+
+    useEffect(() => {
+        if (!oppHtml) return;
+        const psm = document.getElementById('id_psm');
+        const psmHandler = updatePowerEstimationData('psm');
+        psm?.addEventListener('click', psmHandler);
+
+        return () => {
+            psm?.removeEventListener('click', psmHandler);
+        };
+    }, [oppHtml]);
 
     return (
         <div className="power-estimation-container">
@@ -49,8 +69,8 @@ export default ({ active }: PaneProps) => {
                 <div className="power-estimation-landing">
                     {isTsharkInstalled ? (
                         <p>
-                            Start a trace to capture live power estimate or read
-                            from existing trace file
+                            Start a trace to capture live data for power
+                            estimate or read from existing trace file
                         </p>
                     ) : (
                         <Tshark />
