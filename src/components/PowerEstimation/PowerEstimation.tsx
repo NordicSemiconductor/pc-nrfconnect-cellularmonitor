@@ -10,7 +10,11 @@ import InnerHTML from 'dangerously-set-html-content';
 import { Alert, PaneProps, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
-import { updatePowerData } from '../../features/powerEstimation/onlinePowerEstimator';
+import {
+    OnlinePowerEstimatorParams,
+    OPP_KEYS,
+    updatePowerData,
+} from '../../features/powerEstimation/onlinePowerEstimator';
 import {
     getRenderedHtml,
     hasError as powerEstimationError,
@@ -37,21 +41,30 @@ export default ({ active }: PaneProps) => {
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
     }, [active]);
 
-    const updatePowerEstimationData = (key: string) => (event: Event) => {
-        const { target } = event;
-        dispatch(updatePowerData(key, target.checked ? 'on' : 'False'));
-        // const { checked } = event.target;
-        // console.log('value', value);
-    };
+    const updatePowerEstimationData =
+        (key: keyof OnlinePowerEstimatorParams) => (event: Event) => {
+            const target = event.target as HTMLInputElement;
+            let { value } = target;
+            if (target.type === 'checkbox') {
+                value = target.checked ? 'on' : 'False';
+            }
+            dispatch(updatePowerData(key, value));
+        };
 
     useEffect(() => {
         if (!oppHtml) return;
-        const psm = document.getElementById('id_psm');
-        const psmHandler = updatePowerEstimationData('psm');
-        psm?.addEventListener('click', psmHandler);
+
+        const elementsAndHandlers = OPP_KEYS.map(key => {
+            const element = document.getElementById(`id_${key}`);
+            const handler = updatePowerEstimationData(key);
+            element?.addEventListener('click', handler);
+            return [element, handler] as const;
+        });
 
         return () => {
-            psm?.removeEventListener('click', psmHandler);
+            elementsAndHandlers.forEach(([element, handler]) => {
+                element?.removeEventListener('click', handler);
+            });
         };
     }, [oppHtml]);
 

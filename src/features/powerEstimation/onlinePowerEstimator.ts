@@ -13,38 +13,42 @@ export const CHART_URL =
     'https://support.nordicsemi.com/profiler/content/?prot=lte';
 const SETTINGS_URL = 'https://support.nordicsemi.com/profiler/form/?prot=lte';
 
+export const OPP_KEYS = [
+    'cdrx_inactive_timer',
+    'cdrx_int',
+    'cdrx_len',
+    'cdrx_on_duration',
+    'chip',
+    'config_lte_edrx_req_value',
+    'config_lte_psm_req_rat',
+    'config_lte_psm_req_rptau',
+    'data_en',
+    'data_int',
+    'data_size',
+    'drx_idle',
+    'drx_sync',
+    'gps_en',
+    'gps_fix_time',
+    'gps_interval',
+    'idrx_en',
+    'idrx_int',
+    'idrx_len',
+    'idrx_nb_sync',
+    'idrx_reps',
+    'idrx_sync',
+    'lte_type',
+    'psm',
+    'psm_int',
+    'sim_sleep',
+    'sim_sleep_enable',
+    'software',
+    'tx_power',
+    'tx_power_nb',
+    'voltage',
+] as const;
+
 export type OnlinePowerEstimatorParams = {
-    cdrx_inactive_timer?: string;
-    cdrx_int?: string;
-    cdrx_len?: string;
-    cdrx_on_duration?: string;
-    chip?: '4' | '5';
-    config_lte_edrx_req_value?: string;
-    config_lte_psm_req_rat?: string;
-    config_lte_psm_req_rptau?: string;
-    data_en?: 'off' | 'u1' | 'd1';
-    data_int?: string;
-    data_size?: string;
-    drx_idle?: string;
-    drx_sync?: string;
-    gps_en?: 'off' | 'fixed' | 'continuous';
-    gps_fix_time?: string;
-    gps_interval?: string;
-    idrx_en?: 'on';
-    idrx_int?: string;
-    idrx_len?: string;
-    idrx_nb_sync?: string;
-    idrx_reps?: '1' | '2' | '4' | '8' | '16' | '32' | '64' | '128' | '256';
-    idrx_sync?: string;
-    lte_type?: 'm1' | 'nb';
-    psm?: 'False' | 'on';
-    psm_int?: string;
-    sim_sleep?: string;
-    sim_sleep_enable?: 'on' | 'True';
-    software?: string;
-    tx_power?: '0' | '10' | '23';
-    tx_power_nb?: string;
-    voltage?: string;
+    [K in typeof OPP_KEYS[number]]?: string;
 };
 
 const createFormData = (params: OnlinePowerEstimatorParams) => {
@@ -83,6 +87,7 @@ export const updatePowerData =
         const data = getData(getState());
         console.log('data before', data);
         if (!data) return;
+        if (data[key] === value) return;
         const updatedData = {
             ...data,
             [key]: value,
