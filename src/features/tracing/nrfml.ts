@@ -16,7 +16,6 @@ import { TAction, TDispatch } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import { getNameAndDirectory } from '../../utils/fileUtils';
 import {
-    CHART_URL,
     OnlinePowerEstimatorParams,
     postForm,
 } from '../powerEstimation/onlinePowerEstimator';
@@ -24,7 +23,6 @@ import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
     setFilePath as setPowerEstimationFilePath,
-    setHasError as setPowerEstimationErrorOccured,
     setRenderedHtml,
 } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
@@ -242,13 +240,6 @@ const fetchPowerEstimationChart = async (
     powerEstimationData: OnlinePowerEstimatorParams,
     dispatch: TDispatch
 ) => {
-    try {
-        const html = await postForm(powerEstimationData);
-        dispatch(setRenderedHtml(html));
-    } catch (err) {
-        logger.error(
-            `Request to ${CHART_URL} failed. Check network connection.`
-        );
-        dispatch(setPowerEstimationErrorOccured(true));
-    }
+    const html = await postForm(powerEstimationData, dispatch);
+    if (html) dispatch(setRenderedHtml(html));
 };

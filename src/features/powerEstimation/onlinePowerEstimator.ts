@@ -4,8 +4,16 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TAction } from '../../thunk';
-import { getData, setData, setRenderedHtml } from './powerEstimationSlice';
+import { logger } from 'pc-nrfconnect-shared';
+
+import { TAction, TDispatch } from '../../thunk';
+import {
+    getData,
+    setData,
+    setHasError,
+    setIsLoading,
+    setRenderedHtml,
+} from './powerEstimationSlice';
 
 export const OPE_URL =
     'https://devzone.nordicsemi.com/power/w/opp/3/online-power-profiler-for-lte';
@@ -71,21 +79,32 @@ const getHtml = async (body: FormData, url: string) => {
     return data.text();
 };
 
-export const postForm = async (params: OnlinePowerEstimatorParams) => {
-    const formData = createFormData(params);
-    const chartHtml = await getHtml(formData, CHART_URL);
-    const settingsHtml = await getHtml(formData, SETTINGS_URL);
-    return settingsHtml + chartHtml;
+export const postForm = async (
+    params: OnlinePowerEstimatorParams,
+    dispatch: TDispatch
+) => {
+    dispatch(setIsLoading(true));
+    let html = null;
+    try {
+        const formData = createFormData(params);
+        const chartHtml = await getHtml(formData, CHART_URL);
+        const settingsHtml = await getHtml(formData, SETTINGS_URL);
+        html = settingsHtml + chartHtml;
+    } catch (err) {
+        logger.error(
+            `Request to ${CHART_URL} failed. Check network connection.`
+        );
+        dispatch(setHasError(true));
+    }
+    dispatch(setIsLoading(false));
+    return html;
 };
 
 export const updatePowerData =
     (key: keyof OnlinePowerEstimatorParams, value: string): TAction =>
     async (dispatch, getState) => {
-        console.log('key', key);
-        console.log('value', value);
-        console.log('state', getState());
         const data = getData(getState());
-        console.log('data before', data);
+
         if (!data) return;
         if (data[key] === value) return;
         const updatedData = {
@@ -93,7 +112,6 @@ export const updatePowerData =
             [key]: value,
         };
         dispatch(setData(updatedData));
-        console.log('data after', updatedData);
-        const updatedHtml = await postForm(updatedData);
-        dispatch(setRenderedHtml(updatedHtml));
+        const updatedHtml = await postForm(updatedData, dispatch);
+        if (updatedHtml) dispatch(setRenderedHtml(updatedHtml));
     };

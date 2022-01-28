@@ -14,6 +14,7 @@ interface PowerEstimationState {
     filePath: string | null;
     renderedHtml: string | null;
     hasError: boolean;
+    loading: boolean;
 }
 
 const initialState: PowerEstimationState = {
@@ -21,6 +22,7 @@ const initialState: PowerEstimationState = {
     filePath: null,
     renderedHtml: null,
     hasError: false,
+    loading: false,
 };
 
 const powerEstimationSlice = createSlice({
@@ -45,6 +47,9 @@ const powerEstimationSlice = createSlice({
         setHasError: (state, action: PayloadAction<boolean>) => {
             state.hasError = action.payload;
         },
+        setIsLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload;
+        },
     },
 });
 
@@ -55,6 +60,8 @@ export const getRenderedHtml = (state: RootState) =>
     state.app.powerEstimation.renderedHtml;
 export const hasError = (state: RootState) =>
     state.app.powerEstimation.hasError;
+export const getIsLoading = (state: RootState) =>
+    state.app.powerEstimation.loading;
 
 export const {
     setData,
@@ -62,6 +69,7 @@ export const {
     resetParams,
     setRenderedHtml,
     setHasError,
+    setIsLoading,
 } = powerEstimationSlice.actions;
 
 export default powerEstimationSlice.reducer;

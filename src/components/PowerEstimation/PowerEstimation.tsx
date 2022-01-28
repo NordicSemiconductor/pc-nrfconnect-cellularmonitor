@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
 import { Alert, PaneProps, usageData } from 'pc-nrfconnect-shared';
@@ -16,6 +16,7 @@ import {
     updatePowerData,
 } from '../../features/powerEstimation/onlinePowerEstimator';
 import {
+    getIsLoading,
     getRenderedHtml,
     hasError as powerEstimationError,
 } from '../../features/powerEstimation/powerEstimationSlice';
@@ -30,6 +31,7 @@ export default ({ active }: PaneProps) => {
     const dispatch = useDispatch();
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
+    const isLoading = useSelector(getIsLoading);
 
     const selectedTsharkPath = useSelector(getTsharkPath);
     const isTsharkInstalled = !!findTshark(selectedTsharkPath);
@@ -41,7 +43,7 @@ export default ({ active }: PaneProps) => {
         usageData.sendUsageData(EventAction.POWER_ESTIMATION_PANE);
     }, [active]);
 
-    const updatePowerEstimationData =
+    const updatePowerEstimationData = useCallback(
         (key: keyof OnlinePowerEstimatorParams) => (event: Event) => {
             const target = event.target as HTMLInputElement;
             let { value } = target;
@@ -49,7 +51,9 @@ export default ({ active }: PaneProps) => {
                 value = target.checked ? 'on' : 'False';
             }
             dispatch(updatePowerData(key, value));
-        };
+        },
+        [dispatch]
+    );
 
     useEffect(() => {
         if (!oppHtml) return;
@@ -66,7 +70,17 @@ export default ({ active }: PaneProps) => {
                 element?.removeEventListener('click', handler);
             });
         };
-    }, [oppHtml]);
+    }, [oppHtml, updatePowerEstimationData]);
+
+    if (isLoading) {
+        return (
+            <div className="power-estimation-container">
+                <div className="power-estimation-landing">
+                    Loading data from Online Power Profiler, please wait...
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="power-estimation-container">
