@@ -13,12 +13,15 @@ import Plotly from 'plotly.js';
 import {
     OnlinePowerEstimatorParams,
     OPP_KEYS,
+    postForm,
     updatePowerData,
 } from '../../features/powerEstimation/onlinePowerEstimator';
 import {
+    getData,
     getIsLoading,
     getRenderedHtml,
     hasError as powerEstimationError,
+    setRenderedHtml,
 } from '../../features/powerEstimation/powerEstimationSlice';
 import { findTshark } from '../../features/wireshark/wireshark';
 import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
@@ -29,6 +32,7 @@ import './powerEstimation.scss';
 
 export default ({ active }: PaneProps) => {
     const dispatch = useDispatch();
+    const oppData = useSelector(getData);
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
     const isLoading = useSelector(getIsLoading);
@@ -55,9 +59,23 @@ export default ({ active }: PaneProps) => {
         [dispatch]
     );
 
+    const fetchOppHtml = useCallback(
+        async (data: OnlinePowerEstimatorParams) => {
+            const html = await postForm(data, dispatch);
+            if (html) dispatch(setRenderedHtml(html));
+        },
+        [dispatch]
+    );
+
+    useEffect(() => {
+        if (!oppData) return;
+        fetchOppHtml(oppData);
+    }, [oppData, fetchOppHtml]);
+
     useEffect(() => {
         if (!oppHtml) return;
 
+        const oppForm = document.getElementsByClassName('opp-params-form')[0];
         const elementsAndHandlers = OPP_KEYS.map(key => {
             const element = document.getElementById(`id_${key}`);
             const handler = updatePowerEstimationData(key);
@@ -65,10 +83,13 @@ export default ({ active }: PaneProps) => {
             return [element, handler] as const;
         });
 
-        const helpBoxes = document.getElementsByClassName('help-box');
+        const helpBoxes = oppForm.getElementsByClassName('help-box');
         [...helpBoxes].forEach((box: HTMLSpanElement) => {
             box.title = box.dataset.tip;
         });
+
+        const sliders = oppForm.querySelectorAll('input[type=range]');
+        [...sliders].forEach(slider => slider.parentElement.remove());
 
         return () => {
             elementsAndHandlers.forEach(([element, handler]) => {
@@ -81,7 +102,7 @@ export default ({ active }: PaneProps) => {
         return (
             <div className="power-estimation-container">
                 <div className="power-estimation-landing">
-                    Loading data from Online Power Profiler, please wait...
+                    Fetching data from Online Power Profiler, please wait...
                 </div>
             </div>
         );

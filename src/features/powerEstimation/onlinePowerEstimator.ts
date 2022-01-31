@@ -12,7 +12,6 @@ import {
     setData,
     setHasError,
     setIsLoading,
-    setRenderedHtml,
 } from './powerEstimationSlice';
 
 export const OPE_URL =
@@ -66,43 +65,46 @@ const createFormData = (params: OnlinePowerEstimatorParams) => {
         if (key === 'cdrx_int' && value === '0') {
             return;
         }
-        formData.append(key, value);
+        if (value) formData.append(key, value);
     });
     return formData;
 };
 
-const getHtml = async (body: FormData, url: string) => {
-    const data = await fetch(url, {
+const getHtml = (body: FormData, url: string) =>
+    fetch(url, {
         method: 'post',
         body,
-    });
-    return data.text();
-};
+    })
+        .then(response => {
+            return response.text();
+        })
+        .catch(err => {
+            logger.error(
+                `Request to ${url} failed. Check network connection. Error: ${err.message}`
+            );
+            return null;
+        });
 
 export const postForm = async (
     params: OnlinePowerEstimatorParams,
     dispatch: TDispatch
 ) => {
     dispatch(setIsLoading(true));
-    let html = null;
-    try {
-        const formData = createFormData(params);
-        const chartHtml = await getHtml(formData, CHART_URL);
-        const settingsHtml = await getHtml(formData, SETTINGS_URL);
-        html = settingsHtml + chartHtml;
-    } catch (err) {
-        logger.error(
-            `Request to ${CHART_URL} failed. Check network connection.`
-        );
-        dispatch(setHasError(true));
-    }
+    const formData = createFormData(params);
+    const chartHtml = await getHtml(formData, CHART_URL);
+    const settingsHtml = await getHtml(formData, SETTINGS_URL);
+
     dispatch(setIsLoading(false));
-    return html;
+    if (!chartHtml || !settingsHtml) {
+        dispatch(setHasError(true));
+        return null;
+    }
+    return settingsHtml + chartHtml;
 };
 
 export const updatePowerData =
     (key: keyof OnlinePowerEstimatorParams, value: string): TAction =>
-    async (dispatch, getState) => {
+    (dispatch, getState) => {
         const data = getData(getState());
 
         if (!data) return;
@@ -112,6 +114,4 @@ export const updatePowerData =
             [key]: value,
         };
         dispatch(setData(updatedData));
-        const updatedHtml = await postForm(updatedData, dispatch);
-        if (updatedHtml) dispatch(setRenderedHtml(updatedHtml));
     };

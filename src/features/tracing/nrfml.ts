@@ -12,18 +12,13 @@ import { join } from 'path';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
-import { TAction, TDispatch } from '../../thunk';
+import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import { getNameAndDirectory } from '../../utils/fileUtils';
-import {
-    OnlinePowerEstimatorParams,
-    postForm,
-} from '../powerEstimation/onlinePowerEstimator';
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
     setFilePath as setPowerEstimationFilePath,
-    setRenderedHtml,
 } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
@@ -131,11 +126,11 @@ export const extractPowerData =
             () => {},
             () => {},
             jsonData => {
+                if (gotPowerEstimationData) return;
                 // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
                 if (!powerEstimationData) return;
                 gotPowerEstimationData = true;
-                fetchPowerEstimationChart(powerEstimationData, dispatch);
                 dispatch(setPowerEstimationData(powerEstimationData));
                 dispatch(stopTrace(taskId));
                 const [base, filePath] = getNameAndDirectory(path, '.bin');
@@ -211,10 +206,9 @@ export const startTrace =
                 throttleUpdatingProgress: true,
             }),
             () => {},
-            async jsonData => {
+            jsonData => {
                 // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                await fetchPowerEstimationChart(powerEstimationData, dispatch);
                 dispatch(setPowerEstimationData(powerEstimationData));
             }
         );
@@ -235,11 +229,3 @@ export const stopTrace =
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
-
-const fetchPowerEstimationChart = async (
-    powerEstimationData: OnlinePowerEstimatorParams,
-    dispatch: TDispatch
-) => {
-    const html = await postForm(powerEstimationData, dispatch);
-    if (html) dispatch(setRenderedHtml(html));
-};
