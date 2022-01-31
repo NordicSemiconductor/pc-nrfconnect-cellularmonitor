@@ -18,28 +18,7 @@ export default () => {
         if (enable)
             taskId = nrfml.startLogEvents(
                 () => {},
-                evt => {
-                    switch (evt.level) {
-                        case nrfml.NRFML_LOG_TRACE:
-                            logger.verbose(evt.message);
-                            break;
-                        case nrfml.NRFML_LOG_DEBUG:
-                            logger.debug(evt.message);
-                            break;
-                        case nrfml.NRFML_LOG_INFO:
-                            logger.info(evt.message);
-                            break;
-                        case nrfml.NRFML_LOG_WARNING:
-                            logger.warn(evt.message);
-                            break;
-                        case nrfml.NRFML_LOG_ERROR:
-                            logger.error(evt.message);
-                            break;
-                        case nrfml.NRFML_LOG_CRITICAL:
-                            logger.error(evt.message);
-                            break;
-                    }
-                }
+                evt => logger.debug(evt.message)
             );
         else nrfml.stopLogEvents(taskId);
     };
