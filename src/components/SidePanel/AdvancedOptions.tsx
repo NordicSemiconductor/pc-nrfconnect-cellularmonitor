@@ -8,9 +8,11 @@ import React from 'react';
 import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
 import DatabaseFileOverride from './DatabaseFileOverride';
+import NrfmlLogging from './NrfmlLogging';
 
 export default () => (
     <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
+        <NrfmlLogging />
         <DatabaseFileOverride />
     </CollapsibleGroup>
 );
