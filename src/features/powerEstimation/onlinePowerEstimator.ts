@@ -106,7 +106,7 @@ export const updatePowerData =
         const data = getData(getState());
 
         if (!data) return;
-        if (data[key] === value) return;
+        if (data[key] === value) return; // value isn't changed, no need for new request
         const updatedData = {
             ...data,
             [key]: value,

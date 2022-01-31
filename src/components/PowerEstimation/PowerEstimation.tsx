@@ -65,6 +65,11 @@ export default ({ active }: PaneProps) => {
             return [element, handler] as const;
         });
 
+        const helpBoxes = document.getElementsByClassName('help-box');
+        [...helpBoxes].forEach((box: HTMLSpanElement) => {
+            box.title = box.dataset.tip;
+        });
+
         return () => {
             elementsAndHandlers.forEach(([element, handler]) => {
                 element?.removeEventListener('click', handler);

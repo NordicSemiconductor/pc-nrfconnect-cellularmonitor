@@ -42,14 +42,6 @@
     br {
         display: none;
     }
-
-    &-loading {
-        color: $gray-700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-    }
 }
 
 .details-box-container {
@@ -93,8 +85,9 @@
 
 .opp-params {
     &-form {
-        display: flex;
-        gap: 12px;
+        display: grid;
+        grid-gap: 12px;
+        grid-template-columns: 1fr 1fr 1fr;
 
         #sel_submit {
             display: none;
@@ -103,19 +96,34 @@
 
     &-group {
         background: white;
-        padding: 8px;
+        padding: 12px;
 
         &-header {
             h3 {
-                font-size: 16px;
+                font-size: 14px;
+                text-transform: uppercase;
+                color: $gray-700;
+                text-align: center;
+                margin-bottom: 16px;
             }
         }
     }
 
     &-input {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        select {
+            width: 125px;
+        }
+
         &-header {
             h3 {
-                font-size: 14px;
+                font-size: 13px;
+                color: $gray-500;
+                margin-bottom: 0;
             }
         }
     }

@@ -161,12 +161,6 @@ export default () => {
             >
                 Open Online Power Profiler
             </Button>
-            <p>
-                Currently this app only supports display the chart from the
-                Online Power Profiler, to toggle settings like
-                enabling/disabling GPS, PSM etc, visit the Online Power
-                Profiler.
-            </p>
         </CollapsibleGroup>
     );
 };
