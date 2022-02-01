@@ -74,8 +74,8 @@ export default ({ active }: PaneProps) => {
 
     useEffect(() => {
         if (!oppHtml) return;
-
         const oppForm = document.getElementsByClassName('opp-params-form')[0];
+        if (!oppForm) return;
         const elementsAndHandlers = OPP_KEYS.map(key => {
             const element = document.getElementById(`id_${key}`);
             const handler = updatePowerEstimationData(key);
