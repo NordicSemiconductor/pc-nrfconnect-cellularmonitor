@@ -88,7 +88,7 @@ export default ({ active }: PaneProps) => {
             // eslint-disable-next-line no-undef
         ) as HTMLCollectionOf<HTMLSpanElement>;
         [...helpBoxes].forEach((box: HTMLSpanElement) => {
-            if (!box?.dataset?.tip) return;
+            if (!box.dataset?.tip) return;
             box.title = box.dataset.tip;
         });
 

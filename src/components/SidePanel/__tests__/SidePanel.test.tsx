@@ -182,7 +182,7 @@ describe('Sidepanel functionality', () => {
                 'path/to/tshark'
             );
             const callbacks = getNrfmlCallbacks();
-            const waitingText = 'Waiting for power data...';
+            const waitingText = 'Start trace to get power data...';
             const screen = render(
                 <>
                     <PowerEstimationSidePanel />

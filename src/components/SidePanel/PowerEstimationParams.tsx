@@ -98,21 +98,18 @@ const SavePowerDataFromRunningTrace = () => {
         : 'Click Start tracing to get power estimation data from trace';
     const label = powerDataExists
         ? 'Save power estimation data'
-        : 'Waiting for power data...';
+        : 'Start trace to get power data...';
 
     return (
-        <>
-            <Button
-                variant="secondary"
-                disabled={!powerDataExists}
-                className="w-100 btn-sm"
-                title={title}
-                onClick={onSave}
-            >
-                {label}
-            </Button>
-            {!powerDataExists && <span>{title}</span>}
-        </>
+        <Button
+            variant="secondary"
+            disabled={!powerDataExists}
+            className="w-100 btn-sm"
+            title={title}
+            onClick={onSave}
+        >
+            {label}
+        </Button>
     );
 };
 
