@@ -177,10 +177,32 @@ describe('Sidepanel functionality', () => {
     });
 
     describe('Power Estimation flow', () => {
-        it('should start fetching power estimation params in the background', async () => {
+        beforeEach(() => {
             jest.spyOn(wireshark, 'findTshark').mockReturnValue(
                 'path/to/tshark'
             );
+        });
+
+        it('should update button text when tracing begins', async () => {
+            const screen = render(
+                <>
+                    <PowerEstimationSidePanel />
+                    <TraceCollectorSidePanel />
+                </>,
+                serialPortActions
+            );
+            expect(
+                screen.getByText('Start trace to get power data...')
+            ).toBeInTheDocument();
+            fireEvent.click(await screen.findByText('raw'));
+            fireEvent.click(screen.getByText('Start tracing'));
+
+            expect(
+                await screen.findByText('Waiting for power data...')
+            ).toBeInTheDocument();
+        });
+
+        it('should start fetching power estimation params in the background', async () => {
             const callbacks = getNrfmlCallbacks();
             const waitingText = 'Start trace to get power data...';
             const screen = render(

@@ -40,9 +40,8 @@ import TraceFileDetails from './Tracing/TraceFileDetails';
 
 import '../PowerEstimation/powerEstimation.scss';
 
-const GetPowerDataFromFile = () => {
+const GetPowerDataFromFile = ({ isTracing }: { isTracing: boolean }) => {
     const dispatch = useDispatch();
-    const isTracing = useSelector(getIsTracing);
 
     const selectedTsharkPath = useSelector(getTsharkPath);
     const isTsharkInstalled = !!findTshark(selectedTsharkPath);
@@ -71,7 +70,11 @@ const GetPowerDataFromFile = () => {
     );
 };
 
-const SavePowerDataFromRunningTrace = () => {
+const SavePowerDataFromRunningTrace = ({
+    isTracing,
+}: {
+    isTracing: boolean;
+}) => {
     const dispatch = useDispatch();
 
     const powerData = useSelector(getData);
@@ -96,9 +99,14 @@ const SavePowerDataFromRunningTrace = () => {
     const title = powerDataExists
         ? 'Save power estimation data to file'
         : 'Click Start tracing to get power estimation data from trace';
-    const label = powerDataExists
-        ? 'Save power estimation data'
-        : 'Start trace to get power data...';
+    let label;
+    if (powerDataExists) {
+        label = 'Save power estimation data';
+    } else if (isTracing) {
+        label = 'Waiting for power data...';
+    } else {
+        label = 'Start trace to get power data...';
+    }
 
     return (
         <Button
@@ -135,6 +143,7 @@ const PowerEstimationDataInfo = () => {
 
 export default () => {
     const isDeviceSelected = useSelector(getIsDeviceSelected);
+    const isTracing = useSelector(getIsTracing);
 
     return (
         <CollapsibleGroup
@@ -143,9 +152,9 @@ export default () => {
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >
             {isDeviceSelected ? (
-                <SavePowerDataFromRunningTrace />
+                <SavePowerDataFromRunningTrace isTracing={isTracing} />
             ) : (
-                <GetPowerDataFromFile />
+                <GetPowerDataFromFile isTracing={isTracing} />
             )}
             <PowerEstimationDataInfo />
             <Button
