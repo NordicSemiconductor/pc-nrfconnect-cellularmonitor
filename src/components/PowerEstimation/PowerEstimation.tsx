@@ -7,7 +7,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
-import { Alert, PaneProps, usageData } from 'pc-nrfconnect-shared';
+import { Alert, PaneProps, Spinner, usageData } from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
@@ -118,18 +118,19 @@ export default ({ active }: PaneProps) => {
         };
     }, [oppHtml, updatePowerEstimationData]);
 
-    if (isLoading) {
-        return (
-            <div className="power-estimation-container">
-                <div className="power-estimation-landing">
-                    Fetching data from Online Power Profiler, please wait...
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="power-estimation-container">
+            {isLoading && (
+                <div className="power-estimation-loading-container">
+                    <div className="power-estimation-loading">
+                        <Spinner />
+                        <p>
+                            Fetching data from Online Power Profiler, please
+                            wait...
+                        </p>
+                    </div>
+                </div>
+            )}
             {hasError && (
                 <Alert variant="danger" label="Error!">
                     Could not complete network request, see log for more
