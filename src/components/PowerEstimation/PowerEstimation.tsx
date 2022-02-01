@@ -91,6 +91,19 @@ export default ({ active }: PaneProps) => {
         const sliders = oppForm.querySelectorAll('input[type=range]');
         [...sliders].forEach(slider => slider.parentElement.remove());
 
+        const textInputs = oppForm.querySelectorAll('input[type=text]');
+        [...textInputs].forEach((input: HTMLInputElement) => {
+            const idPattern = /id_(\w+)_val/;
+            const key = input?.id?.match(
+                idPattern
+            )[1] as keyof OnlinePowerEstimatorParams;
+            if (key) {
+                const handler = updatePowerEstimationData(key);
+                input.addEventListener('blur', handler);
+                elementsAndHandlers.push([input, handler]);
+            }
+        });
+
         return () => {
             elementsAndHandlers.forEach(([element, handler]) => {
                 element?.removeEventListener('click', handler);

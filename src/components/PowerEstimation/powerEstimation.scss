@@ -87,7 +87,13 @@
     &-form {
         display: grid;
         grid-gap: 12px;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        order: 1;
+        margin-top: 12px;
+
+        @media (min-width: 1200px) {
+            grid-template-columns: repeat(4, 1fr);
+        }
 
         #sel_submit {
             display: none;
@@ -112,11 +118,11 @@
     &-input {
         margin-bottom: 12px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
 
-        select {
-            width: 125px;
+        & > *:last-child {
+            flex-grow: 1;
+            text-align: right;
         }
 
         &-header {
@@ -125,6 +131,26 @@
                 color: $gray-500;
                 margin-bottom: 0;
             }
+        }
+
+        &-range-value {
+            .range-input {
+                max-width: 4em;
+            }
+        }
+
+        &-value input[type='range'] {
+            display: none;
+
+            .opp-params-input-switch {
+                margin-bottom: 0;
+                display: flex;
+                justify-content: flex-end;
+            }
+        }
+
+        .help-box {
+            margin-left: 12px;
         }
     }
 }
