@@ -184,7 +184,10 @@
             display: none;
 
         }
-
+        &-value select, input {
+            color: $gray-700;
+        }
+        
         .help-box {
             margin-left: 12px;
         }
