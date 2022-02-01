@@ -83,20 +83,27 @@ export default ({ active }: PaneProps) => {
             return [element, handler] as const;
         });
 
-        const helpBoxes = oppForm.getElementsByClassName('help-box');
+        const helpBoxes = oppForm.getElementsByClassName(
+            'help-box'
+            // eslint-disable-next-line no-undef
+        ) as HTMLCollectionOf<HTMLSpanElement>;
         [...helpBoxes].forEach((box: HTMLSpanElement) => {
+            if (!box?.dataset?.tip) return;
             box.title = box.dataset.tip;
         });
 
         const sliders = oppForm.querySelectorAll('input[type=range]');
-        [...sliders].forEach(slider => slider.parentElement.remove());
+        [...sliders].forEach(slider => slider?.parentElement?.remove());
 
-        const textInputs = oppForm.querySelectorAll('input[type=text]');
+        const textInputs = oppForm.querySelectorAll(
+            'input[type=text]'
+            // eslint-disable-next-line no-undef
+        ) as NodeListOf<HTMLInputElement>;
         [...textInputs].forEach((input: HTMLInputElement) => {
             const idPattern = /id_(\w+)_val/;
-            const key = input?.id?.match(
-                idPattern
-            )[1] as keyof OnlinePowerEstimatorParams;
+            const matches = input?.id?.match(idPattern);
+            if (!matches) return;
+            const key = matches[1] as keyof OnlinePowerEstimatorParams;
             if (key) {
                 const handler = updatePowerEstimationData(key);
                 input.addEventListener('blur', handler);
