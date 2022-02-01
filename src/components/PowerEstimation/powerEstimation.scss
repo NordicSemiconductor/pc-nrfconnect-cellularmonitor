@@ -154,6 +154,13 @@
         & > *:last-child {
             flex-grow: 1;
             text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            
+            & .opp-params-input-switch {
+                margin-bottom: 0;
+                display: flex;
+            }
         }
 
         &-header {
