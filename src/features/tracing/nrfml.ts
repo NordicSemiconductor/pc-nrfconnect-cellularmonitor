@@ -7,18 +7,14 @@
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
-import { writeFile } from 'fs';
-import { join } from 'path';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
 import { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
-import { getNameAndDirectory } from '../../utils/fileUtils';
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
-    setFilePath as setPowerEstimationFilePath,
 } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
