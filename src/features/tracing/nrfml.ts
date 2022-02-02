@@ -133,16 +133,6 @@ export const extractPowerData =
                 gotPowerEstimationData = true;
                 dispatch(setPowerEstimationData(powerEstimationData));
                 dispatch(stopTrace(taskId));
-                const [base, filePath] = getNameAndDirectory(path, '.bin');
-                const pathToNewFile = join(filePath, `${base}.json`);
-                writeFile(
-                    pathToNewFile,
-                    JSON.stringify(powerEstimationData),
-                    () => {
-                        logger.info(`Created file ${pathToNewFile}`);
-                        dispatch(setPowerEstimationFilePath(pathToNewFile));
-                    }
-                );
             }
         );
         dispatch(
