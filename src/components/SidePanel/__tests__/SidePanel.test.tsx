@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+/* eslint-disable no-restricted-syntax */
+
 import React from 'react';
 
+import { TraceFormat } from '../../../features/tracing/formats';
 import {
     setAvailableSerialPorts,
     setSerialPort,
@@ -31,6 +34,15 @@ const serialPortActions = [
     setSerialPort('COM1'),
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const startTrace = async (screen: any, ...sinks: TraceFormat[]) => {
+    for (const sink of sinks) {
+        // eslint-disable-next-line no-await-in-loop
+        fireEvent.click(await screen.findByText(sink));
+    }
+    fireEvent.click(screen.getByText('Start tracing'));
+};
+
 describe('Sidepanel functionality', () => {
     beforeEach(() => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
@@ -43,8 +55,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'pcap');
             expect(
                 await screen.queryByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -55,8 +66,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'raw');
             const modal = screen.queryByText(
                 'Detecting modem firmware version'
             );
@@ -68,8 +78,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'pcap');
             expect(
                 await screen.queryByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -101,8 +110,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'pcap');
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -122,9 +130,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'raw', 'pcap');
             expect(
                 await screen.queryByText('.bin', {
                     exact: false,
@@ -142,8 +148,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(screen.getByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'raw');
             expect(
                 await screen.queryByText('.bin', {
                     exact: false,
@@ -161,8 +166,7 @@ describe('Sidepanel functionality', () => {
                 <TraceCollectorSidePanel />,
                 serialPortActions
             );
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'pcap');
             expect(
                 await screen.findByText('.pcapng', {
                     exact: false,
@@ -194,8 +198,7 @@ describe('Sidepanel functionality', () => {
             expect(
                 screen.getByText('Start trace to get power data...')
             ).toBeInTheDocument();
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'raw');
 
             expect(
                 await screen.findByText('Waiting for power data...')
@@ -213,8 +216,7 @@ describe('Sidepanel functionality', () => {
                 serialPortActions
             );
             expect(screen.getByText(waitingText)).toBeInTheDocument();
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            await startTrace(screen, 'raw');
             expectNrfmlStartCalledWithSinks(
                 'nrfml-tshark-sink',
                 'nrfml-raw-file-sink'
