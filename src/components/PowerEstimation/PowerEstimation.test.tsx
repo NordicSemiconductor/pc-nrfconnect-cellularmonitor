@@ -50,7 +50,7 @@ describe('Power Estimation pane', () => {
         const screen = render(<PowerEstimation active />);
         expect(
             screen.getByText(
-                'Start a trace to capture live power estimate or read from existing trace file'
+                'Start a trace to capture live data for power estimate or read from existing trace file'
             )
         ).toBeInTheDocument();
     });
@@ -75,17 +75,17 @@ describe('Power Estimation pane', () => {
         fireEvent.click(await screen.findByText('raw'));
         fireEvent.click(screen.getByText('Start tracing'));
         const { jsonCallback } = await callbacks;
-        fetchMock.mockRejectOnce(new Error('request failed'));
+        fetchMock.mockReject(new Error('request failed'));
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        await jsonCallback!([
+        jsonCallback!([
             {
                 onlinePowerProfiler: {
-                    test: 'data',
+                    crdx_len: 'data',
                 },
             },
         ]);
+        expect(await screen.findByText('Error!')).toBeInTheDocument();
         expect(fetchMock).toHaveBeenCalled();
-        expect(screen.getByText('Error!')).toBeInTheDocument();
         assertLogErrorCB();
     });
 
@@ -103,18 +103,18 @@ describe('Power Estimation pane', () => {
         fireEvent.click(screen.getByText('Start tracing'));
 
         const { jsonCallback } = await callbacks;
-        fetchMock.mockResponseOnce('<h1>Request was successful</h1>');
+        fetchMock.mockResponse('<h1>Request was successful</h1>');
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        await jsonCallback!([
+        jsonCallback!([
             {
                 onlinePowerProfiler: {
                     test: 'data',
                 },
             },
         ]);
-        expect(fetchMock).toHaveBeenCalled();
         expect(
-            await screen.findByText('Request was successful')
+            (await screen.findAllByText('Request was successful'))[0]
         ).toBeInTheDocument();
+        expect(fetchMock).toHaveBeenCalled();
     });
 });

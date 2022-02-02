@@ -29,6 +29,37 @@
     display: flex;
     flex-direction: column;
 
+    .power-estimation-loading {
+        background: white;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            height: 32px;
+            width: 32px;
+        }
+
+        p {
+            margin-top: 12px;
+        }
+
+        &-container {
+            position: fixed;
+            opacity: 0.95;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            top: -80px;
+            left: 130px;
+            pointer-events: none;
+        }
+    }
+
     & > div {
         display: flex;
         flex-direction: column;
@@ -81,4 +112,84 @@
 
 #opp-preset {
     display: none;
+}
+
+.opp-params {
+    &-form {
+        display: grid;
+        grid-gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        order: 1;
+        margin-top: 12px;
+
+        @media (min-width: 1200px) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        #sel_submit {
+            display: none;
+        }
+    }
+
+    &-group {
+        background: white;
+        padding: 12px;
+
+        &-header {
+            h3 {
+                font-size: 14px;
+                text-transform: uppercase;
+                color: $gray-700;
+                text-align: center;
+                margin-bottom: 16px;
+            }
+        }
+    }
+
+    &-input {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+
+        & > *:last-child {
+            flex-grow: 1;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            
+            & .opp-params-input-switch {
+                margin-bottom: 0;
+                display: flex;
+            }
+        }
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        &-header {
+            h3 {
+                font-size: 13px;
+                color: $gray-700;
+                margin-bottom: 0;
+            }
+        }
+
+        &-range-value {
+            .range-input {
+                max-width: 4em;
+            }
+        }
+
+        &-value input[type='range'] {
+            display: none;
+
+        }
+        &-value select, input {
+            color: $gray-700;
+        }
+        
+        .help-box {
+            margin-left: 12px;
+        }
+    }
 }
