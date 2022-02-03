@@ -5,6 +5,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
 import { Alert, PaneProps, Spinner, usageData } from 'pc-nrfconnect-shared';
@@ -76,6 +77,11 @@ export default ({ active }: PaneProps) => {
         if (!oppHtml) return;
         const oppForm = document.getElementsByClassName('opp-params-form')[0];
         if (!oppForm) return;
+        oppForm.id = 'opp-params-form';
+        const detailsContainer = document.getElementsByClassName(
+            'details-box-container'
+        )[0];
+        if (detailsContainer) detailsContainer.id = 'general-information';
         const elementsAndHandlers = OPP_KEYS.map(key => {
             const element = document.getElementById(`id_${key}`);
             const handler = updatePowerEstimationData(key);
@@ -138,7 +144,35 @@ export default ({ active }: PaneProps) => {
                 </Alert>
             )}
             {oppHtml ? (
-                <InnerHTML html={oppHtml} />
+                <>
+                    <div className="power-estimation-navigation-bar">
+                        <span>Scroll to: </span>
+                        <Button
+                            className="opp-nav-btn"
+                            variant="secondary"
+                            href="#general-information"
+                        >
+                            Information
+                        </Button>
+                        <Button
+                            className="opp-nav-btn"
+                            variant="secondary"
+                            href="#opp-plot"
+                        >
+                            Chart
+                        </Button>
+                        <Button
+                            className="opp-nav-btn"
+                            variant="secondary"
+                            href="#opp-params-form"
+                        >
+                            Settings
+                        </Button>
+                    </div>
+                    <div className="opp-custom-html-container">
+                        <InnerHTML html={oppHtml} />
+                    </div>
+                </>
             ) : (
                 <div className="power-estimation-landing">
                     {isTsharkInstalled ? (

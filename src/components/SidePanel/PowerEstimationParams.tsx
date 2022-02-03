@@ -72,11 +72,12 @@ const GetPowerDataFromFile = ({ isTracing }: { isTracing: boolean }) => {
 
 const SavePowerDataFromRunningTrace = ({
     isTracing,
+    isDeviceSelected,
 }: {
     isTracing: boolean;
+    isDeviceSelected: boolean;
 }) => {
     const dispatch = useDispatch();
-
     const powerData = useSelector(getData);
 
     const onSave = async () => {
@@ -96,12 +97,11 @@ const SavePowerDataFromRunningTrace = ({
     };
 
     const powerDataExists = powerData != null;
-    const title = powerDataExists
-        ? 'Save power estimation data to file'
-        : 'Click Start tracing to get power estimation data from trace';
+    let title = 'Click Start tracing to get power estimation data from trace';
     let label;
-    if (powerDataExists) {
+    if (powerDataExists || !isDeviceSelected) {
         label = 'Save power estimation data';
+        title = 'Save power estimation data to file';
     } else if (isTracing) {
         label = 'Waiting for power data...';
     } else {
@@ -151,12 +151,18 @@ export default () => {
             defaultCollapsed={getCollapsePowerSection()}
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >
-            {isDeviceSelected ? (
-                <SavePowerDataFromRunningTrace isTracing={isTracing} />
-            ) : (
+            {!isDeviceSelected && (
                 <GetPowerDataFromFile isTracing={isTracing} />
             )}
+            <SavePowerDataFromRunningTrace
+                isTracing={isTracing}
+                isDeviceSelected={isDeviceSelected}
+            />
             <PowerEstimationDataInfo />
+            <p style={{ marginTop: 8 }}>
+                Visit the Online Power Profiler for the full feature set. Saved
+                settings can also be imported there.
+            </p>
             <Button
                 variant="secondary"
                 className="w-100 btn-sm"

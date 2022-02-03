@@ -53,9 +53,8 @@ describe('Power profile params', () => {
     });
 
     describe('without device connected', () => {
-        it('should save file and display link', async () => {
+        it('shows file link after file is saved', async () => {
             const callbacks = getNrfmlCallbacks();
-
             const screen = render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
@@ -72,9 +71,12 @@ describe('Power profile params', () => {
                 },
             ]);
 
-            expect(
-                await screen.findByText(`${mockedFileName}.json`)
-            ).toBeInTheDocument();
+            const saveButton = await screen.findByText(
+                'Save power estimation data'
+            );
+            expect(saveButton).toBeInTheDocument();
+            fireEvent.click(saveButton);
+            expect(await screen.findByText(mockedFileName)).toBeInTheDocument();
         });
 
         it('should report error if jsonCB is not invoked before completedCB', async () => {
