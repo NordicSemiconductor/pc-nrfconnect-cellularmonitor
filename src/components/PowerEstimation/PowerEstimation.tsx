@@ -125,7 +125,11 @@ export default ({ active }: PaneProps) => {
     }, [oppHtml, updatePowerEstimationData]);
 
     return (
-        <div className="power-estimation-container">
+        <div
+            className={`power-estimation-container ${
+                !oppHtml ? 'full-height' : ''
+            }`}
+        >
             {isLoading && (
                 <div className="power-estimation-loading-container">
                     <div className="power-estimation-loading">
