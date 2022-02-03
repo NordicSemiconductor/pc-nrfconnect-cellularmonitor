@@ -159,6 +159,10 @@ export default () => {
                 isDeviceSelected={isDeviceSelected}
             />
             <PowerEstimationDataInfo />
+            <p style={{ marginTop: 8 }}>
+                Visit the Online Power Profiler for the full feature set. Saved
+                settings can also be imported there.
+            </p>
             <Button
                 variant="secondary"
                 className="w-100 btn-sm"
