@@ -7,7 +7,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { remote } from 'electron';
+import { dialog } from '@electron/remote';
 import { writeFile } from 'fs';
 import { join } from 'path';
 import {
@@ -81,7 +81,7 @@ const SavePowerDataFromRunningTrace = ({
     const powerData = useSelector(getData);
 
     const onSave = async () => {
-        const { filePath, canceled } = await remote.dialog.showSaveDialog({
+        const { filePath, canceled } = await dialog.showSaveDialog({
             defaultPath: join(getAppDataDir(), 'power-estimation-data.json'),
             filters: [
                 {

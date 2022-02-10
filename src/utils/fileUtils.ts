@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { FileFilter, remote } from 'electron';
+import { dialog, shell } from '@electron/remote';
+import { FileFilter } from 'electron';
 import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 
 import { autoDetectDbRootFolder } from './store';
-
-const { dialog, shell } = remote;
 
 export const askForTraceDbFile = () =>
     askForFile(
