@@ -58,7 +58,7 @@
             justify-content: center;
             z-index: 1;
             top: -$nav-bar-height;
-            left: $side-panel-width / 2;
+            left: calc($side-panel-width / 2);
             pointer-events: none;
         }
     }
