@@ -20,15 +20,13 @@ import PowerEstimationParams from '../PowerEstimationParams';
 jest.mock('../../../features/wireshark/wireshark');
 const mockedFileName = 'mockedPowerData';
 
-jest.mock('electron', () => ({
-    remote: {
-        dialog: {
-            showSaveDialog: jest.fn(() => ({
-                filePath: `some/path/${mockedFileName}`,
-                canceled: false,
-            })),
-            showOpenDialogSync: jest.fn(() => [`some/path/${mockedFileName}`]),
-        },
+jest.mock('@electron/remote', () => ({
+    dialog: {
+        showSaveDialog: jest.fn(() => ({
+            filePath: `some/path/${mockedFileName}`,
+            canceled: false,
+        })),
+        showOpenDialogSync: jest.fn(() => [`some/path/${mockedFileName}`]),
     },
 }));
 
@@ -62,7 +60,6 @@ describe('Power profile params', () => {
             fireEvent.click(extractButton);
 
             const { jsonCallback } = await callbacks;
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             jsonCallback!([
                 {
                     onlinePowerProfiler: {
