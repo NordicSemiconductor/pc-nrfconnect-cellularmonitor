@@ -15,9 +15,7 @@ import thunk from 'redux-thunk';
 import appReducer from '../appReducer';
 import { TDispatch } from '../thunk';
 
-export const mockedNrfmlStart = nrfml.start as jest.MockedFunction<
-    typeof nrfml.start
->;
+const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
 
 export const getNrfmlCallbacks = () => {
     return new Promise<{

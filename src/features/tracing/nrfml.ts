@@ -155,18 +155,18 @@ export const startTrace =
         };
         dispatch(resetPowerEstimationParams());
 
-        sinks.forEach(format => {
-            usageData.sendUsageData(sinkEvent(format));
-        });
-
         const isDetectingTraceDb =
             getManualDbFilePath(state) == null &&
             !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath)) {
+        if (findTshark(selectedTsharkPath) && !sinks.includes('opp')) {
             sinks.push('opp');
         }
+
+        sinks.forEach(format => {
+            usageData.sendUsageData(sinkEvent(format));
+        });
 
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -182,7 +182,11 @@ export const startTrace =
                     logger.info('Finished tracefile');
                 }
                 // stop tracing if Completed callback is called and we are only doing live tracing
-                if (sinks.length === 1 && sinks[0] === 'live') {
+                if (
+                    sinks.length === 2 &&
+                    sinks.includes('live') &&
+                    sinks.includes('opp')
+                ) {
                     dispatch(stopTrace(taskId));
                 }
             },

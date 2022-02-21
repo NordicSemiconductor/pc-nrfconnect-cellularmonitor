@@ -1,3 +1,8 @@
+## Unreleased
+
+### Fixed
+- Stop trace when closing wireshark during live trace only.
+
 ## 0.3.0
 ### Added
 - Extract data for the

@@ -10,9 +10,14 @@ import { testUtils } from 'pc-nrfconnect-shared';
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
+import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
-import { setDetectingTraceDb, setTraceIsStarted } from './traceSlice';
+import {
+    setDetectingTraceDb,
+    setTraceIsStarted,
+    setTraceIsStopped,
+} from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
@@ -75,6 +80,7 @@ describe('nrfml', () => {
             jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(
                 '2000-01-01T00:00:00.000Z'
             );
+            nrfml.start.mockClear();
         });
 
         it('should start tracing to pcap', () => {
@@ -158,6 +164,30 @@ describe('nrfml', () => {
                     },
                 },
             ]);
+        });
+
+        // Used to simulate wireshark beeing closed while live tracing.
+        const wiresharkClosedError = {
+            error_code: 18,
+            message:
+                'wireshark process closed or pipe error plugin path: nrfml-wireshark-named-pipe-sink.nrfml',
+            origin: 'Error when running nrfml operation worker.',
+        };
+
+        it('stop tracing when wireshark is closed with only live tracing', () => {
+            store.dispatch(startTrace(['live']));
+            const errorHandler = nrfml.start.mock.calls[0][1];
+            errorHandler(wiresharkClosedError);
+            const lastAction = store.getActions().slice(-1)[0];
+            expect(lastAction.type).toBe(setTraceIsStopped.type);
+        });
+
+        it('keep tracing when wireshark is closed but pcap is chosen', () => {
+            store.dispatch(startTrace(['live', 'pcap']));
+            const errorHandler = nrfml.start.mock.calls[0][1];
+            errorHandler(wiresharkClosedError);
+            const lastAction = store.getActions().slice(-1)[0];
+            expect(lastAction.type).toBe(setTraceIsStarted.type);
         });
     });
 
