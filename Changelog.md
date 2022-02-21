@@ -1,9 +1,11 @@
-## Unreleased
+## 0.3.1 - 2022-02-21
 
 ### Fixed
 - Stop trace when closing wireshark during live trace only.
+### Changed
+- Update information text to show when tracing is ongoing.
 
-## 0.3.0
+## 0.3.0 - 2022-02-03
 ### Added
 - Extract data for the
   [`Online Power Profiler`](https://devzone.nordicsemi.com/power/). Can be

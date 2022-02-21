@@ -24,6 +24,7 @@ import {
     hasError as powerEstimationError,
     setRenderedHtml,
 } from '../../features/powerEstimation/powerEstimationSlice';
+import { getIsTracing } from '../../features/tracing/traceSlice';
 import { findTshark } from '../../features/wireshark/wireshark';
 import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
@@ -37,6 +38,7 @@ export default ({ active }: PaneProps) => {
     const oppHtml = useSelector(getRenderedHtml);
     const hasError = useSelector(powerEstimationError);
     const isLoading = useSelector(getIsLoading);
+    const isTracing = useSelector(getIsTracing);
 
     const selectedTsharkPath = useSelector(getTsharkPath);
     const isTsharkInstalled = !!findTshark(selectedTsharkPath);
@@ -180,10 +182,16 @@ export default ({ active }: PaneProps) => {
             ) : (
                 <div className="power-estimation-landing">
                     {isTsharkInstalled ? (
-                        <p>
-                            Start a trace to capture live data for power
-                            estimate or read from existing trace file
-                        </p>
+                        <>
+                            {isTracing ? (
+                                <p>Waiting for power data to be available...</p>
+                            ) : (
+                                <p>
+                                    Start a trace to capture live data for power
+                                    estimate or read from existing trace file
+                                </p>
+                            )}
+                        </>
                     ) : (
                         <Tshark />
                     )}
