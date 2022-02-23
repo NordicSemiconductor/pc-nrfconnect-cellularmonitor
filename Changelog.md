@@ -1,5 +1,8 @@
-## 0.3.1 - 2022-02-21
+## Unreleased
+### Changed
+- Filter determining which devices are shown in the device lister.
 
+## 0.3.1 - 2022-02-21
 ### Fixed
 - Stop trace when closing wireshark during live trace only.
 ### Changed
