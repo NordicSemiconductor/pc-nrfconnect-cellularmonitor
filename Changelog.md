@@ -1,3 +1,8 @@
+## 0.3.2-pre1
+
+### Changed
+- Improve possibly erroneous tshark log messages.
+
 ## 0.3.1 - 2022-02-21
 
 ### Fixed
