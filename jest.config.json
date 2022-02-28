@@ -1,4 +1,11 @@
 {
+    "//": {
+        "1": "This is mostly a copy from jest.config.json from pc-nrfconnect-shared with one relevant deviation:",
+        "2": "In 'moduleNameMapper' modules with 'serialport' in the name are not mocked.",
+        "3": "This is changed because here we want to test with the real modules.",
+        "4": "Instead of copying the whole config it would be better to extend the ",
+        "5": "existing config but we did not make the effort to implement that yet."
+    },
     "moduleNameMapper": {
         "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/fileMock.js",
         "\\.(css|scss)$": "<rootDir>/node_modules/pc-nrfconnect-shared/mocks/emptyMock.js",
