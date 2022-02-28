@@ -2,6 +2,7 @@
 
 ### Changed
 - Improve possibly erroneous tshark log messages.
+- Added 1.2.7 firmware trace database.
 
 ## 0.3.1 - 2022-02-21
 
