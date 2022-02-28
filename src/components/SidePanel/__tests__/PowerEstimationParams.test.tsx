@@ -91,7 +91,6 @@ describe('Power profile params', () => {
 
             const { completeCallback } = await callbacks;
 
-            // @ts-expect-error -- wrong typing
             completeCallback();
             assertLogErrorCB();
         });
@@ -108,7 +107,6 @@ describe('Power profile params', () => {
 
             const { completeCallback } = await callbacks;
 
-            // @ts-expect-error -- wrong typing
             completeCallback();
             expect(
                 screen.queryByText('Fetching data...')
