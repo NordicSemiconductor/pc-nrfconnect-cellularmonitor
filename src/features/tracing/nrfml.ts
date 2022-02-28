@@ -171,7 +171,7 @@ export const startTrace =
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
-                if (err !== null && err.message.includes('tshark')) {
+                if (err?.message.includes('tshark')) {
                     logger.logError('Error while tracing', err);
                 } else if (err != null) {
                     logger.error(`Error when creating trace: ${err.message}`);
