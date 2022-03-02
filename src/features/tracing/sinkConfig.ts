@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import {
+    PcapInitParameters,
+    RawFileInitParameters,
+    TsharkInitParameters,
+    WiresharkNamedPipeInitParameters,
+} from '@nordicsemiconductor/nrf-monitor-lib-js';
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
@@ -23,31 +29,40 @@ const additionalPcapProperties = (device?: Device) => ({
     hw_name: device != null ? describeDevice(device) : undefined,
 });
 
+type InitParameters =
+    | RawFileInitParameters
+    | PcapInitParameters
+    | WiresharkNamedPipeInitParameters
+    | TsharkInitParameters;
+
 export default (
     state: RootState,
     source: SourceFormat,
     format: TraceFormat
-) => {
+): InitParameters => {
     if (format === 'raw') {
+        // RawFileInitParameters
         return {
             name: 'nrfml-raw-file-sink',
             init_parameters: {
                 file_path: sinkFile(source, format),
             },
-        } as const;
+        };
     }
 
     if (format === 'pcap') {
+        // PcapInitParameters
         return {
             name: 'nrfml-pcap-sink',
             init_parameters: {
                 file_path: sinkFile(source, format),
                 ...additionalPcapProperties(selectedDevice(state)),
             },
-        } as const;
+        };
     }
 
     if (format === 'live') {
+        // WiresharkNamedPipeInitParameters
         return {
             name: 'nrfml-wireshark-named-pipe-sink',
             init_parameters: {
@@ -57,18 +72,19 @@ export default (
                     'WIRESHARK NOT FOUND',
                 ...additionalPcapProperties(selectedDevice(state)),
             },
-        } as const;
+        };
     }
 
     if (format === 'opp') {
+        // <TsharkInitParameters>
         return {
             name: 'nrfml-tshark-sink',
             init_parameters: {
                 opp_json_object_key: 'onlinePowerProfiler',
+                tshark_directory: getTsharkPath(state) ?? undefined,
                 sleep: true,
             },
-            tshark_directory: getTsharkPath(state),
-        } as const;
+        };
     }
 
     throw new Error(

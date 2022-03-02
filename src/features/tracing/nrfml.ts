@@ -5,8 +5,10 @@
  */
 
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved
-import { Sources } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import {
+    Configuration,
+    // eslint-disable-next-line import/no-unresolved
+} from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
@@ -36,9 +38,9 @@ const nrfmlConfig = (
     state: RootState,
     source: SourceFormat,
     sinks: TraceFormat[]
-) => ({
+): Configuration => ({
     config: { plugins_directory: getPluginsDir() },
-    sources: [sourceConfig(state, source)] as Sources,
+    sources: [sourceConfig(state, source)],
     sinks: sinks.map(format => sinkConfig(state, source, format)),
 });
 
