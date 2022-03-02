@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-tracecollector-preview",
-  "version": "0.3.2-pre2",
+  "version": "0.3.2-pre3",
   "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
   "displayName": "Trace Collector V2 preview",
   "repository": {

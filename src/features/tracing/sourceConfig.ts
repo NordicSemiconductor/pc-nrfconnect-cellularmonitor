@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+// eslint-disable-next-line import/no-unresolved
+import { InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
@@ -33,7 +35,10 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
               },
           };
 
-export default (state: RootState, source: SourceFormat) => ({
+export default (
+    state: RootState,
+    source: SourceFormat
+): InsightInitParameters => ({
     name: 'nrfml-insight-source',
     init_parameters: {
         ...(source.type === 'file'
