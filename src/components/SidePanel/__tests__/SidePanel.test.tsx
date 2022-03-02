@@ -234,7 +234,6 @@ describe('Sidepanel functionality', () => {
 
             const { jsonCallback } = await callbacks;
             // Invoke the JSON callback to test the remainder of the initial flow
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             jsonCallback!([
                 {
                     onlinePowerProfiler: {
