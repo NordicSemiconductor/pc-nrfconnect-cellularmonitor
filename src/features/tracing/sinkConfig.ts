@@ -10,6 +10,7 @@ import {
     TsharkInitParameters,
     WiresharkNamedPipeInitParameters,
 } from '@nordicsemiconductor/nrf-monitor-lib-js';
+import path from 'path';
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
@@ -79,11 +80,13 @@ export default (
         // <TsharkInitParameters>
         const sharkPath = getTsharkPath(state);
         const tshark = findTshark(sharkPath);
+        const tsharkFolder = tshark && path.dirname(tshark);
+
         return {
             name: 'nrfml-tshark-sink',
             init_parameters: {
                 opp_json_object_key: 'onlinePowerProfiler',
-                tshark_directory: tshark ?? undefined,
+                tshark_directory: tsharkFolder ?? undefined,
                 sleep: true,
             },
         };
