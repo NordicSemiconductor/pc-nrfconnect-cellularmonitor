@@ -13,7 +13,7 @@ import {
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../../appReducer';
-import { defaultSharkPath } from '../wireshark/wireshark';
+import { defaultSharkPath, findTshark } from '../wireshark/wireshark';
 import { getTsharkPath, getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
@@ -77,11 +77,13 @@ export default (
 
     if (format === 'opp') {
         // <TsharkInitParameters>
+        const sharkPath = getTsharkPath(state);
+        const tshark = findTshark(sharkPath);
         return {
             name: 'nrfml-tshark-sink',
             init_parameters: {
                 opp_json_object_key: 'onlinePowerProfiler',
-                tshark_directory: getTsharkPath(state) ?? undefined,
+                tshark_directory: tshark ?? undefined,
                 sleep: true,
             },
         };
