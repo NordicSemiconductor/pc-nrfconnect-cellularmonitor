@@ -9,13 +9,13 @@ import { App } from 'pc-nrfconnect-shared';
 
 export default () => (
     <App
-        deviceSelect={<div />}
-        sidePanel={<div />}
+        deviceSelect={null}
+        sidePanel={null}
+        showLogByDefault={false}
         panes={[
             {
                 name: 'Terminal',
                 Main: () => <div>Terminal</div>,
-                SidePanel: undefined,
             },
         ]}
     />
