@@ -1,0 +1,12 @@
+{
+  "name": "terminal",
+  "version": "1.0.0",
+  "description": "Terminal for the Cellular Monitor application",
+  "main": "dist/bundle.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
