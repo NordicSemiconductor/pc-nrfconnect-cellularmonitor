@@ -7,6 +7,8 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
+import { Main } from './main';
+
 export default () => (
     <App
         deviceSelect={null}
@@ -15,7 +17,7 @@ export default () => (
         panes={[
             {
                 name: 'Terminal',
-                Main: () => <div>Terminal</div>,
+                Main,
             },
         ]}
     />

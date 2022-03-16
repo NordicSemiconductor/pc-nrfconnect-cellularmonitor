@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { ipcRenderer } from 'electron';
-import { Button, SidePanel } from 'pc-nrfconnect-shared';
+import { Button, logger, SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
@@ -30,12 +30,19 @@ export const TraceCollectorSidePanel = () => (
         <TraceFileInformation />
         <AdvancedOptions />
         <Button onClick={openTerminal}>Terminal</Button>
+        <Button onClick={sendTerminalData}>Send data to terminal</Button>
     </SidePanel>
 );
 
 const openTerminal = () => {
     ipcRenderer.send('open-app', {
+        name: 'pc-nrfconnect-cellularmonitor-terminal',
         currentVersion: '1.0.0',
         path: 'C:\\Users\\jonas\\.nrfconnect-apps\\local\\pc-nrfconnect-cellularmonitor\\terminal',
     });
+};
+
+const sendTerminalData = () => {
+    logger.info('Sending some terminal data broadcast-terminal-data');
+    ipcRenderer.send('broadcast-terminal-data', 'Some data');
 };
