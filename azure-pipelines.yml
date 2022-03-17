@@ -2,7 +2,7 @@ trigger:
     - main
     - release/*
 pool:
-    vmImage: 'Ubuntu-20.04'
+    vmImage: 'ubuntu-latest'
 variables:
     - group: wayland
 steps:
@@ -14,7 +14,7 @@ steps:
           npm i -g npm@6
           npm config set //npm.nordicsemi.no/:_authToken $(WAYLAND_NPM_TOKEN_INTERNAL)
           npm ci
-          npm run lint
+          npm run check
           npm run test
           npm run build
           npm pack

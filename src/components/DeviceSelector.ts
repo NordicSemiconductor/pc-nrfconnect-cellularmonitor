@@ -5,9 +5,9 @@
  */
 
 import { connect } from 'react-redux';
+import { DeviceTraits } from '@nordicsemiconductor/nrf-device-lib-js';
 import {
     Device,
-    DeviceListing,
     DeviceSelector,
     DeviceSelectorProps,
     logger,
@@ -15,15 +15,15 @@ import {
 
 import { closeDevice, openDevice } from '../actions/deviceActions';
 import { TDispatch } from '../thunk';
-
 /**
  * Configures which device types to show in the device selector.
  * The config format is described on
  * https://github.com/NordicSemiconductor/nrf-device-lister-js.
  */
-const deviceListing: DeviceListing = {
+// @ts-expect-error DeviceTraits wrongly has all properties as required, but this is already fixed in master
+const deviceListing: DeviceTraits = {
     nordicUsb: true,
-    serialport: true,
+    serialPort: true,
     jlink: true,
 };
 

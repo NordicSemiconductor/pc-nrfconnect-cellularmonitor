@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+@use 'sass:math';
+
 @import '~pc-nrfconnect-shared/styles';
 
 .power-estimation-landing {
@@ -58,7 +60,7 @@
             justify-content: center;
             z-index: 1;
             top: -$nav-bar-height;
-            left: $side-panel-width / 2;
+            left: math.div($side-panel-width, 2);
             pointer-events: none;
         }
     }

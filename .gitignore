@@ -1,5 +1,3 @@
-node_modules
-.idea
-dist
-jest.json
-pc-nrfconnect-*.tgz
+/node_modules
+/dist
+/pc-nrfconnect-*.tgz
