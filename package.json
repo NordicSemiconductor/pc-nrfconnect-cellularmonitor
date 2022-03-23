@@ -44,7 +44,7 @@
         "check-disk-space": "^2.1.0",
         "dangerously-set-html-content": "^1.0.9",
         "electron": "13.1.9",
-        "electron-store": "^5.2.0",
+        "electron-store": "8.0.1",
         "ify-loader": "^1.1.0",
         "jest-fetch-mock": "^3.0.3",
         "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v6.0.5",
