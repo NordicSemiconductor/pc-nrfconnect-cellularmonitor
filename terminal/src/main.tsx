@@ -3,13 +3,10 @@ import { ipcRenderer } from 'electron';
 
 export const Main: FC = () => {
     const [terminalData, setTerminalData] = useState<string[]>([]);
-
     useEffect(() => {
-        const handler = (_: unknown, data: string) => {
-            setTerminalData([...terminalData, data]);
-            console.log(data, new Date().getTime());
-        };
-        ipcRenderer.on('terminal-data', handler);
+        ipcRenderer.on('terminal-data', (_, data) =>
+            setTerminalData(previous => [...previous, data])
+        );
     }, []);
 
     return (

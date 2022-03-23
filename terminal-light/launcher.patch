@@ -1,0 +1,139 @@
+diff --git a/.vscode/launch.json b/.vscode/launch.json
+new file mode 100644
+index 0000000..0f9163d
+--- /dev/null
++++ b/.vscode/launch.json
+@@ -0,0 +1,18 @@
++
++{
++    "version": "0.2.0",
++    "configurations": [
++      {
++        "name": "Debug Main Process",
++        "type": "node",
++        "request": "launch",
++        "cwd": "${workspaceFolder}",
++        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
++        "windows": {
++          "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
++        },
++        "args" : ["."],
++        "outputCapture": "std"
++      }
++    ]
++  }
+diff --git a/src/main/index.js b/src/main/index.js
+index a6a3c1f..3ebb14e 100644
+--- a/src/main/index.js
++++ b/src/main/index.js
+@@ -75,6 +75,10 @@ ipcMain.on('open-app', (event, app) => {
+     windows.openAppWindow(app);
+ });
+ 
++ipcMain.handle('open-app-light', (event, appUrl) => {
++    return windows.openAppLightWindow(appUrl);
++});
++
+ ipcMain.on('show-about-dialog', event => {
+     const appWindow = windows.getAppWindow(event.sender);
+     if (appWindow) {
+diff --git a/src/main/windows.js b/src/main/windows.js
+index 1b0a670..c58f91c 100644
+--- a/src/main/windows.js
++++ b/src/main/windows.js
+@@ -16,6 +16,14 @@ const apps = require('./apps');
+ let launcherWindow;
+ const appWindows = [];
+ 
++function broadCast(handle, message) {
++    appWindows
++        .filter(aw => aw.app.name === 'pc-nrfconnect-cellularmonitor-terminal')
++        .forEach(window =>
++            window.browserWindow.webContents.send(handle, message)
++        );
++}
++
+ function getDefaultIconPath() {
+     const electronResourcesDir = config.getElectronResourcesDir();
+     if (process.platform === 'win32') {
+@@ -51,6 +59,69 @@ function hideLauncherWindow() {
+     launcherWindow.hide();
+ }
+ 
++function openAppLightWindow(appUrl) {
++    const lastWindowState = settings.loadLastWindow();
++
++    let { x, y } = lastWindowState;
++    const { width, height } = lastWindowState;
++    if (x && y) {
++        const { bounds } = electron.screen.getDisplayMatching(lastWindowState);
++        const left = Math.max(x, bounds.x);
++        const top = Math.max(y, bounds.y);
++        const right = Math.min(x + width, bounds.x + bounds.width);
++        const bottom = Math.min(y + height, bounds.y + bounds.height);
++        if (left > right || top > bottom) {
++            // the window would be off screen, let's open it where the launcher is
++            x = undefined;
++            y = undefined;
++        }
++    }
++
++    const appWindow = browser.createWindow({
++        title: appUrl,
++        url: appUrl,
++        icon: getDefaultIconPath(),
++        x,
++        y,
++        width,
++        height,
++        show: true,
++        backgroundColor: '#fff',
++    });
++
++    appWindows.push({
++        browserWindow: appWindow,
++        app: {},
++    });
++
++    appWindow.webContents.on('did-finish-load', () => {
++        if (lastWindowState.maximized) {
++            appWindow.maximize();
++        }
++    });
++
++    appWindow.on('close', () => {
++        settings.storeLastWindow(appWindow);
++    });
++
++    appWindow.on('closed', () => {
++        const index = appWindows.findIndex(
++            appWin => appWin.browserWindow === appWindow
++        );
++        if (index > -1) {
++            appWindows.splice(index, 1);
++        }
++        if (
++            appWindows.length === 0 &&
++            !(launcherWindow && launcherWindow.isVisible())
++        ) {
++            electron.app.quit();
++        }
++    });
++
++    return appWindow.webContents.id;
++}
++
+ function openAppWindow(app) {
+     const lastWindowState = settings.loadLastWindow();
+ 
+@@ -151,8 +222,10 @@ function getAppWindow(sender) {
+ module.exports = {
+     openLauncherWindow,
+     openAppWindow,
++    openAppLightWindow,
+     openOfficialAppWindow,
+     openLocalAppWindow,
+     hideLauncherWindow,
+     getAppWindow,
++    broadCast,
+ };

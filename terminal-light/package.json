@@ -1,0 +1,15 @@
+{
+  "name": "terminal-light",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "start": "esbuild  ./index.tsx --bundle --target=chrome89 --sourcemap --outfile=bundle.js --external:fs --external:electron --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.14.27"
+  }
+}
