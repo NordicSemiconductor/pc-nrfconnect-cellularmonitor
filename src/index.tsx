@@ -16,6 +16,7 @@ import {
     PowerEstimationSidePanel,
     TraceCollectorSidePanel,
 } from './components/SidePanel/SidePanel';
+import { TerminalSidePanel } from './components/Terminal/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';
@@ -38,6 +39,11 @@ export default () => (
                 name: 'Power Estimation',
                 Main: PowerEstimation,
                 SidePanel: PowerEstimationSidePanel,
+            },
+            {
+                name: 'Terminal',
+                Main: PowerEstimation,
+                SidePanel: TerminalSidePanel,
             },
         ]}
         documentation={DocumentationSections}

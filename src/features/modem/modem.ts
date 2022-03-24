@@ -47,12 +47,20 @@ const createHandleLine = (eventEmitter: EventEmitter) => {
 
 export type Modem = ReturnType<typeof createModem>;
 
-export const createModem = (serialPort: SerialPort) => {
+export const createModem = (serialPortPath: string) => {
     const eventEmitter = new EventEmitter();
     let waitingForResponse = false;
 
     const lineSplitter = new parsers.Readline({ delimiter: DELIMITER });
     const handleLine = createHandleLine(eventEmitter);
+
+    const serialPort = new SerialPort(
+        serialPortPath,
+        { baudRate: 115200 },
+        e => {
+            if (e) console.log(e);
+        }
+    );
     serialPort
         .pipe(lineSplitter)
         .on('data', (line: string) => handleLine(line, waitingForResponse));
@@ -69,7 +77,7 @@ export const createModem = (serialPort: SerialPort) => {
         },
 
         close: (callback?: (error?: Error | null) => void) => {
-            serialPort.close(callback);
+            if (serialPort.isOpen) serialPort.close(callback);
         },
 
         write: (command: string) => {
@@ -79,7 +87,9 @@ export const createModem = (serialPort: SerialPort) => {
             eventEmitter.prependOnceListener('response', () => {
                 waitingForResponse = false;
             });
-            serialPort.write(command + DELIMITER);
+            serialPort.write(command + DELIMITER, e => {
+                if (e) console.log(e);
+            });
 
             return true;
         },

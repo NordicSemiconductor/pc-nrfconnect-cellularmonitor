@@ -7,7 +7,7 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
-import { Main } from './main';
+import Main from './Terminal';
 
 export default () => (
     <App

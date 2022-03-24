@@ -5,10 +5,8 @@
  */
 
 import React from 'react';
-import { ipcRenderer } from 'electron';
-import { Button, logger, SidePanel } from 'pc-nrfconnect-shared';
+import { SidePanel } from 'pc-nrfconnect-shared';
 
-import { TERMINAL_OUTPUT } from '../../../terminal-light/sample-output';
 import AdvancedOptions from './AdvancedOptions';
 import Instructions from './Instructions';
 import PowerEstimationParams from './PowerEstimationParams';
@@ -30,34 +28,5 @@ export const TraceCollectorSidePanel = () => (
         <TraceCollector />
         <TraceFileInformation />
         <AdvancedOptions />
-        <Button onClick={openTerminal}>Terminal</Button>
-        <Button onClick={openTerminalLight}>Terminal light</Button>
-        <Button onClick={sendTerminalData}>Send data to terminal</Button>
     </SidePanel>
 );
-
-const openTerminal = () => {
-    ipcRenderer.send('open-app', {
-        name: 'pc-nrfconnect-cellularmonitor-terminal',
-        currentVersion: '1.0.0',
-        path: 'C:\\Users\\jonas\\.nrfconnect-apps\\local\\pc-nrfconnect-cellularmonitor\\terminal',
-    });
-};
-
-let terminalWindowId: number;
-
-const openTerminalLight = async () => {
-    const url =
-        'file://C:\\Users\\jonas\\.nrfconnect-apps\\local\\pc-nrfconnect-cellularmonitor\\terminal-light/index.html';
-    terminalWindowId = await ipcRenderer.invoke('open-app-light', url);
-};
-
-const sendTerminalData = () => {
-    let delay = 0;
-    TERMINAL_OUTPUT.forEach(line => {
-        delay += Math.floor(Math.random() * 200 + 50);
-        setTimeout(() => {
-            ipcRenderer.sendTo(terminalWindowId, 'terminal-data', line);
-        }, delay);
-    });
-};
