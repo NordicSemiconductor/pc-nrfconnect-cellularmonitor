@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import {
     Dropdown,
+    getAppDir,
     Group,
     SidePanel,
     truncateMiddle,
@@ -18,19 +19,20 @@ import { TERMINAL_OUTPUT } from '../../../terminal-light/sample-output';
 import { createModem, Modem, Response } from '../../features/modem/modem';
 import { getAvailableSerialPorts } from '../../features/tracing/traceSlice';
 
+const appDir = getAppDir();
+
 const openTerminal = () => {
     ipcRenderer.send('open-app', {
         name: 'pc-nrfconnect-cellularmonitor-terminal',
         currentVersion: '1.0.0',
-        path: '/home/calm/.nrfconnect-apps/local/pc-nrfconnect-cellularmonitor/terminal',
+        path: `${appDir}/terminal`,
     });
 };
 
 let terminalWindowId: number;
 
 const openTerminalLight = async () => {
-    const url =
-        'file:///home/calm/.nrfconnect-apps/local/pc-nrfconnect-cellularmonitor/terminal-light/index.html';
+    const url = `file://${appDir}/terminal-light/index.html`;
     terminalWindowId = await ipcRenderer.invoke('open-app-light', url);
 };
 
