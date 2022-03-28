@@ -29,7 +29,7 @@ const loadMainBundle = async () => {
 };
 
 const openTerminal = () => {
-    ipcRenderer.send('open-app', {
+    ipcRenderer.send('open-app-light', {
         name: 'pc-nrfconnect-cellularmonitor-terminal',
         currentVersion: '1.0.0',
         path: `${appDir}/terminal`,
@@ -40,7 +40,7 @@ let terminalWindowId: number;
 
 const openTerminalLight = async () => {
     const url = `file://${appDir}/terminal-light/index.html`;
-    terminalWindowId = await ipcRenderer.invoke('open-app-light2', url);
+    terminalWindowId = await ipcRenderer.invoke('open-app-light', url);
 };
 
 const sendTerminalData = () => {
@@ -101,40 +101,55 @@ export const TerminalSidePanel = () => {
             setModem(undefined);
         } else if (!modem && port)
             port?.postMessage('Open a device to activate the terminal.');
-        else if (!modem && terminalWindowId)
+        else if (!modem && terminalWindowId) {
+            console.log('test 2');
             ipcRenderer.sendTo(
                 terminalWindowId,
                 'terminal-data',
                 'Open a device to activate the terminal.'
             );
+        }
     }, [modem, availablePorts, selectedSerialport, port]);
 
     useEffect(() => {
         if (!port) return;
 
         port.onmessage = e => {
-            if (!modem) {
-                if (port)
-                    port.postMessage('Open a device to activate the terminal.');
-                else if (terminalWindowId)
-                    ipcRenderer.sendTo(
-                        terminalWindowId,
-                        'terminal-data',
-                        'Open a device to activate the terminal.'
-                    );
-            } else if (!modem?.write(e.data))
-                if (port)
-                    port.postMessage(
-                        'Command rejected while processing previous command'
-                    );
-                else if (terminalWindowId)
-                    ipcRenderer.sendTo(
-                        terminalWindowId,
-                        'terminal-data',
-                        'Command rejected while processing previous command'
-                    );
+            if (!modem)
+                port.postMessage('Open a device to activate the terminal.');
+            else if (!modem?.write(e.data))
+                port.postMessage(
+                    'Command rejected while processing previous command'
+                );
         };
     }, [port, modem]);
+
+    const handleTerminalData = useCallback(
+        (event, data) => {
+            if (!modem) {
+                console.log('Test 1');
+                ipcRenderer.sendTo(
+                    event.senderId,
+                    'terminal-data',
+                    'Open a device to activate the terminal.'
+                );
+            } else if (!modem?.write(data))
+                ipcRenderer.sendTo(
+                    event.senderId,
+                    'terminal-data',
+                    'Command rejected while processing previous command'
+                );
+        },
+        [modem]
+    );
+
+    useEffect(() => {
+        ipcRenderer.on('terminal-data', handleTerminalData);
+
+        return () => {
+            ipcRenderer.removeListener('terminal-data', handleTerminalData);
+        };
+    }, [modem, handleTerminalData]);
 
     useEffect(() => {
         ipcRenderer.on('new-window-port', event => {
