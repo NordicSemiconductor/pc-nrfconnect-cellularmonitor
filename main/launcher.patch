@@ -1,0 +1,22 @@
+diff --git a/src/main/index.js b/src/main/index.js
+index 7527403..eac4075 100644
+--- a/src/main/index.js
++++ b/src/main/index.js
+@@ -69,6 +69,17 @@ electronApp.on('window-all-closed', () => {
+     electronApp.quit();
+ });
+ 
++ipcMain.handle('require', (event, bundle) => {
++    try {
++        // eslint-disable-next-line global-require
++        require(bundle);
++        return true;
++    } catch (error) {
++        console.log(error);
++        return false;
++    }
++});
++
+ ipcMain.on('open-app-launcher', () => {
+     windows.openLauncherWindow();
+ });

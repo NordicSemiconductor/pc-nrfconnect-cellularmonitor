@@ -11,6 +11,7 @@ import {
     Dropdown,
     getAppDir,
     Group,
+    logger,
     SidePanel,
     truncateMiddle,
 } from 'pc-nrfconnect-shared';
@@ -20,6 +21,12 @@ import { createModem, Modem, Response } from '../../features/modem/modem';
 import { getAvailableSerialPorts } from '../../features/tracing/traceSlice';
 
 const appDir = getAppDir();
+
+const loadMainBundle = async () => {
+    if (await ipcRenderer.invoke('require', `${appDir}/dist/main-bundle`)) {
+        logger.info('Successfully loaded main bundle');
+    }
+};
 
 const openTerminal = () => {
     ipcRenderer.send('open-app', {
@@ -33,7 +40,7 @@ let terminalWindowId: number;
 
 const openTerminalLight = async () => {
     const url = `file://${appDir}/terminal-light/index.html`;
-    terminalWindowId = await ipcRenderer.invoke('open-app-light', url);
+    terminalWindowId = await ipcRenderer.invoke('open-app-light2', url);
 };
 
 const sendTerminalData = () => {
@@ -187,6 +194,10 @@ export const TerminalSidePanel = () => {
             </button>
             <button type="button" onClick={sendTerminalData}>
                 Send terminal data
+            </button>
+
+            <button type="button" onClick={loadMainBundle}>
+                Load main bundle
             </button>
         </SidePanel>
     );
