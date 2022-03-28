@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useResizeDetector } from 'react-resize-detector';
 import * as ansi from 'ansi-escapes';
@@ -8,10 +8,29 @@ import { XTerm } from 'xterm-for-react';
 import nrfTerminalCommander from '../src/components/Terminal/terminalCommander';
 import useFitAddon from '../src/hooks/useFitAddon';
 
-const Main = () => {
-    const xtermRef = useRef<XTerm | null>(null);
+ipcRenderer.once('parent-id', (_, id) => {
+    const commandCallback = (command: string) => {
+        ipcRenderer.sendTo(id, 'terminal-data', command?.trim());
+    };
 
-    const [parentId, setParentId] = useState<number>();
+    const onModemData = (listener: (data: string) => void) => {
+        ipcRenderer.on('terminal-data', (ev, data) => listener(data));
+    };
+
+    ReactDOM.render(
+        <Main commandCallback={commandCallback} onModemData={onModemData} />,
+        document.getElementById('app')
+    );
+});
+
+const Main = ({
+    commandCallback,
+    onModemData,
+}: {
+    commandCallback: (command: string) => void;
+    onModemData: (listener: (line: string) => void) => void;
+}) => {
+    const xtermRef = useRef<XTerm | null>(null);
     const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
@@ -22,44 +41,39 @@ const Main = () => {
     }, []);
 
     const writeln = useCallback(
-        (line: string | Uint8Array) => {
+        (line: string) => {
             xtermRef.current?.terminal.write(ansi.eraseLine + ansi.cursorTo(0));
             xtermRef.current?.terminal.write(line);
             prompt();
         },
         [prompt]
     );
+
+    const handleUserInputLine = useCallback(
+        (line: string) => {
+            if (line === '\n') return;
+            if (line.startsWith('AT')) {
+                commandCallback(line.trim());
+            } else {
+                writeln('Invalid command format');
+            }
+        },
+        [commandCallback, writeln]
+    );
+
+    useEffect(() => {
+        nrfTerminalCommander.onRunCommand(handleUserInputLine);
+    }, [handleUserInputLine]);
+
+    useEffect(() => {
+        onModemData(writeln);
+    }, [writeln, onModemData]);
+
     useEffect(() => {
         xtermRef.current?.terminal.write(
             `AT[1]> ${nrfTerminalCommander.userInput}`
         );
     }, []);
-
-    const handleUserInputLine = useCallback(
-        (line: string) => {
-            if (!parentId) return;
-            if (line === '\n') return; // check if this ever happens
-            if (line.startsWith('AT'))
-                ipcRenderer.sendTo(parentId, 'terminal-data', line.trim());
-            else {
-                writeln('Invalid command format');
-            }
-        },
-        [parentId, writeln]
-    );
-
-    useEffect(() => {
-        if (parentId)
-            return nrfTerminalCommander.onRunCommand(handleUserInputLine);
-    }, [parentId, handleUserInputLine]);
-
-    useEffect(() => {
-        ipcRenderer.on('parent-id', (_, id) => setParentId(id));
-    }, []);
-
-    useEffect(() => {
-        ipcRenderer.on('terminal-data', (_, data) => writeln(data));
-    }, [writeln]);
 
     const terminalOptions = {
         convertEol: true,
@@ -80,5 +94,3 @@ const Main = () => {
         </div>
     );
 };
-
-ReactDOM.render(<Main />, document.getElementById('app'));

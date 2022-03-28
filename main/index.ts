@@ -1,32 +1,31 @@
-import {
-    BrowserWindow,
-    BrowserWindowConstructorOptions,
-    ipcMain,
-    shell,
-} from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 
-shell.beep();
+ipcMain.handle('open-terminal-app', (event, appUrl: string) => {
+    const senderWindow = BrowserWindow.getAllWindows().find(
+        window => window.webContents.id === event.sender.id
+    );
+    const terminalWindow = openWindow(appUrl, senderWindow);
+    senderWindow?.once('close', () => terminalWindow.close());
 
-console.log('Loaded main bundle from CM');
-
-ipcMain.handle('open-app-light2', (_, appUrl: string) => {
-    const newWindow = openWindow({}, appUrl);
-    return newWindow.webContents.id;
+    return terminalWindow.webContents.id;
 });
 
-export const foo = 3;
-const windows: BrowserWindow[] = [];
-
-const openWindow = (options: BrowserWindowConstructorOptions, url: string) => {
+const openWindow = (url: string, parent?: BrowserWindow) => {
     const window = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
         },
-        ...options,
+        backgroundColor: '#263238',
+        autoHideMenuBar: true,
+        title: 'Terminal',
     });
-    window.loadURL(url);
-    windows.push(window);
+    window.loadFile(url);
+
+    window.on('ready-to-show', () =>
+        window.webContents.send('parent-id', parent?.webContents.id)
+    );
+
     return window;
 };

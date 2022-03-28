@@ -39,14 +39,14 @@ const openTerminal = () => {
 let terminalWindowId: number;
 
 const openTerminalLight = async () => {
-    const url = `file://${appDir}/terminal-light/index.html`;
-    terminalWindowId = await ipcRenderer.invoke('open-app-light', url);
+    const file = `${appDir}/terminal-light/index.html`;
+    terminalWindowId = await ipcRenderer.invoke('open-terminal-app', file);
 };
 
 const sendTerminalData = () => {
     let delay = 0;
     TERMINAL_OUTPUT.forEach(line => {
-        delay += Math.floor(Math.random() * 200 + 50);
+        delay += Math.floor(Math.random() * 50 + 25);
         setTimeout(() => {
             ipcRenderer.sendTo(terminalWindowId, 'terminal-data', line);
         }, delay);

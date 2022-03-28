@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "esbuild  ./index.tsx --bundle --target=chrome89 --sourcemap --outfile=bundle.js --external:fs --external:electron --watch",
+    "start": "esbuild  ./index.tsx --bundle --target=chrome89 --sourcemap --outfile=../dist/terminal-bundle.js --external:fs --external:electron --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
