@@ -5,7 +5,8 @@
  */
 
 import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { ipcRenderer } from 'electron';
+import { App, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -16,12 +17,19 @@ import {
     PowerEstimationSidePanel,
     TraceCollectorSidePanel,
 } from './components/SidePanel/SidePanel';
-import { TerminalSidePanel } from './components/Terminal/SidePanel';
+import Terminal from './components/Terminal/Main';
+import TerminalSidePanel from './components/Terminal/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';
 
 logLibVersions();
+
+ipcRenderer
+    .invoke('require', `${getAppDir()}/dist/main-bundle`)
+    .then(succeeded => {
+        if (succeeded) logger.info('Successfully loaded main bundle');
+    });
 
 export default () => (
     <App
@@ -42,7 +50,7 @@ export default () => (
             },
             {
                 name: 'Terminal',
-                Main: PowerEstimation,
+                Main: Terminal,
                 SidePanel: TerminalSidePanel,
             },
         ]}

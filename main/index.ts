@@ -1,16 +1,21 @@
 import { BrowserWindow, ipcMain } from 'electron';
 
-ipcMain.handle('open-terminal-app', (event, appUrl: string) => {
+ipcMain.handle('open-popout', (event, appUrl: string) => {
     const senderWindow = BrowserWindow.getAllWindows().find(
         window => window.webContents.id === event.sender.id
     );
-    const terminalWindow = openWindow(appUrl, senderWindow);
+    if (!senderWindow) return;
+
+    const terminalWindow = openWindow(appUrl, event.sender.id);
+    terminalWindow.once('close', () =>
+        event.sender.send('popout-closed', terminalWindow.webContents.id)
+    );
     senderWindow?.once('close', () => terminalWindow.close());
 
     return terminalWindow.webContents.id;
 });
 
-const openWindow = (url: string, parent?: BrowserWindow) => {
+const openWindow = (url: string, parent?: number) => {
     const window = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
@@ -24,7 +29,7 @@ const openWindow = (url: string, parent?: BrowserWindow) => {
     window.loadFile(url);
 
     window.on('ready-to-show', () =>
-        window.webContents.send('parent-id', parent?.webContents.id)
+        window.webContents.send('parent-id', parent)
     );
 
     return window;

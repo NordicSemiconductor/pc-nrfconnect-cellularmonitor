@@ -1,29 +1,21 @@
-/*
- * Copyright (c) 2015 Nordic Semiconductor ASA
- *
- * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
- */
-
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { useResizeDetector } from 'react-resize-detector';
-import * as c from 'ansi-colors';
-import * as ansi from 'ansi-escapes';
-import { colors } from 'pc-nrfconnect-shared';
+import { cursorTo, eraseLine } from 'ansi-escapes';
 import { XTerm } from 'xterm-for-react';
 
-import { Response } from '../../features/modem/modem';
-import { getModem } from '../../features/modem/modemSlice';
 import useFitAddon from '../../hooks/useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
 
-import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-const TerminalComponent = () => {
+export const Terminal = ({
+    commandCallback,
+    onModemData,
+}: {
+    commandCallback: (command: string) => string | undefined;
+    onModemData: (listener: (line: string) => void) => void;
+}) => {
     const xtermRef = useRef<XTerm | null>(null);
-
-    const modem = useSelector(getModem);
     const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
@@ -34,66 +26,44 @@ const TerminalComponent = () => {
     }, []);
 
     const writeln = useCallback(
-        (line: string | Uint8Array) => {
-            xtermRef.current?.terminal.write(ansi.eraseLine + ansi.cursorTo(0));
+        (line: string) => {
+            xtermRef.current?.terminal.write(eraseLine + cursorTo(0));
             xtermRef.current?.terminal.write(line);
             prompt();
         },
         [prompt]
     );
 
-    const handleModemResponse = useCallback(
-        (lines: Response, err?: string) => {
-            const color = err ? c.red : c.yellow;
-            lines.forEach(l => {
-                writeln(color(l));
-            });
-        },
-        [writeln]
-    );
-
-    useEffect(() => {
-        if (!modem) {
-            writeln(c.yellow('Open a device to activate the terminal.'));
-            return;
-        }
-        xtermRef.current?.terminal.clear();
-        const unregisterOnLine = modem.onLine(line => writeln(c.blue(line)));
-        const unregisterOnResponse = modem.onResponse(handleModemResponse);
-        return () => {
-            unregisterOnLine();
-            unregisterOnResponse();
-        };
-    }, [modem, writeln, handleModemResponse]);
-
     const handleUserInputLine = useCallback(
         (line: string) => {
-            if (line === '\n') return; // check if this ever happens
-            if (modem != null && line.startsWith('AT')) {
-                const commandWasAccepted = modem.write(line.trim());
-                if (!commandWasAccepted) {
-                    writeln(
-                        c.red(
-                            'Command rejected while processing previous command'
-                        )
-                    );
-                }
-            }
+            if (line === '\n') return;
+            if (line.startsWith('AT')) {
+                const ret = commandCallback(line.trim());
+                if (ret) writeln(ret);
+            } else writeln('Invalid command format');
         },
-        [modem, writeln]
+        [commandCallback, writeln]
     );
 
     useEffect(() => {
-        if (modem) {
-            return nrfTerminalCommander.onRunCommand(handleUserInputLine);
-        }
-    }, [modem, handleUserInputLine]);
+        nrfTerminalCommander.onRunCommand(handleUserInputLine);
+    }, [handleUserInputLine]);
+
+    useEffect(() => {
+        onModemData(writeln);
+    }, [writeln, onModemData]);
+
+    useEffect(() => {
+        xtermRef.current?.terminal.write(
+            `AT[1]> ${nrfTerminalCommander.userInput}`
+        );
+    }, []);
 
     const terminalOptions = {
         convertEol: true,
         theme: {
-            foreground: colors.gray50,
-            background: colors.gray900,
+            foreground: '#eceff1',
+            background: '#263238',
         },
     };
 
@@ -102,11 +72,11 @@ const TerminalComponent = () => {
             <XTerm
                 ref={xtermRef}
                 addons={[fitAddon, nrfTerminalCommander]}
-                className="terminal-container"
+                className="terminal-window"
                 options={terminalOptions}
             />
         </div>
     );
 };
 
-export default TerminalComponent;
+export default Terminal;

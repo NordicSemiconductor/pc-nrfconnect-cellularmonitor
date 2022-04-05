@@ -6,10 +6,11 @@
 
 @import '~pc-xterm-lib/styles';
 
-.terminal-container {
+.terminal-window {
     height: 100%;
 
     .xterm.terminal {
-        padding: 0.25rem;
+        width: 100%;
+        height: 100%;
     }
 }
