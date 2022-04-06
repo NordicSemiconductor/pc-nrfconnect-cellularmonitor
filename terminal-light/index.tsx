@@ -10,6 +10,8 @@ import { ipcRenderer } from 'electron';
 
 import Terminal from '../src/components/Terminal/Terminal';
 
+import './index.css';
+
 ipcRenderer.once('parent-id', (_, id) => {
     const commandCallback = (command: string) =>
         ipcRenderer.sendTo(id, 'terminal-data', command?.trim()) as undefined;

@@ -6,7 +6,7 @@ import { XTerm } from 'xterm-for-react';
 import useFitAddon from '../../hooks/useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
 
-import './terminal.scss';
+import './terminal.css';
 
 export const Terminal = ({
     commandCallback,

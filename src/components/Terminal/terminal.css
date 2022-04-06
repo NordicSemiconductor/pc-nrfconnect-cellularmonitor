@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-@import '~pc-xterm-lib/styles';
 
 .terminal-window {
     height: 100%;
+}
 
-    .xterm.terminal {
-        width: 100%;
-        height: 100%;
-    }
+.terminal-window .xterm.terminal {
+    width: 100%;
+    height: 100%;
 }
