@@ -6,15 +6,18 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
+import {Button} from 'pc-nrfconnect-shared';
 
 export const PopoutPlaceholder = ({
     popoutId,
     commandCallback,
     onModemData,
+    closePopout,
 }: {
     popoutId: number;
     commandCallback: (command: string) => string | undefined;
-    onModemData: (listener: (line: string) => void) => void;
+    onModemData: (listener: (line: string) => void) => () => void;
+    closePopout: () => void;
 }) => {
     const onUserWrite = useCallback(
         (_, data) => {
@@ -25,6 +28,7 @@ export const PopoutPlaceholder = ({
     );
 
     useEffect(() => {
+        // Make sure to remove the correct version of callback from listener
         const onUserWriteTemp = onUserWrite;
         ipcRenderer.on('terminal-data', onUserWriteTemp);
 
@@ -34,12 +38,24 @@ export const PopoutPlaceholder = ({
     }, [onUserWrite]);
 
     useEffect(() => {
-        onModemData(line =>
+        const unregisterOnModemData = onModemData(line =>
             ipcRenderer.sendTo(popoutId, 'terminal-data', line)
         );
+
+        return () => {
+            unregisterOnModemData();
+        };
     }, [popoutId, onModemData]);
 
-    return <></>;
+    return (
+        <div className="collapse-popout">
+            <p>Terminal is active in a separate window.</p>
+            <Button type="button" onClick={closePopout}>
+                Close separate terminal window
+                <span className="mdi mdi-arrow-collapse" />
+            </button>
+        </div>
+    );
 };
 
 export default PopoutPlaceholder;

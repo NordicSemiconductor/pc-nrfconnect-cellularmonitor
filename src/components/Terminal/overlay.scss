@@ -4,9 +4,73 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-#popout-control {
+@import '~pc-nrfconnect-shared/styles';
+
+.open-popout {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0;
+    right: 0;
     display: flex;
+    z-index: 5;
+    button {
+        display: flex;
+        height: 24px;
+        color: $gray-200;
+        background-color: $gray-900;
+        border: 1px;
+        border-style: solid;
+        border-color: $gray-200;
+        margin: 8px;
+        .mdi {
+            color: $gray-200;
+            font-size: 1.1em;
+            margin-left: 8px;
+        }
+    }
+}
+
+.collapse-popout {
+    color: $gray-700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    button {
+        display: flex;
+        height: 24px;
+        background-color: $white;
+        border: 1px;
+        border-style: solid;
+        border-color: $gray-700;
+        z-index: 6;
+        .mdi {
+            color: $gray-700;
+            font-size: 1.1em;
+            margin-left: 8px;
+        }
+    }
+}
+
+@mixin terminalScrollbar() {
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-corner {
+        width: 14px;
+        height: 14px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $gray-100;
+        border-radius: 14px;
+        border: 5px solid rgb(38 50 56);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: $gray-300;
+    }
+}
+
+.terminal-window .xterm-viewport {
+    overflow-y: overlay;
+    @include terminalScrollbar();
 }

@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom';
 import { ipcRenderer } from 'electron';
 
 import Terminal from '../src/components/Terminal/Terminal';
+import Header from './NavBar';
 
 import './index.css';
 
@@ -16,14 +17,24 @@ ipcRenderer.once('parent-id', (_, id) => {
     const commandCallback = (command: string) =>
         ipcRenderer.sendTo(id, 'terminal-data', command?.trim()) as undefined;
 
-    const onModemData = (listener: (data: string) => void) =>
+    const onModemData = (listener: (data: string) => void) => {
         ipcRenderer.on('terminal-data', (ev, data) => listener(data));
+        return () => {};
+    };
+
+    ipcRenderer.on('close-popout', () => {
+        ipcRenderer.sendTo(id, 'popout-closed');
+        window.close();
+    });
 
     ReactDOM.render(
-        <Terminal
-            commandCallback={commandCallback}
-            onModemData={onModemData}
-        />,
+        <>
+            <Header />
+            <Terminal
+                commandCallback={commandCallback}
+                onModemData={onModemData}
+            />
+        </>,
         document.getElementById('app')
     );
 });

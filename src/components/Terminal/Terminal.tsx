@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2015 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import { cursorTo, eraseLine } from 'ansi-escapes';
@@ -13,7 +19,7 @@ export const Terminal = ({
     onModemData,
 }: {
     commandCallback: (command: string) => string | undefined;
-    onModemData: (listener: (line: string) => void) => void;
+    onModemData: (listener: (line: string) => void) => () => void;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
     const { width, height, ref: resizeRef } = useResizeDetector();
@@ -46,11 +52,20 @@ export const Terminal = ({
     );
 
     useEffect(() => {
-        nrfTerminalCommander.onRunCommand(handleUserInputLine);
+        const unregisterOnRunCommand =
+            nrfTerminalCommander.onRunCommand(handleUserInputLine);
+
+        return () => {
+            unregisterOnRunCommand();
+        };
     }, [handleUserInputLine]);
 
     useEffect(() => {
-        onModemData(writeln);
+        const unregisterOnModemData = onModemData(writeln);
+
+        return () => {
+            unregisterOnModemData();
+        };
     }, [writeln, onModemData]);
 
     useEffect(() => {

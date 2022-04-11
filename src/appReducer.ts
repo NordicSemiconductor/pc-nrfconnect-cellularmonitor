@@ -7,8 +7,8 @@
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
-import modemReducer from './features/modem/modemSlice';
 import powerEstimationReducer from './features/powerEstimation/powerEstimationSlice';
+import terminalReducer from './features/terminal/terminalSlice';
 import traceReducer from './features/tracing/traceSlice';
 import wiresharkReducer from './features/wireshark/wiresharkSlice';
 
@@ -17,7 +17,7 @@ type AppState = ReturnType<typeof appReducer>;
 export type RootState = NrfConnectState<AppState>;
 
 const appReducer = combineReducers({
-    modem: modemReducer,
+    terminal: terminalReducer,
     trace: traceReducer,
     powerEstimation: powerEstimationReducer,
     wireshark: wiresharkReducer,

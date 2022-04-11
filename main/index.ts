@@ -7,10 +7,21 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
     if (!senderWindow) return;
 
     const terminalWindow = openWindow(appUrl, event.sender.id);
-    terminalWindow.once('close', () =>
-        event.sender.send('popout-closed', terminalWindow.webContents.id)
-    );
-    senderWindow?.once('close', () => terminalWindow.close());
+    terminalWindow.once('close', () => {
+        try {
+            event.sender.send('popout-closed', terminalWindow.webContents.id);
+        } catch {
+            // Main window is closed
+        }
+    });
+
+    senderWindow?.once('close', () => {
+        try {
+            terminalWindow.close();
+        } catch {
+            // Terminal window is closed
+        }
+    });
 
     return terminalWindow.webContents.id;
 });

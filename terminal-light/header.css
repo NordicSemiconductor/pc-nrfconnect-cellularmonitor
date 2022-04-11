@@ -1,0 +1,20 @@
+.header {
+    height: 40px;
+    display: flex;
+}
+
+.header button {
+    display: flex;
+    height: 24px;
+    background-color: var(--white);
+    border: 1px;
+    border-style: solid;
+    border-color: var(--gray-700);
+    z-index: 6;
+}
+
+.header button .mdi {
+    color: var(--gray-700);
+    font-size: 1.1em;
+    margin-left: 8px;
+}

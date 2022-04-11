@@ -4,28 +4,26 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
-import { getModem } from '../../features/modem/modemSlice';
+import {
+    getModem,
+    getPopoutId,
+    setPopoutId,
+} from '../../features/terminal/terminalSlice';
 import PopoutPlaceholder from './Popout';
 import Terminal from './Terminal';
 
 import './overlay.scss';
 
-let terminalWindowId: number;
-
-const openTerminalLight = async () => {
-    const file = `${getAppDir()}/terminal-light/index.html`;
-    terminalWindowId = await ipcRenderer.invoke('open-terminal-app', file);
-};
-
 const Main = () => {
     const modem = useSelector(getModem);
-    const [popout, setPopout] = useState<boolean>(false);
+    const popoutId = useSelector(getPopoutId);
     const modemCallbacks = useRef<(() => void)[]>([]);
+    const dispatch = useDispatch();
 
     const cleanupModemCallbacks = useCallback(() => {
         if (modemCallbacks.current.length > 0) {
@@ -34,31 +32,19 @@ const Main = () => {
         }
     }, []);
 
-    useEffect(
-        () => () => {
-            if (!modem) cleanupModemCallbacks();
-        },
-        [modem, cleanupModemCallbacks]
-    );
-
-    const setupModemCallbacks = useCallback(
-        (onLine, onResponse) => {
-            if (!modem) return;
-            cleanupModemCallbacks();
-            modemCallbacks.current.push(modem.onLine(onLine));
-            modemCallbacks.current.push(modem.onResponse(onResponse));
-        },
-        [modem, cleanupModemCallbacks]
-    );
-
-    const onModemData = useCallback(
+    const onModemData = useCallback<
+        (listener: (data: string) => void) => () => void
+    >(
         (listener: (data: string) => void) => {
-            setupModemCallbacks(
-                (line: string) => listener(line),
-                (lines: string[]) => lines.forEach(listener)
+            if (!modem) return () => {};
+            modemCallbacks.current.push(modem.onLine(listener));
+            modemCallbacks.current.push(
+                modem.onResponse(lines => lines.forEach(listener))
             );
+
+            return cleanupModemCallbacks;
         },
-        [setupModemCallbacks]
+        [modem, cleanupModemCallbacks]
     );
 
     const commandCallback = useCallback(
@@ -70,13 +56,28 @@ const Main = () => {
         [modem]
     );
 
+    const closePopout = useCallback(() => {
+        if (popoutId) ipcRenderer.sendTo(popoutId, 'close-popout');
+    }, [popoutId]);
+
+    useEffect(() => {
+        ipcRenderer.on('popout-closed', () => dispatch(setPopoutId(undefined)));
+    }, [dispatch]);
+
+    const openTerminalLight = async () => {
+        const file = `${getAppDir()}/terminal-light/index.html`;
+        const id = await ipcRenderer.invoke('open-popout', file);
+        dispatch(setPopoutId(id));
+    };
+
     return (
         <>
-            {popout ? (
+            {popoutId ? (
                 <PopoutPlaceholder
-                    popoutId={terminalWindowId}
+                    popoutId={popoutId}
                     commandCallback={commandCallback}
                     onModemData={onModemData}
+                    closePopout={closePopout}
                 />
             ) : (
                 <>
@@ -84,15 +85,13 @@ const Main = () => {
                         commandCallback={commandCallback}
                         onModemData={onModemData}
                     />
-                    <div id="popout-control">
+                    <div className="open-popout">
                         <button
                             type="button"
-                            onClick={() => {
-                                openTerminalLight();
-                                setPopout(true);
-                            }}
+                            onClick={() => openTerminalLight()}
                         >
-                            Pop out
+                            Open in separate window
+                            <span className="mdi mdi-open-in-new" />
                         </button>
                     </div>
                 </>
