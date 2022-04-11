@@ -6,7 +6,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../appReducer';
+import type { RootState } from '../../appReducer';
 import {
     getTsharkPath as getPersistedTsharkPath,
     getWiresharkPath as getPersistedWiresharkPath,
