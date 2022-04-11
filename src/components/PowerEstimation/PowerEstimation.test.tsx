@@ -76,7 +76,6 @@ describe('Power Estimation pane', () => {
         fireEvent.click(screen.getByText('Start tracing'));
         const { jsonCallback } = await callbacks;
         fetchMock.mockReject(new Error('request failed'));
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         jsonCallback!([
             {
                 onlinePowerProfiler: {
@@ -104,7 +103,6 @@ describe('Power Estimation pane', () => {
 
         const { jsonCallback } = await callbacks;
         fetchMock.mockResponse('<h1>Request was successful</h1>');
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         jsonCallback!([
             {
                 onlinePowerProfiler: {
