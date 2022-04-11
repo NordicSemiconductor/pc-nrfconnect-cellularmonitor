@@ -14,7 +14,7 @@ import {
     setDetectingTraceDb,
     setSerialPort,
 } from '../features/tracing/traceSlice';
-import { TAction } from '../thunk';
+import type { TAction } from '../thunk';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 
 export const closeDevice = (): TAction => (dispatch, getState) => {

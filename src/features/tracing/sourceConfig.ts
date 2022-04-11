@@ -10,7 +10,7 @@ import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
-import { RootState } from '../../appReducer';
+import type { RootState } from '../../appReducer';
 import { autoDetectDbRootFolder } from '../../utils/store';
 import { SourceFormat } from './formats';
 import { getManualDbFilePath } from './traceSlice';

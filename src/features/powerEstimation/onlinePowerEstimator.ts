@@ -6,7 +6,7 @@
 
 import { logger } from 'pc-nrfconnect-shared';
 
-import { TAction, TDispatch } from '../../thunk';
+import type { TAction, TDispatch } from '../../thunk';
 import {
     getData,
     setData,
