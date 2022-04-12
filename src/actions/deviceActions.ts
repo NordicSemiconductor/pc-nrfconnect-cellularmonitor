@@ -7,6 +7,7 @@
 import { SerialPort } from '@nordicsemiconductor/nrf-device-lib-js';
 import { Device, logger } from 'pc-nrfconnect-shared';
 
+import { setSelectedSerialport } from '../features/terminal/terminalSlice';
 import { stopTrace } from '../features/tracing/nrfml';
 import {
     getTaskId,
@@ -21,6 +22,7 @@ export const closeDevice = (): TAction => (dispatch, getState) => {
     logger.info('Closing device');
     dispatch(setAvailableSerialPorts([]));
     dispatch(setSerialPort(null));
+    dispatch(setSelectedSerialport(undefined));
     const taskId = getTaskId(getState());
     dispatch(stopTrace(taskId));
     dispatch(setDetectingTraceDb(false));
