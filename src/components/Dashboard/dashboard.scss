@@ -12,10 +12,6 @@
     @include scrollbars-helper($gray-100, $gray-500, $gray-500);
 }
 
-.core19-app-content .core19-main-and-log .core19-main-container {
-    margin-right: 0;
-}
-
 .dashboard {
     display: flex;
     flex-direction: column;
