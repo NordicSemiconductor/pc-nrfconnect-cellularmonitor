@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Group, truncateMiddle } from 'pc-nrfconnect-shared';
 
 import {
+    getPopoutId,
+    getSelectedSerialport as getTerminalPort,
+} from '../../features/terminal/terminalSlice';
+import {
     getAvailableSerialPorts,
     getSelectedSerialNumber,
     setSerialPort,
@@ -24,16 +28,20 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
     const serialNumber = useSelector(getSelectedSerialNumber) ?? '';
+    const terminalId = useSelector(getPopoutId);
+    const terminalPort = useSelector(getTerminalPort);
 
     const updateSerialPort = ({ value: port }: { value: string }) => {
         dispatch(setSerialPort(port));
         persistSerialPort(serialNumber, port);
     };
 
-    const dropdownItems = availablePorts.map(port => ({
-        label: truncateMiddle(port, 20, 8),
-        value: port as string,
-    }));
+    const dropdownItems = availablePorts
+        .filter(port => !(terminalId && port === terminalPort))
+        .map(port => ({
+            label: truncateMiddle(port, 20, 8),
+            value: port as string,
+        }));
 
     return (
         <Group heading="Serialport trace capture">
