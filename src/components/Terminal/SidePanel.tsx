@@ -56,14 +56,6 @@ const TerminalSidePanel = () => {
         );
     });
 
-    useEffect(() => {
-        if (popoutId)
-            ipcRenderer.sendTo(popoutId, 'terminal-serialport', {
-                availablePorts,
-                selectedSerialport,
-            });
-    }, [popoutId, availablePorts, selectedSerialport]);
-
     const dropdownItems = useMemo<DropdownItem[]>(() => {
         if (availablePorts.length > 0)
             return [
@@ -77,6 +69,14 @@ const TerminalSidePanel = () => {
             ] as DropdownItem[];
         return [];
     }, [availablePorts, taskId, tracePort]);
+
+    useEffect(() => {
+        if (popoutId)
+            ipcRenderer.sendTo(popoutId, 'terminal-serialport', {
+                dropdownItems,
+                selectedSerialport,
+            });
+    }, [popoutId, dropdownItems, selectedSerialport]);
 
     return (
         <SidePanel className="side-panel">
