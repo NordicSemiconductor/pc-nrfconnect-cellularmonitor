@@ -22,7 +22,7 @@ export const Terminal = ({
     onModemData: (listener: (line: string) => void) => () => void;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
-    const { width, height, ref: resizeRef } = useResizeDetector();
+    const { width, height } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
@@ -83,14 +83,12 @@ export const Terminal = ({
     };
 
     return (
-        <div ref={resizeRef} style={{ height: '100%' }}>
-            <XTerm
-                ref={xtermRef}
-                addons={[fitAddon, nrfTerminalCommander]}
-                className="terminal-window"
-                options={terminalOptions}
-            />
-        </div>
+        <XTerm
+            ref={xtermRef}
+            addons={[fitAddon, nrfTerminalCommander]}
+            className="terminal-window"
+            options={terminalOptions}
+        />
     );
 };
 
