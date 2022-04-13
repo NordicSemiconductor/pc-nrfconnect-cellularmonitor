@@ -12,6 +12,7 @@ import { XTerm } from 'xterm-for-react';
 import useFitAddon from '../../hooks/useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
 
+import 'xterm/css/xterm.css';
 import './terminal.css';
 
 export const Terminal = ({
@@ -22,7 +23,7 @@ export const Terminal = ({
     onModemData: (listener: (line: string) => void) => () => void;
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
-    const { width, height } = useResizeDetector();
+    const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
     const prompt = useCallback(() => {
@@ -83,12 +84,14 @@ export const Terminal = ({
     };
 
     return (
-        <XTerm
-            ref={xtermRef}
-            addons={[fitAddon, nrfTerminalCommander]}
-            className="terminal-window"
-            options={terminalOptions}
-        />
+        <div ref={resizeRef} style={{ height: '100%' }}>
+            <XTerm
+                ref={xtermRef}
+                addons={[fitAddon, nrfTerminalCommander]}
+                className="terminal-window"
+                options={terminalOptions}
+            />
+        </div>
     );
 };
 
