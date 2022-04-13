@@ -5,41 +5,8 @@
  */
 
 import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { logger } from 'pc-nrfconnect-shared';
 
-import appReducer from './appReducer';
-import Dashboard from './components/Dashboard/Dashboard';
-import DeviceSelector from './components/DeviceSelector';
-import DocumentationSections from './components/DocumentationSection';
-import PowerEstimation from './components/PowerEstimation/PowerEstimation';
-import {
-    PowerEstimationSidePanel,
-    TraceCollectorSidePanel,
-} from './components/SidePanel/SidePanel';
-import logLibVersions from './utils/logLibVersions';
+logger.info('X');
 
-import './index.scss';
-
-logLibVersions();
-
-export default () => (
-    <App
-        reportUsageData
-        appReducer={appReducer}
-        deviceSelect={<DeviceSelector />}
-        sidePanel={<div />}
-        panes={[
-            {
-                name: 'Trace Collector',
-                Main: Dashboard,
-                SidePanel: TraceCollectorSidePanel,
-            },
-            {
-                name: 'Power Estimation',
-                Main: PowerEstimation,
-                SidePanel: PowerEstimationSidePanel,
-            },
-        ]}
-        documentation={DocumentationSections}
-    />
-);
+export default () => <h1>{new Date().toISOString()}</h1>;
