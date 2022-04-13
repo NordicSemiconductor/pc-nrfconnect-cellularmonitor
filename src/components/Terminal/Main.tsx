@@ -7,7 +7,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipcRenderer } from 'electron';
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDir, PaneProps } from 'pc-nrfconnect-shared';
 
 import {
     getModem,
@@ -19,7 +19,7 @@ import Terminal from './Terminal';
 
 import './overlay.scss';
 
-const Main = () => {
+const Main = ({ active }: PaneProps) => {
     const modem = useSelector(getModem);
     const popoutId = useSelector(getPopoutId);
     const modemCallbacks = useRef<(() => void)[]>([]);
@@ -81,10 +81,12 @@ const Main = () => {
                 />
             ) : (
                 <>
-                    <Terminal
-                        commandCallback={commandCallback}
-                        onModemData={onModemData}
-                    />
+                    {active && (
+                        <Terminal
+                            commandCallback={commandCallback}
+                            onModemData={onModemData}
+                        />
+                    )}
                     <div className="open-popout">
                         <button
                             type="button"
