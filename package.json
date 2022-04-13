@@ -33,7 +33,7 @@
     },
     "devDependencies": {
         "electron-store": "8.0.1",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v5.17.0",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#af739fa",
         "react": "16.13.1",
         "react-dom": "16.13.1"
     },
