@@ -14,6 +14,7 @@ import {
     getPopoutId,
     setPopoutId,
 } from '../../features/terminal/terminalSlice';
+import { getPopoutTerminal, setPopoutTerminal } from '../../utils/store';
 import PopoutPlaceholder from './Popout';
 import Terminal from './Terminal';
 
@@ -61,14 +62,22 @@ const Main = ({ active }: PaneProps) => {
     }, [popoutId]);
 
     useEffect(() => {
-        ipcRenderer.on('popout-closed', () => dispatch(setPopoutId(undefined)));
+        ipcRenderer.on('popout-closed', () => {
+            setPopoutTerminal(false);
+            dispatch(setPopoutId(undefined));
+        });
     }, [dispatch]);
 
-    const openTerminalLight = async () => {
+    const openTerminalLight = useCallback(async () => {
         const file = `${getAppDir()}/terminal-light/index.html`;
         const id = await ipcRenderer.invoke('open-popout', file);
         dispatch(setPopoutId(id));
-    };
+        setPopoutTerminal(true);
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (getPopoutTerminal()) openTerminalLight();
+    }, [openTerminalLight]);
 
     return (
         <>

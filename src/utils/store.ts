@@ -21,6 +21,7 @@ const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
 const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
 const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
+const POPOUT_TERMINAL = 'popoutTerminal';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
@@ -30,6 +31,7 @@ interface StoreSchema {
     [SERIALPORTS]: DevicePort;
     [COLLAPSE_POWER_SECTION]: boolean;
     [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
+    [POPOUT_TERMINAL]: boolean;
 }
 
 const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
@@ -91,3 +93,8 @@ export const setCollapseTraceDetailsSection = (
         COLLAPSE_TRACE_DETAILS_SECTION,
         collapseTraceDetailsSection
     );
+
+export const getPopoutTerminal = () =>
+    store<StoreSchema>().get(POPOUT_TERMINAL, false);
+export const setPopoutTerminal = (popoutTerminal: boolean) =>
+    store<StoreSchema>().set(POPOUT_TERMINAL, popoutTerminal);
