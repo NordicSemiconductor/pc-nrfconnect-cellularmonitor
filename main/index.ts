@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 
 ipcMain.handle('open-popout', (event, appUrl: string) => {
     const senderWindow = BrowserWindow.getAllWindows().find(
@@ -15,7 +15,7 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
         }
     });
 
-    senderWindow?.once('close', () => {
+    const closeTerminal = () => {
         if (!terminalWindow) return;
         try {
             terminalWindow.removeAllListeners();
@@ -23,6 +23,17 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
         } catch {
             // Terminal window is closed
         }
+    };
+
+    const onReload = (focusedWindowId: number) => {
+        if (focusedWindowId === senderWindow.webContents.id) closeTerminal();
+    };
+
+    app.on('reload', onReload);
+
+    senderWindow?.once('close', () => {
+        app.removeListener('reload', onReload);
+        closeTerminal();
     });
 
     return terminalWindow.webContents.id;
