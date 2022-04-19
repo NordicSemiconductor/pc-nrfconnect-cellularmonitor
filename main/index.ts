@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2015 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { app, BrowserWindow, ipcMain } from 'electron';
 
 ipcMain.handle('open-popout', (event, appUrl: string) => {
@@ -29,9 +35,11 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
         if (focusedWindowId === senderWindow.webContents.id) closeTerminal();
     };
 
+    // @ts-expect-errorts-ignore Custom event
     app.on('reload', onReload);
 
     senderWindow?.once('close', () => {
+        // @ts-expect-errorts-ignore Custom event
         app.removeListener('reload', onReload);
         closeTerminal();
     });
