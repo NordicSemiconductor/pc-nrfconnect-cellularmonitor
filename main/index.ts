@@ -16,7 +16,9 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
     });
 
     senderWindow?.once('close', () => {
+        if (!terminalWindow) return;
         try {
+            terminalWindow.removeAllListeners();
             terminalWindow.close();
         } catch {
             // Terminal window is closed
