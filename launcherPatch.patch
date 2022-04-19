@@ -1,0 +1,34 @@
+diff --git a/src/main/index.js b/src/main/index.js
+index c2f2269..ea97939 100644
+--- a/src/main/index.js
++++ b/src/main/index.js
+@@ -75,6 +75,17 @@ electronApp.on('window-all-closed', () => {
+     electronApp.quit();
+ });
+ 
++ipcMain.handle('require', (event, bundle) => {
++    try {
++        // eslint-disable-next-line global-require
++        require(bundle);
++        return true;
++    } catch (error) {
++        console.log(error);
++        return false;
++    }
++});
++
+ ipcMain.on('open-app-launcher', () => {
+     windows.openLauncherWindow();
+ });
+diff --git a/src/main/menu.js b/src/main/menu.js
+index d46f602..c532328 100644
+--- a/src/main/menu.js
++++ b/src/main/menu.js
+@@ -49,6 +49,7 @@ function createMenu(app) {
+                     accelerator: 'CmdOrCtrl+R',
+                     click: (item, focusedWindow) => {
+                         if (focusedWindow) {
++                            app.emit('reload', focusedWindow.webContents.id);
+                             focusedWindow.reload();
+                         }
+                     },
