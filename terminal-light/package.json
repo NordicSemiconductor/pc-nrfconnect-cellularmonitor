@@ -2,14 +2,15 @@
   "name": "terminal-light",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
-    "start": "esbuild  ./index.tsx --bundle --target=chrome89 --sourcemap --outfile=../dist/terminal-bundle.js --external:fs --external:electron --watch",
+    "start": "node esbuild",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "esbuild": "^0.14.27"
+    "esbuild": "^0.14.27",
+    "esbuild-sass-plugin": "^2.2.6"
   }
 }
