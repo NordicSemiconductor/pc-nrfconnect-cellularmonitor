@@ -22,10 +22,7 @@ ipcRenderer.once('parent-id', (_, id) => {
         return () => {};
     };
 
-    ipcRenderer.on('close-popout', () => {
-        ipcRenderer.sendTo(id, 'popout-closed');
-        window.close();
-    });
+    ipcRenderer.on('close-popout', () => window.close());
 
     ReactDOM.render(
         <>
