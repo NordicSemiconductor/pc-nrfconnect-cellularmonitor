@@ -51,26 +51,3 @@
         }
     }
 }
-
-@mixin terminalScrollbar() {
-    &::-webkit-scrollbar,
-    &::-webkit-scrollbar-corner {
-        width: 14px;
-        height: 14px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: $gray-100;
-        border-radius: 14px;
-        border: 5px solid rgb(38 50 56);
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background: $gray-300;
-    }
-}
-
-.terminal-window .xterm-viewport {
-    overflow-y: overlay;
-    @include terminalScrollbar();
-}

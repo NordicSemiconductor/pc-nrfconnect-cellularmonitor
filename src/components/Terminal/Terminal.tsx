@@ -13,7 +13,7 @@ import useFitAddon from '../../hooks/useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
-import './terminal.css';
+import './terminal.scss';
 
 export const Terminal = ({
     commandCallback,
