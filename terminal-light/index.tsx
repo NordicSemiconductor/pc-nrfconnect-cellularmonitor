@@ -9,7 +9,6 @@ import ReactDOM from 'react-dom';
 import { ipcRenderer } from 'electron';
 
 import Terminal from '../src/components/Terminal/Terminal';
-import Header from './NavBar';
 
 import './index.css';
 
@@ -26,7 +25,6 @@ ipcRenderer.once('parent-id', (_, id) => {
 
     ReactDOM.render(
         <>
-            <Header />
             <Terminal
                 commandCallback={commandCallback}
                 onModemData={onModemData}
