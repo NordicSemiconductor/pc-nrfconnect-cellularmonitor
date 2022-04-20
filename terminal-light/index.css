@@ -1,8 +1,11 @@
-
+/*
+ * Copyright (c) 2015 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
 
 :root {
     --nordic-blue: blue;
-
 
     --nordic-blue: #00a9ce;
     --blue-slate: #0033a0;
@@ -21,7 +24,7 @@
     --gray-700: #455a64;
     --gray-800: #37474f;
     --gray-900: #263238;
-    
+
     --red: #f44336;
     --indigo: #3f51b5;
     --amber: #ffc107;
@@ -31,13 +34,14 @@
     --orange: #ff9800;
     --lime: #cddc39;
     --pink: #e91e63;
-
 }
 
 body {
     background-color: var(--gray-900);
     margin: 0;
 }
-html, body, #app {
+html,
+body,
+#app {
     height: 100%;
 }
