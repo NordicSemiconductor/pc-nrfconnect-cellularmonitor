@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ipcRenderer } from 'electron';
 import {
     Dropdown,
     DropdownItem,
@@ -18,7 +17,6 @@ import {
 import { createModem } from '../../features/terminal/modem';
 import {
     getModem,
-    getPopoutId,
     getSelectedSerialport,
     setModem,
     setSelectedSerialport,
@@ -33,7 +31,6 @@ const TerminalSidePanel = () => {
     const availablePorts = useSelector(getAvailableSerialPorts);
     const modem = useSelector(getModem);
     const selectedSerialport = useSelector(getSelectedSerialport);
-    const popoutId = useSelector(getPopoutId);
     const taskId = useSelector(getTaskId);
     const tracePort = useSelector(getSerialPort);
     const dispatch = useDispatch();
@@ -50,12 +47,6 @@ const TerminalSidePanel = () => {
         dispatch(setSelectedSerialport(portPath));
     };
 
-    useEffect(() => {
-        ipcRenderer.on('terminal-serialport', (_, data) =>
-            updateSerialPort(data)
-        );
-    });
-
     const dropdownItems = useMemo<DropdownItem[]>(() => {
         if (availablePorts.length > 0)
             return [
@@ -70,17 +61,9 @@ const TerminalSidePanel = () => {
         return [];
     }, [availablePorts, taskId, tracePort]);
 
-    useEffect(() => {
-        if (popoutId)
-            ipcRenderer.sendTo(popoutId, 'terminal-serialport', {
-                dropdownItems,
-                selectedSerialport,
-            });
-    }, [popoutId, dropdownItems, selectedSerialport]);
-
     return (
         <SidePanel className="side-panel">
-            {!popoutId && availablePorts?.length > 0 && (
+            {availablePorts?.length > 0 && (
                 <Group heading="Serialport trace capture">
                     <Dropdown
                         onSelect={updateSerialPort}
