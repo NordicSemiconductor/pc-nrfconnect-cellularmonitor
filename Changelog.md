@@ -1,9 +1,16 @@
-## 0.3.2-pre1
+## 0.3.2 - 2022-04-22
+
+### Added
+
+-   Trace database for modem firmware 1.2.7.
 
 ### Changed
 
--   Improve possibly erroneous tshark log messages.
--   Added 1.2.7 firmware trace database.
+-   Improve erroneous tshark log messages.
+
+### Fixed
+
+-   Some Linux segfaults.
 
 ## 0.3.1 - 2022-02-21
 
