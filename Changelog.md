@@ -11,6 +11,7 @@
 ### Fixed
 
 -   Some Linux segfaults.
+-   Did not display all serialport devices.
 
 ## 0.3.1 - 2022-02-21
 
