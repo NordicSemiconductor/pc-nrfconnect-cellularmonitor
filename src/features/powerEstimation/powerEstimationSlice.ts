@@ -6,8 +6,8 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../appReducer';
-import { OnlinePowerEstimatorParams } from './onlinePowerEstimator';
+import type { RootState } from '../../appReducer';
+import type { OnlinePowerEstimatorParams } from './onlinePowerEstimator';
 
 interface PowerEstimationState {
     data: OnlinePowerEstimatorParams | null;

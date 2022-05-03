@@ -6,14 +6,14 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../../appReducer';
+import type { RootState } from '../../appReducer';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
     setManualDbFilePath as setPersistedManualDbFilePath,
 } from '../../utils/store';
 import { TraceFormat } from './formats';
-import { TaskId } from './nrfml';
+import type { TaskId } from './nrfml';
 
 export interface TraceProgress {
     format: TraceFormat;

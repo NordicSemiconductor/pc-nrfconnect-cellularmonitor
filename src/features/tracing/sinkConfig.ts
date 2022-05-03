@@ -13,7 +13,7 @@ import {
 import path from 'path';
 import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
-import { RootState } from '../../appReducer';
+import type { RootState } from '../../appReducer';
 import { defaultSharkPath, findTshark } from '../wireshark/wireshark';
 import { getTsharkPath, getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';
