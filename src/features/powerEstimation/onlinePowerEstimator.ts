@@ -75,9 +75,7 @@ const getHtml = (body: FormData, url: string) =>
         method: 'post',
         body,
     })
-        .then(response => {
-            return response.text();
-        })
+        .then(response => response.text())
         .catch(err => {
             logger.error(
                 `Request to ${url} failed. Check network connection. Error: ${err.message}`

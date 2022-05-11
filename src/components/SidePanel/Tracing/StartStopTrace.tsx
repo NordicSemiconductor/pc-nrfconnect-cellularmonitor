@@ -29,28 +29,24 @@ export default ({ traceFormats = [] }: StartStopProps) => {
         dispatch(stopTrace(nrfmlTaskId));
     };
 
-    return (
-        <>
-            {isTracing ? (
-                <Button
-                    className="w-100 secondary-btn start-stop active-animation"
-                    variant="secondary"
-                    onClick={stop}
-                >
-                    <span className="mdi mdi-stop-circle" />
-                    Stop tracing
-                </Button>
-            ) : (
-                <Button
-                    className="w-100 secondary-btn start-stop"
-                    variant="secondary"
-                    onClick={start}
-                    disabled={traceFormats.length === 0}
-                >
-                    <span className="mdi mdi-play-circle" />
-                    Start tracing
-                </Button>
-            )}
-        </>
+    return isTracing ? (
+        <Button
+            className="w-100 secondary-btn start-stop active-animation"
+            variant="secondary"
+            onClick={stop}
+        >
+            <span className="mdi mdi-stop-circle" />
+            Stop tracing
+        </Button>
+    ) : (
+        <Button
+            className="w-100 secondary-btn start-stop"
+            variant="secondary"
+            onClick={start}
+            disabled={traceFormats.length === 0}
+        >
+            <span className="mdi mdi-play-circle" />
+            Start tracing
+        </Button>
     );
 };

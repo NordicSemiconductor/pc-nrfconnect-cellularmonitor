@@ -17,8 +17,8 @@ import { TDispatch } from '../thunk';
 
 const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
 
-export const getNrfmlCallbacks = () => {
-    return new Promise<{
+export const getNrfmlCallbacks = () =>
+    new Promise<{
         completeCallback: nrfml.CompleteCallback;
         progressCallback: nrfml.ProgressCallback;
         dataCallback?: nrfml.DataCallback;
@@ -42,7 +42,6 @@ export const getNrfmlCallbacks = () => {
             }
         );
     });
-};
 
 export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
     expect(mockedNrfmlStart).toBeCalledWith(

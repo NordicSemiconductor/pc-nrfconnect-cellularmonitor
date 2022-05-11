@@ -22,12 +22,8 @@ import {
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
 jest.mock('../wireshark/wireshark', () => ({
-    defaultSharkPath: () => {
-        return MOCKED_DEFAULT_WIRESHARK_PATH;
-    },
-    findTshark: () => {
-        return 'path/to/tshark';
-    },
+    defaultSharkPath: () => MOCKED_DEFAULT_WIRESHARK_PATH,
+    findTshark: () => 'path/to/tshark',
 }));
 
 jest.mock('pc-nrfconnect-shared', () => ({
