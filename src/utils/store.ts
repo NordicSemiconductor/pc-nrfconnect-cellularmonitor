@@ -68,9 +68,9 @@ export const setTraceFormats = (traceFormats: TraceFormat[]) =>
     store<StoreSchema>().set(TRACE_FORMATS, traceFormats);
 
 const serialPorts = () => store<StoreSchema>().get(SERIALPORTS, {});
-export const getSerialPort = (serialNumber: string) => {
-    return serialPorts()[serialNumber];
-};
+export const getSerialPort = (serialNumber: string) =>
+    serialPorts()[serialNumber];
+
 export const setSerialPort = (serialNumber: string, port: string) =>
     store<StoreSchema>().set(SERIALPORTS, {
         ...serialPorts(),

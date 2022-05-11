@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
@@ -126,6 +126,19 @@ export default ({ active }: PaneProps) => {
         };
     }, [oppHtml, updatePowerEstimationData]);
 
+    const TSharkLanding = useMemo(
+        () =>
+            isTracing ? (
+                <p>Waiting for power data to be available...</p>
+            ) : (
+                <p>
+                    Start a trace to capture live data for power estimate or
+                    read from existing trace file
+                </p>
+            ),
+        [isTracing]
+    );
+
     return (
         <div
             className={`power-estimation-container ${
@@ -181,20 +194,7 @@ export default ({ active }: PaneProps) => {
                 </>
             ) : (
                 <div className="power-estimation-landing">
-                    {isTsharkInstalled ? (
-                        <>
-                            {isTracing ? (
-                                <p>Waiting for power data to be available...</p>
-                            ) : (
-                                <p>
-                                    Start a trace to capture live data for power
-                                    estimate or read from existing trace file
-                                </p>
-                            )}
-                        </>
-                    ) : (
-                        <Tshark />
-                    )}
+                    {isTsharkInstalled ? TSharkLanding : <Tshark />}
                 </div>
             )}
         </div>

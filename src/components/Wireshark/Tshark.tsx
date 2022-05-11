@@ -37,21 +37,17 @@ const SelectTshark: FC = ({ children }) => {
     );
 };
 
-export const Tshark = () => {
-    return (
-        <div className="tshark">
-            <h5>tshark not detected</h5>
-            <span>
-                tshark is required to get power parameters from network.
-            </span>
-            <Button
-                variant="secondary"
-                className="tshark-btn"
-                onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-            >
-                Install tshark (via Wireshark)
-            </Button>
-            <SelectTshark>Specify install path</SelectTshark>.
-        </div>
-    );
-};
+export const Tshark = () => (
+    <div className="tshark">
+        <h5>tshark not detected</h5>
+        <span>tshark is required to get power parameters from network.</span>
+        <Button
+            variant="secondary"
+            className="tshark-btn"
+            onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
+        >
+            Install tshark (via Wireshark)
+        </Button>
+        <SelectTshark>Specify install path</SelectTshark>.
+    </div>
+);
