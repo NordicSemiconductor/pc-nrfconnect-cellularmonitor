@@ -8,7 +8,8 @@ import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import checkDiskSpace from 'check-disk-space';
-import { currentPane, logger, testUtils } from 'pc-nrfconnect-shared';
+import { currentPane, logger } from 'pc-nrfconnect-shared';
+import { testUtils } from 'pc-nrfconnect-shared/test';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 

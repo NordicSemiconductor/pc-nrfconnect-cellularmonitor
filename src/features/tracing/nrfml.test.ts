@@ -5,7 +5,7 @@
  */
 
 import path from 'path';
-import { testUtils } from 'pc-nrfconnect-shared';
+import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
