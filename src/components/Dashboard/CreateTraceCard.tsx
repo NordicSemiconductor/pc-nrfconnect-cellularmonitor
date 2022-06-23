@@ -37,6 +37,7 @@ export default () => (
                         <li>1.2.7</li>
                         <li>1.3.0</li>
                         <li>1.3.1</li>
+                        <li>1.3.2</li>
                     </ul>
                 </li>
                 <li>
