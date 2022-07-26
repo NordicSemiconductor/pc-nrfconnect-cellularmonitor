@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2015 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 const webpack = require('webpack');
 const config = require('pc-nrfconnect-shared/config/webpack.config');
 
