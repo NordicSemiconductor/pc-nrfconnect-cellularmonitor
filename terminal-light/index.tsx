@@ -24,12 +24,10 @@ ipcRenderer.once('parent-id', (_, id) => {
     ipcRenderer.on('close-popout', () => window.close());
 
     ReactDOM.render(
-        <>
-            <Terminal
-                commandCallback={commandCallback}
-                onModemData={onModemData}
-            />
-        </>,
+        <Terminal
+            commandCallback={commandCallback}
+            onModemData={onModemData}
+        />,
         document.getElementById('app')
     );
 });

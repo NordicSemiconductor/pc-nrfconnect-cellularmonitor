@@ -11,6 +11,7 @@ import { ipcRenderer } from 'electron';
 import { colors } from 'pc-nrfconnect-shared';
 import { XTerm } from 'xterm-for-react';
 
+// eslint-disable-next-line import/no-relative-packages
 import useFitAddon from '../../src/hooks/useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
 

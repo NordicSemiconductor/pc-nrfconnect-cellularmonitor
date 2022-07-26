@@ -15,7 +15,7 @@ import nrfTerminalCommander from './terminalCommander';
 import 'xterm/css/xterm.css';
 import './terminal.scss';
 
-export const Terminal = ({
+const Terminal = ({
     commandCallback,
     onModemData,
 }: {

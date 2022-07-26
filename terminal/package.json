@@ -1,13 +1,13 @@
 {
-  "name": "nrfconnect-terminal",
-  "version": "1.0.0",
-  "description": "Terminal for the Cellular Monitor application",
-  "main": "dist/bundle.js",
-  "dependencies": {},
-  "scripts": {
-    "start": "node webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Nordic Semiconductor ASA",
-  "license": "SEE LICENSE IN LICENSE"
+    "name": "nrfconnect-terminal",
+    "version": "1.0.0",
+    "description": "Terminal for the Cellular Monitor application",
+    "main": "dist/bundle.js",
+    "dependencies": {},
+    "scripts": {
+        "start": "node webpack",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Nordic Semiconductor ASA",
+    "license": "SEE LICENSE IN LICENSE"
 }

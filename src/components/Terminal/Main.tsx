@@ -80,6 +80,7 @@ const Main = ({ active }: PaneProps) => {
     }, [openTerminalLight]);
 
     return (
+        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
             {popoutId ? (
                 <PopoutPlaceholder

@@ -7,7 +7,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 
-export const PopoutPlaceholder = ({
+const PopoutPlaceholder = ({
     popoutId,
     commandCallback,
     onModemData,
