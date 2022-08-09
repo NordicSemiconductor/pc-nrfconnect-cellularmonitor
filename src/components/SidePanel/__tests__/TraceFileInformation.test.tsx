@@ -10,14 +10,14 @@ import {
     setTraceIsStarted,
     setTraceProgress,
 } from '../../../features/tracing/traceSlice';
-import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
+import { mockedCheckDiskSpace, render, screen } from '../../../utils/testUtils';
 import TraceFileInformation from '../Tracing/TraceFileInformation';
 
 describe('FileInformation', () => {
     it('should display the name and size of the trace', async () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
         const filePath = 'path/to/file.bin';
-        const screen = render(<TraceFileInformation />, [
+        render(<TraceFileInformation />, [
             setTraceIsStarted({
                 taskId: 1,
                 progressConfigs: [{ format: 'raw', path: filePath }],
