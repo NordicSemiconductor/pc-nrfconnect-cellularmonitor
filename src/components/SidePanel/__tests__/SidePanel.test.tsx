@@ -21,6 +21,7 @@ import {
     mockedCheckDiskSpace,
     mockedCurrentPane,
     render,
+    screen,
 } from '../../../utils/testUtils';
 import {
     PowerEstimationSidePanel,
@@ -34,8 +35,7 @@ const serialPortActions = [
     setSerialPort('COM1'),
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const startTrace = async (screen: any, ...sinks: TraceFormat[]) => {
+const startTrace = async (...sinks: TraceFormat[]) => {
     for (const sink of sinks) {
         // eslint-disable-next-line no-await-in-loop
         fireEvent.click(await screen.findByText(sink));
@@ -51,22 +51,16 @@ describe('Sidepanel functionality', () => {
 
     describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('pcap');
             expect(
-                await screen.queryByText('Detecting modem firmware version')
+                screen.getByText('Detecting modem firmware version')
             ).toBeInTheDocument();
         });
 
         it('should not show dialog when tracing to RAW', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'raw');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('raw');
             const modal = screen.queryByText(
                 'Detecting modem firmware version'
             );
@@ -74,17 +68,14 @@ describe('Sidepanel functionality', () => {
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('pcap');
             expect(
-                await screen.queryByText('Detecting modem firmware version')
+                screen.getByText('Detecting modem firmware version')
             ).toBeInTheDocument();
             fireEvent.click((await screen.findAllByText('Close'))[0]);
             expect(
-                await screen.queryByText('Detecting modem firmware version')
+                screen.queryByText('Detecting modem firmware version')
             ).not.toBeInTheDocument();
             expect(screen.getByText('Stop tracing')).toBeInTheDocument();
         });
@@ -106,11 +97,8 @@ describe('Sidepanel functionality', () => {
 
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('pcap');
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -126,13 +114,10 @@ describe('Sidepanel functionality', () => {
 
     describe('multiple sinks', () => {
         it('should show file details for multiple sinks', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'raw', 'pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('raw', 'pcap');
             expect(
-                await screen.queryByText('.bin', {
+                screen.getByText('.bin', {
                     exact: false,
                 })
             ).toBeInTheDocument();
@@ -144,36 +129,30 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should store RAW as .bin', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'raw');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('raw');
             expect(
-                await screen.queryByText('.bin', {
+                screen.getByText('.bin', {
                     exact: false,
                 })
             ).toBeInTheDocument();
             expect(
-                await screen.queryByText('.pcapng', {
+                screen.queryByText('.pcapng', {
                     exact: false,
                 })
             ).not.toBeInTheDocument();
         });
 
         it('should store PCAP as .pcap', async () => {
-            const screen = render(
-                <TraceCollectorSidePanel />,
-                serialPortActions
-            );
-            await startTrace(screen, 'pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions);
+            await startTrace('pcap');
             expect(
                 await screen.findByText('.pcapng', {
                     exact: false,
                 })
             ).toBeInTheDocument();
             expect(
-                await screen.queryByText('.bin', {
+                screen.queryByText('.bin', {
                     exact: false,
                 })
             ).not.toBeInTheDocument();
@@ -188,7 +167,7 @@ describe('Sidepanel functionality', () => {
         });
 
         it('should update button text when tracing begins', async () => {
-            const screen = render(
+            render(
                 <>
                     <PowerEstimationSidePanel />
                     <TraceCollectorSidePanel />
@@ -198,7 +177,7 @@ describe('Sidepanel functionality', () => {
             expect(
                 screen.getByText('Start trace to get power data...')
             ).toBeInTheDocument();
-            await startTrace(screen, 'raw');
+            await startTrace('raw');
 
             expect(
                 await screen.findByText('Waiting for power data...')
@@ -208,7 +187,7 @@ describe('Sidepanel functionality', () => {
         it('should start fetching power estimation params in the background', async () => {
             const callbacks = getNrfmlCallbacks();
             const waitingText = 'Start trace to get power data...';
-            const screen = render(
+            render(
                 <>
                     <PowerEstimationSidePanel />
                     <TraceCollectorSidePanel />
@@ -216,7 +195,7 @@ describe('Sidepanel functionality', () => {
                 serialPortActions
             );
             expect(screen.getByText(waitingText)).toBeInTheDocument();
-            await startTrace(screen, 'raw');
+            await startTrace('raw');
             expectNrfmlStartCalledWithSinks(
                 'nrfml-tshark-sink',
                 'nrfml-raw-file-sink'

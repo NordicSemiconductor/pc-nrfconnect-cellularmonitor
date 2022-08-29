@@ -20,6 +20,7 @@ import {
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
     render,
+    screen,
 } from '../../utils/testUtils';
 import {
     PowerEstimationSidePanel,
@@ -47,7 +48,7 @@ describe('Power Estimation pane', () => {
 
     it('should display loading message when no data has been received', () => {
         jest.spyOn(wireshark, 'findTshark').mockReturnValue('path/to/tshark');
-        const screen = render(<PowerEstimation active />);
+        render(<PowerEstimation active />);
         expect(
             screen.getByText(
                 'Start a trace to capture live data for power estimate or read from existing trace file'
@@ -57,14 +58,14 @@ describe('Power Estimation pane', () => {
 
     it('should show tshark warning if tshark is not installed', () => {
         jest.spyOn(wireshark, 'findTshark').mockReturnValue(null);
-        const screen = render(<PowerEstimation active />);
+        render(<PowerEstimation active />);
         expect(screen.getByText('tshark not detected')).toBeInTheDocument();
     });
 
     it('should display error message if network request fails', async () => {
         const assertLogErrorCB = assertErrorWasLogged();
         const callbacks = getNrfmlCallbacks();
-        const screen = render(
+        render(
             <>
                 <TraceCollectorSidePanel />
                 <PowerEstimationSidePanel />
@@ -90,7 +91,7 @@ describe('Power Estimation pane', () => {
 
     it('should display html from response if request is ok', async () => {
         const callbacks = getNrfmlCallbacks();
-        const screen = render(
+        render(
             <>
                 <TraceCollectorSidePanel />
                 <PowerEstimationSidePanel />

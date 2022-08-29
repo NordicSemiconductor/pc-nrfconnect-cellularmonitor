@@ -7,7 +7,7 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { mockedCheckDiskSpace, render } from '../../../utils/testUtils';
+import { mockedCheckDiskSpace, render, screen } from '../../../utils/testUtils';
 import DiskSpaceUsage from '../Tracing/DiskSpaceUsage/DiskSpaceUsage';
 
 const FREE = 100;
@@ -24,14 +24,14 @@ describe('Disk space usage', () => {
                     });
                 })
         );
-        const screen = render(<DiskSpaceUsage />);
+        render(<DiskSpaceUsage />);
         expect(await screen.findByText(prettyBytes(FREE))).toBeInTheDocument();
         expect(await screen.findByText(prettyBytes(TOTAL))).toBeInTheDocument();
     });
 
     it('should display loading message if disk is still unknown', async () => {
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
-        const screen = render(<DiskSpaceUsage />);
+        render(<DiskSpaceUsage />);
         const loadingMessage = 'Loading';
         const loadingBoxes = await screen.findAllByText(loadingMessage);
         expect(loadingBoxes.length).toBe(2);

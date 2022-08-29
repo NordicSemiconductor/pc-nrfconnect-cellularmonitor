@@ -14,6 +14,7 @@ import {
     fireEvent,
     getNrfmlCallbacks,
     render,
+    screen,
 } from '../../../utils/testUtils';
 import PowerEstimationParams from '../PowerEstimationParams';
 
@@ -28,6 +29,9 @@ jest.mock('@electron/remote', () => ({
         })),
         showOpenDialogSync: jest.fn(() => [`some/path/${mockedFileName}`]),
     },
+    getCurrentWindow: () => ({
+        getTitle: () => 'Title',
+    }),
 }));
 
 describe('Power profile params', () => {
@@ -37,7 +41,7 @@ describe('Power profile params', () => {
 
     describe('with device connected', () => {
         it('shows file link after file is saved', async () => {
-            const screen = render(<PowerEstimationParams />, [
+            render(<PowerEstimationParams />, [
                 setPowerEstimationData({ cdrx_len: 'data' }),
                 setSerialPort('COM1'),
             ]);
@@ -53,7 +57,7 @@ describe('Power profile params', () => {
     describe('without device connected', () => {
         it('shows file link after file is saved', async () => {
             const callbacks = getNrfmlCallbacks();
-            const screen = render(<PowerEstimationParams />);
+            render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
@@ -80,7 +84,7 @@ describe('Power profile params', () => {
             const callbacks = getNrfmlCallbacks();
             const assertLogErrorCB = assertErrorWasLogged();
 
-            const screen = render(<PowerEstimationParams />);
+            render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
@@ -95,12 +99,12 @@ describe('Power profile params', () => {
         it('should indicate loading state', async () => {
             const callbacks = getNrfmlCallbacks();
 
-            const screen = render(<PowerEstimationParams />);
+            render(<PowerEstimationParams />);
             const extractButton = await screen.findByText(
                 'Get power data from RAW'
             );
             fireEvent.click(extractButton);
-            expect(screen.queryByText('Fetching data...')).toBeInTheDocument();
+            expect(screen.getByText('Fetching data...')).toBeInTheDocument();
 
             const { completeCallback } = await callbacks;
 
