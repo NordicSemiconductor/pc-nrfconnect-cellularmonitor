@@ -1,3 +1,9 @@
+## 0.3.3 -
+
+### Changed
+
+-   Increased required launcher version to 3.12.
+
 ## 0.3.2 - 2022-05-30
 
 ### Added
