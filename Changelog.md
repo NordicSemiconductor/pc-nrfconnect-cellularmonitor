@@ -1,8 +1,8 @@
 ## 0.3.3 -
 
-### Changed
+### Added
 
--   Increased required launcher version to 3.12.
+-   Trace databases for modem firmware 1.2.7 and 1.3.2.
 
 ## 0.3.2 - 2022-05-30
 
