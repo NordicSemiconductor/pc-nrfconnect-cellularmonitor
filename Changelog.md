@@ -1,8 +1,8 @@
-## 0.3.3 -
+## 0.3.3 - 2022-09-05
 
-### Added
+### Fixed
 
--   Trace databases for modem firmware 1.2.7 and 1.3.2.
+-   Missing text for modem firmware v1.3.2.
 
 ## 0.3.2 - 2022-05-30
 
