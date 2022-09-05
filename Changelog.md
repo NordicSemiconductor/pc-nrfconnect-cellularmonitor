@@ -1,8 +1,8 @@
-## 0.3.3 -
+## 0.3.3 - 2022-09-05
 
-### Changed
+### Fixed
 
--   Increased required launcher version to 3.12.
+-   Missing text for modem firmware v1.3.2.
 
 ## 0.3.2 - 2022-05-30
 
