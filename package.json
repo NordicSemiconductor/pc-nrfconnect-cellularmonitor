@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-tracecollector-preview",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
     "displayName": "Trace Collector V2 preview",
     "repository": {
@@ -49,7 +49,7 @@
         "xterm-for-react": "^1.0.4"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "0.7.4",
+        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.7.5",
         "npm": "^6.14.13"
     },
     "bundledDependencies": [

@@ -1,3 +1,13 @@
+## 0.3.4 - 2022-09-05
+
+### Added
+
+-   Trace database for modem firmware v1.1.5.
+
+### Fixed
+
+-   Crash on application launch.
+
 ## 0.3.3 - 2022-09-05
 
 ### Fixed
