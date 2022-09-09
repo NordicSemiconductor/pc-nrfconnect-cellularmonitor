@@ -27,14 +27,10 @@ const initialState: PowerEstimationState = {
     loading: false,
 };
 
-interface TAU_TYPES {
-    SLEEP_INTERVAL: 0;
-    ACTIVE_TIMER: 1;
+enum TAU_TYPES {
+    SLEEP_INTERVAL = 0,
+    ACTIVE_TIMER = 1,
 }
-const TAU_TYPE: TAU_TYPES = {
-    SLEEP_INTERVAL: 0,
-    ACTIVE_TIMER: 1,
-};
 
 const powerEstimationSlice = createSlice({
     name: 'powerEstimation',
@@ -46,13 +42,13 @@ const powerEstimationSlice = createSlice({
             const newTAUValue = config_lte_psm_req_rptau
                 ? parseTAUByteToSeconds(
                       config_lte_psm_req_rptau,
-                      TAU_TYPE.SLEEP_INTERVAL
+                      TAU_TYPES.SLEEP_INTERVAL
                   )
                 : state.data?.config_lte_psm_req_rptau;
             const newActiveTimer = config_lte_psm_req_rat
                 ? parseTAUByteToSeconds(
                       config_lte_psm_req_rat,
-                      TAU_TYPE.ACTIVE_TIMER
+                      TAU_TYPES.ACTIVE_TIMER
                   )
                 : state.data?.config_lte_psm_req_rat;
 
@@ -109,7 +105,7 @@ export const {
 export default powerEstimationSlice.reducer;
 
 const TAU_DEFAULT_VALUE = 0;
-const TAU_SLEEP_INTERVAL_BASE_VALUES = {
+const TAU_SLEEP_INTERVAL_BASE_VALUES: { [index: string]: number } = {
     '000': 600,
     '001': 3600,
     '010': 36000,
@@ -117,35 +113,32 @@ const TAU_SLEEP_INTERVAL_BASE_VALUES = {
     '100': 30,
     '101': 60,
 };
-const TAU_ACTIVE_TIMER_BASE_VALUES = {
+const TAU_ACTIVE_TIMER_BASE_VALUES: { [index: string]: number } = {
     '000': 2,
     '001': 60,
 };
 
-function parseTAUByteToSeconds(byteString: string, type: number) {
+const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
     const byteArray = [...byteString.trim()];
-    if (!(byteArray.length === 8)) {
-        return TAU_DEFAULT_VALUE;
-    }
+
+    if (byteArray.length !== 8) return TAU_DEFAULT_VALUE;
+
     const TAU_BASE_VALUE = byteArray.slice(0, 3).join('');
-
-    if (type === TAU_TYPE.SLEEP_INTERVAL) {
-        if (!(TAU_BASE_VALUE in TAU_SLEEP_INTERVAL_BASE_VALUES)) {
-            return TAU_DEFAULT_VALUE;
-        }
-    }
-    if (type === TAU_TYPE.ACTIVE_TIMER) {
-        if (!(TAU_BASE_VALUE in TAU_ACTIVE_TIMER_BASE_VALUES)) {
-            return TAU_DEFAULT_VALUE;
-        }
-    }
-
-    const TAU_BASE_MULTIPLIER =
-        type === TAU_TYPE.SLEEP_INTERVAL
-            ? TAU_SLEEP_INTERVAL_BASE_VALUES[TAU_BASE_VALUE]
-            : TAU_ACTIVE_TIMER_BASE_VALUES[TAU_BASE_VALUE];
-
     const TAU_BINARY_VALUE = Number.parseInt(byteArray.slice(3).join(''), 2);
 
-    return TAU_BASE_MULTIPLIER * TAU_BINARY_VALUE;
-}
+    if (
+        type === TAU_TYPES.SLEEP_INTERVAL &&
+        TAU_BASE_VALUE in TAU_SLEEP_INTERVAL_BASE_VALUES
+    )
+        return (
+            TAU_SLEEP_INTERVAL_BASE_VALUES[TAU_BASE_VALUE] * TAU_BINARY_VALUE
+        );
+
+    if (
+        type === TAU_TYPES.ACTIVE_TIMER &&
+        TAU_BASE_VALUE in TAU_ACTIVE_TIMER_BASE_VALUES
+    )
+        return TAU_ACTIVE_TIMER_BASE_VALUES[TAU_BASE_VALUE] * TAU_BINARY_VALUE;
+
+    return TAU_DEFAULT_VALUE;
+};
