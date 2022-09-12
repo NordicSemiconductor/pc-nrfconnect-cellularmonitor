@@ -39,26 +39,21 @@ const powerEstimationSlice = createSlice({
         setData: (state, action: PayloadAction<OnlinePowerEstimatorParams>) => {
             const { config_lte_psm_req_rptau, config_lte_psm_req_rat } =
                 action.payload;
-            const newTAUValue = config_lte_psm_req_rptau
-                ? parseTAUByteToSeconds(
-                      config_lte_psm_req_rptau,
-                      TAU_TYPES.SLEEP_INTERVAL
-                  )
-                : state.data?.config_lte_psm_req_rptau;
-            const newActiveTimer = config_lte_psm_req_rat
-                ? parseTAUByteToSeconds(
-                      config_lte_psm_req_rat,
-                      TAU_TYPES.ACTIVE_TIMER
-                  )
-                : state.data?.config_lte_psm_req_rat;
-
-            console.log(`newActiveTimer is now set to: ${newActiveTimer}`);
 
             state.data = action.payload;
-            if (newTAUValue != null) {
+
+            if (config_lte_psm_req_rptau != null) {
+                const newTAUValue = parseTAUByteToSeconds(
+                    config_lte_psm_req_rptau,
+                    TAU_TYPES.SLEEP_INTERVAL
+                );
                 state.data.psm_int = `${newTAUValue}`;
             }
-            if (newActiveTimer != null) {
+            if (config_lte_psm_req_rat != null) {
+                const newActiveTimer = parseTAUByteToSeconds(
+                    config_lte_psm_req_rat,
+                    TAU_TYPES.ACTIVE_TIMER
+                );
                 state.data.idrx_len = `${newActiveTimer}`;
             }
         },
