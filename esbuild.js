@@ -8,27 +8,51 @@ const { sassPlugin } = require('esbuild-sass-plugin');
 const esbuild = require('esbuild');
 
 Promise.all([
-    esbuild.build({
-        entryPoints: ['./main/index.ts'],
-        outfile: './dist/main-bundle.js',
-        target: 'node14',
-        platform: 'node',
-        external: ['fs', 'electron'],
-        bundle: true,
-        write: true,
-        watch: true,
-    }),
-    esbuild.build({
-        entryPoints: ['./terminal-light/index.tsx'],
-        outfile: './dist/terminal-bundle.js',
-        target: 'chrome89',
-        sourcemap: true,
-        external: ['fs', 'electron'],
-        bundle: true,
-        write: true,
-        watch: true,
-        plugins: [sassPlugin()],
-    }),
+    esbuild
+        .build({
+            entryPoints: ['./main/index.ts'],
+            outfile: './dist/main-bundle.js',
+            target: 'node14',
+            platform: 'node',
+            external: ['fs', 'electron'],
+            bundle: true,
+            write: true,
+            watch: {
+                onRebuild(error, result) {
+                    if (error) {
+                        console.error('watch build failed:', error);
+                    } else {
+                        console.log('Rebuilt main');
+                    }
+                },
+            },
+        })
+        .then(() => {
+            console.log('Built main');
+        }),
+    esbuild
+        .build({
+            entryPoints: ['./terminal-light/index.tsx'],
+            outfile: './dist/terminal-bundle.js',
+            target: 'chrome89',
+            sourcemap: true,
+            external: ['fs', 'electron'],
+            bundle: true,
+            write: true,
+            watch: {
+                onRebuild(error, result) {
+                    if (error) {
+                        console.error('watch build failed:', error);
+                    } else {
+                        console.log('Rebuilt terminal');
+                    }
+                },
+            },
+            plugins: [sassPlugin()],
+        })
+        .then(() => {
+            console.log('Built terminal');
+        }),
 ]).catch(({ errors, warnings }) => {
     if (errors.length) {
         console.error(errors);
