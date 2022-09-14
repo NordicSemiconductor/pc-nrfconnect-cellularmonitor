@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import { getAppDir, PaneProps } from 'pc-nrfconnect-shared';
@@ -23,29 +23,20 @@ import './overlay.scss';
 const Main = ({ active }: PaneProps) => {
     const modem = useSelector(getModem);
     const popoutId = useSelector(getPopoutId);
-    const modemCallbacks = useRef<(() => void)[]>([]);
     const dispatch = useDispatch();
 
-    const cleanupModemCallbacks = useCallback(() => {
-        if (modemCallbacks.current.length > 0) {
-            modemCallbacks.current.forEach(f => f());
-            modemCallbacks.current = [];
-        }
-    }, []);
-
-    const onModemData = useCallback<
-        (listener: (data: string) => void) => () => void
-    >(
+    const onModemData = useCallback(
         (listener: (data: string) => void) => {
             if (!modem) return () => {};
-            modemCallbacks.current.push(modem.onLine(listener));
-            modemCallbacks.current.push(
-                modem.onResponse(lines => lines.forEach(listener))
-            );
 
-            return cleanupModemCallbacks;
+            const cleanup = [
+                modem.onLine(listener),
+                modem.onResponse(lines => lines.forEach(listener)),
+            ];
+
+            return () => cleanup.forEach(fn => fn());
         },
-        [modem, cleanupModemCallbacks]
+        [modem]
     );
 
     const commandCallback = useCallback(
@@ -79,35 +70,27 @@ const Main = ({ active }: PaneProps) => {
         if (getPopoutTerminal()) openTerminalLight();
     }, [openTerminalLight]);
 
-    return (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
+    return popoutId ? (
+        <PopoutPlaceholder
+            popoutId={popoutId}
+            commandCallback={commandCallback}
+            onModemData={onModemData}
+            closePopout={closePopout}
+        />
+    ) : (
         <>
-            {popoutId ? (
-                <PopoutPlaceholder
-                    popoutId={popoutId}
+            {active && (
+                <Terminal
                     commandCallback={commandCallback}
                     onModemData={onModemData}
-                    closePopout={closePopout}
                 />
-            ) : (
-                <>
-                    {active && (
-                        <Terminal
-                            commandCallback={commandCallback}
-                            onModemData={onModemData}
-                        />
-                    )}
-                    <div className="open-popout">
-                        <button
-                            type="button"
-                            onClick={() => openTerminalLight()}
-                        >
-                            Open in separate window
-                            <span className="mdi mdi-open-in-new" />
-                        </button>
-                    </div>
-                </>
             )}
+            <div className="open-popout">
+                <button type="button" onClick={() => openTerminalLight()}>
+                    Open in separate window
+                    <span className="mdi mdi-open-in-new" />
+                </button>
+            </div>
         </>
     );
 };
