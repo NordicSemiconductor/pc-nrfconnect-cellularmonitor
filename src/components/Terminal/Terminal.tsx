@@ -26,20 +26,8 @@ const Terminal = ({
     const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
-    const prompt = useCallback(() => {
-        xtermRef.current?.terminal.write(
-            nrfTerminalCommander.prompt.value + nrfTerminalCommander.userInput
-        );
-    }, []);
-
-    const writeln = useCallback(
-        (line: string) => {
-            xtermRef.current?.terminal.write(eraseLine + cursorTo(0));
-            xtermRef.current?.terminal.write(line);
-            prompt();
-        },
-        [prompt]
-    );
+    const writeln = (line: string) =>
+        xtermRef.current?.terminal.write(`\n${line}`);
 
     const handleUserInputLine = useCallback(
         (line: string) => {
@@ -49,25 +37,28 @@ const Terminal = ({
                 if (ret) writeln(ret);
             } else writeln('Invalid command format');
         },
-        [commandCallback, writeln]
+        [commandCallback]
     );
 
     useEffect(() => {
         const unregisterOnRunCommand =
             nrfTerminalCommander.onRunCommand(handleUserInputLine);
 
-        return () => {
-            unregisterOnRunCommand();
-        };
+        return () => unregisterOnRunCommand();
     }, [handleUserInputLine]);
 
     useEffect(() => {
-        const unregisterOnModemData = onModemData(writeln);
+        const unregisterOnModemData = onModemData(line => {
+            xtermRef.current?.terminal.write(eraseLine + cursorTo(0));
+            xtermRef.current?.terminal.write(line);
+            xtermRef.current?.terminal.write(
+                nrfTerminalCommander.prompt.value +
+                    nrfTerminalCommander.userInput
+            );
+        });
 
-        return () => {
-            unregisterOnModemData();
-        };
-    }, [writeln, onModemData]);
+        return () => unregisterOnModemData();
+    }, [onModemData]);
 
     useEffect(() => {
         xtermRef.current?.terminal.write(
