@@ -59,16 +59,16 @@ const Main = ({ active }: PaneProps) => {
         });
     }, [dispatch]);
 
-    const openTerminalLight = useCallback(async () => {
+    const openTerminalLight = async () => {
         const file = `${getAppDir()}/terminal-light/index.html`;
         const id = await ipcRenderer.invoke('open-popout', file);
         dispatch(setPopoutId(id));
         setPopoutTerminal(true);
-    }, [dispatch]);
+    };
 
     useEffect(() => {
         if (getPopoutTerminal()) openTerminalLight();
-    }, [openTerminalLight]);
+    }, []);
 
     return popoutId ? (
         <PopoutPlaceholder
