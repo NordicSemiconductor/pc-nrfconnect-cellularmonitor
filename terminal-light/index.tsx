@@ -12,7 +12,7 @@ import Terminal from '../src/components/Terminal/Terminal';
 
 import './index.css';
 
-ipcRenderer.once('parent-id', (_, id) => {
+ipcRenderer.once('parent-id', (_, id, logs) => {
     const commandCallback = (command: string) =>
         ipcRenderer.sendTo(id, 'terminal-data', command?.trim()) as undefined;
 
@@ -27,6 +27,7 @@ ipcRenderer.once('parent-id', (_, id) => {
         <Terminal
             commandCallback={commandCallback}
             onModemData={onModemData}
+            savedLogs={logs}
         />,
         document.getElementById('app')
     );

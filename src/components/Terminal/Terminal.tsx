@@ -14,13 +14,16 @@ import nrfTerminalCommander from './terminalCommander';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';
+import { LogEntry } from '../../features/terminal/terminalSlice';
 
 const Terminal = ({
     commandCallback,
     onModemData,
+    savedLogs,
 }: {
     commandCallback: (command: string) => string | undefined;
     onModemData: (listener: (line: string) => void) => () => void;
+    savedLogs?: LogEntry[];
 }) => {
     const xtermRef = useRef<XTerm | null>(null);
     const { width, height, ref: resizeRef } = useResizeDetector();
@@ -61,6 +64,15 @@ const Terminal = ({
     }, [onModemData]);
 
     useEffect(() => {
+        if (savedLogs && savedLogs.length > 0)
+            savedLogs.forEach(line => {
+                if (line.type === 'user')
+                    xtermRef.current?.terminal.write(
+                        nrfTerminalCommander.prompt.value.trim()
+                    );
+                xtermRef.current?.terminal.write(`${line.value}\n`);
+            });
+
         xtermRef.current?.terminal.write(
             `${nrfTerminalCommander.prompt.value.trim()} `
         );

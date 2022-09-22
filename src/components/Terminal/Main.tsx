@@ -13,6 +13,8 @@ import {
     getModem,
     getPopoutId,
     setPopoutId,
+    getTerminalLogs,
+    addLogEntry,
 } from '../../features/terminal/terminalSlice';
 import { getPopoutTerminal, setPopoutTerminal } from '../../utils/store';
 import PopoutPlaceholder from './Popout';
@@ -23,6 +25,7 @@ import './overlay.scss';
 const Main = ({ active }: PaneProps) => {
     const modem = useSelector(getModem);
     const popoutId = useSelector(getPopoutId);
+    const logs = useSelector(getTerminalLogs);
     const dispatch = useDispatch();
 
     const onModemData = useCallback(
@@ -30,13 +33,21 @@ const Main = ({ active }: PaneProps) => {
             if (!modem) return () => {};
 
             const cleanup = [
-                modem.onLine(listener),
-                modem.onResponse(lines => lines.forEach(listener)),
+                modem.onLine(line => {
+                    dispatch(addLogEntry({ type: 'modem', value: line }));
+                    listener(line);
+                }),
+                modem.onResponse(lines =>
+                    lines.forEach(line => {
+                        dispatch(addLogEntry({ type: 'modem', value: line }));
+                        listener(line);
+                    })
+                ),
             ];
 
             return () => cleanup.forEach(fn => fn());
         },
-        [modem]
+        [modem, dispatch]
     );
 
     const commandCallback = useCallback(
@@ -44,8 +55,9 @@ const Main = ({ active }: PaneProps) => {
             if (!modem) return 'Please connect a device and select a port';
             if (!modem?.write(command.trim()))
                 return 'Modem busy or invalid command';
+            else dispatch(addLogEntry({ type: 'user', value: command }));
         },
-        [modem]
+        [modem, dispatch]
     );
 
     const closePopout = useCallback(() => {
@@ -61,7 +73,7 @@ const Main = ({ active }: PaneProps) => {
 
     const openTerminal = async () => {
         const file = `${getAppDir()}/terminal-light/index.html`;
-        const id = await ipcRenderer.invoke('open-popout', file);
+        const id = await ipcRenderer.invoke('open-popout', file, logs);
         dispatch(setPopoutId(id));
         setPopoutTerminal(true);
     };
@@ -83,6 +95,7 @@ const Main = ({ active }: PaneProps) => {
                 <Terminal
                     commandCallback={commandCallback}
                     onModemData={onModemData}
+                    savedLogs={logs}
                 />
             )}
             <div className="open-popout">

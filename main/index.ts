@@ -5,14 +5,15 @@
  */
 
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { LogEntry } from '../src/features/terminal/terminalSlice';
 
-ipcMain.handle('open-popout', (event, appUrl: string) => {
+ipcMain.handle('open-popout', (event, appUrl: string, logs: LogEntry[]) => {
     const senderWindow = BrowserWindow.getAllWindows().find(
         window => window.webContents.id === event.sender.id
     );
     if (!senderWindow) return;
 
-    const terminalWindow = openWindow(appUrl, event.sender.id);
+    const terminalWindow = openWindow(appUrl, event.sender.id, logs);
     terminalWindow.once('close', () => {
         try {
             event.sender.send('popout-closed', terminalWindow.webContents.id);
@@ -47,7 +48,7 @@ ipcMain.handle('open-popout', (event, appUrl: string) => {
     return terminalWindow.webContents.id;
 });
 
-const openWindow = (url: string, parent?: number) => {
+const openWindow = (url: string, parent: number, logs: LogEntry[]) => {
     const window = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
@@ -61,7 +62,7 @@ const openWindow = (url: string, parent?: number) => {
     window.loadFile(url);
 
     window.on('ready-to-show', () =>
-        window.webContents.send('parent-id', parent)
+        window.webContents.send('parent-id', parent, logs)
     );
 
     return window;
