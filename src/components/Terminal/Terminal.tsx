@@ -62,7 +62,7 @@ const Terminal = ({
 
     useEffect(() => {
         xtermRef.current?.terminal.write(
-            `AT[1]> ${nrfTerminalCommander.userInput}`
+            `${nrfTerminalCommander.prompt.value.trim()} `
         );
     }, []);
 

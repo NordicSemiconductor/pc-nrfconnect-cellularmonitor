@@ -12,7 +12,7 @@ const nrfTerminalCommander = new NrfTerminalCommander({
             console.log('Doing something...');
         },
     },
-    prompt: 'AT[:lineCount]>',
+    prompt: 'AT>',
     hoverMetadata: [],
     completerFunction: () => [
         {
