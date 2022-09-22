@@ -59,7 +59,7 @@ const Main = ({ active }: PaneProps) => {
         });
     }, [dispatch]);
 
-    const openTerminalLight = async () => {
+    const openTerminal = async () => {
         const file = `${getAppDir()}/terminal-light/index.html`;
         const id = await ipcRenderer.invoke('open-popout', file);
         dispatch(setPopoutId(id));
@@ -67,7 +67,7 @@ const Main = ({ active }: PaneProps) => {
     };
 
     useEffect(() => {
-        if (getPopoutTerminal()) openTerminalLight();
+        if (getPopoutTerminal()) openTerminal();
     }, []);
 
     return popoutId ? (
@@ -86,7 +86,7 @@ const Main = ({ active }: PaneProps) => {
                 />
             )}
             <div className="open-popout">
-                <button type="button" onClick={() => openTerminalLight()}>
+                <button type="button" onClick={() => openTerminal()}>
                     Open in separate window
                     <span className="mdi mdi-open-in-new" />
                 </button>
