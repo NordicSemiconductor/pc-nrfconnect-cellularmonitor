@@ -26,7 +26,7 @@ const Terminal = ({
     const { width, height, ref: resizeRef } = useResizeDetector();
     const fitAddon = useFitAddon(height, width);
 
-    const writeln = (line: string) =>
+    const writeReply = (line: string) =>
         xtermRef.current?.terminal.write(`\n${line}`);
 
     const handleUserInputLine = useCallback(
@@ -34,8 +34,8 @@ const Terminal = ({
             if (line === '\n') return;
             if (line.startsWith('AT')) {
                 const ret = commandCallback(line.trim());
-                if (ret) writeln(ret);
-            } else writeln('Invalid command format');
+                if (ret) writeReply(ret);
+            } else writeReply('Invalid command format');
         },
         [commandCallback]
     );
