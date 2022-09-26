@@ -1,3 +1,10 @@
+## 0.3.5 - 2022-09-26
+
+### Fixed
+
+-   The PSM values Periodic TAU and Active time were not automatically detected
+    by the trace data in Power Estimation.
+
 ## 0.3.4 - 2022-09-06
 
 ### Added
