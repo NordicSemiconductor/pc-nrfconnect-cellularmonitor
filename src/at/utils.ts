@@ -2,8 +2,9 @@ export const getNumberList = (body?: string) => {
     const firstLine = body?.split('\r\n')[0];
     return (
         firstLine
-            ?.split(',')
-            .filter((item) => item)
+            ?.trim()
+            .split(',')
+            .filter(item => item)
             .map(Number) ?? []
     );
 };
@@ -13,27 +14,26 @@ export const getParametersFromResponse = (body?: string) => {
         return;
     }
 
-    const lineSeparator = body.indexOf('\\r\\n') ? '\\r\\n' : '\r\n';
-
+    const lineSeparator = /(\r\n|\\r\\n)/;
     const trimmedBody = body?.startsWith(':') ? body?.replace(':', '') : body;
     const firstLine = trimmedBody?.split(lineSeparator)[0];
-    const paramArray = firstLine!
+    const paramArray = firstLine
         .split(',')
-        .map((stringValue) => stringValue.trim())
-        .map((value) => {
+        .map(stringValue => stringValue.trim())
+        .map(value => {
             if (
                 value.charAt(0) === '"' &&
                 value.charAt(value.length - 1) === '"'
             ) {
                 return value.substring(1, value.length - 1);
-            } else if (
+            }
+            if (
                 value.substring(0, 2) === '\\"' &&
                 value.substring(value.length - 2) === '\\"'
             ) {
                 return value.substring(2, value.length - 2);
-            } else {
-                return parseInt(value);
             }
+            return parseInt(value, 10);
         });
 
     return paramArray;
