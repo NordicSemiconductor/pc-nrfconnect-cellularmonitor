@@ -1,9 +1,11 @@
-import { convert, initialState } from '.';
+/**
+ * @jest-environment node
+ */
 
 import * as traceDataJson from '../../data/trace.json';
-import { Packet } from '../state';
+import { convert, initialState, Packet } from '.';
 
-const traceData = traceDataJson.map<Packet>((jsonPacket) => ({
+const traceData = traceDataJson.map<Packet>(jsonPacket => ({
     format: jsonPacket.format,
     packet_data: new Uint8Array(jsonPacket.packet_data.data),
 }));
@@ -11,7 +13,7 @@ const traceData = traceDataJson.map<Packet>((jsonPacket) => ({
 test('Trace is read properly', () => {
     let state = initialState();
 
-    traceData.forEach((packet) => {
+    traceData.forEach(packet => {
         state = convert(packet, state);
     });
 

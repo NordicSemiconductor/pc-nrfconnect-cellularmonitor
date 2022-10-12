@@ -1,5 +1,8 @@
-import { Packet } from '../state';
-import { convert, State } from './index';
+/**
+ * @jest-environment node
+ */
+
+import { convert, Packet, State } from './index';
 
 const encoder = new TextEncoder();
 const encode = (txt: string) => Buffer.from(encoder.encode(txt));
@@ -110,14 +113,12 @@ test('Notification of %CESQ may turned on and off', () => {
 });
 
 test('%CESQ notification properly updates signal quality', () => {
-    const initialState = convertPackets([subscribePacket, OkPacket]);
-    expect(initialState.notifySignalQuality).toBe(true);
-    expect(Object.values(initialState.signalQuality)).toEqual([
-        255, 255, 255, 255,
-    ]);
+    const state = convertPackets([subscribePacket, OkPacket]);
+    expect(state.notifySignalQuality).toBe(true);
+    expect(Object.values(state.signalQuality)).toEqual([255, 255, 255, 255]);
 
-    signalQualityNotifications.forEach((notification) => {
-        const result = convertPackets([notification.packet], initialState);
+    signalQualityNotifications.forEach(notification => {
+        const result = convertPackets([notification.packet], state);
         expect(Object.values(result.signalQuality)).toEqual(
             notification.result
         );

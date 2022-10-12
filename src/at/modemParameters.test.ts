@@ -1,5 +1,8 @@
-import { Packet } from '../state';
-import { convert, initialState, State } from './index';
+/**
+ * @jest-environment node
+ */
+
+import { convert, initialState, Packet, State } from './index';
 
 const encoder = new TextEncoder();
 const encode = (txt: string) => Buffer.from(encoder.encode(txt));

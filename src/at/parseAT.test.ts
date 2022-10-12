@@ -1,36 +1,9 @@
-import { Packet } from '../state';
+/**
+ * @jest-environment node
+ */
+
+import { Packet } from '.';
 import { parseAT } from './parseAT';
-
-/*
-        How AT Commands are constructed: 
-            
-            (PREFIX)(PREFIX-EXTENSION)(COMMAND)(TYPE)
-            PREFIX              : AT
-            PREFIX-EXTENSION    : + or %
-            COMMAND             : ...
-            TYPE                : =? or ? or =
-
-            Examples:
-            SET Command:
-                ==> AT+CMD=<params,>
-            READ Command:
-                ==> AT+CMD?
-            TEST Command:
-                ==> AT+CMD=?
-
-            
-            RESPONSE:
-            OK<CR><LF>
-            ERROR<CR><LF>
-            ---- ARE THESE RELEVANT? ----
-            +CME ERROR: <cause_value><CR>LF>
-            +CMS ERROR: <cause_value><CR>LF>
-            ---- ARE THESE RELEVANT? ----
-
-
-
-
-    */
 
 const encoder = new TextEncoder();
 const encode = (txt: string) => Buffer.from(encoder.encode(txt));
@@ -87,7 +60,7 @@ const tests = [
 ];
 
 test('parseAT successfully parses packet', () => {
-    tests.forEach((test) => {
+    tests.forEach(test => {
         expect(parseAT(test.packet)).toEqual(test.expected);
     });
 });
