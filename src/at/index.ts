@@ -12,6 +12,7 @@ import { processor as modeOfOperation } from './modeOfOperation';
 import { parseAT } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
+import { processor as pinRetries } from './pinRetries';
 import { processor as signalQuality } from './signalQuality';
 
 export interface Packet {
@@ -50,7 +51,8 @@ export type State = ExtractViewModel<typeof functionMode> &
     ExtractViewModel<typeof periodicTAU> &
     ExtractViewModel<typeof signalQuality> &
     ExtractViewModel<typeof modemParameters> &
-    ExtractViewModel<typeof pinCode>;
+    ExtractViewModel<typeof pinCode> &
+    ExtractViewModel<typeof pinRetries>;
 
 const processors = [
     functionMode,
@@ -60,6 +62,7 @@ const processors = [
     periodicTAU,
     modemParameters,
     pinCode,
+    pinRetries,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
