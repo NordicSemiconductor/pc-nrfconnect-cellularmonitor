@@ -11,6 +11,7 @@ import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
+import TemporaryTab from './components/EventChart/TemporaryTab';
 import PowerEstimation from './components/PowerEstimation/PowerEstimation';
 import {
     PowerEstimationSidePanel,
@@ -38,6 +39,10 @@ export default () => (
                 name: 'Power Estimation',
                 Main: PowerEstimation,
                 SidePanel: PowerEstimationSidePanel,
+            },
+            {
+                name: 'Events Dashboard',
+                Main: TemporaryTab,
             },
         ]}
         documentation={DocumentationSections}

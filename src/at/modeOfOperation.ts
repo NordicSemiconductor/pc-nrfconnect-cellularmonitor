@@ -6,7 +6,7 @@
 
 import type { Processor } from '.';
 
-type ViewModel = Record<string, never>;
+type ViewModel = {};
 
 export const processor: Processor<ViewModel> = {
     command: '+CEMODE',
