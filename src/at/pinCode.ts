@@ -25,8 +25,6 @@ type PinCodeStatus = keyof typeof pinCodeStatus;
 
 type ViewModel = { pinCodeStatus: PinCodeStatus };
 
-const tentativeState: Partial<ViewModel> | null = null;
-
 export const processor: Processor<ViewModel> = {
     command: '+CPIN',
     documentation:
