@@ -32,12 +32,12 @@ const ErrorPacket = atPacket('ERROR\r\n');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const readCommandPackets = [
     {
-        readCommand: atPacket('AT+CEMODE?'),
+        command: atPacket('AT+CEMODE?'),
         response: atPacket('+CEMODE: 0\r\nOK\r\n'),
         expected: 0,
     },
     {
-        readCommand: atPacket('AT+CEMODE?'),
+        command: atPacket('AT+CEMODE?'),
         response: atPacket('+CEMODE: 2\r\nOK\r\n'),
         expected: 2,
     },
@@ -46,27 +46,27 @@ const readCommandPackets = [
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const testCommandPackets = [
     {
-        testCommand: atPacket('AT+CEMODE=?'),
+        command: atPacket('AT+CEMODE=?'),
         response: atPacket('+CEMODE: (0,2)\r\nOK\r\n'),
         expected: undefined,
     },
     {
-        testCommand: atPacket('AT+CEMODE=?'),
+        command: atPacket('AT+CEMODE=?'),
         response: ErrorPacket,
         expected: undefined,
     },
 ];
 
 const setCommandPackets = [
-    { setCommand: atPacket('AT+CEMODE=0'), response: OkPacket, expected: 0 },
+    { command: atPacket('AT+CEMODE=0'), response: OkPacket, expected: 0 },
     {
-        setCommand: atPacket('AT+CEMODE=1'),
+        command: atPacket('AT+CEMODE=1'),
         response: ErrorPacket,
         expected: undefined,
     },
-    { setCommand: atPacket('AT+CEMODE=2'), response: OkPacket, expected: 2 },
+    { command: atPacket('AT+CEMODE=2'), response: OkPacket, expected: 2 },
     {
-        setCommand: atPacket('AT+CEMODE=3'),
+        command: atPacket('AT+CEMODE=3'),
         response: ErrorPacket,
         expected: undefined,
     },
@@ -75,23 +75,23 @@ const setCommandPackets = [
 test('CEMODE set commands work as expected', () => {
     setCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.setCommand, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation
         ).toEqual(test.expected);
     });
 });
 
 test('CEMODE test commands work as expected', () => {
-    setCommandPackets.forEach(test => {
+    readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.setCommand, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation
         ).toEqual(test.expected);
     });
 });
 
 test('CEMODE read commands work as expected', () => {
-    setCommandPackets.forEach(test => {
+    testCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.setCommand, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation
         ).toEqual(test.expected);
     });
 });
