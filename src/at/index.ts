@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { processor as currentBand } from './currentBand';
 import { processor as functionMode } from './functionMode';
 import { processor as modemParameters } from './modemParameters';
@@ -10,10 +16,10 @@ import { processor as signalQuality } from './signalQuality';
 export interface Packet {
     packet_data: Uint8Array;
     format: 'at';
-    timestamp?: {
-        resolution: string;
-        value: number;
-    };
+    // timestamp?: {
+    //     resolution?: string;
+    //     value?: number;
+    // };
 }
 
 export interface Processor<VM> {
@@ -51,7 +57,9 @@ const processors = [
     signalQuality,
     periodicTAU,
     modemParameters,
-];
+] as const;
+
+// Typescript challange! Think it's related to the one above.
 export const initialState = (): State =>
     processors.reduce(
         (state, processor) => ({ ...state, ...processor.initialState() }),

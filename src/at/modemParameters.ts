@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import type { Processor } from '.';
 import { getParametersFromResponse } from './utils';
 
@@ -51,20 +57,24 @@ export const processor: Processor<ViewModel> = {
                 return {};
             }
 
+            const parsedAcT = parseInt(responseParameters[5], 10);
+            const evaluatedAcT =
+                parsedAcT === 7 || parsedAcT === 9 ? parsedAcT : undefined;
+
             return {
                 xmonitor: {
-                    regStatus: responseParameters[0],
+                    regStatus: parseInt(responseParameters[0], 10),
                     operatorFullName: responseParameters[1],
                     operatorShortName: responseParameters[2],
                     plmn: responseParameters[3],
                     tac: responseParameters[4],
-                    AcT: responseParameters[5],
-                    band: responseParameters[6],
+                    AcT: evaluatedAcT,
+                    band: parseInt(responseParameters[6], 10),
                     cell_id: responseParameters[7],
-                    phys_cell_id: responseParameters[8],
-                    EARFCN: responseParameters[9],
-                    rsrp: responseParameters[10],
-                    snr: responseParameters[11],
+                    phys_cell_id: parseInt(responseParameters[8], 10),
+                    EARFCN: parseInt(responseParameters[9], 10),
+                    rsrp: parseInt(responseParameters[10], 10),
+                    snr: parseInt(responseParameters[11], 10),
                     NW_provided_eDRX_value: responseParameters[12],
                     // Response is always either
                     // activeTime & periodicTAU, or

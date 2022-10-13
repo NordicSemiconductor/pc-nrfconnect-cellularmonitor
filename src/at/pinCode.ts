@@ -1,9 +1,12 @@
-import { Packet, ViewModel } from "../state";
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
 
-export const convert = (
-    packet: Packet,
-    state: ViewModel
-): Partial<ViewModel> => {
+import { Packet, ViewModel } from '../state';
+
+export const convert = (packet: Packet, state: ViewModel): Partial<ViewModel> =>
     // const payload = packet.packet_data.toString().toLowerCase();
 
     // // #### AT+<CMD>
@@ -29,6 +32,4 @@ export const convert = (
     //     }
     // }
 
-    return {};
-};
-
+    ({});

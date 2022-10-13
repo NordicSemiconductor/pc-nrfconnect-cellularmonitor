@@ -2,6 +2,12 @@
  * @jest-environment node
  */
 
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { rawTraceData } from '../../data/trace';
 import { convert, initialState, Packet } from '.';
 

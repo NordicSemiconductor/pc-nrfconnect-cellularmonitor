@@ -2,6 +2,12 @@
  * @jest-environment node
  */
 
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { convert, Packet, State } from './index';
 
 const encoder = new TextEncoder();

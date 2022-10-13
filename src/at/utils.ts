@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 export const getNumberList = (body?: string) => {
     const firstLine = body?.split('\r\n')[0];
     return (
@@ -33,7 +39,7 @@ export const getParametersFromResponse = (body?: string) => {
             ) {
                 return value.substring(2, value.length - 2);
             }
-            return parseInt(value, 10);
+            return value;
         });
 
     return paramArray;
