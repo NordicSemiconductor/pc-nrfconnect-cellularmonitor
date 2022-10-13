@@ -5,18 +5,10 @@
  */
 
 // eslint-disable-next-line import/no-cycle
-import { Packet } from '.';
+import { Packet, ParsedPacket } from '.';
 
-interface parsedAT {
-    command: string | undefined;
-    operator: string | undefined;
-    body: string | undefined;
-    isRequest: boolean | undefined;
-    lastLine: string | undefined;
-    status: string | undefined;
-}
 const decoder = new TextDecoder('utf-8');
-export const parseAT = (packet: Packet): parsedAT => {
+export const parseAT = (packet: Packet): ParsedPacket => {
     const textData = JSON.stringify(decoder.decode(packet.packet_data));
     const escapedData = textData.substring(1, textData.length - 1);
     const match = /(AT)?([+%][\w\d]+)?(=\?|[=?])?(.*)?/gi.exec(escapedData);
