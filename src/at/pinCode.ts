@@ -4,32 +4,71 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Packet, ViewModel } from '../state';
+import type { Processor } from '.';
+import { getParametersFromResponse } from './utils';
 
-export const convert = (packet: Packet, state: ViewModel): Partial<ViewModel> =>
-    // const payload = packet.packet_data.toString().toLowerCase();
+type pinCodeStatus =
+    | 'unknown' // Not yet aware
+    | 'READY' // No PIN required
+    | 'SIM PUN' // PIN code required
+    | 'SIM PIN' // PUK code required
+    | 'SIM PUK' // PIN2 code required
+    | 'SIM PIN2' // PUK2 code required
+    | 'PH-SIM PIN' // USIM depersonalization required
+    | 'PH-NET PIN' // Network depersonalization required
+    | 'PH-NETSUB PIN' // Network subset depersonalization required
+    | 'PH-SP PIN' // Service provider depersonalization required
+    | 'PH-CORP PIN'; // Corporate depersonalization required
 
-    // // #### AT+<CMD>
-    // if (payload.startsWith('at')) {
-    //     if (payload.includes('+cpin')) {
-    //         return {
-    //             waitingAT: '+cpin',
-    //         };
-    //     }
-    // }
+const evaluatePinStateResponse = (
+    responseArray: string[] | undefined
+): pinCodeStatus => {
+    const allowedStates = [
+        'READY',
+        'SIM PUN',
+        'SIM PIN',
+        'SIM PUK',
+        'SIM PIN2',
+        'PH-SIM PIN',
+        'PH-NET PIN',
+        'PH-NETSUB PIN',
+        'PH-SP PIN',
+        'PH-CORP PIN',
+    ] as pinCodeStatus[];
 
-    // // #### +<CMD> <OK>
-    // if (payload.includes('+cpin')) {
-    //     if (payload.includes('ready')) {
-    //         return { pinState: 'ready', waitingAT: null };
-    //     }
-    // }
+    // Typescript challange: Improve the type narrowing
+    if (responseArray) {
+        let returnValue: pinCodeStatus | null = null;
+        allowedStates.forEach((response, index) => {
+            if (response === responseArray[0]) {
+                returnValue = allowedStates[index];
+            }
+        });
+        if (returnValue) {
+            return returnValue;
+        }
+    }
+    return 'unknown';
+};
 
-    // // #### <OK> or <ERROR>
-    // if (payload.includes('error')) {
-    //     if (state.waitingAT === '+cpin') {
-    //         return { pinState: 'error', waitingAT: null };
-    //     }
-    // }
+type ViewModel = { pinCodeStatus: pinCodeStatus };
 
-    ({});
+const tentativeState: Partial<ViewModel> | null = null;
+
+export const processor: Processor<ViewModel> = {
+    command: '+CPIN',
+    documentation:
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',
+    initialState: () => ({ pinCodeStatus: 'unknown' }),
+    response(packet) {
+        if (packet.status === 'OK') {
+            const responseArray = getParametersFromResponse(packet.body);
+            return {
+                pinCodeStatus: evaluatePinStateResponse(responseArray),
+            };
+        }
+        return { pinCodeStatus: 'unknown' };
+    },
+};
+
+export default processor;

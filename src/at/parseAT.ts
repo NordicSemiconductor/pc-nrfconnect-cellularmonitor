@@ -26,7 +26,9 @@ export const parseAT = (packet: Packet): parsedAT => {
         const lines = (body ?? '').split('\\r\\n').filter(line => line);
 
         const lastLine = lines.length > 1 ? lines.pop()?.trim() : undefined;
-        const status = lastLine != null ? lastLine?.trim() : undefined;
+        const status =
+            (lastLine != null ? lastLine?.trim() : undefined) ||
+            (body && body.startsWith('OK') ? 'OK' : undefined);
 
         return {
             command,

@@ -41,7 +41,7 @@ const convertPackets = (
     previousState = initialState()
 ): State =>
     packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) }),
+        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
         previousState
     );
 

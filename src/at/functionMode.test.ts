@@ -25,7 +25,7 @@ const cfunPacketError = atPacket('ERROR\r\n');
 
 const convertPackets = (...packets: Packet[]): State =>
     packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) }),
+        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
         <State>{ pinState: 'unknown' }
     );
 

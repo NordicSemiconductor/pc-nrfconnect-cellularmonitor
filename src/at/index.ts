@@ -11,6 +11,7 @@ import { processor as modeOfOperation } from './modeOfOperation';
 // eslint-disable-next-line import/no-cycle
 import { parseAT } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
+import { processor as pinCode } from './pinCode';
 import { processor as signalQuality } from './signalQuality';
 
 export interface Packet {
@@ -48,7 +49,8 @@ export type State = ExtractViewModel<typeof functionMode> &
     ExtractViewModel<typeof modeOfOperation> &
     ExtractViewModel<typeof periodicTAU> &
     ExtractViewModel<typeof signalQuality> &
-    ExtractViewModel<typeof modemParameters>;
+    ExtractViewModel<typeof modemParameters> &
+    ExtractViewModel<typeof pinCode>;
 
 const processors = [
     functionMode,
@@ -57,18 +59,24 @@ const processors = [
     signalQuality,
     periodicTAU,
     modemParameters,
+    pinCode,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
 export const initialState = (): State =>
     processors.reduce(
-        (state, processor) => ({ ...state, ...processor.initialState() }),
+        (state, processor) =>
+            ({ ...state, ...processor.initialState() } as State),
         {} as State
     );
 
+function castToState<T>(state: State, partialState: T): State {
+    return { ...state, ...partialState } as State;
+}
+
 let waitingAT: string;
 
-export const convert = (packet: Packet, state: State) => {
+export const convert = (packet: Packet, state: State): State => {
     if (packet.format !== 'at') {
         return state;
     }
@@ -81,7 +89,7 @@ export const convert = (packet: Packet, state: State) => {
     if (isRequest) {
         waitingAT = command ?? '';
         if (processor && processor.request) {
-            return { ...state, ...processor.request(parsedPacket) };
+            return castToState(state, processor.request(parsedPacket));
         }
         return state;
     }
@@ -91,15 +99,12 @@ export const convert = (packet: Packet, state: State) => {
         // response if true, otherwise a notification
         if (command === waitingAT) {
             waitingAT = '';
-            return {
-                ...state,
-                ...processor.response(parsedPacket),
-            };
+            return castToState(state, processor.response(parsedPacket));
         }
         const notification = processor.notification
             ? processor.notification(parsedPacket)
             : processor.response(parsedPacket);
-        return { ...state, ...notification };
+        return castToState(state, notification);
     }
 
     // response without command
@@ -108,7 +113,7 @@ export const convert = (packet: Packet, state: State) => {
         waitingAT = '';
 
         const change = responseProcessor.response(parsedPacket);
-        return { ...state, ...change };
+        return castToState(state, change);
     }
 
     // eslint-disable-next-line no-empty

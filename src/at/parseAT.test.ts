@@ -31,6 +31,17 @@ const tests = [
         },
     },
     {
+        packet: atPacket('OK\r\n'),
+        expected: {
+            command: undefined,
+            operator: undefined,
+            body: 'OK\\r\\n',
+            isRequest: false,
+            lastLine: undefined,
+            status: 'OK',
+        },
+    },
+    {
         packet: atPacket('AT%XMODEMTRACE=1,2OK'),
         expected: {
             command: '%XMODEMTRACE',

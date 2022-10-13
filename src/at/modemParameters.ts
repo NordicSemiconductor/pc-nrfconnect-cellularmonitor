@@ -7,15 +7,15 @@
 import type { Processor } from '.';
 import { getParametersFromResponse } from './utils';
 
-enum regStatus {
-    NOT_REGISTERED = 0,
-    REGISTERED = 1,
-    NOT_REGISTERED_SEARCHING = 2,
-    REGISTRATION_DENIED = 3,
-    UNKNOWN = 4,
-    REGISTERED_ROAMING = 5,
-    UUIC_FAILURE = 90,
-}
+// enum regStatus {
+//     NOT_REGISTERED = 0,
+//     REGISTERED = 1,
+//     NOT_REGISTERED_SEARCHING = 2,
+//     REGISTRATION_DENIED = 3,
+//     UNKNOWN = 4,
+//     REGISTERED_ROAMING = 5,
+//     UUIC_FAILURE = 90,
+// }
 
 type ViewModel = {
     xmonitor?: {
