@@ -28,7 +28,6 @@ const convertPackets = (
 
 const ErrorPacket = atPacket('ERROR\r\n');
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setCommandPackets = [
     {
         setCommand: atPacket('AT+CPINR="SIM PIN"'),

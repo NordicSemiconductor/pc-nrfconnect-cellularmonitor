@@ -29,7 +29,6 @@ const convertPackets = (
 const OkPacket = atPacket('OK\r\n');
 const ErrorPacket = atPacket('ERROR\r\n');
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const readCommandPackets = [
     {
         command: atPacket('AT+CEMODE?'),
@@ -43,7 +42,6 @@ const readCommandPackets = [
     },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const testCommandPackets = [
     {
         command: atPacket('AT+CEMODE=?'),
