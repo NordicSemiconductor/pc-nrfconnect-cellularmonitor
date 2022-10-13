@@ -43,15 +43,25 @@ export interface ParsedPacket {
 
 type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
 
-// Typescript challenge! Make this state object by iterating over the processors array below.
-export type State = ExtractViewModel<typeof functionMode> &
-    ExtractViewModel<typeof currentBand> &
-    ExtractViewModel<typeof modeOfOperation> &
-    ExtractViewModel<typeof periodicTAU> &
-    ExtractViewModel<typeof signalQuality> &
-    ExtractViewModel<typeof modemParameters> &
-    ExtractViewModel<typeof pinCode> &
-    ExtractViewModel<typeof pinRetries>;
+type GetKeys<T> = T extends T ? keyof T : never;
+type UnionToIntersection<T> = {
+    [K in GetKeys<T>]: T extends Partial<Record<K, unknown>> ? T[K] : never;
+};
+
+// To replace < | undefined> types with proper optional ? types, add this flag to tsconfig.json "exactOptionalPropertyTypes": true
+export type State = UnionToIntersection<
+    ExtractViewModel<typeof processors[number]>
+>;
+
+// // Typescript challenge! Make this state object by iterating over the processors array below.
+// export type State = ExtractViewModel<typeof functionMode> &
+//     ExtractViewModel<typeof currentBand> &
+//     ExtractViewModel<typeof modeOfOperation> &
+//     ExtractViewModel<typeof periodicTAU> &
+//     ExtractViewModel<typeof signalQuality> &
+//     ExtractViewModel<typeof modemParameters> &
+//     ExtractViewModel<typeof pinCode> &
+//     ExtractViewModel<typeof pinRetries>;
 
 const processors = [
     functionMode,
