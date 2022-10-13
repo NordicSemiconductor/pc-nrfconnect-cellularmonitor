@@ -7,22 +7,25 @@
 import type { Processor } from '.';
 import { getParametersFromResponse } from './utils';
 
-type pinCodeStatus =
-    | 'unknown' // Not yet aware
-    | 'READY' // No PIN required
-    | 'SIM PUN' // PIN code required
-    | 'SIM PIN' // PUK code required
-    | 'SIM PUK' // PIN2 code required
-    | 'SIM PIN2' // PUK2 code required
-    | 'PH-SIM PIN' // USIM depersonalization required
-    | 'PH-NET PIN' // Network depersonalization required
-    | 'PH-NETSUB PIN' // Network subset depersonalization required
-    | 'PH-SP PIN' // Service provider depersonalization required
-    | 'PH-CORP PIN'; // Corporate depersonalization required
+const pinCodeStatus = {
+    unknown: 'Not yet aware',
+    READY: 'No PIN required',
+    'SIM PUN': 'PIN code required',
+    'SIM PIN': 'PUK code required',
+    'SIM PUK': 'PIN2 code required',
+    'SIM PIN2': 'PUK2 code required',
+    'PH-SIM PIN': 'USIM depersonalization required',
+    'PH-NET PIN': 'Network depersonalization required',
+    'PH-NETSUB PIN': 'Network subset depersonalization required',
+    'PH-SP PIN': 'Service provider depersonalization required',
+    'PH-CORP PIN': 'Corporate depersonalization required',
+};
+
+type PinCodeStatus = keyof typeof pinCodeStatus;
 
 const evaluatePinStateResponse = (
     responseArray: string[] | undefined
-): pinCodeStatus => {
+): PinCodeStatus => {
     const allowedStates = [
         'READY',
         'SIM PUN',
@@ -34,11 +37,11 @@ const evaluatePinStateResponse = (
         'PH-NETSUB PIN',
         'PH-SP PIN',
         'PH-CORP PIN',
-    ] as pinCodeStatus[];
+    ] as PinCodeStatus[];
 
     // Typescript challange: Improve the type narrowing
     if (responseArray) {
-        let returnValue: pinCodeStatus | null = null;
+        let returnValue: PinCodeStatus | null = null;
         allowedStates.forEach((response, index) => {
             if (response === responseArray[0]) {
                 returnValue = allowedStates[index];
@@ -51,7 +54,7 @@ const evaluatePinStateResponse = (
     return 'unknown';
 };
 
-type ViewModel = { pinCodeStatus: pinCodeStatus };
+type ViewModel = { pinCodeStatus: PinCodeStatus };
 
 const tentativeState: Partial<ViewModel> | null = null;
 
