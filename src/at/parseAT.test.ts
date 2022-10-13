@@ -68,7 +68,7 @@ const tests = [
         expected: {
             command: '%XSYSTEMMODE',
             operator: undefined,
-            body: `: 1,0,1,0\\r\\nOK\\r\\n`,
+            body: `1,0,1,0\\r\\nOK\\r\\n`,
             isRequest: false,
             lastLine: 'OK',
             status: 'OK',

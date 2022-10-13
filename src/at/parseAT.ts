@@ -11,7 +11,9 @@ const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: Packet): ParsedPacket => {
     const textData = JSON.stringify(decoder.decode(packet.packet_data));
     const escapedData = textData.substring(1, textData.length - 1);
-    const match = /(AT)?([+%][\w\d]+)?(=\?|[=?])?(.*)?/gi.exec(escapedData);
+    const match = /(AT)?([+%][\w\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
+        escapedData
+    );
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
 

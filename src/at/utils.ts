@@ -21,8 +21,7 @@ export const getParametersFromResponse = (body?: string) => {
     }
 
     const lineSeparator = /(\r\n|\\r\\n)/;
-    const trimmedBody = body?.startsWith(':') ? body?.replace(':', '') : body;
-    const firstLine = trimmedBody?.split(lineSeparator)[0];
+    const firstLine = body?.split(lineSeparator)[0];
     const paramArray = firstLine
         .split(',')
         .map(stringValue => stringValue.trim())
