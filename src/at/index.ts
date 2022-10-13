@@ -8,7 +8,6 @@ import { processor as currentBand } from './currentBand';
 import { processor as functionMode } from './functionMode';
 import { processor as modemParameters } from './modemParameters';
 import { processor as modeOfOperation } from './modeOfOperation';
-// eslint-disable-next-line import/no-cycle
 import { parseAT } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';

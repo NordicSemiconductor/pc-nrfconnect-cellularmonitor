@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-// eslint-disable-next-line import/no-cycle
-import { Packet, ParsedPacket } from '.';
+import type { Packet, ParsedPacket } from '.';
 
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: Packet): ParsedPacket => {
