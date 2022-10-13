@@ -23,37 +23,6 @@ const pinCodeStatus = {
 
 type PinCodeStatus = keyof typeof pinCodeStatus;
 
-const evaluatePinStateResponse = (
-    responseArray: string[] | undefined
-): PinCodeStatus => {
-    const allowedStates = [
-        'READY',
-        'SIM PUN',
-        'SIM PIN',
-        'SIM PUK',
-        'SIM PIN2',
-        'PH-SIM PIN',
-        'PH-NET PIN',
-        'PH-NETSUB PIN',
-        'PH-SP PIN',
-        'PH-CORP PIN',
-    ] as PinCodeStatus[];
-
-    // Typescript challange: Improve the type narrowing
-    if (responseArray) {
-        let returnValue: PinCodeStatus | null = null;
-        allowedStates.forEach((response, index) => {
-            if (response === responseArray[0]) {
-                returnValue = allowedStates[index];
-            }
-        });
-        if (returnValue) {
-            return returnValue;
-        }
-    }
-    return 'unknown';
-};
-
 type ViewModel = { pinCodeStatus: PinCodeStatus };
 
 const tentativeState: Partial<ViewModel> | null = null;
@@ -66,9 +35,19 @@ export const processor: Processor<ViewModel> = {
     response(packet) {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.body);
-            return {
-                pinCodeStatus: evaluatePinStateResponse(responseArray),
-            };
+
+            const allowedStates = Object.keys(pinCodeStatus).filter(
+                key => key !== 'unknown'
+            ) as PinCodeStatus[];
+
+            if (responseArray?.length === 1) {
+                return {
+                    pinCodeStatus:
+                        allowedStates.find(
+                            state => state === responseArray[0]
+                        ) ?? 'unknown',
+                };
+            }
         }
         return { pinCodeStatus: 'unknown' };
     },
