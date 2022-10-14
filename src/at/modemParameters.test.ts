@@ -10,10 +10,10 @@
 
 import { atPacket, convertPackets } from './testUtils';
 
-const setCommand = atPacket('AT%XMONITOR');
-const responsePackets = [
+const packets = [
     {
-        packet: atPacket(
+        command: atPacket('AT%XMONITOR'),
+        response: atPacket(
             '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","11100000","11100000","01001001"\r\nOK'
         ),
         expected: {
@@ -38,7 +38,9 @@ const responsePackets = [
 ];
 
 test('response from the setCommand sets the state according to the response', () => {
-    responsePackets.forEach(({ packet, expected }) => {
-        expect(convertPackets([packet]).xmonitor).toEqual(expected);
+    packets.forEach(test => {
+        expect(convertPackets([test.command, test.response]).xmonitor).toEqual(
+            test.expected
+        );
     });
 });
