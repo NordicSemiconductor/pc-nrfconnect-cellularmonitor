@@ -12,8 +12,6 @@ import { atPacket, convertPackets } from './testUtils';
 
 const cpinQuestion = atPacket('AT+CPIN');
 
-const cpinPacketReady = atPacket('+CPIN: READY\r\nOK\r\n');
-
 const readResponseTests = [
     { response: atPacket('+CPIN: READY\r\nOK\r\n'), expected: 'READY' },
     { response: atPacket('+CPIN: SIM PUN\r\nOK\r\n'), expected: 'SIM PUN' },
@@ -59,8 +57,8 @@ const cpinPacketError = atPacket('ERROR\r\n');
 
 test('+CPIN read command responses sets the pinCodeState appropriately', () => {
     readResponseTests.forEach(test => {
-        expect(convertPackets([test.response]).pinCodeStatus).toBe(
-            test.expected
-        );
+        expect(
+            convertPackets([cpinQuestion, test.response]).pinCodeStatus
+        ).toBe(test.expected);
     });
 });
