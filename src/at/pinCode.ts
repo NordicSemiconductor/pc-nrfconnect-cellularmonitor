@@ -34,9 +34,9 @@ export const processor: Processor<ViewModel> = {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.body);
 
-            const allowedStates = Object.keys(pinCodeStatus).filter(
-                key => key !== 'unknown'
-            ) as PinCodeStatus[];
+            const allowedStates = (
+                Object.keys(pinCodeStatus) as PinCodeStatus[]
+            ).filter(key => key !== 'unknown');
 
             if (responseArray?.length === 1) {
                 return {
