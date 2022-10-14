@@ -49,12 +49,14 @@ export const processor: Processor<ViewModel> = {
         }
 
         if (packet.status === 'OK') {
-            const mode = getParametersFromResponse(packet.body);
-            if (tentativeState.requestedRead && mode?.length === 1) {
+            if (tentativeState.requestedRead) {
+                const mode = getParametersFromResponse(packet.body)?.pop();
                 tentativeState.requestedRead = false;
-                return {
-                    modeOfOperation: parseInt(mode[0], 10),
-                };
+                return mode
+                    ? {
+                          modeOfOperation: parseInt(mode, 10),
+                      }
+                    : {};
             }
         }
         return {};

@@ -19,9 +19,7 @@ export const processor: Processor<ViewModel> = {
     response: packet => {
         if (packet.status === 'OK') {
             const imsi = getParametersFromResponse(packet.body)?.pop();
-            if (imsi) {
-                return { imsi };
-            }
+            return imsi ? { imsi } : {};
         }
         return {};
     },

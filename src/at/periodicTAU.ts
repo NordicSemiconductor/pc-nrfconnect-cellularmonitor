@@ -5,7 +5,7 @@
  */
 
 import type { Processor } from '.';
-import { getNumberList } from './utils';
+import { getNumberList, getParametersFromResponse } from './utils';
 
 export type ViewModel = {
     notifyPeriodicTAU?: boolean;
@@ -36,12 +36,8 @@ export const processor: Processor<ViewModel> = {
     },
 
     notification(packet) {
-        const match = /(\d+)/.exec(packet.body ?? '');
-        if (match) {
-            const periodicTAU = Number(match[1]);
-            return { periodicTAU };
-        }
-        return {};
+        const periodicTAU = getParametersFromResponse(packet.body)?.pop();
+        return periodicTAU ? { periodicTAU: parseInt(periodicTAU, 10) } : {};
     },
 };
 
