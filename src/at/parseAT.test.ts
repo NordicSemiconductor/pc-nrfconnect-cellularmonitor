@@ -57,6 +57,28 @@ const tests = [
         },
     },
     {
+        packet: atPacket('AT+CFUN?'),
+        expected: {
+            command: '+CFUN',
+            operator: '?',
+            body: undefined,
+            isRequest: true,
+            lastLine: undefined,
+            status: undefined,
+        },
+    },
+    {
+        packet: atPacket('AT+CFUN=?'),
+        expected: {
+            command: '+CFUN',
+            operator: '=?',
+            body: undefined,
+            isRequest: true,
+            lastLine: undefined,
+            status: undefined,
+        },
+    },
+    {
         packet: atPacket('%XSYSTEMMODE: 1,0,1,0\r\nOK\r\n'),
         expected: {
             command: '%XSYSTEMMODE',
