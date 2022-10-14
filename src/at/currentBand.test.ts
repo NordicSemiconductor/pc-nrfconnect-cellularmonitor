@@ -39,7 +39,7 @@ test('%XCBAND set command reads the current band and sets it in the viewModel', 
     });
 });
 
-test('%XCBAND set command reads available bands and sets it in the viewModel', () => {
+test('%XCBAND test command reads available bands and sets it in the viewModel', () => {
     bandTestResponses.forEach(response => {
         const testCommandSent = convertPackets([testCommandPacket]);
         const responseRecieved = convertPackets(

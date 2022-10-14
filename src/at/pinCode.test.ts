@@ -53,8 +53,6 @@ const readResponseTests = [
     },
 ];
 
-const cpinPacketError = atPacket('ERROR\r\n');
-
 test('+CPIN read command responses sets the pinCodeState appropriately', () => {
     readResponseTests.forEach(test => {
         expect(

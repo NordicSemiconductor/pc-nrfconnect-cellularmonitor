@@ -58,7 +58,7 @@ test('CFUN set commands work as expected', () => {
     });
 });
 
-test('CFUN test commands work as expected', () => {
+test('CFUN read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
             convertPackets([test.command, test.response]).functionalMode
@@ -66,7 +66,7 @@ test('CFUN test commands work as expected', () => {
     });
 });
 
-test('CFUN read commands work as expected', () => {
+test('CFUN test commands work as expected', () => {
     testCommandPackets.forEach(test => {
         expect(
             convertPackets([test.command, test.response]).functionalMode
