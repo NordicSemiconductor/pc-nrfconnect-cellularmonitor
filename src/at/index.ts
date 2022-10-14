@@ -14,6 +14,7 @@ import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
 import { processor as signalQuality } from './signalQuality';
 import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
+import { processor as manufacturerIdentification } from './manufacturerIdentification';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -74,6 +75,7 @@ const processors = [
     pinCode,
     pinRetries,
     internationMobileSubscriberIdentity,
+    manufacturerIdentification,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
