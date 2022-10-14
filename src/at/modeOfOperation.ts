@@ -5,6 +5,7 @@
  */
 
 import type { Processor } from '.';
+import { getParametersFromResponse } from './utils';
 
 const ModeOfOperation = {
     0: 'PS Mode 2',
@@ -48,10 +49,11 @@ export const processor: Processor<ViewModel> = {
         }
 
         if (packet.status === 'OK') {
-            if (tentativeState.requestedRead && packet.body) {
+            const mode = getParametersFromResponse(packet.body);
+            if (tentativeState.requestedRead && mode?.length === 1) {
                 tentativeState.requestedRead = false;
                 return {
-                    modeOfOperation: parseInt(packet.body, 10),
+                    modeOfOperation: parseInt(mode[0], 10),
                 };
             }
         }
