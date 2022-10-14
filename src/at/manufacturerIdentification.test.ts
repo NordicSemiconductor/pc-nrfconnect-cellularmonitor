@@ -13,7 +13,7 @@ import { atPacket, convertPackets, ErrorPacket } from './testUtils';
 const readCommandPackets = [
     {
         command: atPacket('AT+CGMI'),
-        response: atPacket('+CGMI: Nordic Semiconductor ASA\r\nOK\r\n'),
+        response: atPacket('Nordic Semiconductor ASA\r\nOK\r\n'),
         expected: 'Nordic Semiconductor ASA',
     },
     {

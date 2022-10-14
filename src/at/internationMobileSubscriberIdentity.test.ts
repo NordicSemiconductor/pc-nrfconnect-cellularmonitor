@@ -13,7 +13,7 @@ import { atPacket, convertPackets, ErrorPacket } from './testUtils';
 const readCommandPackets = [
     {
         command: atPacket('AT+CIMI'),
-        response: atPacket('+CIMI: 284011234567890\r\nOK\r\n'),
+        response: atPacket('284011234567890\r\nOK\r\n'),
         expected: '284011234567890',
     },
     {
