@@ -13,6 +13,7 @@ import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
 import { processor as signalQuality } from './signalQuality';
+import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -72,6 +73,7 @@ const processors = [
     modemParameters,
     pinCode,
     pinRetries,
+    internationMobileSubscriberIdentity,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
