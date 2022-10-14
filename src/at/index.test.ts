@@ -26,6 +26,6 @@ test('Trace is read properly', () => {
         state = convert(packet, state);
     });
 
-    expect(state.pinState).toBe('ready');
+    expect(state.pinCodeStatus).toBe('READY');
     expect(state.notifySignalQuality).toBe(true);
 });
