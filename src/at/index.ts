@@ -12,6 +12,7 @@ import { parseAT } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
+import { processor as iccid } from './iccid';
 import { processor as signalQuality } from './signalQuality';
 import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
 import { processor as manufacturerIdentification } from './manufacturerIdentification';
@@ -76,6 +77,7 @@ const processors = [
     pinRetries,
     internationMobileSubscriberIdentity,
     manufacturerIdentification,
+    iccid,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
