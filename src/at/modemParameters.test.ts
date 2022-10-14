@@ -8,14 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, initialState, Packet, State } from './index';
-
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
+import { atPacket, convertPackets } from './testUtils';
 
 const setCommand = atPacket('AT%XMONITOR');
 const responsePackets = [
@@ -43,17 +36,6 @@ const responsePackets = [
         },
     },
 ];
-const OkPacket = atPacket('OK\r\n');
-const ErrorPacket = atPacket('ERROR\r\n');
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState()
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
-        previousState
-    );
 
 test('response from the setCommand sets the state according to the response', () => {
     responsePackets.forEach(({ packet, expected }) => {

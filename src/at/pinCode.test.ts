@@ -2,20 +2,13 @@
  * @jest-environment node
  */
 
-import { convert, initialState, Packet, State } from '.';
-
 /*
  * Copyright (c) 2022 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
+import { atPacket, convertPackets } from './testUtils';
 
 const cpinQuestion = atPacket('AT+CPIN');
 
@@ -63,15 +56,6 @@ const readResponseTests = [
 ];
 
 const cpinPacketError = atPacket('ERROR\r\n');
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState()
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
-        previousState
-    );
 
 test('+CPIN read command responses sets the pinCodeState appropriately', () => {
     readResponseTests.forEach(test => {

@@ -8,25 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, initialState, Packet, State } from './index';
-
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState()
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
-        previousState as State
-    );
-
-const ErrorPacket = atPacket('ERROR\r\n');
+import { atPacket, convertPackets, ErrorPacket } from './testUtils';
 
 const setCommandPackets = [
     {

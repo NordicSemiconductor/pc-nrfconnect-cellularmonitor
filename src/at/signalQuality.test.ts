@@ -1,21 +1,13 @@
 /**
  * @jest-environment node
  */
-
 /*
  * Copyright (c) 2022 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, Packet, State } from './index';
-
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
+import { atPacket, convertPackets, ErrorPacket, OkPacket } from './testUtils';
 
 const subscribePacket = atPacket('AT%CESQ=1');
 const unsubscribePacket = atPacket('AT%CESQ=0');
@@ -54,28 +46,6 @@ const signalQualityNotifications = [
         result: [64, 3, 255, 255],
     },
 ];
-
-const OkPacket = atPacket('OK\r\n');
-const ErrorPacket = atPacket('ERROR\r\n');
-
-const initialState = {
-    notifySignalQuality: false,
-    signalQuality: {
-        rsrp: 255,
-        rsrp_threshold_index: 255,
-        rsrq: 255,
-        rsrq_threshold_index: 255,
-    },
-} as State;
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
-        previousState
-    );
 
 test('Subscribe to %CESQ signal quality sets correct viewModel', () => {
     const model = convertPackets([subscribePacket]);

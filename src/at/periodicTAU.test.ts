@@ -1,21 +1,13 @@
 /**
  * @jest-environment node
  */
-
 /*
  * Copyright (c) 2022 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, initialState, Packet, State } from './index';
-
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
+import { atPacket, convertPackets } from './testUtils';
 
 const subscribePacket = atPacket('AT%XT3412=1,2000,30000');
 const unsubscribePacket = atPacket('AT%XT3412=0');
@@ -25,15 +17,6 @@ const signalQualityNotifications = [
 ];
 
 const OkPacket = atPacket('OK\r\n');
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState()
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) }),
-        previousState
-    );
 
 test('Subscribe to %XT3412 signal quality sets correct viewModel', () => {
     expect(convertPackets([subscribePacket, OkPacket]).notifyPeriodicTAU).toBe(

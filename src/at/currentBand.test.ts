@@ -8,14 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, initialState, Packet, State } from './index';
-
-const encoder = new TextEncoder();
-const encode = (txt: string) => Buffer.from(encoder.encode(txt));
-const atPacket = (txt: string): Packet => ({
-    format: 'at',
-    packet_data: encode(txt),
-});
+import { atPacket, convertPackets } from './testUtils';
 
 const setCommandPacket = atPacket('AT%XCBAND');
 const bandResponses = [1, 13, 16, 21, 54, 71].map(band => ({
@@ -35,15 +28,6 @@ const bandTestResponses = listsOfAvailableBands.map(bands => ({
     responsePacket: atPacket(`%XCBAND: (${bands})\r\nOK\r\n`),
     result: bands,
 }));
-
-const convertPackets = (
-    packets: Packet[],
-    previousState = initialState()
-): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) } as State),
-        previousState
-    );
 
 test('%XCBAND set command reads the current band and sets it in the viewModel', () => {
     bandResponses.forEach(response => {
