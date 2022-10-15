@@ -149,17 +149,5 @@ export const convert = (packet: Packet, state: State): State => {
         return castToState(state, change);
     }
 
-    // eslint-disable-next-line no-empty
-    if (lastLine?.startsWith('ERROR')) {
-    }
-
-    // eslint-disable-next-line no-empty
-    if (lastLine?.startsWith('+CME ERROR')) {
-    }
-
-    // eslint-disable-next-line no-empty
-    if (lastLine?.startsWith('+CMS ERROR')) {
-    }
-
     return state;
 };
