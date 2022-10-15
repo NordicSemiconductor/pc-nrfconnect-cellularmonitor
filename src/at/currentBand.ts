@@ -17,7 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxcband.html&cp=2_1_4_9',
-    response(packet) {
+    response: packet => {
         if (packet.status === 'OK') {
             if (!packet.body?.includes('(')) {
                 const currentBand = getParametersFromResponse(

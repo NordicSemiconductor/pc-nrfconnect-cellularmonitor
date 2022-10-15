@@ -44,7 +44,7 @@ export const processor: Processor<ViewModel> = {
         requestedRead = packet.operator === '?';
         return {};
     },
-    response(packet) {
+    response: packet => {
         if (packet.body?.startsWith('OK')) return {};
         if (packet.status === 'OK' && requestedRead) {
             requestedRead = false;

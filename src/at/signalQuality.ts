@@ -32,7 +32,7 @@ export const processor: Processor<ViewModel> = {
             rsrq_threshold_index: 255,
         },
     }),
-    request(packet) {
+    request: packet => {
         if (packet.body?.startsWith('1')) {
             tentativeState = { notifySignalQuality: true };
             return {};
@@ -43,7 +43,7 @@ export const processor: Processor<ViewModel> = {
         }
         return {};
     },
-    response(packet) {
+    response: packet => {
         if (packet.body?.startsWith('OK')) {
             if (tentativeState != null) {
                 return tentativeState;
@@ -51,7 +51,7 @@ export const processor: Processor<ViewModel> = {
         }
         return {};
     },
-    notification(packet) {
+    notification: packet => {
         const signalQualityValues = getParametersFromResponse(packet.body)?.map(
             value => parseInt(value, 10)
         );
