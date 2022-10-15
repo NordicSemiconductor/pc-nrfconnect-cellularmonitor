@@ -83,8 +83,7 @@ const processors = [
 // Typescript challange! Think it's related to the one above.
 export const initialState = (): State =>
     processors.reduce(
-        (state, processor) =>
-            ({ ...state, ...processor.initialState() } as State),
+        (state, processor) => ({ ...state, ...processor.initialState() }),
         {} as State
     );
 
