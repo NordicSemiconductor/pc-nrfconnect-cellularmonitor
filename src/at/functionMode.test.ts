@@ -38,11 +38,69 @@ const testCommandPackets = [
 ];
 
 const setCommandPackets = [
-    ...Object.values(FunctionalModeSetter).map(value => ({
-        command: atPacket(`AT+CFUN=${value}`),
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.POWER_OFF}`),
         response: atPacket('OK\r\n'),
         expected: undefined,
-    })),
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.NORMAL_MODE}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.FUNCTIONALITY_ONLY}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.OFFLINE_MODE}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(
+            `AT+CFUN=${FunctionalModeSetter.DEACTIVATE_LTE_KEEP_GNSS}`
+        ),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(
+            `AT+CFUN=${FunctionalModeSetter.ACTIVATE_LTE_KEEP_GNSS}`
+        ),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(
+            `AT+CFUN=${FunctionalModeSetter.DEACTIVATE_GNSS_KEEP_LTE}`
+        ),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(
+            `AT+CFUN=${FunctionalModeSetter.ACTIVATE_GNSS_KEEP_LTE}`
+        ),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.DEACTIVATE_UICC}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.ACTIVATE_UICC}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
+    {
+        command: atPacket(`AT+CFUN=${FunctionalModeSetter.OFFLINE_MODE_UICC}`),
+        response: atPacket('OK\r\n'),
+        expected: undefined,
+    },
     {
         command: atPacket('AT+CFUN=45'),
         response: ErrorPacket,
