@@ -8,9 +8,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { parseAT } from './parseAT';
+import { parseAT, RequestType } from './parseAT';
 import { atPacket } from './testUtils';
-import { RequestType } from './utils';
 
 const tests = [
     {

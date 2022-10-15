@@ -4,8 +4,23 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Packet, ParsedPacket } from '.';
-import { RequestType } from './utils';
+import type { Packet } from '.';
+
+export enum RequestType {
+    NOT_A_REQUEST,
+    SET,
+    SET_WITH_VALUE,
+    READ,
+    TEST,
+}
+
+export interface ParsedPacket {
+    command?: string;
+    requestType?: RequestType;
+    body?: string;
+    status?: string;
+    lastLine?: string;
+}
 
 const operatorToRequestType = (operator?: string) => {
     if (!operator) return RequestType.SET;

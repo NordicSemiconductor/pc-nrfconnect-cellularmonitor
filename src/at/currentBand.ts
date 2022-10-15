@@ -5,7 +5,8 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse, RequestType } from './utils';
+import { RequestType } from './parseAT';
+import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     availableBands?: number[];

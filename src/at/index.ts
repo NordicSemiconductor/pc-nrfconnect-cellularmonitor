@@ -11,12 +11,11 @@ import { processor as internationMobileSubscriberIdentity } from './internationM
 import { processor as manufacturerIdentification } from './manufacturerIdentification';
 import { processor as modemParameters } from './modemParameters';
 import { processor as modeOfOperation } from './modeOfOperation';
-import { parseAT } from './parseAT';
+import { parseAT, ParsedPacket, RequestType } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
 import { processor as signalQuality } from './signalQuality';
-import { RequestType } from './utils';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -34,14 +33,6 @@ export interface Processor<VM> {
     response: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
     request?: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
     notification?: (packet: ParsedPacket) => Partial<VM>;
-}
-
-export interface ParsedPacket {
-    command?: string;
-    requestType?: RequestType;
-    body?: string;
-    lastLine?: string;
-    status?: string; // 'OK | 'ERROR'
 }
 
 type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
