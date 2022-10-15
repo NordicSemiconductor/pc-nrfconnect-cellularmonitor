@@ -99,7 +99,7 @@ export const convert = (packet: Packet, state: State): State => {
     }
 
     const parsedPacket = parseAT(packet);
-    const { requestType, lastLine, command } = parsedPacket;
+    const { requestType, command } = parsedPacket;
 
     // request
     const processor = processors.find(p => p.command === command);

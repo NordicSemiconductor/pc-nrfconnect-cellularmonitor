@@ -14,12 +14,12 @@ export enum RequestType {
     TEST,
 }
 
+const validStatus = ['OK', 'ERROR', '+CME ERROR', '+CMS ERROR'] as const;
 export interface ParsedPacket {
     command?: string;
     requestType?: RequestType;
     body?: string;
-    status?: string;
-    lastLine?: string;
+    status?: typeof validStatus[number];
 }
 
 const operatorToRequestType = (operator?: string) => {
@@ -36,6 +36,16 @@ const operatorToRequestType = (operator?: string) => {
     }
 };
 
+const getStatus = (body: string) => {
+    const lastLine = body
+        .split('\\r\\n')
+        .filter(line => line)
+        .pop()
+        ?.trim();
+
+    return validStatus.find(status => lastLine === status);
+};
+
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: Packet): ParsedPacket => {
     const textData = JSON.stringify(decoder.decode(packet.packet_data));
@@ -46,28 +56,19 @@ export const parseAT = (packet: Packet): ParsedPacket => {
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
 
-        const lines = (body ?? '').split('\\r\\n').filter(line => line);
-
-        const lastLine = lines.length > 1 ? lines.pop()?.trim() : undefined;
-        const status =
-            (lastLine != null ? lastLine?.trim() : undefined) ||
-            (body && body.startsWith('OK') ? 'OK' : undefined);
-
         return {
             command,
             body,
             requestType: startsWithAt
                 ? operatorToRequestType(operator)
                 : RequestType.NOT_A_REQUEST,
-            lastLine,
-            status,
+            status: body ? getStatus(body) : undefined,
         };
     }
     return {
         command: undefined,
         body: undefined,
         requestType: undefined,
-        lastLine: undefined,
         status: undefined,
     };
 };
