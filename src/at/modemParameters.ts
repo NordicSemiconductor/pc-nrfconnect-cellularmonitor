@@ -50,7 +50,7 @@ export const processor: Processor<ViewModel> = {
             regStatus: 0,
         },
     }),
-    response: packet => {
+    onResponse: packet => {
         if (packet.status === 'OK') {
             const responseParameters = getParametersFromResponse(packet.body);
             if (!responseParameters) {

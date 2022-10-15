@@ -30,9 +30,15 @@ export interface Processor<VM> {
     command: string;
     documentation: string;
     initialState: () => VM;
-    response: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
-    request?: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
-    notification?: (packet: ParsedPacket) => Partial<VM>;
+    onResponse: (
+        packet: ParsedPacket,
+        requestType?: RequestType
+    ) => Partial<VM>;
+    onRequest?: (
+        packet: ParsedPacket,
+        requestType?: RequestType
+    ) => Partial<VM>;
+    onNotification?: (packet: ParsedPacket) => Partial<VM>;
 }
 
 type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
@@ -112,10 +118,10 @@ export const convert = (packet: Packet, state: State): State => {
     ) {
         waitingAT = command ?? '';
         pendingRequestType = requestType;
-        if (processor && processor.request) {
+        if (processor && processor.onRequest) {
             return castToState(
                 state,
-                processor.request(parsedPacket, requestType)
+                processor.onRequest(parsedPacket, requestType)
             );
         }
         return state;
@@ -128,12 +134,12 @@ export const convert = (packet: Packet, state: State): State => {
             waitingAT = '';
             return castToState(
                 state,
-                processor.response(parsedPacket, getAndResetRequestType())
+                processor.onResponse(parsedPacket, getAndResetRequestType())
             );
         }
-        const notification = processor.notification
-            ? processor.notification(parsedPacket)
-            : processor.response(parsedPacket);
+        const notification = processor.onNotification
+            ? processor.onNotification(parsedPacket)
+            : processor.onResponse(parsedPacket);
         return castToState(state, notification);
     }
 
@@ -142,7 +148,7 @@ export const convert = (packet: Packet, state: State): State => {
     if (responseProcessor) {
         waitingAT = '';
 
-        const change = responseProcessor.response(
+        const change = responseProcessor.onResponse(
             parsedPacket,
             getAndResetRequestType()
         );

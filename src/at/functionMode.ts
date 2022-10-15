@@ -39,7 +39,7 @@ export const processor: Processor<ViewModel> = {
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcfun.html&cp=2_1_4_0',
     initialState: () => ({}),
-    response: (packet, requestType) => {
+    onResponse: (packet, requestType) => {
         if (packet.status === 'OK' && requestType === RequestType.READ) {
             const mode = getParametersFromResponse(packet.body)?.pop();
             return mode

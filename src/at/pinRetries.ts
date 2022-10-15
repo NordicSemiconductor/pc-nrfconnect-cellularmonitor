@@ -21,7 +21,7 @@ export const processor: Processor<ViewModel> = {
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcemode.html&cp=2_1_4_11',
     initialState: () => ({}),
-    response: packet => {
+    onResponse: packet => {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.body);
             if (responseArray?.length === 2) {

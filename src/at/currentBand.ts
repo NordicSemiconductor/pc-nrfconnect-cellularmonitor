@@ -18,7 +18,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxcband.html&cp=2_1_4_9',
-    response: (packet, requestType) => {
+    onResponse: (packet, requestType) => {
         if (packet.status === 'OK' && packet.body) {
             if (requestType === RequestType.TEST) {
                 // Response to a test command, e.g. %XCBAND: (1,2,3,4,5)
