@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { atPacket, convertPackets } from './testUtils';
+import { atPacket, convertPackets, OkPacket } from './testUtils';
 
 const cpinQuestion = atPacket('AT+CPIN');
 
@@ -39,19 +39,9 @@ const readResponseTests = [
         response: atPacket('+CPIN: GIBBERISH PIN\r\nOK\r\n'),
         expected: 'unknown',
     },
-    {
-        response: atPacket('+CPIN: GIBBERISH\r\nOK\r\n'),
-        expected: 'unknown',
-    },
-    {
-        response: atPacket('+CPIN: PIN\r\nOK\r\n'),
-        expected: 'unknown',
-    },
-    {
-        response: atPacket('+CPIN: PIN GIBBERISH\r\nOK\r\n'),
-        expected: 'unknown',
-    },
 ];
+
+const cpinSetCommand = atPacket('AT+CPIN="1234"');
 
 test('+CPIN read command responses sets the pinCodeState appropriately', () => {
     readResponseTests.forEach(test => {
@@ -59,4 +49,10 @@ test('+CPIN read command responses sets the pinCodeState appropriately', () => {
             convertPackets([cpinQuestion, test.response]).pinCodeStatus
         ).toBe(test.expected);
     });
+});
+
+test('+CPIN set command does not disturb state', () => {
+    expect(convertPackets([cpinSetCommand, OkPacket]).pinCodeStatus).toBe(
+        'unknown'
+    );
 });
