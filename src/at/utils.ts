@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+export enum RequestType {
+    NOT_A_REQUEST,
+    SET,
+    SET_WITH_VALUE,
+    READ,
+    TEST,
+}
+
 export const getNumberList = (body?: string) => {
     const firstLine = body?.split('\r\n')[0];
     return (

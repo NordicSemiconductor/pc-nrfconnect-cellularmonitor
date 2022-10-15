@@ -5,7 +5,7 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse } from './utils';
+import { getParametersFromResponse, RequestType } from './utils';
 
 export enum FunctionalModeSetter {
     POWER_OFF = 0,
@@ -33,21 +33,13 @@ type ViewModel = {
     functionalMode?: FunctionalMode;
 };
 
-let requestedRead = false;
-
 export const processor: Processor<ViewModel> = {
     command: '+CFUN',
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcfun.html&cp=2_1_4_0',
     initialState: () => ({}),
-    request: packet => {
-        requestedRead = packet.operator === '?';
-        return {};
-    },
-    response: packet => {
-        if (packet.body?.startsWith('OK')) return {};
-        if (packet.status === 'OK' && requestedRead) {
-            requestedRead = false;
+    response: (packet, requestType) => {
+        if (packet.status === 'OK' && requestType === RequestType.READ) {
             const mode = getParametersFromResponse(packet.body)?.pop();
             return mode
                 ? {

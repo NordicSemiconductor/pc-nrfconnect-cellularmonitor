@@ -5,6 +5,21 @@
  */
 
 import type { Packet, ParsedPacket } from '.';
+import { RequestType } from './utils';
+
+const operatorToRequestType = (operator?: string) => {
+    if (!operator) return RequestType.SET;
+    switch (operator) {
+        case '=':
+            return RequestType.SET_WITH_VALUE;
+        case '?':
+            return RequestType.READ;
+        case '=?':
+            return RequestType.TEST;
+        default:
+            return RequestType.NOT_A_REQUEST;
+    }
+};
 
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: Packet): ParsedPacket => {
@@ -25,18 +40,18 @@ export const parseAT = (packet: Packet): ParsedPacket => {
 
         return {
             command,
-            operator,
             body,
-            isRequest: startsWithAt !== undefined,
+            requestType: startsWithAt
+                ? operatorToRequestType(operator)
+                : RequestType.NOT_A_REQUEST,
             lastLine,
             status,
         };
     }
     return {
         command: undefined,
-        operator: undefined,
         body: undefined,
-        isRequest: undefined,
+        requestType: undefined,
         lastLine: undefined,
         status: undefined,
     };

@@ -5,7 +5,7 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse } from './utils';
+import { getParametersFromResponse, RequestType } from './utils';
 
 type ViewModel = {
     notifySignalQuality?: boolean;
@@ -43,8 +43,11 @@ export const processor: Processor<ViewModel> = {
         }
         return {};
     },
-    response: packet => {
-        if (packet.body?.startsWith('OK')) {
+    response: (packet, requestType) => {
+        if (
+            packet.status === 'OK' &&
+            requestType === RequestType.SET_WITH_VALUE
+        ) {
             if (tentativeState != null) {
                 return tentativeState;
             }

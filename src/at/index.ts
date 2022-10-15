@@ -6,16 +6,17 @@
 
 import { processor as currentBand } from './currentBand';
 import { processor as functionMode } from './functionMode';
+import { processor as iccid } from './iccid';
+import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
+import { processor as manufacturerIdentification } from './manufacturerIdentification';
 import { processor as modemParameters } from './modemParameters';
 import { processor as modeOfOperation } from './modeOfOperation';
 import { parseAT } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
-import { processor as iccid } from './iccid';
 import { processor as signalQuality } from './signalQuality';
-import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
-import { processor as manufacturerIdentification } from './manufacturerIdentification';
+import { RequestType } from './utils';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -30,16 +31,15 @@ export interface Processor<VM> {
     command: string;
     documentation: string;
     initialState: () => VM;
-    response: (packet: ParsedPacket) => Partial<VM>;
-    request?: (packet: ParsedPacket) => Partial<VM>;
+    response: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
+    request?: (packet: ParsedPacket, requestType?: RequestType) => Partial<VM>;
     notification?: (packet: ParsedPacket) => Partial<VM>;
 }
 
 export interface ParsedPacket {
     command?: string;
-    operator?: string;
+    requestType?: RequestType;
     body?: string;
-    isRequest?: boolean;
     lastLine?: string;
     status?: string; // 'OK | 'ERROR'
 }
@@ -92,6 +92,15 @@ function castToState<T>(state: State, partialState: T): State {
 }
 
 let waitingAT: string;
+let pendingRequestType: RequestType | null;
+const getAndResetRequestType = () => {
+    const requestTypeCopy =
+        pendingRequestType !== null
+            ? pendingRequestType
+            : RequestType.NOT_A_REQUEST;
+    pendingRequestType = null;
+    return requestTypeCopy;
+};
 
 export const convert = (packet: Packet, state: State): State => {
     if (packet.format !== 'at') {
@@ -99,14 +108,24 @@ export const convert = (packet: Packet, state: State): State => {
     }
 
     const parsedPacket = parseAT(packet);
-    const { isRequest, lastLine, command } = parsedPacket;
+    const { requestType, lastLine, command } = parsedPacket;
 
     // request
     const processor = processors.find(p => p.command === command);
-    if (isRequest) {
+
+    // Explicit checks for readability.
+    // Shorthand "if (requestType)"" would fail on undefined AND RequestType.NOT_A_REQUEST (due to it being a value 0)
+    if (
+        requestType !== undefined &&
+        requestType !== RequestType.NOT_A_REQUEST
+    ) {
         waitingAT = command ?? '';
+        pendingRequestType = requestType;
         if (processor && processor.request) {
-            return castToState(state, processor.request(parsedPacket));
+            return castToState(
+                state,
+                processor.request(parsedPacket, requestType)
+            );
         }
         return state;
     }
@@ -116,7 +135,10 @@ export const convert = (packet: Packet, state: State): State => {
         // response if true, otherwise a notification
         if (command === waitingAT) {
             waitingAT = '';
-            return castToState(state, processor.response(parsedPacket));
+            return castToState(
+                state,
+                processor.response(parsedPacket, getAndResetRequestType())
+            );
         }
         const notification = processor.notification
             ? processor.notification(parsedPacket)
@@ -129,7 +151,10 @@ export const convert = (packet: Packet, state: State): State => {
     if (responseProcessor) {
         waitingAT = '';
 
-        const change = responseProcessor.response(parsedPacket);
+        const change = responseProcessor.response(
+            parsedPacket,
+            getAndResetRequestType()
+        );
         return castToState(state, change);
     }
 

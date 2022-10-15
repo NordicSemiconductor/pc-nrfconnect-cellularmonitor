@@ -10,15 +10,15 @@
 
 import { parseAT } from './parseAT';
 import { atPacket } from './testUtils';
+import { RequestType } from './utils';
 
 const tests = [
     {
         packet: atPacket('AT%XT3412=1,2000,30000'),
         expected: {
             command: '%XT3412',
-            operator: '=',
             body: '1,2000,30000',
-            isRequest: true,
+            requestType: RequestType.SET_WITH_VALUE,
             lastLine: undefined,
             status: undefined,
         },
@@ -27,9 +27,8 @@ const tests = [
         packet: atPacket('OK\r\n'),
         expected: {
             command: undefined,
-            operator: undefined,
             body: 'OK\\r\\n',
-            isRequest: false,
+            requestType: RequestType.NOT_A_REQUEST,
             lastLine: undefined,
             status: 'OK',
         },
@@ -38,9 +37,8 @@ const tests = [
         packet: atPacket('AT%XMODEMTRACE=1,2OK'),
         expected: {
             command: '%XMODEMTRACE',
-            operator: '=',
             body: '1,2OK',
-            isRequest: true,
+            requestType: RequestType.SET_WITH_VALUE,
             lastLine: undefined,
             status: undefined,
         },
@@ -49,9 +47,8 @@ const tests = [
         packet: atPacket('AT+CFUN'),
         expected: {
             command: '+CFUN',
-            operator: undefined,
             body: undefined,
-            isRequest: true,
+            requestType: RequestType.SET,
             lastLine: undefined,
             status: undefined,
         },
@@ -60,9 +57,8 @@ const tests = [
         packet: atPacket('AT+CFUN?'),
         expected: {
             command: '+CFUN',
-            operator: '?',
             body: undefined,
-            isRequest: true,
+            requestType: RequestType.READ,
             lastLine: undefined,
             status: undefined,
         },
@@ -71,9 +67,8 @@ const tests = [
         packet: atPacket('AT+CFUN=?'),
         expected: {
             command: '+CFUN',
-            operator: '=?',
             body: undefined,
-            isRequest: true,
+            requestType: RequestType.TEST,
             lastLine: undefined,
             status: undefined,
         },
@@ -82,9 +77,8 @@ const tests = [
         packet: atPacket('%XSYSTEMMODE: 1,0,1,0\r\nOK\r\n'),
         expected: {
             command: '%XSYSTEMMODE',
-            operator: undefined,
+            requestType: RequestType.NOT_A_REQUEST,
             body: `1,0,1,0\\r\\nOK\\r\\n`,
-            isRequest: false,
             lastLine: 'OK',
             status: 'OK',
         },
