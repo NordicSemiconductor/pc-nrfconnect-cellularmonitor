@@ -133,6 +133,7 @@ export const convert = (packet: Packet, state: State): State => {
                 ...processor.onResponse(parsedPacket, getAndResetRequestType()),
             };
         }
+
         const notification = processor.onNotification
             ? processor.onNotification(parsedPacket)
             : processor.onResponse(parsedPacket);
