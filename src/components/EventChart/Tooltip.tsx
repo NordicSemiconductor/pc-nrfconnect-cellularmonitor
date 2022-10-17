@@ -9,7 +9,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
     const point = dataPoints[0];
     if (!point) return;
 
-    const { format } = (point.raw as { event: Packet }).event;
+    const packet = (point.raw as { event: Packet }).event;
 
     return (
         <div
@@ -22,7 +22,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
                 padding: '4px',
             }}
         >
-            <strong>{format}</strong>
+            <strong>{packet.format}</strong>
             {JSON.stringify(point.raw)}
         </div>
     );

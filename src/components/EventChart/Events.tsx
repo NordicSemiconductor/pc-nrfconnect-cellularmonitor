@@ -3,6 +3,7 @@ import 'chartjs-adapter-date-fns';
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -19,6 +20,7 @@ import {
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 import { rawTraceData } from '../../../data/trace';
+import { setSelectedTime } from './chart.slice';
 import { dragSelectTime } from './chart-plugins';
 import { PacketTooltip } from './Tooltip';
 
@@ -34,9 +36,6 @@ ChartJS.register(
     zoomPlugin
 );
 
-const now = Number(Date.now());
-// const root = createRoot(document.getElementById('tooltip')!);
-
 // Parse modem data from file to sample inputs. Set fake timetamp
 const decoder = new TextDecoder();
 const traceEvents = rawTraceData
@@ -48,65 +47,6 @@ const traceEvents = rawTraceData
         ),
         timestamp: { value: packet.timestamp.value / 1000 },
     }));
-
-export const options: ChartOptions<'scatter'> = {
-    maintainAspectRatio: false,
-    responsive: false,
-
-    plugins: {
-        legend: {
-            display: true,
-        },
-
-        zoom: {
-            zoom: {
-                wheel: {
-                    enabled: true,
-                },
-                mode: 'x',
-            },
-            pan: {
-                enabled: true,
-                mode: 'x',
-            },
-        },
-        tooltip: {
-            enabled: false,
-            external(context) {
-                const showing = context.tooltip.opacity === 1;
-                if (showing) {
-                    ReactDOM.render(
-                        <Events />,
-                        document.getElementById('tooltip')
-                    );
-                    // root.render(PacketTooltip(context.tooltip));
-                } else {
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    ReactDOM.render(<></>, document.getElementById('tooltip'));
-                }
-            },
-        },
-    },
-
-    scales: {
-        y: {
-            display: true,
-            ticks: {
-                callback: () => undefined,
-            },
-            grid: { display: false },
-        },
-        x: {
-            type: 'time',
-            ticks: {
-                sampleSize: 50,
-                autoSkip: true,
-                autoSkipPadding: 50,
-                maxRotation: 0,
-            },
-        },
-    },
-};
 
 const events = traceEvents.map(event => ({
     x: event.timestamp.value,
@@ -145,14 +85,90 @@ export const data: ChartData<'scatter'> = {
     datasets,
 };
 
-const plugins = [dragSelectTime];
+export const Events = () => {
+    const dispatch = useDispatch();
 
-export const Events = () => (
-    <Scatter
-        height={200}
-        width={1280}
-        options={options}
-        data={data}
-        plugins={plugins}
-    />
-);
+    const options: ChartOptions<'scatter'> = {
+        maintainAspectRatio: false,
+        responsive: false,
+
+        plugins: {
+            legend: {
+                display: true,
+            },
+
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    mode: 'x',
+                },
+                pan: {
+                    enabled: true,
+                    modifierKey: 'ctrl',
+                    mode: 'x',
+                },
+            },
+
+            dragSelectTime: {
+                updateTime(time) {
+                    console.log('updatedTime inside', time);
+                    dispatch(setSelectedTime(time));
+                },
+            },
+
+            tooltip: {
+                enabled: false,
+                external(context) {
+                    const showing = context.tooltip.opacity === 1;
+                    if (showing) {
+                        const tooltip = PacketTooltip(context.tooltip);
+                        if (tooltip) {
+                            ReactDOM.render(
+                                tooltip,
+                                document.getElementById('tooltip')
+                            );
+                        }
+                    } else {
+                        ReactDOM.render(
+                            <div />,
+                            document.getElementById('tooltip')
+                        );
+                    }
+                },
+            },
+        },
+
+        scales: {
+            y: {
+                display: true,
+                ticks: {
+                    callback: () => undefined,
+                },
+                grid: { display: false },
+            },
+            x: {
+                type: 'time',
+                ticks: {
+                    sampleSize: 50,
+                    autoSkip: true,
+                    autoSkipPadding: 50,
+                    maxRotation: 0,
+                },
+            },
+        },
+    };
+
+    const plugins = [dragSelectTime];
+
+    return (
+        <Scatter
+            height={200}
+            width={1280}
+            options={options}
+            data={data}
+            plugins={plugins}
+        />
+    );
+};

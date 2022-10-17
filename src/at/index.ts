@@ -19,7 +19,7 @@ import { processor as signalQuality } from './signalQuality';
 
 export interface Packet {
     packet_data: Uint8Array;
-    format: 'at';
+    format: string;
     timestamp?: {
         resolution?: string;
         value?: number;

@@ -7,11 +7,12 @@
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
+import atReducer from './at/atSlice';
+import chartSlice from './components/EventChart/chart.slice';
 import modemReducer from './features/modem/modemSlice';
 import powerEstimationReducer from './features/powerEstimation/powerEstimationSlice';
 import traceReducer from './features/tracing/traceSlice';
 import wiresharkReducer from './features/wireshark/wiresharkSlice';
-import atReducer from './at/atSlice';
 
 type AppState = ReturnType<typeof appReducer>;
 
@@ -23,6 +24,7 @@ const appReducer = combineReducers({
     powerEstimation: powerEstimationReducer,
     wireshark: wiresharkReducer,
     at: atReducer,
+    chart: chartSlice,
 });
 
 export default appReducer;

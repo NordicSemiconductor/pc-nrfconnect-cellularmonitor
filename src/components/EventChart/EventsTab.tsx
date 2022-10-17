@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import DashboardCard from '../Dashboard/DashboardCard';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
 import { rawTraceData } from '../../../data/trace';
 import { convert, initialState, Packet } from '../../at';
+import { getSelectedTime } from './chart.slice';
 import { Events } from './Events';
+import SimCard from './SimCard';
 
 import './Events.scss';
-import SimCard from './SimCard';
 
 const traceData = rawTraceData.map<Packet>(jsonPacket => ({
     format: jsonPacket.format,
@@ -14,41 +16,41 @@ const traceData = rawTraceData.map<Packet>(jsonPacket => ({
 }));
 
 const TemporaryTab = () => {
-    const timestamp = 1665058976038000; // Last item of the included trace file
-    const [state, setState] = useState(initialState());
-
-    useEffect(() => {
-        setState(
+    const timestamp = useSelector(getSelectedTime); // Last item of the included trace file
+    const state = useMemo(
+        () =>
             traceData
-                .filter(packet => packet.timestamp!.value < timestamp)
+                .filter(
+                    packet => (packet.timestamp?.value ?? 0) < timestamp * 1000
+                )
                 .reduce(
                     (current, packet) => ({
                         ...current,
                         ...convert(packet, current),
                     }),
-                    state
-                )
-        );
-    }, [timestamp]);
+                    initialState()
+                ),
+        [timestamp]
+    );
 
     return (
         <div className="events-container">
             <div className="cards-container">
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
-                <SimCard />    
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
+                <SimCard />
             </div>
 
             <div className="events">
-                {/* <div className="code">
+                <div className="code">
                     {JSON.stringify(state, undefined, 4)}
-                </div> */}
+                </div>
                 <Events />
             </div>
         </div>
