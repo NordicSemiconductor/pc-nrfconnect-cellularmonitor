@@ -36,9 +36,9 @@ const operatorToRequestType = (operator?: string) => {
     }
 };
 
-const getStatus = (body: string) => {
+const getStatus = (body?: string) => {
     const lastLine = body
-        .split('\\r\\n')
+        ?.split('\\r\\n')
         .filter(line => line)
         .pop()
         ?.trim();
@@ -62,7 +62,7 @@ export const parseAT = (packet: Packet): ParsedPacket => {
             requestType: startsWithAt
                 ? operatorToRequestType(operator)
                 : RequestType.NOT_A_REQUEST,
-            status: body ? getStatus(body) : undefined,
+            status: getStatus(body),
         };
     }
     return {
