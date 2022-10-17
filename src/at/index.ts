@@ -84,10 +84,6 @@ export const initialState = (): State =>
         {} as State
     );
 
-function castToState<T>(state: State, partialState: T): State {
-    return { ...state, ...partialState } as State;
-}
-
 let waitingAT: string;
 let pendingRequestType: RequestType | null;
 const getAndResetRequestType = () => {
@@ -119,10 +115,10 @@ export const convert = (packet: Packet, state: State): State => {
         waitingAT = command ?? '';
         pendingRequestType = requestType;
         if (processor && processor.onRequest) {
-            return castToState(
-                state,
-                processor.onRequest(parsedPacket, requestType)
-            );
+            return {
+                ...state,
+                ...processor.onRequest(parsedPacket, requestType),
+            };
         }
         return state;
     }
@@ -132,15 +128,18 @@ export const convert = (packet: Packet, state: State): State => {
         // response if true, otherwise a notification
         if (command === waitingAT) {
             waitingAT = '';
-            return castToState(
-                state,
-                processor.onResponse(parsedPacket, getAndResetRequestType())
-            );
+            return {
+                ...state,
+                ...processor.onResponse(parsedPacket, getAndResetRequestType()),
+            };
         }
         const notification = processor.onNotification
             ? processor.onNotification(parsedPacket)
             : processor.onResponse(parsedPacket);
-        return castToState(state, notification);
+        return {
+            ...state,
+            ...notification,
+        };
     }
 
     // response without command
@@ -152,7 +151,10 @@ export const convert = (packet: Packet, state: State): State => {
             parsedPacket,
             getAndResetRequestType()
         );
-        return castToState(state, change);
+        return {
+            ...state,
+            ...change,
+        };
     }
 
     return state;
