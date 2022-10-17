@@ -7,7 +7,7 @@
 import { processor as currentBand } from './currentBand';
 import { processor as functionMode } from './functionMode';
 import { processor as iccid } from './iccid';
-import { processor as internationMobileSubscriberIdentity } from './internationMobileSubscriberIdentity';
+import { processor as internationalMobileSubscriberIdentity } from './internationalMobileSubscriberIdentity';
 import { processor as manufacturerIdentification } from './manufacturerIdentification';
 import { processor as modemParameters } from './modemParameters';
 import { processor as modeOfOperation } from './modeOfOperation';
@@ -72,7 +72,7 @@ const processors = [
     modemParameters,
     pinCode,
     pinRetries,
-    internationMobileSubscriberIdentity,
+    internationalMobileSubscriberIdentity,
     manufacturerIdentification,
     iccid,
 ] as const;
