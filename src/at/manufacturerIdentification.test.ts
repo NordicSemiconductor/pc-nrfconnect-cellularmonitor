@@ -17,6 +17,16 @@ const readCommandPackets = [
         expected: 'Nordic Semiconductor ASA',
     },
     {
+        command: atPacket('AT+CGMI'),
+        response: atPacket('NOK ASA\r\nOK\r\n'),
+        expected: 'NOK ASA',
+    },
+    {
+        command: atPacket('AT+CGMI'),
+        response: atPacket('OK\r\nOK\r\n'),
+        expected: 'OK',
+    },
+    {
         command: atPacket('AT+CGMI?'),
         response: ErrorPacket,
         expected: undefined,
