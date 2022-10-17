@@ -35,7 +35,8 @@ const DashboardCard: React.FC<{
     >
         {children}
         <Button variant="secondary" onClick={onclick} className="w-100">
-            <span className="mdi mdi-reload">Reload</span>
+            <span className="mdi mdi-reload" />
+            Reload
         </Button>
     </Card>
 );

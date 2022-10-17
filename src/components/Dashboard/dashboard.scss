@@ -9,7 +9,7 @@
 
 .carousel-item {
     overflow-y: auto;
-    padding-right: 1em;
+    // padding-right: 1em;
     @include scrollbars-helper($gray-100, $gray-500, $gray-500);
 }
 

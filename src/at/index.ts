@@ -20,10 +20,10 @@ import { processor as signalQuality } from './signalQuality';
 export interface Packet {
     packet_data: Uint8Array;
     format: 'at';
-    // timestamp?: {
-    //     resolution?: string;
-    //     value?: number;
-    // };
+    timestamp?: {
+        resolution?: string;
+        value?: number;
+    };
 }
 
 export interface Processor<VM> {

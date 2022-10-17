@@ -11,7 +11,7 @@ import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
-import TemporaryTab from './components/EventChart/TemporaryTab';
+import TemporaryTab from './components/EventChart/EventsTab';
 import PowerEstimation from './components/PowerEstimation/PowerEstimation';
 import {
     PowerEstimationSidePanel,
