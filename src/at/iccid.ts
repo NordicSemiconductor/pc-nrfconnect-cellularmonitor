@@ -8,7 +8,7 @@ import type { Processor } from '.';
 import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
-    xiccid?: string;
+    iccid?: string;
 };
 
 export const processor: Processor<ViewModel> = {
@@ -18,8 +18,8 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const xiccid = getParametersFromResponse(packet.body)?.pop();
-            return xiccid ? { xiccid } : {};
+            const iccid = getParametersFromResponse(packet.body)?.pop();
+            return iccid ? { iccid } : {};
         }
         return {};
     },
