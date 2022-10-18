@@ -39,10 +39,7 @@ export interface Processor<VM> {
         packet: ParsedPacket,
         requestType?: RequestType
     ) => Partial<VM>;
-    onRequest?: (
-        packet: ParsedPacket,
-        requestType?: RequestType
-    ) => Partial<VM>;
+    onRequest?: (packet: ParsedPacket) => Partial<VM>;
     onNotification?: (packet: ParsedPacket) => Partial<VM>;
 }
 
@@ -127,7 +124,7 @@ export const convert = (packet: Packet, state: State): State => {
         if (processor && processor.onRequest) {
             return {
                 ...state,
-                ...processor.onRequest(parsedPacket, requestType),
+                ...processor.onRequest(parsedPacket),
             };
         }
         return state;

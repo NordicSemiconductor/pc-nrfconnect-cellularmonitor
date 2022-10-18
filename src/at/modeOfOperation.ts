@@ -24,8 +24,8 @@ export const processor: Processor<ViewModel> = {
     documentation:
         'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcemode.html&cp=2_1_4_11',
     initialState: () => ({}),
-    onRequest: (packet, requestType) => {
-        if (requestType === RequestType.SET_WITH_VALUE && packet.body) {
+    onRequest: packet => {
+        if (packet.requestType === RequestType.SET_WITH_VALUE && packet.body) {
             requestedModeOfOperation = parseInt(packet.body.trim(), 10);
         }
         return {};
