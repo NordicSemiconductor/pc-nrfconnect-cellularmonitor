@@ -15,6 +15,7 @@ import { Events } from './Events';
 import SimCard from './SimCard';
 
 import './Events.scss';
+import ModemCard from './ModemCard';
 
 const traceData = rawTraceData.map<Packet>(jsonPacket => ({
     format: jsonPacket.format,
@@ -42,6 +43,7 @@ const TemporaryTab = () => {
     return (
         <div className="events-container">
             <div className="cards-container">
+                <ModemCard />
                 <SimCard />
             </div>
 

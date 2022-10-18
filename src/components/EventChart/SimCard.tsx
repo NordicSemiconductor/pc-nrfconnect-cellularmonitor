@@ -13,7 +13,7 @@ import DashboardCard from '../Dashboard/DashboardCard';
 export default () => {
     const SIMView = useSelector(getSIM);
 
-    const something = {
+    const fields = {
         IMSI: SIMView.iccid ?? 'Unknown',
         Operator: SIMView.operator ?? 'Unknown',
         manufacturer: SIMView.manufacturer ?? 'Unknown',
@@ -30,7 +30,7 @@ export default () => {
     return (
         <DashboardCard title="Sim Card" iconName="mdi-sim" onclick={() => {}}>
             <ul>
-                {Object.entries(something).map(([key, value]) => (
+                {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
                         {key}: {value}
                     </li>

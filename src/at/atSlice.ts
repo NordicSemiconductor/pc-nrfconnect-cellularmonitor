@@ -32,5 +32,27 @@ export const getSIM = (state: RootState) => {
     };
 };
 
+export const getModem = (state: RootState) => {
+    const {
+        IMEI,
+        revisionID,
+        hardwareVersion,
+        modemUUID,
+        currentBand,
+        availableBands,
+        dataProfile,
+    } = state.app.at;
+
+    return {
+        IMEI,
+        revisionID,
+        hardwareVersion,
+        modemUUID,
+        currentBand,
+        availableBands,
+        dataProfile,
+    };
+};
+
 export const { setAT } = atSlice.actions;
 export default atSlice.reducer;
