@@ -15,7 +15,7 @@ let parameters: number[];
 export const processor: Processor<ViewModel> = {
     command: '%XT3412',
     documentation:
-        'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fxt3412.html',
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
     initialState: () => ({ notifyPeriodicTAU: false }),
 
     onRequest: packet => {

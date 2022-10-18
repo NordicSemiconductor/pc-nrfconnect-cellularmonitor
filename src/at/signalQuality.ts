@@ -23,7 +23,7 @@ let tentativeState: Partial<ViewModel> | null = null;
 export const processor: Processor<ViewModel> = {
     command: '%CESQ',
     documentation:
-        'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fproc_cesq.html&cp=2_1_4_3',
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/proc_cesq.html',
     initialState: () => ({
         notifySignalQuality: false,
         signalQuality: {

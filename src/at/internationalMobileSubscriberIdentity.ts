@@ -14,7 +14,7 @@ type ViewModel = {
 export const processor: Processor<ViewModel> = {
     command: '+CIMI',
     documentation:
-        'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcemode.html&cp=2_1_4_11',
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {

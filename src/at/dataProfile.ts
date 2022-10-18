@@ -27,7 +27,7 @@ let requestedDataProfile: PowerLevel | undefined;
 export const processor: Processor<ViewModel> = {
     command: '%XDATAPRFL',
     documentation:
-        'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fref_at_commands%2FREF%2Fat_commands%2Fmob_termination_ctrl_status%2Fcemode.html&cp=2_1_4_11',
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xdataprfl.html',
     initialState: () => ({}),
     onRequest: packet => {
         const powerLevel = Object.keys(PowerLevel).find(
