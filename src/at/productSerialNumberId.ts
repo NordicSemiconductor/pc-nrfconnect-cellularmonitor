@@ -12,27 +12,19 @@ type ViewModel = {
     IMEI?: string;
 };
 
-let awaitingResponseOnOperator: null | RequestType = null;
-
 export const processor: Processor<ViewModel> = {
     command: '+CGSN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgsn.html',
     initialState: () => ({}),
-    onRequest: packet => {
-        awaitingResponseOnOperator = packet.requestType ?? null;
-
-        return {};
-    },
-    onResponse: packet => {
-        if (awaitingResponseOnOperator === RequestType.SET_WITH_VALUE) {
+    onResponse: (packet, requestType) => {
+        if (requestType === RequestType.SET_WITH_VALUE) {
             const IMEI = getParametersFromResponse(packet.body)?.pop();
             if (IMEI != null) {
                 return { IMEI: IMEI ?? undefined };
             }
         }
 
-        awaitingResponseOnOperator = null;
         return {};
     },
 };
