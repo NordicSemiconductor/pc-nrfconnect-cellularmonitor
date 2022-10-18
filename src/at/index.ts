@@ -19,6 +19,7 @@ import { processor as signalQuality } from './signalQuality';
 import { processor as revisionIdentification } from './revisionIdentification';
 import { processor as productSerialNumber } from './productSerialNumberId';
 import { processor as hardwareVersion } from './hardwareVersion';
+import { processor as modemUUID } from './modemUUID';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -81,6 +82,7 @@ const processors = [
     revisionIdentification,
     productSerialNumber,
     hardwareVersion,
+    modemUUID,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
