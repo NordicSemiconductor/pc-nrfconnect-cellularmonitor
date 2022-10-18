@@ -1,6 +1,6 @@
 import 'chartjs-adapter-date-fns';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
@@ -88,76 +88,79 @@ export const data: ChartData<'scatter'> = {
 export const Events = () => {
     const dispatch = useDispatch();
 
-    const options: ChartOptions<'scatter'> = {
-        maintainAspectRatio: false,
-        responsive: false,
+    const options: ChartOptions<'scatter'> = useMemo(
+        () => ({
+            maintainAspectRatio: false,
+            responsive: false,
 
-        plugins: {
-            legend: {
-                display: true,
-            },
+            plugins: {
+                legend: {
+                    display: true,
+                },
 
-            zoom: {
                 zoom: {
-                    wheel: {
-                        enabled: true,
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        mode: 'x',
                     },
-                    mode: 'x',
+                    pan: {
+                        enabled: true,
+                        modifierKey: 'ctrl',
+                        mode: 'x',
+                    },
                 },
-                pan: {
-                    enabled: true,
-                    modifierKey: 'ctrl',
-                    mode: 'x',
+
+                dragSelectTime: {
+                    updateTime(time) {
+                        dispatch(setSelectedTime(time));
+                    },
+                },
+
+                tooltip: {
+                    enabled: false,
+                    external(context) {
+                        // const showing = context.tooltip.opacity === 1;
+                        // if (showing) {
+                        //     const tooltip = PacketTooltip(context.tooltip);
+                        //     if (tooltip) {
+                        //         ReactDOM.render(
+                        //             tooltip,
+                        //             document.getElementById('tooltip')
+                        //         );
+                        //     }
+                        // } else {
+                        //     ReactDOM.render(
+                        //         <div />,
+                        //         document.getElementById('tooltip')
+                        //     );
+                        // }
+                    },
                 },
             },
 
-            dragSelectTime: {
-                updateTime(time) {
-                    dispatch(setSelectedTime(time));
+            scales: {
+                y: {
+                    display: true,
+                    ticks: {
+                        callback: () => undefined,
+                    },
+                    grid: { display: false },
+                },
+                x: {
+                    type: 'time',
+                    ticks: {
+                        sampleSize: 50,
+                        autoSkip: true,
+                        autoSkipPadding: 50,
+                        maxRotation: 0,
+                    },
                 },
             },
-
-            tooltip: {
-                enabled: false,
-                external(context) {
-                    // const showing = context.tooltip.opacity === 1;
-                    // if (showing) {
-                    //     const tooltip = PacketTooltip(context.tooltip);
-                    //     if (tooltip) {
-                    //         ReactDOM.render(
-                    //             tooltip,
-                    //             document.getElementById('tooltip')
-                    //         );
-                    //     }
-                    // } else {
-                    //     ReactDOM.render(
-                    //         <div />,
-                    //         document.getElementById('tooltip')
-                    //     );
-                    // }
-                },
-            },
-        },
-
-        scales: {
-            y: {
-                display: true,
-                ticks: {
-                    callback: () => undefined,
-                },
-                grid: { display: false },
-            },
-            x: {
-                type: 'time',
-                ticks: {
-                    sampleSize: 50,
-                    autoSkip: true,
-                    autoSkipPadding: 50,
-                    maxRotation: 0,
-                },
-            },
-        },
-    };
+        }),
+        []
+    );
 
     const plugins = [dragSelectTime];
 

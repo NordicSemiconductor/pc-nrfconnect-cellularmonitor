@@ -23,14 +23,11 @@ export default () => {
     return (
         <DashboardCard title="Sim Card" iconName="mdi-sim" onclick={() => {}}>
             <ul>
-                {Object.entries(something).map(([key, value], index) => {
-                    console.log(key, value);
-                    return (
-                        <li key={key}>
-                            {key}: {value}
-                        </li>
-                    );
-                })}
+                {Object.entries(something).map(([key, value]) => (
+                    <li key={key}>
+                        {key}: {value}
+                    </li>
+                ))}
             </ul>
         </DashboardCard>
     );
