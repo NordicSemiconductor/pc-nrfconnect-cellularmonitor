@@ -18,6 +18,14 @@ const atSlice = createSlice({
 });
 
 export const getAT = (state: RootState) => state.app.at;
+export const getSIM = (state: RootState) => {
+    const at = state.app.at;
+
+    return {
+        imsi: at.imsi,
+        operator: at.xmonitor?.operatorFullName,
+    };
+};
 
 export const { setAT } = atSlice.actions;
 export default atSlice.reducer;

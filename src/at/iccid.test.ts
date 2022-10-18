@@ -25,8 +25,8 @@ const readCommandPackets = [
 
 test('ICCID read commands work as expected', () => {
     readCommandPackets.forEach(test => {
-        expect(
-            convertPackets([test.command, test.response]).manufacturer
-        ).toEqual(test.expected);
+        expect(convertPackets([test.command, test.response]).xiccid).toEqual(
+            test.expected
+        );
     });
 });

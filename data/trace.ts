@@ -2123,6 +2123,88 @@ export const rawTraceData = [
         },
     },
     {
+        // Manually modified to send an `AT%XICCID` command
+        packet_data: {
+            type: 'Buffer',
+            data: [65, 84, 37, 88, 73, 67, 67, 73, 68],
+        },
+        format: 'at',
+        meta: {
+            data_offset: 81663,
+            modem_db_path:
+                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
+            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
+        },
+        timestamp: {
+            resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
+            value: 1665058975750776,
+        },
+    },
+    {
+        // Manually modified to provide a response to an `AT%XICCID` command
+        packet_data: {
+            type: 'Buffer',
+            data: [
+                37, 88, 73, 67, 67, 73, 68, 58, 32, 56, 57, 48, 49, 50, 51, 52,
+                53, 54, 55, 48, 49, 50, 51, 52, 53, 54, 55, 56, 70, 13, 10, 79,
+                75, 13, 10,
+            ],
+        },
+        format: 'at',
+        meta: {
+            data_offset: 81663,
+            modem_db_path:
+                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
+            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
+        },
+        timestamp: {
+            resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
+            value: 1665058975750800,
+        },
+    },
+
+    {
+        // Manually modified to send an `AT%XCBAND` command
+        packet_data: {
+            type: 'Buffer',
+            data: [65, 84, 37, 88, 67, 66, 65, 78, 68],
+        },
+        format: 'at',
+        meta: {
+            data_offset: 81663,
+            modem_db_path:
+                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
+            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
+        },
+        timestamp: {
+            resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
+            value: 1665058975750800,
+        },
+    },
+
+    {
+        // Manually modified to respond to an `AT%XCBAND` command
+        packet_data: {
+            type: 'Buffer',
+            data: [
+                37, 88, 67, 66, 65, 78, 68, 58, 32, 49, 51, 13, 10, 79, 75, 13,
+                10,
+            ],
+        },
+        format: 'at',
+        meta: {
+            data_offset: 81663,
+            modem_db_path:
+                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
+            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
+        },
+        timestamp: {
+            resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
+            value: 1665058975750800,
+        },
+    },
+
+    {
         packet_data: {
             type: 'Buffer',
             data: [
