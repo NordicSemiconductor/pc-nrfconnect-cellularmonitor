@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { rawTraceData } from '../../../data/trace';
 import { convert, initialState, Packet } from '../../at';
+import { setAT } from '../../at/atSlice';
 import { getSelectedTime } from './chart.slice';
 import { Events } from './Events';
 import SimCard from './SimCard';
@@ -17,33 +18,24 @@ const traceData = rawTraceData.map<Packet>(jsonPacket => ({
 
 const TemporaryTab = () => {
     const timestamp = useSelector(getSelectedTime); // Last item of the included trace file
-    const state = useMemo(
-        () =>
-            traceData
-                .filter(
-                    packet => (packet.timestamp?.value ?? 0) < timestamp * 1000
-                )
-                .reduce(
-                    (current, packet) => ({
-                        ...current,
-                        ...convert(packet, current),
-                    }),
-                    initialState()
-                ),
-        [timestamp]
-    );
+    const dispatch = useDispatch();
+    const state = useMemo(() => {
+        const newState = traceData
+            .filter(packet => (packet.timestamp?.value ?? 0) < timestamp * 1000)
+            .reduce(
+                (current, packet) => ({
+                    ...current,
+                    ...convert(packet, current),
+                }),
+                initialState()
+            );
+        dispatch(setAT(newState));
+        return newState;
+    }, [timestamp, dispatch]);
 
     return (
         <div className="events-container">
             <div className="cards-container">
-                <SimCard />
-                <SimCard />
-                <SimCard />
-                <SimCard />
-                <SimCard />
-                <SimCard />
-                <SimCard />
-                <SimCard />
                 <SimCard />
             </div>
 

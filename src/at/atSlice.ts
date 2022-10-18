@@ -7,15 +7,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../appReducer';
-import { State, initialState } from './index';
+import { initialState, State } from './index';
 
 const atSlice = createSlice({
     name: 'at',
     initialState: initialState(),
     reducers: {
-        setAT: (state, action: PayloadAction<State>) => {
-            return (state = { ...action.payload });
-        },
+        setAT: (state, action: PayloadAction<State>) => ({ ...action.payload }),
     },
 });
 
