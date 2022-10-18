@@ -24,6 +24,11 @@ export const getSIM = (state: RootState) => {
     return {
         imsi: at.imsi,
         operator: at.xmonitor?.operatorFullName,
+        manufacturer: at.manufacturer,
+        iccid: at.iccid,
+        pin: at.pinCodeStatus,
+        remainingPIN: at.pinRetries?.SIM_PIN,
+        remainingPUK: at.pinRetries?.SIM_PUK,
     };
 };
 
