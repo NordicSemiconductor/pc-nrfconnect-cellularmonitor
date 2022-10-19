@@ -4,16 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Plugin } from 'chart.js';
+import type { Chart, Plugin } from 'chart.js';
 
 import type { DragSelectOptions } from './plugin';
 
-let selectedTimeStamp = 1665058976038;
+let selectedTimeStamp = 0;
 let pixelTime = 0;
-export const setTimeStamp = (time: number) => {
-    selectedTimeStamp = time;
-};
-
 let dragging = false;
 
 export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
@@ -24,20 +20,19 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
 
         canvas.addEventListener('pointerdown', event => {
             dragging = true;
+            updateSelectedTime(event, chart, options);
         });
+        
         canvas.addEventListener('pointermove', event => {
             if (dragging) {
-                pixelTime = event.offsetX;
-                chart.update('none');
-                selectedTimeStamp =
-                    chart.scales.x.getValueForPixel(pixelTime) ?? 0;
-                options.updateTime(selectedTimeStamp);
+                updateSelectedTime(event, chart, options);
             }
         });
+
         canvas.addEventListener('pointerup', () => {
             dragging = false;
         });
-        canvas.addEventListener('pointerleave', () => {});
+        
     },
 
     beforeDraw(chart) {
@@ -49,7 +44,7 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
         ctx.save();
 
         ctx.lineWidth = 2;
-        ctx.strokeStyle = '#999999';
+        ctx.strokeStyle = '#263238';
 
         ctx.beginPath();
         ctx.moveTo(pixelTime, top);
@@ -60,3 +55,11 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
         ctx.restore();
     },
 };
+function updateSelectedTime(event: PointerEvent, chart: Chart, options: DragSelectOptions) {
+    pixelTime = event.offsetX;
+    chart.update('none');
+    selectedTimeStamp =
+        chart.scales.x.getValueForPixel(pixelTime) ?? 0;
+    options.updateTime(selectedTimeStamp);
+}
+

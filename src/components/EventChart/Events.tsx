@@ -97,7 +97,7 @@ export const Events = () => {
     const options: ChartOptions<'scatter'> = useMemo(
         () => ({
             maintainAspectRatio: false,
-            responsive: false,
+            responsive: true,
 
             plugins: {
                 legend: {
@@ -173,7 +173,7 @@ export const Events = () => {
     return (
         <Scatter
             height={200}
-            width={1280}
+            // width={1280}
             options={options}
             data={data}
             plugins={plugins}

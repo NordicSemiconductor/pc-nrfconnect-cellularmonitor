@@ -48,9 +48,6 @@ const TemporaryTab = () => {
             </div>
 
             <div className="events">
-                <div className="code">
-                    {JSON.stringify(state, undefined, 4)}
-                </div>
                 <Events />
             </div>
         </div>
