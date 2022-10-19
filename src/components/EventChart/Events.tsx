@@ -132,21 +132,22 @@ export const Events = () => {
                 tooltip: {
                     enabled: false,
                     external(context) {
-                        // const showing = context.tooltip.opacity === 1;
-                        // if (showing) {
-                        //     const tooltip = PacketTooltip(context.tooltip);
-                        //     if (tooltip) {
-                        //         ReactDOM.render(
-                        //             tooltip,
-                        //             document.getElementById('tooltip')
-                        //         );
-                        //     }
-                        // } else {
-                        //     ReactDOM.render(
-                        //         <div />,
-                        //         document.getElementById('tooltip')
-                        //     );
-                        // }
+                        const showing = context.tooltip.opacity === 1;
+                        
+                        if (showing) {
+                            const tooltip = PacketTooltip(context.tooltip);
+                            if (tooltip) {
+                                ReactDOM.render(
+                                    tooltip,
+                                    document.getElementById('tooltip')
+                                );
+                            }
+                        } else {
+                            ReactDOM.render(
+                                <div />,
+                                document.getElementById('tooltip')
+                            );
+                        }
                     },
                 },
             },

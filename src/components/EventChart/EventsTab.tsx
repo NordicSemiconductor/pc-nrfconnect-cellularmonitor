@@ -48,6 +48,7 @@ const TemporaryTab = () => {
             </div>
 
             <div className="events">
+                <div id="tooltip" style={{position: 'relative'}}></div>
                 <Events />
             </div>
         </div>

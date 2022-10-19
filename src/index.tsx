@@ -23,10 +23,6 @@ import './index.scss';
 
 logLibVersions();
 
-const tooltipHolder = document.createElement('div');
-tooltipHolder.id = 'tooltip';
-document.body.appendChild(tooltipHolder);
-
 export default () => (
     <App
         reportUsageData
