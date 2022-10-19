@@ -19,6 +19,10 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
         const { canvas } = chart.ctx;
 
         canvas.addEventListener('pointerdown', event => {
+            if (event.ctrlKey) {
+                // We are currently paning, don't change time
+                return;
+            }
             dragging = true;
             updateSelectedTime(event, chart, options);
         });
@@ -26,6 +30,9 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
         canvas.addEventListener('pointermove', event => {
             if (dragging) {
                 updateSelectedTime(event, chart, options);
+            } else if (event.ctrlKey) {
+                pixelTime = chart.scales.x.getPixelForValue(selectedTimeStamp);
+                chart.update('none');
             }
         });
 

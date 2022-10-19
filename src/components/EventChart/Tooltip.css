@@ -3,8 +3,9 @@
     top: -100px;
     word-break: break-all;
     background: white;
-    border: 1px solid #ccc;
-    padding: 4px;
+    border: 1px solid #b0bec5;
+
+    padding: 16px;
     min-width: 200px;
     transform: translateX(-50%);
     overflow: hidden;
