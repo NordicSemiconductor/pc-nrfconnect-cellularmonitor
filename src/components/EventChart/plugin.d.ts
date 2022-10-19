@@ -5,13 +5,13 @@
  */
 
 import { ChartType } from 'chart.js';
+import { AnyObject } from 'chart.js/types/basic';
 
-interface DragSelectOptions {
-    updateTime(time: number): void;
+interface DragSelectOptions extends AnyObject {
+    updateTime: (time: number) => void;
 }
 
 declare module 'chart.js' {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface PluginOptionsByType<TType extends ChartType> {
         dragSelectTime: DragSelectOptions;
     }

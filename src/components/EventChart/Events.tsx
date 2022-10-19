@@ -54,11 +54,19 @@ const traceEvents = rawTraceData
         timestamp: { value: packet.timestamp.value / 1000 },
     }));
 
+const formats = [...traceEvents
+    .reduce(
+        (collector, event) => collector.add(event.format),
+        new Set<string>()
+    )
+    .values()];
+
 const events = traceEvents.map(event => ({
     x: event.timestamp.value,
-    y: 0,
+    y: formats.indexOf(event.format),
     event,
 }));
+
 const colors = [
     '#f44336',
     '#3f51b5',
@@ -70,20 +78,17 @@ const colors = [
     '#cddc39',
     '#e91e63',
 ];
-const formats = traceEvents
-    .reduce(
-        (collector, event) => collector.add(event.format),
-        new Set<string>()
-    )
-    .values();
 
-const datasets: typeof data.datasets = [...formats].map((format, index) => ({
+const datasets: typeof data.datasets = formats.map((format, index) => ({
     label: format,
     data: events.filter(event => event.event.format === format),
     borderColor: colors[index],
     backgroundColor: colors[index],
-    pointRadius: 10,
-    pointHoverRadius: 12,
+    pointRadius: 6,
+    pointHoverRadius: 6,
+    pointHoverBorderWidth: 5,
+    pointBorderWidth: 5,
+    pointHoverBackgroundColor: 'white',
     hidden: format === 'modem_trace',
 }));
 
@@ -153,6 +158,8 @@ export const Events = () => {
                         callback: () => undefined,
                     },
                     grid: { display: false },
+                    suggestedMin: -1,
+                    suggestedMax: formats.length
                 },
                 x: {
                     type: 'time',
@@ -172,8 +179,6 @@ export const Events = () => {
 
     return (
         <Scatter
-            height={200}
-            // width={1280}
             options={options}
             data={data}
             plugins={plugins}
