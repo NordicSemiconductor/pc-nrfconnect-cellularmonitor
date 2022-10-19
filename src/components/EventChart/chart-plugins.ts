@@ -9,20 +9,20 @@ import type { Chart, Plugin } from 'chart.js';
 import type { DragSelectOptions } from './plugin';
 
 let selectedTimeStamp = 0;
-let pixelTime = 0;
+let pixelTime = -1;
 let dragging = false;
 
 export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
     id: 'dragSelectTime',
 
-    beforeInit(chart, args, options) {
+    afterInit(chart, args, options) {
         const { canvas } = chart.ctx;
 
         canvas.addEventListener('pointerdown', event => {
             dragging = true;
             updateSelectedTime(event, chart, options);
         });
-        
+
         canvas.addEventListener('pointermove', event => {
             if (dragging) {
                 updateSelectedTime(event, chart, options);
@@ -32,7 +32,10 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
         canvas.addEventListener('pointerup', () => {
             dragging = false;
         });
-        
+
+        canvas.addEventListener('pointerleave', () => {
+            dragging = false;
+        });
     },
 
     beforeDraw(chart) {
@@ -41,25 +44,31 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
             ctx,
         } = chart;
 
-        ctx.save();
+        if (pixelTime >= 0) {
+            ctx.save();
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#263238';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#263238';
 
-        ctx.beginPath();
-        ctx.moveTo(pixelTime, top);
-        ctx.lineTo(pixelTime, bottom);
-        ctx.closePath();
-        ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pixelTime, top);
+            ctx.lineTo(pixelTime, bottom);
+            ctx.closePath();
+            ctx.stroke();
 
-        ctx.restore();
+            ctx.restore();
+        }
     },
 };
-function updateSelectedTime(event: PointerEvent, chart: Chart, options: DragSelectOptions) {
-    pixelTime = event.offsetX;
-    chart.update('none');
-    selectedTimeStamp =
-        chart.scales.x.getValueForPixel(pixelTime) ?? 0;
-    options.updateTime(selectedTimeStamp);
-}
 
+const updateSelectedTime = (
+    event: PointerEvent,
+    chart: Chart,
+    options: DragSelectOptions
+) => {
+    pixelTime = event.offsetX;
+    selectedTimeStamp =
+        chart.scales.x.getValueForPixel(pixelTime) ?? chart.scales.x.max;
+    options.updateTime(selectedTimeStamp);
+    chart.update('none');
+};

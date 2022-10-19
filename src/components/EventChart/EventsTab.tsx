@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { rawTraceData } from '../../../data/trace';
@@ -24,9 +24,10 @@ const traceData = rawTraceData.map<Packet>(jsonPacket => ({
 }));
 
 const TemporaryTab = () => {
-    const timestamp = useSelector(getSelectedTime); // Last item of the included trace file
+    const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
-    const state = useMemo(() => {
+
+    useEffect(() => {
         const newState = traceData
             .filter(packet => (packet.timestamp?.value ?? 0) < timestamp * 1000)
             .reduce(
@@ -37,7 +38,6 @@ const TemporaryTab = () => {
                 initialState()
             );
         dispatch(setAT(newState));
-        return newState;
     }, [timestamp, dispatch]);
 
     return (
