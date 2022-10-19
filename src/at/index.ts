@@ -4,25 +4,25 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { processor as currentBand } from './currentBand';
-import { processor as functionMode } from './functionMode';
-import { processor as iccid } from './iccid';
-import { processor as internationalMobileSubscriberIdentity } from './internationalMobileSubscriberIdentity';
-import { processor as manufacturerIdentification } from './manufacturerIdentification';
-import { processor as modemParameters } from './modemParameters';
-import { processor as modeOfOperation } from './modeOfOperation';
+import { processor as currentBand } from './commandProcessors/currentBand';
+import { processor as functionMode } from './commandProcessors/functionMode';
+import { processor as iccid } from './commandProcessors/iccid';
+import { processor as internationalMobileSubscriberIdentity } from './commandProcessors/internationalMobileSubscriberIdentity';
+import { processor as manufacturerIdentification } from './commandProcessors/manufacturerIdentification';
+import { processor as modemParameters } from './commandProcessors/modemParameters';
+import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
-import { processor as periodicTAU } from './periodicTAU';
-import { processor as pinCode } from './pinCode';
-import { processor as pinRetries } from './pinRetries';
-import { processor as signalQualityNotification } from './signalQualityNotification';
-import { processor as revisionIdentification } from './revisionIdentification';
-import { processor as productSerialNumber } from './productSerialNumberId';
-import { processor as hardwareVersion } from './hardwareVersion';
-import { processor as modemUUID } from './modemUUID';
-import { processor as dataProfile } from './dataProfile';
-import { processor as TXPowerReduction } from './TXPowerReduction';
-import { processor as extendedSignalQuality } from './extendedSignalQuality';
+import { processor as periodicTAU } from './commandProcessors/periodicTAU';
+import { processor as pinCode } from './commandProcessors/pinCode';
+import { processor as pinRetries } from './commandProcessors/pinRetries';
+import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
+import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
+import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
+import { processor as hardwareVersion } from './commandProcessors/hardwareVersion';
+import { processor as modemUUID } from './commandProcessors/modemUUID';
+import { processor as dataProfile } from './commandProcessors/dataProfile';
+import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
+import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
 
 export interface Packet {
     packet_data: Uint8Array;
