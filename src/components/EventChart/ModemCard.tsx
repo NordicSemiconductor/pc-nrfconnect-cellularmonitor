@@ -34,7 +34,7 @@ export default () => {
     };
 
     return (
-        <DashboardCard title="Sim Card" iconName="mdi-mobile-phone-wireless" onclick={() => {}}>
+        <DashboardCard title="Modem" iconName="mdi-cellphone-wireless" onclick={() => {}}>
             <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
