@@ -55,7 +55,7 @@ const expectedState: State = {
     availableBands: [1, 2, 3, 4, 5, 8, 12, 13, 18, 19, 20, 25, 26, 28, 66],
     pinRetries: { SIM_PIN: 3 },
     imsi: '204080813630037',
-    xiccid: '8901234567012345678F',
+    iccid: '8901234567012345678F',
     currentBand: 13,
     periodicTAU: undefined,
     hardwareVersion: undefined,
