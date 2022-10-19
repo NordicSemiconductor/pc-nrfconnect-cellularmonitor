@@ -6,7 +6,8 @@
 
 import type { Chart, Plugin } from 'chart.js';
 
-import type { DragSelectOptions } from './plugin';
+import type { DragSelectOptions } from './chart';
+import { colors } from "pc-nrfconnect-shared";
 
 let selectedTimeStamp = 0;
 let pixelTime = -1;
@@ -55,8 +56,7 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
             ctx.save();
 
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#263238';
-
+            ctx.strokeStyle = colors.gray900;
             ctx.beginPath();
             ctx.moveTo(pixelTime, top);
             ctx.lineTo(pixelTime, bottom);

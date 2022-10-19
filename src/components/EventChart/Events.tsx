@@ -25,9 +25,10 @@ import {
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
+import { colors as sharedColors } from "pc-nrfconnect-shared";
 import { rawTraceData } from '../../../data/trace';
 import { setSelectedTime } from './chart.slice';
-import { dragSelectTime } from './chart-plugins';
+import { dragSelectTime } from './chart.plugin.dragSelectTIme';
 import { PacketTooltip } from './Tooltip';
 
 ChartJS.register(
@@ -68,15 +69,16 @@ const events = traceEvents.map(event => ({
 }));
 
 const colors = [
-    '#f44336',
-    '#3f51b5',
-    '#ffc107',
-    '#9c27b0',
-    '#4caf50',
-    '#673ab7',
-    '#ff9800',
-    '#cddc39',
-    '#e91e63',
+    sharedColors.primary,
+    sharedColors.deepPurple,
+    sharedColors.indigo,
+    sharedColors.amber,
+    sharedColors.purple,
+    sharedColors.green,
+    sharedColors.deepPurple,
+    sharedColors.orange,
+    sharedColors.lime,
+    sharedColors.pink,
 ];
 
 const datasets: typeof data.datasets = formats.map((format, index) => ({
