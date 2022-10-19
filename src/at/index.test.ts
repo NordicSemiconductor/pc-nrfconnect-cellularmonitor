@@ -23,9 +23,9 @@ const expectedState: State = {
     notifySignalQuality: true,
     signalQuality: {
         rsrp: 54,
-        rsrp_threshold_index: 2,
+        rsrp_threshold_index: 255,
         rsrq: 11,
-        rsrq_threshold_index: 1,
+        rsrq_threshold_index: 255,
     },
     notifyPeriodicTAU: false,
     xmonitor: {
@@ -60,6 +60,9 @@ const expectedState: State = {
     periodicTAU: undefined,
     hardwareVersion: undefined,
     modemUUID: undefined,
+    dataProfile: undefined,
+    nbiotTXReduction: undefined,
+    ltemTXReduction: undefined,
 };
 
 test('Trace is read properly', () => {

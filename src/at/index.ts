@@ -15,12 +15,14 @@ import { parseAT, ParsedPacket, RequestType } from './parseAT';
 import { processor as periodicTAU } from './periodicTAU';
 import { processor as pinCode } from './pinCode';
 import { processor as pinRetries } from './pinRetries';
-import { processor as signalQuality } from './signalQuality';
+import { processor as signalQualityNotification } from './signalQualityNotification';
 import { processor as revisionIdentification } from './revisionIdentification';
 import { processor as productSerialNumber } from './productSerialNumberId';
 import { processor as hardwareVersion } from './hardwareVersion';
 import { processor as modemUUID } from './modemUUID';
 import { processor as dataProfile } from './dataProfile';
+import { processor as TXPowerReduction } from './TXPowerReduction';
+import { processor as extendedSignalQuality } from './extendedSignalQuality';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -69,7 +71,7 @@ const processors = [
     functionMode,
     currentBand,
     modeOfOperation,
-    signalQuality,
+    signalQualityNotification,
     periodicTAU,
     modemParameters,
     pinCode,
@@ -82,6 +84,8 @@ const processors = [
     hardwareVersion,
     modemUUID,
     dataProfile,
+    TXPowerReduction,
+    extendedSignalQuality,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.
