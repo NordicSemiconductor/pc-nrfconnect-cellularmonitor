@@ -4,13 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { getNumberList, getParametersFromResponse } from './utils';
-
-test('getNumberList', () => {
-    expect(getNumberList('1,2,3,4')).toEqual([1, 2, 3, 4]);
-    expect(getNumberList('1,"2",3,4')).toEqual([1, NaN, 3, 4]);
-    expect(getNumberList('\n1,2,3')).toEqual([1, 2, 3]);
-});
+import { getParametersFromResponse } from './utils';
 
 test('getParametersFromResponse', () => {
     const shortBody = '"11100000","11100000","01001001"\r\nOK\r\n';
@@ -35,7 +29,9 @@ test('getParametersFromResponse', () => {
         '11100000',
         '01001001',
     ];
-    expect(getParametersFromResponse(shortBody)).toEqual(expected.slice(-3));
-    expect(getParametersFromResponse(body)).toEqual(expected);
-    expect(getParametersFromResponse(body2)).toEqual(expected);
+    expect(getParametersFromResponse(shortBody, 'OK')).toEqual(
+        expected.slice(-3)
+    );
+    expect(getParametersFromResponse(body, 'OK')).toEqual(expected);
+    expect(getParametersFromResponse(body2, 'OK')).toEqual(expected);
 });

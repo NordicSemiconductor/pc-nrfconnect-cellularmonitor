@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 export const PowerLevel = {
     0: 'Ultra-low power',
@@ -31,7 +30,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onRequest: packet => {
         const powerLevel = Object.keys(PowerLevel).find(
-            key => key === packet.body
+            key => key === packet.body[0]
         );
         requestedDataProfile = powerLevel
             ? (parseInt(powerLevel, 10) as PowerLevel)
@@ -44,7 +43,7 @@ export const processor: Processor<ViewModel> = {
                 return { dataProfile: requestedDataProfile };
             }
 
-            const dataProfile = getParametersFromResponse(packet.body)?.pop();
+            const dataProfile = packet.body.shift();
             return dataProfile
                 ? { dataProfile: parseInt(dataProfile, 10) as PowerLevel }
                 : {};

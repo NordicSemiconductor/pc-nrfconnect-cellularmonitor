@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 const ModeOfOperation = {
     0: 'PS Mode 2',
@@ -25,8 +24,11 @@ export const processor: Processor<ViewModel> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cemode.html',
     initialState: () => ({}),
     onRequest: packet => {
-        if (packet.requestType === RequestType.SET_WITH_VALUE && packet.body) {
-            requestedModeOfOperation = parseInt(packet.body.trim(), 10);
+        if (
+            packet.requestType === RequestType.SET_WITH_VALUE &&
+            packet.body.length === 1
+        ) {
+            requestedModeOfOperation = parseInt(packet.body[0], 10);
         }
         return {};
     },
@@ -45,7 +47,7 @@ export const processor: Processor<ViewModel> = {
 
         if (packet.status === 'OK') {
             if (requestType === RequestType.READ) {
-                const mode = getParametersFromResponse(packet.body)?.pop();
+                const mode = packet.body.shift();
                 return mode
                     ? {
                           modeOfOperation: parseInt(mode, 10),

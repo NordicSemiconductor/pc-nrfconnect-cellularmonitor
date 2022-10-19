@@ -18,9 +18,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const hardwareVersion = getParametersFromResponse(
-                packet.body
-            )?.pop();
+            const hardwareVersion = packet.body.shift();
             return hardwareVersion ? { hardwareVersion } : {};
         }
         return {};

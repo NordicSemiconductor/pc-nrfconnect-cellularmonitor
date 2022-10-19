@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     availableBands?: number[];
@@ -22,15 +21,13 @@ export const processor: Processor<ViewModel> = {
         if (packet.status === 'OK' && packet.body) {
             if (requestType === RequestType.TEST) {
                 // Response to a test command, e.g. %XCBAND: (1,2,3,4,5)
-                const availableBands = /\(([\d,]+)\)/g
-                    .exec(packet.body)
-                    ?.slice(1)[0]
-                    ?.split(',')
+                const availableBands = packet.body
+                    .map(val => val.replace(/[()]/g, ''))
                     .map(band => parseInt(band, 10));
 
                 return { availableBands };
             }
-            const currentBand = getParametersFromResponse(packet.body)?.pop();
+            const currentBand = packet.body.shift();
 
             // Response to a set command e.g. %XCBAND: 13
             return currentBand

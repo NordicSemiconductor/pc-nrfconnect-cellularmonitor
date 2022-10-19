@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     IMEI?: string;
@@ -19,7 +18,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: (packet, requestType) => {
         if (requestType === RequestType.SET_WITH_VALUE) {
-            const IMEI = getParametersFromResponse(packet.body)?.pop();
+            const IMEI = packet.body.shift();
             if (IMEI != null) {
                 return { IMEI: IMEI ?? undefined };
             }

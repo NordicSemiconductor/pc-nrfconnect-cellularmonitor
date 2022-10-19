@@ -5,7 +5,6 @@
  */
 
 import type { Processor } from '.';
-import { getNumberList, getParametersFromResponse } from './utils';
 
 export type ViewModel = {
     notifyPeriodicTAU?: boolean;
@@ -19,7 +18,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({ notifyPeriodicTAU: false }),
 
     onRequest: packet => {
-        parameters = getNumberList(packet.body);
+        parameters = packet.body.map(val => parseInt(val, 10));
         return {};
     },
 
@@ -36,7 +35,7 @@ export const processor: Processor<ViewModel> = {
     },
 
     onNotification: packet => {
-        const periodicTAU = getParametersFromResponse(packet.body)?.pop();
+        const periodicTAU = packet.body.shift();
         return periodicTAU ? { periodicTAU: parseInt(periodicTAU, 10) } : {};
     },
 };

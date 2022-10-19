@@ -5,7 +5,6 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     modemUUID?: string;
@@ -18,7 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const modemUUID = getParametersFromResponse(packet.body)?.pop();
+            const modemUUID = packet.body.shift();
             return modemUUID ? { modemUUID } : {};
         }
         return {};

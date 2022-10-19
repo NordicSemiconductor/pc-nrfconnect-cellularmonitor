@@ -16,7 +16,7 @@ const tests = [
         packet: atPacket('AT%XT3412=1,2000,30000'),
         expected: {
             command: '%XT3412',
-            body: '1,2000,30000',
+            body: ['1', '2000', '30000'],
             requestType: RequestType.SET_WITH_VALUE,
             status: undefined,
         },
@@ -25,16 +25,16 @@ const tests = [
         packet: atPacket('OK\r\n'),
         expected: {
             command: undefined,
-            body: 'OK\\r\\n',
+            body: [],
             requestType: RequestType.NOT_A_REQUEST,
             status: 'OK',
         },
     },
     {
-        packet: atPacket('AT%XMODEMTRACE=1,2OK'),
+        packet: atPacket('AT%XMODEMTRACE=1,2'),
         expected: {
             command: '%XMODEMTRACE',
-            body: '1,2OK',
+            body: ['1', '2'],
             requestType: RequestType.SET_WITH_VALUE,
             status: undefined,
         },
@@ -43,7 +43,7 @@ const tests = [
         packet: atPacket('AT+CFUN'),
         expected: {
             command: '+CFUN',
-            body: undefined,
+            body: [],
             requestType: RequestType.SET,
             status: undefined,
         },
@@ -52,7 +52,7 @@ const tests = [
         packet: atPacket('AT+CFUN?'),
         expected: {
             command: '+CFUN',
-            body: undefined,
+            body: [],
             requestType: RequestType.READ,
             status: undefined,
         },
@@ -61,7 +61,7 @@ const tests = [
         packet: atPacket('AT+CFUN=?'),
         expected: {
             command: '+CFUN',
-            body: undefined,
+            body: [],
             requestType: RequestType.TEST,
             status: undefined,
         },
@@ -71,7 +71,16 @@ const tests = [
         expected: {
             command: '%XSYSTEMMODE',
             requestType: RequestType.NOT_A_REQUEST,
-            body: `1,0,1,0\\r\\nOK\\r\\n`,
+            body: ['1', '0', '1', '0'],
+            status: 'OK',
+        },
+    },
+    {
+        packet: atPacket('%XEMPR:\r\n0,0,2\r\n1,3,5,2,8,2,13,1\r\nOK\r\n'),
+        expected: {
+            command: '%XEMPR',
+            requestType: RequestType.NOT_A_REQUEST,
+            body: ['0', '0', '2', '1', '3', '5', '2', '8', '2', '13', '1'],
             status: 'OK',
         },
     },

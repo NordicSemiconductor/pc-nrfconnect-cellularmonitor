@@ -32,18 +32,15 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({ pinCodeStatus: 'unknown' }),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const responseArray = getParametersFromResponse(packet.body);
-
             const allowedStates = (
                 Object.keys(pinCodeStatus) as PinCodeStatus[]
             ).filter(key => key !== 'unknown');
 
-            if (responseArray?.length === 1) {
+            if (packet.body.length === 1) {
                 return {
                     pinCodeStatus:
-                        allowedStates.find(
-                            state => state === responseArray[0]
-                        ) ?? 'unknown',
+                        allowedStates.find(state => state === packet.body[0]) ??
+                        'unknown',
                 };
             }
         }

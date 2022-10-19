@@ -5,6 +5,7 @@
  */
 
 import type { Packet } from '.';
+import { getParametersFromResponse } from './utils';
 
 export enum RequestType {
     NOT_A_REQUEST,
@@ -18,7 +19,7 @@ const validStatus = ['OK', 'ERROR', '+CME ERROR', '+CMS ERROR'] as const;
 export interface ParsedPacket {
     command?: string;
     requestType?: RequestType;
-    body?: string;
+    body: string[];
     status?: typeof validStatus[number];
 }
 
@@ -55,19 +56,20 @@ export const parseAT = (packet: Packet): ParsedPacket => {
     );
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
+        const status = getStatus(body);
 
         return {
             command,
-            body,
+            body: getParametersFromResponse(body, status),
             requestType: startsWithAt
                 ? operatorToRequestType(operator)
                 : RequestType.NOT_A_REQUEST,
-            status: getStatus(body),
+            status,
         };
     }
     return {
         command: undefined,
-        body: undefined,
+        body: [],
         requestType: undefined,
         status: undefined,
     };

@@ -5,7 +5,6 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     revisionID?: string;
@@ -18,7 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const revisionID = getParametersFromResponse(packet.body)?.pop();
+            const revisionID = packet.body.shift();
             return revisionID ? { revisionID } : {};
         }
         return {};

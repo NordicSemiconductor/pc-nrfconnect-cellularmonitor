@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 export enum FunctionalModeSetter {
     POWER_OFF = 0,
@@ -41,7 +40,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: (packet, requestType) => {
         if (packet.status === 'OK' && requestType === RequestType.READ) {
-            const mode = getParametersFromResponse(packet.body)?.pop();
+            const mode = packet.body.shift();
             return mode
                 ? {
                       functionalMode: parseInt(mode, 10) as FunctionalMode,

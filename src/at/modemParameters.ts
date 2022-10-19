@@ -52,42 +52,39 @@ export const processor: Processor<ViewModel> = {
     }),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const responseParameters = getParametersFromResponse(packet.body);
-            if (!responseParameters) {
+            if (packet.body.length !== 15 && packet.body.length !== 16) {
                 return {};
             }
 
-            const parsedAcT = parseInt(responseParameters[5], 10);
+            const parsedAcT = parseInt(packet.body[5], 10);
             const evaluatedAcT =
                 parsedAcT === 7 || parsedAcT === 9 ? parsedAcT : undefined;
 
             return {
                 xmonitor: {
-                    regStatus: parseInt(responseParameters[0], 10),
-                    operatorFullName: responseParameters[1],
-                    operatorShortName: responseParameters[2],
-                    plmn: responseParameters[3],
-                    tac: responseParameters[4],
+                    regStatus: parseInt(packet.body[0], 10),
+                    operatorFullName: packet.body[1],
+                    operatorShortName: packet.body[2],
+                    plmn: packet.body[3],
+                    tac: packet.body[4],
                     AcT: evaluatedAcT,
-                    band: parseInt(responseParameters[6], 10),
-                    cell_id: responseParameters[7],
-                    phys_cell_id: parseInt(responseParameters[8], 10),
-                    EARFCN: parseInt(responseParameters[9], 10),
-                    rsrp: parseInt(responseParameters[10], 10),
-                    snr: parseInt(responseParameters[11], 10),
-                    NW_provided_eDRX_value: responseParameters[12],
+                    band: parseInt(packet.body[6], 10),
+                    cell_id: packet.body[7],
+                    phys_cell_id: parseInt(packet.body[8], 10),
+                    EARFCN: parseInt(packet.body[9], 10),
+                    rsrp: parseInt(packet.body[10], 10),
+                    snr: parseInt(packet.body[11], 10),
+                    NW_provided_eDRX_value: packet.body[12],
                     // Response is always either
                     // activeTime & periodicTAU, or
                     // activeTime & periodicTAUext & periodicTAU
-                    activeTime: responseParameters[13],
+                    activeTime: packet.body[13],
                     periodicTAU:
-                        responseParameters.length === 15
-                            ? responseParameters[14]
-                            : responseParameters[15],
+                        packet.body.length === 15
+                            ? packet.body[14]
+                            : packet.body[15],
                     periodicTAUext:
-                        responseParameters.length === 16
-                            ? responseParameters[14]
-                            : undefined,
+                        packet.body.length === 16 ? packet.body[14] : undefined,
                 },
             };
         }

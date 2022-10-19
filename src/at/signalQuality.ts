@@ -6,7 +6,6 @@
 
 import type { Processor } from '.';
 import { RequestType } from './parseAT';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     notifySignalQuality?: boolean;
@@ -34,11 +33,14 @@ export const processor: Processor<ViewModel> = {
         },
     }),
     onRequest: packet => {
-        if (packet.body?.startsWith('1')) {
+        if (packet.body.length !== 1) {
+            return {};
+        }
+        if (packet.body[0].startsWith('1')) {
             tentativeState = { notifySignalQuality: true };
             return {};
         }
-        if (packet.body?.startsWith('0')) {
+        if (packet.body[0].startsWith('0')) {
             tentativeState = { notifySignalQuality: false };
             return {};
         }
@@ -56,8 +58,8 @@ export const processor: Processor<ViewModel> = {
         return {};
     },
     onNotification: packet => {
-        const signalQualityValues = getParametersFromResponse(packet.body)?.map(
-            value => parseInt(value, 10)
+        const signalQualityValues = packet.body.map(value =>
+            parseInt(value, 10)
         );
 
         if (signalQualityValues?.length === 4) {

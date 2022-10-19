@@ -5,7 +5,6 @@
  */
 
 import type { Processor } from '.';
-import { getParametersFromResponse } from './utils';
 
 type ViewModel = {
     imsi?: string;
@@ -18,7 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const imsi = getParametersFromResponse(packet.body)?.pop();
+            const imsi = packet.body.shift();
             return imsi ? { imsi } : {};
         }
         return {};
