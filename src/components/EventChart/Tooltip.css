@@ -3,7 +3,7 @@
     top: -100px;
     word-break: break-all;
     background: white;
-    border: 1px solid #b0bec5;
+    border: 1px solid var(--color-gray-600);
 
     padding: 16px;
     min-width: 200px;

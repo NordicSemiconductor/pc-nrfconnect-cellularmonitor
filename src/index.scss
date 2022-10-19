@@ -5,3 +5,35 @@
  */
 
 // This file is imported by index.jsx, and may contain styles for the app.
+
+@import '~pc-nrfconnect-shared/styles';
+
+:root {
+    --color-nordic-blue: #{$nordic-blue};
+    --color-blue-slate: #{$blue-slate};
+    --color-primary: #{$primary};
+    --color-primary-darkened: #{$primary-darkened};
+    --color-secondary: #{$secondary};
+    --color-accent: #{$accent};
+    
+    --color-gray-50: #{$gray-50};
+    --color-gray-100: #{$gray-100};
+    --color-gray-200: #{$gray-200};
+    --color-gray-300: #{$gray-300};
+    --color-gray-400: #{$gray-400};
+    --color-gray-500: #{$gray-500};
+    --color-gray-600: #{$gray-600};
+    --color-gray-700: #{$gray-700};
+    --color-gray-800: #{$gray-800};
+    --color-gray-900: #{$gray-900};
+
+    --color-red: #{$red};
+    --color-indigo: #{$indigo};
+    --color-amber: #{$amber};
+    --color-purple: #{$purple};
+    --color-green: #{$green};
+    --color-deep-purple: #{$deep-purple};
+    --color-orange: #{$orange};
+    --color-lime: #{$lime};
+    --color-pink: #{$pink};
+}
