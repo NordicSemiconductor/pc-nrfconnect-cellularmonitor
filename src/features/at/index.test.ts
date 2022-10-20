@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { rawTraceData } from '../../data/trace';
+import { rawTraceData } from '../../../data/trace';
 import { convert, initialState, Packet, State } from '.';
 
 const traceData = rawTraceData.map(
