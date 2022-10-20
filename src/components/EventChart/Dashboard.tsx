@@ -16,6 +16,7 @@ import SimCard from './Cards/SimCard';
 import './Dashboard.scss';
 import ModemCard from './Cards/ModemCard';
 import { DataPacket } from '@nordicsemiconductor/nrf-monitor-lib-js';
+import LTECard from './Cards/LTECard';
 
 const packets: Packet[] = [];
 
@@ -55,6 +56,7 @@ const Dashboard = () => {
             <div className="cards-container">
                 <ModemCard />
                 <SimCard />
+                <LTECard />
             </div>
 
             <div className="events">
