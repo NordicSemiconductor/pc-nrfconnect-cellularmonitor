@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getSIM } from '../../../at/atSlice';
+import { getSIM } from '../../../features/at/atSlice';
 import DashboardCard from './DashboardCard';
 
 export default () => {

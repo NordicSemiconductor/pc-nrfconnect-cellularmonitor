@@ -29,7 +29,7 @@ import { colors as sharedColors } from "pc-nrfconnect-shared";
 import { setSelectedTime } from './chartSlice';
 import { selectTimePlugin } from './selectTimePlugin';
 import { PacketTooltip } from './Tooltip';
-import { Packet } from '../../../at';
+import { Packet } from '../../../features/at';
 
 ChartJS.register(
     LinearScale,

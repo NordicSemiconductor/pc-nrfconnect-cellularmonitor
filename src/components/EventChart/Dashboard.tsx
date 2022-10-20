@@ -7,8 +7,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { convert, initialState, Packet } from '../../at';
-import { setAT } from '../../at/atSlice';
+import { convert, initialState, Packet } from '../../features/at';
+import { setAT } from '../../features/at/atSlice';
 import { getSelectedTime } from './Chart/chartSlice';
 import { Events } from './Chart/Chart';
 import SimCard from './Cards/SimCard';

@@ -7,7 +7,7 @@
 import React from 'react';
 import { TooltipModel } from 'chart.js';
 
-import { Packet } from '../../../at';
+import { Packet } from '../../../features/at';
 import './Tooltip.css';
 
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
