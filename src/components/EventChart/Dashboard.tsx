@@ -17,18 +17,15 @@ import './Dashboard.scss';
 import ModemCard from './Cards/ModemCard';
 import { DataPacket } from '@nordicsemiconductor/nrf-monitor-lib-js';
 
-export const traceEvents = new EventTarget();
-
 const packets: Packet[] = [];
 
+export const traceEvents = new EventTarget();
 export const notifyDashboard = (packet: DataPacket) => {
     packets.push(packet as Packet);
-    traceEvents.dispatchEvent(
-        new CustomEvent('new-packet', { detail: packets })
-    );
+    traceEvents.dispatchEvent(new Event('new-packet'));
 };
 
-const EventsTab = () => {
+const Dashboard = () => {
     const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
 
@@ -61,11 +58,11 @@ const EventsTab = () => {
             </div>
 
             <div className="events">
-                <div id="tooltip" style={{ position: 'relative' }}></div>
+                <div id="tooltip"></div>
                 <Events packets={packetList.packets} />
             </div>
         </div>
     );
 };
 
-export default EventsTab;
+export default Dashboard;

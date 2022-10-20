@@ -11,7 +11,7 @@ import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
-import EventsTab from './components/EventChart/Dashboard';
+import EventChartDashboard from './components/EventChart/Dashboard';
 import PowerEstimation from './components/PowerEstimation/PowerEstimation';
 import {
     PowerEstimationSidePanel,
@@ -42,7 +42,7 @@ export default () => (
             },
             {
                 name: 'Events Dashboard',
-                Main: EventsTab,
+                Main: EventChartDashboard,
                 SidePanel: TraceCollectorSidePanel
             },
         ]}
