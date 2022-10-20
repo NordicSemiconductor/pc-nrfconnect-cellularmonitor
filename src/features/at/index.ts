@@ -23,6 +23,7 @@ import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
 import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
+import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
 
 export interface Packet {
     packet_data: Uint8Array;
@@ -86,6 +87,7 @@ const processors = [
     dataProfile,
     TXPowerReduction,
     extendedSignalQuality,
+    activityStatus,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.

@@ -60,5 +60,13 @@ export const getModem = (state: RootState) => {
     };
 };
 
+export const getLTE = (state: RootState) => {
+    const { activityStatus } = state.app.at;
+
+    return {
+        activityStatus,
+    };
+};
+
 export const { setAT } = atSlice.actions;
 export default atSlice.reducer;
