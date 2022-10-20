@@ -16,13 +16,15 @@ export default () => {
     const fields = {
         IMSI: SIMView.iccid ?? 'Unknown',
         Operator: SIMView.operator ?? 'Unknown',
-        manufacturer: SIMView.manufacturer ?? 'Unknown',
+        Manufacturer: SIMView.manufacturer ?? 'Unknown',
         ICCID: SIMView.iccid ?? 'Unknown',
         // ODIS: false,
         PIN: SIMView.pin,
         // PUK: false,
         'Remaining PIN retries': SIMView.remainingPIN ?? 'unknown',
         'Remaining PUK retries': SIMView.remainingPUK ?? 'unknown',
+        'Remaining PIN2 retries': SIMView.remainingPIN2 ?? 'unknown',
+        'Remaining PUK2 retries': SIMView.remainingPUK2 ?? 'unknown',
         // 'Restricted SIM Access?': false,
         // 'Generic SIM Access?': false,
     };
@@ -32,7 +34,8 @@ export default () => {
             <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
-                        {key}: {value}
+                        <p>{key}:</p>
+                        <p>{value}</p>
                     </li>
                 ))}
             </ul>

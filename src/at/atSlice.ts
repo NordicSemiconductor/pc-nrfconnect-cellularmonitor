@@ -29,6 +29,8 @@ export const getSIM = (state: RootState) => {
         pin: at.pinCodeStatus,
         remainingPIN: at.pinRetries?.SIM_PIN,
         remainingPUK: at.pinRetries?.SIM_PUK,
+        remainingPIN2: at.pinRetries?.SIM_PIN2,
+        remainingPUK2: at.pinRetries?.SIM_PUK2,
     };
 };
 
@@ -41,6 +43,8 @@ export const getModem = (state: RootState) => {
         currentBand,
         availableBands,
         dataProfile,
+        ltemTXReduction,
+        nbiotTXReduction,
     } = state.app.at;
 
     return {
@@ -51,6 +55,8 @@ export const getModem = (state: RootState) => {
         currentBand,
         availableBands,
         dataProfile,
+        ltemTXReduction,
+        nbiotTXReduction,
     };
 };
 

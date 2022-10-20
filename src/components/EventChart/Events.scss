@@ -7,41 +7,54 @@
 @import '~pc-nrfconnect-shared/styles';
 
 .events-container {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .cards-container {
-  display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
-  gap: 8px;
-  overflow-x: auto;
-  @include scrollbars($gray-100);
-}
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 8px;
+    overflow-x: auto;
+    @include scrollbars($gray-100);
 
-.cards-container .card {
-  width: 244px;
-  min-width: 244px;
-  max-width: 244px;
-}
+    .card {
+        //width: 244px;
+        min-width: 244px;
+        max-width: 244px;
+        height: 321px;
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    }
 
-.cards-container span {
-  margin-right: 8px;
-}
+    span {
+        margin-right: 8px;
+    }
 
-.cards-container ul {
-  list-style-type: none;
-  padding: 0;
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
+    li {
+        display: flex;
+        justify-content: space-between;
+        p {
+            margin: 0;
+            font-size: 12px;
+        }
+    }
 }
 
 .events {
-  width: 100%;
-  height: 200px;
+    width: 100%;
+    height: 200px;
 }

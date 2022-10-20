@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 import { getModem } from '../../at/atSlice';
 import DashboardCard from '../Dashboard/DashboardCard';
 
-const formatAvailableBands = (bandsArray: number[]) =>  `[ ${bandsArray.join(' , ')} ]`
+const formatAvailableBands = (bandsArray: number[]) =>
+    `[ ${bandsArray.join(' , ')} ]`;
 
 export default () => {
     const {
@@ -21,24 +22,35 @@ export default () => {
         currentBand,
         availableBands,
         dataProfile,
+        ltemTXReduction,
+        nbiotTXReduction,
     } = useSelector(getModem);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
-        revisionID: revisionID ?? 'Unknown',
-        hardwareVersion: hardwareVersion ?? 'Unknown',
-        modemUUID: modemUUID ?? 'Unknown',
-        currentBand: currentBand ?? 'Unknown',
-        availableBands: availableBands?.length ? formatAvailableBands(availableBands) : 'Unknown',
-        dataProfile: dataProfile ?? 'Unknown',
+        'Revision ID': revisionID ?? 'Unknown',
+        'Hardware Version': hardwareVersion ?? 'Unknown',
+        'Modem UUID': modemUUID ?? 'Unknown',
+        'Current Band': currentBand ?? 'Unknown',
+        'Available Bands': availableBands?.length
+            ? formatAvailableBands(availableBands)
+            : 'Unknown',
+        'Data Profile': dataProfile ?? 'Unknown',
+        'TX Power Reduction (LTE-M)': ltemTXReduction ?? 'Unknown',
+        'TX Power Reduction (NB-IoT)': nbiotTXReduction ?? 'Unknown',
     };
 
     return (
-        <DashboardCard title="Modem" iconName="mdi-cellphone-wireless" onclick={() => {}}>
+        <DashboardCard
+            title="Modem"
+            iconName="mdi-cellphone-wireless"
+            onclick={() => {}}
+        >
             <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
-                        {key}: {value}
+                        <p>{key}:</p>
+                        <p>{value}</p>
                     </li>
                 ))}
             </ul>
