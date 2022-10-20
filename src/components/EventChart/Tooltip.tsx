@@ -46,7 +46,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
                 <span className="text-muted">{others}</span>
             </div>
 
-            <p>{JSON.parse(packet.packet_data.toString())}</p>
+            <p>{packet.packet_data.toString()}</p>
             <span className="text-muted">{timestampLabel}</span>
         </div>
     );

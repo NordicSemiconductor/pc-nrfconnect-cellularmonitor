@@ -13,7 +13,7 @@ interface State {
 }
 
 const initialState = (): State => ({
-    time: 0,
+    time: Date.now() + 24 * 60 * 60 * 1000, // now + 1 day
 });
 
 const slice = createSlice({

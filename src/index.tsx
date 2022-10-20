@@ -43,6 +43,7 @@ export default () => (
             {
                 name: 'Events Dashboard',
                 Main: TemporaryTab,
+                SidePanel: TraceCollectorSidePanel
             },
         ]}
         documentation={DocumentationSections}

@@ -12,6 +12,7 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
+import { notifyDashboard } from '../../components/EventChart/EventsTab';
 import type { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {
@@ -195,7 +196,11 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
                 throttleUpdatingProgress: true,
             }),
-            () => {},
+            data => {
+                if (data.format !== 'modem_trace') {
+                    notifyDashboard(data);
+                }
+            },
             jsonData => {
                 // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
                 const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
