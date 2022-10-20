@@ -15,6 +15,7 @@ import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
+import { LoadTraceFile } from './LoadTraceFile';
 
 export const PowerEstimationSidePanel = () => (
     <SidePanel>
@@ -28,5 +29,6 @@ export const TraceCollectorSidePanel = () => (
         <TraceCollector />
         <TraceFileInformation />
         <AdvancedOptions />
+        <LoadTraceFile />
     </SidePanel>
 );

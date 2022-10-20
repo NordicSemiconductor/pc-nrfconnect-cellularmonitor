@@ -14,7 +14,9 @@ export default () => {
     const LTEView = useSelector(getLTE);
 
     const fields = {
-        activityStatus: LTEView.activityStatus ?? 'Unknown',
+        "Signal Quality": LTEView.signalQuality,
+        "Activity Status": LTEView.activityStatus ?? 'Unknown',
+        
     };
 
     return (

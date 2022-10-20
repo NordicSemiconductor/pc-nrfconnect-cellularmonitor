@@ -32,6 +32,9 @@ import {
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
+import { askForPcapFile } from '../../utils/fileUtils';
+import { addEvent } from '../../components/EventChart/eventsSlice';
+import { Packet } from '../at';
 
 export type TaskId = number;
 
@@ -214,6 +217,52 @@ export const startTrace =
                 progressConfigs: progressConfigs(source, sinks),
             })
         );
+    };
+
+export const readRawTrace =
+    (sourceFile: string): TAction =>
+    (dispatch, getState) => {
+        const state = getState();
+        const source: SourceFormat = { type: 'file', path: sourceFile };
+        const sinks: TraceFormat[] = [];
+
+        nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            () => {
+                logger.info(`Completed reading trace from ${sourceFile}`);
+            },
+            () => {},
+            data => {
+                if (data.format !== 'modem_trace') {
+                    dispatch(addEvent(data as Packet));
+                }
+            },
+            () => {}
+        );
+        logger.info(`Started reading trace from ${sourceFile}`);
+    };
+
+export const readPcapTrace =
+    (sourceFile: string): TAction =>
+    (dispatch, getState) => {
+        const state = getState();
+        const source: SourceFormat = { type: 'file', path: sourceFile };
+        const sinks: TraceFormat[] = [];
+
+        nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            () => {
+                logger.info(`Completed reading trace from ${sourceFile}`);
+            },
+            () => {},
+            data => {
+                if (data.format !== 'modem_trace') {
+                    dispatch(addEvent(data as Packet));
+                }
+            },
+            () => {}
+        );
+        logger.info(`Started reading trace from ${sourceFile}`);
     };
 
 export const stopTrace =

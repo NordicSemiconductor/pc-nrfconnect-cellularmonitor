@@ -61,9 +61,13 @@ export const getModem = (state: RootState) => {
 };
 
 export const getLTE = (state: RootState) => {
-    const { activityStatus } = state.app.at;
+    const {
+        signalQuality: { rsrp: signalQuality },
+        activityStatus,
+    } = state.app.at;
 
     return {
+        signalQuality,
         activityStatus,
     };
 };

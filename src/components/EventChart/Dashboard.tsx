@@ -17,29 +17,15 @@ import './Dashboard.scss';
 import ModemCard from './Cards/ModemCard';
 import { DataPacket } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import LTECard from './Cards/LTECard';
-
-const packets: Packet[] = [];
-
-export const traceEvents = new EventTarget();
-export const notifyDashboard = (packet: DataPacket) => {
-    packets.push(packet as Packet);
-    traceEvents.dispatchEvent(new Event('new-packet'));
-};
+import { getEventPackets } from './eventsSlice';
 
 const Dashboard = () => {
     const timestamp = useSelector(getSelectedTime);
+    const packets = useSelector(getEventPackets);
     const dispatch = useDispatch();
 
-    const [packetList, setPacketList] = useState({ packets });
-
     useEffect(() => {
-        traceEvents.addEventListener('new-packet', () =>
-            setPacketList({ packets })
-        );
-    }, []);
-
-    useEffect(() => {
-        const newState = packetList.packets
+        const newState = packets
             .filter(packet => (packet.timestamp?.value ?? 0) < timestamp * 1000)
             .reduce(
                 (current, packet) => ({
@@ -49,7 +35,7 @@ const Dashboard = () => {
                 initialState()
             );
         dispatch(setAT(newState));
-    }, [packetList, timestamp]);
+    }, [packets, timestamp]);
 
     return (
         <div className="events-container">
@@ -61,7 +47,7 @@ const Dashboard = () => {
 
             <div className="events">
                 <div id="tooltip"></div>
-                <Events packets={packetList.packets} />
+                <Events packets={packets} />
             </div>
         </div>
     );

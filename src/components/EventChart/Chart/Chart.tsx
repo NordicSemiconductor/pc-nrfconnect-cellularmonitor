@@ -6,7 +6,7 @@
 
 import 'chartjs-adapter-date-fns';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';

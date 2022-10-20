@@ -13,6 +13,7 @@ import modemReducer from './features/modem/modemSlice';
 import powerEstimationReducer from './features/powerEstimation/powerEstimationSlice';
 import traceReducer from './features/tracing/traceSlice';
 import wiresharkReducer from './features/wireshark/wiresharkSlice';
+import eventsReducer from './components/EventChart/eventsSlice';
 
 type AppState = ReturnType<typeof appReducer>;
 
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
     wireshark: wiresharkReducer,
     at: atReducer,
     chart: chartSlice,
+    events: eventsReducer,
 });
 
 export default appReducer;
