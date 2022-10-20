@@ -7,8 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getSIM } from '../../at/atSlice';
-import DashboardCard from '../Dashboard/DashboardCard';
+import { getSIM } from '../../../at/atSlice';
+import DashboardCard from './DashboardCard';
 
 export default () => {
     const SIMView = useSelector(getSIM);

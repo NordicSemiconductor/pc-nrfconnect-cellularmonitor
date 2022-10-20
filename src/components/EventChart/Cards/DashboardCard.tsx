@@ -8,8 +8,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Card } from 'pc-nrfconnect-shared';
 
-import './dashboard.scss';
-
 const DashboardCard: React.FC<{
     onclick: () => void;
     title: string;
