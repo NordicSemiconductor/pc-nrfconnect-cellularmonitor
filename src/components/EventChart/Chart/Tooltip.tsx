@@ -7,7 +7,7 @@
 import React from 'react';
 import { TooltipModel } from 'chart.js';
 
-import { Packet } from '../../at';
+import { Packet } from '../../../at';
 import './Tooltip.css';
 
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
@@ -29,7 +29,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
 
     const packet = (point.raw as { event: Packet }).event;
 
-    const timestamp = new Date(packet.timestamp?.value ?? 0);
+    const timestamp = new Date((packet.timestamp?.value ?? 0) / 1000);
     const timestampLabel = dateFormatter.format(timestamp);
 
     const others =

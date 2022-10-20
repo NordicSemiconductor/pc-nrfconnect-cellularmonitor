@@ -12,7 +12,7 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import { notifyDashboard } from '../../components/EventChart/EventsTab';
+import { notifyDashboard } from '../../components/EventChart/Dashboard';
 import type { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
 import {

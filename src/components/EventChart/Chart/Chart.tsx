@@ -6,7 +6,7 @@
 
 import 'chartjs-adapter-date-fns';
 
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
@@ -26,12 +26,10 @@ import {
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 import { colors as sharedColors } from "pc-nrfconnect-shared";
-import { rawTraceData } from '../../../data/trace';
-import { setSelectedTime } from './chart.slice';
-import { dragSelectTime } from './chart.plugin.dragSelectTIme';
+import { setSelectedTime } from './chartSlice';
+import { selectTimePlugin } from './selectTimePlugin';
 import { PacketTooltip } from './Tooltip';
-import { convert, initialState, Packet } from '../../at';
-import { traceEvents } from './EventsTab';
+import { Packet } from '../../../at';
 
 ChartJS.register(
     LinearScale,
@@ -60,25 +58,8 @@ const colors = [
 
 const formats = ["at", "lte_rrc.bcch_dl_sch", "nas-eps", "lte_rrc.ul_ccch", "lte_rrc.dl_ccch", "lte_rrc.ul_dcch", "lte_rrc.dl_dcch", "ip"];
 
-export const Events = () => {
+export const Events = ({ packets }: { packets: Packet[] }) => {
     const dispatch = useDispatch();
-
-    const [packets, setPackets] = useState<Packet[]>([]);
-
-    const newPacketListener = useCallback(event => {
-        setPackets(previous => [...previous, event.detail]);
-    }, [])
-
-    useEffect(() => {
-        traceEvents.addEventListener('new-packet', newPacketListener);
-    }, []);
-
-    // const formats = useMemo(() => [...packets
-    //     .reduce(
-    //         (collector, event) => collector.add(event.format),
-    //         new Set<string>()
-    //     )
-    //     .values()], [packets]);
 
     const options: ChartOptions<'scatter'> = useMemo(
         () => ({
@@ -104,7 +85,7 @@ export const Events = () => {
                     },
                 },
 
-                dragSelectTime: {
+                selectTime: {
                     updateTime(time) {
                         dispatch(setSelectedTime(time));
                     },
@@ -157,32 +138,30 @@ export const Events = () => {
         []
     );
 
-    const data: ChartData<'scatter'> = useMemo(() => {
-        const events = packets.map(event => ({
-            x: (event.timestamp?.value ?? 0) / 1000,
-            y: formats.indexOf(event.format) ?? 0,
-            event,
-        }));
-        
-        const datasets: typeof data.datasets = formats.map((format, index) => ({
-            label: format,
-            data: events.filter(event => event.event.format === format),
-            borderColor: colors[index],
-            backgroundColor: colors[index],
-            pointRadius: 6,
-            pointHoverRadius: 6,
-            pointHoverBorderWidth: 5,
-            pointBorderWidth: 5,
-            pointHoverBackgroundColor: 'white',
-            hidden: format === 'modem_trace',
-        }));
-        
-        return {
-            datasets,
-        };
-    }, [packets])
+    const events = packets.map(event => ({
+        x: (event.timestamp?.value ?? 0) / 1000,
+        y: formats.indexOf(event.format) ?? 0,
+        event,
+    }));
+    
+    const datasets: typeof data.datasets = formats.map((format, index) => ({
+        label: format,
+        data: events.filter(event => event.event.format === format),
+        borderColor: colors[index],
+        backgroundColor: colors[index],
+        pointRadius: 6,
+        pointHoverRadius: 6,
+        pointHoverBorderWidth: 5,
+        pointBorderWidth: 5,
+        pointHoverBackgroundColor: 'white',
+        hidden: format === 'modem_trace',
+    }));
+    
+    const data: ChartData<'scatter'> = {
+        datasets,
+    };
 
-    const plugins = [dragSelectTime];
+    const plugins = [selectTimePlugin];
 
     return (
         <Scatter

@@ -7,8 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getModem } from '../../at/atSlice';
-import DashboardCard from '../Dashboard/DashboardCard';
+import { getModem } from '../../../at/atSlice';
+import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `[ ${bandsArray.join(' , ')} ]`;

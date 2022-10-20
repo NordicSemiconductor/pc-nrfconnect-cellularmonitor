@@ -6,15 +6,15 @@
 
 import type { Chart, Plugin } from 'chart.js';
 
-import type { DragSelectOptions } from './chart';
+import type { SelectTimeOptions } from './chart';
 import { colors } from "pc-nrfconnect-shared";
 
 let selectedTimeStamp = 0;
 let pixelTime = -1;
 let dragging = false;
 
-export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
-    id: 'dragSelectTime',
+export const selectTimePlugin: Plugin<'scatter', SelectTimeOptions> = {
+    id: 'selectTime',
 
     afterInit(chart, args, options) {
         const { canvas } = chart.ctx;
@@ -71,7 +71,7 @@ export const dragSelectTime: Plugin<'scatter', DragSelectOptions> = {
 const updateSelectedTime = (
     event: PointerEvent,
     chart: Chart,
-    options: DragSelectOptions
+    options: SelectTimeOptions
 ) => {
     pixelTime = event.offsetX;
     selectedTimeStamp =
