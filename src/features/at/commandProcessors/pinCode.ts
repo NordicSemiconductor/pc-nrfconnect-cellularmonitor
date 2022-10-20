@@ -46,11 +46,6 @@ export const processor: Processor<ViewModel> = {
         }
         return { pinCodeStatus: 'unknown' };
     },
-    commands: {
-        pinRetry: () => {
-            console.log('test');
-        },
-    }
 };
 
 
