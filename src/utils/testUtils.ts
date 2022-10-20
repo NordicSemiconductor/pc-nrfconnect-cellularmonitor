@@ -14,7 +14,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import appReducer from '../appReducer';
-import { TDispatch } from '../thunk';
+import { TDispatch } from './thunk';
 
 const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
 

@@ -23,8 +23,8 @@ import {
     setDetectingTraceDb,
     setSerialPort,
 } from '../features/tracing/traceSlice';
-import type { TAction } from '../thunk';
-import { TDispatch } from '../thunk';
+import type { TAction } from '../utils/thunk';
+import { TDispatch } from '../utils/thunk';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 
 const deviceListing: DeviceTraits = {

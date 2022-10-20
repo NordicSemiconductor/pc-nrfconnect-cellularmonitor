@@ -57,16 +57,6 @@ export type State = UnionToIntersection<
     ExtractViewModel<typeof processors[number]>
 >;
 
-// // Typescript challenge! Make this state object by iterating over the processors array below.
-// export type State = ExtractViewModel<typeof functionMode> &
-//     ExtractViewModel<typeof currentBand> &
-//     ExtractViewModel<typeof modeOfOperation> &
-//     ExtractViewModel<typeof periodicTAU> &
-//     ExtractViewModel<typeof signalQuality> &
-//     ExtractViewModel<typeof modemParameters> &
-//     ExtractViewModel<typeof pinCode> &
-//     ExtractViewModel<typeof pinRetries>;
-
 const processors = [
     functionMode,
     currentBand,
