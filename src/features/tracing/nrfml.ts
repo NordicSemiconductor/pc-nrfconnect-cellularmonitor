@@ -12,7 +12,6 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import { notifyDashboard } from '../../components/EventChart/Dashboard';
 import type { TAction } from '../../utils/thunk';
 import EventAction from '../../usageDataActions';
 import {
@@ -32,8 +31,7 @@ import {
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
-import { askForPcapFile } from '../../utils/fileUtils';
-import { addEvent } from '../../components/EventChart/eventsSlice';
+import { addTracePacket } from './traceSlice';
 import { Packet } from '../at';
 
 export type TaskId = number;
@@ -201,7 +199,7 @@ export const startTrace =
             }),
             data => {
                 if (data.format !== 'modem_trace') {
-                    notifyDashboard(data);
+                    dispatch(addTracePacket(data as Packet));
                 }
             },
             jsonData => {
@@ -234,7 +232,7 @@ export const readRawTrace =
             () => {},
             data => {
                 if (data.format !== 'modem_trace') {
-                    dispatch(addEvent(data as Packet));
+                    dispatch(addTracePacket(data as Packet));
                 }
             },
             () => {}
@@ -257,7 +255,7 @@ export const readPcapTrace =
             () => {},
             data => {
                 if (data.format !== 'modem_trace') {
-                    dispatch(addEvent(data as Packet));
+                    dispatch(addTracePacket(data as Packet));
                 }
             },
             () => {}

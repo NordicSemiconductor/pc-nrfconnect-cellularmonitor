@@ -48,6 +48,14 @@ export const processor: Processor<ViewModel> = {
     },
 };
 
-
+export const commands = {
+    enterPIN(pin: string, newpin: string) {
+        const pin2 = newpin ? '' : `,"${newpin}"`;
+        return `+CPIN="${pin}"${pin2}`; // +CPIN="pin","pin2"
+    },
+    checkPIN() {
+        return '+CPIN?';
+    },
+};
 
 export default processor;

@@ -14,6 +14,7 @@ import {
 } from '../../utils/store';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
+import { Packet } from '../at';
 
 export interface TraceProgress {
     format: TraceFormat;
@@ -28,6 +29,7 @@ interface TraceState {
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
+    tracePackets: Packet[];
 }
 
 const initialState = (): TraceState => ({
@@ -37,6 +39,7 @@ const initialState = (): TraceState => ({
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
+    tracePackets: [],
 });
 
 const traceSlice = createSlice({
@@ -55,6 +58,7 @@ const traceSlice = createSlice({
                 ...sink,
                 size: 0,
             }));
+            state.tracePackets = [];
         },
         setTraceIsStopped: state => {
             state.taskId = null;
@@ -88,6 +92,9 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
+        addTracePacket: (state, actions: PayloadAction<Packet>) => {
+            state.tracePackets.push(actions.payload);
+        },
     },
 });
 
@@ -109,6 +116,7 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
+export const getTracePackets = (state: RootState) => state.app.trace.tracePackets;
 
 export const {
     setTraceIsStarted,
@@ -119,6 +127,7 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setDetectingTraceDb,
+    addTracePacket,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

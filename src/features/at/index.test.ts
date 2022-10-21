@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { rawTraceData } from '../../../data/trace';
+import { rawTraceData } from './traceSample';
 import { convert, initialState, Packet, State } from '.';
 
 const traceData = rawTraceData.map(
@@ -63,6 +63,7 @@ const expectedState: State = {
     dataProfile: undefined,
     nbiotTXReduction: undefined,
     ltemTXReduction: undefined,
+    activityStatus: undefined,
 };
 
 test('Trace is read properly', () => {

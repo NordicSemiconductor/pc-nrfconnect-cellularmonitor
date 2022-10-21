@@ -15,13 +15,12 @@ import SimCard from './Cards/SimCard';
 
 import './Dashboard.scss';
 import ModemCard from './Cards/ModemCard';
-import { DataPacket } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import LTECard from './Cards/LTECard';
-import { getEventPackets } from './eventsSlice';
+import { getTracePackets } from '../../features/tracing/traceSlice';
 
 const Dashboard = () => {
     const timestamp = useSelector(getSelectedTime);
-    const packets = useSelector(getEventPackets);
+    const packets = useSelector(getTracePackets);
     const dispatch = useDispatch();
 
     useEffect(() => {
