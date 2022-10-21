@@ -71,7 +71,9 @@ const formats = [
 
 export const Chart = ({ packets }: { packets: Packet[] }) => {
     const dispatch = useDispatch();
-    const [xScaleType, setXScaleType] = useState<'time' | 'timeseries'>('timeseries');
+    const [xScaleType, setXScaleType] = useState<'time' | 'timeseries'>(
+        'timeseries'
+    );
     const chart = useRef<ChartJSOrUndefined<'scatter'>>();
     const isTracing = useSelector(getIsTracing);
     const selectedTime = useSelector(getSelectedTime);
@@ -94,6 +96,7 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                 },
 
                 zoom: {
+                    
                     zoom: {
                         wheel: {
                             enabled: true,
@@ -154,6 +157,7 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                         autoSkipPadding: 50,
                         maxRotation: 0,
                     },
+
                 },
             },
         }),
@@ -186,9 +190,18 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
     const plugins = [selectTimePlugin];
     return (
         <>
-            <div className="d-flex flex-row justify-content-end" style={{ paddingRight: '0.5rem'}}>
-                <Toggle label="LIVE" isToggled={selectedTime > Date.now()} />
-                <div style={{width: '24px'}}></div>
+            <div
+                className="d-flex flex-row justify-content-end"
+                style={{ paddingRight: '0.5rem' }}
+            >
+                <Toggle
+                    label="LIVE"
+                    isToggled={chart.current?.isZoomedOrPanned()}
+                    onToggle={() => {
+                        chart.current?.resetZoom();
+                    }}
+                />
+                <div style={{ width: '24px' }}></div>
                 <Toggle
                     label="SERIAL"
                     isToggled={xScaleType === 'timeseries'}
