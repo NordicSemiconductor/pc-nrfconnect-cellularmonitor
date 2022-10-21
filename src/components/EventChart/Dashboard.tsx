@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { convert, initialState, Packet } from '../../features/at';
 import { setAT } from '../../features/at/atSlice';
 import { getSelectedTime } from './Chart/chartSlice';
-import { Events } from './Chart/Chart';
+import { Chart } from './Chart/Chart';
 import SimCard from './Cards/SimCard';
 
 import './Dashboard.scss';
@@ -44,9 +44,9 @@ const Dashboard = () => {
                 <LTECard />
             </div>
 
-            <div className="events">
+            <div>
                 <div id="tooltip"></div>
-                <Events packets={packets} />
+                <Chart packets={packets} />
             </div>
         </div>
     );

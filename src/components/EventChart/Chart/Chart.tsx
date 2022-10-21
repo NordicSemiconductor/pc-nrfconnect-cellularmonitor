@@ -6,10 +6,10 @@
 
 import 'chartjs-adapter-date-fns';
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import ReactDOM from 'react-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -25,11 +25,13 @@ import {
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
-import { colors as sharedColors } from "pc-nrfconnect-shared";
-import { setSelectedTime } from './chartSlice';
+import { colors as sharedColors, Toggle } from 'pc-nrfconnect-shared';
+import { getSelectedTime, setSelectedTime } from './chartSlice';
 import { selectTimePlugin } from './selectTimePlugin';
 import { PacketTooltip } from './Tooltip';
 import { Packet } from '../../../features/at';
+import { getIsTracing } from '../../../features/tracing/traceSlice';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 ChartJS.register(
     LinearScale,
@@ -56,10 +58,30 @@ const colors = [
     sharedColors.pink,
 ];
 
-const formats = ["at", "lte_rrc.bcch_dl_sch", "nas-eps", "lte_rrc.ul_ccch", "lte_rrc.dl_ccch", "lte_rrc.ul_dcch", "lte_rrc.dl_dcch", "ip"];
+const formats = [
+    'at',
+    'lte_rrc.bcch_dl_sch',
+    'nas-eps',
+    'lte_rrc.ul_ccch',
+    'lte_rrc.dl_ccch',
+    'lte_rrc.ul_dcch',
+    'lte_rrc.dl_dcch',
+    'ip',
+];
 
-export const Events = ({ packets }: { packets: Packet[] }) => {
+export const Chart = ({ packets }: { packets: Packet[] }) => {
     const dispatch = useDispatch();
+    const [xScaleType, setXScaleType] = useState<'time' | 'timeseries'>('timeseries');
+    const chart = useRef<ChartJSOrUndefined<'scatter'>>();
+    const isTracing = useSelector(getIsTracing);
+    const selectedTime = useSelector(getSelectedTime);
+
+    useEffect(() => {
+        if (chart.current && isTracing) {
+            chart.current.reset();
+            chart.current.resetZoom();
+        }
+    }, [isTracing]);
 
     const options: ChartOptions<'scatter'> = useMemo(
         () => ({
@@ -95,7 +117,7 @@ export const Events = ({ packets }: { packets: Packet[] }) => {
                     enabled: false,
                     external(context) {
                         const showing = context.tooltip.opacity === 1;
-                        
+
                         if (showing) {
                             const tooltip = PacketTooltip(context.tooltip);
                             if (tooltip) {
@@ -122,10 +144,10 @@ export const Events = ({ packets }: { packets: Packet[] }) => {
                     },
                     grid: { display: false },
                     suggestedMin: -1,
-                    suggestedMax: formats.length
+                    suggestedMax: formats.length,
                 },
                 x: {
-                    type: 'time',
+                    type: xScaleType,
                     ticks: {
                         sampleSize: 50,
                         autoSkip: true,
@@ -135,7 +157,7 @@ export const Events = ({ packets }: { packets: Packet[] }) => {
                 },
             },
         }),
-        []
+        [xScaleType]
     );
 
     const events = packets.map(event => ({
@@ -143,7 +165,7 @@ export const Events = ({ packets }: { packets: Packet[] }) => {
         y: formats.indexOf(event.format) ?? 0,
         event,
     }));
-    
+
     const datasets: typeof data.datasets = formats.map((format, index) => ({
         label: format,
         data: events.filter(event => event.event.format === format),
@@ -156,18 +178,35 @@ export const Events = ({ packets }: { packets: Packet[] }) => {
         pointHoverBackgroundColor: 'white',
         hidden: format === 'modem_trace',
     }));
-    
+
     const data: ChartData<'scatter'> = {
         datasets,
     };
 
     const plugins = [selectTimePlugin];
-
     return (
-        <Scatter
-            options={options}
-            data={data}
-            plugins={plugins}
-        />
+        <>
+            <div className="d-flex flex-row justify-content-end" style={{ paddingRight: '0.5rem'}}>
+                <Toggle label="LIVE" isToggled={selectedTime > Date.now()} />
+                <div style={{width: '24px'}}></div>
+                <Toggle
+                    label="SERIAL"
+                    isToggled={xScaleType === 'timeseries'}
+                    onToggle={() =>
+                        setXScaleType(
+                            xScaleType === 'time' ? 'timeseries' : 'time'
+                        )
+                    }
+                />
+            </div>
+            <div style={{ height: '200px' }}>
+                <Scatter
+                    ref={chart}
+                    options={options}
+                    data={data}
+                    plugins={plugins}
+                />
+            </div>
+        </>
     );
 };
