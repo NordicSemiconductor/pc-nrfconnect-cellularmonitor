@@ -15,7 +15,7 @@ const eventsSlice = createSlice({
     initialState,
     reducers: {
         addEvent: (state, actions: PayloadAction<Packet>) => {
-            return { ...state, packets: [...state.packets, actions.payload] };
+            state.packets.push(actions.payload);
         },
     },
 });
