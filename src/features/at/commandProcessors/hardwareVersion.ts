@@ -16,9 +16,8 @@ export const processor: Processor<ViewModel> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/hwver.html',
     initialState: () => ({}),
     onResponse: packet => {
-        if (packet.status === 'OK') {
-            const hardwareVersion = packet.body.shift();
-            return hardwareVersion ? { hardwareVersion } : {};
+        if (packet.status === 'OK' && packet.payload) {
+            return { hardwareVersion: packet.payload };
         }
         return {};
     },

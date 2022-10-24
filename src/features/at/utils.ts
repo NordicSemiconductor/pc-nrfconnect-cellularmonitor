@@ -4,6 +4,28 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+export const getStringNumberPair = (payload: string): [string, number] => {
+    const payloadArray = payload.split(',').map(parseStringValue);
+    return [payloadArray[0], parseInt(payloadArray[1], 10)];
+};
+
+export const getNumber = (payload: string): number => {
+    return parseInt(payload.trim(), 10);
+};
+
+export const getNumberArray = (payload: string): number[] => {
+    return payload
+        .split(',')
+        .map(val => val.replace(/[()]/g, ''))
+        .map(value => parseInt(value, 10));
+};
+
+export const getArrays = (payload: string): number[][] => {
+    const arrays = /\([\w\d\s,']+\)/gi.exec(payload);
+
+    return [];
+};
+
 export const getParametersFromResponse = (body?: string, status?: string) => {
     if (!body) {
         return [];
@@ -37,4 +59,17 @@ export const getParametersFromResponse = (body?: string, status?: string) => {
         .flat();
 
     return paramArray;
+};
+
+export const parseStringValue = (value: string): string => {
+    if (value.charAt(0) === '"' && value.charAt(value.length - 1) === '"') {
+        return value.substring(1, value.length - 1);
+    }
+    if (
+        value.substring(0, 2) === '\\"' &&
+        value.substring(value.length - 2) === '\\"'
+    ) {
+        return value.substring(2, value.length - 2);
+    }
+    return value;
 };

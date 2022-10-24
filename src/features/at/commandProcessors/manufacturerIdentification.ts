@@ -17,8 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const manufacturer = packet.body.shift();
-            return manufacturer ? { manufacturer } : {};
+            return { manufacturer: packet.payload };
         }
         return {};
     },

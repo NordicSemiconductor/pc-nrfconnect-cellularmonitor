@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumberArray } from '../utils';
 
 const ModeOfOperation = {
     0: 'PS Mode 2',
@@ -26,9 +27,9 @@ export const processor: Processor<ViewModel> = {
     onRequest: packet => {
         if (
             packet.requestType === RequestType.SET_WITH_VALUE &&
-            packet.body.length === 1
+            packet.payload
         ) {
-            requestedModeOfOperation = parseInt(packet.body[0], 10);
+            requestedModeOfOperation = getNumberArray(packet.payload)[0];
         }
         return {};
     },
@@ -45,14 +46,9 @@ export const processor: Processor<ViewModel> = {
             return {};
         }
 
-        if (packet.status === 'OK') {
+        if (packet.status === 'OK' && packet.payload) {
             if (requestType === RequestType.READ) {
-                const mode = packet.body.shift();
-                return mode
-                    ? {
-                          modeOfOperation: parseInt(mode, 10),
-                      }
-                    : {};
+                return { modeOfOperation: parseInt(packet.payload, 10) };
             }
         }
         return {};

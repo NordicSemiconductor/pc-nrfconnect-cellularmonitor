@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumberArray } from '../utils';
 
 export type Reduction = {
     0: '0dB';
@@ -32,8 +33,12 @@ export const processor: Processor<ViewModel> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xempr.html',
     initialState: () => ({}),
     onRequest: packet => {
-        if (packet.requestType === RequestType.SET_WITH_VALUE) {
-            requestedReduction = parseToTXReduction(packet.body);
+        if (
+            packet.requestType === RequestType.SET_WITH_VALUE &&
+            packet.payload
+        ) {
+            const requestArgumentArray = getNumberArray(packet.payload);
+            requestedReduction = parseToTXReduction(requestArgumentArray);
         }
         return {};
     },
@@ -49,44 +54,45 @@ export const processor: Processor<ViewModel> = {
                 requestedReduction
             ) {
                 return requestedReduction;
-            } else if (requestType === RequestType.READ) {
-                const firstSegmentLen = parseInt(packet.body[2], 10);
-                if (firstSegmentLen < (packet.body.length - 2) * 2) {
+            } else if (requestType === RequestType.READ && packet.payload) {
+                const responseArray = getNumberArray(packet.payload);
+                const firstSegmentLen = responseArray[2];
+                if (firstSegmentLen < (responseArray.length - 2) * 2) {
                     const secondSegmentStart = 1 + firstSegmentLen * 2;
                     return {
                         ...parseToTXReduction(
-                            packet.body.slice(0, secondSegmentStart)
+                            responseArray.slice(0, secondSegmentStart)
                         ),
                         ...parseToTXReduction(
-                            packet.body.slice(secondSegmentStart)
+                            responseArray.slice(secondSegmentStart)
                         ),
                     };
                 }
-                return parseToTXReduction(packet.body);
+                return parseToTXReduction(responseArray);
             }
         }
         return {};
     },
 };
 
-const parseToTXReduction = (values: string[]) => {
+const parseToTXReduction = (values: number[]) => {
     let reductions: Mode;
 
     // Set all bands or set specific bands with individual values
-    if (values[1] === '0') {
-        reductions = parseInt(values[2], 10) as keyof Reduction;
+    if (values[1] === 0) {
+        reductions = values[2] as keyof Reduction;
     } else {
         reductions = [];
         for (let i = 2; i < values.length - 1; i += 2) {
             reductions.push({
-                band: parseInt(values[i], 10),
-                reduction: parseInt(values[i + 1], 10) as keyof Reduction,
+                band: values[i],
+                reduction: values[i + 1] as keyof Reduction,
             });
         }
     }
 
     // NB-IoT or LTE-M
-    if (values[0] === '0') {
+    if (values[0] === 0) {
         return {
             nbiotTXReduction: reductions,
         };

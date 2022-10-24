@@ -35,10 +35,10 @@ export const processor: Processor<ViewModel> = {
                 Object.keys(pinCodeStatus) as PinCodeStatus[]
             ).filter(key => key !== 'Unknown');
 
-            if (packet.body.length === 1) {
+            if (packet.payload) {
                 return {
                     pinCodeStatus:
-                        allowedStates.find(state => state === packet.body[0]) ??
+                        allowedStates.find(state => state === packet.payload) ??
                         'Unknown',
                 };
             }
@@ -48,8 +48,8 @@ export const processor: Processor<ViewModel> = {
 };
 
 export const commands = {
-    enterPIN(pin: string, newpin: string) {
-        const pin2 = newpin ? '' : `,"${newpin}"`;
+    enterPIN(pin: string, newPin: string) {
+        const pin2 = newPin ? '' : `,"${newPin}"`;
         return `+CPIN="${pin}"${pin2}`; // +CPIN="pin","pin2"
     },
     checkPIN() {

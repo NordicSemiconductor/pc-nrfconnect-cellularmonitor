@@ -31,8 +31,10 @@ const readCommandPackets = [
         expected: {
             rsrq: 255,
             rsrq_threshold_index: 255,
+            rsrq_decibel: 255,
             rsrp: 255,
             rsrp_threshold_index: 255,
+            rsrp_decibel: 255,
         },
     },
     {
@@ -41,8 +43,10 @@ const readCommandPackets = [
         expected: {
             rsrq: 255,
             rsrq_threshold_index: 255,
+            rsrq_decibel: 255,
             rsrp: 255,
             rsrp_threshold_index: 255,
+            rsrp_decibel: 255,
         },
     },
 ];

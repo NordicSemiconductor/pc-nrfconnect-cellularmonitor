@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumberArray } from '../utils';
 
 type ViewModel = {
     notifySignalQuality?: boolean;
@@ -37,14 +38,14 @@ export const processor: Processor<ViewModel> = {
         },
     }),
     onRequest: packet => {
-        if (packet.body.length !== 1) {
+        if (!packet.payload) {
             return {};
         }
-        if (packet.body[0].startsWith('1')) {
+        if (packet.payload.startsWith('1')) {
             tentativeState = { notifySignalQuality: true };
             return {};
         }
-        if (packet.body[0].startsWith('0')) {
+        if (packet.payload.startsWith('0')) {
             tentativeState = { notifySignalQuality: false };
             return {};
         }
@@ -62,22 +63,22 @@ export const processor: Processor<ViewModel> = {
         return {};
     },
     onNotification: packet => {
-        const signalQualityValues = packet.body.map(value =>
-            parseInt(value, 10)
-        );
+        if (packet.payload) {
+            const signalQualityValues = getNumberArray(packet.payload);
 
-        if (signalQualityValues?.length === 4) {
-            return {
-                signalQuality: {
-                    rsrp: signalQualityValues[0],
-                    rsrp_threshold_index: signalQualityValues[1],
-                    rsrp_decibel: signalQualityValues[0] - 140,
+            if (signalQualityValues?.length === 4) {
+                return {
+                    signalQuality: {
+                        rsrp: signalQualityValues[0],
+                        rsrp_threshold_index: signalQualityValues[1],
+                        rsrp_decibel: signalQualityValues[0] - 140,
 
-                    rsrq: signalQualityValues[2],
-                    rsrq_threshold_index: signalQualityValues[3],
-                    rsrq_decibel: signalQualityValues[2] / 2 - 19.5,
-                },
-            };
+                        rsrq: signalQualityValues[2],
+                        rsrq_threshold_index: signalQualityValues[3],
+                        rsrq_decibel: signalQualityValues[2] / 2 - 19.5,
+                    },
+                };
+            }
         }
         return {};
     },

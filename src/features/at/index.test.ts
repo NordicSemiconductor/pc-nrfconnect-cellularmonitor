@@ -24,10 +24,10 @@ const expectedState: State = {
     signalQuality: {
         rsrp: 54,
         rsrp_threshold_index: 255,
-        rsrp_decibel: 140 - 54,
+        rsrp_decibel: 54 - 140,
         rsrq: 11,
         rsrq_threshold_index: 255,
-        rsrq_decibel: 0,
+        rsrq_decibel: 11 / 2 - 19.5,
     },
     notifyPeriodicTAU: false,
     xmonitor: {

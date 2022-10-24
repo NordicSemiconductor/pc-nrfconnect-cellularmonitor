@@ -5,7 +5,6 @@
  */
 
 import type { Packet } from '.';
-import { getParametersFromResponse } from './utils';
 
 export enum RequestType {
     NOT_A_REQUEST,
@@ -19,7 +18,7 @@ const validStatus = ['OK', 'ERROR', '+CME ERROR', '+CMS ERROR'] as const;
 export interface ParsedPacket {
     command?: string;
     requestType?: RequestType;
-    body: string[];
+    payload: string | undefined;
     status?: typeof validStatus[number];
 }
 
@@ -47,6 +46,22 @@ const getStatus = (body?: string) => {
     return validStatus.find(status => lastLine === status);
 };
 
+const removeStatusFromBody = (body: string): string => {
+    const lineSeparator = /(?:\r\n|\\r\\n)/;
+
+    const payloadArray = body.split(lineSeparator).filter(line => line);
+
+    if (
+        payloadArray.length &&
+        validStatus.find(
+            status => status === payloadArray[payloadArray.length - 1]
+        )
+    ) {
+        return payloadArray.slice(0, -1).join();
+    }
+    return body;
+};
+
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: Packet): ParsedPacket => {
     const textData = JSON.stringify(decoder.decode(packet.packet_data));
@@ -57,10 +72,10 @@ export const parseAT = (packet: Packet): ParsedPacket => {
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
         const status = getStatus(body);
-
+        const payload = body ? removeStatusFromBody(body) : undefined;
         return {
             command,
-            body: getParametersFromResponse(body, status),
+            payload: payload ? payload : undefined,
             requestType: startsWithAt
                 ? operatorToRequestType(operator)
                 : RequestType.NOT_A_REQUEST,
@@ -69,7 +84,7 @@ export const parseAT = (packet: Packet): ParsedPacket => {
     }
     return {
         command: undefined,
-        body: [],
+        payload: undefined,
         requestType: undefined,
         status: undefined,
     };

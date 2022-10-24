@@ -28,8 +28,8 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: (packet, requestType) => {
         if (packet.status === 'OK') {
-            if (packet.body[0] !== undefined) {
-                const status = packet.body[0];
+            if (packet.payload !== undefined) {
+                const status = packet.payload;
                 if (Object.keys(activityStatus).includes(status))
                     return {
                         activityStatus: parseInt(status, 10) as ActivityStatus,
