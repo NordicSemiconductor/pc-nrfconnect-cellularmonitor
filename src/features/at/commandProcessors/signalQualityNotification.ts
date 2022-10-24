@@ -33,14 +33,14 @@ export const processor: Processor<ViewModel> = {
         },
     }),
     onRequest: packet => {
-        if (packet.body.length !== 1) {
+        if (packet.payload.length !== 1) {
             return {};
         }
-        if (packet.body[0].startsWith('1')) {
+        if (packet.payload[0].startsWith('1')) {
             tentativeState = { notifySignalQuality: true };
             return {};
         }
-        if (packet.body[0].startsWith('0')) {
+        if (packet.payload[0].startsWith('0')) {
             tentativeState = { notifySignalQuality: false };
             return {};
         }
@@ -58,7 +58,7 @@ export const processor: Processor<ViewModel> = {
         return {};
     },
     onNotification: packet => {
-        const signalQualityValues = packet.body.map(value =>
+        const signalQualityValues = packet.payload.map(value =>
             parseInt(value, 10)
         );
 

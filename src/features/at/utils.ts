@@ -4,6 +4,23 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+export const getNumber = (payload: string): number => {
+    return parseInt(payload.trim(), 10);
+};
+
+export const getNumberArray = (payload: string): number[] => {
+    return payload
+        .split(',')
+        .map(val => val.replace(/[()]/g, ''))
+        .map(value => parseInt(value, 10));
+};
+
+export const getArrays = (payload: string): number[][] => {
+    const arrays = /\([\w\d\s,']+\)/gi.exec(payload);
+
+    return [];
+};
+
 export const getParametersFromResponse = (body?: string, status?: string) => {
     if (!body) {
         return [];

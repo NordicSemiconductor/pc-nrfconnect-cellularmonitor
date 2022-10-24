@@ -5,6 +5,7 @@
  */
 
 import type { Processor } from '..';
+import { getNumberArray } from '../utils';
 
 export type ViewModel = {
     notifyPeriodicTAU?: boolean;
@@ -18,7 +19,9 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({ notifyPeriodicTAU: false }),
 
     onRequest: packet => {
-        parameters = packet.body.map(val => parseInt(val, 10));
+        if (packet.payload) {
+            parameters = getNumberArray(packet.payload);
+        }
         return {};
     },
 
@@ -35,8 +38,10 @@ export const processor: Processor<ViewModel> = {
     },
 
     onNotification: packet => {
-        const periodicTAU = packet.body.shift();
-        return periodicTAU ? { periodicTAU: parseInt(periodicTAU, 10) } : {};
+        if (packet.payload) {
+            return { periodicTAU: parseInt(packet.payload, 10) };
+        }
+        return {};
     },
 };
 

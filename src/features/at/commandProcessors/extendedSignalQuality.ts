@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumberArray } from '../utils';
 
 type ViewModel = {
     signalQuality: {
@@ -30,15 +31,18 @@ export const processor: Processor<ViewModel> = {
     }),
     onResponse: (packet, requestType) => {
         if (packet.status === 'OK' && requestType === RequestType.SET) {
-            return {
-                signalQuality: {
-                    // Unused,Unused,Unused,Unused,rsrq,rsrp
-                    rsrq: parseInt(packet.body[4], 10),
-                    rsrq_threshold_index: 255,
-                    rsrp: parseInt(packet.body[5], 10),
-                    rsrp_threshold_index: 255,
-                },
-            };
+            if (packet.payload) {
+                const responseArray = getNumberArray(packet.payload);
+                return {
+                    signalQuality: {
+                        // Unused,Unused,Unused,Unused,rsrq,rsrp
+                        rsrq: responseArray[4],
+                        rsrp: responseArray[5],
+                        rsrq_threshold_index: 255, // Not supported by this command, look at %CESQ
+                        rsrp_threshold_index: 255, // Not supported  by this command, look at %CESQ
+                    },
+                };
+            }
         }
         return {};
     },

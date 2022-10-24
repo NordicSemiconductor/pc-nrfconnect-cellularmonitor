@@ -33,7 +33,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onRequest: packet => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
-            requestedReduction = parseToTXReduction(packet.body);
+            requestedReduction = parseToTXReduction(packet.payload);
         }
         return {};
     },
@@ -50,19 +50,19 @@ export const processor: Processor<ViewModel> = {
             ) {
                 return requestedReduction;
             } else if (requestType === RequestType.READ) {
-                const firstSegmentLen = parseInt(packet.body[2], 10);
-                if (firstSegmentLen < (packet.body.length - 2) * 2) {
+                const firstSegmentLen = parseInt(packet.payload[2], 10);
+                if (firstSegmentLen < (packet.payload.length - 2) * 2) {
                     const secondSegmentStart = 1 + firstSegmentLen * 2;
                     return {
                         ...parseToTXReduction(
-                            packet.body.slice(0, secondSegmentStart)
+                            packet.payload.slice(0, secondSegmentStart)
                         ),
                         ...parseToTXReduction(
-                            packet.body.slice(secondSegmentStart)
+                            packet.payload.slice(secondSegmentStart)
                         ),
                     };
                 }
-                return parseToTXReduction(packet.body);
+                return parseToTXReduction(packet.payload);
             }
         }
         return {};

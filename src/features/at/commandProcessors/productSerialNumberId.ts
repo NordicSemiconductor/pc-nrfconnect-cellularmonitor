@@ -18,7 +18,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: (packet, requestType) => {
         if (requestType === RequestType.SET_WITH_VALUE) {
-            const IMEI = packet.body.shift();
+            const IMEI = packet.payload.shift();
             if (IMEI != null) {
                 return { IMEI: IMEI ?? undefined };
             }

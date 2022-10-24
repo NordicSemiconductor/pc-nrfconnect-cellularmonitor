@@ -36,11 +36,12 @@ export const processor: Processor<ViewModel> = {
                 Object.keys(pinCodeStatus) as PinCodeStatus[]
             ).filter(key => key !== 'unknown');
 
-            if (packet.body.length === 1) {
+            if (packet.payload.length === 1) {
                 return {
                     pinCodeStatus:
-                        allowedStates.find(state => state === packet.body[0]) ??
-                        'unknown',
+                        allowedStates.find(
+                            state => state === packet.payload[0]
+                        ) ?? 'unknown',
                 };
             }
         }

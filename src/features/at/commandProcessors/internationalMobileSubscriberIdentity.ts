@@ -17,8 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const imsi = packet.body.shift();
-            return imsi ? { imsi } : {};
+            return { imsi: packet.payload };
         }
         return {};
     },

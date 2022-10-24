@@ -17,8 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const iccid = packet.body.shift();
-            return iccid ? { iccid } : {};
+            return { iccid: packet.payload };
         }
         return {};
     },

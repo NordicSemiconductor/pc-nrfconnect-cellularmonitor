@@ -17,8 +17,7 @@ export const processor: Processor<ViewModel> = {
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            const modemUUID = packet.body.shift();
-            return modemUUID ? { modemUUID } : {};
+            return { modemUUID: packet.payload };
         }
         return {};
     },

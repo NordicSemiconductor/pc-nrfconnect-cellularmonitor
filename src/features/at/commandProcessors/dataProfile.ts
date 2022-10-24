@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumber } from '../utils';
 
 export const PowerLevel = {
     0: 'Ultra-low power',
@@ -29,12 +30,14 @@ export const processor: Processor<ViewModel> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xdataprfl.html',
     initialState: () => ({}),
     onRequest: packet => {
-        const powerLevel = Object.keys(PowerLevel).find(
-            key => key === packet.body[0]
-        );
-        requestedDataProfile = powerLevel
-            ? (parseInt(powerLevel, 10) as PowerLevel)
-            : undefined;
+        if (packet.payload) {
+            const powerLevel = Object.keys(PowerLevel).find(
+                key => key === packet.payload
+            );
+            requestedDataProfile = powerLevel
+                ? (parseInt(powerLevel, 10) as PowerLevel)
+                : undefined;
+        }
         return {};
     },
     onResponse: (packet, requestType) => {
@@ -43,7 +46,7 @@ export const processor: Processor<ViewModel> = {
                 return { dataProfile: requestedDataProfile };
             }
 
-            const dataProfile = packet.body.shift();
+            const dataProfile = packet.payload;
             return dataProfile
                 ? { dataProfile: parseInt(dataProfile, 10) as PowerLevel }
                 : {};

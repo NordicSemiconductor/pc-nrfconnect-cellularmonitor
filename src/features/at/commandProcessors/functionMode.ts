@@ -39,13 +39,14 @@ export const processor: Processor<ViewModel> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',
     initialState: () => ({}),
     onResponse: (packet, requestType) => {
-        if (packet.status === 'OK' && requestType === RequestType.READ) {
-            const mode = packet.body.shift();
-            return mode
-                ? {
-                      functionalMode: parseInt(mode, 10) as FunctionalMode,
-                  }
-                : {};
+        if (
+            packet.status === 'OK' &&
+            requestType === RequestType.READ &&
+            packet.payload
+        ) {
+            return {
+                functionalMode: parseInt(packet.payload, 10) as FunctionalMode,
+            };
         }
         return {};
     },
