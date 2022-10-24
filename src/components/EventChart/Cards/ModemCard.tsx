@@ -44,6 +44,7 @@ export default () => {
         <DashboardCard
             title="Modem"
             iconName="mdi-cellphone-wireless"
+            information="Some information"
             onclick={() => {}}
         >
             <ul>

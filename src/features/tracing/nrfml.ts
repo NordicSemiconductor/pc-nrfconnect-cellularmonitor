@@ -12,8 +12,9 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import type { TAction } from '../../utils/thunk';
 import EventAction from '../../usageDataActions';
+import type { TAction } from '../../utils/thunk';
+import { Packet } from '../at';
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
@@ -26,13 +27,13 @@ import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
+    addTracePacket,
+    addTracePackets,
     getManualDbFilePath,
     getSerialPort,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
-import { addTracePacket } from './traceSlice';
-import { Packet } from '../at';
 
 export type TaskId = number;
 
@@ -223,16 +224,17 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
         const sinks: TraceFormat[] = [];
-
+        const packets: Packet[] = [];
         nrfml.start(
             nrfmlConfig(state, source, sinks),
             () => {
                 logger.info(`Completed reading trace from ${sourceFile}`);
+                dispatch(addTracePackets(packets));
             },
             () => {},
             data => {
                 if (data.format !== 'modem_trace') {
-                    dispatch(addTracePacket(data as Packet));
+                    packets.push(data as Packet);
                 }
             },
             () => {}

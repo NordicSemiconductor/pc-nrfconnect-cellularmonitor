@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { convert, initialState, Packet } from '../../features/at';
+import { convert, initialState } from '../../features/at';
 import { setAT } from '../../features/at/atSlice';
-import { getSelectedTime } from './Chart/chartSlice';
-import { Chart } from './Chart/Chart';
+import { getTracePackets } from '../../features/tracing/traceSlice';
+import LTECard from './Cards/LTECard';
+import ModemCard from './Cards/ModemCard';
 import SimCard from './Cards/SimCard';
+import { Chart } from './Chart/Chart';
+import { getSelectedTime } from './Chart/chartSlice';
 
 import './Dashboard.scss';
-import ModemCard from './Cards/ModemCard';
-import LTECard from './Cards/LTECard';
-import { getTracePackets } from '../../features/tracing/traceSlice';
 
 const Dashboard = () => {
     const timestamp = useSelector(getSelectedTime);
@@ -34,7 +34,7 @@ const Dashboard = () => {
                 initialState()
             );
         dispatch(setAT(newState));
-    }, [packets, timestamp]);
+    }, [dispatch, packets, timestamp]);
 
     return (
         <div className="events-container">
@@ -45,7 +45,7 @@ const Dashboard = () => {
             </div>
 
             <div>
-                <div id="tooltip"></div>
+                <div id="tooltip" />
                 <Chart packets={packets} />
             </div>
         </div>

@@ -12,9 +12,9 @@ import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     setManualDbFilePath as setPersistedManualDbFilePath,
 } from '../../utils/store';
+import { Packet } from '../at';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
-import { Packet } from '../at';
 
 export interface TraceProgress {
     format: TraceFormat;
@@ -95,6 +95,9 @@ const traceSlice = createSlice({
         addTracePacket: (state, actions: PayloadAction<Packet>) => {
             state.tracePackets.push(actions.payload);
         },
+        addTracePackets: (state, actions: PayloadAction<Packet[]>) => {
+            state.tracePackets = actions.payload;
+        },
     },
 });
 
@@ -116,7 +119,8 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
-export const getTracePackets = (state: RootState) => state.app.trace.tracePackets;
+export const getTracePackets = (state: RootState) =>
+    state.app.trace.tracePackets;
 
 export const {
     setTraceIsStarted,
@@ -128,6 +132,7 @@ export const {
     resetManualDbFilePath,
     setDetectingTraceDb,
     addTracePacket,
+    addTracePackets,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

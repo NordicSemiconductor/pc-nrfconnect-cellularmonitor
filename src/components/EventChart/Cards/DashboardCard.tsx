@@ -25,9 +25,11 @@ const DashboardCard: React.FC<{
             <>
                 <span className={`mdi ${iconName} icon`} />
                 <span className="title">{title}</span>
-                <span className="mdi mdi-information-outline info-icon">
-                    <span className="info">{information}</span>
-                </span>
+                {information.length && (
+                    <span className="mdi mdi-information-outline info-icon">
+                        <span className="info">{information}</span>
+                    </span>
+                )}
             </>
         }
     >

@@ -6,8 +6,9 @@
 
 import 'chartjs-adapter-date-fns';
 
-import React, { useMemo, useRef, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -24,14 +25,13 @@ import {
     Tooltip,
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
-
 import { colors as sharedColors, Toggle } from 'pc-nrfconnect-shared';
+
+import { Packet } from '../../../features/at';
+import { getIsTracing } from '../../../features/tracing/traceSlice';
 import { getSelectedTime, setSelectedTime } from './chartSlice';
 import { selectTimePlugin } from './selectTimePlugin';
 import { PacketTooltip } from './Tooltip';
-import { Packet } from '../../../features/at';
-import { getIsTracing } from '../../../features/tracing/traceSlice';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 ChartJS.register(
     LinearScale,
@@ -76,7 +76,6 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
     );
     const chart = useRef<ChartJSOrUndefined<'scatter'>>();
     const isTracing = useSelector(getIsTracing);
-    const selectedTime = useSelector(getSelectedTime);
 
     useEffect(() => {
         if (chart.current && isTracing) {
@@ -89,14 +88,13 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
         () => ({
             maintainAspectRatio: false,
             responsive: true,
-
+            animation: false,
             plugins: {
                 legend: {
                     display: true,
                 },
 
                 zoom: {
-                    
                     zoom: {
                         wheel: {
                             enabled: true,
@@ -157,11 +155,10 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                         autoSkipPadding: 50,
                         maxRotation: 0,
                     },
-
                 },
             },
         }),
-        [xScaleType]
+        [dispatch, xScaleType]
     );
 
     const events = packets.map(event => ({
@@ -201,7 +198,7 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                         chart.current?.resetZoom();
                     }}
                 />
-                <div style={{ width: '24px' }}></div>
+                <div style={{ width: '24px' }} />
                 <Toggle
                     label="SERIAL"
                     isToggled={xScaleType === 'timeseries'}
