@@ -92,11 +92,8 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        addTracePacket: (state, actions: PayloadAction<Packet>) => {
-            state.tracePackets.push(actions.payload);
-        },
         addTracePackets: (state, actions: PayloadAction<Packet[]>) => {
-            state.tracePackets = actions.payload;
+            state.tracePackets.push(...actions.payload);
         },
     },
 });
@@ -131,7 +128,6 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setDetectingTraceDb,
-    addTracePacket,
     addTracePackets,
 } = traceSlice.actions;
 

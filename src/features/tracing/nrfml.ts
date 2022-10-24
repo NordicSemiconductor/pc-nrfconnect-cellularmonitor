@@ -27,7 +27,6 @@ import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
-    addTracePacket,
     addTracePackets,
     getManualDbFilePath,
     getSerialPort,
@@ -173,9 +172,18 @@ export const startTrace =
             usageData.sendUsageData(sinkEvent(format));
         });
 
+        let packets: Packet[] = [];
+        const throttle = setInterval(() => {
+            if (packets.length) {
+                dispatch(addTracePackets(packets));
+                packets = [];
+            }
+        }, 250);
+
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
+                clearInterval(throttle);
                 if (err?.message.includes('tshark')) {
                     logger.logError('Error while tracing', err);
                 } else if (err != null) {
@@ -200,7 +208,7 @@ export const startTrace =
             }),
             data => {
                 if (data.format !== 'modem_trace') {
-                    dispatch(addTracePacket(data as Packet));
+                    packets.push(data as Packet);
                 }
             },
             jsonData => {
@@ -235,29 +243,6 @@ export const readRawTrace =
             data => {
                 if (data.format !== 'modem_trace') {
                     packets.push(data as Packet);
-                }
-            },
-            () => {}
-        );
-        logger.info(`Started reading trace from ${sourceFile}`);
-    };
-
-export const readPcapTrace =
-    (sourceFile: string): TAction =>
-    (dispatch, getState) => {
-        const state = getState();
-        const source: SourceFormat = { type: 'file', path: sourceFile };
-        const sinks: TraceFormat[] = [];
-
-        nrfml.start(
-            nrfmlConfig(state, source, sinks),
-            () => {
-                logger.info(`Completed reading trace from ${sourceFile}`);
-            },
-            () => {},
-            data => {
-                if (data.format !== 'modem_trace') {
-                    dispatch(addTracePacket(data as Packet));
                 }
             },
             () => {}

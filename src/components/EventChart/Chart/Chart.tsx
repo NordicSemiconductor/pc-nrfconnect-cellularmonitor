@@ -29,7 +29,7 @@ import { colors as sharedColors, Toggle } from 'pc-nrfconnect-shared';
 
 import { Packet } from '../../../features/at';
 import { getIsTracing } from '../../../features/tracing/traceSlice';
-import { getSelectedTime, setSelectedTime } from './chartSlice';
+import { setSelectedTime } from './chartSlice';
 import { selectTimePlugin } from './selectTimePlugin';
 import { PacketTooltip } from './Tooltip';
 
@@ -88,7 +88,6 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
         () => ({
             maintainAspectRatio: false,
             responsive: true,
-            animation: false,
             plugins: {
                 legend: {
                     display: true,
