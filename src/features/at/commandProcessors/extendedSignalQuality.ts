@@ -11,8 +11,10 @@ type ViewModel = {
     signalQuality: {
         rsrp: number;
         rsrp_threshold_index: number;
+        rsrp_decibel: number;
         rsrq: number;
         rsrq_threshold_index: number;
+        rsrq_decibel: number;
     };
 };
 
@@ -24,8 +26,10 @@ export const processor: Processor<ViewModel> = {
         signalQuality: {
             rsrp: 255,
             rsrp_threshold_index: 255,
+            rsrp_decibel: 255,
             rsrq: 255,
             rsrq_threshold_index: 255,
+            rsrq_decibel: 255,
         },
     }),
     onResponse: (packet, requestType) => {
@@ -35,8 +39,11 @@ export const processor: Processor<ViewModel> = {
                     // Unused,Unused,Unused,Unused,rsrq,rsrp
                     rsrq: parseInt(packet.body[4], 10),
                     rsrq_threshold_index: 255,
+                    rsrq_decibel: parseInt(packet.body[5], 10) / 2 - 19.5,
+
                     rsrp: parseInt(packet.body[5], 10),
                     rsrp_threshold_index: 255,
+                    rsrp_decibel: parseInt(packet.body[5], 10) - 140,
                 },
             };
         }

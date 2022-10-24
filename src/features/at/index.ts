@@ -5,25 +5,25 @@
  */
 
 import { processor as currentBand } from './commandProcessors/currentBand';
+import { processor as dataProfile } from './commandProcessors/dataProfile';
+import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
+import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
 import { processor as functionMode } from './commandProcessors/functionMode';
+import { processor as hardwareVersion } from './commandProcessors/hardwareVersion';
 import { processor as iccid } from './commandProcessors/iccid';
 import { processor as internationalMobileSubscriberIdentity } from './commandProcessors/internationalMobileSubscriberIdentity';
 import { processor as manufacturerIdentification } from './commandProcessors/manufacturerIdentification';
 import { processor as modemParameters } from './commandProcessors/modemParameters';
+import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
-import { parseAT, ParsedPacket, RequestType } from './parseAT';
 import { processor as periodicTAU } from './commandProcessors/periodicTAU';
 import { processor as pinCode } from './commandProcessors/pinCode';
 import { processor as pinRetries } from './commandProcessors/pinRetries';
-import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
-import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
 import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
-import { processor as hardwareVersion } from './commandProcessors/hardwareVersion';
-import { processor as modemUUID } from './commandProcessors/modemUUID';
-import { processor as dataProfile } from './commandProcessors/dataProfile';
+import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
+import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
-import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
-import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
+import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 export interface Packet {
     packet_data: Uint8Array;

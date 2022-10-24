@@ -8,13 +8,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getSIM } from '../../../features/at/atSlice';
+import { commands } from '../../../features/at/commandProcessors/pinCode';
 import DashboardCard from './DashboardCard';
 
-import { commands } from "../../../features/at/commandProcessors/pinCode";
-
 const refresh = () => {
-    commands.checkPIN()
-}
+    commands.checkPIN();
+};
 
 export default () => {
     const SIMView = useSelector(getSIM);
@@ -27,10 +26,10 @@ export default () => {
         // ODIS: false,
         PIN: SIMView.pin,
         // PUK: false,
-        'Remaining PIN retries': SIMView.remainingPIN ?? 'unknown',
-        'Remaining PUK retries': SIMView.remainingPUK ?? 'unknown',
-        'Remaining PIN2 retries': SIMView.remainingPIN2 ?? 'unknown',
-        'Remaining PUK2 retries': SIMView.remainingPUK2 ?? 'unknown',
+        'Remaining PIN retries': SIMView.remainingPIN ?? 'Unknown',
+        'Remaining PUK retries': SIMView.remainingPUK ?? 'Unknown',
+        'Remaining PIN2 retries': SIMView.remainingPIN2 ?? 'Unknown',
+        'Remaining PUK2 retries': SIMView.remainingPUK2 ?? 'Unknown',
         // 'Restricted SIM Access?': false,
         // 'Generic SIM Access?': false,
     };

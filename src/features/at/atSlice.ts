@@ -19,7 +19,7 @@ const atSlice = createSlice({
 
 export const getAT = (state: RootState) => state.app.at;
 export const getSIM = (state: RootState) => {
-    const at = state.app.at;
+    const { at } = state.app;
 
     return {
         imsi: at.imsi,
@@ -62,7 +62,7 @@ export const getModem = (state: RootState) => {
 
 export const getLTE = (state: RootState) => {
     const {
-        signalQuality: { rsrp: signalQuality },
+        signalQuality: { rsrp_decibel: signalQuality },
         activityStatus,
     } = state.app.at;
 

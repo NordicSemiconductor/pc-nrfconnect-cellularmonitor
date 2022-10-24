@@ -8,6 +8,7 @@ import 'chartjs-adapter-date-fns';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
+// eslint-disable-next-line import/no-unresolved
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -192,7 +193,7 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
             >
                 <Toggle
                     label="LIVE"
-                    isToggled={chart.current?.isZoomedOrPanned()}
+                    isToggled
                     onToggle={() => {
                         chart.current?.resetZoom();
                     }}

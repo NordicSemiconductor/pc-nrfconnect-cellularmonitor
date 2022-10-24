@@ -5,10 +5,9 @@
  */
 
 import type { Processor } from '..';
-import { getParametersFromResponse } from '../utils';
 
 const pinCodeStatus = {
-    unknown: 'Not yet aware',
+    Unknown: 'Not yet aware',
     READY: 'No PIN required',
     'SIM PUN': 'PIN code required',
     'SIM PIN': 'PUK code required',
@@ -29,22 +28,22 @@ export const processor: Processor<ViewModel> = {
     command: '+CPIN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',
-    initialState: () => ({ pinCodeStatus: 'unknown' }),
+    initialState: () => ({ pinCodeStatus: 'Unknown' }),
     onResponse: packet => {
         if (packet.status === 'OK') {
             const allowedStates = (
                 Object.keys(pinCodeStatus) as PinCodeStatus[]
-            ).filter(key => key !== 'unknown');
+            ).filter(key => key !== 'Unknown');
 
             if (packet.body.length === 1) {
                 return {
                     pinCodeStatus:
                         allowedStates.find(state => state === packet.body[0]) ??
-                        'unknown',
+                        'Unknown',
                 };
             }
         }
-        return { pinCodeStatus: 'unknown' };
+        return { pinCodeStatus: 'Unknown' };
     },
 };
 

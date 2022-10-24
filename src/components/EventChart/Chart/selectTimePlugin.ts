@@ -5,9 +5,7 @@
  */
 
 import type { Chart, Plugin } from 'chart.js';
-
-import type { SelectTimeOptions } from './chart';
-import { colors } from "pc-nrfconnect-shared";
+import { colors } from 'pc-nrfconnect-shared';
 
 let selectedTimeStamp = 0;
 let pixelTime = -1;
