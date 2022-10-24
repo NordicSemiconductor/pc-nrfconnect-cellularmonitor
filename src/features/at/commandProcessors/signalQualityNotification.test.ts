@@ -91,7 +91,9 @@ test('Notification of %CESQ may turned on and off', () => {
 test('%CESQ notification properly updates signal quality', () => {
     const state = convertPackets([subscribePacket, OkPacket]);
     expect(state.notifySignalQuality).toBe(true);
-    expect(Object.values(state.signalQuality)).toEqual([255, 255, 255, 255]);
+    expect(Object.values(state.signalQuality)).toEqual([
+        255, 255, 255, 255, 255, 255,
+    ]);
 
     signalQualityNotifications.forEach(notification => {
         const result = convertPackets([notification.packet], state);

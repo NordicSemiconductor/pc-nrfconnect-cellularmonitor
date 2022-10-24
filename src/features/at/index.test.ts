@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { rawTraceData } from './traceSample';
 import { convert, initialState, Packet, State } from '.';
+import { rawTraceData } from './traceSample';
 
 const traceData = rawTraceData.map(
     jsonPacket =>
@@ -24,8 +24,10 @@ const expectedState: State = {
     signalQuality: {
         rsrp: 54,
         rsrp_threshold_index: 255,
+        rsrp_decibel: 140 - 54,
         rsrq: 11,
         rsrq_threshold_index: 255,
+        rsrq_decibel: 0,
     },
     notifyPeriodicTAU: false,
     xmonitor: {

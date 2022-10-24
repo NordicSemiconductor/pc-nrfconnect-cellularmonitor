@@ -5,14 +5,10 @@
  */
 
 import { ChartType } from 'chart.js';
-import { AnyObject } from 'chart.js/types/basic';
-
-interface SelectTimeOptions extends AnyObject {
-    updateTime: (time: number) => void;
-}
 
 declare module 'chart.js' {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface PluginOptionsByType<TType extends ChartType> {
-        selectTime: SelectTimeOptions;
+        selectTime: import('./selectTimePlugin').SelectTimeOptions;
     }
 }

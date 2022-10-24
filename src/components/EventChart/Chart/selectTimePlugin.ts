@@ -5,11 +5,17 @@
  */
 
 import type { Chart, Plugin } from 'chart.js';
+// eslint-disable-next-line import/no-unresolved
+import { AnyObject } from 'chart.js/types/basic';
 import { colors } from 'pc-nrfconnect-shared';
 
 let selectedTimeStamp = 0;
 let pixelTime = -1;
 let dragging = false;
+
+export interface SelectTimeOptions extends AnyObject {
+    updateTime: (time: number) => void;
+}
 
 export const selectTimePlugin: Plugin<'scatter', SelectTimeOptions> = {
     id: 'selectTime',

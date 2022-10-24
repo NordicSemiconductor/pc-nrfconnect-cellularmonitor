@@ -37,7 +37,7 @@ const readResponseTests = [
     },
     {
         response: atPacket('+CPIN: GIBBERISH PIN\r\nOK\r\n'),
-        expected: 'unknown',
+        expected: 'Unknown',
     },
 ];
 
@@ -53,6 +53,6 @@ test('+CPIN read command responses sets the pinCodeState appropriately', () => {
 
 test('+CPIN set command does not disturb state', () => {
     expect(convertPackets([cpinSetCommand, OkPacket]).pinCodeStatus).toBe(
-        'unknown'
+        'Unknown'
     );
 });
