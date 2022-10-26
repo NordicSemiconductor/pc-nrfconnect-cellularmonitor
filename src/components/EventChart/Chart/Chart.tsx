@@ -61,6 +61,7 @@ const colors = [
 
 const formats = [
     'at',
+    'ope',
     'lte_rrc.bcch_dl_sch',
     'nas-eps',
     'lte_rrc.ul_ccch',
@@ -200,7 +201,7 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                 />
                 <div style={{ width: '24px' }} />
                 <Toggle
-                    label="SERIAL"
+                    label="TIMSERIES"
                     isToggled={xScaleType === 'timeseries'}
                     onToggle={() =>
                         setXScaleType(

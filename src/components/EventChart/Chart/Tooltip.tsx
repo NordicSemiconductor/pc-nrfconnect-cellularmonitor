@@ -8,6 +8,7 @@ import React from 'react';
 import { TooltipModel } from 'chart.js';
 
 import { Packet } from '../../../features/at';
+
 import './Tooltip.css';
 
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
@@ -33,15 +34,16 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
     const timestampLabel = dateFormatter.format(timestamp);
 
     const others =
-        dataPoints.length === 1
-            ? ''
-            : '+' + (dataPoints.length - 1) + ' others';
+        dataPoints.length === 1 ? '' : `+${dataPoints.length - 1} others`;
 
     // Make sure tooltips dont start rendering too far to the sides
-    const x =  Math.max(Math.min(tooltip.chart.width - 150, caretX), 150);
+    const x = Math.max(Math.min(tooltip.chart.width - 150, caretX), 150);
 
     return (
-        <div className="point-tooltip" style={{ left: x + 'px' }}>
+        <div
+            className="point-tooltip"
+            style={{ left: `${x}px`, top: `-150px` }}
+        >
             <div className="d-flex justify-content-end">
                 <span className="text-muted">{others}</span>
             </div>

@@ -13,8 +13,9 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
-import type { TAction } from '../../utils/thunk';
+import type { TAction, TDispatch } from '../../utils/thunk';
 import { Packet } from '../at';
+import { OnlinePowerEstimatorParams } from '../powerEstimation/onlinePowerEstimator';
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
@@ -211,11 +212,7 @@ export const startTrace =
                     packets.push(data as Packet);
                 }
             },
-            jsonData => {
-                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
-                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                dispatch(setPowerEstimationData(powerEstimationData));
-            }
+            addPowerEstimationPackets(dispatch, packets)
         );
         logger.info('Started tracefile');
         dispatch(
@@ -231,7 +228,7 @@ export const readRawTrace =
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
-        const sinks: TraceFormat[] = [];
+        const sinks: TraceFormat[] = ['opp'];
         const packets: Packet[] = [];
         nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -245,9 +242,27 @@ export const readRawTrace =
                     packets.push(data as Packet);
                 }
             },
-            () => {}
+            addPowerEstimationPackets(dispatch, packets)
         );
         logger.info(`Started reading trace from ${sourceFile}`);
+    };
+
+const addPowerEstimationPackets =
+    (dispatch: TDispatch, packets: Packet[]) =>
+    (jsonData: { onlinePowerProfiler?: OnlinePowerEstimatorParams }[]) => {
+        const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+        if (powerEstimationData) {
+            dispatch(setPowerEstimationData(powerEstimationData));
+
+            packets.push({
+                format: 'ope',
+                // @ts-expect-error will work for now
+                packet_data: JSON.stringify(powerEstimationData, undefined, 4),
+                timestamp: {
+                    value: Date.now() * 1000,
+                },
+            });
+        }
     };
 
 export const stopTrace =
