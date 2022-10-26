@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import { Card } from 'pc-nrfconnect-shared';
 
 const DashboardCard: React.FC<{
-    onclick: () => void;
+    onclick: null | (() => void);
     title: string;
     iconName?: string;
     information?: string;
@@ -18,14 +18,14 @@ const DashboardCard: React.FC<{
     title,
     iconName = 'mdi-border-none-variant',
     information = '',
-    children,
+    fields,
 }) => (
     <Card
         title={
             <>
                 <span className={`mdi ${iconName} icon`} />
                 <span className="title">{title}</span>
-                {information.length && (
+                {information.length > 0 && (
                     <span className="mdi mdi-information-outline info-icon">
                         <span className="info">{information}</span>
                     </span>
@@ -33,11 +33,17 @@ const DashboardCard: React.FC<{
             </>
         }
     >
-        {children}
+        {Object.entries(fields).map(([key, value]) => (
+            <li key={key}>
+                <p className="card-key">{key}</p>
+                <p className="card-value">{value}</p>
+            </li>
+        ))}
+        {onclick !== null &&
         <Button variant="secondary" onClick={onclick} className="w-100">
             <span className="mdi mdi-reload" />
             Reload
-        </Button>
+        </Button>}
     </Card>
 );
 

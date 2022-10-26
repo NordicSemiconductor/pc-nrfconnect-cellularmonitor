@@ -11,7 +11,7 @@ import { getModem } from '../../../features/at/atSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
-    `[ ${bandsArray.join(' , ')} ]`;
+    `${bandsArray.join(',')}`;
 
 export default () => {
     const {
@@ -45,16 +45,17 @@ export default () => {
             title="Modem"
             iconName="mdi-cellphone-wireless"
             information="Some information"
-            onclick={() => {}}
+            onclick={null}
+            fields={fields}
         >
-            <ul>
+            {/* <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
-                        <p>{key}:</p>
-                        <p>{value}</p>
+                        <p className="card-key">{key.toUpperCase()}</p>
+                        <p className="card-value">{value}</p>
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </DashboardCard>
     );
 };

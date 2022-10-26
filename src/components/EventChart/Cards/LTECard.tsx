@@ -27,16 +27,17 @@ export default () => {
         <DashboardCard
             title="LTE Network"
             iconName="mdi-access-point-network"
-            onclick={() => {}}
+            onclick={null}
+            fields={fields}
         >
-            <ul>
+            {/* <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>
-                        <p>{key}:</p>
-                        <p>{value}</p>
+                        <p className="card-key">{key}</p>
+                        <p className="card-value">{value}</p>
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </DashboardCard>
     );
 };

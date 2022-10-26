@@ -25,13 +25,15 @@
 
     .card {
         //width: 244px;
-        min-width: 244px;
-        max-width: 244px;
+        min-width: 276px;
+        max-width: 276px;
         height: 321px;
         .card-body {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+        }
+        .card-header {
+            border-bottom: none !important;
         }
     }
 
@@ -44,12 +46,29 @@
         padding: 0;
     }
 
+    li:first-of-type {
+        border-top: 1px solid $gray-100;
+    }
+
     li {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
+        padding: 2px 0;
+        
+        border-bottom: 1px solid $gray-100;
+
         p {
             margin: 0;
             font-size: 12px;
+        }
+
+        .card-key {
+            font-weight: bold;
+        }
+
+        .card-value {
+            color: $gray-400;
         }
     }
 }
