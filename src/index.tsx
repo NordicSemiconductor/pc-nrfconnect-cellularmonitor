@@ -43,7 +43,7 @@ export default () => (
             {
                 name: 'Events Dashboard',
                 Main: EventChartDashboard,
-                SidePanel: TraceCollectorSidePanel
+                SidePanel: TraceCollectorSidePanel,
             },
         ]}
         documentation={DocumentationSections}

@@ -173,12 +173,10 @@ export const startTrace =
             usageData.sendUsageData(sinkEvent(format));
         });
 
-        let packets: Packet[] = [];
+        const packets: Packet[] = [];
         const throttle = setInterval(() => {
-            if (packets.length) {
-                dispatch(addTracePackets(packets));
-                packets = [];
-            }
+            dispatch(addTracePackets(packets));
+            packets.splice(0, packets.length);
         }, 250);
 
         const taskId = nrfml.start(
@@ -212,7 +210,7 @@ export const startTrace =
                     packets.push(data as Packet);
                 }
             },
-            addPowerEstimationPackets(dispatch, packets)
+            addPowerEstimationPackets(dispatch)
         );
         logger.info('Started tracefile');
         dispatch(
@@ -242,26 +240,34 @@ export const readRawTrace =
                     packets.push(data as Packet);
                 }
             },
-            addPowerEstimationPackets(dispatch, packets)
+            addPowerEstimationPackets(dispatch)
         );
         logger.info(`Started reading trace from ${sourceFile}`);
     };
 
 const addPowerEstimationPackets =
-    (dispatch: TDispatch, packets: Packet[]) =>
+    (dispatch: TDispatch) =>
     (jsonData: { onlinePowerProfiler?: OnlinePowerEstimatorParams }[]) => {
         const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
         if (powerEstimationData) {
             dispatch(setPowerEstimationData(powerEstimationData));
 
-            packets.push({
-                format: 'ope',
-                // @ts-expect-error will work for now
-                packet_data: JSON.stringify(powerEstimationData, undefined, 4),
-                timestamp: {
-                    value: Date.now() * 1000,
-                },
-            });
+            dispatch(
+                addTracePackets([
+                    {
+                        format: 'ope',
+                        // @ts-expect-error will work for now
+                        packet_data: JSON.stringify(
+                            powerEstimationData,
+                            undefined,
+                            4
+                        ),
+                        timestamp: {
+                            value: Date.now() * 1000,
+                        },
+                    },
+                ])
+            );
         }
     };
 

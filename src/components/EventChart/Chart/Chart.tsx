@@ -59,17 +59,17 @@ const colors = [
     sharedColors.pink,
 ];
 
-const formats = [
-    'at',
-    'ope',
-    'lte_rrc.bcch_dl_sch',
-    'nas-eps',
-    'lte_rrc.ul_ccch',
-    'lte_rrc.dl_ccch',
-    'lte_rrc.ul_dcch',
-    'lte_rrc.dl_dcch',
-    'ip',
-];
+const formats = ['AT', 'POWER', 'RRC', 'NAS', 'IP', 'OTHER'] as const;
+
+const formatToLabel = (format: string): typeof formats[number] => {
+    if (format.startsWith('lte_rrc')) return 'RRC';
+    if (format === 'at') return 'AT';
+    if (format.startsWith('nas')) return 'NAS';
+    if (format === 'ip') return 'IP';
+    if (format === 'ope') return 'POWER';
+
+    return 'OTHER';
+};
 
 export const Chart = ({ packets }: { packets: Packet[] }) => {
     const dispatch = useDispatch();
@@ -164,21 +164,23 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
 
     const events = packets.map(event => ({
         x: (event.timestamp?.value ?? 0) / 1000,
-        y: formats.indexOf(event.format) ?? 0,
+        y: formats.indexOf(formatToLabel(event.format)),
         event,
     }));
 
     const datasets: typeof data.datasets = formats.map((format, index) => ({
         label: format,
-        data: events.filter(event => event.event.format === format),
+        data: events.filter(
+            event => formatToLabel(event.event.format) === format
+        ),
         borderColor: colors[index],
         backgroundColor: colors[index],
+
         pointRadius: 6,
         pointHoverRadius: 6,
-        pointHoverBorderWidth: 5,
-        pointBorderWidth: 5,
+        pointHoverBorderWidth: 0,
+        pointBorderWidth: 0,
         pointHoverBackgroundColor: 'white',
-        hidden: format === 'modem_trace',
     }));
 
     const data: ChartData<'scatter'> = {
