@@ -25,7 +25,6 @@ export default () => {
             : `${LTEView.signalQuality}dB`;
 
     useEffect(() => {
-        console.log('networkREG changed!');
         const statusCode = `${LTEView.networkRegistrationStatus?.status}`;
         if (statusCode) {
             const result = Object.entries(networkStatus).filter(
