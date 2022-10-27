@@ -25,7 +25,9 @@ READ CMD: AT+CEREG?
 
 */
 
-const readTest = [
+const readCmd = atPacket('AT+CEREG?');
+
+const testResponses = [
     {
         response: atPacket(`+CEREG: 1,1,\r\nOK\r\n`),
         expected: {
@@ -57,7 +59,7 @@ const readTest = [
 
     // Network faults :: TODO: Need to verify if this is correct responses
     {
-        response: atPacket(`+CEREG: 3,3,"002F","0012BEEF",7,12,12"\r\nOK\r\n`),
+        response: atPacket(`+CEREG: 3,3,"002F","0012BEEF",7,12,12\r\nOK\r\n`),
         expected: {
             status: 3,
             tac: '002F',
@@ -70,9 +72,17 @@ const readTest = [
 ];
 
 test('+CEREG read response sets appropriate attributes correctly', () => {
-    readTest.forEach(test => {
+    testResponses.forEach(test => {
         expect(
-            convertPackets([test.response]).networkRegistrationStatus
+            convertPackets([readCmd, test.response]).networkRegistrationStatus
+        ).toEqual(test.expected);
+    });
+});
+
+test('+CEREG notification sets appropriate attributes correctly', () => {
+    testResponses.forEach(test => {
+        expect(
+            convertPackets([readCmd, test.response]).networkRegistrationStatus
         ).toEqual(test.expected);
     });
 });

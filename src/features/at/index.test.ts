@@ -67,7 +67,7 @@ const expectedState: State = {
     ltemTXReduction: undefined,
     activityStatus: undefined,
     networkRegistrationStatus: {
-        status: 2,
+        status: 5,
         tac: '0901',
         ci: '02024720',
         AcT: 7,

@@ -24,15 +24,12 @@ export const getArrays = (payload: string): number[][] => {
     return [];
 };
 
-export const getParametersFromResponse = (body?: string, status?: string) => {
-    if (!body) {
+export const getParametersFromResponse = (payload?: string) => {
+    if (!payload) {
         return [];
     }
-
     const lineSeparator = /(?:\r\n|\\r\\n)/;
-
-    let lines = body?.split(lineSeparator).filter(line => line);
-    lines = lines[lines.length - 1] === status ? lines.slice(0, -1) : lines;
+    const lines = payload?.split(lineSeparator).filter(line => line);
     const paramArray = lines
         .map(line =>
             line

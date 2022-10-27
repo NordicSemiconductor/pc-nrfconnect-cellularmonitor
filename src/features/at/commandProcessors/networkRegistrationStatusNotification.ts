@@ -4,10 +4,37 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { initialState, Processor } from '..';
-import { RequestType } from '../parseAT';
-import { getNumberArray, getParametersFromResponse } from '../utils';
+import type { Processor } from '..';
+import { getParametersFromResponse } from '../utils';
 
+export const processor: Processor<ViewModel> = {
+    command: '+CEREG',
+    documentation:
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
+    initialState: () => ({}),
+    onResponse: packet => {
+        if (packet.status === 'OK' && packet.payload) {
+            return {
+                networkRegistrationStatus: setNetworkRegistrationStatus(
+                    'response',
+                    packet.payload
+                ),
+            };
+        }
+        return {};
+    },
+    onNotification(packet) {
+        if (packet.payload) {
+            return {
+                networkRegistrationStatus: setNetworkRegistrationStatus(
+                    'notification',
+                    packet.payload
+                ),
+            };
+        }
+        return {};
+    },
+};
 type NetworkRegistrationStatus = {
     status?: number;
     tac?: string;
@@ -22,49 +49,63 @@ type ViewModel = {
     networkRegistrationStatus?: NetworkRegistrationStatus;
 };
 
-export const processor: Processor<ViewModel> = {
-    command: '+CEREG',
-    documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
-    initialState: () => ({}),
-    onResponse: packet => {
-        if (packet.status === 'OK' && packet.payload) {
-            const responseArray = getParametersFromResponse(packet.payload);
-            const networkRegistrationStatus: NetworkRegistrationStatus = {
-                status: parseInt(responseArray[1], 10),
-            };
-            if (responseArray.length >= 4) {
-                networkRegistrationStatus.tac = responseArray[2];
-                networkRegistrationStatus.ci = responseArray[3];
-                networkRegistrationStatus.AcT = parseInt(responseArray[4], 10);
-            }
-            if (responseArray.length >= 6) {
-                const cause_type = responseArray[5]
-                    ? responseArray[5]
-                    : undefined;
-                if (cause_type !== undefined) {
-                    networkRegistrationStatus.cause_type = parseInt(
-                        cause_type,
-                        10
-                    );
-                }
-                const reject_cause = responseArray[6]
-                    ? responseArray[6]
-                    : undefined;
-                if (reject_cause !== undefined) {
-                    networkRegistrationStatus.reject_cause = parseInt(
-                        reject_cause,
-                        10
-                    );
-                }
-            }
-            if (responseArray.length >= 9) {
-                networkRegistrationStatus.activeTime = responseArray[7];
-                networkRegistrationStatus.periodicTAU = responseArray[8];
-            }
-            return { networkRegistrationStatus };
-        }
+type ResponseType = 'response' | 'notification';
 
-        return {};
+const RESPONSE_INDEXES = {
+    response: {
+        status: 1,
+        tac: 2,
+        ci: 3,
+        AcT: 4,
+        cause_type: 5,
+        reject_type: 6,
+        activeTime: 7,
+        periodicTAU: 8,
     },
+    notification: {
+        status: 0,
+        tac: 1,
+        ci: 2,
+        AcT: 3,
+        cause_type: 4,
+        reject_type: 5,
+        activeTime: 6,
+        periodicTAU: 7,
+    },
+};
+
+const setNetworkRegistrationStatus = (
+    requestType: ResponseType,
+    payload: string
+): NetworkRegistrationStatus => {
+    const index = RESPONSE_INDEXES[requestType];
+    const responseArray = getParametersFromResponse(payload);
+    const networkRegistrationStatus: NetworkRegistrationStatus = {
+        status: parseInt(responseArray[index.status], 10),
+    };
+    if (responseArray.length >= 4) {
+        networkRegistrationStatus.tac = responseArray[index.tac];
+        networkRegistrationStatus.ci = responseArray[index.ci];
+        networkRegistrationStatus.AcT = parseInt(responseArray[index.AcT], 10);
+    }
+    if (responseArray.length >= 6) {
+        const causeType = responseArray[index.cause_type]
+            ? responseArray[index.cause_type]
+            : undefined;
+        if (causeType !== undefined) {
+            networkRegistrationStatus.cause_type = parseInt(causeType, 10);
+        }
+        const rejectCause = responseArray[index.reject_type]
+            ? responseArray[index.reject_type]
+            : undefined;
+        if (rejectCause !== undefined) {
+            networkRegistrationStatus.reject_cause = parseInt(rejectCause, 10);
+        }
+    }
+    if (responseArray.length >= 9) {
+        networkRegistrationStatus.activeTime = responseArray[index.activeTime];
+        networkRegistrationStatus.periodicTAU =
+            responseArray[index.periodicTAU];
+    }
+    return networkRegistrationStatus;
 };
