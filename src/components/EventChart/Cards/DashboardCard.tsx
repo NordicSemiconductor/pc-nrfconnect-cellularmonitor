@@ -39,11 +39,12 @@ const DashboardCard: React.FC<{
                 <p className="card-value">{value}</p>
             </li>
         ))}
-        {onclick !== null &&
-        <Button variant="secondary" onClick={onclick} className="w-100">
-            <span className="mdi mdi-reload" />
-            Reload
-        </Button>}
+        {onclick !== null && (
+            <Button variant="secondary" onClick={onclick} className="w-100">
+                <span className="mdi mdi-reload" />
+                Reload
+            </Button>
+        )}
     </Card>
 );
 

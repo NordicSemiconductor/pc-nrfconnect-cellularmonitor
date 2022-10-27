@@ -8,10 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getLTE } from '../../../features/at/atSlice';
-import {
-    NetworkStatus,
-    networkStatus,
-} from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
+import { networkStatus } from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
 import DashboardCard from './DashboardCard';
 
 export default () => {
@@ -35,7 +32,10 @@ export default () => {
                 ([statusKey, status]) => statusKey === statusCode
             )[0];
             if (result) {
-                setFields({ ...fields, Status: result[1].short ?? 'Unknown' });
+                setFields({
+                    ...fields,
+                    Status: `${result[0]}: ${result[1].short}` ?? 'Unknown',
+                });
             }
         }
     }, [LTEView.networkRegistrationStatus]);
