@@ -4,24 +4,41 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getLTE } from '../../../features/at/atSlice';
+import {
+    NetworkStatus,
+    networkStatus,
+} from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
 import DashboardCard from './DashboardCard';
 
 export default () => {
-    const LTEView = useSelector(getLTE);
+    const [fields, setFields] = useState({
+        Status: 'Unknown',
+        'Signal Quality': 'Unknown',
+        'Activity Status': 'Unknown',
+    });
 
+    const LTEView = useSelector(getLTE);
     const signalQuality =
         LTEView.signalQuality === 255
             ? 'Unknown'
             : `${LTEView.signalQuality}dB`;
 
-    const fields = {
-        'Signal Quality': signalQuality,
-        'Activity Status': LTEView.activityStatus ?? 'Unknown',
-    };
+    useEffect(() => {
+        console.log('networkREG changed!');
+        const statusCode = `${LTEView.networkRegistrationStatus?.status}`;
+        if (statusCode) {
+            const result = Object.entries(networkStatus).filter(
+                ([statusKey, status]) => statusKey === statusCode
+            )[0];
+            if (result) {
+                setFields({ ...fields, Status: result[1].short ?? 'Unknown' });
+            }
+        }
+    }, [LTEView.networkRegistrationStatus]);
 
     return (
         <DashboardCard
@@ -29,15 +46,6 @@ export default () => {
             iconName="mdi-access-point-network"
             onclick={null}
             fields={fields}
-        >
-            {/* <ul>
-                {Object.entries(fields).map(([key, value]) => (
-                    <li key={key}>
-                        <p className="card-key">{key}</p>
-                        <p className="card-value">{value}</p>
-                    </li>
-                ))}
-            </ul> */}
-        </DashboardCard>
+        />
     );
 };

@@ -63,11 +63,13 @@ export const getModem = (state: RootState) => {
 export const getLTE = (state: RootState) => {
     const {
         signalQuality: { rsrp_decibel: signalQuality },
+        networkRegistrationStatus,
         activityStatus,
     } = state.app.at;
 
     return {
         signalQuality,
+        networkRegistrationStatus,
         activityStatus,
     };
 };

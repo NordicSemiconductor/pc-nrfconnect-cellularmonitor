@@ -35,6 +35,33 @@ export const processor: Processor<ViewModel> = {
         return {};
     },
 };
+
+export const networkStatus = {
+    0: {
+        short: 'Not Registered',
+        long: 'Not registered. User Equipment (UE) is not currently searching for an operator to register to.',
+    },
+    1: { short: 'Registered', long: 'Registered, home network' },
+    2: {
+        short: 'Not Registered',
+        long: 'Not registered, but UE is currently trying to attach or searching an operator to register to',
+    },
+    3: { short: 'Denied', long: 'Registration denied' },
+    // TODO: 'Unknown' is also the default in the frontend view.
+    4: {
+        short: 'Unknown',
+        long: 'Unknown (for example, out of Evolved Terrestrial Radio Access Network (E-UTRAN) coverage)',
+    },
+    5: { short: 'Registered', long: 'Registered, roaming' },
+    90: {
+        short: 'Not Registered',
+        long: 'Not registered due to Universal Integrated Circuit Card (UICC) failure',
+    },
+} as const;
+
+type NetworkStatuses = typeof networkStatus;
+export type NetworkStatus = NetworkStatuses[keyof NetworkStatuses];
+
 type NetworkRegistrationStatus = {
     status?: number;
     tac?: string;
