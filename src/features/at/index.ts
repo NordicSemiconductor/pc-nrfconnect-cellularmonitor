@@ -16,6 +16,7 @@ import { processor as manufacturerIdentification } from './commandProcessors/man
 import { processor as modemParameters } from './commandProcessors/modemParameters';
 import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
+import { processor as networkRegistrationStatus } from './commandProcessors/networkRegistrationStatusNotification';
 import { processor as periodicTAU } from './commandProcessors/periodicTAU';
 import { processor as pinCode } from './commandProcessors/pinCode';
 import { processor as pinRetries } from './commandProcessors/pinRetries';
@@ -78,6 +79,7 @@ const processors = [
     TXPowerReduction,
     extendedSignalQuality,
     activityStatus,
+    networkRegistrationStatus,
 ] as const;
 
 // Typescript challange! Think it's related to the one above.

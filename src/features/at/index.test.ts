@@ -66,6 +66,12 @@ const expectedState: State = {
     nbiotTXReduction: undefined,
     ltemTXReduction: undefined,
     activityStatus: undefined,
+    networkRegistrationStatus: {
+        status: 2,
+        tac: '0901',
+        ci: '02024720',
+        AcT: 7,
+    },
 };
 
 test('Trace is read properly', () => {
@@ -74,6 +80,5 @@ test('Trace is read properly', () => {
     traceData.forEach(packet => {
         state = convert(packet, state);
     });
-
     expect(state).toEqual(expectedState);
 });
