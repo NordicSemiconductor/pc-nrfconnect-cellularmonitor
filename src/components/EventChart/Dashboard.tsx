@@ -39,8 +39,8 @@ const Dashboard = () => {
     return (
         <div className="events-container">
             <div className="cards-container">
-                {/* <ModemCard /> */}
-                {/* <SimCard /> */}
+                <ModemCard />
+                <SimCard />
                 <LTECard />
             </div>
 
