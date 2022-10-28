@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getLTE } from '../../../features/at/atSlice';
@@ -12,28 +12,26 @@ import { networkStatus } from '../../../features/at/commandProcessors/networkReg
 import DashboardCard from './DashboardCard';
 
 export default () => {
-    const [fields, setFields] = useState({
-        Status: 'Unknown',
-        'Signal Quality': 'Unknown',
-        'Activity Status': 'Unknown',
-    });
-
     const LTEView = useSelector(getLTE);
 
-    useEffect(() => {
-        const statusCode = `${LTEView.networkRegistrationStatus?.status}`;
-        if (statusCode) {
+    const fields = useMemo(() => {
+        let status = 'Unknown';
+        const statusCode = LTEView.networkRegistrationStatus?.status;
+        if (statusCode !== undefined) {
             const [label, value] = Object.entries(networkStatus).filter(
-                ([statusKey]) => statusKey === statusCode
+                ([statusKey]) => statusKey === `${statusCode}`
             )[0];
             if (label) {
-                setFields({
-                    ...fields,
-                    Status: `${label}: ${value.short}` ?? 'Unknown',
-                });
+                status = `${label}: ${value.short}`;
             }
         }
-    }, [LTEView.networkRegistrationStatus, fields]);
+
+        return {
+            'Signal Quality': 'Unknown',
+            'Activity Status': 'Unknown',
+            Status: status,
+        };
+    }, [LTEView.networkRegistrationStatus]);
 
     return (
         <DashboardCard
