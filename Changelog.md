@@ -1,3 +1,12 @@
+## 0.4.0 - 2022-10-28
+
+### Added
+
+-   `Dashboard` pane showing states updated based on trace events.
+-   `Event Chart` component which shows trace events in time and updates
+    `Dashboard` when selecting timestamps.
+-   Load raw trace files to view in `Dashboard` and `Event Chart`.
+
 ## 0.3.5 - 2022-09-26
 
 ### Fixed
