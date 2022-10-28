@@ -26,7 +26,7 @@ export const processor: Processor<ViewModel> = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cpas.html',
     initialState: () => ({}),
-    onResponse: (packet, requestType) => {
+    onResponse(packet) {
         if (packet.status === 'OK') {
             if (packet.payload !== undefined) {
                 const status = packet.payload;

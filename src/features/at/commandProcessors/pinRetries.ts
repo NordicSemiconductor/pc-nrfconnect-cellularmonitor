@@ -5,7 +5,7 @@
  */
 
 import type { Processor } from '..';
-import { getNumberArray, getStringNumberPair } from '../utils';
+import { getStringNumberPair } from '../utils';
 
 type ViewModel = {
     pinRetries?: {

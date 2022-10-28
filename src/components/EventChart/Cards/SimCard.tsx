@@ -8,12 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getSIM } from '../../../features/at/atSlice';
-import { commands } from '../../../features/at/commandProcessors/pinCode';
 import DashboardCard from './DashboardCard';
-
-const refresh = () => {
-    commands.checkPIN();
-};
 
 export default () => {
     const SIMView = useSelector(getSIM);
@@ -35,7 +30,12 @@ export default () => {
     };
 
     return (
-        <DashboardCard title="Sim Card" iconName="mdi-sim" onclick={null} fields={fields}>
+        <DashboardCard
+            title="Sim Card"
+            iconName="mdi-sim"
+            onclick={null}
+            fields={fields}
+        >
             {/* <ul>
                 {Object.entries(fields).map(([key, value]) => (
                     <li key={key}>

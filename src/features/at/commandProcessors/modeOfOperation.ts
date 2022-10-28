@@ -6,8 +6,9 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getNumberArray } from '../utils';
+import { getNumber } from '../utils';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModeOfOperation = {
     0: 'PS Mode 2',
     2: 'CS/PS mode 2',
@@ -29,7 +30,7 @@ export const processor: Processor<ViewModel> = {
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
         ) {
-            requestedModeOfOperation = getNumberArray(packet.payload)[0];
+            requestedModeOfOperation = getNumber(packet.payload);
         }
         return {};
     },

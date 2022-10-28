@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { connect } from 'react-redux';
 import {
     DeviceTraits,
     SerialPort,
@@ -14,7 +15,6 @@ import {
     DeviceSelectorProps,
     logger,
 } from 'pc-nrfconnect-shared';
-import { connect } from 'react-redux';
 
 import { stopTrace } from '../features/tracing/nrfml';
 import {
@@ -23,9 +23,9 @@ import {
     setDetectingTraceDb,
     setSerialPort,
 } from '../features/tracing/traceSlice';
+import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import type { TAction } from '../utils/thunk';
 import { TDispatch } from '../utils/thunk';
-import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 
 const deviceListing: DeviceTraits = {
     nordicUsb: true,

@@ -18,14 +18,14 @@ type Band = {
     band: number;
     reduction: keyof Reduction;
 };
-type Mode = keyof Reduction | Band[];
+export type Mode = keyof Reduction | Band[];
 
 type ViewModel = {
     ltemTXReduction?: Mode;
     nbiotTXReduction?: Mode;
 };
 
-let requestedReduction: ViewModel | undefined = undefined;
+let requestedReduction: ViewModel | undefined;
 
 export const processor: Processor<ViewModel> = {
     command: '%XEMPR',
@@ -49,12 +49,14 @@ export const processor: Processor<ViewModel> = {
                     nbiotTXReduction: undefined,
                     ltemTXReduction: undefined,
                 };
-            } else if (
+            }
+            if (
                 requestType === RequestType.SET_WITH_VALUE &&
                 requestedReduction
             ) {
                 return requestedReduction;
-            } else if (requestType === RequestType.READ && packet.payload) {
+            }
+            if (requestType === RequestType.READ && packet.payload) {
                 const responseArray = getNumberArray(packet.payload);
                 const firstSegmentLen = responseArray[2];
                 if (firstSegmentLen < (responseArray.length - 2) * 2) {
@@ -96,9 +98,8 @@ const parseToTXReduction = (values: number[]) => {
         return {
             nbiotTXReduction: reductions,
         };
-    } else {
-        return {
-            ltemTXReduction: reductions,
-        };
     }
+    return {
+        ltemTXReduction: reductions,
+    };
 };

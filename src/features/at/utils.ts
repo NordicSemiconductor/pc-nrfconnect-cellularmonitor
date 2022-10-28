@@ -18,11 +18,11 @@ export const getNumberArray = (payload: string): number[] =>
         .map(val => val.replace(/[()]/g, ''))
         .map(value => parseInt(value, 10));
 
-export const getArrays = (payload: string): number[][] => {
-    const arrays = /\([\w\d\s,']+\)/gi.exec(payload);
+// export const getArrays = (payload: string): number[][] => {
+//     const arrays = /\([\w\d\s,']+\)/gi.exec(payload);
 
-    return [];
-};
+//     return [];
+// };
 
 export const getParametersFromResponse = (payload?: string) => {
     if (!payload) {

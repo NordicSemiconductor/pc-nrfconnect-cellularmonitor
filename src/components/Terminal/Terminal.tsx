@@ -14,8 +14,8 @@ import { XTerm } from 'xterm-for-react';
 
 import { Response } from '../../features/modem/modem';
 import { getModem } from '../../features/modem/modemSlice';
-import useFitAddon from './useFitAddon';
 import nrfTerminalCommander from './terminalCommander';
+import useFitAddon from './useFitAddon';
 
 import 'xterm/css/xterm.css';
 import './terminal.scss';

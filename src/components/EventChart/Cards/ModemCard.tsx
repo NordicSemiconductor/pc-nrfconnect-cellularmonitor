@@ -8,10 +8,21 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getModem } from '../../../features/at/atSlice';
+import { Mode } from '../../../features/at/commandProcessors/TXPowerReduction';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
+
+const formatMode = (mode?: Mode) => {
+    if (mode === undefined) {
+        return 'Unknown';
+    }
+    if (typeof mode === 'number') {
+        return mode;
+    }
+    return mode.map(band => `${band.band}: ${band.reduction}`).join(', ');
+};
 
 export default () => {
     const {
@@ -36,8 +47,8 @@ export default () => {
             ? formatAvailableBands(availableBands)
             : 'Unknown',
         'Data Profile': dataProfile ?? 'Unknown',
-        'TX Power Reduction (LTE-M)': ltemTXReduction ?? 'Unknown',
-        'TX Power Reduction (NB-IoT)': nbiotTXReduction ?? 'Unknown',
+        'TX Power Reduction (LTE-M)': formatMode(ltemTXReduction),
+        'TX Power Reduction (NB-IoT)': formatMode(nbiotTXReduction),
     };
 
     return (

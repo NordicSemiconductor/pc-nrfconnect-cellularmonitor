@@ -75,7 +75,7 @@ export const parseAT = (packet: Packet): ParsedPacket => {
         const payload = body ? removeStatusFromBody(body) : undefined;
         return {
             command,
-            payload: payload ? payload : undefined,
+            payload: payload || undefined,
             requestType: startsWithAt
                 ? operatorToRequestType(operator)
                 : RequestType.NOT_A_REQUEST,

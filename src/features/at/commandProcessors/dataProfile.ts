@@ -6,7 +6,6 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getNumber } from '../utils';
 
 export const PowerLevel = {
     0: 'Ultra-low power',

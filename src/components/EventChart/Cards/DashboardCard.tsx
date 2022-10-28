@@ -13,6 +13,7 @@ const DashboardCard: React.FC<{
     title: string;
     iconName?: string;
     information?: string;
+    fields: Record<string, string | number>;
 }> = ({
     onclick,
     title,

@@ -23,7 +23,7 @@ const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
 });
 
 export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
-    const { caretX, dataPoints } = tooltip;
+    const { chart, caretX, dataPoints } = tooltip;
 
     const point = dataPoints[0];
     if (!point) return;
@@ -37,7 +37,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
         dataPoints.length === 1 ? '' : `+${dataPoints.length - 1} others`;
 
     // Make sure tooltips dont start rendering too far to the sides
-    const x = Math.max(Math.min(tooltip.chart.width - 150, caretX), 150);
+    const x = Math.max(Math.min(chart.width - 150, caretX), 150);
 
     return (
         <div

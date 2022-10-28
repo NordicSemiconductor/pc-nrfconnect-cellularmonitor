@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 /*
  * Copyright (c) 2022 Nordic Semiconductor ASA
  *
@@ -9,7 +5,7 @@
  */
 
 import { initialState } from '..';
-import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
+import { atPacket, convertPackets } from '../testUtils';
 
 const setCommand = atPacket('AT+CPAS');
 const responses = [

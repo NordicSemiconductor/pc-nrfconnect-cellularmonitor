@@ -19,25 +19,21 @@ export default () => {
     });
 
     const LTEView = useSelector(getLTE);
-    const signalQuality =
-        LTEView.signalQuality === 255
-            ? 'Unknown'
-            : `${LTEView.signalQuality}dB`;
 
     useEffect(() => {
         const statusCode = `${LTEView.networkRegistrationStatus?.status}`;
         if (statusCode) {
-            const result = Object.entries(networkStatus).filter(
-                ([statusKey, status]) => statusKey === statusCode
+            const [label, value] = Object.entries(networkStatus).filter(
+                ([statusKey]) => statusKey === statusCode
             )[0];
-            if (result) {
+            if (label) {
                 setFields({
                     ...fields,
-                    Status: `${result[0]}: ${result[1].short}` ?? 'Unknown',
+                    Status: `${label}: ${value.short}` ?? 'Unknown',
                 });
             }
         }
-    }, [LTEView.networkRegistrationStatus]);
+    }, [LTEView.networkRegistrationStatus, fields]);
 
     return (
         <DashboardCard

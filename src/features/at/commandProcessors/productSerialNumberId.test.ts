@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /*
  * Copyright (c) 2022 Nordic Semiconductor ASA
  *
@@ -8,7 +5,7 @@
  */
 
 import { initialState } from '..';
-import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
+import { atPacket, convertPackets, ErrorPacket } from '../testUtils';
 
 const testCommand = {
     request: atPacket('AT+CGSN=?'),
@@ -41,7 +38,7 @@ test('+CGSN awaiting request response operator should be correct when mixing com
     expect(state.IMEI).toBeUndefined();
 
     state = convertPackets([setCommand.request, setCommand.response], state);
-    const expected = setCommand.expected;
+    const { expected } = setCommand;
     expect(state.IMEI).toBe(expected);
 
     state = convertPackets([readCommand, ErrorPacket], state);
