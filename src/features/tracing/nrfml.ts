@@ -12,8 +12,10 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import type { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
+import type { TAction, TDispatch } from '../../utils/thunk';
+import { Packet } from '../at';
+import { OnlinePowerEstimatorParams } from '../powerEstimation/onlinePowerEstimator';
 import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
@@ -26,6 +28,7 @@ import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
+    addTracePackets,
     getManualDbFilePath,
     getSerialPort,
     setTraceIsStarted,
@@ -170,9 +173,16 @@ export const startTrace =
             usageData.sendUsageData(sinkEvent(format));
         });
 
+        const packets: Packet[] = [];
+        const throttle = setInterval(() => {
+            dispatch(addTracePackets(packets));
+            packets.splice(0, packets.length);
+        }, 250);
+
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
+                clearInterval(throttle);
                 if (err?.message.includes('tshark')) {
                     logger.logError('Error while tracing', err);
                 } else if (err != null) {
@@ -195,12 +205,12 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
                 throttleUpdatingProgress: true,
             }),
-            () => {},
-            jsonData => {
-                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
-                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                dispatch(setPowerEstimationData(powerEstimationData));
-            }
+            data => {
+                if (data.format !== 'modem_trace') {
+                    packets.push(data as Packet);
+                }
+            },
+            addPowerEstimationPackets(dispatch)
         );
         logger.info('Started tracefile');
         dispatch(
@@ -209,6 +219,56 @@ export const startTrace =
                 progressConfigs: progressConfigs(source, sinks),
             })
         );
+    };
+
+export const readRawTrace =
+    (sourceFile: string): TAction =>
+    (dispatch, getState) => {
+        const state = getState();
+        const source: SourceFormat = { type: 'file', path: sourceFile };
+        const sinks: TraceFormat[] = ['opp'];
+        const packets: Packet[] = [];
+        nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            () => {
+                logger.info(`Completed reading trace from ${sourceFile}`);
+                dispatch(addTracePackets(packets));
+            },
+            () => {},
+            data => {
+                if (data.format !== 'modem_trace') {
+                    packets.push(data as Packet);
+                }
+            },
+            addPowerEstimationPackets(dispatch)
+        );
+        logger.info(`Started reading trace from ${sourceFile}`);
+    };
+
+const addPowerEstimationPackets =
+    (dispatch: TDispatch) =>
+    (jsonData: { onlinePowerProfiler?: OnlinePowerEstimatorParams }[]) => {
+        const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
+        if (powerEstimationData) {
+            dispatch(setPowerEstimationData(powerEstimationData));
+
+            dispatch(
+                addTracePackets([
+                    {
+                        format: 'ope',
+                        // @ts-expect-error will work for now
+                        packet_data: JSON.stringify(
+                            powerEstimationData,
+                            undefined,
+                            4
+                        ),
+                        timestamp: {
+                            value: Date.now() * 1000,
+                        },
+                    },
+                ])
+            );
+        }
     };
 
 export const stopTrace =
