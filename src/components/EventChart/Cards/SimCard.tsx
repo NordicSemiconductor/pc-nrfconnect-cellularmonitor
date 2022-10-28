@@ -30,20 +30,6 @@ export default () => {
     };
 
     return (
-        <DashboardCard
-            title="Sim Card"
-            iconName="mdi-sim"
-            onclick={null}
-            fields={fields}
-        >
-            {/* <ul>
-                {Object.entries(fields).map(([key, value]) => (
-                    <li key={key}>
-                        <p className="card-key">{key}</p>
-                        <p className="card-value">{value}</p>
-                    </li>
-                ))}
-            </ul> */}
-        </DashboardCard>
+        <DashboardCard title="Sim Card" iconName="mdi-sim" fields={fields} />
     );
 };

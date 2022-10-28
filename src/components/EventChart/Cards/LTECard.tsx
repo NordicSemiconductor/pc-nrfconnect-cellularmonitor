@@ -37,7 +37,6 @@ export default () => {
         <DashboardCard
             title="LTE Network"
             iconName="mdi-access-point-network"
-            onclick={null}
             fields={fields}
         />
     );

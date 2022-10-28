@@ -56,7 +56,6 @@ export default () => {
             title="Modem"
             iconName="mdi-cellphone-wireless"
             information="Some information"
-            onclick={null}
             fields={fields}
         >
             {/* <ul>

@@ -5,17 +5,14 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { Card } from 'pc-nrfconnect-shared';
 
 const DashboardCard: React.FC<{
-    onclick: null | (() => void);
     title: string;
     iconName?: string;
     information?: string;
     fields: Record<string, string | number>;
 }> = ({
-    onclick,
     title,
     iconName = 'mdi-border-none-variant',
     information = '',
@@ -40,12 +37,6 @@ const DashboardCard: React.FC<{
                 <p className="card-value">{value}</p>
             </li>
         ))}
-        {onclick !== null && (
-            <Button variant="secondary" onClick={onclick} className="w-100">
-                <span className="mdi mdi-reload" />
-                Reload
-            </Button>
-        )}
     </Card>
 );
 
