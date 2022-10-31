@@ -32,6 +32,7 @@ jest.mock('@electron/remote', () => ({
     getCurrentWindow: () => ({
         getTitle: () => 'Title',
     }),
+    app: { getAppPath: () => process.cwd() },
 }));
 
 describe('Power profile params', () => {
