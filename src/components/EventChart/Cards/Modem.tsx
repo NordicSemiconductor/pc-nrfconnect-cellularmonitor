@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getModem } from '../../../features/at/atSlice';
+import { getAT } from '../../../features/at/atSlice';
 import { Mode } from '../../../features/at/commandProcessors/TXPowerReduction';
 import DashboardCard from './DashboardCard';
 
@@ -35,7 +35,7 @@ export default () => {
         dataProfile,
         ltemTXReduction,
         nbiotTXReduction,
-    } = useSelector(getModem);
+    } = useSelector(getAT);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
@@ -57,15 +57,6 @@ export default () => {
             iconName="mdi-cellphone-wireless"
             information="Some information"
             fields={fields}
-        >
-            {/* <ul>
-                {Object.entries(fields).map(([key, value]) => (
-                    <li key={key}>
-                        <p className="card-key">{key.toUpperCase()}</p>
-                        <p className="card-value">{value}</p>
-                    </li>
-                ))}
-            </ul> */}
-        </DashboardCard>
+        />
     );
 };

@@ -8,7 +8,7 @@ import type { Processor } from '..';
 import { getStringNumberPair } from '../utils';
 
 type ViewModel = {
-    pinRetries?: {
+    pinRetries: {
         SIM_PIN?: number;
         SIM_PIN2?: number;
         SIM_PUK?: number;
@@ -20,7 +20,7 @@ export const processor: Processor<ViewModel> = {
     command: '+CPINR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpinr.html',
-    initialState: () => ({}),
+    initialState: () => ({ pinRetries: {} }),
     onResponse: packet => {
         if (packet.status === 'OK') {
             if (packet.payload) {

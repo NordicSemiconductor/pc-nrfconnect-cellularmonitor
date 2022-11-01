@@ -30,7 +30,7 @@ const setCommandPackets = [
     {
         setCommand: atPacket('AT+CPINR="CUSTOM PIN"'),
         response: ErrorPacket,
-        expected: undefined,
+        expected: {},
     },
 ];
 
