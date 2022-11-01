@@ -13,9 +13,10 @@ import DashboardCard from './DashboardCard';
 
 export default () => {
     const {
-        signalQuality: { rsrp_decibel: signalQuality },
+        signalQuality: { rsrp_decibel: RSRP, rsrq_decibel: RSRQ },
         networkRegistrationStatus,
         activityStatus,
+        
     } = useSelector(getAT);
 
     const fields = useMemo(() => {
@@ -31,9 +32,26 @@ export default () => {
         }
 
         return {
-            'Signal Quality': signalQuality ?? 'Unknown',
-            'Activity Status': activityStatus ?? 'Unknown',
-            Status: status,
+            'RRC STAT': 'Not Implemented',
+            PCI: 'Not Implemented',
+            SNR: 'Not Implemented',
+            MCC: 'Not Implemented',
+            'CELL ID': 'Not Implemented',
+            'RRC STATE CHANGE CAUSE': 'Not Implemented',
+            EARFCN: 'Not Implemented',
+            'PUCCH TX POWER': 'Not Implemented',
+            MNC: 'Not Implemented',
+            'NEIGHBOR CELLS': 'Not Implemented',
+            'EMM STATE': 'Not Implemented',
+            RSRP: RSRP ?? 'Unknown',
+            'CE MODE': 'Not Implemented',
+            'BAND INDICATOR': 'Not Implemented',
+            'EMM SUBSTATE': 'Not Implemented',
+            RSRQ: RSRQ ?? 'Unknown',
+            'CE LEVEL': 'Not Implemented',
+            'TRACKING AREA': 'Not Implemented',
+            'ACTIVITY STATUS': activityStatus ?? 'Unknown',
+            STATUS: status,
         };
     }, [networkRegistrationStatus]);
 

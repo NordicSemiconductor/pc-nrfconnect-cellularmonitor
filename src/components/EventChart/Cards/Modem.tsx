@@ -57,15 +57,6 @@ export default () => {
             iconName="mdi-cellphone-wireless"
             information="Some information"
             fields={fields}
-        >
-            {/* <ul>
-                {Object.entries(fields).map(([key, value]) => (
-                    <li key={key}>
-                        <p className="card-key">{key.toUpperCase()}</p>
-                        <p className="card-value">{value}</p>
-                    </li>
-                ))}
-            </ul> */}
-        </DashboardCard>
+        />
     );
 };
