@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { convert, initialState } from '../../features/at';
 import { setAT } from '../../features/at/atSlice';
 import { getTracePackets } from '../../features/tracing/traceSlice';
-import LTECard from './Cards/LTECard';
-import ModemCard from './Cards/ModemCard';
-import SimCard from './Cards/SimCard';
+import LTECard from './Cards/LTENetwork';
+import ModemCard from './Cards/Modem';
+import SimCard from './Cards/Sim';
 import { Chart } from './Chart/Chart';
 import { getSelectedTime } from './Chart/chartSlice';
 

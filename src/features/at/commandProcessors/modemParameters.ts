@@ -18,7 +18,7 @@ import { getParametersFromResponse } from '../utils';
 // }
 
 type ViewModel = {
-    xmonitor?: {
+    xmonitor: {
         regStatus?: number;
         operatorFullName?: string;
         operatorShortName?: string;

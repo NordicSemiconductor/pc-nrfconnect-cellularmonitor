@@ -18,21 +18,5 @@ const atSlice = createSlice({
 });
 
 export const getAT = (state: RootState) => state.app.at;
-export const getSIM = (state: RootState) => {
-    const { at } = state.app;
-
-    return {
-        imsi: at.imsi,
-        operator: at.xmonitor?.operatorFullName,
-        manufacturer: at.manufacturer,
-        iccid: at.iccid,
-        pin: at.pinCodeStatus,
-        remainingPIN: at.pinRetries?.SIM_PIN,
-        remainingPUK: at.pinRetries?.SIM_PUK,
-        remainingPIN2: at.pinRetries?.SIM_PIN2,
-        remainingPUK2: at.pinRetries?.SIM_PUK2,
-    };
-};
-
 export const { setAT } = atSlice.actions;
 export default atSlice.reducer;
