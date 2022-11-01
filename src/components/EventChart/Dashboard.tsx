@@ -11,9 +11,9 @@ import { convert, initialState } from '../../features/at';
 import { setAT } from '../../features/at/atSlice';
 import { getTracePackets } from '../../features/tracing/traceSlice';
 import Device from './Cards/Device';
-import LTECard from './Cards/LTENetwork';
-import ModemCard from './Cards/Modem';
-import SimCard from './Cards/Sim';
+import LTENetwork from './Cards/LTENetwork';
+import Modem from './Cards/Modem';
+import Sim from './Cards/Sim';
 import { Chart } from './Chart/Chart';
 import { getSelectedTime } from './Chart/chartSlice';
 
@@ -41,9 +41,9 @@ const Dashboard = () => {
         <div className="events-container">
             <div className="cards-container">
                 <Device />
-                <SimCard />
-                <LTECard />
-                <ModemCard />
+                <Sim />
+                <LTENetwork />
+                <Modem />
             </div>
 
             <div>

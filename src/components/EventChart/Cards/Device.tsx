@@ -24,12 +24,12 @@ export default () => {
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
-        'REVISION ID': 'Unknown',
-        'HARDWARE VERSION': 'Unknown',
-        'MODEM UUID': 'Unknown',
+        'REVISION ID': 'Not Implemented',
+        'HARDWARE VERSION': 'Not Implemented',
+        'MODEM UUID': 'Not Implemented',
         'CURRENT BAND': currentBand ?? 'Unknown',
         'AVAILABLE BANDS': availableBands ? formatAvailableBands(availableBands) : 'Unknown',
-        'DATA PROFILE': 'Unknown',
+        'DATA PROFILE': 'Not Implemented',
         MANUFACTURER: manufacturer ?? 'Unknown',
     };
     return (
