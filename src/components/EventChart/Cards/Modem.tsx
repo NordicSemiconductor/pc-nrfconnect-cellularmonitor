@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT, getModem } from '../../../features/at/atSlice';
+import { getAT } from '../../../features/at/atSlice';
 import { Mode } from '../../../features/at/commandProcessors/TXPowerReduction';
 import DashboardCard from './DashboardCard';
 

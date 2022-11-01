@@ -6,21 +6,16 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getAT } from '../../../features/at/atSlice';
 
+import { getAT } from '../../../features/at/atSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
 
 export default () => {
-   const {
-    IMEI,
-    currentBand,
-    availableBands,
-    manufacturer
-   } = useSelector(getAT);
-
+    const { IMEI, currentBand, availableBands, manufacturer } =
+        useSelector(getAT);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
@@ -28,7 +23,9 @@ export default () => {
         'HARDWARE VERSION': 'Not Implemented',
         'MODEM UUID': 'Not Implemented',
         'CURRENT BAND': currentBand ?? 'Unknown',
-        'AVAILABLE BANDS': availableBands ? formatAvailableBands(availableBands) : 'Unknown',
+        'AVAILABLE BANDS': availableBands
+            ? formatAvailableBands(availableBands)
+            : 'Unknown',
         'DATA PROFILE': 'Not Implemented',
         MANUFACTURER: manufacturer ?? 'Unknown',
     };

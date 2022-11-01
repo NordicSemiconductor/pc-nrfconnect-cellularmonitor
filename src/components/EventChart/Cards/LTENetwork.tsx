@@ -16,7 +16,6 @@ export default () => {
         signalQuality: { rsrp_decibel: RSRP, rsrq_decibel: RSRQ },
         networkRegistrationStatus,
         activityStatus,
-        
     } = useSelector(getAT);
 
     const fields = useMemo(() => {
@@ -53,7 +52,7 @@ export default () => {
             'ACTIVITY STATUS': activityStatus ?? 'Unknown',
             STATUS: status,
         };
-    }, [networkRegistrationStatus]);
+    }, [networkRegistrationStatus, RSRP, RSRQ, activityStatus]);
 
     return (
         <DashboardCard

@@ -14,9 +14,7 @@ export default () => {
     const {
         iccid,
         imsi,
-        xmonitor: {
-            operatorFullName: operator,
-        },
+        xmonitor: { operatorFullName: operator },
         manufacturer,
         pinCodeStatus: pin,
         pinRetries: {
@@ -26,7 +24,6 @@ export default () => {
             SIM_PUK2: remainingPUK2,
         },
     } = useSelector(getAT);
-
 
     const fields = {
         IMSI: imsi ?? 'Unknown',
@@ -42,18 +39,16 @@ export default () => {
         'PUK2 RETRIED': remainingPUK2 ?? 'Unknown',
         'LTE-M': 'Not Implemented',
         'NB-IoT': 'Not Implemented',
-        'IPV4': 'Not Implemented',
-        'IPV6': 'Not Implemented',
+        IPV4: 'Not Implemented',
+        IPV6: 'Not Implemented',
         'NON-IP': 'Not Implemented',
-        'PSM': 'Not Implemented',
-        'CDRX': 'Not Implemented',
-        'EDRX': 'Not Implemented',
-        'RAI': "Not Implemented",
-        'AS-RAI': "Not Implemented",
+        PSM: 'Not Implemented',
+        CDRX: 'Not Implemented',
+        EDRX: 'Not Implemented',
+        RAI: 'Not Implemented',
+        'AS-RAI': 'Not Implemented',
         'CP-RAI': 'Not Implemented',
     };
 
-    return (
-        <DashboardCard title="Sim" iconName="mdi-sim" fields={fields} />
-    );
+    return <DashboardCard title="Sim" iconName="mdi-sim" fields={fields} />;
 };
