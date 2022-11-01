@@ -7,16 +7,20 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { getLTE } from '../../../features/at/atSlice';
+import { getAT } from '../../../features/at/atSlice';
 import { networkStatus } from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
 import DashboardCard from './DashboardCard';
 
 export default () => {
-    const LTEView = useSelector(getLTE);
+    const {
+        signalQuality: { rsrp_decibel: signalQuality },
+        networkRegistrationStatus,
+        activityStatus,
+    } = useSelector(getAT);
 
     const fields = useMemo(() => {
         let status = 'Unknown';
-        const statusCode = LTEView.networkRegistrationStatus?.status;
+        const statusCode = networkRegistrationStatus?.status;
         if (statusCode !== undefined) {
             const [label, value] = Object.entries(networkStatus).filter(
                 ([statusKey]) => statusKey === `${statusCode}`
@@ -27,11 +31,11 @@ export default () => {
         }
 
         return {
-            'Signal Quality': 'Unknown',
-            'Activity Status': 'Unknown',
+            'Signal Quality': signalQuality ?? 'Unknown',
+            'Activity Status': activityStatus ?? 'Unknown',
             Status: status,
         };
-    }, [LTEView.networkRegistrationStatus]);
+    }, [networkRegistrationStatus]);
 
     return (
         <DashboardCard
