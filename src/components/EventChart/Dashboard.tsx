@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { convert, initialState } from '../../features/at';
 import { setAT } from '../../features/at/atSlice';
 import { getTracePackets } from '../../features/tracing/traceSlice';
+import Device from './Cards/Device';
 import LTECard from './Cards/LTENetwork';
 import ModemCard from './Cards/Modem';
 import SimCard from './Cards/Sim';
@@ -39,9 +40,10 @@ const Dashboard = () => {
     return (
         <div className="events-container">
             <div className="cards-container">
-                <ModemCard />
+                <Device />
                 <SimCard />
                 <LTECard />
+                <ModemCard />
             </div>
 
             <div>
