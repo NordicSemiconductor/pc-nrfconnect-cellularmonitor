@@ -22,6 +22,7 @@ import {
     LineElement,
     PointElement,
     TimeScale,
+    TimeSeriesScale,
     Title,
     Tooltip,
 } from 'chart.js';
@@ -38,6 +39,7 @@ ChartJS.register(
     LinearScale,
     CategoryScale,
     TimeScale,
+    TimeSeriesScale,
     PointElement,
     LineElement,
     Title,
