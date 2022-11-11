@@ -36,9 +36,11 @@ export default () => (
                         <li>1.1.5</li>
                         <li>1.2.3</li>
                         <li>1.2.7</li>
+                        <li>1.2.8</li>
                         <li>1.3.0</li>
                         <li>1.3.1</li>
                         <li>1.3.2</li>
+                        <li>1.3.3</li>
                     </ul>
                 </li>
                 <li>
