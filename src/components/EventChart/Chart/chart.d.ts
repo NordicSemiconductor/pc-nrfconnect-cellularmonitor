@@ -9,6 +9,7 @@ import { ChartType } from 'chart.js';
 declare module 'chart.js' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface PluginOptionsByType<TType extends ChartType> {
-        selectTime: import('./selectTimePlugin').SelectTimeOptions;
+        eventPan: import('./eventPanPlugin').EventPanPluginOptions;
+        timePan: import('./timePanPlugin').TimePanPluginOptions;
     }
 }

@@ -84,4 +84,29 @@
             transform: translate(100%);
         }
     }
+
+    .event-types {
+        width: 100%;
+
+        .event-type {
+            padding: 0.25rem 0;
+            height: 1.6rem;
+            margin: 1px;
+            line-height: 1rem;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .btn-set {
+            color: $gray-700;
+            background-color: $white;
+            border-color: $gray-700;
+        }
+        .btn-unset {
+            color: $white;
+            background-color: $gray-700;
+            border-color: $gray-700;
+        }
+    }
 }

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { TraceEvent } from '../tracing/tracePacketEvents';
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
@@ -25,15 +26,6 @@ import { processor as revisionIdentification } from './commandProcessors/revisio
 import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
-
-export interface Packet {
-    packet_data: Uint8Array;
-    format: string;
-    timestamp?: {
-        resolution?: string;
-        value?: number;
-    };
-}
 
 export interface Processor<VM> {
     command: string;
@@ -100,8 +92,8 @@ const getAndResetRequestType = () => {
     return requestTypeCopy;
 };
 
-export const convert = (packet: Packet, state: State): State => {
-    if (packet.format !== 'at') {
+export const convert = (packet: TraceEvent, state: State): State => {
+    if (packet.format !== 'AT') {
         return state;
     }
 

@@ -4,51 +4,26 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { convert, initialState } from '../../features/at';
-import { setAT } from '../../features/at/atSlice';
-import { getTracePackets } from '../../features/tracing/traceSlice';
-import Device from './Cards/Device';
-import LTENetwork from './Cards/LTENetwork';
-import Modem from './Cards/Modem';
-import Sim from './Cards/Sim';
-import { Chart } from './Chart/Chart';
-import { getSelectedTime } from './Chart/chartSlice';
+import DashboardCards from './Cards';
+import { getMode } from './Chart/chartSlice';
+import EventChart from './Chart/EventChart';
+import TimeChart from './Chart/TimeChart';
 
 import './Dashboard.scss';
 
 const Dashboard = () => {
-    const timestamp = useSelector(getSelectedTime);
-    const packets = useSelector(getTracePackets);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        const newState = packets
-            .filter(packet => (packet.timestamp?.value ?? 0) < timestamp * 1000)
-            .reduce(
-                (current, packet) => ({
-                    ...current,
-                    ...convert(packet, current),
-                }),
-                initialState()
-            );
-        dispatch(setAT(newState));
-    }, [dispatch, packets, timestamp]);
-
+    const mode = useSelector(getMode);
     return (
         <div className="events-container">
-            <div className="cards-container">
-                <Device />
-                <Sim />
-                <LTENetwork />
-                <Modem />
-            </div>
+            <DashboardCards />
 
             <div>
                 <div id="tooltip" />
-                <Chart packets={packets} />
+                {mode === 'Event' && <EventChart />}
+                {mode === 'Time' && <TimeChart />}
             </div>
         </div>
     );
