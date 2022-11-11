@@ -4,49 +4,42 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import 'chartjs-adapter-date-fns';
-
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { Scatter } from 'react-chartjs-2';
 // eslint-disable-next-line import/no-unresolved
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    CategoryScale,
     Chart as ChartJS,
     ChartData,
     ChartOptions,
     Legend,
     LinearScale,
-    LineElement,
     PointElement,
-    TimeScale,
-    TimeSeriesScale,
     Title,
     Tooltip,
 } from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
-import { colors as sharedColors, Toggle } from 'pc-nrfconnect-shared';
+import { colors as sharedColors } from 'pc-nrfconnect-shared';
 
-import { Packet } from '../../../features/at';
-import { getIsTracing } from '../../../features/tracing/traceSlice';
-import { setSelectedTime } from './chartSlice';
-import { selectTimePlugin } from './selectTimePlugin';
+import { EVENT_TYPES } from '../../../features/tracing/formats';
+import {
+    TraceEvent,
+    tracePacketEvents,
+} from '../../../features/tracing/tracePacketEvents';
+import {
+    getLive,
+    getTraceEventFilter,
+    setLive,
+    setSelectedTime,
+} from './chartSlice';
+import panZoomPlugin from './panZoomPlugin';
+import { defaultOptions } from './state';
+import TimeSpanDeltaLine from './TimeSpanDeltaLine';
 import { PacketTooltip } from './Tooltip';
 
-ChartJS.register(
-    LinearScale,
-    CategoryScale,
-    TimeScale,
-    TimeSeriesScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    zoomPlugin
-);
+ChartJS.register(LinearScale, PointElement, Title, Tooltip, Legend);
 
 const colors = [
     sharedColors.primary,
@@ -61,60 +54,122 @@ const colors = [
     sharedColors.pink,
 ];
 
-const formats = ['AT', 'POWER', 'RRC', 'NAS', 'IP', 'OTHER'] as const;
-
-const formatToLabel = (format: string): typeof formats[number] => {
-    if (format.startsWith('lte_rrc')) return 'RRC';
-    if (format === 'at') return 'AT';
-    if (format.startsWith('nas')) return 'NAS';
-    if (format === 'ip') return 'IP';
-    if (format === 'ope') return 'POWER';
-
-    return 'OTHER';
+const datasets = {
+    datasets: [
+        {
+            data: [],
+            pointBackgroundColor: (ctx: { raw: { event: TraceEvent } }) =>
+                ctx.raw?.event
+                    ? colors[
+                          EVENT_TYPES.findIndex(
+                              type => type === ctx.raw.event.format
+                          )
+                      ]
+                    : undefined,
+            pointRadius: 6,
+            pointHoverRadius: 6,
+            pointHoverBorderWidth: 0,
+            pointBorderWidth: 0,
+            pointHoverBackgroundColor: 'white',
+        },
+    ],
 };
 
-export const Chart = ({ packets }: { packets: Packet[] }) => {
+export default () => {
     const dispatch = useDispatch();
-    const [xScaleType, setXScaleType] = useState<'time' | 'timeseries'>(
-        'timeseries'
-    );
     const chart = useRef<ChartJSOrUndefined<'scatter'>>();
-    const isTracing = useSelector(getIsTracing);
+    const traceEventFilter = useSelector(getTraceEventFilter);
+    const isLive = useSelector(getLive);
+    const [range, setRange] = useState(defaultOptions().currentRange);
+    const [chartArea, setChartCanvas] = useState(chart.current?.chartArea);
 
     useEffect(() => {
-        if (chart.current && isTracing) {
-            chart.current.reset();
-            chart.current.resetZoom();
-        }
-    }, [isTracing]);
+        const handler = (packets: TraceEvent[]) => {
+            chart.current?.addData(packets);
+        };
+
+        tracePacketEvents.on('new-packets', handler);
+
+        return () => {
+            tracePacketEvents.removeListener('new-packets', handler);
+        };
+    }, [traceEventFilter]);
+
+    useEffect(() => {
+        const handler = () => {
+            chart.current?.resetChart();
+        };
+
+        tracePacketEvents.on('start-process', handler);
+
+        return () => {
+            tracePacketEvents.removeListener('start-process', handler);
+        };
+    });
+
+    useEffect(() => {
+        chart.current?.setLive(isLive);
+    }, [isLive]);
 
     const options: ChartOptions<'scatter'> = useMemo(
         () => ({
+            animation: false,
             maintainAspectRatio: false,
             responsive: true,
+            parsing: false,
+            normalized: true,
+            onResize: c => {
+                setTimeout(() => setChartCanvas(c.chartArea));
+            },
+
+            scales: {
+                y: {
+                    display: true,
+                    ticks: {
+                        callback: tickValue =>
+                            tickValue >= 0 &&
+                            Math.ceil(tickValue as number) === tickValue
+                                ? traceEventFilter[tickValue]
+                                : undefined,
+                        stepSize: 0.5,
+                    },
+                    grid: {
+                        display: true,
+                        offset: true,
+                        drawTicks: false,
+                    },
+                    suggestedMin: -0.5,
+                    suggestedMax: traceEventFilter.length - 0.5,
+                },
+                x: {
+                    type: 'linear',
+                    afterFit: scale => {
+                        scale.paddingRight = 30;
+                    },
+                    grid: {
+                        drawBorder: false,
+                        drawTicks: false,
+                        display: false,
+                        tickLength: 0,
+                    },
+                    ticks: {
+                        display: false,
+                    },
+                },
+            },
+
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                 },
 
-                zoom: {
-                    zoom: {
-                        wheel: {
-                            enabled: true,
-                        },
-                        mode: 'x',
+                panZoom: {
+                    onLiveChanged: live => dispatch(setLive(live)),
+                    onRangeChanged: r => {
+                        dispatch(setSelectedTime(r.max));
+                        setRange(r);
                     },
-                    pan: {
-                        enabled: true,
-                        modifierKey: 'ctrl',
-                        mode: 'x',
-                    },
-                },
-
-                selectTime: {
-                    updateTime(time) {
-                        dispatch(setSelectedTime(time));
-                    },
+                    traceEventFilter,
                 },
 
                 tooltip: {
@@ -139,89 +194,27 @@ export const Chart = ({ packets }: { packets: Packet[] }) => {
                     },
                 },
             },
-
-            scales: {
-                y: {
-                    display: true,
-                    ticks: {
-                        callback: () => undefined,
-                    },
-                    grid: { display: false },
-                    suggestedMin: -1,
-                    suggestedMax: formats.length,
-                },
-                x: {
-                    type: xScaleType,
-                    ticks: {
-                        sampleSize: 50,
-                        autoSkip: true,
-                        autoSkipPadding: 50,
-                        maxRotation: 0,
-                    },
-                },
-            },
         }),
-        [dispatch, xScaleType]
+        [dispatch, traceEventFilter]
     );
 
-    const events = packets.map(event => ({
-        x: (event.timestamp?.value ?? 0) / 1000,
-        y: formats.indexOf(formatToLabel(event.format)),
-        event,
-    }));
-
-    const datasets: typeof data.datasets = formats.map((format, index) => ({
-        label: format,
-        data: events.filter(
-            event => formatToLabel(event.event.format) === format
-        ),
-        borderColor: colors[index],
-        backgroundColor: colors[index],
-
-        pointRadius: 6,
-        pointHoverRadius: 6,
-        pointHoverBorderWidth: 0,
-        pointBorderWidth: 0,
-        pointHoverBackgroundColor: 'white',
-    }));
-
-    const data: ChartData<'scatter'> = {
-        datasets,
-    };
-
-    const plugins = [selectTimePlugin];
     return (
         <>
             <div
-                className="d-flex flex-row justify-content-end"
-                style={{ paddingRight: '0.5rem' }}
+                style={{
+                    height: `${
+                        30 + (170 / 7) * (traceEventFilter.length + 2)
+                    }px`,
+                }}
             >
-                <Toggle
-                    label="LIVE"
-                    isToggled
-                    onToggle={() => {
-                        chart.current?.resetZoom();
-                    }}
-                />
-                <div style={{ width: '24px' }} />
-                <Toggle
-                    label="TIMSERIES"
-                    isToggled={xScaleType === 'timeseries'}
-                    onToggle={() =>
-                        setXScaleType(
-                            xScaleType === 'time' ? 'timeseries' : 'time'
-                        )
-                    }
-                />
-            </div>
-            <div style={{ height: '200px' }}>
                 <Scatter
                     ref={chart}
                     options={options}
-                    data={data}
-                    plugins={plugins}
+                    data={datasets as ChartData<'scatter'>}
+                    plugins={[panZoomPlugin]}
                 />
             </div>
+            <TimeSpanDeltaLine range={range} chartArea={chartArea} />
         </>
     );
 };

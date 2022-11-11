@@ -11,7 +11,7 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": "^3.12.0"
+        "nrfconnect": "^3.13.0"
     },
     "main": "dist/bundle.js",
     "files": [
@@ -26,7 +26,7 @@
         "build:dev": "run-esbuild",
         "build:prod": "run-esbuild --prod",
         "test": "jest",
-        "check": "run-p --silent --continue-on-error --print-label 'check:*'",
+        "check": "run-p --silent --continue-on-error --print-label \"check:*\"",
         "check:app": "check-app-properties",
         "check:lint": "eslint --color .",
         "check:types": "check-for-typescript tsc --noEmit --pretty",
@@ -39,9 +39,8 @@
         "@types/redux-mock-store": "^1.0.2",
         "ansi-colors": "^4.1.1",
         "ansi-escapes": "^4.3.1",
-        "chart.js": "^3.9.1",
+        "chart.js": "^4.0.1",
         "chartjs-adapter-date-fns": "^2.0.0",
-        "chartjs-plugin-zoom": "^1.2.1",
         "check-disk-space": "^2.1.0",
         "dangerously-set-html-content": "^1.0.9",
         "ify-loader": "^1.1.0",
@@ -50,7 +49,7 @@
         "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
         "plotly.js": "^2.8.3",
         "pretty-bytes": "^5.6.0",
-        "react-chartjs-2": "^4.3.1",
+        "react-chartjs-2": "^5.0.1",
         "redux-mock-store": "^1.5.4",
         "xterm-addon-fit": "^0.5.0",
         "xterm-for-react": "^1.0.4"

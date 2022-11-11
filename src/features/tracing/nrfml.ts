@@ -14,7 +14,6 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import type { TAction, TDispatch } from '../../utils/thunk';
-import { Packet } from '../at';
 import { OnlinePowerEstimatorParams } from '../powerEstimation/onlinePowerEstimator';
 import {
     resetParams as resetPowerEstimationParams,
@@ -28,7 +27,11 @@ import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
-    addTracePackets,
+    notifyListeners,
+    Packet,
+    tracePacketEvents,
+} from './tracePacketEvents';
+import {
     getManualDbFilePath,
     getSerialPort,
     setTraceIsStarted,
@@ -175,10 +178,13 @@ export const startTrace =
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
-            dispatch(addTracePackets(packets));
-            packets.splice(0, packets.length);
+            if (packets.length > 0) {
+                notifyListeners(packets);
+                packets.splice(0, packets.length);
+            }
         }, 250);
 
+        tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
@@ -228,11 +234,17 @@ export const readRawTrace =
         const source: SourceFormat = { type: 'file', path: sourceFile };
         const sinks: TraceFormat[] = ['opp'];
         const packets: Packet[] = [];
+
+        tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),
-            () => {
-                logger.info(`Completed reading trace from ${sourceFile}`);
-                dispatch(addTracePackets(packets));
+            event => {
+                if (event)
+                    logger.error(
+                        `Error when reading trace from ${sourceFile}: ${event.message}`
+                    );
+                else logger.info(`Completed reading trace from ${sourceFile}`);
+                notifyListeners(packets);
             },
             () => {},
             data => {
@@ -252,22 +264,20 @@ const addPowerEstimationPackets =
         if (powerEstimationData) {
             dispatch(setPowerEstimationData(powerEstimationData));
 
-            dispatch(
-                addTracePackets([
-                    {
-                        format: 'ope',
-                        // @ts-expect-error will work for now
-                        packet_data: JSON.stringify(
-                            powerEstimationData,
-                            undefined,
-                            4
-                        ),
-                        timestamp: {
-                            value: Date.now() * 1000,
-                        },
+            notifyListeners([
+                {
+                    format: 'ope',
+                    // @ts-expect-error will work for now
+                    packet_data: JSON.stringify(
+                        powerEstimationData,
+                        undefined,
+                        4
+                    ),
+                    timestamp: {
+                        value: Date.now() * 1000,
                     },
-                ])
-            );
+                },
+            ]);
         }
     };
 
