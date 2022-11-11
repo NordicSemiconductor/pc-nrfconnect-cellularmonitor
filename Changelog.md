@@ -6,6 +6,7 @@
 -   `Event Chart` component which shows trace events in time and updates
     `Dashboard` when selecting timestamps.
 -   Load raw trace files to view in `Dashboard` and `Event Chart`.
+
 ## 0.3.6 - 2022-11-11
 
 ### Added
