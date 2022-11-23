@@ -55,7 +55,7 @@
         flex-wrap: wrap;
         justify-content: space-between;
         padding: 2px 0;
-        
+
         border-bottom: 1px solid $gray-100;
 
         p {
@@ -65,10 +65,11 @@
 
         .card-key {
             font-weight: bold;
+            color: $gray-900;
         }
 
         .card-value {
-            color: $gray-400;
+            color: $gray-900;
         }
     }
 }
