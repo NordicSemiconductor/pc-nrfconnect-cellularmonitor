@@ -35,13 +35,17 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
         value: port as string,
     }));
 
+    const selectedItem = dropdownItems.find(
+        item => item.value === selectedSerialPort
+    ) ?? { label: '', value: '' };
+
     return (
         <Group heading="Serialport trace capture">
             <div className="serialport-selection">
                 <Dropdown
                     disabled={disabled}
                     onSelect={updateSerialPort}
-                    defaultIndex={availablePorts.indexOf(selectedSerialPort)}
+                    selectedItem={selectedItem}
                     items={dropdownItems}
                 />
             </div>
