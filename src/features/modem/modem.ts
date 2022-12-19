@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { ReadlineParser } from '@serialport/parser-readline';
 import EventEmitter from 'events';
-import SerialPort, { parsers } from 'serialport';
+import { SerialPort } from 'serialport';
 
 export type Response = string[];
 
@@ -51,7 +52,7 @@ export const createModem = (serialPort: SerialPort) => {
     const eventEmitter = new EventEmitter();
     let waitingForResponse = false;
 
-    const lineSplitter = new parsers.Readline({ delimiter: DELIMITER });
+    const lineSplitter = new ReadlineParser({ delimiter: DELIMITER });
     const handleLine = createHandleLine(eventEmitter);
     serialPort
         .pipe(lineSplitter)
