@@ -14,7 +14,7 @@ steps:
           npm ci
           npm run check
           npm run test
-          npm run build
+          npm run build:prod
           npm pack
       displayName: 'Build and pack'
     - bash: |
