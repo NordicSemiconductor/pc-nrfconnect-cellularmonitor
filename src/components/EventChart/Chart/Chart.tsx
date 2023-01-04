@@ -28,6 +28,7 @@ import {
     TraceEvent,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
+import chartAreaBorderPlugin from './chartAreaBorderPlugin';
 import {
     getLive,
     getTraceEventFilter,
@@ -124,7 +125,6 @@ export default () => {
 
             scales: {
                 y: {
-                    display: true,
                     ticks: {
                         callback: tickValue =>
                             tickValue >= 0 &&
@@ -137,6 +137,20 @@ export default () => {
                         display: true,
                         offset: true,
                         drawTicks: false,
+                        lineWidth: tick => {
+                            // remove top and bottom offset gridline to avoid overlap with chartAreaBorderPlugin
+                            if (
+                                // Chartjs has incorrect typings
+                                (tick as unknown as { type: string }).type ===
+                                    'scale' ||
+                                tick.index === 0
+                            )
+                                return 0;
+                            return 1;
+                        },
+                    },
+                    border: {
+                        display: false,
                     },
                     suggestedMin: -0.5,
                     suggestedMax: traceEventFilter.length - 0.5,
@@ -144,13 +158,13 @@ export default () => {
                 x: {
                     type: 'linear',
                     afterFit: scale => {
-                        scale.paddingRight = 30;
+                        scale.paddingRight = 16;
                     },
                     grid: {
-                        drawBorder: false,
-                        drawTicks: false,
                         display: false,
-                        tickLength: 0,
+                    },
+                    border: {
+                        display: false,
                     },
                     ticks: {
                         display: false,
@@ -211,7 +225,7 @@ export default () => {
                     ref={chart}
                     options={options}
                     data={datasets as ChartData<'scatter'>}
-                    plugins={[panZoomPlugin]}
+                    plugins={[panZoomPlugin, chartAreaBorderPlugin]}
                 />
             </div>
             <TimeSpanDeltaLine range={range} chartArea={chartArea} />

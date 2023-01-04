@@ -182,6 +182,8 @@ const initChart = (chart: Chart) => {
     options.onLiveChanged(options.live);
 };
 
+const liveIntervalCallback = () => {};
+
 export default {
     id: 'panZoom',
     start(chart: Chart) {
