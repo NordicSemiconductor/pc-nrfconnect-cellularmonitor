@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
+import { getAT } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>

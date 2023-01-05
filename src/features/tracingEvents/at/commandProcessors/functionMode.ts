@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Processor } from '..';
+import type { Processor } from '../..';
 import { RequestType } from '../parseAT';
 
 export enum FunctionalModeSetter {

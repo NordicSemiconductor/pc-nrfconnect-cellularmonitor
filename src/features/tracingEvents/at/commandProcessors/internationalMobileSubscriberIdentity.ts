@@ -4,20 +4,20 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Processor } from '..';
+import type { Processor } from '../..';
 
 type ViewModel = {
-    modemUUID?: string;
+    imsi?: string;
 };
 
 export const processor: Processor<ViewModel> = {
-    command: '%XMODEMUUID',
+    command: '+CIMI',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/modemuuid.html',
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',
     initialState: () => ({}),
     onResponse: packet => {
         if (packet.status === 'OK') {
-            return { modemUUID: packet.payload };
+            return { imsi: packet.payload };
         }
         return {};
     },

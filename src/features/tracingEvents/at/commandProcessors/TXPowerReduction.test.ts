@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { TraceEvent } from '../../../tracing/tracePacketEvents';
 import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
 
 const packets = [

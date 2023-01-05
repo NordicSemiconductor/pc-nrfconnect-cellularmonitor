@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../tracing/tracePacketEvents';
-import { convert, initialState, State } from '.';
+import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { convert, initialState, State } from '..';
 
 const encoder = new TextEncoder();
 const encode = (txt: string) => Buffer.from(encoder.encode(txt));

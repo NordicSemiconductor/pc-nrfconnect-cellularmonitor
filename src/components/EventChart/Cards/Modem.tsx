@@ -7,8 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
-import { Mode } from '../../../features/at/commandProcessors/TXPowerReduction';
+import { getAT } from '../../../features/tracingEvents/dashboardSlice';
+import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>

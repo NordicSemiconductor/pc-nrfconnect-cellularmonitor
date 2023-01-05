@@ -7,15 +7,39 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
-import { networkStatus } from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
+import { RRCState } from '../../../features/tracingEvents';
+import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
+import { getAT } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
+
+type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
+
+const getRRCStateColor = (state: RRCState | undefined): RRCStateFlag => {
+    if (state === 'rrcConnectionSetup') {
+        return '🟡';
+    }
+
+    if (state === 'rrcConnectionSetupRequest') {
+        return '🔵';
+    }
+
+    if (state === 'rrcConnectionRelease') {
+        return '🟡';
+    }
+
+    if (state === 'rrcConnectionSetupComplete') {
+        return '🟢';
+    }
+
+    // return '🔴';
+};
 
 export default () => {
     const {
         signalQuality: { rsrp_decibel: RSRP, rsrq_decibel: RSRQ },
         networkRegistrationStatus,
         activityStatus,
+        rrcState,
     } = useSelector(getAT);
 
     const fields = useMemo(() => {
@@ -31,7 +55,7 @@ export default () => {
         }
 
         return {
-            'RRC STAT': 'Not Implemented',
+            'RRC STATE': getRRCStateColor(rrcState),
             PCI: 'Not Implemented',
             SNR: 'Not Implemented',
             MCC: 'Not Implemented',
@@ -52,7 +76,7 @@ export default () => {
             'ACTIVITY STATUS': activityStatus ?? 'Unknown',
             STATUS: status,
         };
-    }, [networkRegistrationStatus, RSRP, RSRQ, activityStatus]);
+    }, [networkRegistrationStatus, RSRP, RSRQ, activityStatus, rrcState]);
 
     return (
         <DashboardCard

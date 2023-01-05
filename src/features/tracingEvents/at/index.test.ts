@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { events, notifyListeners } from '../tracing/tracePacketEvents';
-import { convert, initialState, State } from '.';
+import { events, notifyListeners } from '../../tracing/tracePacketEvents';
+import { convert, initialState, State } from '..';
 import { rawTraceData } from './traceSample';
 
 const expectedState: State = {

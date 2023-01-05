@@ -12,6 +12,7 @@ import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     setManualDbFilePath as setPersistedManualDbFilePath,
 } from '../../utils/store';
+import { Packet } from '../tracingEvents';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 

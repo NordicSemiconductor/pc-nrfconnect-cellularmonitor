@@ -19,10 +19,16 @@ import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
 } from '../powerEstimation/powerEstimationSlice';
+import { Packet } from '../tracingEvents';
+import { setRRCState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
+import type {
+    InterpretedJSONPacket,
+    interpretedJSONPacket,
+} from './packetTypes';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
@@ -137,6 +143,7 @@ export const extractPowerData =
                 gotPowerEstimationData = true;
                 dispatch(setPowerEstimationData(powerEstimationData));
                 dispatch(stopTrace(taskId));
+                console.log(jsonData);
             }
         );
         dispatch(
@@ -169,6 +176,10 @@ export const startTrace =
 
         const selectedTsharkPath = getTsharkPath(getState());
         if (findTshark(selectedTsharkPath) && !sinks.includes('opp')) {
+            sinks.push('opp');
+        }
+
+        if (!sinks.includes('opp')) {
             sinks.push('opp');
         }
 
@@ -214,9 +225,35 @@ export const startTrace =
             data => {
                 if (data.format !== 'modem_trace') {
                     packets.push(data as Packet);
+                    // if (data.format !== 'ip' && data.format !== 'at') {
+                    //     if (Object.keys(data).includes('interpreted_json')) {
+                    //         const interpretedJson = data.interpreted_json;
+                    //         console.log(
+                    //             `${data.format}: ${JSON.stringify(
+                    //                 interpretedJson
+                    //             )}`
+                    //         );
+
+                    //         if (
+                    //             Object.keys(interpretedJson).includes('lte-rrc')
+                    //         ) {
+                    //             const rrcState =
+                    //                 interpretedJson['lte-rrc'].connection_state;
+                    //             if (rrcState) {
+                    //                 console.log(
+                    //                     `Found lte-rrc state: ${rrcState}`
+                    //                 );
+                    //                 dispatch(setRRCState(rrcState));
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             },
-            addPowerEstimationPackets(dispatch)
+            data => {
+                console.log(data);
+                addPowerEstimationPackets(dispatch)(data);
+            }
         );
         logger.info('Started tracefile');
         dispatch(
@@ -290,3 +327,9 @@ export const stopTrace =
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
+
+/*
+static const std::unordered_map rrc_conncection_state_map = 
+{{"lte-rrc.rrcConnectionSetup_","rrcConnectionSetup"},{"lte-rrc.rrcConnectionSetupComplete_","rrcConnectionSetupComplete"},{"lte-rrc.rrcConnectionRequest_", "rrcConnectionRequest"},{"lte-rrc.rrcConnectionRelease_", "rrcConnectionRelease"}};
+
+*/

@@ -4,28 +4,43 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../tracing/tracePacketEvents';
-import { processor as currentBand } from './commandProcessors/currentBand';
-import { processor as dataProfile } from './commandProcessors/dataProfile';
-import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
-import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
-import { processor as functionMode } from './commandProcessors/functionMode';
-import { processor as hardwareVersion } from './commandProcessors/hardwareVersion';
-import { processor as iccid } from './commandProcessors/iccid';
-import { processor as internationalMobileSubscriberIdentity } from './commandProcessors/internationalMobileSubscriberIdentity';
-import { processor as manufacturerIdentification } from './commandProcessors/manufacturerIdentification';
-import { processor as modemParameters } from './commandProcessors/modemParameters';
-import { processor as modemUUID } from './commandProcessors/modemUUID';
-import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
-import { processor as networkRegistrationStatus } from './commandProcessors/networkRegistrationStatusNotification';
-import { processor as periodicTAU } from './commandProcessors/periodicTAU';
-import { processor as pinCode } from './commandProcessors/pinCode';
-import { processor as pinRetries } from './commandProcessors/pinRetries';
-import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
-import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
-import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
-import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
-import { parseAT, ParsedPacket, RequestType } from './parseAT';
+import { processor as currentBand } from './at/commandProcessors/currentBand';
+import { processor as dataProfile } from './at/commandProcessors/dataProfile';
+import { processor as activityStatus } from './at/commandProcessors/deviceActivityStatus';
+import { processor as extendedSignalQuality } from './at/commandProcessors/extendedSignalQuality';
+import { processor as functionMode } from './at/commandProcessors/functionMode';
+import { processor as hardwareVersion } from './at/commandProcessors/hardwareVersion';
+import { processor as iccid } from './at/commandProcessors/iccid';
+import { processor as internationalMobileSubscriberIdentity } from './at/commandProcessors/internationalMobileSubscriberIdentity';
+import { processor as manufacturerIdentification } from './at/commandProcessors/manufacturerIdentification';
+import { processor as modemParameters } from './at/commandProcessors/modemParameters';
+import { processor as modemUUID } from './at/commandProcessors/modemUUID';
+import { processor as modeOfOperation } from './at/commandProcessors/modeOfOperation';
+import { processor as networkRegistrationStatus } from './at/commandProcessors/networkRegistrationStatusNotification';
+import { processor as periodicTAU } from './at/commandProcessors/periodicTAU';
+import { processor as pinCode } from './at/commandProcessors/pinCode';
+import { processor as pinRetries } from './at/commandProcessors/pinRetries';
+import { processor as productSerialNumber } from './at/commandProcessors/productSerialNumberId';
+import { processor as revisionIdentification } from './at/commandProcessors/revisionIdentification';
+import { processor as signalQualityNotification } from './at/commandProcessors/signalQualityNotification';
+import { processor as TXPowerReduction } from './at/commandProcessors/TXPowerReduction';
+import { parseAT, ParsedPacket, RequestType } from './at/parseAT';
+
+export type RRCState =
+    | 'rrcConnectionSetupRequest'
+    | 'rrcConnectionSetup'
+    | 'rrcConnectionSetupComplete'
+    | 'rrcConnectionRelease';
+
+export interface Packet {
+    packet_data: Uint8Array;
+    format: string;
+    timestamp?: {
+        resolution?: string;
+        value?: number;
+    };
+    interpreted_json?: unknown;
+}
 
 export interface Processor<VM> {
     command: string;
@@ -48,7 +63,7 @@ type UnionToIntersection<T> = {
 
 // To replace < | undefined> types with proper optional ? types, add this flag to tsconfig.json "exactOptionalPropertyTypes": true
 export type State = UnionToIntersection<
-    ExtractViewModel<typeof processors[number]>
+    ExtractViewModel<typeof processors[number]> & { rrcState?: RRCState }
 >;
 
 const processors = [
