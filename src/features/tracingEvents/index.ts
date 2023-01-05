@@ -4,92 +4,60 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { processor as currentBand } from './at/commandProcessors/currentBand';
-import { processor as dataProfile } from './at/commandProcessors/dataProfile';
-import { processor as activityStatus } from './at/commandProcessors/deviceActivityStatus';
-import { processor as extendedSignalQuality } from './at/commandProcessors/extendedSignalQuality';
-import { processor as functionMode } from './at/commandProcessors/functionMode';
-import { processor as hardwareVersion } from './at/commandProcessors/hardwareVersion';
-import { processor as iccid } from './at/commandProcessors/iccid';
-import { processor as internationalMobileSubscriberIdentity } from './at/commandProcessors/internationalMobileSubscriberIdentity';
-import { processor as manufacturerIdentification } from './at/commandProcessors/manufacturerIdentification';
-import { processor as modemParameters } from './at/commandProcessors/modemParameters';
-import { processor as modemUUID } from './at/commandProcessors/modemUUID';
-import { processor as modeOfOperation } from './at/commandProcessors/modeOfOperation';
-import { processor as networkRegistrationStatus } from './at/commandProcessors/networkRegistrationStatusNotification';
-import { processor as periodicTAU } from './at/commandProcessors/periodicTAU';
-import { processor as pinCode } from './at/commandProcessors/pinCode';
-import { processor as pinRetries } from './at/commandProcessors/pinRetries';
-import { processor as productSerialNumber } from './at/commandProcessors/productSerialNumberId';
-import { processor as revisionIdentification } from './at/commandProcessors/revisionIdentification';
-import { processor as signalQualityNotification } from './at/commandProcessors/signalQualityNotification';
-import { processor as TXPowerReduction } from './at/commandProcessors/TXPowerReduction';
+import type { TraceEvent } from '../tracing/tracePacketEvents';
+import * as at from './at';
 import { parseAT, ParsedPacket, RequestType } from './at/parseAT';
+import type { State } from './types';
 
-export type RRCState =
-    | 'rrcConnectionSetupRequest'
-    | 'rrcConnectionSetup'
-    | 'rrcConnectionSetupComplete'
-    | 'rrcConnectionRelease';
-
-export interface Packet {
-    packet_data: Uint8Array;
-    format: string;
-    timestamp?: {
-        resolution?: string;
-        value?: number;
-    };
-    interpreted_json?: unknown;
-}
-
-export interface Processor<VM> {
+export interface Processor {
     command: string;
     documentation: string;
-    initialState: () => VM;
+    // initialState: () => VM;
     onResponse: (
         packet: ParsedPacket,
         requestType?: RequestType
-    ) => Partial<VM>;
-    onRequest?: (packet: ParsedPacket) => Partial<VM>;
-    onNotification?: (packet: ParsedPacket) => Partial<VM>;
+    ) => Partial<State>;
+    onRequest?: (packet: ParsedPacket) => Partial<State>;
+    onNotification?: (packet: ParsedPacket) => Partial<State>;
 }
 
-type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
+// type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
 
-type GetKeys<T> = T extends T ? keyof T : never;
-type UnionToIntersection<T> = {
-    [K in GetKeys<T>]: T extends Partial<Record<K, unknown>> ? T[K] : never;
-};
+// type GetKeys<T> = T extends T ? keyof T : never;
+// type UnionToIntersection<T> = {
+//     [K in GetKeys<T>]: T extends Partial<Record<K, unknown>> ? T[K] : never;
+// };
 
 // To replace < | undefined> types with proper optional ? types, add this flag to tsconfig.json "exactOptionalPropertyTypes": true
-export type State = UnionToIntersection<
-    ExtractViewModel<typeof processors[number]> & { rrcState?: RRCState }
->;
+
+// UnionToIntersection<
+//     ExtractViewModel<typeof processors[number]> & { rrcState?: RRCState }
+// >;
 
 const processors = [
-    functionMode,
-    currentBand,
-    modeOfOperation,
-    signalQualityNotification,
-    periodicTAU,
-    modemParameters,
-    pinCode,
-    pinRetries,
-    internationalMobileSubscriberIdentity,
-    manufacturerIdentification,
-    iccid,
-    revisionIdentification,
-    productSerialNumber,
-    hardwareVersion,
-    modemUUID,
-    dataProfile,
-    TXPowerReduction,
-    extendedSignalQuality,
-    activityStatus,
-    networkRegistrationStatus,
+    at.functionMode,
+    at.currentBand,
+    at.modeOfOperation,
+    at.signalQualityNotification,
+    at.periodicTAU,
+    at.modemParameters,
+    at.pinCode,
+    at.pinRetries,
+    at.internationalMobileSubscriberIdentity,
+    at.manufacturerIdentification,
+    at.iccid,
+    at.revisionIdentification,
+    at.productSerialNumber,
+    at.hardwareVersion,
+    at.modemUUID,
+    at.dataProfile,
+    at.TXPowerReduction,
+    at.extendedSignalQuality,
+    at.activityStatus,
+    at.networkRegistrationStatus,
 ] as const;
 
-// Typescript challange! Think it's related to the one above.
+// Typescript challenge! Think it's related to the one above.
 export const initialState = (): State =>
     processors.reduce(
         (state, processor) => ({ ...state, ...processor.initialState() }),
@@ -108,10 +76,26 @@ const getAndResetRequestType = () => {
 };
 
 export const convert = (packet: TraceEvent, state: State): State => {
-    if (packet.format !== 'AT') {
-        return state;
+    if (packet.format === 'AT') {
+        return convertAtPacket(packet, state);
     }
 
+    // if (packet.format === 'nas-eps') {
+    //     if (packet.interpreted_json) {
+    //         console.log(packet);
+    //     }
+    // }
+
+    if (/lte-rrc.*/.test(packet.format)) {
+        if (packet.interpreted_json) {
+            console.log(packet);
+        }
+    }
+
+    return state;
+};
+
+const convertAtPacket = (packet: TraceEvent, state: State) => {
     const parsedPacket = parseAT(packet);
     const { requestType, command } = parsedPacket;
 
