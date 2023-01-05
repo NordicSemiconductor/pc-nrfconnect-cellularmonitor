@@ -1,3 +1,9 @@
+## 0.3.7 - Unreleased
+
+### Changed
+
+-   Updated to be compatible with launcher v4.0.0.
+
 ## 0.3.6 - 2022-11-11
 
 ### Added

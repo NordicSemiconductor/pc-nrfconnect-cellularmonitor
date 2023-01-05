@@ -4,13 +4,40 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import SerialPort from 'serialport';
+import { MockBinding } from '@serialport/binding-mock';
+import { SerialPortStream as MockSerialPortStream } from '@serialport/stream';
+import { SerialPort } from 'serialport';
 
 import { createModem, Modem } from './modem';
 
-const MockBinding = require('@serialport/binding-mock');
+const testPortPath = '/dev/PORT';
+
+jest.mock('serialport', () => {
+    const MockSerialPort = new Proxy(MockSerialPortStream, {
+        construct(Target, args) {
+            const [options] = args;
+            return new Target({
+                path: testPortPath,
+                binding: MockBinding,
+                ...options,
+            });
+        },
+    });
+    return {
+        SerialPort: MockSerialPort,
+    };
+});
 
 describe('modem', () => {
+    beforeEach(() => {
+        // Cleanup between each test.
+        MockBinding.reset();
+        MockBinding.createPort(testPortPath, {
+            echo: true,
+            record: true,
+        });
+    });
+
     it('emits a line event for unexpected data from the serial port', done => {
         const [modem, serialPort] = initialiseModem();
 
@@ -79,13 +106,6 @@ describe('modem', () => {
 // SETUP
 
 function initialiseModem(): [Modem, SerialPort] {
-    SerialPort.Binding = MockBinding;
-    const port = '/dev/PORT';
-    // Create a port and enable echoing of input
-    MockBinding.createPort(port, {
-        echo: true,
-        readyData: Buffer.from([]),
-    });
-    const serialPort = new SerialPort(port);
+    const serialPort = new SerialPort({ path: testPortPath, baudRate: 9600 });
     return [createModem(serialPort), serialPort];
 }

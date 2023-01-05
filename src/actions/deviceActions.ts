@@ -33,6 +33,11 @@ export const openDevice =
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
         const ports = device.serialPorts;
+        if (!ports) {
+            logger.error("Couldn't identify serial port");
+            return;
+        }
+
         if (ports?.length > 0) {
             dispatch(
                 setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
@@ -43,6 +48,7 @@ export const openDevice =
             dispatch(setSerialPort(persistedPath));
             return;
         }
+
         const port = autoSelectPort(ports);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
