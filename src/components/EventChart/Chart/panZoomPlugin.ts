@@ -60,15 +60,15 @@ const initRange = (chart: Chart) => {
 };
 
 const getOffset = (chart: Chart) => {
+    const { resolution } = getState(chart).options;
     const pointRadius = (chart.data.datasets[0] as ChartDataset<'scatter'>)
         .pointRadius;
-    const sumPointRadiusBasePixel =
-        chart.scales.x.getBasePixel() +
-        (typeof pointRadius === 'number' ? pointRadius : 0);
-    const pointRadiusOffset =
-        chart.scales.x.getValueForPixel(sumPointRadiusBasePixel) ??
-        chart.scales.x.min;
-    return pointRadiusOffset - chart.scales.x.min;
+
+    const pixelSize = chart.chartArea.right - chart.chartArea.left;
+    const percDiff =
+        (typeof pointRadius === 'number' ? pointRadius : 0) / pixelSize;
+
+    return percDiff * resolution;
 };
 
 const getMinMaxX = (chart: Chart) => {
@@ -91,6 +91,7 @@ const getMinMaxX = (chart: Chart) => {
         traceEventFilter.includes(e.format)
     )?.timestamp;
 
+    // TODO: How to handle min with offset? Don't want to display negative values, but points should be fully visible.
     return [
         min ?? defaultOptions().currentRange.min,
         max ? max + offset : defaultOptions().currentRange.max,
