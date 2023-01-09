@@ -1,6 +1,10 @@
 import {
+    AccessPointName,
     IPv4Address,
+    IPv6Address,
     Packet,
+    parseCrudePDN as parseRawPDNType,
+    parsePDNType,
     PowerSavingModeEntries,
     PowerSavingModeValues,
     State,
@@ -9,7 +13,16 @@ import {
 } from '../types';
 
 const attachValues = ['0x41', '0x42', '0x43', '0x44'] as const;
-const timers: Timers[] = ['T3324', 'T3402', 'T3412'];
+
+// Just fill in all the values of the Timers type
+const timers: Timers[] = [
+    'T3324',
+    'T3402',
+    'T3412',
+    'T3324_extended',
+    'T3402_extended',
+    'T3412_extended',
+];
 
 export type AttachPacket =
     | AttachRequestPacket
@@ -47,6 +60,7 @@ export type AttachAcceptPacket = {
     pdn?: {
         'gsm_a.len'?: `${number}`;
         'nas_eps.esm.pdn_ipv4'?: IPv4Address;
+        'nas_eps.esm.pdn_ipv6_if_id'?: IPv6Address;
         'nas_eps.esm_pdn_type'?: `${number}`; // Type 1, 2, 3 ... ?
         'nas_eps.spare_bits'?: '0x00'; // Don't know if it's necessary?
     };
@@ -133,10 +147,14 @@ export const nasConverter = (packet: Packet, state: State) => {
 const getKeyOfPacket = (
     packet: AttachPacket,
     lookup: Timers
-): TimerKey | undefined =>
-    Object.keys(packet).find(key => key.includes(lookup)) as
+): TimerKey | undefined => {
+    const predicate = lookup.includes('extended')
+        ? (key: string) => key.includes(lookup)
+        : (key: string) => key.includes(lookup) && !key.includes('extended');
+    return Object.keys(packet).find(key => predicate(key)) as
         | TimerKey
         | undefined;
+};
 
 const getPowerSavingEntriesFromPacket = (packet: AttachPacket) =>
     timers.reduce((previous, lookup) => {
@@ -155,12 +173,39 @@ export const processAttachRequestPacket = (
     },
 });
 
+const parsePDN = (packet: AttachAcceptPacket): AccessPointName => {
+    const pdnObj = packet.pdn;
+
+    let pdnPartial: Partial<AccessPointName> = {};
+    if (pdnObj) {
+        const rawPDNType = parseRawPDNType(
+            packet.pdn?.['nas_eps.esm_pdn_type']
+        );
+        pdnPartial = {
+            rawPDNType,
+            pdnType: parsePDNType(rawPDNType),
+            ipv4: pdnObj['nas_eps.esm.pdn_ipv4'],
+            ipv6Postfix: pdnObj['nas_eps.esm.pdn_ipv6_if_id'],
+        };
+    }
+
+    return {
+        apn: packet.apn,
+        ...pdnPartial,
+    };
+};
+
 export const processAttachAcceptPacket = (
     packet: AttachAcceptPacket
 ): Partial<State> => ({
     powerSavingMode: {
         granted: getPowerSavingEntriesFromPacket(packet),
     },
+    accessPointNames: [parsePDN(packet)],
+    mnc: packet.mnc,
+    mnc_code: packet.mnc_code,
+    mcc: packet.mcc,
+    mcc_code: packet.mcc_code,
 });
 
 // TODO: Must decide if this is needed at all?

@@ -94,24 +94,35 @@ export interface State {
         granted?: PowerSavingModeEntries;
     };
 
-    accessPointNames: {
-        default: AccessPointName;
-        additional: AccessPointName[];
-    };
+    accessPointNames: AccessPointName[];
+
+    mnc: string;
+    mnc_code: number;
+    mcc: string;
+    mcc_code: number;
 }
 
 export interface AccessPointName {
-    apn: string;
-    pdnType: PDNType;
-    pdnTypeRaw: RawPDNType;
-    ipv4: IPv4Address;
-    ipv6: IPv6Address;
-    info: 'IPv4 Only' | 'IPv6 Only';
+    apn?: string;
+    pdnType?: PDNType;
+    rawPDNType?: RawPDNType;
+    ipv4?: IPv4Address;
+    ipv6Postfix?: IPv6Address;
+    ipv6Prefix?: IPv6Address;
+    info?: 'IPv4 Only' | 'IPv6 Only';
 }
 
 // Need to be cast from RawPDNType with parsePDNType function
-type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
-type RawPDNType = '1' | '2' | '3' | '4';
+export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
+export type RawPDNType = '1' | '2' | '3' | '4';
+
+export const parseCrudePDN = (rawPDN: unknown): RawPDNType => {
+    if (rawPDN === '1') return rawPDN;
+    if (rawPDN === '2') return rawPDN;
+    if (rawPDN === '3') return rawPDN;
+    if (rawPDN === '4') return rawPDN;
+    return null as never;
+};
 
 export const parsePDNType = (rawType: RawPDNType): PDNType => {
     if (rawType === '1') return 'IPv4';
@@ -143,4 +154,6 @@ type Binary = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
     | 1}`;
 type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 
-export type Timers = 'T3324' | 'T3402' | 'T3412';
+type T_Keys = 'T3324' | 'T3402' | 'T3412';
+type Extended = '' | '_extended';
+export type Timers = `${T_Keys}${Extended}`;
