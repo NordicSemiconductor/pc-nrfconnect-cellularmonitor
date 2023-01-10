@@ -16,8 +16,12 @@ export interface XAxisRange {
     max: number;
 }
 
+interface ResolutionLimits {
+    min: number;
+    max: number;
+}
 export interface PanPluginOptions extends AnyObject {
-    minResolution?: number;
+    resolutionLimits?: Partial<ResolutionLimits>;
     zoomFactor?: number;
     traceEventFilter: eventType[];
     onLiveChanged?: (live: boolean) => void;
@@ -25,8 +29,10 @@ export interface PanPluginOptions extends AnyObject {
 }
 
 export type InternalPanPluginOptions = Required<PanPluginOptions> & {
+    resolutionLimits: ResolutionLimits;
     live: boolean;
     resolution: number;
+    maxRange: number;
     currentRange: XAxisRange;
 };
 
@@ -40,9 +46,14 @@ const chartStates = new WeakMap<Chart, ChartState>();
 export const defaultOptions = () => ({
     live: true,
     resolution: 20000,
-    minResolution: 1000,
+    resolutionLimits: {
+        min: 1000,
+        // One day in ms
+        max: 86400000,
+    },
     zoomFactor: 1.1,
-    currentRange: { min: 0, max: 20000 },
+    maxRange: 0,
+    currentRange: { min: 0, max: 0 },
     traceEventFilter: [],
     onLiveChanged: () => {},
     onRangeChanged: () => {},

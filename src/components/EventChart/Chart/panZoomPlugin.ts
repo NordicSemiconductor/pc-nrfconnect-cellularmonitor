@@ -312,12 +312,15 @@ export default {
                     : options.resolution * options.zoomFactor; // Zoom out
 
             const [min, max] = getMinMaxX(chart);
-            const fullResolution = max - min;
+            const maxResolution = Math.min(
+                max - min,
+                options.resolutionLimits.max
+            );
 
             newResolution = Math.ceil(
                 Math.max(
-                    options.minResolution,
-                    Math.min(newResolution, fullResolution)
+                    options.resolutionLimits.min,
+                    Math.min(newResolution, maxResolution)
                 )
             );
 
