@@ -97,9 +97,9 @@ export interface State {
     accessPointNames: AccessPointName[];
 
     mnc: string;
-    mnc_code: number;
+    mncCode: number;
     mcc: string;
-    mcc_code: number;
+    mccCode: number;
 }
 
 export interface AccessPointName {

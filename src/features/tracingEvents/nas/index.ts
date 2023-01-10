@@ -1,8 +1,8 @@
+import { TraceEvent } from '../../tracing/tracePacketEvents';
 import {
     AccessPointName,
     IPv4Address,
     IPv6Address,
-    Packet,
     parseCrudePDN as parseRawPDNType,
     parsePDNType,
     PowerSavingModeEntries,
@@ -107,7 +107,7 @@ const assertIsAttachRejectPacket = (
     packet: AttachPacket
 ): packet is AttachRejectPacket => packet.nas_msg_emm_type === '0x44';
 
-export const nasConverter = (packet: Packet, state: State) => {
+export const nasConverter = (packet: TraceEvent, state: State) => {
     if (packet.interpreted_json && 'nas-eps' in packet.interpreted_json) {
         const attach: unknown = packet.interpreted_json['nas-eps'];
         if (assertIsAttachPacket(attach)) {

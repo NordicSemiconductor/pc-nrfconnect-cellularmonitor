@@ -7,6 +7,7 @@
 import type { TraceEvent } from '../tracing/tracePacketEvents';
 import * as at from './at';
 import { parseAT, ParsedPacket, RequestType } from './at/parseAT';
+import { nasConverter } from './nas';
 import type { State } from './types';
 
 export interface Processor {
@@ -80,11 +81,13 @@ export const convert = (packet: TraceEvent, state: State): State => {
         return convertAtPacket(packet, state);
     }
 
-    // if (packet.format === 'nas-eps') {
-    //     if (packet.interpreted_json) {
-    //         console.log(packet);
-    //     }
-    // }
+    if (packet.format === 'NAS') {
+        if (packet.interpreted_json) {
+            const newState = nasConverter(packet, state);
+            return newState;
+        }
+        return state;
+    }
 
     if (/lte-rrc.*/.test(packet.format)) {
         if (packet.interpreted_json) {

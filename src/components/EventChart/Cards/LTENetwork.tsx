@@ -40,6 +40,10 @@ export default () => {
         networkRegistrationStatus,
         activityStatus,
         rrcState,
+        mcc,
+        mccCode,
+        mnc,
+        mncCode,
     } = useSelector(getAT);
 
     const fields = useMemo(() => {
@@ -56,14 +60,16 @@ export default () => {
 
         return {
             'RRC STATE': getRRCStateColor(rrcState),
+            MNC: mnc ?? 'Unknown',
+            'MNC Code': mncCode ?? 'Unknown',
+            MCC: mcc ?? 'Unknown',
+            'MCC Code': mccCode ?? 'Unknown',
+            'CELL ID': 'Not Implemented',
             PCI: 'Not Implemented',
             SNR: 'Not Implemented',
-            MCC: 'Not Implemented',
-            'CELL ID': 'Not Implemented',
             'RRC STATE CHANGE CAUSE': 'Not Implemented',
             EARFCN: 'Not Implemented',
             'PUCCH TX POWER': 'Not Implemented',
-            MNC: 'Not Implemented',
             'NEIGHBOR CELLS': 'Not Implemented',
             'EMM STATE': 'Not Implemented',
             RSRP: RSRP ?? 'Unknown',
@@ -76,7 +82,17 @@ export default () => {
             'ACTIVITY STATUS': activityStatus ?? 'Unknown',
             STATUS: status,
         };
-    }, [networkRegistrationStatus, RSRP, RSRQ, activityStatus, rrcState]);
+    }, [
+        networkRegistrationStatus,
+        RSRP,
+        RSRQ,
+        activityStatus,
+        rrcState,
+        mnc,
+        mncCode,
+        mcc,
+        mccCode,
+    ]);
 
     return (
         <DashboardCard
