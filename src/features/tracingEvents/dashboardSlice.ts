@@ -26,5 +26,7 @@ const atSlice = createSlice({
 });
 
 export const getAT = (state: RootState) => state.app.at;
+export const getPowerSavingMode = (state: RootState) =>
+    state.app.at.powerSavingMode;
 export const { setAT, setRRCState } = atSlice.actions;
 export default atSlice.reducer;

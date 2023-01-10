@@ -112,16 +112,34 @@ export const nasConverter = (packet: TraceEvent, state: State) => {
         const attach: unknown = packet.interpreted_json['nas-eps'];
         if (assertIsAttachPacket(attach)) {
             if (assertIsAttachRequestPacket(attach)) {
+                const processedState = processAttachRequestPacket(attach);
                 return {
                     ...state,
-                    ...processAttachRequestPacket(attach),
+                    ...processedState,
+                    powerSavingMode: {
+                        requested: {
+                            ...processedState.powerSavingMode?.requested,
+                        },
+                        granted: {
+                            ...state.powerSavingMode?.granted,
+                        },
+                    },
                 };
             }
 
             if (assertIsAttachAcceptPacket(attach)) {
+                const processedState = processAttachAcceptPacket(attach);
                 return {
                     ...state,
                     ...processAttachAcceptPacket(attach),
+                    powerSavingMode: {
+                        requested: {
+                            ...state.powerSavingMode?.requested,
+                        },
+                        granted: {
+                            ...processedState?.powerSavingMode?.granted,
+                        },
+                    },
                 };
             }
 
@@ -156,11 +174,27 @@ const getKeyOfPacket = (
         | undefined;
 };
 
+const parsePSMValues = (
+    values: PowerSavingModeValues
+): PowerSavingModeValues => {
+    if (values.unit && values.value && values.unit === 'decihours') {
+        // Convert decihours to seconds
+        // 1 decihour = 6 minutes
+        return {
+            bitmask: values.bitmask,
+            unit: 'seconds',
+            value: values.value * 6 * 60,
+        };
+    }
+
+    return values;
+};
+
 const getPowerSavingEntriesFromPacket = (packet: AttachPacket) =>
     timers.reduce((previous, lookup) => {
         const key = getKeyOfPacket(packet, lookup);
         if (key) {
-            previous[lookup] = packet[key];
+            previous[lookup] = parsePSMValues(packet[key]);
         }
         return previous;
     }, {} as PowerSavingModeEntries);
@@ -203,9 +237,9 @@ export const processAttachAcceptPacket = (
     },
     accessPointNames: [parsePDN(packet)],
     mnc: packet.mnc,
-    mnc_code: packet.mnc_code,
+    mncCode: packet.mnc_code,
     mcc: packet.mcc,
-    mcc_code: packet.mcc_code,
+    mccCode: packet.mcc_code,
 });
 
 // TODO: Must decide if this is needed at all?

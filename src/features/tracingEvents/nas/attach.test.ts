@@ -17,6 +17,7 @@ const expectedRequestState = {
         },
     },
 };
+
 const expectedAcceptState = {
     powerSavingMode: {
         granted: {
@@ -37,10 +38,10 @@ const expectedAcceptState = {
     ],
 
     mnc: 'Telenor Norge AS',
-    mnc_code: 1,
+    mncCode: 1,
     mcc: 'Norway',
-    mcc_code: 242,
-} as Partial<State>;
+    mccCode: 242,
+};
 
 test('processAttachRequest sets state', () => {
     const attachRequestPacket = actualAttachRequestPacket.interpreted_json![
@@ -58,6 +59,28 @@ test('processAttachAccept sets correct state', () => {
     const actualState = processAttachAcceptPacket(attachAcceptPacket);
 
     expect(actualState).toEqual(expectedAcceptState);
+});
+
+test('Process Request and then Accept sets correct state', () => {
+    const expectedState = {
+        ...expectedRequestState,
+        ...expectedAcceptState,
+        powerSavingMode: {
+            requested: {
+                ...expectedRequestState.powerSavingMode.requested,
+            },
+            granted: {
+                ...expectedAcceptState.powerSavingMode.granted,
+            },
+        },
+    } as Partial<State>;
+
+    let actualState = {};
+    [actualAttachRequestPacket, actualAttachAcceptPacket].forEach(packet => {
+        actualState = nasConverter(packet, actualState as State);
+    });
+
+    expect(actualState).toEqual(expectedState);
 });
 
 const actualAttachRequestPacket: Packet = {

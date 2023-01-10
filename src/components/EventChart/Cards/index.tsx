@@ -7,21 +7,27 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { convert, initialState } from '../../../features/at';
-import { getAT, setAT } from '../../../features/at/atSlice';
 import {
     events,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
+import { convert, initialState } from '../../../features/tracingEvents';
+import {
+    getAT,
+    getPowerSavingMode,
+    setAT,
+} from '../../../features/tracingEvents/dashboardSlice';
 import { getSelectedTime } from '../Chart/chartSlice';
 import Device from './Device';
 import LTENetwork from './LTENetwork';
 import Modem from './Modem';
+import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
 
 export default () => {
     const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
+    const powerSavingMode = useSelector(getPowerSavingMode);
     const atState = useSelector(getAT);
 
     useEffect(() => {
@@ -52,6 +58,7 @@ export default () => {
             <Sim />
             <LTENetwork />
             <Modem />
+            {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
         </div>
     );
 };

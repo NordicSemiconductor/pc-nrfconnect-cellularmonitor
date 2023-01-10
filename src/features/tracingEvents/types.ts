@@ -136,8 +136,18 @@ export type IPv4Address = `${number}.${number}.${number}.${number}`;
 export type IPv6Address =
     `${string}:${string}:${string}:${string}:${string}:${string}:${string}:${string}`;
 
-export type PowerSavingModeEntries = {
+export type GeneratedPowerSavingModeEntries = {
     [timer: TimerKey]: PowerSavingModeValues;
+};
+export type PowerSavingModeEntries = {
+    // Also known as 'Active Time'
+    T3324?: PowerSavingModeValues;
+    T3324_extended?: PowerSavingModeValues;
+    T3402?: PowerSavingModeValues;
+    T3402_extended?: PowerSavingModeValues;
+    T3412?: PowerSavingModeValues;
+    // Also known as 'Periodic TAU'
+    T3412_extended?: PowerSavingModeValues;
 };
 
 export type TimerKey = `${string}${Timers}${string}`;
