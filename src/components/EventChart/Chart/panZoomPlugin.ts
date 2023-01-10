@@ -133,7 +133,7 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
         return false;
 
     options.currentRange = { ...range };
-    options.onRangeChanged(range);
+    options.onRangeChanged({ min: range.min - min, max: range.max - min });
 
     (chart.scales.x.options as CartesianScaleOptions).min =
         options.currentRange.min;
