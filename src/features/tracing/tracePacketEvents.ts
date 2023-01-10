@@ -45,15 +45,11 @@ const packetsToEvent = (packets: Packet[]) =>
             } as TraceEvent)
     );
 
-tracePacketEvents.on('new-raw-packets', (packets: Packet[]) => {
+tracePacketEvents.on('start-process', () => events.splice(0, events.length));
+
+export const notifyListeners = (packets: Packet[]) => {
     const formattedEvents = packetsToEvent(packets);
 
     events.push(...formattedEvents);
-
     tracePacketEvents.emit('new-packets', formattedEvents);
-});
-
-tracePacketEvents.on('start-process', () => events.splice(0, events.length));
-
-export const notifyListeners = (packets: Packet[]) =>
-    tracePacketEvents.emit('new-raw-packets', packets);
+};
