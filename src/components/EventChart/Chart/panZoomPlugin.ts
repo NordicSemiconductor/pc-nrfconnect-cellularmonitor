@@ -12,6 +12,7 @@ import type {
     ScatterDataPoint,
 } from 'chart.js';
 
+import { tracePacketEvents } from '../../../features/tracing/tracePacketEvents';
 import {
     defaultOptions,
     getState,
@@ -72,10 +73,7 @@ const getOffset = (chart: Chart) => {
 };
 
 const getMinMaxX = (chart: Chart) => {
-    const {
-        data,
-        options: { traceEventFilter },
-    } = getState(chart);
+    const { data, options } = getState(chart);
 
     if (data.length === 0) {
         return [
@@ -84,18 +82,15 @@ const getMinMaxX = (chart: Chart) => {
         ];
     }
 
-    const offset = getOffset(chart);
+    // const offset = getOffset(chart);
 
-    const min = data.find(e => traceEventFilter.includes(e.format))?.timestamp;
-    const max = data.findLast(e =>
-        traceEventFilter.includes(e.format)
-    )?.timestamp;
+    const min = data[0].timestamp ?? defaultOptions().currentRange.min;
+    // const maxTimestamp =
+    //     data.findLast(e => traceEventFilter.includes(e.format))?.timestamp ??
+    //     defaultOptions().currentRange.max;
+    // const max = Math.max(maxTimestamp + offset, maxRange);
 
-    // TODO: How to handle min with offset? Don't want to display negative values, but points should be fully visible.
-    return [
-        min ?? defaultOptions().currentRange.min,
-        max ? max + offset : defaultOptions().currentRange.max,
-    ];
+    return [min, Math.max(options.maxRange, min + options.resolution)];
 };
 
 // Calulate Range from Data Backup
@@ -183,13 +178,31 @@ const initChart = (chart: Chart) => {
     options.onLiveChanged(options.live);
 };
 
-const liveIntervalCallback = () => {};
+const liveInterval = 30;
+let liveIntervalId: NodeJS.Timeout | undefined;
+
+const setupLiveInterval = (chart: Chart) => {
+    if (liveIntervalId) return;
+
+    liveIntervalId = setInterval(() => {
+        const { options } = getState(chart);
+
+        options.maxRange = Date.now();
+
+        if (options.live) {
+            updateRange(chart, getRange(chart));
+            chart.update('none');
+        }
+    }, 30);
+};
 
 export default {
     id: 'panZoom',
     start(chart: Chart) {
         initChart(chart);
-        chart.options.plugins?.panZoom?.traceEventFilter;
+        tracePacketEvents.on('stop-process', () => {
+            if (liveIntervalId) clearInterval(liveIntervalId);
+        });
         chart.zoom = (resolution, offset) => {
             const { options } = getState(chart);
             // Necessary as options.resolution is not correct during the very start.
@@ -222,28 +235,52 @@ export default {
             chart.update('none');
         };
         chart.addData = newData => {
+            if (newData.length === 0) return;
+            if (!liveIntervalId) setupLiveInterval(chart);
+
             const { options, data } = getState(chart);
             data.push(...newData);
 
             if (options.live) {
-                if (updateRange(chart, getRange(chart))) {
-                    chart.update('none');
+                const offset = getOffset(chart);
+
+                // There is some device delay (~250ms) which is being synced here.
+                // With the smoothing formula there appear to be no choppy updates
+                if (
+                    data[data.length - 1].timestamp >
+                        options.maxRange + offset + liveInterval * 2 ||
+                    data[data.length - 1].timestamp <
+                        options.maxRange - liveInterval * 2
+                ) {
+                    const alpha = 0.3;
+
+                    options.maxRange =
+                        alpha * options.maxRange +
+                        (1.0 - alpha) *
+                            (data[data.length - 1].timestamp +
+                                getOffset(chart));
                 }
+
+                // if (updateRange(chart, getRange(chart))) {
+                //     chart.update('none');
+                // }
             }
         };
         chart.setLive = live => {
             const { options } = getState(chart);
-            if (options.live === live) return;
+            // if (options.live === live) return;
 
             options.live = live;
 
-            if (live) {
-                // && !liveInterval) ?
-                // setLiveInterval that calls mutatedata(chart) and chart.update('none') ?
-                if (updateRange(chart, getRange(chart))) {
-                    chart.update('none');
-                }
-            }
+            // if (live && !liveInterval) {
+            //     setupLiveInterval(chart);
+            //     // setLiveInterval that calls mutatedata(chart) and chart.update('none') ?
+            //     // if (updateRange(chart, getRange(chart))) {
+            //     //     chart.update('none');
+            //     // }
+            // } else {
+            //     clearInterval(liveInterval);
+            // }
         };
     },
     afterInit(chart) {
@@ -334,6 +371,10 @@ export default {
         chart.data.datasets[0].data = mutateData(chart);
     },
     stop(chart) {
+        if (liveIntervalId) {
+            clearInterval(liveIntervalId);
+            liveIntervalId = undefined;
+        }
         removeState(chart);
     },
 } as Plugin<'scatter', PanPluginOptions>;

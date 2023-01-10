@@ -182,7 +182,7 @@ export const startTrace =
                 notifyListeners(packets);
                 packets.splice(0, packets.length);
             }
-        }, 250);
+        }, 30);
 
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
@@ -286,6 +286,7 @@ export const stopTrace =
     dispatch => {
         if (taskId === null) return;
         nrfml.stop(taskId);
+        tracePacketEvents.emit('stop-process');
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
