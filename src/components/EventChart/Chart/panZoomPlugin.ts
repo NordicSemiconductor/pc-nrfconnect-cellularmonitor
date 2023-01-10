@@ -201,7 +201,10 @@ export default {
     start(chart: Chart) {
         initChart(chart);
         tracePacketEvents.on('stop-process', () => {
-            if (liveIntervalId) clearInterval(liveIntervalId);
+            if (liveIntervalId) {
+                clearInterval(liveIntervalId);
+                liveIntervalId = undefined;
+            }
         });
         chart.zoom = (resolution, offset) => {
             const { options } = getState(chart);
@@ -224,6 +227,7 @@ export default {
             }
         };
         chart.resetChart = () => {
+            removeState(chart);
             initChart(chart);
 
             const { options } = getState(chart);
