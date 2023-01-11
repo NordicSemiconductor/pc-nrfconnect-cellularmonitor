@@ -13,14 +13,15 @@ import {
 } from '../../../features/tracing/tracePacketEvents';
 import { convert, initialState } from '../../../features/tracingEvents';
 import {
-    getAT,
+    getDashboardState,
     getPowerSavingMode,
-    setAT,
+    setDashboardState,
 } from '../../../features/tracingEvents/dashboardSlice';
 import { getSelectedTime } from '../Chart/chartSlice';
 import Device from './Device';
 import LTENetwork from './LTENetwork';
 import Modem from './Modem';
+import PacketDomainNetwork from './PacketDomainNetwork';
 import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
 
@@ -28,7 +29,7 @@ export default () => {
     const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
     const powerSavingMode = useSelector(getPowerSavingMode);
-    const atState = useSelector(getAT);
+    const atState = useSelector(getDashboardState);
 
     useEffect(() => {
         const handler = () => {
@@ -43,7 +44,7 @@ export default () => {
                     }),
                     initialState()
                 );
-            dispatch(setAT(newState));
+            dispatch(setDashboardState(newState));
         };
 
         tracePacketEvents.on('new-packets', handler);
@@ -59,6 +60,7 @@ export default () => {
             <LTENetwork />
             <Modem />
             {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
+            <PacketDomainNetwork />
         </div>
     );
 };
