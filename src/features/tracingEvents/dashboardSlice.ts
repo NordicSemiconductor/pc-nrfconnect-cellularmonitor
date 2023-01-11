@@ -5,28 +5,28 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import StateSelector from 'pc-nrfconnect-shared/src/StateSelector/StateSelector';
 
 import type { RootState } from '../../appReducer';
-import { initialState, RRCState, State } from './index';
+import { initialState } from './index';
+import { State } from './types';
 
-const atSlice = createSlice({
-    name: 'at',
+const dashboardSlice = createSlice({
+    name: 'dashboard',
     initialState: initialState(),
     reducers: {
-        setAT: (state, action: PayloadAction<State>) => ({
+        setDashboardState: (state, action: PayloadAction<State>) => ({
             ...state,
             ...action.payload,
         }),
 
-        setRRCState: (state, action: PayloadAction<RRCState>) => {
-            state.rrcState = action.payload;
-        },
+        // setRRCState: (state, action: PayloadAction<RRCState>) => {
+        //     state.rrcState = action.payload;
+        // },
     },
 });
 
-export const getAT = (state: RootState) => state.app.at;
+export const getDashboardState = (state: RootState) => state.app.dashboard;
 export const getPowerSavingMode = (state: RootState) =>
-    state.app.at.powerSavingMode;
-export const { setAT, setRRCState } = atSlice.actions;
-export default atSlice.reducer;
+    state.app.dashboard.powerSavingMode;
+export const { setDashboardState } = dashboardSlice.actions;
+export default dashboardSlice.reducer;

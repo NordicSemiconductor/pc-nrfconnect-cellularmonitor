@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { RRCState } from '../../../features/tracingEvents';
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
-import { getAT } from '../../../features/tracingEvents/dashboardSlice';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
@@ -44,7 +44,7 @@ export default () => {
         mccCode,
         mnc,
         mncCode,
-    } = useSelector(getAT);
+    } = useSelector(getDashboardState);
 
     const fields = useMemo(() => {
         let status = 'Unknown';

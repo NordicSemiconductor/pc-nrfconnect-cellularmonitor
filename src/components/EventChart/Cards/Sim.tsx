@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/tracingEvents/dashboardSlice';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 export default () => {
@@ -23,7 +23,7 @@ export default () => {
             SIM_PIN2: remainingPIN2,
             SIM_PUK2: remainingPUK2,
         },
-    } = useSelector(getAT);
+    } = useSelector(getDashboardState);
 
     const fields = {
         IMSI: imsi ?? 'Unknown',

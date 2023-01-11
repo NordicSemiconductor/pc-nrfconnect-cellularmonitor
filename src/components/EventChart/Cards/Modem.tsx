@@ -7,8 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/tracingEvents/dashboardSlice';
 import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
@@ -35,7 +35,7 @@ export default () => {
         dataProfile,
         ltemTXReduction,
         nbiotTXReduction,
-    } = useSelector(getAT);
+    } = useSelector(getDashboardState);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
