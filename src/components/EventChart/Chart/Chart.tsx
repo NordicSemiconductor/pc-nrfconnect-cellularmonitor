@@ -5,7 +5,6 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-// eslint-disable-next-line import/no-unresolved
 import { Scatter } from 'react-chartjs-2';
 // eslint-disable-next-line import/no-unresolved
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
