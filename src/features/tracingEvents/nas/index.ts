@@ -207,7 +207,16 @@ export const processAttachRequestPacket = (
     },
 });
 
-const parsePDN = (packet: AttachAcceptPacket): AccessPointName => {
+export const parseIPv6Postfix = (postfix: string | undefined) => {
+    if (postfix == null) return;
+
+    const addr = postfix.split(':');
+    // Wrongly formatted address?
+    if (addr.length !== 8) return undefined;
+    return `${addr[0]}${addr[1]}:${addr[2]}${addr[3]}:${addr[4]}${addr[5]}:${addr[6]}${addr[7]}`;
+};
+
+export const parsePDN = (packet: AttachAcceptPacket): AccessPointName => {
     const pdnObj = packet.pdn;
 
     let pdnPartial: Partial<AccessPointName> = {};
@@ -219,13 +228,14 @@ const parsePDN = (packet: AttachAcceptPacket): AccessPointName => {
             rawPDNType,
             pdnType: parsePDNType(rawPDNType),
             ipv4: pdnObj['nas_eps.esm.pdn_ipv4'],
-            ipv6Postfix: pdnObj['nas_eps.esm.pdn_ipv6_if_id'],
+            ipv6Postfix: parseIPv6Postfix(pdnObj['nas_eps.esm.pdn_ipv6_if_id']),
         };
     }
 
     return {
         apn: packet.apn,
         ...pdnPartial,
+        ipv6Complete: false,
     };
 };
 

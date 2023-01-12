@@ -107,8 +107,12 @@ export interface AccessPointName {
     pdnType?: PDNType;
     rawPDNType?: RawPDNType;
     ipv4?: IPv4Address;
-    ipv6Postfix?: IPv6Address;
-    ipv6Prefix?: IPv6Address;
+    ipv6?: IPv6Address | undefined;
+    ipv6Postfix?: IPv6Address | undefined;
+    ipv6Prefix?: IPv6Address | undefined;
+    // First IPv6 postfix is retrieved from Attach Accept, and ipv6Complete=false
+    // Then IPv6 prefix is retrieved from an IP packet, and ipv6Complete is set to true.
+    ipv6Complete: boolean;
     info?: 'IPv4 Only' | 'IPv6 Only';
 }
 

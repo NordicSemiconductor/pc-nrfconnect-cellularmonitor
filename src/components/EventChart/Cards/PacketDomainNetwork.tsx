@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card } from 'pc-nrfconnect-shared';
 
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import { AccessPointName } from '../../../features/tracingEvents/types';
@@ -11,8 +10,7 @@ const PacketDomainNetwork = ({
     pdnType,
     rawPDNType,
     ipv4,
-    ipv6Prefix,
-    ipv6Postfix,
+    ipv6,
     info,
 }: AccessPointName) => {
     const fields = Object.fromEntries(
@@ -21,7 +19,7 @@ const PacketDomainNetwork = ({
             'PDN Type': pdnType ?? undefined,
             'PDN Type Raw': rawPDNType ?? undefined,
             'IPv4 Address': ipv4 ?? undefined,
-            'IPv6 Address': `${ipv6Prefix}:${ipv6Postfix}` ?? undefined,
+            'IPv6 Address': `${ipv6}` ?? undefined,
             info: info ?? undefined,
         }).filter(([_, value]) => value != null)
     ) as unknown as Record<string, string>;

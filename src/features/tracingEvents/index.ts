@@ -7,6 +7,7 @@
 import type { TraceEvent } from '../tracing/tracePacketEvents';
 import * as at from './at';
 import { parseAT, ParsedPacket, RequestType } from './at/parseAT';
+import IPConverter from './ip';
 import { nasConverter } from './nas';
 import type { State } from './types';
 
@@ -21,19 +22,6 @@ export interface Processor {
     onRequest?: (packet: ParsedPacket) => Partial<State>;
     onNotification?: (packet: ParsedPacket) => Partial<State>;
 }
-
-// type ExtractViewModel<Type> = Type extends Processor<infer X> ? X : never;
-
-// type GetKeys<T> = T extends T ? keyof T : never;
-// type UnionToIntersection<T> = {
-//     [K in GetKeys<T>]: T extends Partial<Record<K, unknown>> ? T[K] : never;
-// };
-
-// To replace < | undefined> types with proper optional ? types, add this flag to tsconfig.json "exactOptionalPropertyTypes": true
-
-// UnionToIntersection<
-//     ExtractViewModel<typeof processors[number]> & { rrcState?: RRCState }
-// >;
 
 const processors = [
     at.functionMode,
@@ -81,17 +69,18 @@ export const convert = (packet: TraceEvent, state: State): State => {
         return convertAtPacket(packet, state);
     }
 
-    if (packet.format === 'NAS') {
-        if (packet.interpreted_json) {
+    if (packet.interpreted_json) {
+        if (packet.format === 'NAS') {
             const newState = nasConverter(packet, state);
             return newState;
         }
-        return state;
-    }
 
-    if (/lte-rrc.*/.test(packet.format)) {
-        if (packet.interpreted_json) {
-            console.log(packet);
+        if (packet.format === 'IP') {
+            return IPConverter(packet, state);
+        }
+
+        if (/lte-rrc.*/.test(packet.format)) {
+            // suppose to be empty
         }
     }
 

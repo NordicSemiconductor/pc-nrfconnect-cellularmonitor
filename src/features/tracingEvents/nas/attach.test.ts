@@ -3,45 +3,10 @@ import {
     AttachAcceptPacket,
     AttachRequestPacket,
     nasConverter,
+    parseIPv6Postfix,
     processAttachAcceptPacket,
-    processAttachCompletePacket,
-    processAttachRejectPacket,
     processAttachRequestPacket,
 } from './index';
-
-const expectedRequestState = {
-    powerSavingMode: {
-        requested: {
-            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
-        },
-    },
-};
-
-const expectedAcceptState = {
-    powerSavingMode: {
-        granted: {
-            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
-            T3402_extended: { bitmask: '00101100', unit: 'minutes', value: 12 },
-            T3412: { bitmask: '01011111', unit: 'decihours', value: 186 },
-        },
-    },
-    accessPointNames: [
-        {
-            apn: 'telenor.smart.mnc001.mcc242.gprs',
-            ipv4: '10.166.181.52',
-            ipv6Postfix: '00:00:00:00:39:a7:3f:79',
-            pdnType: 'IPv4v6',
-            rawPDNType: '3',
-        },
-    ],
-
-    mnc: 'Telenor Norge AS',
-    mncCode: 1,
-    mcc: 'Norway',
-    mccCode: 242,
-};
 
 test('processAttachRequest sets state', () => {
     const attachRequestPacket = actualAttachRequestPacket.interpreted_json![
@@ -83,6 +48,46 @@ test('Process Request and then Accept sets correct state', () => {
     expect(actualState).toEqual(expectedState);
 });
 
+test('parsePartialIpv6 should return correctly formatted address', () => {
+    const toTest = '00:00:00:00:39:a7:3f:79';
+
+    expect(parseIPv6Postfix(toTest)).toBe('0000:0000:39a7:3f79');
+});
+
+const expectedRequestState = {
+    powerSavingMode: {
+        requested: {
+            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
+            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
+        },
+    },
+};
+
+const expectedAcceptState = {
+    powerSavingMode: {
+        granted: {
+            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
+            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
+            T3402_extended: { bitmask: '00101100', unit: 'minutes', value: 12 },
+            T3412: { bitmask: '01011111', unit: 'decihours', value: 186 },
+        },
+    },
+    accessPointNames: [
+        {
+            apn: 'telenor.smart.mnc001.mcc242.gprs',
+            ipv4: '10.166.181.52',
+            ipv6Postfix: '0000:0000:39a7:3f79',
+            pdnType: 'IPv4v6',
+            rawPDNType: '3',
+            ipv6Complete: false,
+        },
+    ],
+
+    mnc: 'Telenor Norge AS',
+    mncCode: 1,
+    mcc: 'Norway',
+    mccCode: 242,
+};
 const actualAttachRequestPacket: Packet = {
     packet_data: Uint8Array.from([
         7, 65, 33, 11, 246, 66, 242, 16, 128, 233, 72, 195, 135, 59, 253, 7,
