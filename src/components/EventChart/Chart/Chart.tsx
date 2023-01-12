@@ -93,7 +93,7 @@ export default () => {
         return () => {
             tracePacketEvents.removeListener('new-packets', handler);
         };
-    }, [traceEventFilter]);
+    }, []);
 
     useEffect(() => {
         const handler = () => {
@@ -105,7 +105,7 @@ export default () => {
         return () => {
             tracePacketEvents.removeListener('start-process', handler);
         };
-    });
+    }, []);
 
     useEffect(() => {
         chart.current?.setLive(isLive);
