@@ -19,7 +19,6 @@ import {
     resetParams as resetPowerEstimationParams,
     setData as setPowerEstimationData,
 } from '../powerEstimation/powerEstimationSlice';
-import { Packet } from '../tracingEvents/types';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -138,7 +137,6 @@ export const extractPowerData =
                 gotPowerEstimationData = true;
                 dispatch(setPowerEstimationData(powerEstimationData));
                 dispatch(stopTrace(taskId));
-                console.log(jsonData);
             }
         );
         dispatch(
@@ -219,7 +217,6 @@ export const startTrace =
                 }
             },
             data => {
-                console.log(data);
                 addPowerEstimationPackets(dispatch)(data);
             }
         );

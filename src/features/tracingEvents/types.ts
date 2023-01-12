@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
+import type { Packet } from '../tracing/tracePacketEvents';
 import type { AttachPacket } from './nas/index';
 
 export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
@@ -6,19 +13,6 @@ export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
 type NasPacket = Omit<Packet, 'interpreted_json'> & {
     interpreted_json: { 'nas-eps': AttachPacket };
 };
-
-export interface Packet {
-    packet_data: Uint8Array;
-    format: PacketFormat;
-    timestamp?: {
-        resolution?: string;
-        value?: number;
-    };
-    type?: string;
-    meta?: unknown;
-    interpreted_json?: { 'nas-eps': AttachPacket };
-    sequence_number: number;
-}
 
 export type RRCState =
     | 'rrcConnectionSetupRequest'

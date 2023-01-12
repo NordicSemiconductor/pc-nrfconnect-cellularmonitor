@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 export { processor as currentBand } from './commandProcessors/currentBand';
 export { processor as dataProfile } from './commandProcessors/dataProfile';
 export { processor as activityStatus } from './commandProcessors/deviceActivityStatus';

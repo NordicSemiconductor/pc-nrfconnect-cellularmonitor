@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import {
     AccessPointName,
@@ -81,9 +87,13 @@ export type AttachRejectPacket = {
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
 };
 
-const assertIsAttachPacket = (packet: any): packet is AttachPacket => {
-    if ('nas_msg_emm_type' in packet) {
-        if (attachValues.includes(packet.nas_msg_emm_type)) {
+const assertIsAttachPacket = (packet: unknown): packet is AttachPacket => {
+    if (packet && typeof packet === 'object' && 'nas_msg_emm_type' in packet) {
+        if (
+            attachValues.includes(
+                packet.nas_msg_emm_type as typeof attachValues[number]
+            )
+        ) {
             return true;
         }
     }
@@ -108,8 +118,8 @@ const assertIsAttachRejectPacket = (
 ): packet is AttachRejectPacket => packet.nas_msg_emm_type === '0x44';
 
 export const nasConverter = (packet: TraceEvent, state: State) => {
-    if (packet.interpreted_json && 'nas-eps' in packet.interpreted_json) {
-        const attach: unknown = packet.interpreted_json['nas-eps'];
+    if (packet.jsonData) {
+        const attach: unknown = packet.jsonData;
         if (assertIsAttachPacket(attach)) {
             if (assertIsAttachRequestPacket(attach)) {
                 const processedState = processAttachRequestPacket(attach);
@@ -228,7 +238,9 @@ export const parsePDN = (packet: AttachAcceptPacket): AccessPointName => {
             rawPDNType,
             pdnType: parsePDNType(rawPDNType),
             ipv4: pdnObj['nas_eps.esm.pdn_ipv4'],
-            ipv6Postfix: parseIPv6Postfix(pdnObj['nas_eps.esm.pdn_ipv6_if_id']),
+            ipv6Postfix: parseIPv6Postfix(
+                pdnObj['nas_eps.esm.pdn_ipv6_if_id']
+            ) as IPv6Address,
         };
     }
 
@@ -254,13 +266,15 @@ export const processAttachAcceptPacket = (
 
 // TODO: Must decide if this is needed at all?
 export const processAttachCompletePacket = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     packet: AttachCompletePacket
-): Partial<State> => {};
+): Partial<State> => ({});
 
 // Should report that attach was rejected.
 export const processAttachRejectPacket = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     packet: AttachRejectPacket
-): Partial<State> => {};
+): Partial<State> => ({});
 
 type DNSServerAddressConfig = {
     [key: `Options:${string}`]: {

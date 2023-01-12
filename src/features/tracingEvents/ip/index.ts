@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import { parseIPv6Postfix } from '../nas';
 import { AccessPointName, State } from '../types';

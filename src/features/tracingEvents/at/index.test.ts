@@ -5,7 +5,7 @@
  */
 
 import { events, notifyListeners } from '../../tracing/tracePacketEvents';
-import { convert, initialState, State } from '..';
+import { convert, initialState } from '..';
 import { rawTraceData } from './traceSample';
 
 const expectedState: State = {
@@ -65,11 +65,13 @@ const expectedState: State = {
 
 test('Trace is read properly', () => {
     let state = initialState();
+    let sequenceNumber = 0;
     rawTraceData.forEach(jsonPacket => {
         notifyListeners([
             {
                 format: jsonPacket.format,
                 packet_data: new Uint8Array(jsonPacket.packet_data.data),
+                sequence_number: (sequenceNumber += 1),
             },
         ]);
     });

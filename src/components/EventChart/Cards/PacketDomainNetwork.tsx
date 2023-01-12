@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -47,8 +53,6 @@ export default () => {
     if (accessPointNames == null) {
         return null;
     }
-
-    console.log(accessPointNames);
 
     return <>{accessPointNames.map(apn => PacketDomainNetwork(apn))}</>;
 };
