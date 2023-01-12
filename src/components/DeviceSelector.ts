@@ -66,7 +66,8 @@ const openDevice =
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
         const ports = device.serialPorts;
-        if (ports?.length > 0) {
+
+        if (ports && ports.length > 0) {
             dispatch(
                 setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
             );
@@ -76,7 +77,7 @@ const openDevice =
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = autoSelectPort(ports);
+        const port = autoSelectPort(ports ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
