@@ -22,7 +22,7 @@ type ViewModel = {
 
 let tentativeState: Partial<ViewModel> | null = null;
 
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%CESQ',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/proc_cesq.html',

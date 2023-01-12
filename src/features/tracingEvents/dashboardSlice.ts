@@ -8,7 +8,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../appReducer';
 import { initialState } from './index';
-import { State } from './types';
+import { RRCState, State } from './types';
 
 const dashboardSlice = createSlice({
     name: 'dashboard',
@@ -19,9 +19,9 @@ const dashboardSlice = createSlice({
             ...action.payload,
         }),
 
-        // setRRCState: (state, action: PayloadAction<RRCState>) => {
-        //     state.rrcState = action.payload;
-        // },
+        setRRCState: (state, action: PayloadAction<RRCState>) => {
+            state.rrcState = action.payload;
+        },
     },
 });
 

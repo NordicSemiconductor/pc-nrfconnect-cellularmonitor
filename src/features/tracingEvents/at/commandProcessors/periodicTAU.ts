@@ -7,12 +7,8 @@
 import type { Processor } from '../..';
 import { getNumberArray } from '../utils';
 
-export type ViewModel = {
-    notifyPeriodicTAU?: boolean;
-    periodicTAU?: number;
-};
 let parameters: number[];
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%XT3412',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',

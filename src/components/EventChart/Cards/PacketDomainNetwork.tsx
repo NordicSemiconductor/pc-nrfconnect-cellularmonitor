@@ -27,7 +27,7 @@ const PacketDomainNetwork = ({
             'IPv4 Address': ipv4 ?? undefined,
             'IPv6 Address': `${ipv6}` ?? undefined,
             info: info ?? undefined,
-        }).filter(([_, value]) => value != null)
+        }).filter(([, value]) => value != null)
     ) as unknown as Record<string, string>;
     return (
         <DashboardCard

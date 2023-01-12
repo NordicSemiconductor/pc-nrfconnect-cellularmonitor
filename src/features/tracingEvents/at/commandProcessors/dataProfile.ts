@@ -15,15 +15,11 @@ export const PowerLevel = {
     4: 'High performance',
 };
 
-type PowerLevel = keyof typeof PowerLevel;
-
-type ViewModel = {
-    dataProfile?: PowerLevel;
-};
+export type PowerLevel = keyof typeof PowerLevel;
 
 let requestedDataProfile: PowerLevel | undefined;
 
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%XDATAPRFL',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xdataprfl.html',

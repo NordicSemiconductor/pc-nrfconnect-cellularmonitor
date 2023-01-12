@@ -6,10 +6,6 @@
 
 import type { Processor } from '../..';
 
-type ViewModel = {
-    activityStatus?: ActivityStatus;
-};
-
 const activityStatus = {
     0: 'ready',
     1: 'unavailable',
@@ -19,9 +15,9 @@ const activityStatus = {
     5: 'asleep',
 };
 
-type ActivityStatus = keyof typeof activityStatus;
+export type ActivityStatus = keyof typeof activityStatus;
 
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CPAS',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cpas.html',

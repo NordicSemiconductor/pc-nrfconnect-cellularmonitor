@@ -6,11 +6,7 @@
 
 import type { Processor } from '../..';
 
-type ViewModel = {
-    manufacturer?: string;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CGMI',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',

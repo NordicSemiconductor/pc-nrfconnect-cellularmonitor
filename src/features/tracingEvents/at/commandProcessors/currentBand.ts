@@ -8,12 +8,7 @@ import type { Processor } from '../..';
 import { RequestType } from '../parseAT';
 import { getNumber, getNumberArray } from '../utils';
 
-type ViewModel = {
-    availableBands?: number[];
-    currentBand?: number;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%XCBAND',
     initialState: () => ({}),
     documentation:

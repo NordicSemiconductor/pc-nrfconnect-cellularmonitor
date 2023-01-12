@@ -6,11 +6,7 @@
 
 import type { Processor } from '../..';
 
-type ViewModel = {
-    imsi?: string;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CIMI',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',

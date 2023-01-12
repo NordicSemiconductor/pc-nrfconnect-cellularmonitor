@@ -5,20 +5,21 @@
  */
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
-import { parseIPv6Postfix } from '../nas';
-import { AccessPointName, State } from '../types';
+import { AttachAcceptPacket, parseIPv6Postfix } from '../nas';
+import { AccessPointName, IPv6Address, IPv6Partial, State } from '../types';
 
 export const mergeIpv6Address = (
-    prefix: string,
-    postfix: string
-): string | undefined =>
+    prefix: IPv6Partial,
+    postfix: IPv6Partial
+): IPv6Address | undefined =>
     prefix !== undefined && postfix !== undefined
-        ? `${prefix}:${postfix}`
+        ? (`${prefix}:${postfix}` as IPv6Address)
         : undefined;
 
 export default (packet: TraceEvent, state: State): State => {
-    if (packet.interpreted_json?.['nas-eps']) {
-        const incomingPDN = packet.interpreted_json['nas-eps']?.pdn;
+    if (packet.jsonData) {
+        const incomingPDN = (packet.jsonData as AttachAcceptPacket).pdn;
+        if (incomingPDN == null) return state;
 
         const { accessPointNames } = state;
 
@@ -33,14 +34,16 @@ export default (packet: TraceEvent, state: State): State => {
 
         const ipv6Prefix =
             incomingPDN.ICMPv6_prefix != null
-                ? incomingPDN.ICMPv6_prefix.split(':').slice(0, 4).join(':')
+                ? (incomingPDN.ICMPv6_prefix.split(':')
+                      .slice(0, 4)
+                      .join(':') as IPv6Partial)
                 : undefined;
 
         const newAPN: AccessPointName = {
             ...apn,
-            ipv6Prefix: ipv6Prefix ?? undefined,
+            ipv6Prefix: (ipv6Prefix as IPv6Partial) ?? undefined,
             ipv6:
-                ipv6Prefix !== undefined
+                ipv6Prefix !== undefined && apn.ipv6Postfix !== undefined
                     ? mergeIpv6Address(ipv6Prefix, apn.ipv6Postfix)
                     : undefined,
         };

@@ -40,15 +40,15 @@ export default () => {
     const fields = {
         IMEI: IMEI ?? 'Unknown',
         'Revision ID': revisionID ?? 'Unknown',
-        'Hardware Version': hardwareVersion ?? 'Unknown',
-        'Modem UUID': modemUUID ?? 'Unknown',
+        'Hardware Version': (hardwareVersion as string) ?? 'Unknown',
+        'Modem UUID': (modemUUID as string) ?? 'Unknown',
         'Current Band': currentBand ?? 'Unknown',
         'Available Bands': availableBands?.length
             ? formatAvailableBands(availableBands)
             : 'Unknown',
         'Data Profile': dataProfile ?? 'Unknown',
-        'TX Power Reduction (LTE-M)': formatMode(ltemTXReduction),
-        'TX Power Reduction (NB-IoT)': formatMode(nbiotTXReduction),
+        'TX Power Reduction (LTE-M)': formatMode(ltemTXReduction as Mode),
+        'TX Power Reduction (NB-IoT)': formatMode(nbiotTXReduction as Mode),
     };
 
     return (

@@ -64,6 +64,7 @@ export type AttachAcceptPacket = {
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
 
     pdn?: {
+        ICMPv6_prefix?: string;
         'gsm_a.len'?: `${number}`;
         'nas_eps.esm.pdn_ipv4'?: IPv4Address;
         'nas_eps.esm.pdn_ipv6_if_id'?: IPv6Address;
@@ -88,14 +89,10 @@ export type AttachRejectPacket = {
 };
 
 const assertIsAttachPacket = (packet: unknown): packet is AttachPacket => {
-    if (packet && typeof packet === 'object' && 'nas_msg_emm_type' in packet) {
-        if (
-            attachValues.includes(
-                packet.nas_msg_emm_type as typeof attachValues[number]
-            )
-        ) {
-            return true;
-        }
+    if (packet && (packet as AttachPacket).nas_msg_emm_type) {
+        return attachValues.some(
+            type => (packet as AttachPacket).nas_msg_emm_type === type
+        );
     }
 
     return false;

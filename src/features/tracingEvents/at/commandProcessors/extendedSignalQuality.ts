@@ -8,18 +8,7 @@ import type { Processor } from '../..';
 import { RequestType } from '../parseAT';
 import { getNumberArray } from '../utils';
 
-type ViewModel = {
-    signalQuality: {
-        rsrp: number;
-        rsrp_threshold_index: number;
-        rsrp_decibel: number;
-        rsrq: number;
-        rsrq_threshold_index: number;
-        rsrq_decibel: number;
-    };
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CESQ',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',

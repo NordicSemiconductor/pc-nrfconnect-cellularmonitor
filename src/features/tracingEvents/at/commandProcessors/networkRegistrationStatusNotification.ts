@@ -7,7 +7,7 @@
 import type { Processor } from '../..';
 import { getParametersFromResponse } from '../utils';
 
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CEREG',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
@@ -71,9 +71,6 @@ type NetworkRegistrationStatus = {
     reject_cause?: number;
     activeTime?: string;
     periodicTAU?: string;
-};
-type ViewModel = {
-    networkRegistrationStatus?: NetworkRegistrationStatus;
 };
 
 type ResponseType = 'response' | 'notification';

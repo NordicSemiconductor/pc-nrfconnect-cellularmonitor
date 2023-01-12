@@ -7,11 +7,7 @@
 import type { Processor } from '../..';
 import { parseStringValue } from '../utils';
 
-type ViewModel = {
-    revisionID?: string;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CGMR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmr.html',

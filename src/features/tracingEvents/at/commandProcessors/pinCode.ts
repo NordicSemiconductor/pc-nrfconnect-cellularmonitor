@@ -22,9 +22,7 @@ const pinCodeStatus = {
 
 type PinCodeStatus = keyof typeof pinCodeStatus;
 
-type ViewModel = { pinCodeStatus: PinCodeStatus };
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CPIN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',

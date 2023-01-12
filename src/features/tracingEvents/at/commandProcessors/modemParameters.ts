@@ -7,41 +7,7 @@
 import type { Processor } from '../..';
 import { getParametersFromResponse } from '../utils';
 
-// enum regStatus {
-//     NOT_REGISTERED = 0,
-//     REGISTERED = 1,
-//     NOT_REGISTERED_SEARCHING = 2,
-//     REGISTRATION_DENIED = 3,
-//     UNKNOWN = 4,
-//     REGISTERED_ROAMING = 5,
-//     UUIC_FAILURE = 90,
-// }
-
-type ViewModel = {
-    xmonitor: {
-        regStatus?: number;
-        operatorFullName?: string;
-        operatorShortName?: string;
-        plmn?: string;
-        tac?: string;
-        AcT?: 7 | 9;
-        band?: number;
-        cell_id?: string;
-        phys_cell_id?: number;
-        EARFCN?: number;
-        rsrp?: number;
-        snr?: number;
-        NW_provided_eDRX_value?: string;
-        // Response is always either
-        // activeTime & periodicTAU, or
-        // activeTime & periodicTAUext & periodicTAU
-        activeTime?: string;
-        periodicTAU?: string;
-        periodicTAUext?: string;
-    };
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%XMONITOR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xmonitor.html',

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { RRCState } from '../tracingEvents/index';
+import type { RRCState } from '../tracingEvents/types';
 
 export type GPRS_Timer = {
     bitmask: `${number}`;

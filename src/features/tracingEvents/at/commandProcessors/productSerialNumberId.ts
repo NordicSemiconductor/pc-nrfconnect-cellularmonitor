@@ -8,11 +8,7 @@ import type { Processor } from '../..';
 import { RequestType } from '../parseAT';
 import { parseStringValue } from '../utils';
 
-type ViewModel = {
-    IMEI?: string;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CGSN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgsn.html',

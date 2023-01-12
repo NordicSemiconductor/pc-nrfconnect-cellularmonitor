@@ -5,6 +5,9 @@
  */
 
 import type { Packet } from '../tracing/tracePacketEvents';
+import { PowerLevel } from './at/commandProcessors/dataProfile';
+import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
+import { Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
 import type { AttachPacket } from './nas/index';
 
 export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
@@ -38,47 +41,52 @@ export interface State {
         rsrq_decibel: number;
     };
     notifyPeriodicTAU: boolean;
-    xmonitor: {
-        regStatus: number;
-        operatorFullName: string;
-        operatorShortName: string;
-        plmn: string;
-        tac: string;
-        AcT: number;
-        band: number;
-        cell_id: string;
-        phys_cell_id: number;
-        EARFCN: number;
-        rsrp: number;
-        snr: number;
-        NW_provided_eDRX_value: string;
-        activeTime: `${number}`;
-        periodicTAU: `${number}`;
-        periodicTAUext: `${number}`;
+    xmonitor?: {
+        regStatus?: number;
+        operatorFullName?: string;
+        operatorShortName?: string;
+        plmn?: string;
+        tac?: string;
+        AcT?: number;
+        band?: number;
+        cell_id?: string;
+        phys_cell_id?: number;
+        EARFCN?: number;
+        rsrp?: number;
+        snr?: number;
+        NW_provided_eDRX_value?: string;
+        activeTime?: string;
+        periodicTAU?: string;
+        periodicTAUext?: string;
     };
     pinCodeStatus: string;
     functionalMode: number;
-    IMEI: `${number}`;
+    IMEI: string;
     manufacturer: string;
-    revisionID: `mfw_${string}_${number}.${number}.${number}`;
+    revisionID: string;
     modeOfOperation: number;
     availableBands: number[];
-    pinRetries: { SIM_PIN: number };
-    imsi: `${number}`;
+    pinRetries: {
+        SIM_PIN?: number;
+        SIM_PUK?: number;
+        SIM_PIN2?: number;
+        SIM_PUK2?: number;
+    };
+    imsi: string;
     iccid: string;
     currentBand: number;
-    periodicTAU: string;
-    hardwareVersion: unknown;
-    modemUUID: unknown;
-    dataProfile: unknown;
-    nbiotTXReduction: unknown;
-    ltemTXReduction: unknown;
-    activityStatus: unknown;
+    periodicTAU: number;
+    hardwareVersion?: string;
+    modemUUID?: string;
+    dataProfile: PowerLevel;
+    nbiotTXReduction: TXReductionMode;
+    ltemTXReduction: TXReductionMode;
+    activityStatus: ActivityStatus;
     networkRegistrationStatus: {
-        status: number;
-        tac: `${number}`;
-        ci: `${number}`;
-        AcT: number;
+        status?: number;
+        tac?: string;
+        ci?: string;
+        AcT?: number;
     };
 
     // TODO: Revise above state attributes.
@@ -94,6 +102,7 @@ export interface State {
     mncCode: number;
     mcc: string;
     mccCode: number;
+    rrcState: RRCState;
 }
 
 export interface AccessPointName {
@@ -102,8 +111,8 @@ export interface AccessPointName {
     rawPDNType?: RawPDNType;
     ipv4?: IPv4Address;
     ipv6?: IPv6Address | undefined;
-    ipv6Postfix?: IPv6Address | undefined;
-    ipv6Prefix?: IPv6Address | undefined;
+    ipv6Postfix?: IPv6Partial | undefined;
+    ipv6Prefix?: IPv6Partial | undefined;
     // First IPv6 postfix is retrieved from Attach Accept, and ipv6Complete=false
     // Then IPv6 prefix is retrieved from an IP packet, and ipv6Complete is set to true.
     ipv6Complete: boolean;
@@ -131,8 +140,8 @@ export const parsePDNType = (rawType: RawPDNType): PDNType => {
 };
 
 export type IPv4Address = `${number}.${number}.${number}.${number}`;
-export type IPv6Address =
-    `${string}:${string}:${string}:${string}:${string}:${string}:${string}:${string}`;
+export type IPv6Partial = `${string}:${string}:${string}:${string}`;
+export type IPv6Address = `${IPv6Partial}:${IPv6Partial}`;
 
 export type GeneratedPowerSavingModeEntries = {
     [timer: TimerKey]: PowerSavingModeValues;

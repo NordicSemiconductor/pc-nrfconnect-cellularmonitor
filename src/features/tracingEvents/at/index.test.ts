@@ -8,7 +8,7 @@ import { events, notifyListeners } from '../../tracing/tracePacketEvents';
 import { convert, initialState } from '..';
 import { rawTraceData } from './traceSample';
 
-const expectedState: State = {
+const expectedState = {
     notifySignalQuality: true,
     signalQuality: {
         rsrp: 54,

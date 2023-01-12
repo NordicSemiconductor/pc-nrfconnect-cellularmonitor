@@ -70,7 +70,7 @@ export default () => {
                     <h4>Requested Parameters</h4>
                     {requestedFields &&
                         Object.entries(requestedFields)
-                            .filter(([_, value]) => value !== undefined)
+                            .filter(([, value]) => value !== undefined)
                             .map(([key, value]) => (
                                 <li key={key}>
                                     <p className="card-key">{key}</p>
@@ -86,7 +86,7 @@ export default () => {
                     <h4>Granted Parameters</h4>
                     {grantedFields &&
                         Object.entries(grantedFields)
-                            .filter(([_, value]) => value !== undefined)
+                            .filter(([, value]) => value !== undefined)
                             .map(([key, value]) => (
                                 <li key={key}>
                                     <p className="card-key">{key}</p>

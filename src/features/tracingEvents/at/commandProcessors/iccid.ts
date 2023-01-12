@@ -6,11 +6,7 @@
 
 import type { Processor } from '../..';
 
-type ViewModel = {
-    iccid?: string;
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '%XICCID',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/xiccid.html',

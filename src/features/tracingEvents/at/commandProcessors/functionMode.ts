@@ -29,11 +29,8 @@ export const functionalMode = {
 };
 
 type FunctionalMode = keyof typeof functionalMode;
-type ViewModel = {
-    functionalMode?: FunctionalMode;
-};
 
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CFUN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',

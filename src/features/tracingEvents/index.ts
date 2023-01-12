@@ -14,7 +14,7 @@ import type { State } from './types';
 export interface Processor {
     command: string;
     documentation: string;
-    // initialState: () => VM;
+    initialState: () => Partial<State>;
     onResponse: (
         packet: ParsedPacket,
         requestType?: RequestType
@@ -69,7 +69,7 @@ export const convert = (packet: TraceEvent, state: State): State => {
         return convertAtPacket(packet, state);
     }
 
-    if (packet.interpreted_json) {
+    if (packet.jsonData) {
         if (packet.format === 'NAS') {
             const newState = nasConverter(packet, state);
             return newState;

@@ -14,7 +14,7 @@ export default () => {
     const {
         iccid,
         imsi,
-        xmonitor: { operatorFullName: operator },
+        xmonitor,
         manufacturer,
         pinCodeStatus: pin,
         pinRetries: {
@@ -29,7 +29,7 @@ export default () => {
         IMSI: imsi ?? 'Unknown',
         ISSUER: 'Not Implemented',
         NETWORK: 'Not Implemented',
-        OPERATOR: operator ?? 'Unknown',
+        OPERATOR: xmonitor?.operatorFullName ?? 'Unknown',
         MANUFACTURER: manufacturer ?? 'Unknown',
         ICCID: iccid ?? 'Unknown',
         PIN: pin,

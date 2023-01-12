@@ -7,9 +7,9 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { RRCState } from '../../../features/tracingEvents';
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
+import type { RRCState } from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
 
 type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
@@ -31,7 +31,7 @@ const getRRCStateColor = (state: RRCState | undefined): RRCStateFlag => {
         return '🟢';
     }
 
-    // return '🔴';
+    return '🔴';
 };
 
 export default () => {
@@ -59,7 +59,7 @@ export default () => {
         }
 
         return {
-            'RRC STATE': getRRCStateColor(rrcState),
+            'RRC STATE': getRRCStateColor(rrcState) as string,
             MNC: mnc ?? 'Unknown',
             'MNC Code': mncCode ?? 'Unknown',
             MCC: mcc ?? 'Unknown',

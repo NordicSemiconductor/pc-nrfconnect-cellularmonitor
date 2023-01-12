@@ -64,11 +64,14 @@ export const notifyListeners = (packets: Packet[]) => {
     tracePacketEvents.emit('new-packets', formattedEvents);
 };
 
-const parseJsonData = (data: unknown): AttachPacket | undefined => {
-    if (data == null) return undefined;
+type InterpretedJSON = { 'nas-eps': AttachPacket };
 
-    if (typeof data === 'object' && 'nas-eps' in data) {
-        return data['nas-eps'] as AttachPacket;
+const assertContainsNAS = (data: unknown): data is InterpretedJSON =>
+    data != null && 'nas-eps' in (data as InterpretedJSON);
+
+const parseJsonData = (data: unknown): AttachPacket | undefined => {
+    if (assertContainsNAS(data)) {
+        return data['nas-eps'];
     }
 
     return undefined;

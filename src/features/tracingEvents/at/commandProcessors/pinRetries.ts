@@ -7,16 +7,7 @@
 import type { Processor } from '../..';
 import { getStringNumberPair } from '../utils';
 
-type ViewModel = {
-    pinRetries: {
-        SIM_PIN?: number;
-        SIM_PIN2?: number;
-        SIM_PUK?: number;
-        SIM_PUK2?: number;
-    };
-};
-
-export const processor: Processor<ViewModel> = {
+export const processor: Processor = {
     command: '+CPINR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpinr.html',
