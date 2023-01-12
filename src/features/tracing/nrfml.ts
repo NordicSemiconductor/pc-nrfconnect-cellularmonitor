@@ -174,10 +174,6 @@ export const startTrace =
             sinks.push('opp');
         }
 
-        if (!sinks.includes('opp')) {
-            sinks.push('opp');
-        }
-
         sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
