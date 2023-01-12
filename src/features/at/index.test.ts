@@ -8,15 +8,6 @@ import { events, notifyListeners } from '../tracing/tracePacketEvents';
 import { convert, initialState, State } from '.';
 import { rawTraceData } from './traceSample';
 
-const traceData = rawTraceData.forEach(jsonPacket => {
-    notifyListeners([
-        {
-            format: jsonPacket.format,
-            packet_data: new Uint8Array(jsonPacket.packet_data.data),
-        },
-    ]);
-});
-
 const expectedState: State = {
     notifySignalQuality: true,
     signalQuality: {
@@ -74,7 +65,14 @@ const expectedState: State = {
 
 test('Trace is read properly', () => {
     let state = initialState();
-
+    rawTraceData.forEach(jsonPacket => {
+        notifyListeners([
+            {
+                format: jsonPacket.format,
+                packet_data: new Uint8Array(jsonPacket.packet_data.data),
+            },
+        ]);
+    });
     events.forEach(packet => {
         state = convert(packet, state);
     });

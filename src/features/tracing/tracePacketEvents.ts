@@ -19,7 +19,7 @@ export interface Packet {
 export interface TraceEvent {
     timestamp: number;
     format: eventType;
-    data: string;
+    data: Uint8Array;
 }
 
 export const tracePacketEvents = new EventEmitter();
@@ -35,13 +35,14 @@ const formatToLabel = (format: string): eventType => {
 
     return 'OTHER';
 };
+
 const packetsToEvent = (packets: Packet[]) =>
     packets.map(
         event =>
             ({
                 format: formatToLabel(event.format),
                 timestamp: (event.timestamp?.value ?? 0) / 1000,
-                data: event.packet_data.toString(),
+                data: event.packet_data,
             } as TraceEvent)
     );
 

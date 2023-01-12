@@ -62,9 +62,11 @@ const removeStatusFromBody = (body: string): string => {
     return body;
 };
 
+const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: TraceEvent): ParsedPacket => {
-    const textData = packet.data;
+    const textData = JSON.stringify(decoder.decode(packet.data));
     const escapedData = textData.substring(1, textData.length - 1);
+
     const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
         escapedData
     );

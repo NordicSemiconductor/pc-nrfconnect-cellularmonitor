@@ -7,9 +7,11 @@
 import { TraceEvent } from '../tracing/tracePacketEvents';
 import { convert, initialState, State } from '.';
 
+const encoder = new TextEncoder();
+const encode = (txt: string) => Buffer.from(encoder.encode(txt));
 export const atPacket = (txt: string): TraceEvent => ({
     format: 'AT',
-    data: txt,
+    data: encode(txt),
     timestamp: 0,
 });
 
