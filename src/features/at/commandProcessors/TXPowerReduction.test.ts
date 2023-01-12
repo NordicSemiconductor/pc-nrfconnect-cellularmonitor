@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Packet } from '..';
+import { TraceEvent } from '../../tracing/tracePacketEvents';
 import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
 
 const packets = [
@@ -78,7 +78,7 @@ const packets = [
 test('XEMPR commands work as expected', () => {
     packets.forEach(test => {
         const { ltemTXReduction, nbiotTXReduction } = {
-            ...convertPackets(test.packets as Packet[]),
+            ...convertPackets(test.packets as TraceEvent[]),
         };
         expect({ nbiotTXReduction, ltemTXReduction }).toEqual(test.expected);
     });

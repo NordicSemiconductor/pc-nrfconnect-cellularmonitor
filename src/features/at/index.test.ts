@@ -4,16 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { convert, initialState, Packet, State } from '.';
+import { events, notifyListeners } from '../tracing/tracePacketEvents';
+import { convert, initialState, State } from '.';
 import { rawTraceData } from './traceSample';
-
-const traceData = rawTraceData.map(
-    jsonPacket =>
-        ({
-            format: jsonPacket.format,
-            packet_data: new Uint8Array(jsonPacket.packet_data.data),
-        } as Packet)
-);
 
 const expectedState: State = {
     notifySignalQuality: true,
@@ -72,8 +65,15 @@ const expectedState: State = {
 
 test('Trace is read properly', () => {
     let state = initialState();
-
-    traceData.forEach(packet => {
+    rawTraceData.forEach(jsonPacket => {
+        notifyListeners([
+            {
+                format: jsonPacket.format,
+                packet_data: new Uint8Array(jsonPacket.packet_data.data),
+            },
+        ]);
+    });
+    events.forEach(packet => {
         state = convert(packet, state);
     });
     expect(state).toEqual(expectedState);

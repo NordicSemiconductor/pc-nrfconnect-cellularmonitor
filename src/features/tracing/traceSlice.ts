@@ -12,7 +12,6 @@ import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     setManualDbFilePath as setPersistedManualDbFilePath,
 } from '../../utils/store';
-import { Packet } from '../at';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 
@@ -21,7 +20,6 @@ export interface TraceProgress {
     path: string;
     size?: number;
 }
-
 interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;
@@ -29,7 +27,6 @@ interface TraceState {
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
-    tracePackets: Packet[];
 }
 
 const initialState = (): TraceState => ({
@@ -39,7 +36,6 @@ const initialState = (): TraceState => ({
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
-    tracePackets: [],
 });
 
 const traceSlice = createSlice({
@@ -58,7 +54,6 @@ const traceSlice = createSlice({
                 ...sink,
                 size: 0,
             }));
-            state.tracePackets = [];
         },
         setTraceIsStopped: state => {
             state.taskId = null;
@@ -92,9 +87,6 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        addTracePackets: (state, actions: PayloadAction<Packet[]>) => {
-            state.tracePackets.push(...actions.payload);
-        },
     },
 });
 
@@ -116,8 +108,6 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
-export const getTracePackets = (state: RootState) =>
-    state.app.trace.tracePackets;
 
 export const {
     setTraceIsStarted,
@@ -128,7 +118,6 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setDetectingTraceDb,
-    addTracePackets,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

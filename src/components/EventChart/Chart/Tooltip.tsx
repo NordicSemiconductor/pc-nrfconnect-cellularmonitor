@@ -7,7 +7,7 @@
 import React from 'react';
 import { TooltipModel } from 'chart.js';
 
-import { Packet } from '../../../features/at';
+import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
 
 import './Tooltip.css';
 
@@ -28,9 +28,8 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
     const point = dataPoints[0];
     if (!point) return;
 
-    const packet = (point.raw as { event: Packet }).event;
-
-    const timestamp = new Date((packet.timestamp?.value ?? 0) / 1000);
+    const packet = (point.raw as { event: TraceEvent }).event;
+    const timestamp = new Date(packet.timestamp);
     const timestampLabel = dateFormatter.format(timestamp);
 
     const others =
@@ -48,7 +47,7 @@ export const PacketTooltip = (tooltip: TooltipModel<'scatter'>) => {
                 <span className="text-muted">{others}</span>
             </div>
 
-            <p>{packet.packet_data.toString()}</p>
+            {dataPoints.length === 1 && <p>{packet.data.toString()}</p>}
             <span className="text-muted">{timestampLabel}</span>
         </div>
     );

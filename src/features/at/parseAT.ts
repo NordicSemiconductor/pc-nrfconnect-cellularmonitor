@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Packet } from '.';
+import { TraceEvent } from '../tracing/tracePacketEvents';
 
 export enum RequestType {
     NOT_A_REQUEST,
@@ -63,9 +63,10 @@ const removeStatusFromBody = (body: string): string => {
 };
 
 const decoder = new TextDecoder('utf-8');
-export const parseAT = (packet: Packet): ParsedPacket => {
-    const textData = JSON.stringify(decoder.decode(packet.packet_data));
+export const parseAT = (packet: TraceEvent): ParsedPacket => {
+    const textData = JSON.stringify(decoder.decode(packet.data));
     const escapedData = textData.substring(1, textData.length - 1);
+
     const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
         escapedData
     );
