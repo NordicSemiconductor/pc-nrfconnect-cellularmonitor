@@ -57,14 +57,11 @@
     "dependencies": {
         "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
     },
-    "bundledDependencies": [
+    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ],
     "eslintConfig": {
         "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
     },
-    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
-    "bundleDependencies": [
-        "@nordicsemiconductor/nrf-monitor-lib-js"
-    ]
+    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js"
 }
