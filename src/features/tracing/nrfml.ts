@@ -13,12 +13,8 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
-import type { TAction, TDispatch } from '../../utils/thunk';
-import { OnlinePowerEstimatorParams } from '../powerEstimation/onlinePowerEstimator';
-import {
-    resetParams as resetPowerEstimationParams,
-    setData as setPowerEstimationData,
-} from '../powerEstimation/powerEstimationSlice';
+import type { TAction } from '../../utils/thunk';
+import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -95,58 +91,6 @@ export const convertTraceFile =
         );
     };
 
-export const extractPowerData =
-    (path: string): TAction =>
-    (dispatch, getState) => {
-        let gotPowerEstimationData = false;
-        dispatch(resetPowerEstimationParams());
-        logger.info(
-            `Attempting to extract power estimation data from file ${path}`
-        );
-        usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
-        const source: SourceFormat = { type: 'file', path };
-        const sinks = ['opp' as TraceFormat];
-
-        const state = getState();
-        const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
-            err => {
-                if (!gotPowerEstimationData) {
-                    logger.error(
-                        'Failed to get power estimation data, file may not contain requisite data'
-                    );
-                } else if (err != null) {
-                    logger.error(
-                        `Failed to get power estimation data: ${err.message}`
-                    );
-                    logger.debug(`Full error: ${JSON.stringify(err)}`);
-                } else {
-                    logger.info(
-                        `Successfully extracted power estimation data from ${path}`
-                    );
-                }
-                dispatch(setTraceIsStopped());
-            },
-            () => {},
-            () => {},
-            jsonData => {
-                if (gotPowerEstimationData) return;
-                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
-                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                if (!powerEstimationData) return;
-                gotPowerEstimationData = true;
-                dispatch(setPowerEstimationData(powerEstimationData));
-                dispatch(stopTrace(taskId));
-            }
-        );
-        dispatch(
-            setTraceIsStarted({
-                taskId,
-                progressConfigs: progressConfigs(source, sinks),
-            })
-        );
-    };
-
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
@@ -213,11 +157,9 @@ export const startTrace =
             }),
             data => {
                 if (data.format !== 'modem_trace') {
+                    // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
                 }
-            },
-            data => {
-                addPowerEstimationPackets(dispatch)(data);
             }
         );
         logger.info('Started tracefile');
@@ -251,36 +193,12 @@ export const readRawTrace =
             () => {},
             data => {
                 if (data.format !== 'modem_trace') {
+                    // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
                 }
-            },
-            addPowerEstimationPackets(dispatch)
+            }
         );
         logger.info(`Started reading trace from ${sourceFile}`);
-    };
-
-const addPowerEstimationPackets =
-    (dispatch: TDispatch) =>
-    (jsonData: { onlinePowerProfiler?: OnlinePowerEstimatorParams }[]) => {
-        const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-        if (powerEstimationData) {
-            dispatch(setPowerEstimationData(powerEstimationData));
-
-            notifyListeners([
-                {
-                    format: 'ope',
-                    // @ts-expect-error will work for now
-                    packet_data: JSON.stringify(
-                        powerEstimationData,
-                        undefined,
-                        4
-                    ),
-                    timestamp: {
-                        value: Date.now() * 1000,
-                    },
-                },
-            ]);
-        }
     };
 
 export const stopTrace =
@@ -292,9 +210,3 @@ export const stopTrace =
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
     };
-
-/*
-static const std::unordered_map rrc_conncection_state_map = 
-{{"lte-rrc.rrcConnectionSetup_","rrcConnectionSetup"},{"lte-rrc.rrcConnectionSetupComplete_","rrcConnectionSetupComplete"},{"lte-rrc.rrcConnectionRequest_", "rrcConnectionRequest"},{"lte-rrc.rrcConnectionRelease_", "rrcConnectionRelease"}};
-
-*/

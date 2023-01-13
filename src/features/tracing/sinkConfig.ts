@@ -87,7 +87,6 @@ export default (
             init_parameters: {
                 opp_json_object_key: 'onlinePowerProfiler',
                 tshark_directory: tsharkFolder ?? undefined,
-                sleep: true,
             },
         };
     }
