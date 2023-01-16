@@ -41,24 +41,45 @@ const formatToLabel = (format: string): eventType => {
     return 'OTHER';
 };
 
-const packetsToEvent = (packets: Packet[]) =>
-    packets.map(
-        event =>
-            ({
-                format: formatToLabel(event.format),
-                timestamp: (event.timestamp?.value ?? 0) / 1000,
-                data: event.packet_data,
-                sequenceNumber: event.sequence_number,
-                jsonData: event.interpreted_json
-                    ? parseJsonData(event.interpreted_json)
-                    : undefined,
-            } as TraceEvent)
-    );
+const packetsToEvent = (packet: Packet) =>
+    ({
+        format: formatToLabel(packet.format),
+        timestamp: (packet.timestamp?.value ?? 0) / 1000,
+        data: packet.packet_data,
+        sequenceNumber: packet.sequence_number,
+        jsonData: packet.interpreted_json
+            ? parseJsonData(packet.interpreted_json)
+            : undefined,
+    } as TraceEvent);
 
 tracePacketEvents.on('start-process', () => events.splice(0, events.length));
 
 export const notifyListeners = (packets: Packet[]) => {
-    const formattedEvents = packetsToEvent(packets);
+    // const formattedEvents = packetsToEvent(packets);
+
+    // events.push(...formattedEvents);
+
+    const formattedEvents: TraceEvent[] = [];
+
+    packets.forEach(packet => {
+        if (!packet.interpreted_json) {
+            formattedEvents.push(packetsToEvent(packet));
+        } else {
+            const rawPacket =
+                formattedEvents.find(
+                    event => event.sequenceNumber === packet.sequence_number
+                ) ||
+                events.find(
+                    event => event.sequenceNumber === packet.sequence_number
+                );
+
+            if (rawPacket) {
+                rawPacket.jsonData = parseJsonData(packet.interpreted_json);
+            } else {
+                // This would indicate an issue with monitor lib
+            }
+        }
+    });
 
     events.push(...formattedEvents);
     tracePacketEvents.emit('new-packets', formattedEvents);
