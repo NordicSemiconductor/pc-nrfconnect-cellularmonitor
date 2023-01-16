@@ -38,7 +38,7 @@ export default () => (
             {
                 name: 'Power Estimation',
                 Main: PowerEstimation,
-                SidePanel: PowerEstimationSidePanel,
+                SidePanel: TraceCollectorSidePanel,
             },
             {
                 name: 'Events Dashboard',
