@@ -19,18 +19,53 @@ interface PowerEstimationState {
     loading: boolean;
 }
 
+enum TAU_TYPES {
+    SLEEP_INTERVAL = 0,
+    ACTIVE_TIMER = 1,
+}
+
+const defaultPowerEstimationParameters: OnlinePowerEstimatorParams = {
+    chip: '5',
+    software: '0',
+    voltage: '3.7',
+    lte_type: 'm1',
+    psm_int: '3600',
+    config_lte_edrx_req_value: '0000',
+    data_en: 'off',
+    data_size: '100',
+    data_int: '3600',
+    idrx_sync: '(320,5120)',
+    drx_sync: '(64,80)',
+    idrx_nb_sync: '',
+    drx_idle: '(10,80)',
+    tx_power_nb: '23',
+    tx_power: '23',
+    sim_sleep: '30',
+    sim_sleep_enable: 'True',
+    gps_en: 'off',
+    gps_interval: '1800',
+    gps_fix_time: '1',
+
+    psm: 'false',
+    config_lte_psm_req_rat: '00000000',
+    config_lte_psm_req_rptau: '00000000',
+    cdrx_inactive_timer: '',
+    cdrx_int: '',
+    cdrx_len: '7',
+    cdrx_on_duration: '',
+    idrx_en: 'true',
+    idrx_int: '10', // TODO: must be verified
+    idrx_len: '10',
+    idrx_reps: '',
+};
+
 const initialState: PowerEstimationState = {
-    data: null,
+    data: defaultPowerEstimationParameters,
     filePath: null,
     renderedHtml: null,
     hasError: false,
     loading: false,
 };
-
-enum TAU_TYPES {
-    SLEEP_INTERVAL = 0,
-    ACTIVE_TIMER = 1,
-}
 
 const powerEstimationSlice = createSlice({
     name: 'powerEstimation',

@@ -7,22 +7,29 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { convert, initialState } from '../../../features/at';
-import { getAT, setAT } from '../../../features/at/atSlice';
 import {
     events,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
+import { convert, initialState } from '../../../features/tracingEvents';
+import {
+    getDashboardState,
+    getPowerSavingMode,
+    setDashboardState,
+} from '../../../features/tracingEvents/dashboardSlice';
 import { getSelectedTime } from '../Chart/chartSlice';
 import Device from './Device';
 import LTENetwork from './LTENetwork';
 import Modem from './Modem';
+import PacketDomainNetwork from './PacketDomainNetwork';
+import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
 
 export default () => {
     const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
-    const atState = useSelector(getAT);
+    const powerSavingMode = useSelector(getPowerSavingMode);
+    const atState = useSelector(getDashboardState);
 
     useEffect(() => {
         const handler = () => {
@@ -37,7 +44,7 @@ export default () => {
                     }),
                     initialState()
                 );
-            dispatch(setAT(newState));
+            dispatch(setDashboardState(newState));
         };
 
         tracePacketEvents.on('new-packets', handler);
@@ -52,6 +59,8 @@ export default () => {
             <Sim />
             <LTENetwork />
             <Modem />
+            {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
+            <PacketDomainNetwork />
         </div>
     );
 };

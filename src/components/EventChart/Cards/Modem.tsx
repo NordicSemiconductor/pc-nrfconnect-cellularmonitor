@@ -7,8 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
-import { Mode } from '../../../features/at/commandProcessors/TXPowerReduction';
+import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
@@ -35,20 +35,20 @@ export default () => {
         dataProfile,
         ltemTXReduction,
         nbiotTXReduction,
-    } = useSelector(getAT);
+    } = useSelector(getDashboardState);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',
         'Revision ID': revisionID ?? 'Unknown',
-        'Hardware Version': hardwareVersion ?? 'Unknown',
-        'Modem UUID': modemUUID ?? 'Unknown',
+        'Hardware Version': (hardwareVersion as string) ?? 'Unknown',
+        'Modem UUID': (modemUUID as string) ?? 'Unknown',
         'Current Band': currentBand ?? 'Unknown',
         'Available Bands': availableBands?.length
             ? formatAvailableBands(availableBands)
             : 'Unknown',
         'Data Profile': dataProfile ?? 'Unknown',
-        'TX Power Reduction (LTE-M)': formatMode(ltemTXReduction),
-        'TX Power Reduction (NB-IoT)': formatMode(nbiotTXReduction),
+        'TX Power Reduction (LTE-M)': formatMode(ltemTXReduction as Mode),
+        'TX Power Reduction (NB-IoT)': formatMode(nbiotTXReduction as Mode),
     };
 
     return (

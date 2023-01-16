@@ -23,15 +23,11 @@ import {
     getFilePath,
     setFilePath,
 } from '../../features/powerEstimation/powerEstimationSlice';
-import { extractPowerData } from '../../features/tracing/nrfml';
 import {
     getIsDeviceSelected,
     getIsTracing,
 } from '../../features/tracing/traceSlice';
-import { findTshark } from '../../features/wireshark/wireshark';
-import { getTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
-import { askForTraceFile } from '../../utils/fileUtils';
 import {
     getCollapsePowerSection,
     setCollapsePowerSection,
@@ -39,36 +35,6 @@ import {
 import TraceFileDetails from './Tracing/TraceFileDetails';
 
 import '../PowerEstimation/powerEstimation.scss';
-
-const GetPowerDataFromFile = ({ isTracing }: { isTracing: boolean }) => {
-    const dispatch = useDispatch();
-
-    const selectedTsharkPath = useSelector(getTsharkPath);
-    const isTsharkInstalled = !!findTshark(selectedTsharkPath);
-
-    const getPowerData = () => {
-        const file = askForTraceFile();
-        if (file) {
-            dispatch(extractPowerData(file));
-        }
-    };
-
-    return (
-        <Button
-            className="w-100 secondary-btn btn-sm"
-            variant="secondary"
-            onClick={getPowerData}
-            disabled={isTracing || !isTsharkInstalled}
-            title={
-                isTsharkInstalled
-                    ? ''
-                    : 'tshark is not installed, cannot get power data'
-            }
-        >
-            {isTracing ? 'Fetching data...' : 'Get power data from RAW'}
-        </Button>
-    );
-};
 
 const SavePowerDataFromRunningTrace = ({
     isTracing,
@@ -151,9 +117,6 @@ export default () => {
             defaultCollapsed={getCollapsePowerSection()}
             onToggled={isNowExpanded => setCollapsePowerSection(!isNowExpanded)}
         >
-            {!isDeviceSelected && (
-                <GetPowerDataFromFile isTracing={isTracing} />
-            )}
             <SavePowerDataFromRunningTrace
                 isTracing={isTracing}
                 isDeviceSelected={isDeviceSelected}

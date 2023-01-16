@@ -7,16 +7,44 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
-import { networkStatus } from '../../../features/at/commandProcessors/networkRegistrationStatusNotification';
+import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
+import type { RRCState } from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
+
+type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
+
+const getRRCStateColor = (state: RRCState | undefined): RRCStateFlag => {
+    if (state === 'rrcConnectionSetup') {
+        return '🟡';
+    }
+
+    if (state === 'rrcConnectionSetupRequest') {
+        return '🔵';
+    }
+
+    if (state === 'rrcConnectionRelease') {
+        return '🟡';
+    }
+
+    if (state === 'rrcConnectionSetupComplete') {
+        return '🟢';
+    }
+
+    return '🔴';
+};
 
 export default () => {
     const {
         signalQuality: { rsrp_decibel: RSRP, rsrq_decibel: RSRQ },
         networkRegistrationStatus,
         activityStatus,
-    } = useSelector(getAT);
+        rrcState,
+        mcc,
+        mccCode,
+        mnc,
+        mncCode,
+    } = useSelector(getDashboardState);
 
     const fields = useMemo(() => {
         let status = 'Unknown';
@@ -31,15 +59,17 @@ export default () => {
         }
 
         return {
-            'RRC STAT': 'Not Implemented',
+            'RRC STATE': getRRCStateColor(rrcState) as string,
+            MNC: mnc ?? 'Unknown',
+            'MNC Code': mncCode ?? 'Unknown',
+            MCC: mcc ?? 'Unknown',
+            'MCC Code': mccCode ?? 'Unknown',
+            'CELL ID': 'Not Implemented',
             PCI: 'Not Implemented',
             SNR: 'Not Implemented',
-            MCC: 'Not Implemented',
-            'CELL ID': 'Not Implemented',
             'RRC STATE CHANGE CAUSE': 'Not Implemented',
             EARFCN: 'Not Implemented',
             'PUCCH TX POWER': 'Not Implemented',
-            MNC: 'Not Implemented',
             'NEIGHBOR CELLS': 'Not Implemented',
             'EMM STATE': 'Not Implemented',
             RSRP: RSRP ?? 'Unknown',
@@ -52,7 +82,17 @@ export default () => {
             'ACTIVITY STATUS': activityStatus ?? 'Unknown',
             STATUS: status,
         };
-    }, [networkRegistrationStatus, RSRP, RSRQ, activityStatus]);
+    }, [
+        networkRegistrationStatus,
+        RSRP,
+        RSRQ,
+        activityStatus,
+        rrcState,
+        mnc,
+        mncCode,
+        mcc,
+        mccCode,
+    ]);
 
     return (
         <DashboardCard

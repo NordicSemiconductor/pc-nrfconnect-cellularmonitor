@@ -42,7 +42,7 @@
         "chart.js": "^4.1.2",
         "chartjs-adapter-date-fns": "^2.0.0",
         "check-disk-space": "^2.1.0",
-        "dangerously-set-html-content": "^1.0.9",
+        "dangerously-set-html-content": "1.0.9",
         "ify-loader": "^1.1.0",
         "jest-fetch-mock": "^3.0.3",
         "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.14.1",
@@ -55,9 +55,9 @@
         "xterm-for-react": "^1.0.4"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.7.6"
+        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
     },
-    "bundledDependencies": [
+    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ],
     "eslintConfig": {

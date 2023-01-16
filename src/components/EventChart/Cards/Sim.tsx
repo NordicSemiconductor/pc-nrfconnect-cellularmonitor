@@ -7,14 +7,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 export default () => {
     const {
         iccid,
         imsi,
-        xmonitor: { operatorFullName: operator },
+        xmonitor,
         manufacturer,
         pinCodeStatus: pin,
         pinRetries: {
@@ -23,13 +23,13 @@ export default () => {
             SIM_PIN2: remainingPIN2,
             SIM_PUK2: remainingPUK2,
         },
-    } = useSelector(getAT);
+    } = useSelector(getDashboardState);
 
     const fields = {
         IMSI: imsi ?? 'Unknown',
         ISSUER: 'Not Implemented',
         NETWORK: 'Not Implemented',
-        OPERATOR: operator ?? 'Unknown',
+        OPERATOR: xmonitor?.operatorFullName ?? 'Unknown',
         MANUFACTURER: manufacturer ?? 'Unknown',
         ICCID: iccid ?? 'Unknown',
         PIN: pin,

@@ -6,6 +6,7 @@
 
 import EventEmitter from 'events';
 
+import type { AttachPacket } from '../tracingEvents/nas';
 import { eventType } from './formats';
 
 export interface Packet {
@@ -15,11 +16,15 @@ export interface Packet {
         resolution?: string;
         value?: number;
     };
+    sequence_number: number;
+    interpreted_json?: unknown;
 }
 export interface TraceEvent {
     timestamp: number;
     format: eventType;
+    sequenceNumber: number;
     data: Uint8Array;
+    jsonData?: AttachPacket;
 }
 
 export const tracePacketEvents = new EventEmitter();
@@ -43,6 +48,10 @@ const packetsToEvent = (packets: Packet[]) =>
                 format: formatToLabel(event.format),
                 timestamp: (event.timestamp?.value ?? 0) / 1000,
                 data: event.packet_data,
+                sequenceNumber: event.sequence_number,
+                jsonData: event.interpreted_json
+                    ? parseJsonData(event.interpreted_json)
+                    : undefined,
             } as TraceEvent)
     );
 
@@ -53,4 +62,17 @@ export const notifyListeners = (packets: Packet[]) => {
 
     events.push(...formattedEvents);
     tracePacketEvents.emit('new-packets', formattedEvents);
+};
+
+type InterpretedJSON = { 'nas-eps': AttachPacket };
+
+const assertContainsNAS = (data: unknown): data is InterpretedJSON =>
+    data != null && 'nas-eps' in (data as InterpretedJSON);
+
+const parseJsonData = (data: unknown): AttachPacket | undefined => {
+    if (assertContainsNAS(data)) {
+        return data['nas-eps'];
+    }
+
+    return undefined;
 };

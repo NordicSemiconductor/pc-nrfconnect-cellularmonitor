@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getAT } from '../../../features/at/atSlice';
+import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
@@ -15,7 +15,7 @@ const formatAvailableBands = (bandsArray: number[]) =>
 
 export default () => {
     const { IMEI, currentBand, availableBands, manufacturer } =
-        useSelector(getAT);
+        useSelector(getDashboardState);
 
     const fields = {
         IMEI: IMEI ?? 'Unknown',

@@ -57,7 +57,6 @@ export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
         }),
         expect.any(Function),
         expect.any(Function),
-        expect.any(Function),
         expect.any(Function)
     );
 
