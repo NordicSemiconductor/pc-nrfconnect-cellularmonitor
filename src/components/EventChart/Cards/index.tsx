@@ -11,7 +11,8 @@ import {
     events,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
-import { convert, initialState } from '../../../features/tracingEvents';
+import { convert } from '../../../features/tracingEvents';
+import { initialState } from '../../../features/tracingEvents/at';
 import {
     getDashboardState,
     getPowerSavingMode,

@@ -6,10 +6,9 @@
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import type { State } from '../types';
-import {
+import NASConverter, {
     AttachAcceptPacket,
     AttachRequestPacket,
-    nasConverter,
     parseIPv6Postfix,
     processAttachAcceptPacket,
     processAttachRequestPacket,
@@ -47,7 +46,7 @@ test('Process Request and then Accept sets correct state', () => {
 
     let actualState = {};
     [actualAttachRequestPacket, actualAttachAcceptPacket].forEach(packet => {
-        actualState = nasConverter(packet, actualState as State);
+        actualState = NASConverter(packet, actualState as State);
     });
 
     expect(actualState).toEqual(expectedState);

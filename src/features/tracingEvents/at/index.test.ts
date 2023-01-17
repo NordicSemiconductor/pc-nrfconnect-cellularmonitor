@@ -5,7 +5,8 @@
  */
 
 import { events, notifyListeners } from '../../tracing/tracePacketEvents';
-import { convert, initialState } from '..';
+import { convert } from '..';
+import { initialState } from '.';
 import { rawTraceData } from './traceSample';
 
 const expectedState = {

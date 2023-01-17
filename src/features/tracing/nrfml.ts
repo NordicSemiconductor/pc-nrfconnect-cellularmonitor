@@ -196,6 +196,9 @@ export const readRawTrace =
                 if (data.format !== 'modem_trace') {
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
+                    if (data.interpreted_json) {
+                        console.log(data);
+                    }
                 }
             }
         );
