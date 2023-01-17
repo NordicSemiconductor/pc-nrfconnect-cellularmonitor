@@ -90,7 +90,10 @@ const getMinMaxX = (chart: Chart) => {
     //     defaultOptions().currentRange.max;
     // const max = Math.max(maxTimestamp + offset, maxRange);
 
-    return [min, Math.max(options.maxRange, min + options.resolution)];
+    return [
+        min,
+        Math.max(options.maxRange + getOffset(chart), min + options.resolution),
+    ];
 };
 
 // Calulate Range from Data Backup
@@ -205,6 +208,11 @@ export default {
                 clearInterval(liveIntervalId);
                 liveIntervalId = undefined;
             }
+
+            const { data, options } = getState(chart);
+            options.maxRange = data[data.length - 1].timestamp;
+            updateRange(chart, getRange(chart));
+            chart.update('none');
         });
         chart.zoom = (resolution, offset) => {
             const { options } = getState(chart);
@@ -260,9 +268,7 @@ export default {
 
                     options.maxRange =
                         alpha * options.maxRange +
-                        (1.0 - alpha) *
-                            (data[data.length - 1].timestamp +
-                                getOffset(chart));
+                        (1.0 - alpha) * data[data.length - 1].timestamp;
                 }
 
                 // if (updateRange(chart, getRange(chart))) {

@@ -189,6 +189,7 @@ export const readRawTrace =
                     );
                 else logger.info(`Completed reading trace from ${sourceFile}`);
                 notifyListeners(packets);
+                tracePacketEvents.emit('stop-process');
             },
             () => {},
             data => {
