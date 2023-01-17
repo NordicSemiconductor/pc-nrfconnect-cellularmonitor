@@ -91,6 +91,7 @@ export interface State {
 
     // TODO: Revise above state attributes.
     // New state attributes under:
+    networkType: NetworkType;
     powerSavingMode: {
         requested?: PowerSavingModeEntries;
         granted?: PowerSavingModeEntries;
@@ -120,6 +121,7 @@ export interface AccessPointName {
 }
 
 // Need to be cast from RawPDNType with parsePDNType function
+export type NetworkType = 'NB-IoT' | 'LTE-M';
 export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
 export type RawPDNType = '1' | '2' | '3' | '4';
 

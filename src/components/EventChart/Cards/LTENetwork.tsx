@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
@@ -44,6 +44,7 @@ export default () => {
         mccCode,
         mnc,
         mncCode,
+        networkType,
     } = useSelector(getDashboardState);
 
     const fields = useMemo(() => {
@@ -96,7 +97,7 @@ export default () => {
 
     return (
         <DashboardCard
-            title="LTE Network"
+            title={`${networkType} Network`.trim()}
             iconName="mdi-access-point-network"
             fields={fields}
         />

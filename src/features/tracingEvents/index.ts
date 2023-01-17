@@ -8,7 +8,8 @@ import type { TraceEvent } from '../tracing/tracePacketEvents';
 import * as at from './at';
 import { parseAT, ParsedPacket, RequestType } from './at/parseAT';
 import IPConverter from './ip';
-import { nasConverter } from './nas';
+import LTEConverter from './lte';
+import NASConverter from './nas';
 import type { State } from './types';
 
 export interface Processor {
@@ -71,17 +72,15 @@ export const convert = (packet: TraceEvent, state: State): State => {
 
     if (packet.jsonData) {
         if (packet.format === 'NAS') {
-            const newState = nasConverter(packet, state);
-            return newState;
+            return NASConverter(packet, state);
         }
 
         if (packet.format === 'IP') {
             return IPConverter(packet, state);
         }
-
-        if (/lte-rrc.*/.test(packet.format)) {
-            // suppose to be empty
-        }
+    }
+    if (packet.format === 'RRC') {
+        return LTEConverter(packet, state);
     }
 
     return state;

@@ -116,7 +116,6 @@ const powerEstimationSlice = createSlice({
 export const getData = (state: RootState) => {
     const powerEstimationState = state.app.powerEstimation.data;
     const grantedPSM = state.app.dashboard.powerSavingMode?.granted;
-    console.log('Do we have granted PSM?', JSON.stringify(grantedPSM));
     const psm = grantedPSM ? 'on' : powerEstimationState?.psm;
     const config_lte_psm_req_rptau = grantedPSM?.T3412_extended
         ? grantedPSM.T3412_extended.bitmask

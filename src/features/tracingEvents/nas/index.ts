@@ -114,7 +114,7 @@ const assertIsAttachRejectPacket = (
     packet: AttachPacket
 ): packet is AttachRejectPacket => packet.nas_msg_emm_type === '0x44';
 
-export const nasConverter = (packet: TraceEvent, state: State) => {
+export default (packet: TraceEvent, state: State) => {
     if (packet.jsonData) {
         const attach: unknown = packet.jsonData;
         if (assertIsAttachPacket(attach)) {
