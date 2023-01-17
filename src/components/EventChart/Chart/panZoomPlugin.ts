@@ -205,6 +205,11 @@ export default {
                 clearInterval(liveIntervalId);
                 liveIntervalId = undefined;
             }
+
+            const { data, options } = getState(chart);
+            options.maxRange = data[data.length - 1].timestamp;
+            updateRange(chart, getRange(chart));
+            chart.update('none');
         });
         chart.zoom = (resolution, offset) => {
             const { options } = getState(chart);
