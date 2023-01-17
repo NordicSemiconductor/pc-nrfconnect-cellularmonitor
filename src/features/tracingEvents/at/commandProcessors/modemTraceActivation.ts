@@ -1,27 +1,31 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import type { Processor } from '..';
 import { getParametersFromResponse } from '../utils';
 
 export const processor: Processor = {
-    command: '%XMONITOR',
+    command: '%XMODEMTRACE',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xmonitor.html',
-    initialState: () => ({
-        xmonitor: {
-            regStatus: 0,
-        },
-    }),
-    onResponse: packet => {
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xmodemtrace.html',
+    initialState: () => ({}),
+    onRequest: packet => {
         if (packet.status === 'OK') {
-            const responseArray = getParametersFromResponse(packet.payload);
-            if (responseArray.length !== 15 && responseArray.length !== 16) {
-                return {};
-            }
+            const payload = getParametersFromResponse(packet.payload);
 
-            const parsedAcT = parseInt(responseArray[5], 10);
-            const evaluatedAcT =
-                parsedAcT === 7 || parsedAcT === 9 ? parsedAcT : undefined;
+            return {
+                xModemTraceOperation: Number.parseInt(payload[0], 10),
+                xModemTraceSetID:
+                    payload.length >= 2
+                        ? Number.parseInt(payload[1], 10)
+                        : undefined,
+            };
+        }
 
-            
-        return {}
+        return {};
     },
+    onResponse: () => ({}),
 };

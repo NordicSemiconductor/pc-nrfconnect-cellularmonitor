@@ -104,6 +104,10 @@ export interface State {
     mcc: string;
     mccCode: number;
     rrcState: RRCState;
+
+    // XModemTrace
+    xModemTraceOperation: number;
+    xModemTraceSetID: number;
 }
 
 export interface AccessPointName {

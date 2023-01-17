@@ -16,6 +16,7 @@ import { processor as iccid } from './commandProcessors/iccid';
 import { processor as internationalMobileSubscriberIdentity } from './commandProcessors/internationalMobileSubscriberIdentity';
 import { processor as manufacturerIdentification } from './commandProcessors/manufacturerIdentification';
 import { processor as modemParameters } from './commandProcessors/modemParameters';
+import { processor as modemTraceActivation } from './commandProcessors/modemTraceActivation';
 import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
 import { processor as networkRegistrationStatus } from './commandProcessors/networkRegistrationStatusNotification';
@@ -27,6 +28,30 @@ import { processor as revisionIdentification } from './commandProcessors/revisio
 import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
+
+const processors = [
+    functionMode,
+    currentBand,
+    modeOfOperation,
+    signalQualityNotification,
+    periodicTAU,
+    modemParameters,
+    pinCode,
+    pinRetries,
+    internationalMobileSubscriberIdentity,
+    manufacturerIdentification,
+    iccid,
+    revisionIdentification,
+    productSerialNumber,
+    hardwareVersion,
+    modemUUID,
+    dataProfile,
+    TXPowerReduction,
+    extendedSignalQuality,
+    activityStatus,
+    networkRegistrationStatus,
+    modemTraceActivation,
+] as const;
 
 let waitingAT: string;
 let pendingRequestType: RequestType | null;
@@ -100,29 +125,6 @@ export default (packet: TraceEvent, state: State) => {
 
     return state;
 };
-
-const processors = [
-    functionMode,
-    currentBand,
-    modeOfOperation,
-    signalQualityNotification,
-    periodicTAU,
-    modemParameters,
-    pinCode,
-    pinRetries,
-    internationalMobileSubscriberIdentity,
-    manufacturerIdentification,
-    iccid,
-    revisionIdentification,
-    productSerialNumber,
-    hardwareVersion,
-    modemUUID,
-    dataProfile,
-    TXPowerReduction,
-    extendedSignalQuality,
-    activityStatus,
-    networkRegistrationStatus,
-] as const;
 
 export interface Processor {
     command: string;
