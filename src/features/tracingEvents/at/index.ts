@@ -26,6 +26,7 @@ import { processor as pinRetries } from './commandProcessors/pinRetries';
 import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
 import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
 import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
+import { processor as systemMode } from './commandProcessors/systemMode';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
@@ -51,6 +52,7 @@ const processors = [
     activityStatus,
     networkRegistrationStatus,
     modemTraceActivation,
+    systemMode,
 ] as const;
 
 let waitingAT: string;

@@ -62,6 +62,11 @@ const expectedState = {
         ci: '02024720',
         AcT: 7,
     },
+
+    modemSupportLTEM: true,
+    modemSupportNBIoT: false,
+    modemSupportGNSS: true,
+    modemSystemPreference: 0,
 };
 
 test('Trace is read properly', () => {

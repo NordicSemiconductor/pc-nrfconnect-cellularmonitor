@@ -108,6 +108,12 @@ export interface State {
     // XModemTrace
     xModemTraceOperation: number;
     xModemTraceSetID: number;
+
+    // XSystemMode
+    modemSupportLTEM: boolean;
+    modemSupportNBIoT: boolean;
+    modemSupportGNSS: boolean;
+    modemSystemPreference: number;
 }
 
 export interface AccessPointName {
