@@ -25,6 +25,7 @@ import Modem from './Modem';
 import PacketDomainNetwork from './PacketDomainNetwork';
 import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
+import Temp from './Temp';
 
 export default () => {
     const timestamp = useSelector(getSelectedTime);
@@ -56,6 +57,7 @@ export default () => {
 
     return (
         <div className="cards-container">
+            <Temp />
             <Device />
             <Sim />
             <LTENetwork />
