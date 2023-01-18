@@ -8,6 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
+import { NetworkStatusNotifications } from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
 
 export default () => {
@@ -21,6 +22,9 @@ export default () => {
         modemSupportNBIoT,
         modemSupportGNSS,
         modemSystemPreference,
+
+        // +CEREG Notifications
+        networkStatusNotifications,
     } = useSelector(getDashboardState);
 
     const parseSupportedValue = (supported: boolean | undefined) => {
@@ -54,6 +58,10 @@ export default () => {
         'NB-IoT Support': parseSupportedValue(modemSupportNBIoT),
         'GNSS Support': parseSupportedValue(modemSupportGNSS),
         'Preferred Bearer': parsePreferredBearer(modemSystemPreference),
+
+        'Network Status Notifications': parseNetworkStatusNotifications(
+            networkStatusNotifications
+        ),
     };
 
     return (
@@ -64,4 +72,16 @@ export default () => {
             fields={fields}
         />
     );
+};
+
+const parseNetworkStatusNotifications = (
+    notification: NetworkStatusNotifications
+) => {
+    if (notification != null) {
+        if (notification === 0) return 'Unsubscribed';
+
+        return `Subscribed with value: ${notification}`;
+    }
+
+    return 'Unknown';
 };

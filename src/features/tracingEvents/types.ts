@@ -114,7 +114,12 @@ export interface State {
     modemSupportNBIoT: boolean;
     modemSupportGNSS: boolean;
     modemSystemPreference: number;
+
+    // CEREG - Network Registration Status Notification
+    networkStatusNotifications: NetworkStatusNotifications;
 }
+
+export type NetworkStatusNotifications = 0 | 1 | 2 | 3 | 4 | 5 | undefined;
 
 export interface AccessPointName {
     apn?: string;

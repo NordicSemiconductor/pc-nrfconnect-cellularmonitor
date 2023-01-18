@@ -7,11 +7,42 @@
 import type { Processor } from '..';
 import { getParametersFromResponse } from '../utils';
 
+const parsePayload = (value: string) => {
+    switch (value) {
+        case '0':
+            return 0;
+        case '1':
+            return 1;
+        case '2':
+            return 2;
+        case '3':
+            return 3;
+        case '4':
+            return 4;
+        case '5':
+            return 5;
+        default:
+            return null as never;
+    }
+};
+
 export const processor: Processor = {
     command: '+CEREG',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
     initialState: () => ({}),
+    onRequest: packet => {
+        if (packet.status === 'OK') {
+            const payload = getParametersFromResponse(packet.payload);
+            if (payload.length) {
+                return {
+                    networkStatusNotifications:
+                        parsePayload(payload[0]) ?? undefined,
+                };
+            }
+        }
+        return {};
+    },
     onResponse: packet => {
         if (packet.status === 'OK' && packet.payload) {
             return {
