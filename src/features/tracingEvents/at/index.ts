@@ -9,6 +9,7 @@ import { State } from '../types';
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
+import { processor as evaluatingConnectionParameters } from './commandProcessors/evaluatingConnectionParameters';
 import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
 import { processor as functionMode } from './commandProcessors/functionMode';
 import { processor as hardwareVersion } from './commandProcessors/hardwareVersion';
@@ -31,28 +32,29 @@ import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduct
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
-    functionMode,
+    activityStatus,
     currentBand,
-    modeOfOperation,
-    signalQualityNotification,
-    periodicTAU,
-    modemParameters,
-    pinCode,
-    pinRetries,
+    dataProfile,
+    evaluatingConnectionParameters,
+    extendedSignalQuality,
+    functionMode,
+    hardwareVersion,
+    iccid,
     internationalMobileSubscriberIdentity,
     manufacturerIdentification,
-    iccid,
-    revisionIdentification,
-    productSerialNumber,
-    hardwareVersion,
-    modemUUID,
-    dataProfile,
-    TXPowerReduction,
-    extendedSignalQuality,
-    activityStatus,
-    networkRegistrationStatus,
+    modemParameters,
     modemTraceActivation,
+    modemUUID,
+    modeOfOperation,
+    networkRegistrationStatus,
+    periodicTAU,
+    pinCode,
+    pinRetries,
+    productSerialNumber,
+    revisionIdentification,
+    signalQualityNotification,
     systemMode,
+    TXPowerReduction,
 ] as const;
 
 let waitingAT: string;

@@ -17,12 +17,6 @@ type NasPacket = Omit<Packet, 'interpreted_json'> & {
     interpreted_json: { 'nas-eps': AttachPacket };
 };
 
-export type RRCState =
-    | 'rrcConnectionSetupRequest'
-    | 'rrcConnectionSetup'
-    | 'rrcConnectionSetupComplete'
-    | 'rrcConnectionRelease';
-
 export type PacketFormat =
     | 'at'
     | 'nas-eps'
@@ -32,14 +26,6 @@ export type PacketFormat =
 
 export interface State {
     notifySignalQuality: boolean;
-    signalQuality: {
-        rsrp: number;
-        rsrp_threshold_index: number;
-        rsrp_decibel: number;
-        rsrq: number;
-        rsrq_threshold_index: number;
-        rsrq_decibel: number;
-    };
     notifyPeriodicTAU: boolean;
     xmonitor?: {
         regStatus?: number;
@@ -103,7 +89,6 @@ export interface State {
     mncCode: number;
     mcc: string;
     mccCode: number;
-    rrcState: RRCState;
 
     // XModemTrace
     xModemTraceOperation: number;
@@ -117,9 +102,59 @@ export interface State {
 
     // CEREG - Network Registration Status Notification
     networkStatusNotifications: NetworkStatusNotifications;
+
+    // Evaluating Connection Parameters %CONEVAL
+    conevalResult: ConnectionEvaluationResult;
+    conevalEnergyEstimate: ConevalEnergyEstimate;
+    rrcState: RRCState;
+    signalQuality: {
+        rsrp?: number;
+        rsrp_threshold_index?: number;
+        rsrp_decibel?: number;
+        rsrq?: number;
+        rsrq_threshold_index?: number;
+        rsrq_decibel?: number;
+        snr?: number;
+    };
+    cellID: string; // 4-byte E-UTRAN cell ID.
+    physicalCellID: number; // Integer [0, 503]
+    earfcn: number;
+    plmn: string; // Actually just <MCC + MNC>
+    band: number; // 0 = unavailable, Integer [0, 88]
+    TAUTriggered: TAUTriggered;
+
+    // Don't actually know if ce=Cell Evaluation
+    conevalCellEvaluationLevel: CellEvaluationLevel;
+    conevalTXPower: number;
+    conevalTXRepetitions: number; // Integer [1, 2048], special 0 and 1.
+    conevalRXRepetitions: number; // Integer [1, 2048], special 0 and 1.
+    conevalDLPathLoss: number;
 }
 
+/*
+    Several responses to AT commands have a set of result code: e.g. NetworkStatusNotifications = [0, 5].
+    Would like a type Generic with an included interval [1, 2] => 1 | 2, [0, 4] => 0 | 1 | 2 | 3 | 4, and so on...
+*/
+// export type ResultCode<From extends number, To extends number> = ;
+export type RRCState =
+    | 0 // In IDLE state.
+    | 1 // In Connected state.
+    | undefined;
 export type NetworkStatusNotifications = 0 | 1 | 2 | 3 | 4 | 5 | undefined;
+export type ConnectionEvaluationResult =
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | undefined;
+// Higher values means smaller energy consumption.
+export type ConevalEnergyEstimate = 5 | 6 | 7 | 8 | 9 | undefined;
+export type CellEvaluationLevel = 0 | 1 | 2 | 3 | 255 | undefined;
+export type TAUTriggered = 0 | 1 | 255 | undefined;
 
 export interface AccessPointName {
     apn?: string;

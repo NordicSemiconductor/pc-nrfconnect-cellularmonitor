@@ -25,6 +25,23 @@ export default () => {
 
         // +CEREG Notifications
         networkStatusNotifications,
+
+        // %CONEVAL
+        conevalResult,
+        rrcState,
+        conevalEnergyEstimate,
+        signalQuality: { rsrp, rsrq, snr },
+        cellID,
+        plmn,
+        physicalCellID,
+        earfcn,
+        band,
+        TAUTriggered,
+        conevalCellEvaluationLevel,
+        conevalTXPower,
+        conevalTXRepetitions,
+        conevalRXRepetitions,
+        conevalDLPathLoss,
     } = useSelector(getDashboardState);
 
     const parseSupportedValue = (supported: boolean | undefined) => {
@@ -62,6 +79,25 @@ export default () => {
         'Network Status Notifications': parseNetworkStatusNotifications(
             networkStatusNotifications
         ),
+
+        'Connection Evaluation Result': conevalResult ?? 'Unknown',
+        'RRC State': rrcState ?? 'Unknown',
+        'Energy Estimate': conevalEnergyEstimate ?? 'Unknown',
+        'Signal Quality (RSRP)': rsrp ?? 'Unknown',
+        'Signal Quality (RSRQ)': rsrq ?? 'Unknown',
+        'Signal Quality (SNR)': snr ?? 'Unknown',
+        'Cell ID': cellID ?? 'Unknown',
+        PLMN: plmn ?? 'Unknown',
+        'Physical Cell ID': physicalCellID ?? 'Unknown',
+        EARFCN: earfcn ?? 'Unknown',
+        Band: band ?? 'Unknown',
+        'TAU Triggered': TAUTriggered ?? 'Unknown',
+        'CONEVAL Cell Evaluation Level':
+            conevalCellEvaluationLevel ?? 'Unknown',
+        'CONEVAL TX Power': conevalTXPower ?? 'Unknown',
+        'CONEVAL TX Repetitions': conevalTXRepetitions ?? 'Unknown',
+        'CONEVAL RX Repetitions': conevalRXRepetitions ?? 'Unknown',
+        'CONEVAL DL Path Loss': conevalDLPathLoss ?? 'Unknown',
     };
 
     return (
