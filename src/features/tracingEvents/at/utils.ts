@@ -35,21 +35,7 @@ export const getParametersFromResponse = (payload?: string) => {
             line
                 .split(',')
                 .map(stringValue => stringValue.trim())
-                .map(value => {
-                    if (
-                        value.charAt(0) === '"' &&
-                        value.charAt(value.length - 1) === '"'
-                    ) {
-                        return value.substring(1, value.length - 1);
-                    }
-                    if (
-                        value.substring(0, 2) === '\\"' &&
-                        value.substring(value.length - 2) === '\\"'
-                    ) {
-                        return value.substring(2, value.length - 2);
-                    }
-                    return value;
-                })
+                .map(value => value.replace(/[\\]+|["]|[”]/g, ''))
         )
         .flat();
 
