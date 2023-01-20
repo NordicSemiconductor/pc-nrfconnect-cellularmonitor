@@ -22,5 +22,6 @@ declare module 'chart.js' {
         addData: (data: TraceEvent[]) => void;
         resetChart: () => void;
         setLive: (live: boolean) => void;
+        setMode: (mode: 'Event' | 'Time') => void;
     }
 }
