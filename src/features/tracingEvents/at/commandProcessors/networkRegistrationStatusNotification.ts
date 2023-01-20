@@ -4,27 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { NetworkStatusNotifications } from '../../types';
 import type { Processor } from '..';
+import { RequestType } from '../parseAT';
 import { getParametersFromResponse } from '../utils';
 
-const parsePayload = (value: string) => {
-    switch (value) {
-        case '0':
-            return 0;
-        case '1':
-            return 1;
-        case '2':
-            return 2;
-        case '3':
-            return 3;
-        case '4':
-            return 4;
-        case '5':
-            return 5;
-        default:
-            return null as never;
-    }
-};
+let setPayload: NetworkStatusNotifications;
 
 export const processor: Processor = {
     command: '+CEREG',
@@ -32,25 +17,31 @@ export const processor: Processor = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
     initialState: () => ({}),
     onRequest: packet => {
-        if (packet.status === 'OK') {
+        if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const payload = getParametersFromResponse(packet.payload);
-            if (payload.length) {
-                return {
-                    networkStatusNotifications:
-                        parsePayload(payload[0]) ?? undefined,
-                };
+            if (payload) {
+                setPayload = Number.parseInt(
+                    payload[0],
+                    10
+                ) as NetworkStatusNotifications;
             }
         }
         return {};
     },
-    onResponse: packet => {
-        if (packet.status === 'OK' && packet.payload) {
-            return {
-                networkRegistrationStatus: setNetworkRegistrationStatus(
-                    'response',
-                    packet.payload
-                ),
-            };
+    onResponse: (packet, reqType) => {
+        if (packet.status === 'OK') {
+            if (reqType === RequestType.SET_WITH_VALUE) {
+                return { networkStatusNotifications: setPayload };
+            }
+
+            if (packet.payload) {
+                return {
+                    networkRegistrationStatus: setNetworkRegistrationStatus(
+                        'response',
+                        packet.payload
+                    ),
+                };
+            }
         }
         return {};
     },

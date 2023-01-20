@@ -121,16 +121,16 @@ export const getData = (state: RootState) => {
         ? grantedPSM.T3412_extended.bitmask
         : powerEstimationState?.config_lte_psm_req_rptau;
     const psm_int = grantedPSM?.T3412_extended
-        ? parseTAUByteToSeconds(
+        ? `${parseTAUByteToSeconds(
               grantedPSM.T3412_extended.bitmask,
               TAU_TYPES.SLEEP_INTERVAL
-          )
+          )}`
         : powerEstimationState?.psm_int;
     const idrx_len = grantedPSM?.T3324
-        ? parseTAUByteToSeconds(
+        ? `${parseTAUByteToSeconds(
               grantedPSM.T3324.bitmask,
               TAU_TYPES.ACTIVE_TIMER
-          )
+          )}`
         : powerEstimationState?.idrx_len;
     const config_lte_psm_req_rat = grantedPSM?.T3324
         ? grantedPSM.T3324.bitmask

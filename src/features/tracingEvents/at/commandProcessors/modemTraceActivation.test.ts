@@ -5,22 +5,22 @@
  */
 
 import { State } from '../../types';
-import { atPacket, convertPackets } from '../testUtils';
+import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 const tests = [
     {
-        response: atPacket('AT%XMODEMTRACE=1,1\r\nOK\r\n'),
+        commands: [atPacket('AT%XMODEMTRACE=1,1'), OkPacket],
         expected: { xModemTraceOperation: 1, xModemTraceSetID: 1 },
     },
     {
-        response: atPacket('AT%XMODEMTRACE=0\r\nOK\r\n'),
+        commands: [atPacket('AT%XMODEMTRACE=0'), OkPacket],
         expected: { xModemTraceOperation: 0 },
     },
 ];
 
 test('XModemTrace returns correct partial state', () => {
     tests.forEach(test => {
-        const result = convertPackets([test.response]);
+        const result = convertPackets(test.commands);
 
         Object.entries(test.expected).forEach(([key, value]) => {
             expect(result[key as keyof State]).toBe(value);

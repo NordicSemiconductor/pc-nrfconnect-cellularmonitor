@@ -5,7 +5,13 @@
  */
 
 import type { Processor } from '..';
+import { RequestType } from '../parseAT';
 import { getParametersFromResponse } from '../utils';
+
+let setPayload: {
+    xModemTraceOperation: number | undefined;
+    xModemTraceSetID: number | undefined;
+};
 
 export const processor: Processor = {
     command: '%XMODEMTRACE',
@@ -13,10 +19,9 @@ export const processor: Processor = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xmodemtrace.html',
     initialState: () => ({}),
     onRequest: packet => {
-        if (packet.status === 'OK') {
+        if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const payload = getParametersFromResponse(packet.payload);
-
-            return {
+            setPayload = {
                 xModemTraceOperation: Number.parseInt(payload[0], 10),
                 xModemTraceSetID:
                     payload.length >= 2
@@ -27,5 +32,10 @@ export const processor: Processor = {
 
         return {};
     },
-    onResponse: () => ({}),
+    onResponse: (packet, reqType) => {
+        if (packet.status === 'OK' && reqType === RequestType.SET_WITH_VALUE) {
+            return setPayload;
+        }
+        return {};
+    },
 };

@@ -5,10 +5,10 @@
  */
 
 import { State } from '../../types';
-import { atPacket, convertPackets } from '../testUtils';
+import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 const setCommand = {
-    commands: [atPacket('AT%XSYSTEMMODE=1,0,1,0\r\nOK\r\n')],
+    commands: [atPacket('AT%XSYSTEMMODE=1,0,1,0'), OkPacket],
     expected: {
         modemSupportLTEM: true,
         modemSupportNBIoT: false,
@@ -30,9 +30,15 @@ const readCommand = {
 };
 
 test('XSystemMode SetCommand returns correct partial state', () => {
-    const result = convertPackets(setCommand.commands);
+    const resultSet = convertPackets(setCommand.commands);
 
     Object.entries(setCommand.expected).forEach(([key, value]) => {
-        expect(result[key as keyof State]).toBe(value);
+        expect(resultSet[key as keyof State]).toBe(value);
+    });
+
+    const resultRead = convertPackets(readCommand.commands);
+
+    Object.entries(readCommand.expected).forEach(([key, value]) => {
+        expect(resultRead[key as keyof State]).toBe(value);
     });
 });

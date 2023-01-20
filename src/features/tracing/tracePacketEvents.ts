@@ -45,7 +45,8 @@ const formatToLabel = (format: string): eventType => {
 };
 
 const parseNetworkType = (format: string): NetworkType => {
-    const type = format.split('.').at(-1);
+    const formatList = format.split('.');
+    const type = formatList[formatList.length - 1];
 
     if (type === 'nb') {
         return 'NB-IoT';
