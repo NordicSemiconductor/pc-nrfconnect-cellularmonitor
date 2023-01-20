@@ -2,7 +2,7 @@
 
 ### Changed
 
--   Updated to be compatible with launcher v4.0.0.
+-   Updated to be compatible with nRF Connect for Desktop v4.0.0.
 
 ## 0.3.6 - 2022-11-11
 
