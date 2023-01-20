@@ -30,6 +30,7 @@ import {
 import chartAreaBorderPlugin from './chartAreaBorderPlugin';
 import {
     getLive,
+    getMode,
     getTraceEventFilter,
     setLive,
     setSelectedTime,
@@ -80,7 +81,8 @@ export default () => {
     const chart = useRef<ChartJSOrUndefined<'scatter'>>();
     const traceEventFilter = useSelector(getTraceEventFilter);
     const isLive = useSelector(getLive);
-    const [range, setRange] = useState(defaultOptions().currentRange);
+    const mode = useSelector(getMode);
+    const [range, setRange] = useState(defaultOptions(mode).currentRange);
     const [chartArea, setChartCanvas] = useState(chart.current?.chartArea);
 
     useEffect(() => {
@@ -110,6 +112,10 @@ export default () => {
     useEffect(() => {
         chart.current?.setLive(isLive);
     }, [isLive]);
+
+    useEffect(() => {
+        chart.current?.setMode(mode);
+    }, [mode]);
 
     const options: ChartOptions<'scatter'> = useMemo(
         () => ({
@@ -216,7 +222,7 @@ export default () => {
             <div
                 style={{
                     height: `${
-                        30 + (170 / 7) * (traceEventFilter.length + 2)
+                        30 + (170 / 6) * (traceEventFilter.length + 2)
                     }px`,
                 }}
             >

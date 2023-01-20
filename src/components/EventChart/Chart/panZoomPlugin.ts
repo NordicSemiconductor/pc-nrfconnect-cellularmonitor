@@ -77,18 +77,26 @@ const getMinMaxX = (chart: Chart) => {
 
     if (data.length === 0) {
         return [
-            defaultOptions().currentRange.min,
-            defaultOptions().currentRange.max,
+            defaultOptions(options.mode).currentRange.min,
+            defaultOptions(options.mode).currentRange.max,
         ];
     }
 
-    // const offset = getOffset(chart);
+    if (options.mode === 'Event') {
+        return [
+            0,
+            Math.max(
+                data.filter(e => options.traceEventFilter.includes(e.format))
+                    .length -
+                    1 +
+                    getOffset(chart),
+                0 + options.resolution
+            ),
+        ];
+    }
 
-    const min = data[0].timestamp ?? defaultOptions().currentRange.min;
-    // const maxTimestamp =
-    //     data.findLast(e => traceEventFilter.includes(e.format))?.timestamp ??
-    //     defaultOptions().currentRange.max;
-    // const max = Math.max(maxTimestamp + offset, maxRange);
+    const min =
+        data[0].timestamp ?? defaultOptions(options.mode).currentRange.min;
 
     return [
         min,
@@ -115,7 +123,7 @@ const getRange = (chart: Chart) => {
 };
 
 const updateRange = (chart: Chart, range: XAxisRange) => {
-    const { options } = getState(chart);
+    const { data, options } = getState(chart);
     const [min, max] = getMinMaxX(chart);
 
     const old = options.live;
@@ -129,6 +137,27 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
         range = getRange(chart);
     }
 
+    // Event mode has to update delta display without updating slice
+    // This is only relevant during the start when the range is bigger than data displayed
+    if (options.mode === 'Event') {
+        const filteredData = data.filter(event =>
+            options.traceEventFilter.includes(event.format)
+        );
+        if (filteredData.length === 0) {
+            options.onRangeChanged({ min: 0, max: 0 });
+        } else {
+            options.onRangeChanged({
+                min:
+                    filteredData[Math.ceil(range.min)].timestamp -
+                    data[0].timestamp,
+                max:
+                    filteredData[
+                        Math.min(Math.floor(range.max), filteredData.length - 1)
+                    ].timestamp - data[0].timestamp,
+            });
+        }
+    }
+
     if (
         options.currentRange.max === range.max &&
         options.currentRange.min === range.min
@@ -136,7 +165,10 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
         return false;
 
     options.currentRange = { ...range };
-    options.onRangeChanged({ min: range.min - min, max: range.max - min });
+
+    if (options.mode === 'Time') {
+        options.onRangeChanged({ min: range.min - min, max: range.max - min });
+    }
 
     (chart.scales.x.options as CartesianScaleOptions).min =
         options.currentRange.min;
@@ -150,21 +182,45 @@ const mutateData = (chart: Chart) => {
     const { data, options } = getState(chart);
     if (data.length === 0) return [];
 
+    const filteredData = data.filter(event =>
+        options.traceEventFilter.includes(event.format)
+    );
+
+    if (options.mode === 'Event') {
+        const start = Math.floor(options.currentRange.min);
+
+        return filteredData
+            .slice(
+                start,
+                Math.min(
+                    Math.ceil(options.currentRange.max) + 1,
+                    filteredData.length
+                )
+            )
+            .map(
+                (event, index) =>
+                    ({
+                        x: start + index,
+                        y: options.traceEventFilter.indexOf(event.format),
+                        event,
+                    } as ScatterDataPoint)
+            );
+    }
+
     const offset = getOffset(chart);
 
-    return data
+    return filteredData
         .filter(
-            packet =>
-                options.traceEventFilter.includes(packet.format) &&
-                packet.timestamp >= options.currentRange.min - offset &&
-                packet.timestamp <= options.currentRange.max + offset
+            event =>
+                event.timestamp >= options.currentRange.min - offset &&
+                event.timestamp <= options.currentRange.max + offset
         )
         .map(
-            packet =>
+            event =>
                 ({
-                    x: packet.timestamp,
-                    y: options.traceEventFilter.indexOf(packet.format),
-                    event: packet,
+                    x: event.timestamp,
+                    y: options.traceEventFilter.indexOf(event.format),
+                    event,
                 } as ScatterDataPoint)
         );
 };
@@ -192,7 +248,7 @@ const setupLiveInterval = (chart: Chart) => {
 
         options.maxRange = Date.now();
 
-        if (options.live) {
+        if (options.mode === 'Time' && options.live) {
             updateRange(chart, getRange(chart));
             chart.update('none');
         }
@@ -235,8 +291,11 @@ export default {
             }
         };
         chart.resetChart = () => {
+            // Mode needs to be preserved since setMode is only called on change
+            const prevMode = getState(chart).options.mode;
             removeState(chart);
             initChart(chart);
+            chart.setMode(prevMode);
 
             const { options } = getState(chart);
             (chart.scales.x.options as CartesianScaleOptions).min =
@@ -256,9 +315,10 @@ export default {
             if (options.live) {
                 const offset = getOffset(chart);
 
-                // There is some device delay (~250ms) which is being synced here.
-                // With the smoothing formula there appear to be no choppy updates
-                if (
+                if (options.mode === 'Event') {
+                    updateRange(chart, getRange(chart));
+                    chart.update('none');
+                } else if (
                     data[data.length - 1].timestamp >
                         options.maxRange + offset + liveInterval * 2 ||
                     data[data.length - 1].timestamp <
@@ -270,27 +330,57 @@ export default {
                         alpha * options.maxRange +
                         (1.0 - alpha) * data[data.length - 1].timestamp;
                 }
-
-                // if (updateRange(chart, getRange(chart))) {
-                //     chart.update('none');
-                // }
             }
         };
         chart.setLive = live => {
             const { options } = getState(chart);
-            // if (options.live === live) return;
 
             options.live = live;
+        };
+        chart.setMode = mode => {
+            const { data, options } = getState(chart);
+            if (options.mode === mode) return;
+            options.mode = mode;
 
-            // if (live && !liveInterval) {
-            //     setupLiveInterval(chart);
-            //     // setLiveInterval that calls mutatedata(chart) and chart.update('none') ?
-            //     // if (updateRange(chart, getRange(chart))) {
-            //     //     chart.update('none');
-            //     // }
-            // } else {
-            //     clearInterval(liveInterval);
-            // }
+            let max: number;
+            options.resolution = defaultOptions(mode).resolution;
+            options.resolutionLimits =
+                (chart.options.plugins?.panZoom?.resolutionLimits as {
+                    min: number;
+                    max: number;
+                }) ?? defaultOptions(mode).resolutionLimits;
+
+            if (options.live) {
+                if (updateRange(chart, getRange(chart))) {
+                    chart.update('none');
+                }
+                return;
+            }
+
+            const offset = getOffset(chart);
+            if (mode === 'Event') {
+                const refEvent = data.findLast(
+                    e => e.timestamp < options.currentRange.max
+                );
+
+                max = refEvent
+                    ? data.indexOf(refEvent) + offset
+                    : defaultOptions(mode).currentRange.max;
+            } else {
+                max =
+                    data.length > 0
+                        ? data[
+                              Math.min(
+                                  Math.floor(options.currentRange.max),
+                                  data.length - 1
+                              )
+                          ].timestamp + offset
+                        : defaultOptions('Time').currentRange.max;
+            }
+
+            if (updateRange(chart, { min: max - options.resolution, max })) {
+                chart.update('none');
+            }
         };
     },
     afterInit(chart) {

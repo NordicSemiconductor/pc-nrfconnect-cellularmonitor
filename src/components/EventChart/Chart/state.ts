@@ -34,6 +34,7 @@ export type InternalPanPluginOptions = Required<PanPluginOptions> & {
     resolution: number;
     maxRange: number;
     currentRange: XAxisRange;
+    mode: 'Event' | 'Time';
 };
 
 interface ChartState {
@@ -43,20 +44,24 @@ interface ChartState {
 
 const chartStates = new WeakMap<Chart, ChartState>();
 
-export const defaultOptions = () => ({
+export const defaultOptions = (mode: 'Event' | 'Time') => ({
     live: true,
-    resolution: 20000,
-    resolutionLimits: {
-        min: 1000,
-        // One day in ms
-        max: 86400000,
-    },
+    resolution: mode === 'Event' ? 80 : 20000,
+    resolutionLimits:
+        mode === 'Event'
+            ? { min: 20, max: 160 }
+            : {
+                  min: 1000,
+                  // One day in ms
+                  max: 86400000,
+              },
     zoomFactor: 1.1,
     maxRange: 0,
     currentRange: { min: 0, max: 0 },
     traceEventFilter: [],
     onLiveChanged: () => {},
     onRangeChanged: () => {},
+    mode,
 });
 
 export const getState = (chart: Chart) => {
@@ -64,7 +69,7 @@ export const getState = (chart: Chart) => {
 
     if (!state) {
         state = {
-            options: defaultOptions(),
+            options: defaultOptions('Event'),
             data: [],
         };
         chartStates.set(chart, state);
@@ -74,6 +79,7 @@ export const getState = (chart: Chart) => {
     Object.assign(state.options, {
         ...chart.options.plugins?.panZoom,
     });
+
     return state;
 };
 
