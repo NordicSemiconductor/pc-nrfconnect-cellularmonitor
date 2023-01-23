@@ -15,8 +15,6 @@ const fileExtension = (format: TraceFormat) => {
             return '.bin';
         case 'pcap':
             return '.pcapng';
-        case 'opp':
-            return '.json';
         default:
             throw new Error(
                 `Unknown format ${format} does not have associated file extension`
