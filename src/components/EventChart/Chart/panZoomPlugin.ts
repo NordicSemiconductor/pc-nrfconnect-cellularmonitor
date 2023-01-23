@@ -145,17 +145,22 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
             options.traceEventFilter.includes(event.format)
         );
         if (filteredData.length === 0) {
-            options.onRangeChanged({ min: 0, max: 0 });
+            options.onRangeChanged({ min: 0, max: 0 }, 0);
         } else {
-            options.onRangeChanged({
-                min:
-                    filteredData[Math.ceil(range.min)].timestamp -
-                    data[0].timestamp,
-                max:
-                    filteredData[
-                        Math.min(Math.floor(range.max), filteredData.length - 1)
-                    ].timestamp - data[0].timestamp,
-            });
+            const maxTimestamp =
+                filteredData[
+                    Math.min(Math.floor(range.max), filteredData.length - 1)
+                ].timestamp;
+
+            options.onRangeChanged(
+                {
+                    min:
+                        filteredData[Math.ceil(range.min)].timestamp -
+                        data[0].timestamp,
+                    max: maxTimestamp - data[0].timestamp,
+                },
+                maxTimestamp
+            );
         }
     }
 
@@ -168,7 +173,10 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
     options.currentRange = { ...range };
 
     if (options.mode === 'Time') {
-        options.onRangeChanged({ min: range.min - min, max: range.max - min });
+        options.onRangeChanged(
+            { min: range.min - min, max: range.max - min },
+            range.max
+        );
     }
 
     (chart.scales.x.options as CartesianScaleOptions).min =

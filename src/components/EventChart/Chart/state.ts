@@ -25,7 +25,10 @@ export interface PanPluginOptions extends AnyObject {
     zoomFactor?: number;
     traceEventFilter: eventType[];
     onLiveChanged?: (live: boolean) => void;
-    onRangeChanged?: (range: XAxisRange) => void;
+    onRangeChanged?: (
+        relativeRange: XAxisRange,
+        referenceNrfmlTimestamp: number
+    ) => void;
 }
 
 export type InternalPanPluginOptions = Required<PanPluginOptions> & {
