@@ -5,7 +5,9 @@
  */
 
 import { events, notifyListeners } from '../../tracing/tracePacketEvents';
-import { convert, initialState } from '..';
+import { convert } from '..';
+import { State } from '../types';
+import { initialState } from '.';
 import { rawTraceData } from './traceSample';
 
 const expectedState = {
@@ -61,7 +63,17 @@ const expectedState = {
         ci: '02024720',
         AcT: 7,
     },
-};
+
+    networkStatusNotifications: 5,
+
+    modemSupportLTEM: true,
+    modemSupportNBIoT: false,
+    modemSupportGNSS: true,
+    modemSystemPreference: 0,
+
+    xModemTraceOperation: 1,
+    xModemTraceSetID: 2,
+} as Partial<State>;
 
 test('Trace is read properly', () => {
     let state = initialState();

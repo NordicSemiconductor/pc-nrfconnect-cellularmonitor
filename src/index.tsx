@@ -13,10 +13,7 @@ import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
 import EventChartDashboard from './components/EventChart/Dashboard';
 import PowerEstimation from './components/PowerEstimation/PowerEstimation';
-import {
-    PowerEstimationSidePanel,
-    TraceCollectorSidePanel,
-} from './components/SidePanel/SidePanel';
+import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
 import './index.scss';
@@ -38,7 +35,7 @@ export default () => (
             {
                 name: 'Power Estimation',
                 Main: PowerEstimation,
-                SidePanel: PowerEstimationSidePanel,
+                SidePanel: TraceCollectorSidePanel,
             },
             {
                 name: 'Events Dashboard',

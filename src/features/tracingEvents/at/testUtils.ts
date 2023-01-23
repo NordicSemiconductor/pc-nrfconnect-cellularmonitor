@@ -5,8 +5,9 @@
  */
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
-import { convert, initialState } from '..';
+import { convert } from '..';
 import { State } from '../types';
+import { initialState } from '.';
 
 const encoder = new TextEncoder();
 const encode = (txt: string) => Buffer.from(encoder.encode(txt));

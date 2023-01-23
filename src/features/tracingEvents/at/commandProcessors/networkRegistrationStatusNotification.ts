@@ -4,22 +4,44 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Processor } from '../..';
+import { NetworkStatusNotifications } from '../../types';
+import type { Processor } from '..';
+import { RequestType } from '../parseAT';
 import { getParametersFromResponse } from '../utils';
+
+let setPayload: NetworkStatusNotifications;
 
 export const processor: Processor = {
     command: '+CEREG',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
     initialState: () => ({}),
-    onResponse: packet => {
-        if (packet.status === 'OK' && packet.payload) {
-            return {
-                networkRegistrationStatus: setNetworkRegistrationStatus(
-                    'response',
-                    packet.payload
-                ),
-            };
+    onRequest: packet => {
+        if (packet.requestType === RequestType.SET_WITH_VALUE) {
+            const payload = getParametersFromResponse(packet.payload);
+            if (payload) {
+                setPayload = Number.parseInt(
+                    payload[0],
+                    10
+                ) as NetworkStatusNotifications;
+            }
+        }
+        return {};
+    },
+    onResponse: (packet, reqType) => {
+        if (packet.status === 'OK') {
+            if (reqType === RequestType.SET_WITH_VALUE) {
+                return { networkStatusNotifications: setPayload };
+            }
+
+            if (packet.payload) {
+                return {
+                    networkRegistrationStatus: setNetworkRegistrationStatus(
+                        'response',
+                        packet.payload
+                    ),
+                };
+            }
         }
         return {};
     },

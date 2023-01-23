@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
-import { atPacket, convertPackets } from '../testUtils';
+import { State } from '../../types';
+import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 /*
 
@@ -22,6 +23,46 @@ READ CMD: AT+CEREG?
 */
 
 const readCmd = atPacket('AT+CEREG?');
+
+const setCommands = [
+    // Unsubscribe
+    {
+        commands: [atPacket('AT+CEREG=0'), OkPacket],
+        expected: {
+            networkStatusNotifications: 0,
+        } as Partial<State>,
+    },
+    {
+        commands: [atPacket('AT+CEREG=1'), OkPacket],
+        expected: {
+            networkStatusNotifications: 1,
+        } as Partial<State>,
+    },
+    {
+        commands: [atPacket('AT+CEREG=2'), OkPacket],
+        expected: {
+            networkStatusNotifications: 2,
+        } as Partial<State>,
+    },
+    {
+        commands: [atPacket('AT+CEREG=3'), OkPacket],
+        expected: {
+            networkStatusNotifications: 3,
+        } as Partial<State>,
+    },
+    {
+        commands: [atPacket('AT+CEREG=4'), OkPacket],
+        expected: {
+            networkStatusNotifications: 4,
+        } as Partial<State>,
+    },
+    {
+        commands: [atPacket('AT+CEREG=5'), OkPacket],
+        expected: {
+            networkStatusNotifications: 5,
+        } as Partial<State>,
+    },
+];
 
 const testResponses = [
     {
@@ -66,6 +107,15 @@ const testResponses = [
         },
     },
 ];
+
+test('+CEREG set commands will appropriately set the notifications status in state', () => {
+    setCommands.forEach(test => {
+        const result = convertPackets(test.commands);
+        expect(result.networkStatusNotifications).toBe(
+            test.expected.networkStatusNotifications
+        );
+    });
+});
 
 test('+CEREG read response sets appropriate attributes correctly', () => {
     testResponses.forEach(test => {

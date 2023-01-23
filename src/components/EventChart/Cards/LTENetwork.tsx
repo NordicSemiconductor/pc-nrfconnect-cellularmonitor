@@ -14,24 +14,17 @@ import DashboardCard from './DashboardCard';
 
 type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
 
-const getRRCStateColor = (state: RRCState | undefined): RRCStateFlag => {
-    if (state === 'rrcConnectionSetup') {
-        return '🟡';
+const getRRCStateColor = (
+    state: RRCState | undefined
+): `${RRCStateFlag}${string}` => {
+    switch (state) {
+        case 0:
+            return '🟡 Idle';
+        case 1:
+            return '🟢 Connected';
+        default:
+            return '🔴 Unknown';
     }
-
-    if (state === 'rrcConnectionSetupRequest') {
-        return '🔵';
-    }
-
-    if (state === 'rrcConnectionRelease') {
-        return '🟡';
-    }
-
-    if (state === 'rrcConnectionSetupComplete') {
-        return '🟢';
-    }
-
-    return '🔴';
 };
 
 export default () => {
@@ -44,6 +37,7 @@ export default () => {
         mccCode,
         mnc,
         mncCode,
+        networkType,
     } = useSelector(getDashboardState);
 
     const fields = useMemo(() => {
@@ -59,7 +53,7 @@ export default () => {
         }
 
         return {
-            'RRC STATE': getRRCStateColor(rrcState) as string,
+            'RRC STATE': getRRCStateColor(rrcState),
             MNC: mnc ?? 'Unknown',
             'MNC Code': mncCode ?? 'Unknown',
             MCC: mcc ?? 'Unknown',
@@ -96,7 +90,7 @@ export default () => {
 
     return (
         <DashboardCard
-            title="LTE Network"
+            title={`${networkType} Network`.trim()}
             iconName="mdi-access-point-network"
             fields={fields}
         />

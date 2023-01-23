@@ -11,7 +11,8 @@ import {
     events,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
-import { convert, initialState } from '../../../features/tracingEvents';
+import { convert } from '../../../features/tracingEvents';
+import { initialState } from '../../../features/tracingEvents/at';
 import {
     getDashboardState,
     getPowerSavingMode,
@@ -24,6 +25,7 @@ import Modem from './Modem';
 import PacketDomainNetwork from './PacketDomainNetwork';
 import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
+import Temp from './Temp';
 
 export default () => {
     const timestamp = useSelector(getSelectedTime);
@@ -55,6 +57,7 @@ export default () => {
 
     return (
         <div className="cards-container">
+            <Temp />
             <Device />
             <Sim />
             <LTENetwork />

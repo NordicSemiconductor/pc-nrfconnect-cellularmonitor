@@ -29,7 +29,6 @@ const defaultPowerEstimationParameters: OnlinePowerEstimatorParams = {
     software: '0',
     voltage: '3.7',
     lte_type: 'm1',
-    psm_int: '3600',
     config_lte_edrx_req_value: '0000',
     data_en: 'off',
     data_size: '100',
@@ -45,8 +44,6 @@ const defaultPowerEstimationParameters: OnlinePowerEstimatorParams = {
     gps_en: 'off',
     gps_interval: '1800',
     gps_fix_time: '1',
-
-    psm: 'false',
     config_lte_psm_req_rat: '00000000',
     config_lte_psm_req_rptau: '00000000',
     cdrx_inactive_timer: '',
@@ -54,9 +51,12 @@ const defaultPowerEstimationParameters: OnlinePowerEstimatorParams = {
     cdrx_len: '7',
     cdrx_on_duration: '',
     idrx_en: 'true',
-    idrx_int: '10', // TODO: must be verified
     idrx_len: '10',
     idrx_reps: '',
+
+    psm: 'off',
+    psm_int: '3600',
+    idrx_int: '10', // TODO: must be verified
 };
 
 const initialState: PowerEstimationState = {
@@ -113,7 +113,39 @@ const powerEstimationSlice = createSlice({
     },
 });
 
-export const getData = (state: RootState) => state.app.powerEstimation.data;
+export const getData = (state: RootState) => {
+    const powerEstimationState = state.app.powerEstimation.data;
+    const grantedPSM = state.app.dashboard.powerSavingMode?.granted;
+    const psm = grantedPSM ? 'on' : powerEstimationState?.psm;
+    const config_lte_psm_req_rptau = grantedPSM?.T3412_extended
+        ? grantedPSM.T3412_extended.bitmask
+        : powerEstimationState?.config_lte_psm_req_rptau;
+    const psm_int = grantedPSM?.T3412_extended
+        ? `${parseTAUByteToSeconds(
+              grantedPSM.T3412_extended.bitmask,
+              TAU_TYPES.SLEEP_INTERVAL
+          )}`
+        : powerEstimationState?.psm_int;
+    const idrx_len = grantedPSM?.T3324
+        ? `${parseTAUByteToSeconds(
+              grantedPSM.T3324.bitmask,
+              TAU_TYPES.ACTIVE_TIMER
+          )}`
+        : powerEstimationState?.idrx_len;
+    const config_lte_psm_req_rat = grantedPSM?.T3324
+        ? grantedPSM.T3324.bitmask
+        : powerEstimationState?.config_lte_psm_req_rat;
+
+    return {
+        ...state.app.powerEstimation.data,
+
+        psm,
+        psm_int,
+        idrx_len,
+        config_lte_psm_req_rptau,
+        config_lte_psm_req_rat,
+    };
+};
 export const getFilePath = (state: RootState) =>
     state.app.powerEstimation.filePath;
 export const getRenderedHtml = (state: RootState) =>

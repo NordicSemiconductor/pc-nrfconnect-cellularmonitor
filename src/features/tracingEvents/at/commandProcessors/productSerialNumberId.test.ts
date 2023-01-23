@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { initialState } from '../..';
+import { initialState } from '..';
 import { atPacket, convertPackets, ErrorPacket } from '../testUtils';
 
 const testCommand = {

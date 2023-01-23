@@ -71,11 +71,6 @@ export default ({ active }: PaneProps) => {
     );
 
     useEffect(() => {
-        if (!oppData) return;
-        fetchOppHtml(oppData);
-    }, [oppData, fetchOppHtml]);
-
-    useEffect(() => {
         if (!oppHtml) return;
         const oppForm = document.getElementsByClassName('opp-params-form')[0];
         if (!oppForm) return;
@@ -140,63 +135,81 @@ export default ({ active }: PaneProps) => {
     );
 
     return (
-        <div
-            className={`power-estimation-container ${
-                !oppHtml ? 'full-height' : ''
-            }`}
-        >
-            {isLoading && (
-                <div className="power-estimation-loading-container">
-                    <div className="power-estimation-loading">
-                        <Spinner />
-                        <p>
-                            Fetching data from Online Power Profiler, please
-                            wait...
-                        </p>
+        <>
+            <div className="power-estimation-info">
+                <p>
+                    The content below is fetched from Online Power Profiler. The
+                    initial content is based on the default values, but if you
+                    want to load with your latest state, please press the
+                    button:{' '}
+                </p>
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        fetchOppHtml(oppData);
+                    }}
+                >
+                    Reload Power Estimation
+                </Button>
+            </div>
+            <div
+                className={`power-estimation-container ${
+                    !oppHtml ? 'full-height' : ''
+                }`}
+            >
+                {isLoading && (
+                    <div className="power-estimation-loading-container">
+                        <div className="power-estimation-loading">
+                            <Spinner />
+                            <p>
+                                Fetching data from Online Power Profiler, please
+                                wait...
+                            </p>
+                        </div>
                     </div>
-                </div>
-            )}
-            {hasError && (
-                <Alert variant="danger" label="Error!">
-                    Could not complete network request, see log for more
-                    details.
-                </Alert>
-            )}
-            {oppHtml ? (
-                <>
-                    <div className="power-estimation-navigation-bar">
-                        <span>Scroll to: </span>
-                        <Button
-                            className="opp-nav-btn"
-                            variant="secondary"
-                            href="#general-information"
-                        >
-                            Information
-                        </Button>
-                        <Button
-                            className="opp-nav-btn"
-                            variant="secondary"
-                            href="#opp-plot"
-                        >
-                            Chart
-                        </Button>
-                        <Button
-                            className="opp-nav-btn"
-                            variant="secondary"
-                            href="#opp-params-form"
-                        >
-                            Settings
-                        </Button>
+                )}
+                {hasError && (
+                    <Alert variant="danger" label="Error!">
+                        Could not complete network request, see log for more
+                        details.
+                    </Alert>
+                )}
+                {oppHtml ? (
+                    <>
+                        <div className="power-estimation-navigation-bar">
+                            <span>Scroll to: </span>
+                            <Button
+                                className="opp-nav-btn"
+                                variant="secondary"
+                                href="#general-information"
+                            >
+                                Information
+                            </Button>
+                            <Button
+                                className="opp-nav-btn"
+                                variant="secondary"
+                                href="#opp-plot"
+                            >
+                                Chart
+                            </Button>
+                            <Button
+                                className="opp-nav-btn"
+                                variant="secondary"
+                                href="#opp-params-form"
+                            >
+                                Settings
+                            </Button>
+                        </div>
+                        <div className="opp-custom-html-container">
+                            <InnerHTML html={oppHtml} />
+                        </div>
+                    </>
+                ) : (
+                    <div className="power-estimation-landing">
+                        {isTsharkInstalled ? TSharkLanding : <Tshark />}
                     </div>
-                    <div className="opp-custom-html-container">
-                        <InnerHTML html={oppHtml} />
-                    </div>
-                </>
-            ) : (
-                <div className="power-estimation-landing">
-                    {isTsharkInstalled ? TSharkLanding : <Tshark />}
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </>
     );
 };
