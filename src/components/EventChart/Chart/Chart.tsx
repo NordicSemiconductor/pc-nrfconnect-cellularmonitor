@@ -132,7 +132,7 @@ export default () => {
                 y: {
                     ticks: {
                         callback: tickValue =>
-                            tickValue >= 0 &&
+                            (tickValue as number) >= 0 &&
                             Math.ceil(tickValue as number) === tickValue
                                 ? traceEventFilter[tickValue]
                                 : undefined,
@@ -184,9 +184,12 @@ export default () => {
 
                 panZoom: {
                     onLiveChanged: live => dispatch(setLive(live)),
-                    onRangeChanged: r => {
-                        dispatch(setSelectedTime(r.max));
-                        setRange(r);
+                    onRangeChanged: (
+                        relativeRange,
+                        referenceNrfmlTimestamp
+                    ) => {
+                        dispatch(setSelectedTime(referenceNrfmlTimestamp));
+                        setRange(relativeRange);
                     },
                     traceEventFilter,
                 },
