@@ -39,7 +39,6 @@ const formatToLabel = (format: string): eventType => {
     if (format === 'at') return 'AT';
     if (format.startsWith('nas')) return 'NAS';
     if (format === 'ip') return 'IP';
-    if (format === 'ope') return 'POWER';
 
     return 'OTHER';
 };

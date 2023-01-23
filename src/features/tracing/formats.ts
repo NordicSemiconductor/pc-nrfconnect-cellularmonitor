@@ -6,14 +6,7 @@
 
 import EventAction from '../../usageDataActions';
 
-export const EVENT_TYPES = [
-    'AT',
-    'POWER',
-    'RRC',
-    'NAS',
-    'IP',
-    'OTHER',
-] as const;
+export const EVENT_TYPES = ['AT', 'RRC', 'NAS', 'IP', 'OTHER'] as const;
 export type eventType = typeof EVENT_TYPES[number];
 export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live', 'opp'] as const;
 export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
