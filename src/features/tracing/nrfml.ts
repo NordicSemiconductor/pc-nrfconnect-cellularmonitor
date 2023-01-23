@@ -35,6 +35,7 @@ import {
 } from './traceSlice';
 
 export type TaskId = number;
+let reloadHandler: () => void;
 
 const nrfmlConfig = (
     state: RootState,
@@ -141,6 +142,11 @@ export const startTrace =
                 } else {
                     logger.info('Finished tracefile');
                 }
+
+                if (reloadHandler) {
+                    window.removeEventListener('beforeunload', reloadHandler);
+                }
+
                 // stop tracing if Completed callback is called and we are only doing live tracing
                 if (
                     sinks.length === 2 &&
@@ -169,6 +175,10 @@ export const startTrace =
                 progressConfigs: progressConfigs(source, sinks),
             })
         );
+        reloadHandler = () => {
+            nrfml.stop(taskId);
+        };
+        window.addEventListener('beforeunload', reloadHandler);
     };
 
 export const readRawTrace =
@@ -207,7 +217,7 @@ export const stopTrace =
     dispatch => {
         if (taskId === null) return;
         nrfml.stop(taskId);
-        tracePacketEvents.emit('stop-process');
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
+        tracePacketEvents.emit('stop-process');
     };
