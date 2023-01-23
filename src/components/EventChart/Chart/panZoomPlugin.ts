@@ -64,10 +64,11 @@ const getOffset = (chart: Chart) => {
     const { resolution } = getState(chart).options;
     const pointRadius = (chart.data.datasets[0] as ChartDataset<'scatter'>)
         .pointRadius;
-
     const pixelSize = chart.chartArea.right - chart.chartArea.left;
     const percDiff =
-        (typeof pointRadius === 'number' ? pointRadius : 0) / pixelSize;
+        typeof pointRadius === 'number' && pixelSize > 0
+            ? pointRadius / pixelSize
+            : 0;
 
     return percDiff * resolution;
 };
