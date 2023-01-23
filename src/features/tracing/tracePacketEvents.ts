@@ -75,10 +75,6 @@ const packetsToEvent = (packet: Packet) =>
 tracePacketEvents.on('start-process', () => events.splice(0, events.length));
 
 export const notifyListeners = (packets: Packet[]) => {
-    // const formattedEvents = packetsToEvent(packets);
-
-    // events.push(...formattedEvents);
-
     const formattedEvents: TraceEvent[] = [];
 
     packets.forEach(packet => {
