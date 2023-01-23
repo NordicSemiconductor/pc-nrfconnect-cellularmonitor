@@ -8,7 +8,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
-import { NetworkStatusNotifications } from '../../../features/tracingEvents/types';
+import {
+    NetworkStatusNotifications,
+    SignalingConnectionStatusNotifications,
+} from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
 
 export default () => {
@@ -25,6 +28,9 @@ export default () => {
 
         // +CEREG Notifications
         networkStatusNotifications,
+
+        // +CSCON Notifications
+        signalingConnectionStatusNotifications,
 
         // %CONEVAL
         conevalResult,
@@ -76,8 +82,11 @@ export default () => {
         'GNSS Support': parseSupportedValue(modemSupportGNSS),
         'Preferred Bearer': parsePreferredBearer(modemSystemPreference),
 
-        'Network Status Notifications': parseNetworkStatusNotifications(
+        'Network Status Notifications': parseNotificationStatus(
             networkStatusNotifications
+        ),
+        'Signaling Connecting Status Notifications': parseNotificationStatus(
+            signalingConnectionStatusNotifications
         ),
 
         'Connection Evaluation Result': conevalResult ?? 'Unknown',
@@ -110,8 +119,10 @@ export default () => {
     );
 };
 
-const parseNetworkStatusNotifications = (
-    notification: NetworkStatusNotifications
+const parseNotificationStatus = (
+    notification:
+        | NetworkStatusNotifications
+        | SignalingConnectionStatusNotifications
 ) => {
     if (notification != null) {
         if (notification === 0) return 'Unsubscribed';

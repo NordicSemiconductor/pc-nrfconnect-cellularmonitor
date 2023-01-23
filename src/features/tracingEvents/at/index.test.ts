@@ -65,6 +65,7 @@ const expectedState = {
     },
 
     networkStatusNotifications: 5,
+    signalingConnectionStatusNotifications: 1,
 
     modemSupportLTEM: true,
     modemSupportNBIoT: false,
@@ -73,6 +74,8 @@ const expectedState = {
 
     xModemTraceOperation: 1,
     xModemTraceSetID: 2,
+
+    rrcState: 1,
 } as Partial<State>;
 
 test('Trace is read properly', () => {

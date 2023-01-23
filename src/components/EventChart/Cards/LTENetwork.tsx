@@ -12,7 +12,7 @@ import { getDashboardState } from '../../../features/tracingEvents/dashboardSlic
 import type { RRCState } from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
 
-type RRCStateFlag = '🟡' | '🔴' | '🔵' | '🟢';
+type RRCStateFlag = '🟡' | '🟢' | '🔴';
 
 const getRRCStateColor = (
     state: RRCState | undefined

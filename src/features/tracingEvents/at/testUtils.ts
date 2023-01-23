@@ -25,7 +25,4 @@ export const convertPackets = (
     packets: TraceEvent[],
     previousState = initialState()
 ): State =>
-    packets.reduce(
-        (state, packet) => ({ ...state, ...convert(packet, state) }),
-        previousState
-    );
+    packets.reduce((state, packet) => convert(packet, state), previousState);

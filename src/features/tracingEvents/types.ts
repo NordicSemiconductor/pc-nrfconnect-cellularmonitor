@@ -102,6 +102,8 @@ export interface State {
 
     // CEREG - Network Registration Status Notification
     networkStatusNotifications: NetworkStatusNotifications;
+    // +CSCON
+    signalingConnectionStatusNotifications: SignalingConnectionStatusNotifications;
 
     // Evaluating Connection Parameters %CONEVAL
     conevalResult: ConnectionEvaluationResult;
@@ -155,6 +157,8 @@ export type ConnectionEvaluationResult =
 export type ConevalEnergyEstimate = 5 | 6 | 7 | 8 | 9 | undefined;
 export type CellEvaluationLevel = 0 | 1 | 2 | 3 | 255 | undefined;
 export type TAUTriggered = 0 | 1 | 255 | undefined;
+
+export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
     apn?: string;
