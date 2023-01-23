@@ -112,8 +112,8 @@ export const startTrace =
             !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath) && !sinks.includes('opp')) {
-            sinks.push('opp');
+        if (findTshark(selectedTsharkPath) && !sinks.includes('tshark')) {
+            sinks.push('tshark');
         }
 
         sinks.forEach(format => {
@@ -145,7 +145,7 @@ export const startTrace =
                 if (
                     sinks.length === 2 &&
                     sinks.includes('live') &&
-                    sinks.includes('opp')
+                    sinks.includes('tshark')
                 ) {
                     dispatch(stopTrace(taskId));
                 }
@@ -176,7 +176,7 @@ export const readRawTrace =
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
-        const sinks: TraceFormat[] = ['opp'];
+        const sinks: TraceFormat[] = ['tshark'];
         const packets: Packet[] = [];
 
         tracePacketEvents.emit('start-process');

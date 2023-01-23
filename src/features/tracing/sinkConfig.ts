@@ -76,7 +76,7 @@ export default (
         };
     }
 
-    if (format === 'opp') {
+    if (format === 'tshark') {
         // <TsharkInitParameters>
         const sharkPath = getTsharkPath(state);
         const tshark = findTshark(sharkPath);
@@ -85,7 +85,6 @@ export default (
         return {
             name: 'nrfml-tshark-sink',
             init_parameters: {
-                opp_json_object_key: 'onlinePowerProfiler',
                 tshark_directory: tsharkFolder ?? undefined,
             },
         };

@@ -98,7 +98,7 @@ const PowerEstimationDataInfo = () => {
         <div className="opp-result-wrapper">
             <TraceFileDetails
                 progress={{
-                    format: 'opp',
+                    format: 'tshark',
                     path: powerEstimationFilePath,
                 }}
                 label="Power estimation data"
