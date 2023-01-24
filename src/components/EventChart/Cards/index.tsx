@@ -38,7 +38,7 @@ export default () => {
             // TODO: Create new state based on atState
             // TODO: Filter out events later than selected time
             const newState = events
-                .filter(packet => packet.timestamp < timestamp * 1000)
+                .filter(packet => packet.timestamp < timestamp)
                 .reduce(
                     (current, packet) => ({
                         ...current,
