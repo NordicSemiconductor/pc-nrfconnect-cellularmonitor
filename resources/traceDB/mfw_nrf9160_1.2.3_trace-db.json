@@ -1,0 +1,1430 @@
+{
+    "meta": {
+        "version_major": 1,
+        "version_minor": 0,
+        "decoder_config": {
+            "masters": [
+                {
+                    "aliases": [97, 98, 99],
+                    "id": 96,
+                    "timestamp_frequency": 32768,
+                    "timestamp_max": 4294967295
+                }
+            ],
+            "protocol_version": 3
+        },
+        "trace_type_descriptors": [
+            {
+                "conditions": [
+                    {
+                        "trace_id": 0
+                    }
+                ],
+                "type": "ascii"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 5
+                    }
+                ],
+                "type": "structured"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 6
+                    }
+                ],
+                "type": "peer"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 4
+                    }
+                ],
+                "type": "buf_dump"
+            },
+            {
+                "conditions": [
+                    {
+                        "id_range": {
+                            "max": 65535,
+                            "min": 63
+                        }
+                    }
+                ],
+                "type": "formatted"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 7
+                    }
+                ],
+                "type": "data_dump"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 9
+                    }
+                ],
+                "type": "peer_dump"
+            }
+        ],
+        "trace_id_size": 2,
+        "endianness": "little",
+        "id": 96,
+        "uuid": "0191538f-d3a5-4fe9-8f54-ba7cad9460c0",
+        "min_data_size": 1,
+        "type_mapping": "id"
+    },
+    "buffers": [
+        {
+            "id": 32,
+            "name": "EPDCP_UP_PACKET_UL"
+        },
+        {
+            "id": 33,
+            "name": "EPDCP_UP_PACKET_DL"
+        },
+        {
+            "id": 34,
+            "name": "EPDCP_UP_PACKET_UL_SINGLE"
+        },
+        {
+            "id": 35,
+            "name": "EPDCP_UP_PACKET_UL_MULTI"
+        }
+    ],
+    "peer_buffers": [
+        {
+            "description": "UNKNOWN MESSAGE",
+            "direction": "DL",
+            "id": 0,
+            "layer": 1,
+            "name": "NAS_PDU_UNKNOWN_EMM_MESSAGE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH REQUEST",
+            "direction": "UL",
+            "id": 65,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH ACCEPT",
+            "direction": "DL",
+            "id": 66,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH COMPLETE",
+            "direction": "UL",
+            "id": 67,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH REJECT",
+            "direction": "DL",
+            "id": 68,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DETACH REQUEST",
+            "direction": "UL",
+            "id": 69,
+            "layer": 1,
+            "name": "NAS_PDU_DETACH_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DETACH ACCEPT",
+            "direction": "UL",
+            "id": 70,
+            "layer": 1,
+            "name": "NAS_PDU_DETACH_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "TAU REQUEST",
+            "direction": "UL",
+            "id": 72,
+            "layer": 1,
+            "name": "NAS_PDU_TAU_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "TAU ACCEPT",
+            "direction": "DL",
+            "id": 73,
+            "layer": 1,
+            "name": "NAS_PDU_TAU_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "TAU COMPLETE",
+            "direction": "UL",
+            "id": 74,
+            "layer": 1,
+            "name": "NAS_PDU_TAU_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "TAU REJECT",
+            "direction": "DL",
+            "id": 75,
+            "layer": 1,
+            "name": "NAS_PDU_TAU_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "EXTENDED SERVICE REQUEST",
+            "direction": "UL",
+            "id": 76,
+            "layer": 1,
+            "name": "NAS_PDU_EXTENDED_SERVICE_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CONTROL PLANE SERVICE REQUEST",
+            "direction": "UL",
+            "id": 77,
+            "layer": 1,
+            "name": "NAS_PDU_CONTROL_PLANE_SERVICE_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "SERVICE REJECT",
+            "direction": "DL",
+            "id": 78,
+            "layer": 1,
+            "name": "NAS_PDU_SERVICE_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "SERVICE ACCEPT",
+            "direction": "DL",
+            "id": 79,
+            "layer": 1,
+            "name": "NAS_PDU_SERVICE_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "GUTI REALLOCATION COMMAND",
+            "direction": "DL",
+            "id": 80,
+            "layer": 1,
+            "name": "NAS_PDU_GUTI_REALLOCATION_COMMAND",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "GUTI REALLOCATION COMPLETE",
+            "direction": "UL",
+            "id": 81,
+            "layer": 1,
+            "name": "NAS_PDU_GUTI_REALLOCATION_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "AUTHENTICATION REQUEST",
+            "direction": "DL",
+            "id": 82,
+            "layer": 1,
+            "name": "NAS_PDU_AUTHENTICATION_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "AUTHENTICATION RESPONSE",
+            "direction": "UL",
+            "id": 83,
+            "layer": 1,
+            "name": "NAS_PDU_AUTHENTICATION_RESPONSE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "AUTHENTICATION REJECT",
+            "direction": "DL",
+            "id": 84,
+            "layer": 1,
+            "name": "NAS_PDU_AUTHENTICATION_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "IDENTITY REQUEST",
+            "direction": "DL",
+            "id": 85,
+            "layer": 1,
+            "name": "NAS_PDU_IDENTITY_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "IDENTITY RESPONSE",
+            "direction": "UL",
+            "id": 86,
+            "layer": 1,
+            "name": "NAS_PDU_IDENTITY_RESPONSE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "AUTHENTICATION FAILURE",
+            "direction": "UL",
+            "id": 92,
+            "layer": 1,
+            "name": "NAS_PDU_AUTHENTICATION_FAILURE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "SECURITY MODE COMMAND",
+            "direction": "DL",
+            "id": 93,
+            "layer": 1,
+            "name": "NAS_PDU_SECURITY_MODE_COMMAND",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "SECURITY MODE COMPLETE",
+            "direction": "UL",
+            "id": 94,
+            "layer": 1,
+            "name": "NAS_PDU_SECURITY_MODE_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "SECURITY MODE REJECT",
+            "direction": "DL",
+            "id": 95,
+            "layer": 1,
+            "name": "NAS_PDU_SECURITY_MODE_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "EMM STATUS",
+            "direction": "DL",
+            "id": 96,
+            "layer": 1,
+            "name": "NAS_PDU_EMM_STATUS",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "EMM INFORMATION",
+            "direction": "DL",
+            "id": 97,
+            "layer": 1,
+            "name": "NAS_PDU_EMM_INFORMATION",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DOWNLINK NAS TRANSPORT",
+            "direction": "DL",
+            "id": 98,
+            "layer": 1,
+            "name": "NAS_PDU_DOWNLINK_NAS_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "UPLINK NAS TRANSPORT",
+            "direction": "UL",
+            "id": 99,
+            "layer": 1,
+            "name": "NAS_PDU_UPLINK_NAS_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CS SERVICE NOTIFICATION",
+            "direction": "DL",
+            "id": 100,
+            "layer": 1,
+            "name": "NAS_PDU_CS_SERVICE_NOTIFICAITON",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DOWNLINK GENERIC NAS TRANSPORT",
+            "direction": "DL",
+            "id": 104,
+            "layer": 1,
+            "name": "NAS_PDU_DOWNLINK_GENERIC_NAS_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "UPLINK GENERIC NAS TRANSPORT",
+            "direction": "UL",
+            "id": 105,
+            "layer": 1,
+            "name": "NAS_PDU_UPLINK_GENERIC_NAS_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CLOSE TEST LOOP",
+            "direction": "DL",
+            "id": 128,
+            "layer": 1,
+            "name": "NAS_PDU_CLOSE_TEST_LOOP",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CLOSE TEST LOOP COMPLETE",
+            "direction": "UL",
+            "id": 129,
+            "layer": 1,
+            "name": "NAS_PDU_CLOSE_TEST_LOOP_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "OPEN TEST LOOP",
+            "direction": "DL",
+            "id": 130,
+            "layer": 1,
+            "name": "NAS_PDU_OPEN_TEST_LOOP",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "OPEN TEST LOOP COMPLETE",
+            "direction": "UL",
+            "id": 131,
+            "layer": 1,
+            "name": "NAS_PDU_OPEN_TEST_LOOP_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE TEST MODE",
+            "direction": "DL",
+            "id": 132,
+            "layer": 1,
+            "name": "NAS_PDU_ACTIVATE_TEST_MODE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE TEST MODE COMPLETE",
+            "direction": "UL",
+            "id": 133,
+            "layer": 1,
+            "name": "NAS_PDU_ACTIVATE_TEST_MODE_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DEACTIVATE TEST MODE",
+            "direction": "DL",
+            "id": 134,
+            "layer": 1,
+            "name": "NAS_PDU_DEACTIVATE_TEST_MODE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DEACTIVATE TEST MODE COMPLETE",
+            "direction": "UL",
+            "id": 135,
+            "layer": 1,
+            "name": "NAS_PDU_DEACTIVATE_TEST_MODE_COMPLETE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH REQUEST(PDN CONNECTIVITY REQUEST)",
+            "direction": "UL",
+            "id": 241,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_REQUEST_W_PDN_CONNECTIVITY_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH ACCEPT(ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST)",
+            "direction": "DL",
+            "id": 242,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_ACCEPT_W_ACTIVATE_DEFAULT_EPS_BEARER_CONTEXT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH COMPLETE(ACTIVATE DEFAULT EPS BEARER CONTEXT ACCEPT)",
+            "direction": "UL",
+            "id": 243,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_COMPLETE_W_ACTIVATE_DEFAULT_EPS_BEARER_CONTEXT_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ATTACH REJECT(PDN CONNECTIVITY REJECT)",
+            "direction": "DL",
+            "id": 244,
+            "layer": 1,
+            "name": "NAS_PDU_ATTACH_REJECT_W_PDN_CONNECTIVITY_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DETACH REQUEST",
+            "direction": "DL",
+            "id": 245,
+            "layer": 1,
+            "name": "NAS_PDU_DETACH_REQUEST_DOWNLINK",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DETACH ACCEPT",
+            "direction": "DL",
+            "id": 246,
+            "layer": 1,
+            "name": "NAS_PDU_DETACH_ACCEPT_DOWNLINK",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CONTROL PLANE SERVICE REQUEST(UPLINK NAS TRANSPORT)",
+            "direction": "UL",
+            "id": 247,
+            "layer": 1,
+            "name": "NAS_PDU_CONTROL_SERVICE_REQUEST_W_UPLINK_NAS_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "CONTROL PLANE SERVICE REQUEST(ESM DATA TRANSPORT)",
+            "direction": "UL",
+            "id": 248,
+            "layer": 1,
+            "name": "NAS_PDU_CONTROL_SERVICE_REQUEST_W_NAS_PDU_ESM_DATA_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "UPLINK ESM MESSAGE",
+            "direction": "UL",
+            "id": 254,
+            "layer": 1,
+            "name": "NAS_PDU_UPLINK_ESM_MESSAGE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "EMM SERVICE REQUEST",
+            "direction": "UL",
+            "id": 255,
+            "layer": 1,
+            "name": "NAS_PDU_SERVICE_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "System Information (SI)",
+            "direction": "DL",
+            "id": 0,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SI",
+            "type": "ASN_BCCH_DL_SCH"
+        },
+        {
+            "description": "System Information Block 1 (SIB1)",
+            "direction": "DL",
+            "id": 1,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SIB1",
+            "type": "ASN_BCCH_DL_SCH"
+        },
+        {
+            "description": "Paging",
+            "direction": "DL",
+            "id": 2,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_PCCH",
+            "type": "ASN_PCCH"
+        },
+        {
+            "description": "RRC Connection Setup",
+            "direction": "DL",
+            "id": 3,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_SETUP",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reject",
+            "direction": "DL",
+            "id": 4,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REJECT",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment",
+            "direction": "DL",
+            "id": 5,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Reject",
+            "direction": "DL",
+            "id": 6,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_REJECT",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "DL Information Transfer",
+            "direction": "DL",
+            "id": 7,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_DL_INFO",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reconfiguration",
+            "direction": "DL",
+            "id": 8,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RECONF",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Release",
+            "direction": "DL",
+            "id": 9,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RELEASE",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "Security Mode Command",
+            "direction": "DL",
+            "id": 10,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "UE Capability Enquiry",
+            "direction": "DL",
+            "id": 11,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CAPA_ENQUIRY",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "Counter Check",
+            "direction": "DL",
+            "id": 12,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_COUNTER_CHECK",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "UE Information Request",
+            "direction": "DL",
+            "id": 13,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_INFO_REQ",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Resume",
+            "direction": "DL",
+            "id": 14,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Request",
+            "direction": "UL",
+            "id": 15,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Request",
+            "direction": "UL",
+            "id": 16,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "RRC Connection Resume Request",
+            "direction": "UL",
+            "id": 17,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "Measurement Report",
+            "direction": "UL",
+            "id": 18,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_MEAS_REPORT",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reconfiguration Complete",
+            "direction": "UL",
+            "id": 19,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RECONF_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Complete",
+            "direction": "UL",
+            "id": 20,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Setup Complete",
+            "direction": "UL",
+            "id": 21,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_SETUP_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Security Mode Complete",
+            "direction": "UL",
+            "id": 22,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Security Mode Failure",
+            "direction": "UL",
+            "id": 23,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE_FAILURE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Capability Information",
+            "direction": "UL",
+            "id": 24,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CAPA_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UL Information Transfer",
+            "direction": "UL",
+            "id": 25,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UL_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Counter Check Response",
+            "direction": "UL",
+            "id": 26,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_COUNTER_CHECK_RESP",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Information Response",
+            "direction": "UL",
+            "id": 27,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_INFO_RESP",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Resume Complete",
+            "direction": "UL",
+            "id": 28,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Assistance Information",
+            "direction": "UL",
+            "id": 29,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_ASSIST_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "System Information (SI-NB)",
+            "direction": "DL",
+            "id": 30,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SI",
+            "type": "ASN_BCCH_DL_SCH_NB"
+        },
+        {
+            "description": "System Information Block 1 (SIB1-NB)",
+            "direction": "DL",
+            "id": 31,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SIB1",
+            "type": "ASN_BCCH_DL_SCH_NB"
+        },
+        {
+            "description": "Paging",
+            "direction": "DL",
+            "id": 32,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_PCCH",
+            "type": "ASN_PCCH_NB"
+        },
+        {
+            "description": "RRC Connection Setup",
+            "direction": "DL",
+            "id": 33,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_SETUP",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reject",
+            "direction": "DL",
+            "id": 34,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REJECT",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment",
+            "direction": "DL",
+            "id": 35,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Reject",
+            "direction": "DL",
+            "id": 36,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_REJECT",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "DL Information Transfer",
+            "direction": "DL",
+            "id": 37,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_DL_INFO",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reconfiguration",
+            "direction": "DL",
+            "id": 38,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RECONF",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Release",
+            "direction": "DL",
+            "id": 39,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RELEASE",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Command",
+            "direction": "DL",
+            "id": 40,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "UE Capability Enquiry",
+            "direction": "DL",
+            "id": 41,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CAPA_ENQUIRY",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume",
+            "direction": "DL",
+            "id": 42,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Request",
+            "direction": "UL",
+            "id": 43,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Request",
+            "direction": "UL",
+            "id": 44,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume Request",
+            "direction": "UL",
+            "id": 45,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reconfiguration Complete",
+            "direction": "UL",
+            "id": 46,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RECONF_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Complete",
+            "direction": "UL",
+            "id": 47,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Setup Complete",
+            "direction": "UL",
+            "id": 48,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_SETUP_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Complete",
+            "direction": "UL",
+            "id": 49,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Failure",
+            "direction": "UL",
+            "id": 50,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE_FAILURE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "UE Capability Information",
+            "direction": "UL",
+            "id": 51,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CAPA_INFO",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "UL Information Transfer",
+            "direction": "UL",
+            "id": 52,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_UL_INFO",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume Complete",
+            "direction": "UL",
+            "id": 53,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "UNKNOWN MESSAGE",
+            "direction": "DL",
+            "id": 0,
+            "layer": 3,
+            "name": "NAS_PDU_UNKNOWN_ESM_MESSAGE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST",
+            "direction": "DL",
+            "id": 193,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEFAULT_EPS_BEARER_CONTEXT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEFAULT EPS BEARER CONTEXT ACCEPT",
+            "direction": "UL",
+            "id": 194,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEFAULT_EPS_BEARER_CONTEXT_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEFAULT EPS BEARER CONTEXT REJECT",
+            "direction": "UL",
+            "id": 195,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEFAULT_EPS_BEARER_CONTEXT_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEDICATED EPS BEARER CONTEXT REQUEST",
+            "direction": "DL",
+            "id": 197,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEDICATED_EPS_BEARER_CONTEXT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEDICATED EPS BEARER CONTEXT ACCEPT",
+            "direction": "UL",
+            "id": 198,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEDICATED_EPS_BEARER_CONTEXT_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ACTIVATE DEDICATED EPS BEARER CONTEXT REJECT",
+            "direction": "UL",
+            "id": 199,
+            "layer": 3,
+            "name": "NAS_PDU_ACTIVATE_DEDICATED_EPS_BEARER_CONTEXT_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "MODIFY EPS BEARER CONTEXT REQUEST",
+            "direction": "DL",
+            "id": 201,
+            "layer": 3,
+            "name": "NAS_PDU_MODIFY_EPS_BEARER_CONTEXT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "MODIFY EPS BEARER CONTEXT ACCEPT",
+            "direction": "UL",
+            "id": 202,
+            "layer": 3,
+            "name": "NAS_PDU_MODIFY_EPS_BEARER_CONTEXT_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "MODIFY EPS BEARER CONTEXT REJECT",
+            "direction": "UL",
+            "id": 203,
+            "layer": 3,
+            "name": "NAS_PDU_MODIFY_EPS_BEARER_CONTEXT_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DEACTIVATE EPS BEARER CONTEXT REQUEST",
+            "direction": "DL",
+            "id": 205,
+            "layer": 3,
+            "name": "NAS_PDU_DEACTIVATE_EPS_BEARER_CONTEXT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "DEACTIVATE EPS BEARER CONTEXT ACCEPT",
+            "direction": "UL",
+            "id": 206,
+            "layer": 3,
+            "name": "NAS_PDU_DEACTIVATE_EPS_BEARER_CONTEXT_ACCEPT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "PDN CONNECTIVITY REQUEST",
+            "direction": "UL",
+            "id": 208,
+            "layer": 3,
+            "name": "NAS_PDU_PDN_CONNECTIVITY_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "PDN CONNECTIVITY REJECT",
+            "direction": "DL",
+            "id": 209,
+            "layer": 3,
+            "name": "NAS_PDU_PDN_CONNECTIVITY_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "PDN DISCONNECT REQUEST",
+            "direction": "UL",
+            "id": 210,
+            "layer": 3,
+            "name": "NAS_PDU_PDN_DISCONNECT_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "PDN DISCONNECT REJECT",
+            "direction": "DL",
+            "id": 211,
+            "layer": 3,
+            "name": "NAS_PDU_PDN_DISCONNECT_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "BEARER RESOURCE ALLOCATION REQUEST",
+            "direction": "UL",
+            "id": 212,
+            "layer": 3,
+            "name": "NAS_PDU_BEARER_RESOURCE_ALLOCATION_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "BEARER RESOURCE ALLOCATION REJECT",
+            "direction": "DL",
+            "id": 213,
+            "layer": 3,
+            "name": "NAS_PDU_BEARER_RESOURCE_ALLOCATION_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "BEARER RESOURCE MODIFICATION REQUEST",
+            "direction": "UL",
+            "id": 214,
+            "layer": 3,
+            "name": "NAS_PDU_BEARER_RESOURCE_MODIFICATION_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "BEARER RESOURCE MODIFICATION REJECT",
+            "direction": "DL",
+            "id": 215,
+            "layer": 3,
+            "name": "NAS_PDU_BEARER_RESOURCE_MODIFICATION_REJECT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM INFORMATION REQUEST",
+            "direction": "DL",
+            "id": 217,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_INFORMATION_REQUEST",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM INFORMATION RESPONSE",
+            "direction": "UL",
+            "id": 218,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_INFORMATION_RESPONSE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "NOTIFICATION",
+            "direction": "DL",
+            "id": 219,
+            "layer": 3,
+            "name": "NAS_PDU_NOTIFICATION",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM DUMMY MESSAGE",
+            "direction": "DL",
+            "id": 220,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_DUMMY_MESSAGE",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM STATUS",
+            "direction": "UL",
+            "id": 232,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_STATUS",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM DATA TRANSPORT",
+            "direction": "UL",
+            "id": 235,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_DATA_TRANSPORT",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM STATUS",
+            "direction": "DL",
+            "id": 248,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_STATUS_DOWNLINK",
+            "type": "NAS_PDU"
+        },
+        {
+            "description": "ESM DATA TRANSPORT",
+            "direction": "DL",
+            "id": 251,
+            "layer": 3,
+            "name": "NAS_PDU_ESM_DATA_TRANSPORT_DOWNLINK",
+            "type": "NAS_PDU"
+        }
+    ],
+    "peer_buffer_layers": [
+        {
+            "id": 1,
+            "name": "EMM"
+        },
+        {
+            "id": 2,
+            "name": "ERRC"
+        },
+        {
+            "id": 3,
+            "name": "ESM"
+        }
+    ],
+    "traces": [
+        {
+            "format": "FW version %s",
+            "id": 5887,
+            "label": "EXTERNAL_FW_VERSION",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "FW product ID %s",
+            "id": 5888,
+            "label": "EXTERNAL_FW_PRODUCT_ID",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8447,
+            "label": "GNSS_NMEA_GGA",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8448,
+            "label": "GNSS_NMEA_GLL",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8449,
+            "label": "GNSS_NMEA_GSA",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8450,
+            "label": "GNSS_NMEA_GSV_EMPTY",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8451,
+            "label": "GNSS_NMEA_GSV",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 8452,
+            "label": "GNSS_NMEA_RMC",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "Date %u-%02u-%02u %02u:%02u:%02u WN %u TOW %u.%03u tunc %d.%09u",
+            "id": 9217,
+            "label": "GNSS_POS_REP_DT",
+            "format_items": [
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                }
+            ]
+        },
+        {
+            "format": "Lat %d.%06u Lon %d.%06u Height %d.%02u Speed %d.%02u Heading %d.%02u",
+            "id": 9218,
+            "label": "GNSS_POS_REP_PV",
+            "format_items": [
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 13248,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 32
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 13249,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 32
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 13250,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 32
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 13255,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 33
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        }
+    ],
+    "static_data": {
+        "static_strings": [
+            {
+                "id": 32,
+                "value": "<="
+            },
+            {
+                "id": 33,
+                "value": "=>"
+            }
+        ]
+    }
+}

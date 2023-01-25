@@ -3,6 +3,7 @@
 ### Changed
 
 -   Updated to be compatible with nRF Connect for Desktop v4.0.0.
+-   Trace database for modem firmware v1.3.4.
 
 ## 0.3.6 - 2022-11-11
 
