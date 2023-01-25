@@ -20,7 +20,7 @@ export const askForTraceDbFile = () =>
             },
             { name: 'All Files', extensions: ['*'] },
         ],
-        autoDetectDbRootFolder
+        autoDetectDbRootFolder()
     );
 
 export const askForTraceFile = () =>

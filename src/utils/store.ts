@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import path from 'path';
-import { getPersistentStore as store } from 'pc-nrfconnect-shared';
+import { getAppFile, getPersistentStore as store } from 'pc-nrfconnect-shared';
 
 import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
 
@@ -32,18 +31,8 @@ interface StoreSchema {
     [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
 }
 
-const AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR = [
-    '..',
-    '..',
-    'config',
-    'auto-detect-trace-db-config',
-];
-
-export const autoDetectDbRootFolder = path.join(
-    getPluginsDir(),
-    ...AUTO_DETECT_DB_ROOT_RELATIVE_TO_PLUGINS_DIR,
-    path.sep
-);
+export const autoDetectDbRootFolder = () =>
+    getAppFile(path.join('resources', 'traceDB')) as string;
 
 export const getManualDbFilePath = () =>
     store<StoreSchema>().get(MANUAL_DB_FILE_PATH_KEY);

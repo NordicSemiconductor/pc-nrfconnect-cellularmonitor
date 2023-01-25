@@ -1,0 +1,790 @@
+{
+    "meta": {
+        "version_major": 1,
+        "version_minor": 0,
+        "decoder_config": {
+            "masters": [
+                {
+                    "aliases": [97, 98, 99],
+                    "id": 96,
+                    "timestamp_frequency": 32768,
+                    "timestamp_max": 4294967295
+                }
+            ],
+            "protocol_version": 3
+        },
+        "trace_type_descriptors": [
+            {
+                "conditions": [
+                    {
+                        "trace_id": 0
+                    }
+                ],
+                "type": "ascii"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 5
+                    }
+                ],
+                "type": "structured"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 6
+                    }
+                ],
+                "type": "peer"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 4
+                    }
+                ],
+                "type": "buf_dump"
+            },
+            {
+                "conditions": [
+                    {
+                        "id_range": {
+                            "max": 65535,
+                            "min": 63
+                        }
+                    }
+                ],
+                "type": "formatted"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 7
+                    }
+                ],
+                "type": "data_dump"
+            },
+            {
+                "conditions": [
+                    {
+                        "trace_id": 9
+                    }
+                ],
+                "type": "peer_dump"
+            }
+        ],
+        "trace_id_size": 2,
+        "endianness": "little",
+        "id": 96,
+        "uuid": "4325d595-7b69-4474-ba39-9c177930aac3",
+        "min_data_size": 1,
+        "type_mapping": "id"
+    },
+    "buffers": [
+        {
+            "id": 31,
+            "name": "EPDCP_UP_PACKET_UL"
+        },
+        {
+            "id": 32,
+            "name": "EPDCP_UP_PACKET_DL"
+        },
+        {
+            "id": 33,
+            "name": "EPDCP_UP_PACKET_UL_SINGLE"
+        },
+        {
+            "id": 34,
+            "name": "EPDCP_UP_PACKET_UL_MULTI"
+        }
+    ],
+    "peer_buffers": [
+        {
+            "description": "System Information (SI)",
+            "direction": "DL",
+            "id": 0,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SI",
+            "type": "ASN_BCCH_DL_SCH"
+        },
+        {
+            "description": "System Information Block 1 (SIB1)",
+            "direction": "DL",
+            "id": 1,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SIB1",
+            "type": "ASN_BCCH_DL_SCH"
+        },
+        {
+            "description": "Paging",
+            "direction": "DL",
+            "id": 2,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_PCCH",
+            "type": "ASN_PCCH"
+        },
+        {
+            "description": "RRC Connection Setup",
+            "direction": "DL",
+            "id": 3,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_SETUP",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reject",
+            "direction": "DL",
+            "id": 4,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REJECT",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment",
+            "direction": "DL",
+            "id": 5,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Reject",
+            "direction": "DL",
+            "id": 6,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_REJECT",
+            "type": "ASN_DL_CCCH"
+        },
+        {
+            "description": "DL Information Transfer",
+            "direction": "DL",
+            "id": 7,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_DL_INFO",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reconfiguration",
+            "direction": "DL",
+            "id": 8,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RECONF",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Release",
+            "direction": "DL",
+            "id": 9,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RELEASE",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "Security Mode Command",
+            "direction": "DL",
+            "id": 10,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "UE Capability Enquiry",
+            "direction": "DL",
+            "id": 11,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CAPA_ENQUIRY",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "Counter Check",
+            "direction": "DL",
+            "id": 12,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_COUNTER_CHECK",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "UE Information Request",
+            "direction": "DL",
+            "id": 13,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_INFO_REQ",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Resume",
+            "direction": "DL",
+            "id": 14,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME",
+            "type": "ASN_DL_DCCH"
+        },
+        {
+            "description": "RRC Connection Request",
+            "direction": "UL",
+            "id": 15,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Request",
+            "direction": "UL",
+            "id": 16,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "RRC Connection Resume Request",
+            "direction": "UL",
+            "id": 17,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME_REQ",
+            "type": "ASN_UL_CCCH"
+        },
+        {
+            "description": "Measurement Report",
+            "direction": "UL",
+            "id": 18,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_MEAS_REPORT",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reconfiguration Complete",
+            "direction": "UL",
+            "id": 19,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RECONF_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Reestablishment Complete",
+            "direction": "UL",
+            "id": 20,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_REEST_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Setup Complete",
+            "direction": "UL",
+            "id": 21,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_SETUP_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Security Mode Complete",
+            "direction": "UL",
+            "id": 22,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Security Mode Failure",
+            "direction": "UL",
+            "id": 23,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_SECURITY_MODE_FAILURE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Capability Information",
+            "direction": "UL",
+            "id": 24,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CAPA_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UL Information Transfer",
+            "direction": "UL",
+            "id": 25,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UL_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "Counter Check Response",
+            "direction": "UL",
+            "id": 26,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_COUNTER_CHECK_RESP",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Information Response",
+            "direction": "UL",
+            "id": 27,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_INFO_RESP",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "RRC Connection Resume Complete",
+            "direction": "UL",
+            "id": 28,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_CON_RESUME_COMPLETE",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "UE Assistance Information",
+            "direction": "UL",
+            "id": 29,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_UE_ASSIST_INFO",
+            "type": "ASN_UL_DCCH"
+        },
+        {
+            "description": "System Information (SI-NB)",
+            "direction": "DL",
+            "id": 30,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SI",
+            "type": "ASN_BCCH_DL_SCH_NB"
+        },
+        {
+            "description": "System Information Block 1 (SIB1-NB)",
+            "direction": "DL",
+            "id": 31,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SIB1",
+            "type": "ASN_BCCH_DL_SCH_NB"
+        },
+        {
+            "description": "Paging",
+            "direction": "DL",
+            "id": 32,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_PCCH",
+            "type": "ASN_PCCH_NB"
+        },
+        {
+            "description": "RRC Connection Setup",
+            "direction": "DL",
+            "id": 33,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_SETUP",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reject",
+            "direction": "DL",
+            "id": 34,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REJECT",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment",
+            "direction": "DL",
+            "id": 35,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Reject",
+            "direction": "DL",
+            "id": 36,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_REJECT",
+            "type": "ASN_DL_CCCH_NB"
+        },
+        {
+            "description": "DL Information Transfer",
+            "direction": "DL",
+            "id": 37,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_DL_INFO",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reconfiguration",
+            "direction": "DL",
+            "id": 38,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RECONF",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Release",
+            "direction": "DL",
+            "id": 39,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RELEASE",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Command",
+            "direction": "DL",
+            "id": 40,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "UE Capability Enquiry",
+            "direction": "DL",
+            "id": 41,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CAPA_ENQUIRY",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume",
+            "direction": "DL",
+            "id": 42,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME",
+            "type": "ASN_DL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Request",
+            "direction": "UL",
+            "id": 43,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Request",
+            "direction": "UL",
+            "id": 44,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume Request",
+            "direction": "UL",
+            "id": 45,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME_REQ",
+            "type": "ASN_UL_CCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reconfiguration Complete",
+            "direction": "UL",
+            "id": 46,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RECONF_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Reestablishment Complete",
+            "direction": "UL",
+            "id": 47,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_REEST_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Setup Complete",
+            "direction": "UL",
+            "id": 48,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_SETUP_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Complete",
+            "direction": "UL",
+            "id": 49,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "Security Mode Failure",
+            "direction": "UL",
+            "id": 50,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_SECURITY_MODE_FAILURE",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "UE Capability Information",
+            "direction": "UL",
+            "id": 51,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CAPA_INFO",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "UL Information Transfer",
+            "direction": "UL",
+            "id": 52,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_UL_INFO",
+            "type": "ASN_UL_DCCH_NB"
+        },
+        {
+            "description": "RRC Connection Resume Complete",
+            "direction": "UL",
+            "id": 53,
+            "layer": 2,
+            "name": "ERRC_PEER_MSG_NB_CON_RESUME_COMPLETE",
+            "type": "ASN_UL_DCCH_NB"
+        }
+    ],
+    "peer_buffer_layers": [
+        {
+            "id": 2,
+            "name": "ERRC"
+        }
+    ],
+    "traces": [
+        {
+            "format": "FW version %s",
+            "id": 2943,
+            "label": "EXTERNAL_FW_VERSION",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "FW product ID %s",
+            "id": 2944,
+            "label": "EXTERNAL_FW_PRODUCT_ID",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5887,
+            "label": "GNSS_NMEA_GGA",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5888,
+            "label": "GNSS_NMEA_GLL",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5889,
+            "label": "GNSS_NMEA_GSA",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5890,
+            "label": "GNSS_NMEA_GSV_NO_SIGNAL",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5891,
+            "label": "GNSS_NMEA_GSV",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "%s",
+            "id": 5892,
+            "label": "GNSS_NMEA_RMC",
+            "format_items": [
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "Date %u-%02u-%02u %02u:%02u:%02u WN %u TOW %u.%03u tunc %d.%09u",
+            "id": 6529,
+            "label": "GNSS_POS_REP_DT",
+            "format_items": [
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                }
+            ]
+        },
+        {
+            "format": "Lat %d.%06u Lon %d.%06u Height %d.%02u Speed %d.%02u Heading %d.%02u",
+            "id": 6530,
+            "label": "GNSS_POS_REP_PV",
+            "format_items": [
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                },
+                {
+                    "type": "int32_t",
+                    "size": 4
+                },
+                {
+                    "type": "uint32_t",
+                    "size": 4
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 10624,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 3
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 10625,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 3
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 10626,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 3
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        },
+        {
+            "format": "AT_STRING %s %s",
+            "id": 10632,
+            "label": "L23_AT_STRING",
+            "format_items": [
+                {
+                    "type": "static_c_str",
+                    "reference": 4
+                },
+                {
+                    "type": "c_str"
+                }
+            ]
+        }
+    ],
+    "static_data": {
+        "static_strings": [
+            {
+                "id": 3,
+                "value": "<="
+            },
+            {
+                "id": 4,
+                "value": "=>"
+            }
+        ]
+    }
+}
