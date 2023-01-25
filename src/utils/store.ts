@@ -31,9 +31,8 @@ interface StoreSchema {
     [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
 }
 
-export const autoDetectDbRootFolder = getAppFile(
-    path.join('resources', 'traceDB')
-) as string;
+export const autoDetectDbRootFolder = () =>
+    getAppFile(path.join('resources', 'traceDB')) as string;
 
 export const getManualDbFilePath = () =>
     store<StoreSchema>().get(MANUAL_DB_FILE_PATH_KEY);

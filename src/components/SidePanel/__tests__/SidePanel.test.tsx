@@ -20,6 +20,7 @@ import {
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
     mockedCurrentPane,
+    mockedDataDir,
     render,
     screen,
 } from '../../../utils/testUtils';
@@ -29,6 +30,12 @@ import {
 } from '../SidePanel';
 
 jest.mock('../../../features/wireshark/wireshark');
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => mockedDataDir,
+    getAppFile: () => mockedDataDir,
+    currentPane: jest.fn().mockReturnValue(0),
+}));
 
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
