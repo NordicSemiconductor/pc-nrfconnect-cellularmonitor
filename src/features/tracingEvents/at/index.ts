@@ -24,6 +24,7 @@ import { processor as networkRegistrationStatus } from './commandProcessors/netw
 import { processor as periodicTAU } from './commandProcessors/periodicTAU';
 import { processor as pinCode } from './commandProcessors/pinCode';
 import { processor as pinRetries } from './commandProcessors/pinRetries';
+import { processor as powerSavingModeSettings } from './commandProcessors/powerSavingModeSettings';
 import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
 import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
 import { processor as signalingConnectionStatus } from './commandProcessors/signalingConnectionStatusNotification';
@@ -51,6 +52,7 @@ const processors = [
     periodicTAU,
     pinCode,
     pinRetries,
+    powerSavingModeSettings,
     productSerialNumber,
     revisionIdentification,
     signalingConnectionStatus,
@@ -123,10 +125,24 @@ export default (packet: TraceEvent, state: State) => {
             parsedPacket,
             getAndResetRequestType()
         );
-        return {
+
+        const tempPSM = {
+            requested: {
+                ...state.powerSavingMode?.requested,
+                ...change.powerSavingMode?.requested,
+            },
+            granted: {
+                ...state.powerSavingMode?.granted,
+                ...change.powerSavingMode?.granted,
+            },
+        };
+        const result = {
             ...state,
             ...change,
+            powerSavingMode: { ...tempPSM },
         };
+
+        return result;
     }
 
     return state;

@@ -117,12 +117,12 @@ export const getData = (state: RootState) => {
     const powerEstimationState = state.app.powerEstimation.data;
     const grantedPSM = state.app.dashboard.powerSavingMode?.granted;
     const psm = grantedPSM ? 'on' : powerEstimationState?.psm;
-    const config_lte_psm_req_rptau = grantedPSM?.T3412_extended
-        ? grantedPSM.T3412_extended.bitmask
+    const config_lte_psm_req_rptau = grantedPSM?.T3412Extended
+        ? grantedPSM.T3412Extended.bitmask
         : powerEstimationState?.config_lte_psm_req_rptau;
-    const psm_int = grantedPSM?.T3412_extended
+    const psm_int = grantedPSM?.T3412Extended
         ? `${parseTAUByteToSeconds(
-              grantedPSM.T3412_extended.bitmask,
+              grantedPSM.T3412Extended.bitmask,
               TAU_TYPES.SLEEP_INTERVAL
           )}`
         : powerEstimationState?.psm_int;

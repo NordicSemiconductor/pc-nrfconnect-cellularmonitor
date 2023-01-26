@@ -64,6 +64,19 @@ const expectedState = {
         AcT: 7,
     },
 
+    powerSavingMode: {
+        granted: {},
+        requested: {
+            state: 'on',
+            T3324: {
+                bitmask: '00000000',
+            },
+            T3412Extended: {
+                bitmask: '10010100',
+            },
+        },
+    },
+
     networkStatusNotifications: 5,
     signalingConnectionStatusNotifications: 1,
 

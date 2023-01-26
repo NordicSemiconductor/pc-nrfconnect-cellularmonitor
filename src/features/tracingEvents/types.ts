@@ -78,7 +78,7 @@ export interface State {
     // TODO: Revise above state attributes.
     // New state attributes under:
     networkType: NetworkType;
-    powerSavingMode: {
+    powerSavingMode?: {
         requested?: PowerSavingModeEntries;
         granted?: PowerSavingModeEntries;
     };
@@ -203,28 +203,35 @@ export type GeneratedPowerSavingModeEntries = {
     [timer: TimerKey]: PowerSavingModeValues;
 };
 export type PowerSavingModeEntries = {
+    state?: 'on' | 'off';
     // Also known as 'Active Time'
     T3324?: PowerSavingModeValues;
-    T3324_extended?: PowerSavingModeValues;
+    T3324Extended?: PowerSavingModeValues;
     T3402?: PowerSavingModeValues;
-    T3402_extended?: PowerSavingModeValues;
+    T3402Extended?: PowerSavingModeValues;
     T3412?: PowerSavingModeValues;
     // Also known as 'Periodic TAU'
-    T3412_extended?: PowerSavingModeValues;
+    T3412Extended?: PowerSavingModeValues;
 };
 
 export type TimerKey = `${string}${Timers}${string}`;
 
 export type PowerSavingModeValues = {
-    bitmask: Binary;
+    bitmask: Bitmask;
     unit?: TimeUnits;
     value?: number;
 };
 
+export const isValidBitmask = (bitmask: string): bitmask is Bitmask =>
+    bitmask != null &&
+    bitmask
+        .split('')
+        .every(character => character === '0' || character === '1');
+
 // TODO: Is this a really bad idea?
-type Binary = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
+export type Bitmask = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
     | 0
-    | 1}`;
+    | 1}${0 | 1}`;
 type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 
 type T_Keys = 'T3324' | 'T3402' | 'T3412';
