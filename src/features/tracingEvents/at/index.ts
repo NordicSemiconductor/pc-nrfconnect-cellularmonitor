@@ -16,6 +16,7 @@ import { processor as hardwareVersion } from './commandProcessors/hardwareVersio
 import { processor as iccid } from './commandProcessors/iccid';
 import { processor as internationalMobileSubscriberIdentity } from './commandProcessors/internationalMobileSubscriberIdentity';
 import { processor as manufacturerIdentification } from './commandProcessors/manufacturerIdentification';
+import { processor as modemDomainEventNotifications } from './commandProcessors/modemDomainEventNotification';
 import { processor as modemParameters } from './commandProcessors/modemParameters';
 import { processor as modemTraceActivation } from './commandProcessors/modemTraceActivation';
 import { processor as modemUUID } from './commandProcessors/modemUUID';
@@ -44,6 +45,7 @@ const processors = [
     iccid,
     internationalMobileSubscriberIdentity,
     manufacturerIdentification,
+    modemDomainEventNotifications,
     modemParameters,
     modemTraceActivation,
     modemUUID,

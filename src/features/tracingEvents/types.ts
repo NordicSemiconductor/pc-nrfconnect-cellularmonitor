@@ -131,6 +131,10 @@ export interface State {
     conevalTXRepetitions: number; // Integer [1, 2048], special 0 and 1.
     conevalRXRepetitions: number; // Integer [1, 2048], special 0 and 1.
     conevalDLPathLoss: number;
+
+    // %MDMEV Modem Domain Event Notification
+    mdmevNotification?: 0 | 1;
+    modemDomainEvents: string[];
 }
 
 /*
