@@ -5,8 +5,10 @@
  */
 
 import React, { useCallback, useState } from 'react';
-import { Button, Card, openUrl } from 'pc-nrfconnect-shared';
+import { useSelector } from 'react-redux';
+import { Button, Card, openUrl, selectedDevice } from 'pc-nrfconnect-shared';
 
+import { is91DK, isThingy91 } from './flashSample';
 import FlashSampleModal from './FlashSampleModal';
 
 const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
@@ -14,6 +16,9 @@ const USER_GUIDE_VIDEO = 'https://www.youtube.com/watch?v=8kB5XA5a2pI';
 
 export default () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const device = useSelector(selectedDevice);
+    const compatible = device && (isThingy91(device) || is91DK(device));
+
     const close = useCallback(() => setModalVisible(false), []);
 
     return (
@@ -51,14 +56,20 @@ export default () => {
                     to generate files for Wireshark.
                 </p>
                 <h5>Sample application</h5>
-                <p>Try the trace collector sample app too see some data</p>
+                <p>
+                    Try the trace collector sample app too see some data.
+                    Connect a nRF91 device to flash a sample app (asset manager)
+                    to your device.
+                </p>
 
-                <Button
-                    className="w-100"
-                    onClick={() => setModalVisible(!modalVisible)}
-                >
-                    Flash sample app to device
-                </Button>
+                {compatible && (
+                    <Button
+                        className="w-100"
+                        onClick={() => setModalVisible(!modalVisible)}
+                    >
+                        Flash sample app to device
+                    </Button>
+                )}
                 <FlashSampleModal visible={modalVisible} close={close} />
             </section>
         </Card>

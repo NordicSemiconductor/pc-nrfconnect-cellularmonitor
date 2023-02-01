@@ -9,36 +9,41 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Device, getAppDir, getDeviceLibContext } from 'pc-nrfconnect-shared';
 
+export const isThingy91 = (device: Device) =>
+    device?.serialport?.productId === '9100';
+
+export const is91DK = (device: Device) =>
+    device?.jlink?.boardVersion === 'PCA10090';
+
 export const flash = async (
     device: Device,
     progress: (progress?: string) => void
 ) => {
     progress('Programming modem...');
-    await programModem(device.id, progress);
+    await programModem(device, progress);
     progress('Programming firmware...');
-    await programFirmware(device.id, progress);
+    await programFirmware(device, progress);
     progress('Completed programming sample');
 };
 
-const programModem = (
-    deviceId: number,
-    progress: (progress?: string) => void
-) =>
+const programModem = (device: Device, progress: (progress?: string) => void) =>
     new Promise<void>((resolve, reject) => {
         const modemFile = join(
             getAppDir(),
             'resources',
             'firmware',
-            'mfw_nrf9160_1.3.2.zip'
+            'mfw_nrf9160_1.3.3.zip'
         );
 
         firmwareProgram(
             getDeviceLibContext(),
-            deviceId,
+            device.id,
             'NRFDL_FW_FILE',
             'NRFDL_FW_NRF91_MODEM',
             modemFile,
             complete => {
+                console.log('complete', complete);
+
                 if (complete) {
                     reject(complete);
                 } else {
@@ -54,22 +59,26 @@ const programModem = (
     });
 
 const programFirmware = (
-    deviceId: number,
+    device: Device,
     progress: (progress?: string) => void
 ) =>
     new Promise<void>((resolve, reject) => {
+        const hexFile = isThingy91(device)
+            ? 'thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex'
+            : 'nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex';
+
         const firmwareFile = join(
             getAppDir(),
             'resources',
             'firmware',
-            'nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex'
+            hexFile
         );
 
         const buffer = readFileSync(firmwareFile);
 
         firmwareProgram(
             getDeviceLibContext(),
-            deviceId,
+            device.id,
             'NRFDL_FW_BUFFER',
             'NRFDL_FW_INTEL_HEX',
             buffer,

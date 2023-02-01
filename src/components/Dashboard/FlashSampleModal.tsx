@@ -9,26 +9,25 @@ import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { Button, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
-import { flash } from './flashSample';
+import { flash, is91DK, isThingy91 } from './flashSample';
 
 type Props = { visible: boolean; close: () => void };
 
 export default ({ visible, close }: Props) => {
-    if (!visible) return null;
     const device = useSelector(selectedDevice);
 
-    const [status, setStatus] = useState(device ? 'Ready to flash' : '');
+    const [status, setStatus] = useState<(string | undefined)[]>([]);
     const onProgress = useCallback(
-        (progress?: string) => setStatus(progress ?? ''),
+        (progress?: string) => setStatus(state => [...state, progress]),
         []
     );
     const deviceName = device
         ? device.nickname || deviceInfo(device).name
         : 'No device selected';
 
-    const dk = device?.jlink?.boardVersion === 'PCA10090';
-    const thingy = device?.jlink?.boardVersion === 'PCA20035';
-    const validDevice = dk || thingy;
+    const validDevice = device && (isThingy91(device) || is91DK(device));
+
+    if (!visible) return null;
 
     return (
         <Modal show onHide={close} size="lg">
@@ -52,7 +51,13 @@ export default ({ visible, close }: Props) => {
                     your device with first the required modem (1.3.2) and the
                     hex file for the Asset tracker.
                 </p>
-                {status}
+                <ul>
+                    {status.map(item => (
+                        // eslint-disable-next-line react/jsx-key
+                        <li>{item}</li>
+                    ))}
+                </ul>
+
                 {!!device && !validDevice && (
                     <p>
                         Selected device does not have any available firmware

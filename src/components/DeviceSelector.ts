@@ -31,6 +31,7 @@ const deviceListing: DeviceTraits = {
     nordicUsb: true,
     serialPorts: true,
     jlink: true,
+    mcuBoot: true,
 };
 
 const mapState = (): DeviceSelectorProps => ({
