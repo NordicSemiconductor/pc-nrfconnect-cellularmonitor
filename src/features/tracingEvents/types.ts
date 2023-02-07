@@ -239,5 +239,5 @@ export type Bitmask = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
 type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 
 type T_Keys = 'T3324' | 'T3402' | 'T3412';
-type Extended = '' | '_extended';
+type Extended = '' | 'Extended';
 export type Timers = `${T_Keys}${Extended}`;

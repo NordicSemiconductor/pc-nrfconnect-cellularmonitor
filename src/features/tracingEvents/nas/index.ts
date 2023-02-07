@@ -25,9 +25,9 @@ const timers: Timers[] = [
     'T3324',
     'T3402',
     'T3412',
-    'T3324_extended',
-    'T3402_extended',
-    'T3412_extended',
+    'T3324Extended',
+    'T3402Extended',
+    'T3412Extended',
 ];
 
 export type AttachPacket =
@@ -173,8 +173,8 @@ const getKeyOfPacket = (
     packet: AttachPacket,
     lookup: Timers
 ): TimerKey | undefined => {
-    const predicate = lookup.includes('extended')
-        ? (key: string) => key.includes(lookup)
+    const predicate = lookup.includes('Extended')
+        ? (key: string) => key.includes(lookup.replace('Extended', '_extended'))
         : (key: string) => key.includes(lookup) && !key.includes('extended');
     return Object.keys(packet).find(key => predicate(key)) as
         | TimerKey
