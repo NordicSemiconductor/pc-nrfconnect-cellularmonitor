@@ -58,15 +58,15 @@ export interface State {
         SIM_PIN2?: number;
         SIM_PUK2?: number;
     };
-    imsi: string;
+    imsi?: string;
     iccid: string;
-    currentBand: number;
+    currentBand?: number;
     periodicTAU: number;
     hardwareVersion?: string;
     modemUUID?: string;
-    dataProfile: PowerLevel;
-    nbiotTXReduction: TXReductionMode;
-    ltemTXReduction: TXReductionMode;
+    dataProfile?: PowerLevel;
+    nbiotTXReduction?: TXReductionMode;
+    ltemTXReduction?: TXReductionMode;
     activityStatus: ActivityStatus;
     networkRegistrationStatus: {
         status?: number;
@@ -91,8 +91,8 @@ export interface State {
     mccCode: number;
 
     // XModemTrace
-    xModemTraceOperation: number;
-    xModemTraceSetID: number;
+    xModemTraceOperation?: number;
+    xModemTraceSetID?: number;
 
     // XSystemMode
     modemSupportLTEM: boolean;
@@ -106,10 +106,10 @@ export interface State {
     signalingConnectionStatusNotifications: SignalingConnectionStatusNotifications;
 
     // Evaluating Connection Parameters %CONEVAL
-    conevalResult: ConnectionEvaluationResult;
-    conevalEnergyEstimate: ConevalEnergyEstimate;
-    rrcState: RRCState;
-    signalQuality: {
+    conevalResult?: ConnectionEvaluationResult;
+    conevalEnergyEstimate?: ConevalEnergyEstimate;
+    rrcState?: RRCState;
+    signalQuality?: {
         rsrp?: number;
         rsrp_threshold_index?: number;
         rsrp_decibel?: number;
@@ -119,18 +119,18 @@ export interface State {
         snr?: number;
     };
     cellID: string; // 4-byte E-UTRAN cell ID.
-    physicalCellID: number; // Integer [0, 503]
-    earfcn: number;
-    plmn: string; // Actually just <MCC + MNC>
-    band: number; // 0 = unavailable, Integer [0, 88]
-    TAUTriggered: TAUTriggered;
+    physicalCellID?: number; // Integer [0, 503]
+    earfcn?: number;
+    plmn?: string; // Actually just <MCC + MNC>
+    band?: number; // 0 = unavailable, Integer [0, 88]
+    TAUTriggered?: TAUTriggered;
 
     // Don't actually know if ce=Cell Evaluation
-    conevalCellEvaluationLevel: CellEvaluationLevel;
-    conevalTXPower: number;
-    conevalTXRepetitions: number; // Integer [1, 2048], special 0 and 1.
-    conevalRXRepetitions: number; // Integer [1, 2048], special 0 and 1.
-    conevalDLPathLoss: number;
+    conevalCellEvaluationLevel?: CellEvaluationLevel;
+    conevalTXPower?: number;
+    conevalTXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
+    conevalRXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
+    conevalDLPathLoss?: number;
 
     // %MDMEV Modem Domain Event Notification
     mdmevNotification?: 0 | 1;

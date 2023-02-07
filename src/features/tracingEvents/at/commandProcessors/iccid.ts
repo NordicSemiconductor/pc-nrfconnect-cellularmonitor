@@ -11,10 +11,10 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/xiccid.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: ( packet, state ) => {
         if (packet.status === 'OK') {
-            return { iccid: packet.payload };
+            return { ...state, iccid: packet.payload };
         }
-        return {};
+        return state;
     },
 };

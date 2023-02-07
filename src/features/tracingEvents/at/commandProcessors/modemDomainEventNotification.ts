@@ -6,7 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getNumber } from '../utils';
+import { getNumber, parseStringValue } from '../utils';
 
 let setNotification: 0 | 1;
 
@@ -15,7 +15,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/mdmev.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
@@ -25,24 +25,29 @@ export const processor: Processor = {
                 setNotification = payload;
             }
         }
-        return {};
+        return state;
     },
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
             if (requestType === RequestType.SET_WITH_VALUE) {
                 return {
+                    ...state,
                     mdmevNotification: setNotification,
                 };
             }
         }
-        return {};
+        return state;
     },
-    onNotification: packet => {
+    onNotification: (packet, state) => {
         if (packet.payload) {
+            const event = parseStringValue(packet.payload);
             return {
-                modemDomainEvents: [packet.payload],
+                ...state,
+                modemDomainEvents: state.modemDomainEvents
+                    ? [...state.modemDomainEvents, event]
+                    : [event],
             };
         }
-        return {};
+        return state;
     },
 };

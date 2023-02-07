@@ -20,7 +20,7 @@ export const processor: Processor = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/packet_domain/cscon.html',
     initialState: () => ({}),
 
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const parsedPayload = Number.parseInt(
                 getParametersFromResponse(packet.payload)[0],
@@ -31,31 +31,32 @@ export const processor: Processor = {
                     parsedPayload as SignalingConnectionStatusNotifications;
             }
         }
-        return {};
+        return state;
     },
 
-    onResponse: (packet, reqType) => {
+    onResponse: (packet, state, reqType) => {
         if (packet.status === 'OK') {
             if (reqType === RequestType.SET_WITH_VALUE) {
                 return {
+                    ...state,
                     signalingConnectionStatusNotifications: setPayload,
                 };
             }
 
             if (reqType === RequestType.READ && packet.payload) {
                 const rrcState = parseRRCState(packet.payload);
-                return { rrcState };
+                return { ...state, rrcState };
             }
         }
-        return {};
+        return state;
     },
 
-    onNotification: packet => {
+    onNotification: (packet, state) => {
         if (packet.payload) {
             const rrcState = parseRRCState(packet.payload);
-            return { rrcState };
+            return { ...state, rrcState };
         }
-        return {};
+        return state;
     },
 };
 

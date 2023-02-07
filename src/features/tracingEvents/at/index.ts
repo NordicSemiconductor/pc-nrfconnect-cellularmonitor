@@ -74,7 +74,7 @@ const getAndResetRequestType = () => {
     return requestTypeCopy;
 };
 
-export default (packet: TraceEvent, state: State) => {
+export default (packet: TraceEvent, state: State): State => {
     const parsedPacket = parseAT(packet);
     const { requestType, command } = parsedPacket;
 
@@ -90,10 +90,7 @@ export default (packet: TraceEvent, state: State) => {
         waitingAT = command ?? '';
         pendingRequestType = requestType;
         if (processor && processor.onRequest) {
-            return {
-                ...state,
-                ...processor.onRequest(parsedPacket),
-            };
+            return processor.onRequest(parsedPacket, state);
         }
         return state;
     }
@@ -103,19 +100,16 @@ export default (packet: TraceEvent, state: State) => {
         // response if true, otherwise a notification
         if (command === waitingAT) {
             waitingAT = '';
-            return {
-                ...state,
-                ...processor.onResponse(parsedPacket, getAndResetRequestType()),
-            };
+            return processor.onResponse(
+                parsedPacket,
+                state,
+                getAndResetRequestType()
+            );
         }
 
-        const notification = processor.onNotification
-            ? processor.onNotification(parsedPacket)
-            : processor.onResponse(parsedPacket);
-        return {
-            ...state,
-            ...notification,
-        };
+        return processor.onNotification
+            ? processor.onNotification(parsedPacket, state)
+            : processor.onResponse(parsedPacket, state);
     }
 
     // response without command
@@ -123,28 +117,11 @@ export default (packet: TraceEvent, state: State) => {
     if (responseProcessor) {
         waitingAT = '';
 
-        const change = responseProcessor.onResponse(
+        return responseProcessor.onResponse(
             parsedPacket,
+            state,
             getAndResetRequestType()
         );
-
-        const tempPSM = {
-            requested: {
-                ...state.powerSavingMode?.requested,
-                ...change.powerSavingMode?.requested,
-            },
-            granted: {
-                ...state.powerSavingMode?.granted,
-                ...change.powerSavingMode?.granted,
-            },
-        };
-        const result = {
-            ...state,
-            ...change,
-            powerSavingMode: { ...tempPSM },
-        };
-
-        return result;
     }
 
     return state;
@@ -156,10 +133,11 @@ export interface Processor {
     initialState: () => Partial<State>;
     onResponse: (
         packet: ParsedPacket,
+        state: State,
         requestType?: RequestType
-    ) => Partial<State>;
-    onRequest?: (packet: ParsedPacket) => Partial<State>;
-    onNotification?: (packet: ParsedPacket) => Partial<State>;
+    ) => State;
+    onRequest?: (packet: ParsedPacket, state: State) => State;
+    onNotification?: (packet: ParsedPacket, state: State) => State;
 }
 
 // Typescript challenge! Think it's related to the one above.

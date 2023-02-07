@@ -27,7 +27,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',
     initialState: () => ({ pinCodeStatus: 'Unknown' }),
-    onResponse: packet => {
+    onResponse: ( packet, state ) => {
         if (packet.status === 'OK') {
             const allowedStates = (
                 Object.keys(pinCodeStatus) as PinCodeStatus[]
@@ -35,13 +35,14 @@ export const processor: Processor = {
 
             if (packet.payload) {
                 return {
+                    ...state,
                     pinCodeStatus:
                         allowedStates.find(state => state === packet.payload) ??
                         'Unknown',
                 };
             }
         }
-        return { pinCodeStatus: 'Unknown' };
+        return { ...state, pinCodeStatus: 'Unknown' };
     },
 };
 

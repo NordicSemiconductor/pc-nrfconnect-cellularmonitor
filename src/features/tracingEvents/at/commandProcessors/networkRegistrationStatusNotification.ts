@@ -16,7 +16,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const payload = getParametersFromResponse(packet.payload);
             if (payload) {
@@ -26,16 +26,17 @@ export const processor: Processor = {
                 ) as NetworkStatusNotifications;
             }
         }
-        return {};
+        return state;
     },
-    onResponse: (packet, reqType) => {
+    onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
-            if (reqType === RequestType.SET_WITH_VALUE) {
-                return { networkStatusNotifications: setPayload };
+            if (requestType === RequestType.SET_WITH_VALUE) {
+                return { ...state, networkStatusNotifications: setPayload };
             }
 
             if (packet.payload) {
                 return {
+                    ...state,
                     networkRegistrationStatus: setNetworkRegistrationStatus(
                         'response',
                         packet.payload
@@ -43,18 +44,19 @@ export const processor: Processor = {
                 };
             }
         }
-        return {};
+        return state;
     },
-    onNotification(packet) {
+    onNotification: (packet, state) => {
         if (packet.payload) {
             return {
+                ...state,
                 networkRegistrationStatus: setNetworkRegistrationStatus(
                     'notification',
                     packet.payload
                 ),
             };
         }
-        return {};
+        return state;
     },
 };
 

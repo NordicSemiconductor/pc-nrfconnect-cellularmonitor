@@ -11,10 +11,10 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: ( packet, state ) => {
         if (packet.status === 'OK') {
-            return { imsi: packet.payload };
+            return { ...state, imsi: packet.payload };
         }
-        return {};
+        return state;
     },
 };

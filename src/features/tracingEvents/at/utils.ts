@@ -35,7 +35,7 @@ export const getParametersFromResponse = (payload?: string) => {
             line
                 .split(',')
                 .map(stringValue => stringValue.trim())
-                .map(value => value.replace(/[\\]+|["]|[”]/g, ''))
+                .map(parseStringValue)
         )
         .flat();
 
@@ -43,14 +43,5 @@ export const getParametersFromResponse = (payload?: string) => {
 };
 
 export const parseStringValue = (value: string): string => {
-    if (value.charAt(0) === '"' && value.charAt(value.length - 1) === '"') {
-        return value.substring(1, value.length - 1);
-    }
-    if (
-        value.substring(0, 2) === '\\"' &&
-        value.substring(value.length - 2) === '\\"'
-    ) {
-        return value.substring(2, value.length - 2);
-    }
-    return value;
+    return value.replace(/\\r|\\n|[\\]+|["]|[”]/g, '');
 };

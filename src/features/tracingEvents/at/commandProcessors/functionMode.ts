@@ -35,17 +35,18 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',
     initialState: () => ({}),
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (
             packet.status === 'OK' &&
             requestType === RequestType.READ &&
             packet.payload
         ) {
             return {
+                ...state,
                 functionalMode: parseInt(packet.payload, 10) as FunctionalMode,
             };
         }
-        return {};
+        return state;
     },
 };
 

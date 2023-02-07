@@ -48,7 +48,7 @@ export const processor: Processor = {
             },
         },
     }),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
             if (packet.payload) {
                 setRequested = parsePowerSavingModePayload(packet.payload);
@@ -58,23 +58,37 @@ export const processor: Processor = {
                 setRequested = resetToDefault;
             }
         }
-        return {};
+        return state;
     },
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
             if (requestType === RequestType.SET_WITH_VALUE) {
-                return { powerSavingMode: { requested: setRequested } };
+                return {
+                    ...state,
+                    powerSavingMode: {
+                        requested: {
+                            ...state.powerSavingMode?.requested,
+                            ...setRequested,
+                        },
+                        granted: state.powerSavingMode?.granted,
+                    },
+                };
             }
 
             if (requestType === RequestType.READ && packet.payload) {
                 return {
+                    ...state,
                     powerSavingMode: {
-                        requested: parsePowerSavingModePayload(packet.payload),
+                        requested: {
+                            ...state.powerSavingMode?.requested,
+                            ...parsePowerSavingModePayload(packet.payload),
+                        },
+                        granted: state.powerSavingMode?.granted,
                     },
                 };
             }
         }
-        return {};
+        return state;
     },
 };
 

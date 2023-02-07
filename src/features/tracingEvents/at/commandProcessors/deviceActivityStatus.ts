@@ -22,16 +22,17 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cpas.html',
     initialState: () => ({}),
-    onResponse(packet) {
+    onResponse(packet, state) {
         if (packet.status === 'OK') {
             if (packet.payload !== undefined) {
                 const status = packet.payload;
                 if (Object.keys(activityStatus).includes(status))
                     return {
+                        ...state,
                         activityStatus: parseInt(status, 10) as ActivityStatus,
                     };
             }
         }
-        return {};
+        return state;
     },
 };

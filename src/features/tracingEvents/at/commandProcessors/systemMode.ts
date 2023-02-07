@@ -20,7 +20,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xsystemmode.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
@@ -28,19 +28,19 @@ export const processor: Processor = {
             setPayload = extractSystemModePayload(packet.payload);
         }
 
-        return {};
+        return state;
     },
-    onResponse: (packet, reqType) => {
+    onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
-            if (reqType === RequestType.SET_WITH_VALUE) {
-                return setPayload;
+            if (requestType === RequestType.SET_WITH_VALUE) {
+                return { ...state, ...setPayload };
             }
 
             if (packet.payload) {
-                return extractSystemModePayload(packet.payload);
+                return { ...state, ...extractSystemModePayload(packet.payload) };
             }
         }
-        return {};
+        return state;
     },
 };
 

@@ -50,13 +50,13 @@ const expectedState = {
     imsi: '204080813630037',
     iccid: '8901234567012345678F',
     currentBand: 13,
-    periodicTAU: undefined,
-    hardwareVersion: undefined,
-    modemUUID: undefined,
-    dataProfile: undefined,
-    nbiotTXReduction: undefined,
-    ltemTXReduction: undefined,
-    activityStatus: undefined,
+    // periodicTAU: undefined,
+    // hardwareVersion: undefined,
+    // modemUUID: undefined,
+    // dataProfile: undefined,
+    // nbiotTXReduction: undefined,
+    // ltemTXReduction: undefined,
+    // activityStatus: undefined,
     networkRegistrationStatus: {
         status: 5,
         tac: '0901',
@@ -65,7 +65,7 @@ const expectedState = {
     },
 
     powerSavingMode: {
-        granted: {},
+        granted: undefined,
         requested: {
             state: 'on',
             T3324: {
@@ -79,16 +79,15 @@ const expectedState = {
 
     networkStatusNotifications: 5,
     signalingConnectionStatusNotifications: 1,
-
     modemSupportLTEM: true,
     modemSupportNBIoT: false,
     modemSupportGNSS: true,
     modemSystemPreference: 0,
-
     xModemTraceOperation: 1,
     xModemTraceSetID: 2,
-
     rrcState: 1,
+    mdmevNotification: 1,
+    modemDomainEvents: ['SEARCH STATUS 2'],
 } as Partial<State>;
 
 test('Trace is read properly', () => {
@@ -106,5 +105,6 @@ test('Trace is read properly', () => {
     events.forEach(packet => {
         state = convert(packet, state);
     });
+    console.log(state);
     expect(state).toEqual(expectedState);
 });

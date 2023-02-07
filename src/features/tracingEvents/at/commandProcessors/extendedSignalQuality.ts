@@ -22,7 +22,7 @@ export const processor: Processor = {
             rsrq_decibel: 255,
         },
     }),
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (
             packet.status === 'OK' &&
             requestType === RequestType.SET &&
@@ -30,6 +30,7 @@ export const processor: Processor = {
         ) {
             const responseArray = getNumberArray(packet.payload);
             return {
+                ...state,
                 signalQuality: {
                     // Unused,Unused,Unused,Unused,rsrq,rsrp
                     rsrq: responseArray[4],
@@ -41,6 +42,6 @@ export const processor: Processor = {
                 },
             };
         }
-        return {};
+        return state;
     },
 };

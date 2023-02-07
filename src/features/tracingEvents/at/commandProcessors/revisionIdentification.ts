@@ -12,11 +12,11 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmr.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: ( packet, state ) => {
         if (packet.status === 'OK' && packet.payload) {
             const revisionID = parseStringValue(packet.payload);
-            return revisionID ? { revisionID } : {};
+            return { ...state, revisionID };
         }
-        return {};
+        return state;
     },
 };

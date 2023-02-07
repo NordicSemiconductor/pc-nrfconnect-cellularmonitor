@@ -15,16 +15,16 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cemode.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
         ) {
             requestedModeOfOperation = getNumber(packet.payload);
         }
-        return {};
+        return state;
     },
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (
             packet.status === 'OK' &&
             requestType === RequestType.SET_WITH_VALUE
@@ -32,16 +32,16 @@ export const processor: Processor = {
             if (requestedModeOfOperation !== -1) {
                 const modeOfOperation = requestedModeOfOperation;
                 requestedModeOfOperation = -1;
-                return { modeOfOperation };
+                return { ...state, modeOfOperation };
             }
-            return {};
+            return state;
         }
 
         if (packet.status === 'OK' && packet.payload) {
             if (requestType === RequestType.READ) {
-                return { modeOfOperation: parseInt(packet.payload, 10) };
+                return { ...state, modeOfOperation: parseInt(packet.payload, 10) };
             }
         }
-        return {};
+        return state;
     },
 };
