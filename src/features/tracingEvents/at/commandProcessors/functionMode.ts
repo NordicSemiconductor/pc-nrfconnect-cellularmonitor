@@ -6,8 +6,9 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumber } from '../utils';
 
-export enum FunctionalModeSetter {
+export enum FunctionalMode {
     POWER_OFF = 0,
     NORMAL_MODE = 1,
     FUNCTIONALITY_ONLY = 2,
@@ -21,30 +22,37 @@ export enum FunctionalModeSetter {
     OFFLINE_MODE_UICC = 44,
 }
 
-export const functionalMode = {
-    0: 'Power off',
-    1: 'Normal',
-    4: 'Offline mode',
-    44: 'Offline mode without shutting down UICC',
-};
-
-type FunctionalMode = keyof typeof functionalMode;
+let requestedMode: FunctionalMode;
 
 export const processor: Processor = {
     command: '+CFUN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',
     initialState: () => ({}),
-    onResponse: (packet, state, requestType) => {
+    onRequest: (packet, state) => {
         if (
-            packet.status === 'OK' &&
-            requestType === RequestType.READ &&
+            packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
         ) {
-            return {
-                ...state,
-                functionalMode: parseInt(packet.payload, 10) as FunctionalMode,
-            };
+            requestedMode = getNumber(packet.payload);
+        }
+        return state;
+    },
+    onResponse: (packet, state, requestType) => {
+        if (packet.status === 'OK') {
+            if (requestType === RequestType.SET_WITH_VALUE) {
+                return { ...state, functionalMode: requestedMode };
+            }
+
+            if (requestType === RequestType.READ && packet.payload) {
+                return {
+                    ...state,
+                    functionalMode: parseInt(
+                        packet.payload,
+                        10
+                    ) as FunctionalMode,
+                };
+            }
         }
         return state;
     },
