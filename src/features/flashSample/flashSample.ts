@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /*
  * Copyright (c) 2023 Nordic Semiconductor ASA
  *
@@ -6,53 +7,61 @@
 
 import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
-import { join } from 'path';
-import { Device, getAppDir, getDeviceLibContext } from 'pc-nrfconnect-shared';
+import { Device, getDeviceLibContext } from 'pc-nrfconnect-shared';
 
-export const isThingy91 = (device: Device) =>
+import { Sample } from './samples';
+
+export const isThingy91 = (device?: Device) =>
     device?.serialport?.productId === '9100';
 
-export const is91DK = (device: Device) =>
+export const is91DK = (device?: Device) =>
     device?.jlink?.boardVersion === 'PCA10090';
 
 export const flash = async (
     device: Device,
+    sample: Sample,
     progress: (progress?: string) => void
 ) => {
-    progress('Programming modem...');
-    await programModem(device, progress);
-    progress('Programming firmware...');
-    await programFirmware(device, progress);
-    progress('Completed programming sample');
+    // eslint-disable-next-line no-restricted-syntax
+    for (const fw of sample.fw) {
+        switch (fw.type) {
+            case 'Modem':
+                await programModem(device, fw.file, progress);
+
+                break;
+            case 'Application':
+                await programFirmware(device, fw.file, progress);
+                break;
+            default:
+                throw new Error(`Unable to program fw type: ${fw.type}`);
+        }
+    }
+
+    progress('Programming complete');
 };
 
-const programModem = (device: Device, progress: (progress?: string) => void) =>
+const programModem = (
+    device: Device,
+    file: string,
+    progress: (progress?: string) => void
+) =>
     new Promise<void>((resolve, reject) => {
-        const modemFile = join(
-            getAppDir(),
-            'resources',
-            'firmware',
-            'mfw_nrf9160_1.3.3.zip'
-        );
-
         firmwareProgram(
             getDeviceLibContext(),
             device.id,
             'NRFDL_FW_FILE',
             'NRFDL_FW_NRF91_MODEM',
-            modemFile,
+            file,
             complete => {
-                console.log('complete', complete);
-
                 if (complete) {
+                    progress(`Programming ${file} failed`);
                     reject(complete);
                 } else {
+                    progress(`Programming ${file} succeeded`);
                     resolve();
                 }
             },
             ({ progressJson }) => {
-                console.log(progressJson);
-
                 progress(progressJson.message);
             }
         );
@@ -60,21 +69,11 @@ const programModem = (device: Device, progress: (progress?: string) => void) =>
 
 const programFirmware = (
     device: Device,
+    file: string,
     progress: (progress?: string) => void
 ) =>
     new Promise<void>((resolve, reject) => {
-        const hexFile = isThingy91(device)
-            ? 'thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex'
-            : 'nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex';
-
-        const firmwareFile = join(
-            getAppDir(),
-            'resources',
-            'firmware',
-            hexFile
-        );
-
-        const buffer = readFileSync(firmwareFile);
+        const buffer = readFileSync(file);
 
         firmwareProgram(
             getDeviceLibContext(),
@@ -84,14 +83,14 @@ const programFirmware = (
             buffer,
             complete => {
                 if (complete) {
+                    progress(`Programming ${file} failed`);
                     reject(complete);
                 } else {
+                    progress(`Programming ${file} succeeded`);
                     resolve();
                 }
             },
             ({ progressJson }) => {
-                console.log(progressJson);
-
                 progress(progressJson.message);
             },
             null,

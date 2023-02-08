@@ -6,16 +6,10 @@
 
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    Button,
-    Card,
-    openUrl,
-    selectedDevice,
-    SidePanel,
-} from 'pc-nrfconnect-shared';
+import { Button, selectedDevice, SidePanel } from 'pc-nrfconnect-shared';
 
-import { is91DK, isThingy91 } from '../Dashboard/flashSample';
-import FlashSampleModal from '../Dashboard/FlashSampleModal';
+import { is91DK, isThingy91 } from '../../features/flashSample/flashSample';
+import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
 import AdvancedOptions from './AdvancedOptions';
 import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
