@@ -7,7 +7,12 @@
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
-import { Button, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    ConfirmationDialog,
+    deviceInfo,
+    selectedDevice,
+} from 'pc-nrfconnect-shared';
 
 import { flash, is91DK, isThingy91 } from './flashSample';
 
