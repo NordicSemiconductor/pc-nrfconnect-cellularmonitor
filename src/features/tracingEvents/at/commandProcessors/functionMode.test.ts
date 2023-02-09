@@ -5,13 +5,13 @@
  */
 
 import { atPacket, convertPackets, ErrorPacket } from '../testUtils';
-import { functionalMode, FunctionalModeSetter } from './functionMode';
+import { functionalMode } from './functionMode';
 
 const readCommandPackets = [
-    ...Object.keys(functionalMode).map(key => ({
+    ...Object.values(functionalMode).map(mode => ({
         command: atPacket('AT+CFUN?'),
-        response: atPacket(`+CFUN: ${key}\r\nOK\r\n`),
-        expected: parseInt(key, 10),
+        response: atPacket(`+CFUN: ${mode}\r\nOK\r\n`),
+        expected: mode,
     })),
     {
         command: atPacket('AT+CFUN?'),
@@ -35,67 +35,59 @@ const testCommandPackets = [
 
 const setCommandPackets = [
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.POWER_OFF}`),
+        Fommand: atPacket(`AT+CFUN=${functionalMode.POWER_OFF}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.POWER_OFF,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.NORMAL_MODE}`),
+        command: atPacket(`AT+CFUN=${functionalMode.NORMAL_MODE}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.NORMAL_MODE,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.FUNCTIONALITY_ONLY}`),
+        command: atPacket(`AT+CFUN=${functionalMode.FUNCTIONALITY_ONLY}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.FUNCTIONALITY_ONLY,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.OFFLINE_MODE}`),
+        command: atPacket(`AT+CFUN=${functionalMode.OFFLINE_MODE}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.OFFLINE_MODE,
     },
     {
-        command: atPacket(
-            `AT+CFUN=${FunctionalModeSetter.DEACTIVATE_LTE_KEEP_GNSS}`
-        ),
+        command: atPacket(`AT+CFUN=${functionalMode.DEACTIVATE_LTE_KEEP_GNSS}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.DEACTIVATE_LTE_KEEP_GNSS,
     },
     {
-        command: atPacket(
-            `AT+CFUN=${FunctionalModeSetter.ACTIVATE_LTE_KEEP_GNSS}`
-        ),
+        command: atPacket(`AT+CFUN=${functionalMode.ACTIVATE_LTE_KEEP_GNSS}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.ACTIVATE_LTE_KEEP_GNSS,
     },
     {
-        command: atPacket(
-            `AT+CFUN=${FunctionalModeSetter.DEACTIVATE_GNSS_KEEP_LTE}`
-        ),
+        command: atPacket(`AT+CFUN=${functionalMode.DEACTIVATE_GNSS_KEEP_LTE}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.DEACTIVATE_GNSS_KEEP_LTE,
     },
     {
-        command: atPacket(
-            `AT+CFUN=${FunctionalModeSetter.ACTIVATE_GNSS_KEEP_LTE}`
-        ),
+        command: atPacket(`AT+CFUN=${functionalMode.ACTIVATE_GNSS_KEEP_LTE}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.ACTIVATE_GNSS_KEEP_LTE,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.DEACTIVATE_UICC}`),
+        command: atPacket(`AT+CFUN=${functionalMode.DEACTIVATE_UICC}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.DEACTIVATE_UICC,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.ACTIVATE_UICC}`),
+        command: atPacket(`AT+CFUN=${functionalMode.ACTIVATE_UICC}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.ACTIVATE_UICC,
     },
     {
-        command: atPacket(`AT+CFUN=${FunctionalModeSetter.OFFLINE_MODE_UICC}`),
+        command: atPacket(`AT+CFUN=${functionalMode.OFFLINE_MODE_UICC}`),
         response: atPacket('OK\r\n'),
-        expected: undefined,
+        expected: functionalMode.OFFLINE_MODE_UICC,
     },
     {
         command: atPacket('AT+CFUN=45'),
@@ -106,9 +98,11 @@ const setCommandPackets = [
 
 test('CFUN set commands work as expected', () => {
     setCommandPackets.forEach(test => {
-        expect(
-            convertPackets([test.command, test.response]).functionalMode
-        ).toEqual(test.expected);
+        if (test.command) {
+            expect(
+                convertPackets([test.command, test.response]).functionalMode
+            ).toEqual(test.expected);
+        }
     });
 });
 

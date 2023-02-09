@@ -29,7 +29,7 @@ const getRRCStateColor = (
 
 export default () => {
     const {
-        signalQuality: { rsrp_decibel: RSRP, rsrq_decibel: RSRQ },
+        signalQuality,
         networkRegistrationStatus,
         activityStatus,
         rrcState,
@@ -66,11 +66,11 @@ export default () => {
             'PUCCH TX POWER': 'Not Implemented',
             'NEIGHBOR CELLS': 'Not Implemented',
             'EMM STATE': 'Not Implemented',
-            RSRP: RSRP ?? 'Unknown',
+            RSRP: signalQuality?.rsrp_decibel ?? 'Unknown',
             'CE MODE': 'Not Implemented',
             'BAND INDICATOR': 'Not Implemented',
             'EMM SUBSTATE': 'Not Implemented',
-            RSRQ: RSRQ ?? 'Unknown',
+            RSRQ: signalQuality?.rsrq_decibel ?? 'Unknown',
             'CE LEVEL': 'Not Implemented',
             'TRACKING AREA': 'Not Implemented',
             'ACTIVITY STATUS': activityStatus ?? 'Unknown',
@@ -78,8 +78,7 @@ export default () => {
         };
     }, [
         networkRegistrationStatus,
-        RSRP,
-        RSRQ,
+        signalQuality,
         activityStatus,
         rrcState,
         mnc,

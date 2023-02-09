@@ -24,7 +24,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xdataprfl.html',
     initialState: () => ({}),
-    onRequest: ( packet, state ) => {
+    onRequest: (packet, state) => {
         if (packet.payload) {
             const powerLevel = Object.keys(PowerLevel).find(
                 key => key === packet.payload
@@ -43,7 +43,10 @@ export const processor: Processor = {
 
             const dataProfile = packet.payload;
             if (dataProfile) {
-                return { ...state, dataProfile: parseInt(dataProfile, 10) as PowerLevel }
+                return {
+                    ...state,
+                    dataProfile: parseInt(dataProfile, 10) as PowerLevel,
+                };
             }
         }
         return state;

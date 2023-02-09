@@ -62,7 +62,7 @@ const expectedRequestState = {
     powerSavingMode: {
         requested: {
             T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
+            T3412Extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
         },
     },
 };
@@ -71,8 +71,8 @@ const expectedAcceptState = {
     powerSavingMode: {
         granted: {
             T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412_extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
-            T3402_extended: { bitmask: '00101100', unit: 'minutes', value: 12 },
+            T3412Extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
+            T3402Extended: { bitmask: '00101100', unit: 'minutes', value: 12 },
             T3412: {
                 bitmask: '01011111',
                 unit: 'seconds',

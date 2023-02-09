@@ -18,7 +18,10 @@ export const processor: Processor = {
             if (requestType === RequestType.TEST) {
                 // Response to a test command, e.g. %XCBAND: (1,2,3,4,5)
 
-                return { ...state, availableBands: getNumberArray(packet.payload) };
+                return {
+                    ...state,
+                    availableBands: getNumberArray(packet.payload),
+                };
             }
             return { ...state, currentBand: getNumber(packet.payload) };
 

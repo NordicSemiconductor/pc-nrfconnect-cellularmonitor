@@ -37,7 +37,10 @@ export const processor: Processor = {
             }
 
             if (packet.payload) {
-                return { ...state, ...extractSystemModePayload(packet.payload) };
+                return {
+                    ...state,
+                    ...extractSystemModePayload(packet.payload),
+                };
             }
         }
         return state;

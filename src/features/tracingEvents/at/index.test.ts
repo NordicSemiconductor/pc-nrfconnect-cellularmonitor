@@ -50,13 +50,6 @@ const expectedState = {
     imsi: '204080813630037',
     iccid: '8901234567012345678F',
     currentBand: 13,
-    // periodicTAU: undefined,
-    // hardwareVersion: undefined,
-    // modemUUID: undefined,
-    // dataProfile: undefined,
-    // nbiotTXReduction: undefined,
-    // ltemTXReduction: undefined,
-    // activityStatus: undefined,
     networkRegistrationStatus: {
         status: 5,
         tac: '0901',
@@ -105,6 +98,5 @@ test('Trace is read properly', () => {
     events.forEach(packet => {
         state = convert(packet, state);
     });
-    console.log(state);
     expect(state).toEqual(expectedState);
 });

@@ -124,8 +124,7 @@ export const startTrace =
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
             if (packets.length > 0) {
-                notifyListeners(packets);
-                packets.splice(0, packets.length);
+                notifyListeners(packets.splice(0, packets.length));
             }
         }, 30);
 

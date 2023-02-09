@@ -16,7 +16,7 @@ export const processor: Processor = {
             regStatus: 0,
         },
     }),
-    onResponse: ( packet, state ) => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.payload);
             if (responseArray.length !== 15 && responseArray.length !== 16) {

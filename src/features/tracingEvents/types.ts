@@ -59,7 +59,7 @@ export interface State {
         SIM_PUK2?: number;
     };
     imsi?: string;
-    iccid: string;
+    iccid?: string;
     currentBand?: number;
     periodicTAU: number;
     hardwareVersion?: string;

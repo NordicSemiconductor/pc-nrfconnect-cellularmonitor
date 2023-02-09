@@ -7,9 +7,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { FunctionalMode } from '../../../features/tracingEvents/at/commandProcessors/functionMode';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
-import { FunctionalMode } from '../../../features/tracingEvents/at/functionalMode';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
@@ -50,7 +50,7 @@ const functionalModeStrings = {
 const functionalModeHasStringValue = (
     mode: FunctionalMode
 ): mode is keyof typeof functionalModeStrings => {
-    if (Object.keys(functionalModeStrings).includes(mode)) {
+    if (Object.keys(functionalModeStrings).includes(`${mode}`)) {
         return true;
     }
     return false;

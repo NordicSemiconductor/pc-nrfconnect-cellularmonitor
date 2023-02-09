@@ -19,7 +19,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/coneval.html',
     initialState: () => ({}),
-    onResponse: ( packet, state ) => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             const parsedPayload = getParametersFromResponse(packet.payload);
             const conevalResult = validateConevalResult(parsedPayload[0]);

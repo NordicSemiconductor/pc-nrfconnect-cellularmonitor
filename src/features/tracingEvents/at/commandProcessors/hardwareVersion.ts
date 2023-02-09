@@ -11,7 +11,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/hwver.html',
     initialState: () => ({}),
-    onResponse: ( packet, state ) => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK' && packet.payload) {
             return { ...state, hardwareVersion: packet.payload };
         }

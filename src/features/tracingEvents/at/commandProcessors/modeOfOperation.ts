@@ -39,7 +39,10 @@ export const processor: Processor = {
 
         if (packet.status === 'OK' && packet.payload) {
             if (requestType === RequestType.READ) {
-                return { ...state, modeOfOperation: parseInt(packet.payload, 10) };
+                return {
+                    ...state,
+                    modeOfOperation: parseInt(packet.payload, 10),
+                };
             }
         }
         return state;

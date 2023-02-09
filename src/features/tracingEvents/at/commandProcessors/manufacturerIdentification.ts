@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Processor } from '..';
 import { State } from '../../types';
+import type { Processor } from '..';
 
 export const processor: Processor = {
     command: '+CGMI',

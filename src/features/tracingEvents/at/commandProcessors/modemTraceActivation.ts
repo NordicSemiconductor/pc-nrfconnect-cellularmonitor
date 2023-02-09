@@ -33,7 +33,10 @@ export const processor: Processor = {
         return state;
     },
     onResponse: (packet, state, requestType) => {
-        if (packet.status === 'OK' && requestType === RequestType.SET_WITH_VALUE) {
+        if (
+            packet.status === 'OK' &&
+            requestType === RequestType.SET_WITH_VALUE
+        ) {
             return { ...state, ...setPayload };
         }
         return state;

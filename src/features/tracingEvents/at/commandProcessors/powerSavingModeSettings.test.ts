@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
+import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 /*
 ==> AT+CPSMS= 
