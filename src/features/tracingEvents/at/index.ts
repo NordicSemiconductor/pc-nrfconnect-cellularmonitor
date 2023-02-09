@@ -6,6 +6,7 @@
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import { State } from '../types';
+import { processor as connectivityStatistics } from './commandProcessors/connectivityStatistics';
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
@@ -36,6 +37,7 @@ import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
     activityStatus,
+    connectivityStatistics,
     currentBand,
     dataProfile,
     evaluatingConnectionParameters,

@@ -135,6 +135,17 @@ export interface State {
     // %MDMEV Modem Domain Event Notification
     mdmevNotification?: 0 | 1;
     modemDomainEvents: string[];
+
+    // %CONNSTAT Connectivity Statistics state
+    connStat?: {
+        collecting?: boolean;
+        smsTX?: number; // Indicate the total number of SMSs successfully transmitted during the collection period
+        smsRX?: number; // Indicate the total number of SMSs successfully received during the collection period
+        dataTX?: number; // Indicate the total amount of data (in kilobytes) transmitted during the collection period
+        dataRX?: number; // Indicate the total amount of data (in kilobytes) received during the collection period
+        packetMax?: number; // The maximum packet size (in bytes) used during the collection period
+        packetAverage?: number; // The average packet size (in bytes) used during the collection period
+    };
 }
 
 /*

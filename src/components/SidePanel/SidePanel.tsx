@@ -14,7 +14,6 @@ import { LoadTraceFile } from './LoadTraceFile';
 import PowerEstimationParams from './PowerEstimationParams';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
@@ -33,8 +32,5 @@ export const TraceCollectorSidePanel = () => (
         <AdvancedOptions />
         <LoadTraceFile />
         <EventGraphOptions />
-        <button onClick={async () => console.log(await nrfml.apiVersion())} >
-            CLICK ME PLEASE
-            </button>
     </SidePanel>
 );

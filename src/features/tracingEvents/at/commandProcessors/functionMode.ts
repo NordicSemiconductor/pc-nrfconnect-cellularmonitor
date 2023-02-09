@@ -41,14 +41,12 @@ export const processor: Processor = {
         return state;
     },
     onResponse: (packet, state, requestType) => {
-        console.log(packet.status, packet.payload, packet.requestType, packet.command)
         if (packet.status === 'OK') {
             if (requestType === RequestType.SET_WITH_VALUE) {
                 return { ...state, functionalMode: requestedMode };
             }
 
             if (requestType === RequestType.READ && packet.payload) {
-                console.log('Read from AT+CFUN? value: ', packet.payload);
                 return {
                     ...state,
                     functionalMode: parseInt(
