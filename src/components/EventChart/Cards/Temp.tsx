@@ -48,6 +48,13 @@ export default () => {
         conevalTXRepetitions,
         conevalRXRepetitions,
         conevalDLPathLoss,
+
+        // +CEDRXRDP
+        /* eslint-disable camelcase */
+        AcTState,
+        requested_eDRX_value,
+        NW_provided_eDRX_value,
+        pagingTimeWindow,
     } = useSelector(getDashboardState);
 
     const parseSupportedValue = (supported: boolean | undefined) => {
@@ -107,6 +114,11 @@ export default () => {
         'CONEVAL TX Repetitions': conevalTXRepetitions ?? 'Unknown',
         'CONEVAL RX Repetitions': conevalRXRepetitions ?? 'Unknown',
         'CONEVAL DL Path Loss': conevalDLPathLoss ?? 'Unknown',
+        'AcT State': AcTState ?? 'Unknown',
+        /* eslint-disable camelcase */
+        'Requested eDRX': requested_eDRX_value ?? 'Unknown',
+        'NW Provided eDRX': NW_provided_eDRX_value ?? 'Unknown',
+        'Paging Time Window': pagingTimeWindow ?? 'Unknown',
     };
 
     return (

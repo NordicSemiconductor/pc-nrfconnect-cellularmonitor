@@ -10,6 +10,7 @@ import { processor as connectivityStatistics } from './commandProcessors/connect
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
+import { processor as edrxdynamicparameters } from './commandProcessors/eDRXDynamicParameters';
 import { processor as evaluatingConnectionParameters } from './commandProcessors/evaluatingConnectionParameters';
 import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
 import { processor as functionMode } from './commandProcessors/functionMode';
@@ -40,6 +41,7 @@ const processors = [
     connectivityStatistics,
     currentBand,
     dataProfile,
+    edrxdynamicparameters,
     evaluatingConnectionParameters,
     extendedSignalQuality,
     functionMode,

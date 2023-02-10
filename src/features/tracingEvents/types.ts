@@ -146,7 +146,21 @@ export interface State {
         packetMax?: number; // The maximum packet size (in bytes) used during the collection period
         packetAverage?: number; // The average packet size (in bytes) used during the collection period
     };
+
+    // +CEDRXRDP eDRX Dynamic Parameters
+    AcTState?: AcTState;
+    requested_eDRX_value: string; // 4 bit string
+    NW_provided_eDRX_value: string; // 4 bit string
+    pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
 }
+
+export type AcTState = 0 | 4 | 5;
+export const isValidAcTState = (state: number): state is AcTState => {
+    if ([0, 4, 5].includes(state)) {
+        return true;
+    }
+    return false;
+};
 
 /*
     Several responses to AT commands have a set of result code: e.g. NetworkStatusNotifications = [0, 5].
