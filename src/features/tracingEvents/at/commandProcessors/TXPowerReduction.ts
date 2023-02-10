@@ -32,7 +32,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xempr.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
@@ -40,12 +40,13 @@ export const processor: Processor = {
             const requestArgumentArray = getNumberArray(packet.payload);
             requestedReduction = parseToTXReduction(requestArgumentArray);
         }
-        return {};
+        return state;
     },
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
             if (requestType === RequestType.SET) {
                 return {
+                    ...state,
                     nbiotTXReduction: undefined,
                     ltemTXReduction: undefined,
                 };
@@ -54,7 +55,7 @@ export const processor: Processor = {
                 requestType === RequestType.SET_WITH_VALUE &&
                 requestedReduction
             ) {
-                return requestedReduction;
+                return { ...state, ...requestedReduction };
             }
             if (requestType === RequestType.READ && packet.payload) {
                 const responseArray = getNumberArray(packet.payload);
@@ -62,6 +63,7 @@ export const processor: Processor = {
                 if (firstSegmentLen < (responseArray.length - 2) * 2) {
                     const secondSegmentStart = 1 + firstSegmentLen * 2;
                     return {
+                        ...state,
                         ...parseToTXReduction(
                             responseArray.slice(0, secondSegmentStart)
                         ),
@@ -70,10 +72,10 @@ export const processor: Processor = {
                         ),
                     };
                 }
-                return parseToTXReduction(responseArray);
+                return { ...state, ...parseToTXReduction(responseArray) };
             }
         }
-        return {};
+        return state;
     },
 };
 

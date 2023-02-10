@@ -11,10 +11,10 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/modemuuid.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
-            return { modemUUID: packet.payload };
+            return { ...state, modemUUID: packet.payload };
         }
-        return {};
+        return state;
     },
 };

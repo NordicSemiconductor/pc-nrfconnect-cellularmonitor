@@ -5,16 +5,17 @@
  */
 
 import type { Processor } from '..';
+import { parseStringValue } from '../utils';
 
 export const processor: Processor = {
     command: '%XICCID',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/xiccid.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
-            return { iccid: packet.payload };
+            return { ...state, iccid: parseStringValue(packet.payload ?? '') };
         }
-        return {};
+        return state;
     },
 };

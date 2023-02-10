@@ -19,13 +19,14 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/coneval.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             const parsedPayload = getParametersFromResponse(packet.payload);
             const conevalResult = validateConevalResult(parsedPayload[0]);
 
             if (conevalResult === 0) {
                 return {
+                    ...state,
                     conevalResult: validateConevalResult(parsedPayload[0]),
                     rrcState: validateRRCState(parsedPayload[1]),
                     conevalEnergyEstimate: validateConevalEnergyEstimate(
@@ -56,9 +57,9 @@ export const processor: Processor = {
                 };
             }
 
-            return { conevalResult };
+            return { ...state, conevalResult };
         }
-        return {};
+        return state;
     },
 };
 

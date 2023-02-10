@@ -8,7 +8,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
-import { NetworkStatusNotifications } from '../../../features/tracingEvents/types';
+import {
+    NetworkStatusNotifications,
+    SignalingConnectionStatusNotifications,
+} from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
 
 export default () => {
@@ -26,11 +29,14 @@ export default () => {
         // +CEREG Notifications
         networkStatusNotifications,
 
+        // +CSCON Notifications
+        signalingConnectionStatusNotifications,
+
         // %CONEVAL
         conevalResult,
         rrcState,
         conevalEnergyEstimate,
-        signalQuality: { rsrp, rsrq, snr },
+        signalQuality,
         cellID,
         plmn,
         physicalCellID,
@@ -42,6 +48,17 @@ export default () => {
         conevalTXRepetitions,
         conevalRXRepetitions,
         conevalDLPathLoss,
+
+        // +CEDRXRDP
+        /* eslint-disable camelcase */
+        AcTState,
+        requested_eDRX_value,
+        NW_provided_eDRX_value,
+        pagingTimeWindow,
+
+        // %XTIME
+        networkTimeNotifications,
+        networkTimeNotification,
     } = useSelector(getDashboardState);
 
     const parseSupportedValue = (supported: boolean | undefined) => {
@@ -76,16 +93,19 @@ export default () => {
         'GNSS Support': parseSupportedValue(modemSupportGNSS),
         'Preferred Bearer': parsePreferredBearer(modemSystemPreference),
 
-        'Network Status Notifications': parseNetworkStatusNotifications(
+        'Network Status Notifications': parseNotificationStatus(
             networkStatusNotifications
+        ),
+        'Signaling Connecting Status Notifications': parseNotificationStatus(
+            signalingConnectionStatusNotifications
         ),
 
         'Connection Evaluation Result': conevalResult ?? 'Unknown',
         'RRC State': rrcState ?? 'Unknown',
         'Energy Estimate': conevalEnergyEstimate ?? 'Unknown',
-        'Signal Quality (RSRP)': rsrp ?? 'Unknown',
-        'Signal Quality (RSRQ)': rsrq ?? 'Unknown',
-        'Signal Quality (SNR)': snr ?? 'Unknown',
+        'Signal Quality (RSRP)': signalQuality?.rsrp ?? 'Unknown',
+        'Signal Quality (RSRQ)': signalQuality?.rsrq ?? 'Unknown',
+        'Signal Quality (SNR)': signalQuality?.snr ?? 'Unknown',
         'Cell ID': cellID ?? 'Unknown',
         PLMN: plmn ?? 'Unknown',
         'Physical Cell ID': physicalCellID ?? 'Unknown',
@@ -98,6 +118,19 @@ export default () => {
         'CONEVAL TX Repetitions': conevalTXRepetitions ?? 'Unknown',
         'CONEVAL RX Repetitions': conevalRXRepetitions ?? 'Unknown',
         'CONEVAL DL Path Loss': conevalDLPathLoss ?? 'Unknown',
+        'AcT State': AcTState ?? 'Unknown',
+        /* eslint-disable camelcase */
+        'Requested eDRX': requested_eDRX_value ?? 'Unknown',
+        'NW Provided eDRX': NW_provided_eDRX_value ?? 'Unknown',
+        'Paging Time Window': pagingTimeWindow ?? 'Unknown',
+
+        'Network Time Notifications': parseNotificationStatus(
+            networkTimeNotifications
+        ),
+        'Local Time Zone': networkTimeNotification?.localTimeZone ?? 'Unknown',
+        'Universal Time': networkTimeNotification?.universalTime ?? 'Unknown',
+        'Daylight Saving Time':
+            networkTimeNotification?.daylightSavingTime ?? 'Unknown',
     };
 
     return (
@@ -110,8 +143,11 @@ export default () => {
     );
 };
 
-const parseNetworkStatusNotifications = (
-    notification: NetworkStatusNotifications
+const parseNotificationStatus = (
+    notification:
+        | NetworkStatusNotifications
+        | SignalingConnectionStatusNotifications
+        | (0 | 1)
 ) => {
     if (notification != null) {
         if (notification === 0) return 'Unsubscribed';

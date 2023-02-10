@@ -30,7 +30,7 @@ export default () => {
         if (!requested) return;
 
         return {
-            'Periodic TAU': requested.T3412_extended ?? undefined,
+            'Periodic TAU': requested.T3412Extended ?? undefined,
             'Active Timer': requested.T3324 ?? undefined,
 
             // Could be displayed if user toggles an Advanced option?
@@ -45,7 +45,7 @@ export default () => {
         if (!granted) return;
 
         return {
-            'Periodic TAU': granted.T3412_extended ?? undefined,
+            'Periodic TAU': granted.T3412Extended ?? undefined,
             'Active Timer': granted.T3324 ?? undefined,
 
             // Could be displayed if user toggles an Advanced option?

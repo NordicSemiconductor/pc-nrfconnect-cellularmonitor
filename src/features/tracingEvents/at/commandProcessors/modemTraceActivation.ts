@@ -18,7 +18,7 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xmodemtrace.html',
     initialState: () => ({}),
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const payload = getParametersFromResponse(packet.payload);
             setPayload = {
@@ -30,12 +30,15 @@ export const processor: Processor = {
             };
         }
 
-        return {};
+        return state;
     },
-    onResponse: (packet, reqType) => {
-        if (packet.status === 'OK' && reqType === RequestType.SET_WITH_VALUE) {
-            return setPayload;
+    onResponse: (packet, state, requestType) => {
+        if (
+            packet.status === 'OK' &&
+            requestType === RequestType.SET_WITH_VALUE
+        ) {
+            return { ...state, ...setPayload };
         }
-        return {};
+        return state;
     },
 };

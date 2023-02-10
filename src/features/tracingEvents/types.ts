@@ -58,15 +58,15 @@ export interface State {
         SIM_PIN2?: number;
         SIM_PUK2?: number;
     };
-    imsi: string;
-    iccid: string;
-    currentBand: number;
+    imsi?: string;
+    iccid?: string;
+    currentBand?: number;
     periodicTAU: number;
     hardwareVersion?: string;
     modemUUID?: string;
-    dataProfile: PowerLevel;
-    nbiotTXReduction: TXReductionMode;
-    ltemTXReduction: TXReductionMode;
+    dataProfile?: PowerLevel;
+    nbiotTXReduction?: TXReductionMode;
+    ltemTXReduction?: TXReductionMode;
     activityStatus: ActivityStatus;
     networkRegistrationStatus: {
         status?: number;
@@ -78,7 +78,7 @@ export interface State {
     // TODO: Revise above state attributes.
     // New state attributes under:
     networkType: NetworkType;
-    powerSavingMode: {
+    powerSavingMode?: {
         requested?: PowerSavingModeEntries;
         granted?: PowerSavingModeEntries;
     };
@@ -91,8 +91,8 @@ export interface State {
     mccCode: number;
 
     // XModemTrace
-    xModemTraceOperation: number;
-    xModemTraceSetID: number;
+    xModemTraceOperation?: number;
+    xModemTraceSetID?: number;
 
     // XSystemMode
     modemSupportLTEM: boolean;
@@ -102,12 +102,14 @@ export interface State {
 
     // CEREG - Network Registration Status Notification
     networkStatusNotifications: NetworkStatusNotifications;
+    // +CSCON
+    signalingConnectionStatusNotifications: SignalingConnectionStatusNotifications;
 
     // Evaluating Connection Parameters %CONEVAL
-    conevalResult: ConnectionEvaluationResult;
-    conevalEnergyEstimate: ConevalEnergyEstimate;
-    rrcState: RRCState;
-    signalQuality: {
+    conevalResult?: ConnectionEvaluationResult;
+    conevalEnergyEstimate?: ConevalEnergyEstimate;
+    rrcState?: RRCState;
+    signalQuality?: {
         rsrp?: number;
         rsrp_threshold_index?: number;
         rsrp_decibel?: number;
@@ -117,19 +119,57 @@ export interface State {
         snr?: number;
     };
     cellID: string; // 4-byte E-UTRAN cell ID.
-    physicalCellID: number; // Integer [0, 503]
-    earfcn: number;
-    plmn: string; // Actually just <MCC + MNC>
-    band: number; // 0 = unavailable, Integer [0, 88]
-    TAUTriggered: TAUTriggered;
+    physicalCellID?: number; // Integer [0, 503]
+    earfcn?: number;
+    plmn?: string; // Actually just <MCC + MNC>
+    band?: number; // 0 = unavailable, Integer [0, 88]
+    TAUTriggered?: TAUTriggered;
 
     // Don't actually know if ce=Cell Evaluation
-    conevalCellEvaluationLevel: CellEvaluationLevel;
-    conevalTXPower: number;
-    conevalTXRepetitions: number; // Integer [1, 2048], special 0 and 1.
-    conevalRXRepetitions: number; // Integer [1, 2048], special 0 and 1.
-    conevalDLPathLoss: number;
+    conevalCellEvaluationLevel?: CellEvaluationLevel;
+    conevalTXPower?: number;
+    conevalTXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
+    conevalRXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
+    conevalDLPathLoss?: number;
+
+    // %MDMEV Modem Domain Event Notification
+    mdmevNotification?: 0 | 1;
+    modemDomainEvents: string[];
+
+    // %CONNSTAT Connectivity Statistics state
+    connStat?: {
+        collecting?: boolean;
+        smsTX?: number; // Indicate the total number of SMSs successfully transmitted during the collection period
+        smsRX?: number; // Indicate the total number of SMSs successfully received during the collection period
+        dataTX?: number; // Indicate the total amount of data (in kilobytes) transmitted during the collection period
+        dataRX?: number; // Indicate the total amount of data (in kilobytes) received during the collection period
+        packetMax?: number; // The maximum packet size (in bytes) used during the collection period
+        packetAverage?: number; // The average packet size (in bytes) used during the collection period
+    };
+
+    // +CEDRXRDP eDRX Dynamic Parameters
+    AcTState?: AcTState;
+    requested_eDRX_value: string; // 4 bit string
+    NW_provided_eDRX_value: string; // 4 bit string
+    pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
+
+    // %XTIME Network Time Notification
+    networkTimeNotifications?: 0 | 1;
+    networkTimeNotification?: {
+        // All fields are optional
+        localTimeZone?: string; // 1 byte in hexadecimal string
+        universalTime?: string; // 7 bytes in hexadecimal string
+        daylightSavingTime?: string; // 1 byte in hexadecimal string
+    };
 }
+
+export type AcTState = 0 | 4 | 5;
+export const isValidAcTState = (state: number): state is AcTState => {
+    if ([0, 4, 5].includes(state)) {
+        return true;
+    }
+    return false;
+};
 
 /*
     Several responses to AT commands have a set of result code: e.g. NetworkStatusNotifications = [0, 5].
@@ -155,6 +195,8 @@ export type ConnectionEvaluationResult =
 export type ConevalEnergyEstimate = 5 | 6 | 7 | 8 | 9 | undefined;
 export type CellEvaluationLevel = 0 | 1 | 2 | 3 | 255 | undefined;
 export type TAUTriggered = 0 | 1 | 255 | undefined;
+
+export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
     apn?: string;
@@ -199,30 +241,37 @@ export type GeneratedPowerSavingModeEntries = {
     [timer: TimerKey]: PowerSavingModeValues;
 };
 export type PowerSavingModeEntries = {
+    state?: 'on' | 'off';
     // Also known as 'Active Time'
     T3324?: PowerSavingModeValues;
-    T3324_extended?: PowerSavingModeValues;
+    T3324Extended?: PowerSavingModeValues;
     T3402?: PowerSavingModeValues;
-    T3402_extended?: PowerSavingModeValues;
+    T3402Extended?: PowerSavingModeValues;
     T3412?: PowerSavingModeValues;
     // Also known as 'Periodic TAU'
-    T3412_extended?: PowerSavingModeValues;
+    T3412Extended?: PowerSavingModeValues;
 };
 
 export type TimerKey = `${string}${Timers}${string}`;
 
 export type PowerSavingModeValues = {
-    bitmask: Binary;
+    bitmask: Bitmask;
     unit?: TimeUnits;
     value?: number;
 };
 
+export const isValidBitmask = (bitmask: string): bitmask is Bitmask =>
+    bitmask != null &&
+    bitmask
+        .split('')
+        .every(character => character === '0' || character === '1');
+
 // TODO: Is this a really bad idea?
-type Binary = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
+export type Bitmask = `${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${0 | 1}${
     | 0
-    | 1}`;
+    | 1}${0 | 1}`;
 type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 
 type T_Keys = 'T3324' | 'T3402' | 'T3412';
-type Extended = '' | '_extended';
+type Extended = '' | 'Extended';
 export type Timers = `${T_Keys}${Extended}`;

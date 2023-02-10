@@ -16,11 +16,11 @@ export const processor: Processor = {
             regStatus: 0,
         },
     }),
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.payload);
             if (responseArray.length !== 15 && responseArray.length !== 16) {
-                return {};
+                return state;
             }
 
             const parsedAcT = parseInt(responseArray[5], 10);
@@ -28,6 +28,7 @@ export const processor: Processor = {
                 parsedAcT === 7 || parsedAcT === 9 ? parsedAcT : undefined;
 
             return {
+                ...state,
                 xmonitor: {
                     regStatus: parseInt(responseArray[0], 10),
                     operatorFullName: responseArray[1],
@@ -57,6 +58,6 @@ export const processor: Processor = {
                 },
             };
         }
-        return {};
+        return state;
     },
 };

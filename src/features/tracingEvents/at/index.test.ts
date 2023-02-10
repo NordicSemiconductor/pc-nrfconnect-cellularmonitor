@@ -50,13 +50,6 @@ const expectedState = {
     imsi: '204080813630037',
     iccid: '8901234567012345678F',
     currentBand: 13,
-    periodicTAU: undefined,
-    hardwareVersion: undefined,
-    modemUUID: undefined,
-    dataProfile: undefined,
-    nbiotTXReduction: undefined,
-    ltemTXReduction: undefined,
-    activityStatus: undefined,
     networkRegistrationStatus: {
         status: 5,
         tac: '0901',
@@ -64,15 +57,37 @@ const expectedState = {
         AcT: 7,
     },
 
-    networkStatusNotifications: 5,
+    powerSavingMode: {
+        granted: undefined,
+        requested: {
+            state: 'on',
+            T3324: {
+                bitmask: '00000000',
+            },
+            T3412Extended: {
+                bitmask: '10010100',
+            },
+        },
+    },
 
+    networkStatusNotifications: 5,
+    signalingConnectionStatusNotifications: 1,
     modemSupportLTEM: true,
     modemSupportNBIoT: false,
     modemSupportGNSS: true,
     modemSystemPreference: 0,
-
     xModemTraceOperation: 1,
     xModemTraceSetID: 2,
+    rrcState: 1,
+    mdmevNotification: 1,
+    modemDomainEvents: ['SEARCH STATUS 2'],
+
+    networkTimeNotifications: 1,
+    networkTimeNotification: {
+        localTimeZone: '80',
+        universalTime: '22016021225580',
+        daylightSavingTime: '01',
+    },
 } as Partial<State>;
 
 test('Trace is read properly', () => {

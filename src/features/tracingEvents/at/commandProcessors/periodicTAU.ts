@@ -14,30 +14,30 @@ export const processor: Processor = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
     initialState: () => ({ notifyPeriodicTAU: false }),
 
-    onRequest: packet => {
+    onRequest: (packet, state) => {
         if (packet.payload) {
             parameters = getNumberArray(packet.payload);
         }
-        return {};
+        return state;
     },
 
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             if (parameters[0] === 1) {
-                return { notifyPeriodicTAU: true };
+                return { ...state, notifyPeriodicTAU: true };
             }
             if (parameters[0] === 0) {
-                return { notifyPeriodicTAU: false };
+                return { ...state, notifyPeriodicTAU: false };
             }
         }
-        return {};
+        return state;
     },
 
-    onNotification: packet => {
+    onNotification: (packet, state) => {
         if (packet.payload) {
-            return { periodicTAU: parseInt(packet.payload, 10) };
+            return { ...state, periodicTAU: parseInt(packet.payload, 10) };
         }
-        return {};
+        return state;
     },
 };
 

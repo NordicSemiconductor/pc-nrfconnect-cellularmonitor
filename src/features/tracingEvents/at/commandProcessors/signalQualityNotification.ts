@@ -37,37 +37,35 @@ export const processor: Processor = {
             rsrq_decibel: 255,
         },
     }),
-    onRequest: packet => {
-        if (!packet.payload) {
-            return {};
+    onRequest: (packet, state) => {
+        if (packet.payload) {
+            if (packet.payload.startsWith('1')) {
+                tentativeState = { notifySignalQuality: true };
+            }
+            if (packet.payload.startsWith('0')) {
+                tentativeState = { notifySignalQuality: false };
+            }
         }
-        if (packet.payload.startsWith('1')) {
-            tentativeState = { notifySignalQuality: true };
-            return {};
-        }
-        if (packet.payload.startsWith('0')) {
-            tentativeState = { notifySignalQuality: false };
-            return {};
-        }
-        return {};
+        return state;
     },
-    onResponse: (packet, requestType) => {
+    onResponse: (packet, state, requestType) => {
         if (
             packet.status === 'OK' &&
             requestType === RequestType.SET_WITH_VALUE
         ) {
             if (tentativeState != null) {
-                return tentativeState;
+                return { ...state, ...tentativeState };
             }
         }
-        return {};
+        return state;
     },
-    onNotification: packet => {
+    onNotification: (packet, state) => {
         if (packet.payload) {
             const signalQualityValues = getNumberArray(packet.payload);
 
             if (signalQualityValues?.length === 4) {
                 return {
+                    ...state,
                     signalQuality: {
                         rsrp: signalQualityValues[0],
                         rsrp_threshold_index: signalQualityValues[1],
@@ -80,6 +78,6 @@ export const processor: Processor = {
                 };
             }
         }
-        return {};
+        return state;
     },
 };

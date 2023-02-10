@@ -18,12 +18,6 @@ export const getNumberArray = (payload: string): number[] =>
         .map(val => val.replace(/[()]/g, ''))
         .map(value => parseInt(value, 10));
 
-// export const getArrays = (payload: string): number[][] => {
-//     const arrays = /\([\w\d\s,']+\)/gi.exec(payload);
-
-//     return [];
-// };
-
 export const getParametersFromResponse = (payload?: string) => {
     if (!payload) {
         return [];
@@ -35,22 +29,12 @@ export const getParametersFromResponse = (payload?: string) => {
             line
                 .split(',')
                 .map(stringValue => stringValue.trim())
-                .map(value => value.replace(/[\\]+|["]|[”]/g, ''))
+                .map(parseStringValue)
         )
         .flat();
 
     return paramArray;
 };
 
-export const parseStringValue = (value: string): string => {
-    if (value.charAt(0) === '"' && value.charAt(value.length - 1) === '"') {
-        return value.substring(1, value.length - 1);
-    }
-    if (
-        value.substring(0, 2) === '\\"' &&
-        value.substring(value.length - 2) === '\\"'
-    ) {
-        return value.substring(2, value.length - 2);
-    }
-    return value;
-};
+export const parseStringValue = (value: string): string =>
+    value.replace(/\\r|\\n|[\\]+|["]|[”]/g, '');

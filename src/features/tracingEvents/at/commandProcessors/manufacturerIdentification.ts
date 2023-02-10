@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { State } from '../../types';
 import type { Processor } from '..';
 
 export const processor: Processor = {
@@ -11,10 +12,10 @@ export const processor: Processor = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',
     initialState: () => ({}),
-    onResponse: packet => {
+    onResponse: (packet, state) => {
         if (packet.status === 'OK') {
-            return { manufacturer: packet.payload };
+            return { ...state, manufacturer: packet.payload } as State;
         }
-        return {};
+        return state;
     },
 };

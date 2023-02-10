@@ -6,6 +6,15 @@
 -   `Event Chart` component which shows trace events in time and updates
     `Dashboard` when selecting timestamps.
 -   Load raw trace files to view in `Dashboard` and `Event Chart`.
+-   Support for AT Commands:
+    -   AT+CSCON
+    -   AT+CPSMS
+    -   AT%MDMEV
+    -   AT%MDMEV
+    -   AT+CFUN
+    -   AT%XCONNSTAT
+    -   AT+CEDRXRDP
+    -   AT%XTIME
 
 ## 0.3.6 - 2022-11-11
 
