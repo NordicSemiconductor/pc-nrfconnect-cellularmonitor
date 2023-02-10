@@ -23,7 +23,6 @@ export const processor: Processor = {
         if (packet.status === 'OK') {
             const parsedPayload = getParametersFromResponse(packet.payload);
             const conevalResult = validateConevalResult(parsedPayload[0]);
-
             if (conevalResult === 0) {
                 return {
                     ...state,
