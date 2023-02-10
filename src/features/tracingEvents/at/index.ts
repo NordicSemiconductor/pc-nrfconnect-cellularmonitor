@@ -24,6 +24,7 @@ import { processor as modemTraceActivation } from './commandProcessors/modemTrac
 import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
 import { processor as networkRegistrationStatus } from './commandProcessors/networkRegistrationStatusNotification';
+import { processor as networkTimeNotification } from './commandProcessors/networkTimeNotification';
 import { processor as periodicTAU } from './commandProcessors/periodicTAU';
 import { processor as pinCode } from './commandProcessors/pinCode';
 import { processor as pinRetries } from './commandProcessors/pinRetries';
@@ -39,6 +40,7 @@ import { parseAT, ParsedPacket, RequestType } from './parseAT';
 const processors = [
     activityStatus,
     connectivityStatistics,
+    networkTimeNotification,
     currentBand,
     dataProfile,
     edrxdynamicparameters,

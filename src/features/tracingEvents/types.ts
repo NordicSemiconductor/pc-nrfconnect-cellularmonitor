@@ -152,6 +152,15 @@ export interface State {
     requested_eDRX_value: string; // 4 bit string
     NW_provided_eDRX_value: string; // 4 bit string
     pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
+
+    // %XTIME Network Time Notification
+    networkTimeNotifications?: 0 | 1;
+    networkTimeNotification?: {
+        // All fields are optional
+        localTimeZone?: string; // 1 byte in hexadecimal string
+        universalTime?: string; // 7 bytes in hexadecimal string
+        daylightSavingTime?: string; // 1 byte in hexadecimal string
+    };
 }
 
 export type AcTState = 0 | 4 | 5;

@@ -55,6 +55,10 @@ export default () => {
         requested_eDRX_value,
         NW_provided_eDRX_value,
         pagingTimeWindow,
+
+        // %XTIME
+        networkTimeNotifications,
+        networkTimeNotification,
     } = useSelector(getDashboardState);
 
     const parseSupportedValue = (supported: boolean | undefined) => {
@@ -119,6 +123,14 @@ export default () => {
         'Requested eDRX': requested_eDRX_value ?? 'Unknown',
         'NW Provided eDRX': NW_provided_eDRX_value ?? 'Unknown',
         'Paging Time Window': pagingTimeWindow ?? 'Unknown',
+
+        'Network Time Notifications': parseNotificationStatus(
+            networkTimeNotifications
+        ),
+        'Local Time Zone': networkTimeNotification?.localTimeZone ?? 'Unknown',
+        'Universal Time': networkTimeNotification?.universalTime ?? 'Unknown',
+        'Daylight Saving Time':
+            networkTimeNotification?.daylightSavingTime ?? 'Unknown',
     };
 
     return (
@@ -135,6 +147,7 @@ const parseNotificationStatus = (
     notification:
         | NetworkStatusNotifications
         | SignalingConnectionStatusNotifications
+        | (0 | 1)
 ) => {
     if (notification != null) {
         if (notification === 0) return 'Unsubscribed';

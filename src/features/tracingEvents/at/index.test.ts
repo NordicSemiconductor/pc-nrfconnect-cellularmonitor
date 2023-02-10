@@ -81,6 +81,13 @@ const expectedState = {
     rrcState: 1,
     mdmevNotification: 1,
     modemDomainEvents: ['SEARCH STATUS 2'],
+
+    networkTimeNotifications: 1,
+    networkTimeNotification: {
+        localTimeZone: '80',
+        universalTime: '22016021225580',
+        daylightSavingTime: '01',
+    },
 } as Partial<State>;
 
 test('Trace is read properly', () => {
