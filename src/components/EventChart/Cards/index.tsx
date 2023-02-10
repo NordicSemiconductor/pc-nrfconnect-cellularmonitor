@@ -35,26 +35,19 @@ export default () => {
     const atState = useSelector(getDashboardState);
 
     useEffect(() => {
-        const handler = () => {
-            // TODO: Create new state based on atState
-            // TODO: Filter out events later than selected time
-            const newState = events
-                .filter(packet => packet.timestamp < timestamp)
-                .reduce(
-                    (current, packet) => ({
-                        ...current,
-                        ...convert(packet, current),
-                    }),
-                    initialState()
-                );
-            dispatch(setDashboardState(newState));
-        };
-
-        tracePacketEvents.on('new-packets', handler);
-        return () => {
-            tracePacketEvents.removeListener('new-packets', handler);
-        };
-    }, [dispatch, atState, timestamp]);
+        // TODO: Create new state based on atState
+        // TODO: Filter out events later than selected time
+        const newState = events
+            .filter(packet => packet.timestamp < timestamp)
+            .reduce(
+                (current, packet) => ({
+                    ...current,
+                    ...convert(packet, current),
+                }),
+                initialState()
+            );
+        dispatch(setDashboardState(newState));
+    }, [dispatch, timestamp]);
 
     return (
         <div className="cards-container">
