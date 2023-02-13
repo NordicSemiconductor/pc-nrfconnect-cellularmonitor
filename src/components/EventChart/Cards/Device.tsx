@@ -31,19 +31,19 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields = {
-        'Funcational Mode': parseFunctionalMode(functionalMode),
-        IMEI: IMEI ?? 'Unknown',
-        'MODEM FIRMWARE': revisionID ?? 'Unknown',
-        'HARDWARE VERSION': hardwareVersion ?? 'Unknown',
-        'MODEM UUID': modemUUID ?? 'Unknown',
-        'CURRENT BAND': currentBand ?? 'Unknown',
-        'AVAILABLE BANDS': availableBands
+        'Funcational Mode': { value: parseFunctionalMode(functionalMode), commands: ['AT+CFUN'] },
+        IMEI: { value: IMEI ?? 'Unknown', commands: ['AT+CGSN'] },
+        'MODEM FIRMWARE': { value: revisionID ?? 'Unknown', commands: ['AT+CGMR'] },
+        'HARDWARE VERSION': { value: hardwareVersion ?? 'Unknown', commands: ['AT%HWVERSION'] },
+        'MODEM UUID': { value: modemUUID ?? 'Unknown', commands: ['AT%XMODEMUUID'] },
+        'CURRENT BAND': { value: currentBand ?? 'Unknown', commands: ['AT%XCBAND'] },
+        'AVAILABLE BANDS': { value: availableBands
             ? formatAvailableBands(availableBands)
-            : 'Unknown',
-        'DATA PROFILE': dataProfile ?? 'Unknown',
-        MANUFACTURER: manufacturer ?? 'Unknown',
-        'LTE-M TX Reduction': formatMode(ltemTXReduction) ?? 'Unknown',
-        'NB-IoT TX Reduction': formatMode(nbiotTXReduction) ?? 'Unknown',
+            : 'Unknown', commands: ['AT%XCBAND'] },
+        'DATA PROFILE': { value: dataProfile ?? 'Unknown', commands: ['AT%XDATAPRFL'] },
+        MANUFACTURER: { value: manufacturer ?? 'Unknown', commands: ['AT+CGMI'] },
+        'LTE-M TX Reduction': { value: formatMode(ltemTXReduction) ?? 'Unknown', commands: [] },
+        'NB-IoT TX Reduction': { value: formatMode(nbiotTXReduction) ?? 'Unknown', commands: [] },
     };
     return (
         <DashboardCard

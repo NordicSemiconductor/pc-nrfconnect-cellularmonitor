@@ -14,21 +14,36 @@ export default () => {
     const { connStat } = useSelector(getDashboardState);
 
     const fields = {
-        'Collecting data': parseCollecting(connStat?.collecting),
-        'Successfull SMS Tx': connStat?.smsTX ?? 'Unknown',
-        'Successfull SMS Rx': connStat?.smsRX ?? 'Unknown',
-        'Data Transmitted': connStat?.dataTX
-            ? `${connStat?.dataTX} kB`
-            : 'Unknown',
-        'Data Recieved': connStat?.dataRX
-            ? `${connStat?.dataRX} kB`
-            : 'Unknown',
-        'Max Packet Size Tx or Rx': connStat?.packetMax
-            ? `${connStat.packetMax} kB`
-            : 'Unknown',
-        'Average Packet Size': connStat?.packetAverage
-            ? `${connStat.packetAverage} kB`
-            : 'Unknown',
+        'Collecting data': {
+            value: parseCollecting(connStat?.collecting),
+            commands: [],
+        },
+        'Successfull SMS Tx': {
+            value: connStat?.smsTX ?? 'Unknown',
+            commands: [],
+        },
+        'Successfull SMS Rx': {
+            value: connStat?.smsRX ?? 'Unknown',
+            commands: [],
+        },
+        'Data Transmitted': {
+            value: connStat?.dataTX ? `${connStat?.dataTX} kB` : 'Unknown',
+            commands: [],
+        },
+        'Data Recieved': {
+            value: connStat?.dataRX ? `${connStat?.dataRX} kB` : 'Unknown',
+            commands: [],
+        },
+        'Max Packet Size Tx or Rx': {
+            value: connStat?.packetMax ? `${connStat.packetMax} kB` : 'Unknown',
+            commands: [],
+        },
+        'Average Packet Size': {
+            value: connStat?.packetAverage
+                ? `${connStat.packetAverage} kB`
+                : 'Unknown',
+            commands: [],
+        },
     };
 
     return (

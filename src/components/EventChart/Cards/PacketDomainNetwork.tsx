@@ -19,16 +19,14 @@ const PacketDomainNetwork = ({
     ipv6,
     info,
 }: AccessPointName) => {
-    const fields = Object.fromEntries(
-        Object.entries({
-            'Access Point Name': apn ?? undefined,
-            'PDN Type': pdnType ?? undefined,
-            'PDN Type Raw': rawPDNType ?? undefined,
-            'IPv4 Address': ipv4 ?? undefined,
-            'IPv6 Address': `${ipv6}` ?? undefined,
-            info: info ?? undefined,
-        }).filter(([, value]) => value != null)
-    ) as unknown as Record<string, string>;
+    const fields = {
+        'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
+        'PDN Type': { value: pdnType ?? 'Unknown', commands: [] },
+        'PDN Type Raw': { value: rawPDNType ?? 'Unknown', commands: [] },
+        'IPv4 Address': { value: ipv4 ?? 'Unknown', commands: [] },
+        'IPv6 Address': { value: `${ipv6}` ?? 'Unknown', commands: [] },
+        info: { value: info ?? 'Unknown', commands: [] },
+    };
     return (
         <DashboardCard
             title={
@@ -41,7 +39,7 @@ const PacketDomainNetwork = ({
                     : 'Unknown APN'
             }
             iconName="mdi-web"
-            fields={fields as unknown as Record<string, string | number>}
+            fields={fields}
         />
     );
 };

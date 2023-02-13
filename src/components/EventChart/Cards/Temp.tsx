@@ -85,52 +85,50 @@ export default () => {
     };
 
     const fields = {
-        'Trace State Operation': xModemTraceOperation ?? 'Unknown',
-        'Trace State Set ID': xModemTraceSetID ?? 'Unknown',
-
-        'LTE-M Support': parseSupportedValue(modemSupportLTEM),
-        'NB-IoT Support': parseSupportedValue(modemSupportNBIoT),
-        'GNSS Support': parseSupportedValue(modemSupportGNSS),
-        'Preferred Bearer': parsePreferredBearer(modemSystemPreference),
-
-        'Network Status Notifications': parseNotificationStatus(
+        'Trace State Operation': { value: xModemTraceOperation ?? 'Unknown', commands: ['AT%XMODEMTRACE'] },
+        'Trace State Set ID': { value: xModemTraceSetID ?? 'Unknown', commands: ['AT%XMODEMTRACE'] },
+        'LTE-M Support': { value: parseSupportedValue(modemSupportLTEM), commands: ['AT%XSYSTEMMODE'] },
+        'NB-IoT Support': { value: parseSupportedValue(modemSupportNBIoT), commands: ['AT%XSYSTEMMODE'] },
+        'GNSS Support': { value: parseSupportedValue(modemSupportGNSS), commands: ['AT%XSYSTEMMODE'] },
+        'Preferred Bearer': { value: parsePreferredBearer(modemSystemPreference), commands: ['AT%XSYSTEMMODE'] },
+        'Network Status Notifications': { value: parseNotificationStatus(
             networkStatusNotifications
-        ),
-        'Signaling Connecting Status Notifications': parseNotificationStatus(
+        ), commands: ['AT+CEREG'] },
+        'Signaling Connecting Status Notifications': { value: parseNotificationStatus(
             signalingConnectionStatusNotifications
-        ),
+        ), commands: ['AT+CSCON'] },
 
-        'Connection Evaluation Result': conevalResult ?? 'Unknown',
-        'RRC State': rrcState ?? 'Unknown',
-        'Energy Estimate': conevalEnergyEstimate ?? 'Unknown',
-        'Signal Quality (RSRP)': signalQuality?.rsrp ?? 'Unknown',
-        'Signal Quality (RSRQ)': signalQuality?.rsrq ?? 'Unknown',
-        'Signal Quality (SNR)': signalQuality?.snr ?? 'Unknown',
-        'Cell ID': cellID ?? 'Unknown',
-        PLMN: plmn ?? 'Unknown',
-        'Physical Cell ID': physicalCellID ?? 'Unknown',
-        EARFCN: earfcn ?? 'Unknown',
-        Band: band ?? 'Unknown',
-        'TAU Triggered': TAUTriggered ?? 'Unknown',
+        'Connection Evaluation Result': { value: conevalResult ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'RRC State': { value: rrcState ?? 'Unknown', commands: ['AT%CONEVAL', 'AT+CSCON'] },
+        'Energy Estimate': { value: conevalEnergyEstimate ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'Signal Quality (RSRP)': { value: signalQuality?.rsrp ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'Signal Quality (RSRQ)': { value: signalQuality?.rsrq ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'Signal Quality (SNR)': { value: signalQuality?.snr ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'Cell ID': { value: cellID ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        PLMN: { value: plmn ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'Physical Cell ID': { value: physicalCellID ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        EARFCN: { value: earfcn ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        Band: { value: band ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'TAU Triggered': { value: TAUTriggered ?? 'Unknown', commands: ['AT%CONEVAL'] },
         'CONEVAL Cell Evaluation Level':
-            conevalCellEvaluationLevel ?? 'Unknown',
-        'CONEVAL TX Power': conevalTXPower ?? 'Unknown',
-        'CONEVAL TX Repetitions': conevalTXRepetitions ?? 'Unknown',
-        'CONEVAL RX Repetitions': conevalRXRepetitions ?? 'Unknown',
-        'CONEVAL DL Path Loss': conevalDLPathLoss ?? 'Unknown',
-        'AcT State': AcTState ?? 'Unknown',
+        { value: conevalCellEvaluationLevel ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'CONEVAL TX Power': { value: conevalTXPower ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'CONEVAL TX Repetitions': { value: conevalTXRepetitions ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'CONEVAL RX Repetitions': { value: conevalRXRepetitions ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'CONEVAL DL Path Loss': { value: conevalDLPathLoss ?? 'Unknown', commands: ['AT%CONEVAL'] },
+        'AcT State': { value: AcTState ?? 'Unknown', commands: ['AT+CEDRXRDP'] },
         /* eslint-disable camelcase */
-        'Requested eDRX': requested_eDRX_value ?? 'Unknown',
-        'NW Provided eDRX': NW_provided_eDRX_value ?? 'Unknown',
-        'Paging Time Window': pagingTimeWindow ?? 'Unknown',
+        'Requested eDRX': { value: requested_eDRX_value ?? 'Unknown', commands: ['AT+CEDRXRDP'] },
+        'NW Provided eDRX': { value: NW_provided_eDRX_value ?? 'Unknown', commands: ['AT+CEDRXRDP'] },
+        'Paging Time Window': { value: pagingTimeWindow ?? 'Unknown', commands: ['AT+CEDRXRDP'] },
 
-        'Network Time Notifications': parseNotificationStatus(
+        'Network Time Notifications': { value: parseNotificationStatus(
             networkTimeNotifications
-        ),
-        'Local Time Zone': networkTimeNotification?.localTimeZone ?? 'Unknown',
-        'Universal Time': networkTimeNotification?.universalTime ?? 'Unknown',
-        'Daylight Saving Time':
-            networkTimeNotification?.daylightSavingTime ?? 'Unknown',
+        ), commands: ['AT%XTIME'] },
+        'Local Time Zone': { value: networkTimeNotification?.localTimeZone ?? 'Unknown', commands: ['AT%XTIME'] },
+        'Universal Time': { value: networkTimeNotification?.universalTime ?? 'Unknown', commands: ['AT%XTIME'] },
+        'Daylight Saving Time': { value: 
+            networkTimeNotification?.daylightSavingTime ?? 'Unknown', commands: ['AT%XTIME'] },
     };
 
     return (

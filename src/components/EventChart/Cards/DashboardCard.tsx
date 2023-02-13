@@ -4,40 +4,121 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Card } from 'pc-nrfconnect-shared';
+import {
+    documentationMap,
+    DocumentationKeys,
+} from '../../../features/tracingEvents/at';
 
-const DashboardCard: React.FC<{
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+
+export type DashboardCardFields = Record<string, DashboardCardField>;
+export type DashboardCardField = {
+    value: string | number;
+    commands?: DocumentationKeys[];
+};
+
+type DashboardCard = {
     title: string;
-    iconName?: string;
+    iconName: string;
     information?: string;
-    fields: Record<string, string | number>;
-}> = ({
+    fields: DashboardCardFields;
+};
+
+export default ({
     title,
     iconName = 'mdi-border-none-variant',
     information = '',
     fields,
-}) => (
-    <Card
-        title={
-            <>
-                <span className={`mdi ${iconName} icon`} />
-                <span className="title">{title}</span>
-                {information.length > 0 && (
-                    <span className="mdi mdi-information-outline info-icon">
-                        <span className="info">{information}</span>
-                    </span>
-                )}
-            </>
-        }
-    >
-        {Object.entries(fields).map(([key, value]) => (
-            <li key={key}>
-                <p className="card-key">{key}</p>
-                <p className="card-value">{value}</p>
-            </li>
-        ))}
-    </Card>
-);
+}: DashboardCard) => {
+    console.log(fields);
+    return (
+        <Card
+            title={
+                <>
+                    <span className={`mdi ${iconName} icon`} />
+                    <span className="title">{title}</span>
+                    {information.length > 0 && (
+                        <span className="mdi mdi-information-outline info-icon">
+                            <span className="info">{information}</span>
+                        </span>
+                    )}
+                </>
+            }
+        >
+            {Object.entries(fields).map(([fieldKey, fieldValues]) => (
+                <li fieldKey={fieldKey}>
+                    <CardEntry
+                        fieldKey={fieldKey}
+                        value={fieldValues.value}
+                        commands={fieldValues.commands}
+                    />
+                </li>
+            ))}
+        </Card>
+    );
+};
 
-export default DashboardCard;
+type CardEntry = {
+    fieldKey: string;
+    value: string | number;
+    commands?: DocumentationKeys[];
+};
+
+const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
+    const [keepShowing, setKeepShowing] = useState(false);
+    const target = useRef(null);
+
+    const showTooltip = (show: boolean) => setKeepShowing(show);
+
+    return (
+        <OverlayTrigger
+            fieldKey={`overlay-${fieldKey}`}
+            placement="right-start"
+            overlay={CardTooltip({ fieldKey, commands, showTooltip })}
+            show={keepShowing}
+        >
+            <div
+                ref={target}
+                className="card-entry"
+                onMouseLeave={() => setKeepShowing(false)}
+                onMouseEnter={() => setKeepShowing(true)}
+            >
+                <p className="card-key">{fieldKey}</p>
+                <p className="card-value">{value}</p>
+            </div>
+        </OverlayTrigger>
+    );
+};
+
+type CardTooltip = {
+    fieldKey: string;
+    commands?: DocumentationKeys[];
+    showTooltip: (show: boolean) => void;
+};
+
+const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => {
+    return (
+        <Tooltip id={`tooltip-${fieldKey}`}>
+            <div
+                className="card-tooltip"
+                onMouseEnter={() => showTooltip(true)}
+                onMouseLeave={() => showTooltip(false)}
+            >
+                <h4>{fieldKey}</h4>
+                <p>AT commands:</p>
+                <ul>
+                    {commands !== undefined
+                        ? commands.map(cmd => (
+                              <li>
+                                  <a href={documentationMap[cmd]}>{cmd}</a>
+                              </li>
+                          ))
+                        : null}
+                </ul>
+            </div>
+        </Tooltip>
+    );
+};
