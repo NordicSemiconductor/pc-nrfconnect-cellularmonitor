@@ -7,6 +7,7 @@
 import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
+import { openAppWindow } from '../../utils/openApp';
 import AdvancedOptions from './AdvancedOptions';
 import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
@@ -32,5 +33,11 @@ export const TraceCollectorSidePanel = () => (
         <AdvancedOptions />
         <LoadTraceFile />
         <EventGraphOptions />
+        <button
+            type="button"
+            onClick={() => openAppWindow('pc-nrfconnect-programmer')}
+        >
+            Open programmer
+        </button>
     </SidePanel>
 );
