@@ -152,3 +152,6 @@ export const initialState = (): State =>
         (state, processor) => ({ ...state, ...processor.initialState() }),
         {} as State
     );
+
+export const documentationMap = processors.reduce((acc, {command, documentation}) => Object.assign(acc, {['AT' + command]: documentation}), {});
+
