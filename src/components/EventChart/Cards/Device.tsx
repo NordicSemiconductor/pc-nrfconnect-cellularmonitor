@@ -15,14 +15,21 @@ const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
 
 export default () => {
-    const { functionalMode, IMEI, currentBand, availableBands, manufacturer } =
-        useSelector(getDashboardState);
+    const {
+        revisionID,
+        hardwareVersion,
+        functionalMode,
+        IMEI,
+        currentBand,
+        availableBands,
+        manufacturer,
+    } = useSelector(getDashboardState);
 
     const fields = {
         'Funcational Mode': parseFunctionalMode(functionalMode),
         IMEI: IMEI ?? 'Unknown',
-        'REVISION ID': 'Not Implemented',
-        'HARDWARE VERSION': 'Not Implemented',
+        'MODEM FIRMWARE': revisionID ?? 'Unknown',
+        'HARDWARE VERSION': hardwareVersion ?? 'Unknown',
         'MODEM UUID': 'Not Implemented',
         'CURRENT BAND': currentBand ?? 'Unknown',
         'AVAILABLE BANDS': availableBands

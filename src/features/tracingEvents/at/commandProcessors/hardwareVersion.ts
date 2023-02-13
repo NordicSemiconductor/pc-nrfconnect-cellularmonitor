@@ -5,6 +5,7 @@
  */
 
 import type { Processor } from '..';
+import {parseStringValue} from '../utils';
 
 export const processor: Processor = {
     command: '%HWVERSION',
@@ -13,7 +14,9 @@ export const processor: Processor = {
     initialState: () => ({}),
     onResponse: (packet, state) => {
         if (packet.status === 'OK' && packet.payload) {
-            return { ...state, hardwareVersion: packet.payload };
+            const hardwareVersion = parseStringValue(packet.payload);
+
+            return { ...state, hardwareVersion };
         }
         return state;
     },
