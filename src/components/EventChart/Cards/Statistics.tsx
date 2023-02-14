@@ -7,6 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
@@ -16,33 +17,33 @@ export default () => {
     const fields = {
         'Collecting data': {
             value: parseCollecting(connStat?.collecting),
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Successfull SMS Tx': {
             value: connStat?.smsTX ?? 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Successfull SMS Rx': {
             value: connStat?.smsRX ?? 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Data Transmitted': {
             value: connStat?.dataTX ? `${connStat?.dataTX} kB` : 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Data Recieved': {
             value: connStat?.dataRX ? `${connStat?.dataRX} kB` : 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Max Packet Size Tx or Rx': {
             value: connStat?.packetMax ? `${connStat.packetMax} kB` : 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
         'Average Packet Size': {
             value: connStat?.packetAverage
                 ? `${connStat.packetAverage} kB`
                 : 'Unknown',
-            commands: [],
+            commands: ['AT%XCONNSTAT'] as DocumentationKeys[],
         },
     };
 

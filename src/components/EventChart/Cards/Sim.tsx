@@ -7,6 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
@@ -26,15 +27,39 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields = {
-        IMSI: { value: imsi ?? 'Unknown', commands: ['AT+CIMI'] },
-        OPERATOR: { value: xmonitor?.operatorFullName ?? 'Unknown', commands: ['AT%XMONITOR'] },
-        MANUFACTURER: { value: manufacturer ?? 'Unknown', commands: [] },
-        ICCID: { value: iccid ?? 'Unknown', commands: [] },
-        PIN: { value: pin, commands: [] },
-        'PIN RETRIED': { value: remainingPIN ?? 'Unknown', commands: [] },
-        'PUK RETRIED': { value: remainingPUK ?? 'Unknown', commands: [] },
-        'PIN2 RETRIED': { value: remainingPIN2 ?? 'Unknown', commands: [] },
-        'PUK2 RETRIED': { value: remainingPUK2 ?? 'Unknown', commands: [] },
+        IMSI: {
+            value: imsi ?? 'Unknown',
+            commands: ['AT+CIMI'] as DocumentationKeys[],
+        },
+        OPERATOR: {
+            value: xmonitor?.operatorFullName ?? 'Unknown',
+            commands: ['AT%XMONITOR'] as DocumentationKeys[],
+        },
+        MANUFACTURER: {
+            value: manufacturer ?? 'Unknown',
+            commands: ['AT+CGMI'] as DocumentationKeys[] as DocumentationKeys[],
+        },
+        ICCID: {
+            value: iccid ?? 'Unknown',
+            commands: ['AT%XICCID'] as DocumentationKeys[],
+        },
+        PIN: { value: pin, commands: ['AT+CPIN'] as DocumentationKeys[] },
+        'PIN RETRIED': {
+            value: remainingPIN ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PUK RETRIED': {
+            value: remainingPUK ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PIN2 RETRIED': {
+            value: remainingPIN2 ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PUK2 RETRIED': {
+            value: remainingPUK2 ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
         'LTE-M': { value: 'Not Implemented', commands: [] },
         'NB-IoT': { value: 'Not Implemented', commands: [] },
         IPV4: { value: 'Not Implemented', commands: [] },
