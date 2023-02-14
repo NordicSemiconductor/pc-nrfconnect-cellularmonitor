@@ -7,6 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { FunctionalMode } from '../../../features/tracingEvents/at/commandProcessors/functionMode';
 import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
@@ -31,19 +32,52 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields = {
-        'Funcational Mode': parseFunctionalMode(functionalMode),
-        IMEI: IMEI ?? 'Unknown',
-        'MODEM FIRMWARE': revisionID ?? 'Unknown',
-        'HARDWARE VERSION': hardwareVersion ?? 'Unknown',
-        'MODEM UUID': modemUUID ?? 'Unknown',
-        'CURRENT BAND': currentBand ?? 'Unknown',
-        'AVAILABLE BANDS': availableBands
-            ? formatAvailableBands(availableBands)
-            : 'Unknown',
-        'DATA PROFILE': dataProfile ?? 'Unknown',
-        MANUFACTURER: manufacturer ?? 'Unknown',
-        'LTE-M TX Reduction': formatMode(ltemTXReduction) ?? 'Unknown',
-        'NB-IoT TX Reduction': formatMode(nbiotTXReduction) ?? 'Unknown',
+        'Funcational Mode': {
+            value: parseFunctionalMode(functionalMode),
+            commands: ['AT+CFUN'] as DocumentationKeys[] as DocumentationKeys[],
+        },
+        IMEI: {
+            value: IMEI ?? 'Unknown',
+            commands: ['AT+CGSN'] as DocumentationKeys[],
+        },
+        'MODEM FIRMWARE': {
+            value: revisionID ?? 'Unknown',
+            commands: ['AT+CGMR'] as DocumentationKeys[],
+        },
+        'HARDWARE VERSION': {
+            value: hardwareVersion ?? 'Unknown',
+            commands: ['AT%HWVERSION'] as DocumentationKeys[],
+        },
+        'MODEM UUID': {
+            value: modemUUID ?? 'Unknown',
+            commands: ['AT%XMODEMUUID'] as DocumentationKeys[],
+        },
+        'CURRENT BAND': {
+            value: currentBand ?? 'Unknown',
+            commands: ['AT%XCBAND'] as DocumentationKeys[],
+        },
+        'AVAILABLE BANDS': {
+            value: availableBands
+                ? formatAvailableBands(availableBands)
+                : 'Unknown',
+            commands: ['AT%XCBAND'] as DocumentationKeys[],
+        },
+        'DATA PROFILE': {
+            value: dataProfile ?? 'Unknown',
+            commands: ['AT%XDATAPRFL'] as DocumentationKeys[],
+        },
+        MANUFACTURER: {
+            value: manufacturer ?? 'Unknown',
+            commands: ['AT+CGMI'] as DocumentationKeys[],
+        },
+        'LTE-M TX Reduction': {
+            value: formatMode(ltemTXReduction) ?? 'Unknown',
+            commands: [] as DocumentationKeys[],
+        },
+        'NB-IoT TX Reduction': {
+            value: formatMode(nbiotTXReduction) ?? 'Unknown',
+            commands: [] as DocumentationKeys[],
+        },
     };
     return (
         <DashboardCard

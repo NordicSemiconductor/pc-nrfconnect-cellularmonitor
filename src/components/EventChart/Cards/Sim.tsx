@@ -7,6 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard from './DashboardCard';
 
@@ -26,28 +27,52 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields = {
-        IMSI: imsi ?? 'Unknown',
-        ISSUER: 'Not Implemented',
-        NETWORK: 'Not Implemented',
-        OPERATOR: xmonitor?.operatorFullName ?? 'Unknown',
-        MANUFACTURER: manufacturer ?? 'Unknown',
-        ICCID: iccid ?? 'Unknown',
-        PIN: pin,
-        'PIN RETRIED': remainingPIN ?? 'Unknown',
-        'PUK RETRIED': remainingPUK ?? 'Unknown',
-        'PIN2 RETRIED': remainingPIN2 ?? 'Unknown',
-        'PUK2 RETRIED': remainingPUK2 ?? 'Unknown',
-        'LTE-M': 'Not Implemented',
-        'NB-IoT': 'Not Implemented',
-        IPV4: 'Not Implemented',
-        IPV6: 'Not Implemented',
-        'NON-IP': 'Not Implemented',
-        PSM: 'Not Implemented',
-        CDRX: 'Not Implemented',
-        EDRX: 'Not Implemented',
-        RAI: 'Not Implemented',
-        'AS-RAI': 'Not Implemented',
-        'CP-RAI': 'Not Implemented',
+        IMSI: {
+            value: imsi ?? 'Unknown',
+            commands: ['AT+CIMI'] as DocumentationKeys[],
+        },
+        OPERATOR: {
+            value: xmonitor?.operatorFullName ?? 'Unknown',
+            commands: ['AT%XMONITOR'] as DocumentationKeys[],
+        },
+        MANUFACTURER: {
+            value: manufacturer ?? 'Unknown',
+            commands: ['AT+CGMI'] as DocumentationKeys[] as DocumentationKeys[],
+        },
+        ICCID: {
+            value: iccid ?? 'Unknown',
+            commands: ['AT%XICCID'] as DocumentationKeys[],
+        },
+        PIN: { value: pin, commands: ['AT+CPIN'] as DocumentationKeys[] },
+        'PIN RETRIED': {
+            value: remainingPIN ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PUK RETRIED': {
+            value: remainingPUK ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PIN2 RETRIED': {
+            value: remainingPIN2 ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'PUK2 RETRIED': {
+            value: remainingPUK2 ?? 'Unknown',
+            commands: ['AT+CPINR'] as DocumentationKeys[],
+        },
+        'LTE-M': { value: 'Not Implemented', commands: [] },
+        'NB-IoT': { value: 'Not Implemented', commands: [] },
+        IPV4: { value: 'Not Implemented', commands: [] },
+        IPV6: { value: 'Not Implemented', commands: [] },
+        'NON-IP': { value: 'Not Implemented', commands: [] },
+        PSM: { value: 'Not Implemented', commands: [] },
+        CDRX: { value: 'Not Implemented', commands: [] },
+        EDRX: { value: 'Not Implemented', commands: [] },
+        RAI: { value: 'Not Implemented', commands: [] },
+        'AS-RAI': { value: 'Not Implemented', commands: [] },
+        'CP-RAI': { value: 'Not Implemented', commands: [] },
+        NETWORK: { value: 'Not Implemented', commands: [] },
+        ISSUER: { value: 'Not Implemented', commands: [] },
     };
 
     return <DashboardCard title="Sim" iconName="mdi-sim" fields={fields} />;

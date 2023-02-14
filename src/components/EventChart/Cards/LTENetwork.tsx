@@ -7,6 +7,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
+import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import type { RRCState } from '../../../features/tracingEvents/types';
@@ -53,28 +54,43 @@ export default () => {
         }
 
         return {
-            'RRC STATE': getRRCStateColor(rrcState),
-            MNC: mnc ?? 'Unknown',
-            'MNC Code': mncCode ?? 'Unknown',
-            MCC: mcc ?? 'Unknown',
-            'MCC Code': mccCode ?? 'Unknown',
-            'CELL ID': 'Not Implemented',
-            PCI: 'Not Implemented',
-            SNR: 'Not Implemented',
-            'RRC STATE CHANGE CAUSE': 'Not Implemented',
-            EARFCN: 'Not Implemented',
-            'PUCCH TX POWER': 'Not Implemented',
-            'NEIGHBOR CELLS': 'Not Implemented',
-            'EMM STATE': 'Not Implemented',
-            RSRP: signalQuality?.rsrp_decibel ?? 'Unknown',
-            'CE MODE': 'Not Implemented',
-            'BAND INDICATOR': 'Not Implemented',
-            'EMM SUBSTATE': 'Not Implemented',
-            RSRQ: signalQuality?.rsrq_decibel ?? 'Unknown',
-            'CE LEVEL': 'Not Implemented',
-            'TRACKING AREA': 'Not Implemented',
-            'ACTIVITY STATUS': activityStatus ?? 'Unknown',
-            STATUS: status,
+            'RRC STATE': {
+                value: getRRCStateColor(rrcState),
+                commands: ['AT%CONEVAL', 'AT+CSCON'] as DocumentationKeys[],
+            },
+            MNC: { value: mnc ?? 'Unknown', commands: [] },
+            'MNC Code': { value: mncCode ?? 'Unknown', commands: [] },
+            MCC: { value: mcc ?? 'Unknown', commands: [] },
+            'MCC Code': { value: mccCode ?? 'Unknown', commands: [] },
+            RSRP: {
+                value: signalQuality?.rsrp_decibel ?? 'Unknown',
+                commands: ['AT%CESQ'] as DocumentationKeys[],
+            },
+            RSRQ: {
+                value: signalQuality?.rsrq_decibel ?? 'Unknown',
+                commands: ['AT%CESQ'] as DocumentationKeys[],
+            },
+            'ACTIVITY STATUS': {
+                value: activityStatus ?? 'Unknown',
+                commands: ['AT+CPAS'] as DocumentationKeys[],
+            },
+            'CELL ID': { value: 'Not Implemented', commands: [] },
+            PCI: { value: 'Not Implemented', commands: [] },
+            SNR: { value: 'Not Implemented', commands: [] },
+            'RRC STATE CHANGE CAUSE': {
+                value: 'Not Implemented',
+                commands: [],
+            },
+            EARFCN: { value: 'Not Implemented', commands: [] },
+            'PUCCH TX POWER': { value: 'Not Implemented', commands: [] },
+            'NEIGHBOR CELLS': { value: 'Not Implemented', commands: [] },
+            'EMM STATE': { value: 'Not Implemented', commands: [] },
+            'CE MODE': { value: 'Not Implemented', commands: [] },
+            'BAND INDICATOR': { value: 'Not Implemented', commands: [] },
+            'EMM SUBSTATE': { value: 'Not Implemented', commands: [] },
+            'CE LEVEL': { value: 'Not Implemented', commands: [] },
+            'TRACKING AREA': { value: 'Not Implemented', commands: [] },
+            STATUS: { value: status, commands: [] },
         };
     }, [
         networkRegistrationStatus,

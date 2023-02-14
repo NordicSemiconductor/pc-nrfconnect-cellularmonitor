@@ -152,3 +152,66 @@ export const initialState = (): State =>
         (state, processor) => ({ ...state, ...processor.initialState() }),
         {} as State
     );
+
+// export const documentationMap = processors.reduce((acc, {command, documentation}) => Object.assign(acc, {['AT' + command]: documentation}), {});
+export type DocumentationKeys = keyof typeof documentationMap;
+export const documentationMap = {
+    'AT+CPAS':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cpas.html',
+    'AT%XCONNSTAT':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xconnstat.html',
+    'AT%XTIME':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xtime.html',
+    'AT%XCBAND':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xcband.html',
+    'AT%XDATAPRFL':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xdataprfl.html',
+    'AT+CEDRXRDP':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cedrxrdp.html',
+    'AT%CONEVAL':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/coneval.html',
+    'AT+CESQ':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',
+    'AT+CFUN':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',
+    'AT%HWVERSION':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/hwver.html',
+    'AT%XICCID':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/xiccid.html',
+    'AT+CIMI':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',
+    'AT+CGMI':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',
+    'AT%MDMEV':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/mdmev.html',
+    'AT%XMONITOR':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xmonitor.html',
+    'AT%XMODEMTRACE':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xmodemtrace.html',
+    'AT%XMODEMUUID':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/modemuuid.html',
+    'AT+CEMODE':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cemode.html',
+    'AT+CEREG':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cereg.html',
+    'AT%XT3412':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
+    'AT+CPIN':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',
+    'AT+CPINR':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpinr.html',
+    'AT+CPSMS':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cpsms.html',
+    'AT+CGSN':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgsn.html',
+    'AT+CGMR':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmr.html',
+    'AT+CSCON':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/packet_domain/cscon.html',
+    'AT%CESQ':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/proc_cesq.html',
+    'AT%XSYSTEMMODE':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xsystemmode.html',
+    'AT%XEMPR':
+        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xempr.html',
+};
