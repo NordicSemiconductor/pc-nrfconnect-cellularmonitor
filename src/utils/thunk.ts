@@ -7,7 +7,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
-import type { RootState } from './appReducer';
+import type { RootState } from '../appReducer';
 
 export type TAction = ThunkAction<void, RootState, null, AnyAction>;
 export type TDispatch = ThunkDispatch<RootState, null, AnyAction>;

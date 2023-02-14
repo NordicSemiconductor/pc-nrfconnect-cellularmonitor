@@ -12,12 +12,9 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import type { TAction } from '../../thunk';
 import EventAction from '../../usageDataActions';
-import {
-    resetParams as resetPowerEstimationParams,
-    setData as setPowerEstimationData,
-} from '../powerEstimation/powerEstimationSlice';
+import type { TAction } from '../../utils/thunk';
+import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -26,6 +23,11 @@ import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
 import {
+    notifyListeners,
+    Packet,
+    tracePacketEvents,
+} from './tracePacketEvents';
+import {
     getManualDbFilePath,
     getSerialPort,
     setTraceIsStarted,
@@ -33,6 +35,7 @@ import {
 } from './traceSlice';
 
 export type TaskId = number;
+let reloadHandler: () => void;
 
 const nrfmlConfig = (
     state: RootState,
@@ -89,58 +92,6 @@ export const convertTraceFile =
         );
     };
 
-export const extractPowerData =
-    (path: string): TAction =>
-    (dispatch, getState) => {
-        let gotPowerEstimationData = false;
-        dispatch(resetPowerEstimationParams());
-        logger.info(
-            `Attempting to extract power estimation data from file ${path}`
-        );
-        usageData.sendUsageData(EventAction.EXTRACT_POWER_DATA);
-        const source: SourceFormat = { type: 'file', path };
-        const sinks = ['opp' as TraceFormat];
-
-        const state = getState();
-        const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
-            err => {
-                if (!gotPowerEstimationData) {
-                    logger.error(
-                        'Failed to get power estimation data, file may not contain requisite data'
-                    );
-                } else if (err != null) {
-                    logger.error(
-                        `Failed to get power estimation data: ${err.message}`
-                    );
-                    logger.debug(`Full error: ${JSON.stringify(err)}`);
-                } else {
-                    logger.info(
-                        `Successfully extracted power estimation data from ${path}`
-                    );
-                }
-                dispatch(setTraceIsStopped());
-            },
-            () => {},
-            () => {},
-            jsonData => {
-                if (gotPowerEstimationData) return;
-                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
-                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                if (!powerEstimationData) return;
-                gotPowerEstimationData = true;
-                dispatch(setPowerEstimationData(powerEstimationData));
-                dispatch(stopTrace(taskId));
-            }
-        );
-        dispatch(
-            setTraceIsStarted({
-                taskId,
-                progressConfigs: progressConfigs(source, sinks),
-            })
-        );
-    };
-
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
@@ -162,17 +113,26 @@ export const startTrace =
             !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath) && !sinks.includes('opp')) {
-            sinks.push('opp');
+        if (findTshark(selectedTsharkPath) && !sinks.includes('tshark')) {
+            sinks.push('tshark');
         }
 
         sinks.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
+        const packets: Packet[] = [];
+        const throttle = setInterval(() => {
+            if (packets.length > 0) {
+                notifyListeners(packets.splice(0, packets.length));
+            }
+        }, 30);
+
+        tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
+                clearInterval(throttle);
                 if (err?.message.includes('tshark')) {
                     logger.logError('Error while tracing', err);
                 } else if (err != null) {
@@ -181,11 +141,16 @@ export const startTrace =
                 } else {
                     logger.info('Finished tracefile');
                 }
+
+                if (reloadHandler) {
+                    window.removeEventListener('beforeunload', reloadHandler);
+                }
+
                 // stop tracing if Completed callback is called and we are only doing live tracing
                 if (
                     sinks.length === 2 &&
                     sinks.includes('live') &&
-                    sinks.includes('opp')
+                    sinks.includes('tshark')
                 ) {
                     dispatch(stopTrace(taskId));
                 }
@@ -195,11 +160,11 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
                 throttleUpdatingProgress: true,
             }),
-            () => {},
-            jsonData => {
-                // @ts-expect-error -- wrong typings from nrfml-js, key name is defined in sink config
-                const powerEstimationData = jsonData[0]?.onlinePowerProfiler;
-                dispatch(setPowerEstimationData(powerEstimationData));
+            data => {
+                if (data.format !== 'modem_trace') {
+                    // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
+                    packets.push(data as Packet);
+                }
             }
         );
         logger.info('Started tracefile');
@@ -209,6 +174,41 @@ export const startTrace =
                 progressConfigs: progressConfigs(source, sinks),
             })
         );
+        reloadHandler = () => {
+            nrfml.stop(taskId);
+        };
+        window.addEventListener('beforeunload', reloadHandler);
+    };
+
+export const readRawTrace =
+    (sourceFile: string): TAction =>
+    (dispatch, getState) => {
+        const state = getState();
+        const source: SourceFormat = { type: 'file', path: sourceFile };
+        const sinks: TraceFormat[] = ['tshark'];
+        const packets: Packet[] = [];
+
+        tracePacketEvents.emit('start-process');
+        nrfml.start(
+            nrfmlConfig(state, source, sinks),
+            event => {
+                if (event)
+                    logger.error(
+                        `Error when reading trace from ${sourceFile}: ${event.message}`
+                    );
+                else logger.info(`Completed reading trace from ${sourceFile}`);
+                notifyListeners(packets);
+                tracePacketEvents.emit('stop-process');
+            },
+            () => {},
+            data => {
+                if (data.format !== 'modem_trace') {
+                    // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
+                    packets.push(data as Packet);
+                }
+            }
+        );
+        logger.info(`Started reading trace from ${sourceFile}`);
     };
 
 export const stopTrace =
@@ -218,4 +218,5 @@ export const stopTrace =
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
+        tracePacketEvents.emit('stop-process');
     };

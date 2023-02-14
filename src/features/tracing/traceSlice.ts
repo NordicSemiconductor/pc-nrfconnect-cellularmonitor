@@ -20,7 +20,6 @@ export interface TraceProgress {
     path: string;
     size?: number;
 }
-
 interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;

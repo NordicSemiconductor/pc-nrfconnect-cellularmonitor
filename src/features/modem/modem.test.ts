@@ -103,8 +103,6 @@ describe('modem', () => {
     });
 });
 
-// SETUP
-
 function initialiseModem(): [Modem, SerialPort] {
     const serialPort = new SerialPort({ path: testPortPath, baudRate: 9600 });
     return [createModem(serialPort), serialPort];

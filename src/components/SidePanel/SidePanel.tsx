@@ -8,7 +8,9 @@ import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
 import AdvancedOptions from './AdvancedOptions';
+import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
+import { LoadTraceFile } from './LoadTraceFile';
 import PowerEstimationParams from './PowerEstimationParams';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
@@ -28,5 +30,7 @@ export const TraceCollectorSidePanel = () => (
         <TraceCollector />
         <TraceFileInformation />
         <AdvancedOptions />
+        <LoadTraceFile />
+        <EventGraphOptions />
     </SidePanel>
 );

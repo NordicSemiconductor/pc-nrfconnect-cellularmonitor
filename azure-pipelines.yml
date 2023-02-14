@@ -8,15 +8,13 @@ variables:
 steps:
     - task: NodeTool@0
       inputs:
-          versionSpec: 14
+          versionSpec: 18
     - script: |
           set -o errexit -o pipefail
-          npm i -g npm@6
-          npm config set //npm.nordicsemi.no/:_authToken $(WAYLAND_NPM_TOKEN_INTERNAL)
           npm ci
           npm run check
           npm run test
-          npm run build:dev
+          npm run build:prod
           npm pack
       displayName: 'Build and pack'
     - bash: |

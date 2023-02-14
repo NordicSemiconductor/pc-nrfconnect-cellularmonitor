@@ -46,7 +46,7 @@ export default ({
                 }`}
             >
                 {ALL_TRACE_FORMATS.filter(
-                    (format: TraceFormat) => format !== 'opp'
+                    (format: TraceFormat) => format !== 'tshark'
                 ).map((format: TraceFormat) => (
                     <Button
                         variant={

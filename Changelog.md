@@ -1,3 +1,27 @@
+## 0.4.0 - Unreleased
+
+### Added
+
+-   `Dashboard` pane showing states updated based on trace events.
+-   `Event Chart` component which shows trace events in time and updates
+    `Dashboard` when selecting timestamps.
+-   Load raw trace files to view in `Dashboard` and `Event Chart`.
+-   Support for AT Commands:
+    -   AT+CSCON
+    -   AT+CPSMS
+    -   AT%MDMEV
+    -   AT%MDMEV
+    -   AT+CFUN
+    -   AT%XCONNSTAT
+    -   AT+CEDRXRDP
+    -   AT%XTIME
+
+## 0.3.6 - 2022-11-11
+
+### Added
+
+-   Trace database for modem firmware v1.2.8 and 1.3.3.
+
 ## 0.3.7 - 2023-02-13
 
 ### Changed

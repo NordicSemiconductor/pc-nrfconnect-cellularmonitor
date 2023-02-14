@@ -5,38 +5,38 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { Card } from 'pc-nrfconnect-shared';
 
-import './dashboard.scss';
-
 const DashboardCard: React.FC<{
-    onclick: () => void;
     title: string;
     iconName?: string;
     information?: string;
+    fields: Record<string, string | number>;
 }> = ({
-    onclick,
     title,
     iconName = 'mdi-border-none-variant',
     information = '',
-    children,
+    fields,
 }) => (
     <Card
         title={
             <>
                 <span className={`mdi ${iconName} icon`} />
                 <span className="title">{title}</span>
-                <span className="mdi mdi-information-outline info-icon">
-                    <span className="info">{information}</span>
-                </span>
+                {information.length > 0 && (
+                    <span className="mdi mdi-information-outline info-icon">
+                        <span className="info">{information}</span>
+                    </span>
+                )}
             </>
         }
     >
-        {children}
-        <Button variant="secondary" onClick={onclick} className="w-100">
-            <span className="mdi mdi-reload">Reload</span>
-        </Button>
+        {Object.entries(fields).map(([key, value]) => (
+            <li key={key}>
+                <p className="card-key">{key}</p>
+                <p className="card-value">{value}</p>
+            </li>
+        ))}
     </Card>
 );
 

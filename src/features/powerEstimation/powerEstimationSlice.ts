@@ -19,18 +19,53 @@ interface PowerEstimationState {
     loading: boolean;
 }
 
+enum TAU_TYPES {
+    SLEEP_INTERVAL = 0,
+    ACTIVE_TIMER = 1,
+}
+
+const defaultPowerEstimationParameters: OnlinePowerEstimatorParams = {
+    chip: '5',
+    software: '0',
+    voltage: '3.7',
+    lte_type: 'm1',
+    config_lte_edrx_req_value: '0000',
+    data_en: 'off',
+    data_size: '100',
+    data_int: '3600',
+    idrx_sync: '(320,5120)',
+    drx_sync: '(64,80)',
+    idrx_nb_sync: '',
+    drx_idle: '(10,80)',
+    tx_power_nb: '23',
+    tx_power: '23',
+    sim_sleep: '30',
+    sim_sleep_enable: 'True',
+    gps_en: 'off',
+    gps_interval: '1800',
+    gps_fix_time: '1',
+    config_lte_psm_req_rat: '00000000',
+    config_lte_psm_req_rptau: '00000000',
+    cdrx_inactive_timer: '',
+    cdrx_int: '',
+    cdrx_len: '7',
+    cdrx_on_duration: '',
+    idrx_en: 'true',
+    idrx_len: '10',
+    idrx_reps: '',
+
+    psm: 'off',
+    psm_int: '3600',
+    idrx_int: '10', // TODO: must be verified
+};
+
 const initialState: PowerEstimationState = {
-    data: null,
+    data: defaultPowerEstimationParameters,
     filePath: null,
     renderedHtml: null,
     hasError: false,
     loading: false,
 };
-
-enum TAU_TYPES {
-    SLEEP_INTERVAL = 0,
-    ACTIVE_TIMER = 1,
-}
 
 const powerEstimationSlice = createSlice({
     name: 'powerEstimation',
@@ -78,7 +113,39 @@ const powerEstimationSlice = createSlice({
     },
 });
 
-export const getData = (state: RootState) => state.app.powerEstimation.data;
+export const getData = (state: RootState) => {
+    const powerEstimationState = state.app.powerEstimation.data;
+    const grantedPSM = state.app.dashboard.powerSavingMode?.granted;
+    const psm = grantedPSM ? 'on' : powerEstimationState?.psm;
+    const config_lte_psm_req_rptau = grantedPSM?.T3412Extended
+        ? grantedPSM.T3412Extended.bitmask
+        : powerEstimationState?.config_lte_psm_req_rptau;
+    const psm_int = grantedPSM?.T3412Extended
+        ? `${parseTAUByteToSeconds(
+              grantedPSM.T3412Extended.bitmask,
+              TAU_TYPES.SLEEP_INTERVAL
+          )}`
+        : powerEstimationState?.psm_int;
+    const idrx_len = grantedPSM?.T3324
+        ? `${parseTAUByteToSeconds(
+              grantedPSM.T3324.bitmask,
+              TAU_TYPES.ACTIVE_TIMER
+          )}`
+        : powerEstimationState?.idrx_len;
+    const config_lte_psm_req_rat = grantedPSM?.T3324
+        ? grantedPSM.T3324.bitmask
+        : powerEstimationState?.config_lte_psm_req_rat;
+
+    return {
+        ...state.app.powerEstimation.data,
+
+        psm,
+        psm_int,
+        idrx_len,
+        config_lte_psm_req_rptau,
+        config_lte_psm_req_rat,
+    };
+};
 export const getFilePath = (state: RootState) =>
     state.app.powerEstimation.filePath;
 export const getRenderedHtml = (state: RootState) =>
