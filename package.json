@@ -2,7 +2,7 @@
     "name": "pc-nrfconnect-cellularmonitor",
     "version": "0.4.0",
     "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
-    "displayName": "Trace Collector V2 preview",
+    "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicPlayground/pc-nrfconnect-cellularmonitor",
     "repository": {
         "type": "git",

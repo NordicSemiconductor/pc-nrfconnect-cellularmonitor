@@ -219,7 +219,7 @@ describe('nrfml', () => {
             expect(liveConfig).toEqual({
                 name: 'nrfml-wireshark-named-pipe-sink',
                 init_parameters: {
-                    application_name: 'Trace Collector V2 preview',
+                    application_name: 'Cellular Monitor',
                     hw_name: undefined,
                     os_name: 'MockOS',
                     start_process: MOCKED_DEFAULT_WIRESHARK_PATH,
@@ -236,7 +236,7 @@ describe('nrfml', () => {
             expect(pcapConfig).toEqual({
                 name: 'nrfml-pcap-sink',
                 init_parameters: {
-                    application_name: 'Trace Collector V2 preview',
+                    application_name: 'Cellular Monitor',
                     hw_name: undefined,
                     os_name: 'MockOS',
                     file_path: path.join('some', 'path.pcapng'),
