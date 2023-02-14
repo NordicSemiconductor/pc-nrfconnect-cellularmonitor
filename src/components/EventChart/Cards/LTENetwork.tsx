@@ -7,7 +7,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { DocumentationKeys } from '../../../features/tracingEvents/at';
+import { ATCommands } from '../../../features/tracingEvents/at';
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import type { RRCState } from '../../../features/tracingEvents/types';
@@ -56,7 +56,7 @@ export default () => {
         return {
             'RRC STATE': {
                 value: getRRCStateColor(rrcState),
-                commands: ['AT%CONEVAL', 'AT+CSCON'] as DocumentationKeys[],
+                commands: ['AT%CONEVAL', 'AT+CSCON'] as ATCommands[],
             },
             MNC: { value: mnc ?? 'Unknown', commands: [] },
             'MNC Code': { value: mncCode ?? 'Unknown', commands: [] },
@@ -64,15 +64,15 @@ export default () => {
             'MCC Code': { value: mccCode ?? 'Unknown', commands: [] },
             RSRP: {
                 value: signalQuality?.rsrp_decibel ?? 'Unknown',
-                commands: ['AT%CESQ'] as DocumentationKeys[],
+                commands: ['AT%CESQ'] as ATCommands[],
             },
             RSRQ: {
                 value: signalQuality?.rsrq_decibel ?? 'Unknown',
-                commands: ['AT%CESQ'] as DocumentationKeys[],
+                commands: ['AT%CESQ'] as ATCommands[],
             },
             'ACTIVITY STATUS': {
                 value: activityStatus ?? 'Unknown',
-                commands: ['AT+CPAS'] as DocumentationKeys[],
+                commands: ['AT+CPAS'] as ATCommands[],
             },
             'CELL ID': { value: 'Not Implemented', commands: [] },
             PCI: { value: 'Not Implemented', commands: [] },

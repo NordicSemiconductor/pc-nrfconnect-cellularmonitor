@@ -7,7 +7,7 @@
 import type { Processor } from '..';
 import { getParametersFromResponse } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'%XMONITOR'> = {
     command: '%XMONITOR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xmonitor.html',

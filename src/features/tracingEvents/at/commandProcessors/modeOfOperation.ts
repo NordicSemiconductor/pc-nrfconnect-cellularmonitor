@@ -10,7 +10,7 @@ import { getNumber } from '../utils';
 
 let requestedModeOfOperation = -1;
 
-export const processor: Processor = {
+export const processor: Processor<'+CEMODE'> = {
     command: '+CEMODE',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cemode.html',

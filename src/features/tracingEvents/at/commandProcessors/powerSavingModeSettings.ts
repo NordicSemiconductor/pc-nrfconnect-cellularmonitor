@@ -36,7 +36,7 @@ const resetToDefault = {
 
 let setRequested: PowerSavingModeEntries;
 
-export const processor: Processor = {
+export const processor: Processor<'+CPSMS'> = {
     command: '+CPSMS',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cpsms.html',

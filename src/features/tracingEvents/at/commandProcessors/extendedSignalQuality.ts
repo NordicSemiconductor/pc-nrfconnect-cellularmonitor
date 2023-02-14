@@ -8,7 +8,7 @@ import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { getNumberArray } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'+CESQ'> = {
     command: '+CESQ',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',

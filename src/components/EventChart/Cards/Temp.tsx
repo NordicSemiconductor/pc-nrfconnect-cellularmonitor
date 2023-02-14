@@ -7,7 +7,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import {
     NetworkStatusNotifications,
@@ -88,140 +87,140 @@ export default () => {
     const fields = {
         'Trace State Operation': {
             value: xModemTraceOperation ?? 'Unknown',
-            commands: ['AT%XMODEMTRACE'] as DocumentationKeys[],
+            commands: ['AT%XMODEMTRACE'] as const,
         },
         'Trace State Set ID': {
             value: xModemTraceSetID ?? 'Unknown',
-            commands: ['AT%XMODEMTRACE'] as DocumentationKeys[],
+            commands: ['AT%XMODEMTRACE'] as const,
         },
         'LTE-M Support': {
             value: parseSupportedValue(modemSupportLTEM),
-            commands: ['AT%XSYSTEMMODE'] as DocumentationKeys[],
+            commands: ['AT%XSYSTEMMODE'] as const,
         },
         'NB-IoT Support': {
             value: parseSupportedValue(modemSupportNBIoT),
-            commands: ['AT%XSYSTEMMODE'] as DocumentationKeys[],
+            commands: ['AT%XSYSTEMMODE'] as const,
         },
         'GNSS Support': {
             value: parseSupportedValue(modemSupportGNSS),
-            commands: ['AT%XSYSTEMMODE'] as DocumentationKeys[],
+            commands: ['AT%XSYSTEMMODE'] as const,
         },
         'Preferred Bearer': {
             value: parsePreferredBearer(modemSystemPreference),
-            commands: ['AT%XSYSTEMMODE'] as DocumentationKeys[],
+            commands: ['AT%XSYSTEMMODE'] as const,
         },
         'Network Status Notifications': {
             value: parseNotificationStatus(networkStatusNotifications),
-            commands: ['AT+CEREG'] as DocumentationKeys[],
+            commands: ['AT+CEREG'] as const,
         },
         'Signaling Connecting Status Notifications': {
             value: parseNotificationStatus(
                 signalingConnectionStatusNotifications
             ),
-            commands: ['AT+CSCON'] as DocumentationKeys[],
+            commands: ['AT+CSCON'] as const,
         },
 
         'Connection Evaluation Result': {
             value: conevalResult ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'RRC State': {
             value: rrcState ?? 'Unknown',
-            commands: ['AT%CONEVAL', 'AT+CSCON'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL', 'AT+CSCON'] as const,
         },
         'Energy Estimate': {
             value: conevalEnergyEstimate ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'Signal Quality (RSRP)': {
             value: signalQuality?.rsrp ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'Signal Quality (RSRQ)': {
             value: signalQuality?.rsrq ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'Signal Quality (SNR)': {
             value: signalQuality?.snr ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'Cell ID': {
             value: cellID ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         PLMN: {
             value: plmn ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'Physical Cell ID': {
             value: physicalCellID ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         EARFCN: {
             value: earfcn ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         Band: {
             value: band ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'TAU Triggered': {
             value: TAUTriggered ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL Cell Evaluation Level': {
             value: conevalCellEvaluationLevel ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL TX Power': {
             value: conevalTXPower ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL TX Repetitions': {
             value: conevalTXRepetitions ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL RX Repetitions': {
             value: conevalRXRepetitions ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL DL Path Loss': {
             value: conevalDLPathLoss ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as DocumentationKeys[],
+            commands: ['AT%CONEVAL'] as const,
         },
         'AcT State': {
             value: AcTState ?? 'Unknown',
-            commands: ['AT+CEDRXRDP'] as DocumentationKeys[],
+            commands: ['AT+CEDRXRDP'] as const,
         },
         /* eslint-disable camelcase */
         'Requested eDRX': {
             value: requested_eDRX_value ?? 'Unknown',
-            commands: ['AT+CEDRXRDP'] as DocumentationKeys[],
+            commands: ['AT+CEDRXRDP'] as const,
         },
         'NW Provided eDRX': {
             value: NW_provided_eDRX_value ?? 'Unknown',
-            commands: ['AT+CEDRXRDP'] as DocumentationKeys[],
+            commands: ['AT+CEDRXRDP'] as const,
         },
         'Paging Time Window': {
             value: pagingTimeWindow ?? 'Unknown',
-            commands: ['AT+CEDRXRDP'] as DocumentationKeys[],
+            commands: ['AT+CEDRXRDP'] as const,
         },
 
         'Network Time Notifications': {
             value: parseNotificationStatus(networkTimeNotifications),
-            commands: ['AT%XTIME'] as DocumentationKeys[],
+            commands: ['AT%XTIME'] as const,
         },
         'Local Time Zone': {
             value: networkTimeNotification?.localTimeZone ?? 'Unknown',
-            commands: ['AT%XTIME'] as DocumentationKeys[],
+            commands: ['AT%XTIME'] as const,
         },
         'Universal Time': {
             value: networkTimeNotification?.universalTime ?? 'Unknown',
-            commands: ['AT%XTIME'] as DocumentationKeys[],
+            commands: ['AT%XTIME'] as const,
         },
         'Daylight Saving Time': {
             value: networkTimeNotification?.daylightSavingTime ?? 'Unknown',
-            commands: ['AT%XTIME'] as DocumentationKeys[],
+            commands: ['AT%XTIME'] as const,
         },
     };
 

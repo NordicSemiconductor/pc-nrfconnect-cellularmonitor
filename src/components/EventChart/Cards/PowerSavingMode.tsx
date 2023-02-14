@@ -7,7 +7,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { DocumentationKeys } from '../../../features/tracingEvents/at';
 import { getPowerSavingMode } from '../../../features/tracingEvents/dashboardSlice';
 import { PowerSavingModeValues } from '../../../features/tracingEvents/types';
 import DashboardCard from './DashboardCard';
@@ -34,11 +33,11 @@ export default () => {
     const fields = {
         'Requested Periodic TAU (T3412 extended)': {
             value: formatPSMValuesToString(requested?.T3412Extended),
-            commands: ['AT+CPSMS'] as DocumentationKeys[],
+            commands: ['AT+CPSMS'] as const,
         },
         'Requested Active Timer (T3324)': {
             value: formatPSMValuesToString(requested?.T3324),
-            commands: ['AT+CPSMS'] as DocumentationKeys[],
+            commands: ['AT+CPSMS'] as const,
         },
 
         // Could be displayed if user toggles an Advanced option?

@@ -27,17 +27,14 @@ export type PacketFormat =
 export interface State {
     notifySignalQuality: boolean;
     notifyPeriodicTAU: boolean;
+    regStatus?: number;
+    operatorFullName?: string;
+    operatorShortName?: string;
     xmonitor?: {
-        regStatus?: number;
-        operatorFullName?: string;
-        operatorShortName?: string;
-        plmn?: string;
         tac?: string;
-        AcT?: number;
         band?: number;
         cell_id?: string;
         phys_cell_id?: number;
-        EARFCN?: number;
         rsrp?: number;
         snr?: number;
         NW_provided_eDRX_value?: string;
@@ -121,6 +118,7 @@ export interface State {
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]
     earfcn?: number;
+    AcT?: number;
     plmn?: string; // Actually just <MCC + MNC>
     band?: number; // 0 = unavailable, Integer [0, 88]
     TAUTriggered?: TAUTriggered;

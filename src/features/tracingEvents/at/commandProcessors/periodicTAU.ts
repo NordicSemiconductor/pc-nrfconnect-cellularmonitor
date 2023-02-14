@@ -8,7 +8,7 @@ import type { Processor } from '..';
 import { getNumberArray } from '../utils';
 
 let parameters: number[];
-export const processor: Processor = {
+export const processor: Processor<'%XT3412'> = {
     command: '%XT3412',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',

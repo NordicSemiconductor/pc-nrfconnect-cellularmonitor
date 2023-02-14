@@ -8,7 +8,7 @@ import { isValidAcTState } from '../../types';
 import type { Processor } from '..';
 import { getNumber, getParametersFromResponse } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'+CEDRXRDP'> = {
     command: '+CEDRXRDP',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cedrxrdp.html',

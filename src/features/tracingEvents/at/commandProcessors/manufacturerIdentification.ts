@@ -7,7 +7,7 @@
 import { State } from '../../types';
 import type { Processor } from '..';
 
-export const processor: Processor = {
+export const processor: Processor<'+CGMI'> = {
     command: '+CGMI',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmi.html',

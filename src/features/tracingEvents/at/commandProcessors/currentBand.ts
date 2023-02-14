@@ -8,7 +8,7 @@ import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { getNumber, getNumberArray } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'%XCBAND'> = {
     command: '%XCBAND',
     initialState: () => ({}),
     documentation:

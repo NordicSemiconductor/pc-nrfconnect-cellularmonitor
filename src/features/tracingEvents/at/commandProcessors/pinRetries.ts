@@ -7,7 +7,7 @@
 import type { Processor } from '..';
 import { getStringNumberPair } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'+CPINR'> = {
     command: '+CPINR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpinr.html',
