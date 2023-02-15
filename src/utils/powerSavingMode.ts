@@ -5,7 +5,9 @@
  */
 
 export enum TAU_TYPES {
+    // T3412Extended
     SLEEP_INTERVAL = 0,
+    // T3324
     ACTIVE_TIMER = 1,
 }
 
@@ -24,6 +26,12 @@ export const TAU_ACTIVE_TIMER_BASE_VALUES: { [index: string]: number } = {
     '001': 60,
 };
 
+/*
+ * Converts a 1byte/8bit string to number of seconds it represents
+ * according to if it's
+ * * T3412 extended timer ==> Periodic TAU
+ * * T3324 timer ==> Active timer
+ */
 export const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
     const byteArray = [...byteString.trim()];
 

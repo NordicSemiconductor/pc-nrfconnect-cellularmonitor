@@ -18,13 +18,15 @@ import { RequestType } from '../parseAT';
 import { getParametersFromResponse } from '../utils';
 
 const defaultT3324 = {
-    bitmask: '00100001',
-    value: 60,
+    // Active timer
+    bitmask: '00000110',
+    value: 1,
     unit: 'minutes',
 } as PowerSavingModeValues;
 const defaultT3412Extended = {
-    bitmask: '00000110',
-    value: 1,
+    // Periodic tau = sleep timer
+    bitmask: '00100001',
+    value: 60,
     unit: 'minutes',
 } as PowerSavingModeValues;
 

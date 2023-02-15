@@ -30,18 +30,14 @@ export interface State {
     regStatus?: number;
     operatorFullName?: string;
     operatorShortName?: string;
-    xmonitor?: {
-        tac?: string;
-        band?: number;
-        cell_id?: string;
-        phys_cell_id?: number;
-        rsrp?: number;
-        snr?: number;
-        NW_provided_eDRX_value?: string;
-        activeTime?: string;
-        periodicTAU?: string;
-        periodicTAUext?: string;
-    };
+    tac?: string;
+    cell_id?: string;
+    phys_cell_id?: number;
+    rsrp?: number;
+    snr?: number;
+    activeTime?: string;
+    periodicTAU?: string;
+    periodicTAUext?: string;
     pinCodeStatus: string;
     functionalMode: number;
     IMEI: string;
@@ -58,19 +54,16 @@ export interface State {
     imsi?: string;
     iccid?: string;
     currentBand?: number;
-    periodicTAU: number;
     hardwareVersion?: string;
     modemUUID?: string;
     dataProfile?: PowerLevel;
     nbiotTXReduction?: TXReductionMode;
     ltemTXReduction?: TXReductionMode;
     activityStatus: ActivityStatus;
-    networkRegistrationStatus: {
-        status?: number;
-        tac?: string;
-        ci?: string;
-        AcT?: number;
-    };
+    networkStatus?: number;
+    ci?: string;
+    ceregCauseType: number;
+    ceregRejectCause: number;
 
     // TODO: Revise above state attributes.
     // New state attributes under:
@@ -118,7 +111,6 @@ export interface State {
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]
     earfcn?: number;
-    AcT?: number;
     plmn?: string; // Actually just <MCC + MNC>
     band?: number; // 0 = unavailable, Integer [0, 88]
     TAUTriggered?: TAUTriggered;
@@ -161,9 +153,9 @@ export interface State {
     };
 }
 
-export type AcTState = 0 | 4 | 5;
+export type AcTState = 0 | 4 | 5 | 7 | 9;
 export const isValidAcTState = (state: number): state is AcTState => {
-    if ([0, 4, 5].includes(state)) {
+    if ([0, 4, 5, 7, 9].includes(state)) {
         return true;
     }
     return false;

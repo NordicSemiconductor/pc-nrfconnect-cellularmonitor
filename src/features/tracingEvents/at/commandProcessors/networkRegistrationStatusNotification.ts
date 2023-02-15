@@ -4,10 +4,20 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { NetworkStatusNotifications } from '../../types';
+import {
+    parseTAUByteToSeconds,
+    TAU_TYPES,
+} from '../../../../utils/powerSavingMode';
+import {
+    isValidAcTState,
+    isValidBitmask,
+    NetworkStatusNotifications,
+    PowerSavingModeEntries,
+    State,
+} from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getParametersFromResponse } from '../utils';
+import { getNumber, getParametersFromResponse } from '../utils';
 
 let setPayload: NetworkStatusNotifications;
 
@@ -34,27 +44,25 @@ export const processor: Processor<'+CEREG'> = {
                 return { ...state, networkStatusNotifications: setPayload };
             }
 
-            if (packet.payload) {
-                return {
-                    ...state,
-                    networkRegistrationStatus: setNetworkRegistrationStatus(
-                        'response',
-                        packet.payload
-                    ),
-                };
+            if (packet.payload !== undefined) {
+                return handleNetworkRegPayload(
+                    'response',
+                    packet.payload,
+                    state
+                );
             }
         }
         return state;
     },
     onNotification: (packet, state) => {
         if (packet.payload) {
-            return {
-                ...state,
-                networkRegistrationStatus: setNetworkRegistrationStatus(
+            if (packet.payload !== undefined) {
+                return handleNetworkRegPayload(
                     'notification',
-                    packet.payload
-                ),
-            };
+                    packet.payload,
+                    state
+                );
+            }
         }
         return state;
     },
@@ -86,74 +94,109 @@ export const networkStatus = {
 type NetworkStatuses = typeof networkStatus;
 export type NetworkStatus = NetworkStatuses[keyof NetworkStatuses];
 
-type NetworkRegistrationStatus = {
-    status?: number;
-    tac?: string;
-    ci?: string;
-    AcT?: number;
-    cause_type?: number;
-    reject_cause?: number;
-    activeTime?: string;
-    periodicTAU?: string;
-};
+type NetworkRegistrationStatus = Required<Pick<State, 'networkStatus'>> &
+    Partial<
+        Pick<
+            State,
+            | 'tac'
+            | 'ci'
+            | 'AcTState'
+            | 'ceregCauseType'
+            | 'ceregRejectCause'
+            | 'powerSavingMode'
+        >
+    >;
 
 type ResponseType = 'response' | 'notification';
 
 const RESPONSE_INDEXES = {
     response: {
-        status: 1,
+        networkStatus: 1,
         tac: 2,
         ci: 3,
         AcT: 4,
         cause_type: 5,
         reject_type: 6,
-        activeTime: 7,
-        periodicTAU: 8,
+        T3324: 7,
+        T3412Extended: 8,
     },
     notification: {
-        status: 0,
+        networkStatus: 0,
         tac: 1,
         ci: 2,
         AcT: 3,
         cause_type: 4,
         reject_type: 5,
-        activeTime: 6,
-        periodicTAU: 7,
+        T3324: 6,
+        T3412Extended: 7,
     },
 };
 
-const setNetworkRegistrationStatus = (
+const handleNetworkRegPayload = (
     requestType: ResponseType,
-    payload: string
-): NetworkRegistrationStatus => {
+    payload: string,
+    state: State
+): State => {
     const index = RESPONSE_INDEXES[requestType];
     const responseArray = getParametersFromResponse(payload);
-    const networkRegistrationStatus: NetworkRegistrationStatus = {
-        status: parseInt(responseArray[index.status], 10),
+    const networkRegState: NetworkRegistrationStatus = {
+        networkStatus: getNumber(responseArray[index.networkStatus]),
     };
     if (responseArray.length >= 4) {
-        networkRegistrationStatus.tac = responseArray[index.tac];
-        networkRegistrationStatus.ci = responseArray[index.ci];
-        networkRegistrationStatus.AcT = parseInt(responseArray[index.AcT], 10);
+        networkRegState.tac = responseArray[index.tac];
+        networkRegState.ci = responseArray[index.ci];
+        const AcTState = getNumber(responseArray[index.AcT]);
+        networkRegState.AcTState = isValidAcTState(AcTState)
+            ? AcTState
+            : undefined;
     }
     if (responseArray.length >= 6) {
         const causeType = responseArray[index.cause_type]
             ? responseArray[index.cause_type]
             : undefined;
         if (causeType !== undefined) {
-            networkRegistrationStatus.cause_type = parseInt(causeType, 10);
+            networkRegState.ceregCauseType = parseInt(causeType, 10);
         }
         const rejectCause = responseArray[index.reject_type]
             ? responseArray[index.reject_type]
             : undefined;
         if (rejectCause !== undefined) {
-            networkRegistrationStatus.reject_cause = parseInt(rejectCause, 10);
+            networkRegState.ceregRejectCause = parseInt(rejectCause, 10);
         }
     }
+    let grantedPSM: PowerSavingModeEntries | undefined;
     if (responseArray.length >= 9) {
-        networkRegistrationStatus.activeTime = responseArray[index.activeTime];
-        networkRegistrationStatus.periodicTAU =
-            responseArray[index.periodicTAU];
+        grantedPSM = { state: 'on' };
+        const T3324Bitmask = responseArray[index.T3324];
+        if (isValidBitmask(T3324Bitmask)) {
+            grantedPSM.T3324 = {
+                bitmask: T3324Bitmask,
+                value: parseTAUByteToSeconds(
+                    T3324Bitmask,
+                    TAU_TYPES.ACTIVE_TIMER
+                ),
+                unit: 'seconds',
+            };
+        }
+
+        const T3412ExtendedBitmask = responseArray[index.T3412Extended];
+        if (isValidBitmask(T3412ExtendedBitmask)) {
+            grantedPSM.T3412Extended = {
+                bitmask: T3412ExtendedBitmask,
+                value: parseTAUByteToSeconds(
+                    T3412ExtendedBitmask,
+                    TAU_TYPES.SLEEP_INTERVAL
+                ),
+                unit: 'seconds',
+            };
+        }
     }
-    return networkRegistrationStatus;
+    return {
+        ...state,
+        ...networkRegState,
+        powerSavingMode: {
+            requested: { ...state?.powerSavingMode?.requested },
+            granted: grantedPSM ?? { ...state.powerSavingMode?.granted },
+        },
+    };
 };

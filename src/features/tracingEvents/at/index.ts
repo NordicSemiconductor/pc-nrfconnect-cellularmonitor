@@ -164,3 +164,4 @@ export const documentationMap = processors.reduce(
         Object.assign(acc, { [`AT${command}`]: documentation }),
     {} as Record<ATCommands, string>
 );
+
