@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { getPowerSavingMode } from '../../../features/tracingEvents/dashboardSlice';
 import { PowerSavingModeValues } from '../../../features/tracingEvents/types';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 const formatPSMValuesToString = (
     values: PowerSavingModeValues | undefined
@@ -30,7 +30,7 @@ export default () => {
         granted: undefined,
     };
 
-    const fields = {
+    const fields: DashboardCardFields = {
         'Requested Periodic TAU (T3412 extended)': {
             value: formatPSMValuesToString(requested?.T3412Extended),
             commands: ['AT+CPSMS'] as const,

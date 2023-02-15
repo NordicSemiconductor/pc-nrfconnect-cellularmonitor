@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { ATCommands } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default () => {
     const {
@@ -26,7 +26,7 @@ export default () => {
         },
     } = useSelector(getDashboardState);
 
-    const fields = {
+    const fields: DashboardCardFields = {
         IMSI: {
             value: imsi ?? 'Unknown',
             commands: ['AT+CIMI'] as ATCommands[],

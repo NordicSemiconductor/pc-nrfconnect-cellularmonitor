@@ -11,7 +11,7 @@ import { ATCommands } from '../../../features/tracingEvents/at';
 import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import type { RRCState } from '../../../features/tracingEvents/types';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 type RRCStateFlag = '🟡' | '🟢' | '🔴';
 
@@ -41,7 +41,7 @@ export default () => {
         networkType,
     } = useSelector(getDashboardState);
 
-    const fields = useMemo(() => {
+    const fields: DashboardCardFields = useMemo(() => {
         let status = 'Unknown';
         const statusCode = networkRegistrationStatus?.status;
         if (statusCode !== undefined) {

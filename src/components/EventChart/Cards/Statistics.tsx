@@ -9,12 +9,12 @@ import { useSelector } from 'react-redux';
 
 import { ATCommands } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default () => {
     const { connStat } = useSelector(getDashboardState);
 
-    const fields = {
+    const fields: DashboardCardFields = {
         'Collecting data': {
             value: parseCollecting(connStat?.collecting),
             commands: ['AT%XCONNSTAT'] as ATCommands[],

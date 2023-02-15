@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { FunctionalMode } from '../../../features/tracingEvents/at/commandProcessors/functionMode';
 import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
@@ -30,7 +30,7 @@ export default () => {
         nbiotTXReduction,
     } = useSelector(getDashboardState);
 
-    const fields = {
+    const fields: DashboardCardFields = {
         'Funcational Mode': {
             value: parseFunctionalMode(functionalMode),
             commands: ['AT+CFUN'] as const,

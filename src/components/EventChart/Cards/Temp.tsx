@@ -12,7 +12,7 @@ import {
     NetworkStatusNotifications,
     SignalingConnectionStatusNotifications,
 } from '../../../features/tracingEvents/types';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default () => {
     const {
@@ -84,7 +84,7 @@ export default () => {
         }
     };
 
-    const fields = {
+    const fields: DashboardCardFields = {
         'Trace State Operation': {
             value: xModemTraceOperation ?? 'Unknown',
             commands: ['AT%XMODEMTRACE'] as const,
