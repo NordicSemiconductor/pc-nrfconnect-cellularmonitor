@@ -19,6 +19,7 @@ import {
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
+    mockedDataDir,
     render,
     screen,
 } from '../../utils/testUtils';
@@ -33,7 +34,11 @@ jest.mock('../../features/wireshark/wireshark');
 enableFetchMocks();
 
 jest.mock('plotly.js', () => ({}));
-
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => mockedDataDir,
+    getAppFile: () => mockedDataDir,
+}));
 const serialPortActions = [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setSerialPort('COM1'),

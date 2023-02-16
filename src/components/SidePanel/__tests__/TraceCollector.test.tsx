@@ -15,12 +15,18 @@ import {
     expectNrfmlStartCalledWithSinks,
     fireEvent,
     mockedCheckDiskSpace,
+    mockedDataDir,
     render,
     screen,
 } from '../../../utils/testUtils';
 import TraceCollector from '../Tracing/TraceCollector';
 
 jest.mock('../../../features/wireshark/wireshark');
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => mockedDataDir,
+    getAppFile: () => mockedDataDir,
+}));
 
 mockedCheckDiskSpace.mockImplementation(
     () =>

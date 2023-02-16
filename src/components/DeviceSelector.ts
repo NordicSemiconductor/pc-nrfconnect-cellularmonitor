@@ -65,7 +65,7 @@ const openDevice =
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = device.serialPorts;
+        const ports = device.serialPorts ?? [];
         if (ports?.length > 0) {
             dispatch(
                 setAvailableSerialPorts(ports.map(port => port.comName ?? ''))

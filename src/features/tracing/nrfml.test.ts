@@ -29,6 +29,7 @@ jest.mock('../wireshark/wireshark', () => ({
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
+    getAppFile: () => mockedDataDir,
 }));
 
 const mockStore = getMockStore();

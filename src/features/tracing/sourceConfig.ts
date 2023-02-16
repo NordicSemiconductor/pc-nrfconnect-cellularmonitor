@@ -20,7 +20,8 @@ const CHUNK_SIZE = 256;
 
 const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
 
-const autoDetectDbRootURL = pathToFileURL(autoDetectDbRootFolder).toString();
+const autoDetectDbRootURL = () =>
+    pathToFileURL(autoDetectDbRootFolder()).toString();
 
 const initParameterForTraceDb = (manualDbFilePath?: string) =>
     manualDbFilePath != null
@@ -28,7 +29,7 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
         : {
               auto_detect_db_config: {
                   cache_directory: autoDetectDbCacheDirectory,
-                  root: autoDetectDbRootURL,
+                  root: autoDetectDbRootURL(),
                   update_cache: true,
                   // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
                   trace_db_locations: ['${root}/config.json'],

@@ -13,6 +13,7 @@ import {
     assertErrorWasLogged,
     fireEvent,
     getNrfmlCallbacks,
+    mockedDataDir,
     render,
     screen,
 } from '../../../utils/testUtils';
@@ -33,6 +34,12 @@ jest.mock('@electron/remote', () => ({
         getTitle: () => 'Title',
     }),
     app: { getAppPath: () => process.cwd() },
+}));
+
+jest.mock('pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('pc-nrfconnect-shared'),
+    getAppDataDir: () => mockedDataDir,
+    getAppFile: () => mockedDataDir,
 }));
 
 describe('Power profile params', () => {
