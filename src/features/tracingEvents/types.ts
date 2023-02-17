@@ -244,7 +244,12 @@ export type PowerSavingModeEntries = {
 
 export type TimerKey = `${string}${Timers}${string}`;
 
+export const PowerSavingModeDeactivatedTimer: PowerSavingModeValues = {
+    activated: false,
+    bitmask: '11100000',
+};
 export type PowerSavingModeValues = {
+    activated: boolean;
     bitmask: Bitmask;
     unit?: TimeUnits;
     value?: number;

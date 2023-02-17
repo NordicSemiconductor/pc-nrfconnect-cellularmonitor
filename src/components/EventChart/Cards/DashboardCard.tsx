@@ -17,6 +17,7 @@ import {
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
     value: string | number;
+    description?: string[];
     commands: readonly ATCommands[];
 };
 
