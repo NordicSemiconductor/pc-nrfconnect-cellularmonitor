@@ -5,7 +5,7 @@
  */
 
 import type { Processor } from '..';
-import { getNumberArray } from '../utils';
+import { getNumber, getNumberArray } from '../utils';
 
 let parameters: number[];
 export const processor: Processor<'%XT3412'> = {
@@ -35,7 +35,16 @@ export const processor: Processor<'%XT3412'> = {
 
     onNotification: (packet, state) => {
         if (packet.payload) {
-            return { ...state, periodicTAU: parseInt(packet.payload, 10) };
+            const T3412ExtendedNotification = getNumber(packet.payload);
+            return {
+                ...state,
+                powerSavingMode: {
+                    granted: {
+                        ...state.powerSavingMode?.granted,
+                        T3412ExtendedNotification,
+                    },
+                },
+            };
         }
         return state;
     },

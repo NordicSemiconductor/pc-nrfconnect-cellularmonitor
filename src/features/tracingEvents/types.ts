@@ -234,12 +234,13 @@ export type PowerSavingModeEntries = {
     state?: 'on' | 'off';
     // Also known as 'Active Time'
     T3324?: PowerSavingModeValues;
-    T3324Extended?: PowerSavingModeValues;
-    T3402?: PowerSavingModeValues;
-    T3402Extended?: PowerSavingModeValues;
+    // Also known as Periodic TAU (Legacy)
     T3412?: PowerSavingModeValues;
     // Also known as 'Periodic TAU'
     T3412Extended?: PowerSavingModeValues;
+    // Notification from %XT3412
+    // indicates how much is left of Periodic TAU
+    T3412ExtendedNotification?: number;
 };
 
 export type TimerKey = `${string}${Timers}${string}`;
@@ -249,8 +250,8 @@ export const PowerSavingModeDeactivatedTimer: PowerSavingModeValues = {
     bitmask: '11100000',
 };
 export type PowerSavingModeValues = {
-    activated: boolean;
     bitmask: Bitmask;
+    activated?: boolean;
     unit?: TimeUnits;
     value?: number;
 };
@@ -270,3 +271,4 @@ type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 type T_Keys = 'T3324' | 'T3402' | 'T3412';
 type Extended = '' | 'Extended';
 export type Timers = `${T_Keys}${Extended}`;
+// export type PowerSavingModeTimer = 'T3324' | 'T3412' | 'T3412Extended';

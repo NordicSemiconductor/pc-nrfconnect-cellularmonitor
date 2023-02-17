@@ -61,8 +61,18 @@ test('parsePartialIpv6 should return correctly formatted address', () => {
 const expectedRequestState = {
     powerSavingMode: {
         requested: {
-            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412Extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
+            T3324: {
+                activated: true,
+                bitmask: '00100001',
+                unit: 'seconds',
+                value: 60,
+            },
+            T3412Extended: {
+                activated: true,
+                bitmask: '00000110',
+                unit: 'seconds',
+                value: 3600,
+            },
         },
     },
 };
@@ -70,13 +80,23 @@ const expectedRequestState = {
 const expectedAcceptState = {
     powerSavingMode: {
         granted: {
-            T3324: { bitmask: '00100001', unit: 'minutes', value: 1 },
-            T3412Extended: { bitmask: '00000110', unit: 'minutes', value: 60 },
-            T3402Extended: { bitmask: '00101100', unit: 'minutes', value: 12 },
+            T3324: {
+                activated: true,
+                bitmask: '00100001',
+                unit: 'seconds',
+                value: 60,
+            },
+            T3412Extended: {
+                activated: true,
+                bitmask: '00000110',
+                unit: 'seconds',
+                value: 3600,
+            },
             T3412: {
+                activated: true,
                 bitmask: '01011111',
                 unit: 'seconds',
-                value: 186 * 6 * 60,
+                value: 1_116_000,
             },
         },
     },

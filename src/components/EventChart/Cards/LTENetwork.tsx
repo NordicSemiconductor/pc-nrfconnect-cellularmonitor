@@ -8,7 +8,6 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ATCommands } from '../../../features/tracingEvents/at';
-import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import type { RRCState } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
@@ -31,7 +30,7 @@ const getRRCStateColor = (
 export default () => {
     const {
         signalQuality,
-        networkRegistrationStatus,
+        networkStatus,
         activityStatus,
         rrcState,
         mcc,
@@ -43,10 +42,9 @@ export default () => {
 
     const fields: DashboardCardFields = useMemo(() => {
         let status = 'Unknown';
-        const statusCode = networkRegistrationStatus?.status;
-        if (statusCode !== undefined) {
+        if (networkStatus !== undefined) {
             const [label, value] = Object.entries(networkStatus).filter(
-                ([statusKey]) => statusKey === `${statusCode}`
+                ([statusKey]) => statusKey === `${networkStatus}`
             )[0];
             if (label) {
                 status = `${label}: ${value.short}`;
@@ -93,7 +91,7 @@ export default () => {
             STATUS: { value: status, commands: [] },
         };
     }, [
-        networkRegistrationStatus,
+        networkStatus,
         signalQuality,
         activityStatus,
         rrcState,

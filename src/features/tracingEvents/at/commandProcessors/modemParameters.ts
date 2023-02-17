@@ -8,11 +8,7 @@ import {
     parsePowerSavingMode,
     TAU_TYPES,
 } from '../../../../utils/powerSavingMode';
-import {
-    isValidAcTState,
-    isValidBitmask,
-    PowerSavingModeEntries,
-} from '../../types';
+import { isValidAcTState, PowerSavingModeEntries } from '../../types';
 import type { Processor } from '..';
 import { getNumber, getParametersFromResponse } from '../utils';
 
