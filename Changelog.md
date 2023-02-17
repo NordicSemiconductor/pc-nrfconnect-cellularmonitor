@@ -16,6 +16,15 @@
     -   AT+CEDRXRDP
     -   AT%XTIME
 
+### Changed
+
+-   Improved Power Saving Mode parsing
+-   Clearly display the different Power Saving Mode Timers with consistent
+    naming
+    -   T3324: Active Timer
+    -   T3412 extended: Periodic TAU
+    -   T3412: Periodic TAU (Legacy)
+
 ## 0.3.6 - 2022-11-11
 
 ### Added

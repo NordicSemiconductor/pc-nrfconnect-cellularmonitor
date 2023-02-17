@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import {
+    parsePowerSavingMode,
+    TAU_TYPES,
+} from '../../../utils/powerSavingMode';
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import {
     AccessPointName,
@@ -20,14 +24,14 @@ import {
 
 const attachValues = ['0x41', '0x42', '0x43', '0x44'] as const;
 
-// Just fill in all the values of the Timers type
+// Only relevant timers for PSM
 const timers: Timers[] = [
-    'T3324',
-    'T3402',
-    'T3412',
-    'T3324Extended',
-    'T3402Extended',
-    'T3412Extended',
+    'T3324', // Active Timer
+    'T3412Extended', // Periodic TAU
+    'T3412', // Periodic TAU (legacy)
+    // 'T3402',
+    // 'T3324Extended',
+    // 'T3402Extended',
 ];
 
 export type AttachPacket =
@@ -60,7 +64,6 @@ export type AttachAcceptPacket = {
 
     dns_server_address_config: DNSServerAddressConfig;
 
-    // Super relevant ATM
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
 
     pdn?: {
@@ -181,30 +184,24 @@ const getKeyOfPacket = (
         | undefined;
 };
 
-const parsePSMValues = (
-    values: PowerSavingModeValues
-): PowerSavingModeValues => {
-    if (values.unit && values.value && values.unit === 'decihours') {
-        // Convert decihours to seconds
-        // 1 decihour = 6 minutes
-        return {
-            bitmask: values.bitmask,
-            unit: 'seconds',
-            value: values.value * 6 * 60,
-        };
-    }
-
-    return values;
-};
-
 const getPowerSavingEntriesFromPacket = (packet: AttachPacket) =>
-    timers.reduce((previous, lookup) => {
-        const key = getKeyOfPacket(packet, lookup);
+    timers.reduce<PowerSavingModeEntries>((PsmEntries, lookupKey) => {
+        const key = getKeyOfPacket(packet, lookupKey);
         if (key) {
-            previous[lookup] = parsePSMValues(packet[key]);
+            if (lookupKey === 'T3324') {
+                PsmEntries[lookupKey] = parsePowerSavingMode(
+                    packet[key].bitmask,
+                    TAU_TYPES.ACTIVE_TIMER
+                );
+            } else if (lookupKey === 'T3412' || lookupKey === 'T3412Extended') {
+                PsmEntries[lookupKey] = parsePowerSavingMode(
+                    packet[key].bitmask,
+                    TAU_TYPES.SLEEP_INTERVAL
+                );
+            }
         }
-        return previous;
-    }, {} as PowerSavingModeEntries);
+        return PsmEntries;
+    }, {});
 
 export const processAttachRequestPacket = (
     packet: AttachRequestPacket

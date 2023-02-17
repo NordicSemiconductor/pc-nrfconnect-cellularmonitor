@@ -7,7 +7,7 @@
 import type { Processor } from '..';
 import { parseStringValue } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'+CGMR'> = {
     command: '+CGMR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgmr.html',

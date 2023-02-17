@@ -17,7 +17,7 @@ t3412ext   = 001 00001 = 0x06 = 60 minutes
 const CPSMS = 'AT+CPSMS';
 
 const defaultT3324 = '00100001';
-const notDefaultT3324 = '01100011';
+const notDefaultT3324 = '00100011';
 
 const defaultT3412Extended = '00000110';
 const notDefaultT3412Extended = '10101010';
@@ -25,6 +25,7 @@ const notDefaultT3412Extended = '10101010';
 test('AT+CPSMS=1 with only mode argument will use default values for t3324 and t3412ext', () => {
     let state = convertPackets([atPacket(`${CPSMS}=1`), OkPacket]);
     expect(state.powerSavingMode?.requested?.state).toBe('on');
+
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(defaultT3324);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
         defaultT3412Extended
@@ -65,7 +66,7 @@ test('AT+CPSMS=1 with only mode argument will use default values for t3324 and t
 });
 
 test('AT+CPSMS? read command will update the state appropriately', () => {
-    let [t3412ext, t3324] = ['11110000', '00001111'];
+    let [t3412ext, t3324] = ['00000100', '00001111'];
 
     let state = convertPackets([
         atPacket(`${CPSMS}?`),
@@ -77,7 +78,7 @@ test('AT+CPSMS? read command will update the state appropriately', () => {
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(t3324);
 
-    [t3412ext, t3324] = ['10101010', '10101010'];
+    [t3412ext, t3324] = ['10101010', '00101010'];
     state = convertPackets([
         atPacket(`${CPSMS}?`),
         atPacket(`+CPSMS: 1,,,"${t3412ext}","${t3324}"\r\nOK\r\n`),

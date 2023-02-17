@@ -10,7 +10,7 @@ import { getNumber, getParametersFromResponse } from '../utils';
 
 let setValue: 0 | 1;
 
-export const processor: Processor = {
+export const processor: Processor<'%XTIME'> = {
     command: '%XTIME',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xtime.html',

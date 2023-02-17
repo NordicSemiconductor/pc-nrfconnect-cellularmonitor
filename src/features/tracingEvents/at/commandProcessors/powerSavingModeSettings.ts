@@ -9,24 +9,19 @@
 // specific default values.
 
 import {
-    isValidBitmask,
-    PowerSavingModeEntries,
-    PowerSavingModeValues,
-} from '../../types';
+    parsePowerSavingMode,
+    TAU_TYPES,
+} from '../../../../utils/powerSavingMode';
+import { PowerSavingModeEntries } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { getParametersFromResponse } from '../utils';
 
-const defaultT3324 = {
-    bitmask: '00100001',
-    value: 60,
-    unit: 'minutes',
-} as PowerSavingModeValues;
-const defaultT3412Extended = {
-    bitmask: '00000110',
-    value: 1,
-    unit: 'minutes',
-} as PowerSavingModeValues;
+const defaultT3324 = parsePowerSavingMode('00100001', TAU_TYPES.ACTIVE_TIMER);
+const defaultT3412Extended = parsePowerSavingMode(
+    '00000110',
+    TAU_TYPES.SLEEP_INTERVAL
+);
 
 const resetToDefault = {
     state: 'off',
@@ -36,7 +31,7 @@ const resetToDefault = {
 
 let setRequested: PowerSavingModeEntries;
 
-export const processor: Processor = {
+export const processor: Processor<'+CPSMS'> = {
     command: '+CPSMS',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cpsms.html',
@@ -58,11 +53,17 @@ export const processor: Processor = {
                 setRequested = resetToDefault;
             }
         }
+        if (packet.requestType === RequestType.SET) {
+            setRequested = resetToDefault;
+        }
         return state;
     },
     onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {
-            if (requestType === RequestType.SET_WITH_VALUE) {
+            if (
+                requestType === RequestType.SET_WITH_VALUE ||
+                requestType === RequestType.SET
+            ) {
                 return {
                     ...state,
                     powerSavingMode: {
@@ -105,20 +106,21 @@ const parsePowerSavingModePayload = (payload: string) => {
         ..._rest
     ] = getParametersFromResponse(payload);
 
-    let result = {
+    const result = {
         state: mode === '1' ? 'on' : 'off',
     } as PowerSavingModeEntries;
 
-    if (isValidBitmask(T3412ExtendedBitmask)) {
-        result = {
-            ...result,
-            T3412Extended: { bitmask: T3412ExtendedBitmask },
-        };
-    }
-
-    if (isValidBitmask(T3324Bitmask)) {
-        result = { ...result, T3324: { bitmask: T3324Bitmask } };
-    }
+    result.T3324 =
+        T3324Bitmask !== undefined
+            ? parsePowerSavingMode(T3324Bitmask, TAU_TYPES.ACTIVE_TIMER)
+            : defaultT3324;
+    result.T3412Extended =
+        T3412ExtendedBitmask !== undefined
+            ? parsePowerSavingMode(
+                  T3412ExtendedBitmask,
+                  TAU_TYPES.SLEEP_INTERVAL
+              )
+            : defaultT3412Extended;
 
     return result;
 };

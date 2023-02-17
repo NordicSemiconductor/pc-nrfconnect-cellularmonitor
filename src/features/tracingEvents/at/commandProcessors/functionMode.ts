@@ -26,7 +26,7 @@ export type FunctionalMode = typeof functionalMode[keyof typeof functionalMode];
 
 let requestedMode: FunctionalMode;
 
-export const processor: Processor = {
+export const processor: Processor<'+CFUN'> = {
     command: '+CFUN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cfun.html',

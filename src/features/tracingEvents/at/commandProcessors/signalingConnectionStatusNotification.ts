@@ -14,7 +14,7 @@ import { getParametersFromResponse } from '../utils';
 
 let setPayload: SignalingConnectionStatusNotifications;
 
-export const processor: Processor = {
+export const processor: Processor<'+CSCON'> = {
     command: '+CSCON',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/packet_domain/cscon.html',

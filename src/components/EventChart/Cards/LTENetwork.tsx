@@ -7,11 +7,10 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { DocumentationKeys } from '../../../features/tracingEvents/at';
-import { networkStatus } from '../../../features/tracingEvents/at/commandProcessors/networkRegistrationStatusNotification';
+import { ATCommands } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import type { RRCState } from '../../../features/tracingEvents/types';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 type RRCStateFlag = '🟡' | '🟢' | '🔴';
 
@@ -31,7 +30,7 @@ const getRRCStateColor = (
 export default () => {
     const {
         signalQuality,
-        networkRegistrationStatus,
+        networkStatus,
         activityStatus,
         rrcState,
         mcc,
@@ -41,12 +40,11 @@ export default () => {
         networkType,
     } = useSelector(getDashboardState);
 
-    const fields = useMemo(() => {
+    const fields: DashboardCardFields = useMemo(() => {
         let status = 'Unknown';
-        const statusCode = networkRegistrationStatus?.status;
-        if (statusCode !== undefined) {
+        if (networkStatus !== undefined) {
             const [label, value] = Object.entries(networkStatus).filter(
-                ([statusKey]) => statusKey === `${statusCode}`
+                ([statusKey]) => statusKey === `${networkStatus}`
             )[0];
             if (label) {
                 status = `${label}: ${value.short}`;
@@ -56,7 +54,7 @@ export default () => {
         return {
             'RRC STATE': {
                 value: getRRCStateColor(rrcState),
-                commands: ['AT%CONEVAL', 'AT+CSCON'] as DocumentationKeys[],
+                commands: ['AT%CONEVAL', 'AT+CSCON'] as ATCommands[],
             },
             MNC: { value: mnc ?? 'Unknown', commands: [] },
             'MNC Code': { value: mncCode ?? 'Unknown', commands: [] },
@@ -64,15 +62,15 @@ export default () => {
             'MCC Code': { value: mccCode ?? 'Unknown', commands: [] },
             RSRP: {
                 value: signalQuality?.rsrp_decibel ?? 'Unknown',
-                commands: ['AT%CESQ'] as DocumentationKeys[],
+                commands: ['AT%CESQ'] as ATCommands[],
             },
             RSRQ: {
                 value: signalQuality?.rsrq_decibel ?? 'Unknown',
-                commands: ['AT%CESQ'] as DocumentationKeys[],
+                commands: ['AT%CESQ'] as ATCommands[],
             },
             'ACTIVITY STATUS': {
                 value: activityStatus ?? 'Unknown',
-                commands: ['AT+CPAS'] as DocumentationKeys[],
+                commands: ['AT+CPAS'] as ATCommands[],
             },
             'CELL ID': { value: 'Not Implemented', commands: [] },
             PCI: { value: 'Not Implemented', commands: [] },
@@ -93,7 +91,7 @@ export default () => {
             STATUS: { value: status, commands: [] },
         };
     }, [
-        networkRegistrationStatus,
+        networkStatus,
         signalQuality,
         activityStatus,
         rrcState,

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import { AccessPointName } from '../../../features/tracingEvents/types';
-import DashboardCard from './DashboardCard';
+import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 const PacketDomainNetwork = ({
     apn,
@@ -19,7 +19,7 @@ const PacketDomainNetwork = ({
     ipv6,
     info,
 }: AccessPointName) => {
-    const fields = {
+    const fields: DashboardCardFields = {
         'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
         'PDN Type': { value: pdnType ?? 'Unknown', commands: [] },
         'PDN Type Raw': { value: rawPDNType ?? 'Unknown', commands: [] },

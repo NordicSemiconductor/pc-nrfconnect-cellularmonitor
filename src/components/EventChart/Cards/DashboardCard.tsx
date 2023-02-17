@@ -10,14 +10,15 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { Card } from 'pc-nrfconnect-shared';
 
 import {
-    DocumentationKeys,
+    ATCommands,
     documentationMap,
 } from '../../../features/tracingEvents/at';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
     value: string | number;
-    commands?: DocumentationKeys[];
+    description?: string[];
+    commands: readonly ATCommands[];
 };
 
 type DashboardCard = {
@@ -61,7 +62,7 @@ export default ({
 type CardEntry = {
     fieldKey: string;
     value: string | number;
-    commands?: DocumentationKeys[];
+    commands: readonly ATCommands[];
 };
 
 const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
@@ -92,7 +93,7 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
 
 type CardTooltip = {
     fieldKey: string;
-    commands?: DocumentationKeys[];
+    commands: readonly ATCommands[];
     showTooltip: (show: boolean) => void;
 };
 

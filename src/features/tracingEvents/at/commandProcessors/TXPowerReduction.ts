@@ -27,7 +27,7 @@ type ViewModel = {
 
 let requestedReduction: ViewModel | undefined;
 
-export const processor: Processor = {
+export const processor: Processor<'%XEMPR'> = {
     command: '%XEMPR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xempr.html',
