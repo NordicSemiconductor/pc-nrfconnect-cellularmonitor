@@ -11,7 +11,6 @@ import { shell } from 'electron';
 import { basename, dirname } from 'path';
 import {
     Button,
-    Card,
     deviceInfo,
     Dialog,
     DialogButton,
@@ -37,10 +36,6 @@ export default () => {
         setSelectedSample(undefined);
     }, []);
 
-    const title = `Program ${
-        selectedSample ? selectedSample?.title : 'device'
-    }`;
-
     return (
         <>
             {compatible && (
@@ -53,7 +48,11 @@ export default () => {
             )}
             <Dialog isVisible={modalVisible} closeOnUnfocus onHide={close}>
                 {selectedSample ? (
-                    <ProgramSample sample={selectedSample} close={close} />
+                    <ProgramSample
+                        sample={selectedSample}
+                        selectSample={setSelectedSample}
+                        close={close}
+                    />
                 ) : (
                     <SelectSample
                         selectSample={setSelectedSample}
@@ -73,6 +72,7 @@ const SelectSample = ({
     close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
+
     const deviceName = device
         ? device.nickname || deviceInfo(device).name
         : 'No device selected';
@@ -81,7 +81,7 @@ const SelectSample = ({
 
     return (
         <>
-            <Dialog.Header title="" />
+            <Dialog.Header title="Flash sample app" />
             <Dialog.Body>
                 <p>
                     Make a selection to program the {deviceName} with a
@@ -89,8 +89,14 @@ const SelectSample = ({
                 </p>
                 <div className="installable-app-grid">
                     {selectedSamples.map(sample => (
-                        <Card key={sample.title} title={sample.title}>
-                            {sample.description}
+                        <div
+                            key={sample.title}
+                            className="card-in-card p-3 d-flex flex-column"
+                        >
+                            <strong className="d-block">{sample.title}</strong>
+                            <p className="flex-grow-1 py-2">
+                                {sample.description}
+                            </p>
                             <Button
                                 className="w-100"
                                 onClick={() => {
@@ -99,7 +105,7 @@ const SelectSample = ({
                             >
                                 Select
                             </Button>
-                        </Card>
+                        </div>
                     ))}
                 </div>
             </Dialog.Body>
@@ -113,9 +119,11 @@ const SelectSample = ({
 
 const ProgramSample = ({
     sample,
+    selectSample,
     close,
 }: {
     sample: Sample;
+    selectSample: (sample?: Sample) => void;
     close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
@@ -146,7 +154,7 @@ const ProgramSample = ({
 
     return (
         <>
-            <Dialog.Header title="" />
+            <Dialog.Header title={`Program ${sample.title}`} />
             <Dialog.Body>
                 <p>This will program the following:</p>
                 {isMcuBoot && (
@@ -176,32 +184,25 @@ const ProgramSample = ({
                     className="text-muted mb-4"
                     style={{ wordBreak: 'break-all' }}
                 >
-                    Application download documentation: <br />
+                    Documentation: <br />
                     <a
-                        href="https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk"
+                        href={sample.documentation}
                         target="_blank"
                         rel="noreferrer"
                     >
-                        https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk
-                    </a>
-                </p>
-
-                <p
-                    className="text-muted mb-4"
-                    style={{ wordBreak: 'break-all' }}
-                >
-                    Application example documentation: <br />
-                    <a
-                        href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html"
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html
+                        {sample.documentation}
                     </a>
                 </p>
             </Dialog.Body>
             <Dialog.Footer>
                 {isProgramming && <Spinner />}
+
+                <DialogButton
+                    onClick={() => selectSample(undefined)}
+                    disabled={isProgramming}
+                >
+                    Back
+                </DialogButton>
 
                 <DialogButton onClick={close} disabled={isProgramming}>
                     Close

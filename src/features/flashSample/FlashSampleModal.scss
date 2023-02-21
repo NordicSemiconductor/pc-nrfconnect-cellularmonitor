@@ -12,14 +12,13 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 
-    .card {
+    * {
+        color: $gray-700;
+    }
+
+    .card-in-card {
         background-color: $gray-50;
-        
-        .card-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        border: 1px solid $gray-500;
     }
 
  }
