@@ -52,17 +52,14 @@ export default () => {
                 </Button>
             )}
             <Dialog isVisible={modalVisible} closeOnUnfocus onHide={close}>
-                <Dialog.Header title={title} />
-                <Dialog.Body>
-                    {selectedSample ? (
-                        <ProgramSample sample={selectedSample} close={close} />
-                    ) : (
-                        <SelectSample
-                            selectSample={setSelectedSample}
-                            close={close}
-                        />
-                    )}
-                </Dialog.Body>
+                {selectedSample ? (
+                    <ProgramSample sample={selectedSample} close={close} />
+                ) : (
+                    <SelectSample
+                        selectSample={setSelectedSample}
+                        close={close}
+                    />
+                )}
             </Dialog>
         </>
     );
@@ -84,25 +81,29 @@ const SelectSample = ({
 
     return (
         <>
-            <p>
-                Make a selection to program the {deviceName} with a pre-compiled
-                application and modem firmware.
-            </p>
-            <div className="installable-app-grid">
-                {selectedSamples.map(sample => (
-                    <Card key={sample.title} title={sample.title}>
-                        {sample.description}
-                        <Button
-                            className="w-100"
-                            onClick={() => {
-                                selectSample(sample);
-                            }}
-                        >
-                            Select
-                        </Button>
-                    </Card>
-                ))}
-            </div>
+            <Dialog.Header title="" />
+            <Dialog.Body>
+                <p>
+                    Make a selection to program the {deviceName} with a
+                    pre-compiled application and modem firmware.
+                </p>
+                <div className="installable-app-grid">
+                    {selectedSamples.map(sample => (
+                        <Card key={sample.title} title={sample.title}>
+                            {sample.description}
+                            <Button
+                                className="w-100"
+                                onClick={() => {
+                                    selectSample(sample);
+                                }}
+                            >
+                                Select
+                            </Button>
+                        </Card>
+                    ))}
+                </div>
+            </Dialog.Body>
+
             <Dialog.Footer>
                 <DialogButton onClick={close}>Close</DialogButton>
             </Dialog.Footer>
@@ -145,66 +146,68 @@ const ProgramSample = ({
 
     return (
         <>
-            <p>This will program the following:</p>
-            {isMcuBoot && (
-                <p>
-                    Remember to put the device in MCUBoot mode. Press down the
-                    center black button on the device while powering on.
-                </p>
-            )}
-            {sample.fw.map(fw => (
-                <div key={fw.file} className="mb-4">
-                    <strong>{fw.type}</strong>
-                    <button
-                        type="button"
-                        className="btn btn-link"
-                        onClick={() => shell.openPath(dirname(fw.file))}
+            <Dialog.Header title="" />
+            <Dialog.Body>
+                <p>This will program the following:</p>
+                {isMcuBoot && (
+                    <p>
+                        Remember to put the device in MCUBoot mode. Press down
+                        the center black button on the device while powering on.
+                    </p>
+                )}
+                {sample.fw.map(fw => (
+                    <div key={fw.file} className="mb-4">
+                        <strong>{fw.type}</strong>
+                        <button
+                            type="button"
+                            className="btn btn-link"
+                            onClick={() => shell.openPath(dirname(fw.file))}
+                        >
+                            {basename(fw.file)}
+                        </button>
+                        <ProgressBar
+                            now={progress.get(fw)}
+                            style={{ height: '4px' }}
+                        />
+                    </div>
+                ))}
+
+                <p
+                    className="text-muted mb-4"
+                    style={{ wordBreak: 'break-all' }}
+                >
+                    Application download documentation: <br />
+                    <a
+                        href="https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk"
+                        target="_blank"
+                        rel="noreferrer"
                     >
-                        {basename(fw.file)}
-                    </button>
-                    <ProgressBar
-                        now={progress.get(fw)}
-                        style={{ height: '4px' }}
-                    />
-                </div>
-            ))}
+                        https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk
+                    </a>
+                </p>
 
-            <p className="text-muted mb-4" style={{ wordBreak: 'break-all' }}>
-                Application download documentation: <br />
-                <a
-                    href="https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk"
-                    target="_blank"
-                    rel="noreferrer"
+                <p
+                    className="text-muted mb-4"
+                    style={{ wordBreak: 'break-all' }}
                 >
-                    https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk
-                </a>
-            </p>
-
-            <p className="text-muted mb-4" style={{ wordBreak: 'break-all' }}>
-                Application example documentation: <br />
-                <a
-                    href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html
-                </a>
-            </p>
-
-            <div className="d-flex justify-content-end">
+                    Application example documentation: <br />
+                    <a
+                        href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html
+                    </a>
+                </p>
+            </Dialog.Body>
+            <Dialog.Footer>
                 {isProgramming && <Spinner />}
 
-                <Button
-                    onClick={close}
-                    large
-                    disabled={isProgramming}
-                    className="mr-3"
-                >
+                <DialogButton onClick={close} disabled={isProgramming}>
                     Close
-                </Button>
-                <Button
-                    className="btn btn-primary"
-                    large
+                </DialogButton>
+                <DialogButton
+                    variant="primary"
                     disabled={isProgramming}
                     onClick={async () => {
                         setIsProgramming(true);
@@ -213,8 +216,8 @@ const ProgramSample = ({
                     }}
                 >
                     Program
-                </Button>
-            </div>
+                </DialogButton>
+            </Dialog.Footer>
         </>
     );
 };
