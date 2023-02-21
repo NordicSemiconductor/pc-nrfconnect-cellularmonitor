@@ -7,9 +7,16 @@
 
 import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
-import { Device, getDeviceLibContext } from 'pc-nrfconnect-shared';
+import { Device, getDeviceLibContext, logger } from 'pc-nrfconnect-shared';
 
-import { Sample } from './samples';
+import { Firmware, Sample } from './samples';
+
+export type SampleProgress = {
+    fw: Firmware;
+    progressJson: Parameters<
+        Parameters<typeof firmwareProgram>['6']
+    >['0']['progressJson'];
+};
 
 export const isThingy91 = (device?: Device) =>
     device?.serialport?.productId === '9100';
@@ -20,30 +27,32 @@ export const is91DK = (device?: Device) =>
 export const flash = async (
     device: Device,
     sample: Sample,
-    progress: (progress?: string) => void
+    progress: (progress: SampleProgress) => void
 ) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const fw of sample.fw) {
-        switch (fw.type) {
-            case 'Modem':
-                await programModem(device, fw.file, progress);
+    try {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const fw of sample.fw) {
+            switch (fw.type) {
+                case 'Modem':
+                    await programModem(device, fw, progress);
 
-                break;
-            case 'Application':
-                await programFirmware(device, fw.file, progress);
-                break;
-            default:
-                throw new Error(`Unable to program fw type: ${fw.type}`);
+                    break;
+                case 'Application':
+                    await programFirmware(device, fw, progress);
+                    break;
+                default:
+                    throw new Error(`Unable to program fw type: ${fw.type}`);
+            }
         }
+    } catch (error) {
+        logger.error(error);
     }
-
-    progress('Programming complete');
 };
 
 const programModem = (
     device: Device,
-    file: string,
-    progress: (progress?: string) => void
+    fw: Firmware,
+    progress: (progress: SampleProgress) => void
 ) =>
     new Promise<void>((resolve, reject) => {
         firmwareProgram(
@@ -51,47 +60,46 @@ const programModem = (
             device.id,
             'NRFDL_FW_FILE',
             'NRFDL_FW_NRF91_MODEM',
-            file,
-            complete => {
-                if (complete) {
-                    progress(`Programming ${file} failed`);
-                    reject(complete);
+            fw.file,
+            error => {
+                if (error) {
+                    reject(error);
                 } else {
-                    progress(`Programming ${file} succeeded`);
                     resolve();
                 }
             },
             ({ progressJson }) => {
-                progress(progressJson.message);
-            }
+                progress({ fw, progressJson });
+            },
+            {
+                verify: false,
+                mcuEndState: 'NRFDL_MCU_STATE_PROGRAMMING',
+            },
+            'NRFDL_DEVICE_CORE_MODEM'
         );
     });
 
 const programFirmware = (
     device: Device,
-    file: string,
-    progress: (progress?: string) => void
+    fw: Firmware,
+    progress: (progress: SampleProgress) => void
 ) =>
     new Promise<void>((resolve, reject) => {
-        const buffer = readFileSync(file);
-
         firmwareProgram(
             getDeviceLibContext(),
             device.id,
             'NRFDL_FW_BUFFER',
             'NRFDL_FW_INTEL_HEX',
-            buffer,
-            complete => {
-                if (complete) {
-                    progress(`Programming ${file} failed`);
-                    reject(complete);
+            readFileSync(fw.file),
+            error => {
+                if (error) {
+                    reject(error);
                 } else {
-                    progress(`Programming ${file} succeeded`);
                     resolve();
                 }
             },
             ({ progressJson }) => {
-                progress(progressJson.message);
+                progress({ fw, progressJson });
             },
             null,
             'NRFDL_DEVICE_CORE_APPLICATION'

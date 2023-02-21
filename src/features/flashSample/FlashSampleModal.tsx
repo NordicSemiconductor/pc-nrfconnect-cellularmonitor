@@ -4,58 +4,76 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useSelector } from 'react-redux';
+import { shell } from 'electron';
+import { basename, dirname } from 'path';
 import {
     Button,
     Card,
     deviceInfo,
-    InfoDialog,
+    Dialog,
+    DialogButton,
     logger,
     selectedDevice,
+    Spinner,
 } from 'pc-nrfconnect-shared';
 
-import { flash, is91DK } from './flashSample';
+import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
 import { Sample, samples } from './samples';
 
 import './FlashSampleModal.scss';
 
-// import { flash, is91DK, isThingy91 } from './flashSample';
-
-type Props = { visible: boolean; close: () => void };
-
-export default ({ visible, close }: Props) => {
+export default () => {
     const [selectedSample, setSelectedSample] = useState<Sample>();
 
-    // const [status, setStatus] = useState<(string | undefined)[]>([]);
-    // const onProgress = useCallback(
-    //     (progress?: string) => setStatus(state => [...state, progress]),
-    //     []
-    // );
+    const [modalVisible, setModalVisible] = useState(false);
+    const device = useSelector(selectedDevice);
+    const compatible = device && (isThingy91(device) || is91DK(device));
 
-    // const validDevice = device && (isThingy91(device) || is91DK(device));
-
-    if (!visible) return null;
+    const close = useCallback(() => {
+        setModalVisible(false);
+        setSelectedSample(undefined);
+    }, []);
 
     const title = `Program ${
         selectedSample ? selectedSample?.title : 'device'
     }`;
 
     return (
-        <InfoDialog onClose={close} isVisible={visible} title={title}>
-            {selectedSample ? (
-                <ProgramSample sample={selectedSample} />
-            ) : (
-                <SelectSample selectSample={setSelectedSample} />
+        <>
+            {compatible && (
+                <Button
+                    className="w-100"
+                    onClick={() => setModalVisible(!modalVisible)}
+                >
+                    Program device
+                </Button>
             )}
-        </InfoDialog>
+            <Dialog isVisible={modalVisible} closeOnUnfocus onHide={close}>
+                <Dialog.Header title={title} />
+                <Dialog.Body>
+                    {selectedSample ? (
+                        <ProgramSample sample={selectedSample} close={close} />
+                    ) : (
+                        <SelectSample
+                            selectSample={setSelectedSample}
+                            close={close}
+                        />
+                    )}
+                </Dialog.Body>
+            </Dialog>
+        </>
     );
 };
 
 const SelectSample = ({
     selectSample,
+    close,
 }: {
     selectSample: (sample: Sample) => void;
+    close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
     const deviceName = device
@@ -85,25 +103,73 @@ const SelectSample = ({
                     </Card>
                 ))}
             </div>
+            <Dialog.Footer>
+                <DialogButton onClick={close}>Close</DialogButton>
+            </Dialog.Footer>
         </>
     );
 };
 
-const ProgramSample = ({ sample }: { sample: Sample }) => {
+const ProgramSample = ({
+    sample,
+    close,
+}: {
+    sample: Sample;
+    close: () => void;
+}) => {
     const device = useSelector(selectedDevice);
+
+    const [progress, setProgress] = useState(
+        new Map(sample.fw.map(fw => [fw, 0]))
+    );
+
+    const [isProgramming, setIsProgramming] = useState(false);
+
+    const progressCb = useCallback(
+        ({ progressJson: json, fw }: SampleProgress) => {
+            logger.info(
+                `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
+            );
+            const amountOfProgress =
+                ((json.step - 1) / json.amountOfSteps) * 100 +
+                (1 / json.amountOfSteps) * json.progressPercentage;
+
+            progress.set(fw, amountOfProgress);
+            setProgress(new Map(progress.entries()));
+        },
+        [progress]
+    );
+
     if (!device) return null;
+    const isMcuBoot = isThingy91(device);
 
     return (
         <>
             <p>This will program the following:</p>
-            {sample.fw.map(f => (
-                <div key={f.file}>
-                    <strong>{f.type}</strong>
-                    <br />
-                    {f.file}
+            {isMcuBoot && (
+                <p>
+                    Remember to put the device in MCUBoot mode. Press down the
+                    center black button on the device while powering on.
+                </p>
+            )}
+            {sample.fw.map(fw => (
+                <div key={fw.file} className="mb-4">
+                    <strong>{fw.type}</strong>
+                    <button
+                        type="button"
+                        className="btn btn-link"
+                        onClick={() => shell.openPath(dirname(fw.file))}
+                    >
+                        {basename(fw.file)}
+                    </button>
+                    <ProgressBar
+                        now={progress.get(fw)}
+                        style={{ height: '4px' }}
+                    />
                 </div>
             ))}
-            <p className="text-muted mt-5" style={{ wordBreak: 'break-all' }}>
+
+            <p className="text-muted mb-4" style={{ wordBreak: 'break-all' }}>
                 Application download documentation: <br />
                 <a
                     href="https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk"
@@ -113,7 +179,8 @@ const ProgramSample = ({ sample }: { sample: Sample }) => {
                     https://www.nordicsemi.com/Products/Development-hardware/nrf9160-dk
                 </a>
             </p>
-            <p className="text-muted" style={{ wordBreak: 'break-all' }}>
+
+            <p className="text-muted mb-4" style={{ wordBreak: 'break-all' }}>
                 Application example documentation: <br />
                 <a
                     href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html"
@@ -124,11 +191,26 @@ const ProgramSample = ({ sample }: { sample: Sample }) => {
                 </a>
             </p>
 
-            <div className="mt-5">
+            <div className="d-flex justify-content-end">
+                {isProgramming && <Spinner />}
+
                 <Button
-                    onClick={() =>
-                        flash(device, sample, progress => logger.info(progress))
-                    }
+                    onClick={close}
+                    large
+                    disabled={isProgramming}
+                    className="mr-3"
+                >
+                    Close
+                </Button>
+                <Button
+                    className="btn btn-primary"
+                    large
+                    disabled={isProgramming}
+                    onClick={async () => {
+                        setIsProgramming(true);
+                        await flash(device, sample, progressCb);
+                        setIsProgramming(false);
+                    }}
                 >
                     Program
                 </Button>
@@ -136,50 +218,3 @@ const ProgramSample = ({ sample }: { sample: Sample }) => {
         </>
     );
 };
-
-// <Modal show onHide={close} size="lg">
-//     <Modal.Header closeButton>
-//         <Modal.Title>{deviceName}</Modal.Title>
-//     </Modal.Header>
-//     <Modal.Body>
-//         <p>
-//             Try nRF9160: Asset Tracker v2 (
-//             <a
-//                 target="_blank"
-//                 href="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html"
-//                 rel="noreferrer"
-//             >
-//                 link
-//             </a>
-//             ) sample app too capture some live trace data.
-//         </p>
-//         <p>
-//             Clicking the &ldquo;Flash device&rdquo; button will flash
-//             your device with first the required modem (1.3.2) and the
-//             hex file for the Asset tracker.
-//         </p>
-//         <ul>
-//             {status.map(item => (
-//                 // eslint-disable-next-line react/jsx-key
-//                 <li>{item}</li>
-//             ))}
-//         </ul>
-
-//         {!!device && !validDevice && (
-//             <p>
-//                 Selected device does not have any available firmware
-//                 sample.
-//             </p>
-//         )}
-//     </Modal.Body>
-//     <Modal.Footer>
-//         {!device && <em>Select a device to flash</em>}
-
-//         {!!device && validDevice && (
-//             <Button className='w-100' onClick={() => flash(device, onProgress)}>
-//                 Flash device {deviceName}
-//             </Button>
-//         )}
-//         <Button onClick={close}>Close</Button>
-//     </Modal.Footer>
-// </Modal>

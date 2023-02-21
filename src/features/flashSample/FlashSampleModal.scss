@@ -11,10 +11,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    user-select: auto;
 
     .card {
-        background-color: $gray-100;
+        background-color: $gray-50;
         
         .card-body {
             display: flex;

@@ -1,10 +1,15 @@
 import { join } from 'path';
 import { getAppDir } from 'pc-nrfconnect-shared';
 
+export interface Firmware {
+    file: string;
+    type: 'Application' | 'Modem';
+}
+
 export interface Sample {
     title: string;
     description: string;
-    fw: { file: string; type: 'Application' | 'Modem' }[];
+    fw: Firmware[];
 }
 
 export const samples: { [key: string]: Sample[] } = {
@@ -29,7 +34,7 @@ export const samples: { [key: string]: Sample[] } = {
                         getAppDir(),
                         'resources',
                         'firmware',
-                        'nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex'
+                        'thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex'
                     ),
                 },
             ],
@@ -57,7 +62,7 @@ export const samples: { [key: string]: Sample[] } = {
                         getAppDir(),
                         'resources',
                         'firmware',
-                        'thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex'
+                        'nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex'
                     ),
                 },
             ],

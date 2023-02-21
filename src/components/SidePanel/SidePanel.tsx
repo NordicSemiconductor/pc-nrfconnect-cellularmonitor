@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Button, selectedDevice, SidePanel } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { SidePanel } from 'pc-nrfconnect-shared';
 
-import { is91DK, isThingy91 } from '../../features/flashSample/flashSample';
 import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
 import AdvancedOptions from './AdvancedOptions';
 import EventGraphOptions from './EventGraphOptions';
@@ -27,29 +25,15 @@ export const PowerEstimationSidePanel = () => (
     </SidePanel>
 );
 
-export const TraceCollectorSidePanel = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const device = useSelector(selectedDevice);
-    const compatible = device && (isThingy91(device) || is91DK(device));
+export const TraceCollectorSidePanel = () => (
+    <SidePanel className="side-panel">
+        <Instructions />
+        <TraceCollector />
+        <TraceFileInformation />
+        <AdvancedOptions />
+        <LoadTraceFile />
+        <EventGraphOptions />
 
-    const close = useCallback(() => setModalVisible(false), []);
-    return (
-        <SidePanel className="side-panel">
-            <Instructions />
-            <TraceCollector />
-            <TraceFileInformation />
-            <AdvancedOptions />
-            <LoadTraceFile />
-            <EventGraphOptions />
-            {compatible && (
-                <Button
-                    className="w-100"
-                    onClick={() => setModalVisible(!modalVisible)}
-                >
-                    Program device
-                </Button>
-            )}
-            <FlashSampleModal visible={modalVisible} close={close} />
-        </SidePanel>
-    );
-};
+        <FlashSampleModal />
+    </SidePanel>
+);
