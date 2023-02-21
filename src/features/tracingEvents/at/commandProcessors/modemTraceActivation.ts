@@ -13,7 +13,7 @@ let setPayload: {
     xModemTraceSetID: number | undefined;
 };
 
-export const processor: Processor = {
+export const processor: Processor<'%XMODEMTRACE'> = {
     command: '%XMODEMTRACE',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xmodemtrace.html',

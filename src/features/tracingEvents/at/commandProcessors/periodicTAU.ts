@@ -5,10 +5,10 @@
  */
 
 import type { Processor } from '..';
-import { getNumberArray } from '../utils';
+import { getNumber, getNumberArray } from '../utils';
 
 let parameters: number[];
-export const processor: Processor = {
+export const processor: Processor<'%XT3412'> = {
     command: '%XT3412',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
@@ -35,7 +35,16 @@ export const processor: Processor = {
 
     onNotification: (packet, state) => {
         if (packet.payload) {
-            return { ...state, periodicTAU: parseInt(packet.payload, 10) };
+            const T3412ExtendedNotification = getNumber(packet.payload);
+            return {
+                ...state,
+                powerSavingMode: {
+                    granted: {
+                        ...state.powerSavingMode?.granted,
+                        T3412ExtendedNotification,
+                    },
+                },
+            };
         }
         return state;
     },

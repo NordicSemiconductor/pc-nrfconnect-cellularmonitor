@@ -17,7 +17,7 @@ const activityStatus = {
 
 export type ActivityStatus = keyof typeof activityStatus;
 
-export const processor: Processor = {
+export const processor: Processor<'+CPAS'> = {
     command: '+CPAS',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/cpas.html',

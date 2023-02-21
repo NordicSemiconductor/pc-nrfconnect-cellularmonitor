@@ -10,7 +10,7 @@ import { getNumber, getNumberArray } from '../utils';
 
 let setValue: boolean;
 
-export const processor: Processor = {
+export const processor: Processor<'%XCONNSTAT'> = {
     command: '%XCONNSTAT',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xconnstat.html',

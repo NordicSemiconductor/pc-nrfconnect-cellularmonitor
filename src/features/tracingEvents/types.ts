@@ -27,24 +27,17 @@ export type PacketFormat =
 export interface State {
     notifySignalQuality: boolean;
     notifyPeriodicTAU: boolean;
-    xmonitor?: {
-        regStatus?: number;
-        operatorFullName?: string;
-        operatorShortName?: string;
-        plmn?: string;
-        tac?: string;
-        AcT?: number;
-        band?: number;
-        cell_id?: string;
-        phys_cell_id?: number;
-        EARFCN?: number;
-        rsrp?: number;
-        snr?: number;
-        NW_provided_eDRX_value?: string;
-        activeTime?: string;
-        periodicTAU?: string;
-        periodicTAUext?: string;
-    };
+    regStatus?: number;
+    operatorFullName?: string;
+    operatorShortName?: string;
+    tac?: string;
+    cell_id?: string;
+    phys_cell_id?: number;
+    rsrp?: number;
+    snr?: number;
+    activeTime?: string;
+    periodicTAU?: string;
+    periodicTAUext?: string;
     pinCodeStatus: string;
     functionalMode: number;
     IMEI: string;
@@ -61,19 +54,16 @@ export interface State {
     imsi?: string;
     iccid?: string;
     currentBand?: number;
-    periodicTAU: number;
     hardwareVersion?: string;
     modemUUID?: string;
     dataProfile?: PowerLevel;
     nbiotTXReduction?: TXReductionMode;
     ltemTXReduction?: TXReductionMode;
     activityStatus: ActivityStatus;
-    networkRegistrationStatus: {
-        status?: number;
-        tac?: string;
-        ci?: string;
-        AcT?: number;
-    };
+    networkStatus?: number;
+    ci?: string;
+    ceregCauseType: number;
+    ceregRejectCause: number;
 
     // TODO: Revise above state attributes.
     // New state attributes under:
@@ -163,9 +153,9 @@ export interface State {
     };
 }
 
-export type AcTState = 0 | 4 | 5;
+export type AcTState = 0 | 4 | 5 | 7 | 9;
 export const isValidAcTState = (state: number): state is AcTState => {
-    if ([0, 4, 5].includes(state)) {
+    if ([0, 4, 5, 7, 9].includes(state)) {
         return true;
     }
     return false;
@@ -244,18 +234,24 @@ export type PowerSavingModeEntries = {
     state?: 'on' | 'off';
     // Also known as 'Active Time'
     T3324?: PowerSavingModeValues;
-    T3324Extended?: PowerSavingModeValues;
-    T3402?: PowerSavingModeValues;
-    T3402Extended?: PowerSavingModeValues;
+    // Also known as Periodic TAU (Legacy)
     T3412?: PowerSavingModeValues;
     // Also known as 'Periodic TAU'
     T3412Extended?: PowerSavingModeValues;
+    // Notification from %XT3412
+    // indicates how much is left of Periodic TAU
+    T3412ExtendedNotification?: number;
 };
 
 export type TimerKey = `${string}${Timers}${string}`;
 
+export const PowerSavingModeDeactivatedTimer: PowerSavingModeValues = {
+    activated: false,
+    bitmask: '11100000',
+};
 export type PowerSavingModeValues = {
     bitmask: Bitmask;
+    activated?: boolean;
     unit?: TimeUnits;
     value?: number;
 };
@@ -275,3 +271,4 @@ type TimeUnits = 'seconds' | 'minutes' | 'decihours' | 'hours' | 'days';
 type T_Keys = 'T3324' | 'T3402' | 'T3412';
 type Extended = '' | 'Extended';
 export type Timers = `${T_Keys}${Extended}`;
+// export type PowerSavingModeTimer = 'T3324' | 'T3412' | 'T3412Extended';

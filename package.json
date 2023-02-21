@@ -2,7 +2,7 @@
     "name": "pc-nrfconnect-cellularmonitor",
     "version": "0.4.0",
     "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
-    "displayName": "Trace Collector V2 preview",
+    "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicPlayground/pc-nrfconnect-cellularmonitor",
     "repository": {
         "type": "git",
@@ -32,7 +32,8 @@
         "check:lint": "eslint --color .",
         "check:types": "check-for-typescript tsc --noEmit --pretty",
         "check:license": "nrfconnect-license check",
-        "nordic-publish": "node ./dist/nordic-publish.js"
+        "nordic-publish": "node ./dist/nordic-publish.js",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@types/node": "15.14.1",
@@ -58,7 +59,7 @@
     "dependencies": {
         "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
     },
-    "bundleDependencies": [
+    "bundledDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ],
     "eslintConfig": {

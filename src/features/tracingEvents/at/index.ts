@@ -133,8 +133,8 @@ export default (packet: TraceEvent, state: State): State => {
     return state;
 };
 
-export interface Processor {
-    command: string;
+export type Processor<Command extends string> = {
+    command: Command;
     documentation: string;
     initialState: () => Partial<State>;
     onResponse: (
@@ -144,7 +144,7 @@ export interface Processor {
     ) => State;
     onRequest?: (packet: ParsedPacket, state: State) => State;
     onNotification?: (packet: ParsedPacket, state: State) => State;
-}
+};
 
 // Typescript challenge! Think it's related to the one above.
 export const initialState = (): State =>
@@ -152,3 +152,15 @@ export const initialState = (): State =>
         (state, processor) => ({ ...state, ...processor.initialState() }),
         {} as State
     );
+
+type ProcessorCommands = typeof processors[number]['command'];
+
+export type ATCommands = ProcessorCommands extends `${infer CMD}`
+    ? `AT${CMD}`
+    : never;
+
+export const documentationMap = processors.reduce(
+    (acc, { command, documentation }) =>
+        Object.assign(acc, { [`AT${command}`]: documentation }),
+    {} as Record<ATCommands, string>
+);

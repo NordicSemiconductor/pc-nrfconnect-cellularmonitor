@@ -75,6 +75,7 @@ export const mockedDataDir = '/mocked/data/dir';
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
     getAppDir: () => '/mocked/data/dir',
+    getAppFile: () => '/mocked/data/dir',
     getAppDataDir: () => '/mocked/data/dir',
     getPersistentStore: jest.fn().mockImplementation(() => ({
         get: (_: unknown, defaultVal: unknown) => defaultVal,

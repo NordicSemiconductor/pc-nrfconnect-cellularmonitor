@@ -8,7 +8,7 @@ import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { parseStringValue } from '../utils';
 
-export const processor: Processor = {
+export const processor: Processor<'+CGSN'> = {
     command: '+CGSN',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgsn.html',

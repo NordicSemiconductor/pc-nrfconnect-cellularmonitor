@@ -1,4 +1,4 @@
-## 0.4.0 - 2023-02-10
+## 0.4.0 - Unreleased
 
 ### Added
 
@@ -15,6 +15,28 @@
     -   AT%XCONNSTAT
     -   AT+CEDRXRDP
     -   AT%XTIME
+
+### Changed
+
+-   Improved Power Saving Mode parsing
+-   Clearly display the different Power Saving Mode Timers with consistent
+    naming
+    -   T3324: Active Timer
+    -   T3412 extended: Periodic TAU
+    -   T3412: Periodic TAU (Legacy)
+
+## 0.3.6 - 2022-11-11
+
+### Added
+
+-   Trace database for modem firmware v1.2.8 and 1.3.3.
+
+## 0.3.7 - 2023-02-13
+
+### Changed
+
+-   Updated to be compatible with nRF Connect for Desktop v4.0.0.
+-   Trace database for modem firmware v1.3.4.
 
 ## 0.3.6 - 2022-11-11
 

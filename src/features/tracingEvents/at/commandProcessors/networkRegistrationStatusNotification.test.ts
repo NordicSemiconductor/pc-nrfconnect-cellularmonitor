@@ -9,7 +9,7 @@ import { atPacket, convertPackets, OkPacket } from '../testUtils';
 /*
 
 READ CMD: AT+CEREG?
-+CEREG: <n>,<stat>[,[<tac>],[<ci>],[<AcT>][,<cause_type>],[<reject_cause>][,[<Active-Time>],[<Periodic-TAU>]]]]
++CEREG: <n>,<stat>[,[<tac>],[<ci>],[<cT>][,<cause_type>],[<reject_cause>][,[<Active-Time>],[<Periodic-TAU>]]]]
     - <n>                   ==> Always
     - <stat>                ==> When n >= 1
     - [<tac>]               ==> When n >= 2
@@ -68,43 +68,56 @@ const testResponses = [
     {
         response: atPacket(`+CEREG: 1,1,\r\nOK\r\n`),
         expected: {
-            status: 1,
+            networkStatus: 1,
         },
     },
     {
         response: atPacket(`+CEREG: 2,1,"002F","0012BEEF",7\r\nOK\r\n`),
         expected: {
-            status: 1,
+            networkStatus: 1,
             tac: '002F',
             ci: '0012BEEF',
-            AcT: 7,
+            AcTState: 7,
         },
     },
     {
         response: atPacket(
-            `+CEREG: 2,1,"002F","0012BEEF",7,,,"01100010","00100010"\r\nOK\r\n`
+            `+CEREG: 2,1,"002F","0012BEEF",7,,,"00000001","00100010"\r\nOK\r\n`
         ),
         expected: {
-            status: 1,
+            networkStatus: 1,
             tac: '002F',
             ci: '0012BEEF',
-            AcT: 7,
-            activeTime: '01100010',
-            periodicTAU: '00100010',
+            AcTState: 7,
+            powerSavingMode: {
+                granted: {
+                    state: 'on',
+                    T3412Extended: {
+                        bitmask: '00100010',
+                        value: 7200,
+                        unit: 'seconds',
+                    },
+                    T3324: {
+                        bitmask: '00000001',
+                        value: 2,
+                        unit: 'seconds',
+                    },
+                },
+            },
         },
     },
 
     // Network faults :: TODO: Need to verify if this is correct responses
     {
-        response: atPacket(`+CEREG: 3,3,"002F","0012BEEF",7,12,12\r\nOK\r\n`),
+        response: atPacket(`+CEREG: 3,3,"002F","0012BEEF",7,12,13\r\nOK\r\n`),
         expected: {
-            status: 3,
+            networkStatus: 3,
             tac: '002F',
             ci: '0012BEEF',
-            AcT: 7,
-            cause_type: 12,
-            reject_cause: 12,
-        },
+            AcTState: 7,
+            ceregCauseType: 12,
+            ceregRejectCause: 13,
+        } as Partial<State>,
     },
 ];
 
@@ -119,16 +132,28 @@ test('+CEREG set commands will appropriately set the notifications status in sta
 
 test('+CEREG read response sets appropriate attributes correctly', () => {
     testResponses.forEach(test => {
-        expect(
-            convertPackets([readCmd, test.response]).networkRegistrationStatus
-        ).toEqual(test.expected);
+        const state = convertPackets([readCmd, test.response]);
+        Object.entries(test.expected).forEach(([key, value]) => {
+            if (key === 'powerSavingMode') {
+                expect(state.powerSavingMode?.granted).toEqual(value.granted);
+            } else {
+                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                expect(state[key as any as keyof State]).toBe(value);
+            }
+        });
     });
 });
 
 test('+CEREG notification sets appropriate attributes correctly', () => {
     testResponses.forEach(test => {
-        expect(
-            convertPackets([readCmd, test.response]).networkRegistrationStatus
-        ).toEqual(test.expected);
+        const state = convertPackets([readCmd, test.response]);
+        Object.entries(test.expected).forEach(([key, value]) => {
+            if (key === 'powerSavingMode') {
+                expect(state.powerSavingMode?.granted).toEqual(value.granted);
+            } else {
+                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                expect(state[key as any as keyof State]).toBe(value);
+            }
+        });
     });
 });

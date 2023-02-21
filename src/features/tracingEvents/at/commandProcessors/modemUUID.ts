@@ -6,7 +6,7 @@
 
 import type { Processor } from '..';
 
-export const processor: Processor = {
+export const processor: Processor<'%XMODEMUUID'> = {
     command: '%XMODEMUUID',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/modemuuid.html',

@@ -70,12 +70,7 @@ const programModem = (
             },
             ({ progressJson }) => {
                 progress({ fw, progressJson });
-            },
-            {
-                verify: false,
-                mcuEndState: 'NRFDL_MCU_STATE_PROGRAMMING',
-            },
-            'NRFDL_DEVICE_CORE_MODEM'
+            }
         );
     });
 

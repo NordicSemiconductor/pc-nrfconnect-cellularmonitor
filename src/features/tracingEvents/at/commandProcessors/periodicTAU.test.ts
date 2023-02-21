@@ -52,11 +52,14 @@ test('Subscribe and unsubscribe of %3412 may turned on and off', () => {
 test('%3412 notification properly updates remaining T3412 time', () => {
     const state = convertPackets([subscribePacket, OkPacket]);
     expect(state.notifyPeriodicTAU).toBe(true);
-    expect(state.periodicTAU).toBe(undefined);
+    expect(state.powerSavingMode?.granted?.T3412ExtendedNotification).toBe(
+        undefined
+    );
 
     signalQualityNotifications.forEach(notification => {
-        expect(convertPackets([notification.packet], state).periodicTAU).toBe(
-            notification.result
-        );
+        expect(
+            convertPackets([notification.packet], state).powerSavingMode
+                ?.granted?.T3412ExtendedNotification
+        ).toBe(notification.result);
     });
 });
