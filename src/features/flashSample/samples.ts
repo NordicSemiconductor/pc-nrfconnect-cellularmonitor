@@ -1,5 +1,8 @@
+import { net } from '@electron/remote';
+import { existsSync } from 'fs';
+import { writeFile } from 'fs/promises';
 import { join } from 'path';
-import { getAppDir } from 'pc-nrfconnect-shared';
+import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 export interface Firmware {
     file: string;
@@ -32,7 +35,7 @@ export const initialSamples: Samples = {
             fw: [
                 {
                     type: 'Modem',
-                    file: 'C:\\Users\\Jonas\\Downloads\\thingy91_fw_2022_12_08_188a1603\\mfw_nrf9160_1.3.3.zip',
+                    file: fullPath('mfw_nrf9160_1.3.3.zip'),
                 },
                 {
                     type: 'Application',
@@ -107,3 +110,35 @@ export const initialSamples: Samples = {
         },
     ],
 };
+
+const SERVER_URL =
+    'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
+const DOWNLOAD_FOLDER = getAppDataDir();
+
+export const downloadSampleIndex = fetch(
+    `${SERVER_URL}/index.json`
+).then<Samples>(result => result.json());
+
+export const downloadSample = async (sample: Sample) => {
+    const targetFile = downloadedFilePath(sample.fw[0].file);
+
+    if (existsSync(targetFile)) return;
+
+    const path = `${SERVER_URL}/${sample.fw[0].file}`;
+    logger.info(`Sample not found locally, downloading ${path}`);
+
+    const file = await new Promise<Buffer>((resolve, reject) => {
+        const request = net.request({ path });
+        const buffer: Buffer[] = [];
+        request.on('response', response => {
+            response.on('data', data => buffer.push(data));
+            response.on('end', () => resolve(Buffer.concat(buffer)));
+            response.on('error', reject);
+        });
+        request.end();
+    });
+
+    await writeFile(targetFile, file);
+};
+
+export const downloadedFilePath = (file: string) => join(DOWNLOAD_FOLDER, file);

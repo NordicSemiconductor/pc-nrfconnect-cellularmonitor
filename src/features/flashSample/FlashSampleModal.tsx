@@ -20,13 +20,14 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
-import { initialSamples, Sample, Samples } from './samples';
+import {
+    downloadSample,
+    downloadSampleIndex,
+    initialSamples,
+    Sample,
+} from './samples';
 
 import './FlashSampleModal.scss';
-
-const samplesFromWeb = fetch('http://localhost:8080/index.json').then<Samples>(
-    result => result.json()
-);
 
 export default () => {
     const [selectedSample, setSelectedSample] = useState<Sample>();
@@ -79,7 +80,7 @@ const SelectSample = ({
     const [samples, setSamples] = useState(initialSamples);
 
     useEffect(() => {
-        samplesFromWeb.then(setSamples);
+        downloadSampleIndex.then(setSamples);
     }, []);
 
     const deviceName = device
@@ -221,6 +222,7 @@ const ProgramSample = ({
                     disabled={isProgramming}
                     onClick={async () => {
                         setIsProgramming(true);
+                        await downloadSample(sample);
                         await flash(device, sample, progressCb);
                         setIsProgramming(false);
                     }}

@@ -9,7 +9,7 @@ import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
 import { Device, getDeviceLibContext, logger } from 'pc-nrfconnect-shared';
 
-import { Firmware, Sample } from './samples';
+import { downloadedFilePath, Firmware, Sample } from './samples';
 
 export type SampleProgress = {
     fw: Firmware;
@@ -85,7 +85,7 @@ const programFirmware = (
             device.id,
             'NRFDL_FW_BUFFER',
             'NRFDL_FW_INTEL_HEX',
-            readFileSync(fw.file),
+            readFileSync(downloadedFilePath(fw.file)),
             error => {
                 if (error) {
                     reject(error);
