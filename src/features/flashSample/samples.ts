@@ -13,10 +13,15 @@ export interface Sample {
     fw: Firmware[];
 }
 
+export interface Samples {
+    thingy91: Sample[];
+    dk91: Sample[];
+}
+
 const fullPath = (file: string) =>
     join(getAppDir(), 'resources', 'firmware', file);
 
-export const samples: { [key: string]: Sample[] } = {
+export const initialSamples: Samples = {
     thingy91: [
         {
             title: 'Asset Tracker V2',
@@ -27,7 +32,7 @@ export const samples: { [key: string]: Sample[] } = {
             fw: [
                 {
                     type: 'Modem',
-                    file: fullPath('mfw_nrf9160_1.3.3.zip'),
+                    file: 'C:\\Users\\Jonas\\Downloads\\thingy91_fw_2022_12_08_188a1603\\mfw_nrf9160_1.3.3.zip',
                 },
                 {
                     type: 'Application',

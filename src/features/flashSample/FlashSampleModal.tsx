@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useSelector } from 'react-redux';
 import { shell } from 'electron';
@@ -20,9 +20,13 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
-import { Sample, samples } from './samples';
+import { initialSamples, Sample, Samples } from './samples';
 
 import './FlashSampleModal.scss';
+
+const samplesFromWeb = fetch('http://localhost:8080/index.json').then<Samples>(
+    result => result.json()
+);
 
 export default () => {
     const [selectedSample, setSelectedSample] = useState<Sample>();
@@ -72,6 +76,11 @@ const SelectSample = ({
     close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
+    const [samples, setSamples] = useState(initialSamples);
+
+    useEffect(() => {
+        samplesFromWeb.then(setSamples);
+    }, []);
 
     const deviceName = device
         ? device.nickname || deviceInfo(device).name
