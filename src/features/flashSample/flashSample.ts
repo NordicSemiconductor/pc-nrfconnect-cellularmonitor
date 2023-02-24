@@ -60,7 +60,7 @@ const programModem = (
             device.id,
             'NRFDL_FW_FILE',
             'NRFDL_FW_NRF91_MODEM',
-            fw.file,
+            downloadedFilePath(fw.file),
             error => {
                 if (error) {
                     reject(error);

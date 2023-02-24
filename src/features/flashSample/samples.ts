@@ -119,23 +119,26 @@ export const downloadSampleIndex = fetch(
     `${SERVER_URL}/index.json`
 ).then<Samples>(result => result.json());
 
-export const downloadSample = async (sample: Sample) => {
-    const targetFile = downloadedFilePath(sample.fw[0].file);
+export const downloadSample = (sample: Sample) =>
+    Promise.all(sample.fw.map(fw => downloadFile(fw.file)));
+
+export const downloadFile = async (fileName: string) => {
+    const targetFile = downloadedFilePath(fileName);
+    const url = `${SERVER_URL}/${fileName}`;
 
     if (existsSync(targetFile)) return;
-
-    const path = `${SERVER_URL}/${sample.fw[0].file}`;
-    logger.info(`Sample not found locally, downloading ${path}`);
+    logger.info(`Sample not found locally, downloading ${url}`);
 
     const file = await new Promise<Buffer>((resolve, reject) => {
-        const request = net.request({ path });
         const buffer: Buffer[] = [];
-        request.on('response', response => {
-            response.on('data', data => buffer.push(data));
-            response.on('end', () => resolve(Buffer.concat(buffer)));
-            response.on('error', reject);
-        });
-        request.end();
+        net.request({ url })
+            .on('response', response => {
+                response.on('data', data => buffer.push(data));
+                response.on('end', () => resolve(Buffer.concat(buffer)));
+                response.on('error', reject);
+            })
+            .on('error', reject)
+            .end();
     });
 
     await writeFile(targetFile, file);
