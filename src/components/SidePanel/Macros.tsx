@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -7,6 +13,7 @@ import {
     selectedDevice,
     SerialPort,
 } from 'pc-nrfconnect-shared';
+import { Dispatch } from 'redux';
 
 import {
     getUartSerialPort,
@@ -25,18 +32,24 @@ export const Macros = () => {
         const portName =
             port != null ? port.comName ?? `Port #${port.vcom}` : 'Unknown';
         const path = port.path;
+
+        if (path == null) {
+            return null;
+        }
+
         return (
             <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
                 <Button
                     large
                     className="btn-secondary w-100"
-                    onClick={() => connectToSerialPort(dispatch, path!)}
+                    onClick={() => connectToSerialPort(dispatch, path)}
                 >
                     Connect to port ${portName}
                 </Button>
             </CollapsibleGroup>
         );
     }
+
     if (serialPort != null) {
         return (
             <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
@@ -54,7 +67,7 @@ export const Macros = () => {
     return null;
 };
 
-const connectToSerialPort = async (dispatch, path: string) => {
+const connectToSerialPort = async (dispatch: Dispatch, path: string) => {
     dispatch(
         setUartSerialPort(
             await createSerialPort({
@@ -66,19 +79,50 @@ const connectToSerialPort = async (dispatch, path: string) => {
 };
 
 const notifications = [
-    // 'AT+CNEC=24',
-    'AT+CFUN=1\r\n',
-    'AT+CMEE=1\r\n',
-    'AT+CEER\r\n',
-    'AT%MDMEV=1\r\n',
-    'AT+CEREG=5\r\n',
-    'AT%CESQ=1\r\n',
-    'AT+CGEREP=1\r\n',
-    'AT%XTIME=1\r\n',
-    'AT+CSCON=1\r\n',
-    'AT%XSIM=1\r\n',
-    'AT%XPOFWARN=\r\n',
-    'AT%XVBATLVL=\r\n',
+    'AT+CFUN=1',
+    'AT+CGSN=1',
+    'AT+CGMI',
+    'AT+CGMM',
+    'AT+CGMR',
+    'AT+CEMODE?',
+    'AT%XCBAND=?',
+    'AT+CMEE?',
+    'AT+CNEC?',
+    'AT+CGEREP?',
+    'AT+CIND=1,1,1',
+    'AT+CEREG=5',
+    'AT+CEREG?',
+    'AT+COPS=3,2',
+    'AT+COPS?',
+    'AT%XCBAND',
+    'AT+CGDCONT?',
+    'AT+CGACT?',
+    'AT%CESQ=1',
+    'AT+CESQ',
+    'AT%XSIM=1',
+    'AT%XSIM?',
+    'AT+CPIN?',
+    'AT+CPINR="SIM PIN"',
+    'AT+CIMI',
+    'AT+CNEC=24',
+    'AT+CMEE=1',
+    'AT+CEER',
+    'AT%MDMEV=1',
+    'AT%CESQ=1',
+    'AT+CGEREP=1',
+    'AT%XTIME=1',
+    'AT+CSCON=1',
+    'AT%XPOFWARN=1,30',
+    'AT%XVBATLVL=1',
+    'AT%XMONITOR',
+    'AT%CONEVAL',
+    'AT%XCONNSTAT=1',
+    'AT#XPING="www.google.com",45,5000,5,1000',
+    'AT%XCONNSTAT?',
+    'AT%HWVERSION',
+    'AT%XMODEMUUID',
+    'AT%XDATAPRFL?',
+    'AT%XSYSTEMMODE?',
 ];
 
 const subscribe = (serialPort: SerialPort) => {
@@ -88,22 +132,18 @@ const subscribe = (serialPort: SerialPort) => {
     serialPort.onData(data => {
         response += decoder.decode(data);
         const doCompare = response.endsWith('\r\n');
-        console.log(`Buffer=${response} && doCompare=${doCompare}`);
         const doContinue =
             (doCompare && response.includes('OK')) ||
             response.includes('ERROR');
-        console.log(
-            `On cmd=${notifications[commandIndex]}, we recieved = ${response}, hence doContinue = ${doContinue}`
-        );
         if (doContinue) {
             commandIndex += 1;
 
             if (commandIndex < notifications.length) {
-                serialPort.write(notifications[commandIndex]);
+                serialPort.write(`${notifications[commandIndex]}\r\n`);
             }
             response = '';
         }
     });
 
-    serialPort.write(notifications[commandIndex]);
+    serialPort.write(`${notifications[commandIndex]}\r\n`);
 };

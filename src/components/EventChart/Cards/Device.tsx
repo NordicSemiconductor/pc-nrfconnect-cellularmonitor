@@ -140,6 +140,9 @@ const functionalModeHasStringValue = (
 const parseFunctionalMode = (mode: FunctionalMode): string => {
     if (mode === undefined) return 'Unknown';
     if (functionalModeHasStringValue(mode)) {
+        console.log(
+            `On cmd=${notifications[commandIndex]}, we recieved = ${response}, hence doContinue = ${doContinue}`
+        );
         return `${mode}: ${functionalModeStrings[mode]}`;
     }
     return `${mode}`;
