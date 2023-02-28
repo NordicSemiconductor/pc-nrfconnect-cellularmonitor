@@ -46,7 +46,7 @@ export default () => {
 
     return (
         <div className="cards-container">
-            <MasonryLayout minWidth={60}>
+            <MasonryLayout minWidth={600}>
                 <Device />
                 <LTENetwork />
                 <Sim />
