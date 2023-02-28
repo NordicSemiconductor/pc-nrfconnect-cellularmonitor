@@ -72,7 +72,6 @@ const OpenSerialTerminal = () => {
                     currentVersion: string;
                 }[];
             };
-            console.log(downloadableApps);
             const downloadableSources = downloadableApps
                 .filter(
                     app =>
