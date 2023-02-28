@@ -109,7 +109,6 @@ const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => (
             <ul>
                 {commands !== undefined
                     ? commands.map(cmd => (
-                          // eslint-disable-next-line react/jsx-indent
                           <li key={`${cmd}`}>
                               <a href={documentationMap[cmd]}>{cmd}</a>
                           </li>

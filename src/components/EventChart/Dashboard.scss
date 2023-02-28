@@ -24,9 +24,7 @@
     @include scrollbars($gray-100);
 
     .card {
-        //width: 244px;
         min-width: 276px;
-        max-width: 276px;
         .card-body {
             display: flex;
             flex-direction: column;
@@ -81,9 +79,16 @@
     }
 }
 
-.card-tooltip {
-    padding: 8px 16px;
+.tooltip {
+    div.arrow::before {
+        border-right-color: $gray-900;
+    }
+    .tooltip-inner { background: $gray-900; }
+}
 
+.card-tooltip {
+    background: $gray-900;
+    padding: 8px 16px;
     ul {
         list-style-type: none;
         padding: 0;

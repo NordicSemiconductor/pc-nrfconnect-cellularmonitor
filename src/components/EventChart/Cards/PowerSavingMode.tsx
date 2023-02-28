@@ -34,35 +34,28 @@ export default () => {
     };
 
     const fields: DashboardCardFields = {
-        'Requested Periodic TAU (T3412 extended)': {
-            value: formatPSMValuesToString(requested?.T3412Extended),
-            commands: ['AT+CPSMS'] as const,
-        },
-        'Requested Active Timer (T3324)': {
+        'Requested Active Timer(T3324)': {
             value: formatPSMValuesToString(requested?.T3324),
             commands: ['AT+CPSMS'] as const,
         },
-
-        // Could be displayed if user toggles an Advanced option?
-        // 'T3324 Extended': requested.T3324_extended ?? 'Unknown',
-        // T3402: requested.T3402 ?? 'Unknown',
-        // 'T3402 Extended': requested.T3402_extended ?? 'Unknown',
-
-        // GRANTED VALUES
-        'Power Saving Mode State': {
-            value: granted?.state?.toUpperCase() ?? 'OFF',
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
-        },
-        'Granted Periodic TAU (T3412 extended)': {
-            value: formatPSMValuesToString(granted?.T3412Extended),
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
-        },
-        'Granted Active Timer (T3324)': {
+        'Granted Active Timer(T3324)': {
             value: formatPSMValuesToString(granted?.T3324),
             commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
-        'Granted Periodic TAU (T3412 / legacy)': {
+        'Requested Periodic TAU(T3412 extended)': {
+            value: formatPSMValuesToString(requested?.T3412Extended),
+            commands: ['AT+CPSMS'] as const,
+        },
+        'Granted Periodic TAU(T3412 extended)': {
+            value: formatPSMValuesToString(granted?.T3412Extended),
+            commands: ['AT+CEREG', 'AT%XMONITOR'],
+        },
+        'Granted Periodic TAU(T3412 / legacy)': {
             value: formatPSMValuesToString(granted?.T3412),
+            commands: ['AT+CEREG', 'AT%XMONITOR'],
+        },
+        'Power Saving Mode State (Granted)': {
+            value: granted?.state?.toUpperCase() ?? 'OFF',
             commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
     };

@@ -18,7 +18,7 @@
         "dist/",
         "resources/*",
         "LICENSE",
-        "./Changelog.md"
+        "Changelog.md"
     ],
     "scripts": {
         "watch": "run-p --silent --continue-on-error watch:*",
@@ -47,7 +47,7 @@
         "dangerously-set-html-content": "1.0.9",
         "ify-loader": "^1.1.0",
         "jest-fetch-mock": "^3.0.3",
-        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.14.3",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#feat/npm-18",
         "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
         "plotly.js": "^2.8.3",
         "pretty-bytes": "^5.6.0",
@@ -65,5 +65,8 @@
     "eslintConfig": {
         "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
     },
-    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js"
+    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
+    "bundleDependencies": [
+        "@nordicsemiconductor/nrf-monitor-lib-js"
+    ]
 }
