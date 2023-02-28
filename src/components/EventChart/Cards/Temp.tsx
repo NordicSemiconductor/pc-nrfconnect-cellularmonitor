@@ -20,12 +20,6 @@ export default () => {
         xModemTraceOperation,
         xModemTraceSetID,
 
-        // xSystemMode
-        modemSupportLTEM,
-        modemSupportNBIoT,
-        modemSupportGNSS,
-        modemSystemPreference,
-
         // +CEREG Notifications
         networkStatusNotifications,
 
