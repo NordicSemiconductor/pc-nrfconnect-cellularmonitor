@@ -52,32 +52,33 @@ export default () => {
             value: getRRCStateColor(rrcState),
             commands: ['AT%CONEVAL', 'AT+CSCON'],
         },
-        PCI: { value: 'Not Implemented', commands: [] },
-        SNR: { value: 'Not Implemented', commands: [] },
+        'NETWORK TYPE': { value: networkType ?? 'Unknown', commands: [] },
+        PCI: { value: 'NOT IMPLEMENTED', commands: [] },
+        SNR: { value: 'NOT IMPLEMENTED', commands: [] },
         MNC: { value: parseMCC(mnc, mncCode), commands: [] },
-        'CELL ID': { value: 'Not Implemented', commands: [] },
+        'CELL ID': { value: 'NOT IMPLEMENTED', commands: [] },
         'RRC STATE CHANGE CAUSE': { value: 'NOT IMPLEMENTED', commands: [] },
         EARFCN: {
             value: earfcn ?? 'Unknown',
             commands: ['AT%CONEVAL'],
         },
-        'PUCCH TX POWER': { value: 'Not Implemented', commands: [] },
+        'PUCCH TX POWER': { value: 'NOT IMPLEMENTED', commands: [] },
         MCC: { value: parseMCC(mcc, mccCode), commands: [] },
-        'NEIGHBOR CELLS': { value: 'Not Implemented', commands: [] },
-        'EMM STATE': { value: 'Not Implemented', commands: [] },
+        'NEIGHBOR CELLS': { value: 'NOT IMPLEMENTED', commands: [] },
+        'EMM STATE': { value: 'NOT IMPLEMENTED', commands: [] },
         RSRP: {
             value: signalQuality?.rsrp_decibel ?? 'Unknown',
             commands: ['AT%CESQ'],
         },
-        'CE MODE': { value: 'Not Implemented', commands: [] },
-        'BAND INDICATOR': { value: 'Not Implemented', commands: [] },
-        'EMM SUBSTATE': { value: 'Not Implemented', commands: [] },
+        'CE MODE': { value: 'NOT IMPLEMENTED', commands: [] },
+        'BAND INDICATOR': { value: 'NOT IMPLEMENTED', commands: [] },
+        'EMM SUBSTATE': { value: 'NOT IMPLEMENTED', commands: [] },
         RSRQ: {
             value: signalQuality?.rsrq_decibel ?? 'Unknown',
             commands: ['AT%CESQ'],
         },
-        'CE LEVEL': { value: 'Not Implemented', commands: [] },
-        'TRACKING AREA': { value: 'Not Implemented', commands: [] },
+        'CE LEVEL': { value: 'NOT IMPLEMENTED', commands: [] },
+        'TRACKING AREA': { value: 'NOT IMPLEMENTED', commands: [] },
 
         // TODO: To be removed?
         'ACTIVITY STATUS': {
@@ -88,7 +89,7 @@ export default () => {
     };
     return (
         <DashboardCard
-            title={`${networkType} Network`.trim()}
+            title="LTE Network"
             iconName="mdi-access-point-network"
             fields={fields}
         />

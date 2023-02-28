@@ -59,7 +59,7 @@ export const Macros = () => {
                     className="btn-secondary w-100"
                     onClick={() => subscribe(serialPort)}
                 >
-                    Subscribe to notifications
+                    Macro 1
                 </Button>
             </CollapsibleGroup>
         );
