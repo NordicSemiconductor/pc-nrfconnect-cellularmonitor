@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 
@@ -13,21 +13,27 @@ import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const loadTrace = () => {
         const file = askForTraceFile();
         if (file) {
-            dispatch(convertTraceFile(file));
+            dispatch(convertTraceFile(file, setLoading));
         }
     };
 
     return (
         <Button
-            className="w-100 secondary-btn btn-sm"
+            className={`w-100 secondary-btn btn-sm ${
+                loading && 'active-animation'
+            }`}
             variant="secondary"
             onClick={loadTrace}
+            disabled={loading}
         >
-            Convert RAW trace to PCAP
+            {loading === true
+                ? 'Converting file to PCAP'
+                : 'Convert RAW trace to PCAP'}
         </Button>
     );
 };

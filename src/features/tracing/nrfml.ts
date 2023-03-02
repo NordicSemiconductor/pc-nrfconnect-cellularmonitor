@@ -54,7 +54,10 @@ const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
     }));
 
 export const convertTraceFile =
-    (path: string): TAction =>
+    (
+        path: string,
+        setLoading: (loading: boolean) => void = () => {}
+    ): TAction =>
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
@@ -63,6 +66,7 @@ export const convertTraceFile =
         const state = getState();
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
 
+        setLoading(true);
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
@@ -77,13 +81,17 @@ export const convertTraceFile =
                     logger.info(`Successfully converted ${path} to pcap`);
                 }
                 dispatch(setTraceIsStopped());
+                setLoading(false);
             },
             makeProgressCallback(dispatch, {
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: false,
-                throttleUpdatingProgress: false,
-            })
+                throttleUpdatingProgress: true,
+            }),
+            () => {}
         );
+
+        logger.info(`Started converting ${path} to pcap.`);
         dispatch(
             setTraceIsStarted({
                 taskId,
