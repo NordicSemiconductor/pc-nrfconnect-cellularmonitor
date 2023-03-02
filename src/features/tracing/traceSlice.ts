@@ -95,9 +95,6 @@ const traceSlice = createSlice({
             if (state.uartSerialPort != null) {
                 state.uartSerialPort.close();
             }
-            console.log(
-                `old=${state.uartSerialPort?.path} ==> new=${action.payload.path}`
-            );
             state.uartSerialPort = action.payload;
         },
     },

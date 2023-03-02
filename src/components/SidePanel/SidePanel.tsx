@@ -47,14 +47,14 @@ export const PowerEstimationSidePanel = () => (
 export const TraceCollectorSidePanel = () => (
     <SidePanel className="side-panel">
         <Instructions />
+        <OpenSerialTerminal />
         <TraceCollector />
         <TraceFileInformation />
+        <Macros />
         <AdvancedOptions />
         <LoadTraceFile />
 
         <EventGraphOptions />
-        <OpenSerialTerminal />
-        <Macros />
     </SidePanel>
 );
 
@@ -146,7 +146,7 @@ const OpenSerialTerminal = () => {
         return null;
     }
     return (
-        <Group heading="Open Serial Terminal">
+        <Group heading="Serial Terminal">
             {selectedSerialPortItem !== null ? (
                 <Dropdown
                     label="Port"
@@ -158,7 +158,6 @@ const OpenSerialTerminal = () => {
                     }}
                     items={serialPortItems}
                     selectedItem={selectedSerialPortItem}
-                    title="The selected serial port will be used by Open Serial Terminal and Macros"
                 />
             ) : null}
 
@@ -174,7 +173,7 @@ const OpenSerialTerminal = () => {
             {selectedUartSerialPort != null ? (
                 <Button
                     large
-                    className="btn-secondary w-100"
+                    className="btn-secondary w-100 mt-2"
                     onClick={() =>
                         openSerialTerminal(
                             device,

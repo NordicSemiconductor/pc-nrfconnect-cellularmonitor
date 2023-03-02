@@ -35,6 +35,9 @@ jest.mock('pc-nrfconnect-shared', () => ({
     getAppDataDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
     currentPane: jest.fn().mockReturnValue(0),
+    createSerialPort: () => ({
+        path: '/dev/ROBOT',
+    }),
 }));
 
 jest.mock('electron', () => ({
