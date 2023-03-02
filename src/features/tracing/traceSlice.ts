@@ -5,6 +5,7 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SerialPort } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import {
@@ -27,6 +28,7 @@ interface TraceState {
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
+    readonly uartSerialPort: SerialPort | null;
 }
 
 const initialState = (): TraceState => ({
@@ -36,6 +38,7 @@ const initialState = (): TraceState => ({
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
+    uartSerialPort: null,
 });
 
 const traceSlice = createSlice({
@@ -87,6 +90,16 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
+        setUartSerialPort: (state, action: PayloadAction<SerialPort>) => {
+            if (state.uartSerialPort?.path === action.payload.path) return;
+            if (state.uartSerialPort != null) {
+                state.uartSerialPort.close();
+            }
+            console.log(
+                `old=${state.uartSerialPort?.path} ==> new=${action.payload.path}`
+            );
+            state.uartSerialPort = action.payload;
+        },
     },
 });
 
@@ -109,6 +122,9 @@ export const getSelectedSerialNumber = (state: RootState) =>
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
 
+export const getUartSerialPort = (state: RootState) =>
+    state.app.trace.uartSerialPort;
+
 export const {
     setTraceIsStarted,
     setTraceIsStopped,
@@ -118,6 +134,7 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setDetectingTraceDb,
+    setUartSerialPort,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

@@ -5,61 +5,28 @@
  */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    Button,
-    CollapsibleGroup,
-    createSerialPort,
-    selectedDevice,
-    SerialPort,
-} from 'pc-nrfconnect-shared';
-import { Dispatch } from 'redux';
+import { useSelector } from 'react-redux';
+import { Button, CollapsibleGroup, SerialPort } from 'pc-nrfconnect-shared';
 
-import {
-    getUartSerialPort,
-    setUartSerialPort,
-} from '../../features/modem/modemSlice';
+import { getUartSerialPort } from '../../features/tracing/traceSlice';
 
 export const Macros = () => {
-    const dispatch = useDispatch();
-    const device = useSelector(selectedDevice);
     const serialPort = useSelector(getUartSerialPort);
-
-    if (device != null && serialPort === null) {
-        const ports = device.serialPorts;
-        const port = ports != null ? ports[0] : undefined;
-        if (port == null) return;
-        const portName =
-            port != null ? port.comName ?? `Port #${port.vcom}` : 'Unknown';
-        const path = port.path;
-
-        if (path == null) {
-            return null;
-        }
-
-        return (
-            <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
-                <Button
-                    large
-                    className="btn-secondary w-100"
-                    onClick={() => connectToSerialPort(dispatch, path)}
-                >
-                    Connect to port ${portName}
-                </Button>
-            </CollapsibleGroup>
-        );
-    }
+    let count = 1;
 
     if (serialPort != null) {
         return (
             <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
-                <p>Connected to {serialPort.path}</p>
                 <Button
                     large
                     className="btn-secondary w-100"
-                    onClick={() => subscribe(serialPort)}
+                    onClick={() => {
+                        subscribe(serialPort, count);
+                        count += 1;
+                    }}
+                    title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
                 >
-                    Macro 1
+                    Send Recommended AT
                 </Button>
             </CollapsibleGroup>
         );
@@ -67,18 +34,7 @@ export const Macros = () => {
     return null;
 };
 
-const connectToSerialPort = async (dispatch: Dispatch, path: string) => {
-    dispatch(
-        setUartSerialPort(
-            await createSerialPort({
-                path,
-                baudRate: 115200,
-            })
-        )
-    );
-};
-
-const notifications = [
+const recommendedAt = [
     'AT+CFUN=1',
     'AT+CGSN=1',
     'AT+CGMI',
@@ -125,12 +81,13 @@ const notifications = [
     'AT%XSYSTEMMODE?',
 ];
 
-const subscribe = (serialPort: SerialPort) => {
+const subscribe = (serialPort: SerialPort, count: number) => {
     const decoder = new TextDecoder();
     let commandIndex = 0;
     let response = '';
     serialPort.onData(data => {
         response += decoder.decode(data);
+        console.log(`ID=${count} ==> onData with: ${response}`);
         const doCompare = response.endsWith('\r\n');
         const doContinue =
             (doCompare && response.includes('OK')) ||
@@ -138,12 +95,12 @@ const subscribe = (serialPort: SerialPort) => {
         if (doContinue) {
             commandIndex += 1;
 
-            if (commandIndex < notifications.length) {
-                serialPort.write(`${notifications[commandIndex]}\r\n`);
+            if (commandIndex < recommendedAt.length) {
+                serialPort.write(`${recommendedAt[commandIndex]}\r\n`);
             }
             response = '';
         }
     });
 
-    serialPort.write(`${notifications[commandIndex]}\r\n`);
+    serialPort.write(`${recommendedAt[commandIndex]}\r\n`);
 };
