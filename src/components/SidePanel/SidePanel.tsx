@@ -85,6 +85,7 @@ const OpenSerialTerminal = () => {
     }, [availablePorts]);
 
     useEffect(() => {
+        if (device == null) return;
         if (serialPortItems.length > 0) {
             const selected = serialPortItems[0];
 
@@ -93,7 +94,7 @@ const OpenSerialTerminal = () => {
                 connectToSerialPort(dispatch, selected.value);
             }
         }
-    }, [dispatch, serialPortItems, selectedUartSerialPort]);
+    }, [dispatch, serialPortItems, selectedUartSerialPort, device]);
 
     useEffect(() => {
         const getSources = async () => {

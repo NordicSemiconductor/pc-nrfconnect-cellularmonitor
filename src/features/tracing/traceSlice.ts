@@ -90,8 +90,11 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        setUartSerialPort: (state, action: PayloadAction<SerialPort>) => {
-            if (state.uartSerialPort?.path === action.payload.path) return;
+        setUartSerialPort: (
+            state,
+            action: PayloadAction<SerialPort | null>
+        ) => {
+            if (state.uartSerialPort?.path === action.payload?.path) return;
             if (state.uartSerialPort != null) {
                 state.uartSerialPort.close();
             }
