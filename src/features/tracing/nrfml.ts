@@ -181,23 +181,27 @@ export const startTrace =
     };
 
 export const readRawTrace =
-    (sourceFile: string): TAction =>
+    (sourceFile: string, setLoading: (loading: boolean) => void): TAction =>
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
         const sinks: TraceFormat[] = ['tshark'];
         const packets: Packet[] = [];
 
+        setLoading(true);
         tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),
-            event => {
-                if (event)
+            error => {
+                if (error) {
                     logger.error(
-                        `Error when reading trace from ${sourceFile}: ${event.message}`
+                        `Error when reading trace from ${sourceFile}: ${error.message}`
                     );
-                else logger.info(`Completed reading trace from ${sourceFile}`);
+                } else {
+                    logger.info(`Completed reading trace from ${sourceFile}`);
+                }
                 notifyListeners(packets);
+                setLoading(false);
                 tracePacketEvents.emit('stop-process');
             },
             () => {},

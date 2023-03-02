@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, CollapsibleGroup } from 'pc-nrfconnect-shared';
 
@@ -13,6 +13,7 @@ import { askForTraceFile } from '../../utils/fileUtils';
 
 export const LoadTraceFile = () => {
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const readRawFile = () => {
         const sourceFile = askForTraceFile();
@@ -21,13 +22,21 @@ export const LoadTraceFile = () => {
             console.error('Could not select the provided file.');
             return;
         }
-        dispatch(readRawTrace(sourceFile));
+        dispatch(readRawTrace(sourceFile, setLoading));
     };
 
     return (
         <CollapsibleGroup heading="Read Trace">
-            <Button className="w-100 btn-sm" onClick={readRawFile}>
-                Read Trace from Raw File
+            <Button
+                className={`w-100 secondary-btn ${
+                    loading && 'active-animation'
+                }`}
+                onClick={readRawFile}
+                disabled={loading}
+            >
+                {loading === true
+                    ? 'Reading trace file'
+                    : 'Read Trace from Raw File'}
             </Button>
         </CollapsibleGroup>
     );
