@@ -12,7 +12,6 @@ import { getUartSerialPort } from '../../features/tracing/traceSlice';
 
 export const Macros = () => {
     const serialPort = useSelector(getUartSerialPort);
-    let count = 1;
 
     if (serialPort != null) {
         return (
@@ -20,10 +19,7 @@ export const Macros = () => {
                 <Button
                     large
                     className="btn-secondary w-100"
-                    onClick={() => {
-                        subscribe(serialPort, count);
-                        count += 1;
-                    }}
+                    onClick={() => subscribe(serialPort)}
                     title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
                 >
                     Send Recommended AT
@@ -81,13 +77,13 @@ const recommendedAt = [
     'AT%XSYSTEMMODE?',
 ];
 
-const subscribe = (serialPort: SerialPort, count: number) => {
+const subscribe = (serialPort: SerialPort) => {
     const decoder = new TextDecoder();
     let commandIndex = 0;
     let response = '';
-    serialPort.onData(data => {
+
+    const handler = serialPort.onData(data => {
         response += decoder.decode(data);
-        console.log(`ID=${count} ==> onData with: ${response}`);
         const doCompare = response.endsWith('\r\n');
         const doContinue =
             (doCompare && response.includes('OK')) ||
@@ -97,6 +93,9 @@ const subscribe = (serialPort: SerialPort, count: number) => {
 
             if (commandIndex < recommendedAt.length) {
                 serialPort.write(`${recommendedAt[commandIndex]}\r\n`);
+            } else {
+                // Cleanup when all commands have been sent.
+                handler();
             }
             response = '';
         }
