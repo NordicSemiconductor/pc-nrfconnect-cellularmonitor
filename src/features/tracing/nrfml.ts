@@ -86,7 +86,6 @@ export const convertTraceFile =
             makeProgressCallback(dispatch, {
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: false,
-                throttleUpdatingProgress: true,
             }),
             () => {}
         );
@@ -166,7 +165,6 @@ export const startTrace =
             makeProgressCallback(dispatch, {
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
-                throttleUpdatingProgress: true,
             }),
             data => {
                 if (data.format !== 'modem_trace') {
