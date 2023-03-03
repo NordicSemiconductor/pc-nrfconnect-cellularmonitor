@@ -54,7 +54,10 @@ const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
     }));
 
 export const convertTraceFile =
-    (path: string): TAction =>
+    (
+        path: string,
+        setLoading: (loading: boolean) => void = () => {}
+    ): TAction =>
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
@@ -63,6 +66,7 @@ export const convertTraceFile =
         const state = getState();
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
 
+        setLoading(true);
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
             err => {
@@ -77,13 +81,16 @@ export const convertTraceFile =
                     logger.info(`Successfully converted ${path} to pcap`);
                 }
                 dispatch(setTraceIsStopped());
+                setLoading(false);
             },
             makeProgressCallback(dispatch, {
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: false,
-                throttleUpdatingProgress: false,
-            })
+            }),
+            () => {}
         );
+
+        logger.info(`Started converting ${path} to pcap.`);
         dispatch(
             setTraceIsStarted({
                 taskId,
@@ -158,7 +165,6 @@ export const startTrace =
             makeProgressCallback(dispatch, {
                 detectingTraceDb: isDetectingTraceDb,
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
-                throttleUpdatingProgress: true,
             }),
             data => {
                 if (data.format !== 'modem_trace') {
@@ -181,23 +187,27 @@ export const startTrace =
     };
 
 export const readRawTrace =
-    (sourceFile: string): TAction =>
+    (sourceFile: string, setLoading: (loading: boolean) => void): TAction =>
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
         const sinks: TraceFormat[] = ['tshark'];
         const packets: Packet[] = [];
 
+        setLoading(true);
         tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),
-            event => {
-                if (event)
+            error => {
+                if (error) {
                     logger.error(
-                        `Error when reading trace from ${sourceFile}: ${event.message}`
+                        `Error when reading trace from ${sourceFile}: ${error.message}`
                     );
-                else logger.info(`Completed reading trace from ${sourceFile}`);
+                } else {
+                    logger.info(`Completed reading trace from ${sourceFile}`);
+                }
                 notifyListeners(packets);
+                setLoading(false);
                 tracePacketEvents.emit('stop-process');
             },
             () => {},
