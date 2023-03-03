@@ -5,8 +5,8 @@
  */
 
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
+import { Button } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
 import { askForTraceFile } from '../../../utils/fileUtils';
@@ -24,10 +24,7 @@ export default () => {
 
     return (
         <Button
-            className={`w-100 secondary-btn btn-sm ${
-                loading && 'active-animation'
-            }`}
-            variant="secondary"
+            className={`w-100 secondary-btn ${loading && 'active-animation'}`}
             onClick={loadTrace}
             disabled={loading}
         >
