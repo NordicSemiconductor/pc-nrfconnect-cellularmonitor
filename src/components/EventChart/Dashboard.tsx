@@ -13,9 +13,10 @@ import './Dashboard.scss';
 
 const Dashboard = () => (
     <div className="events-container">
-        <DashboardCards />
-
-        <div>
+        <div className="events-dashboard-cards">
+            <DashboardCards />
+        </div>
+        <div className="chart">
             <div id="tooltip" />
             <Chart />
         </div>

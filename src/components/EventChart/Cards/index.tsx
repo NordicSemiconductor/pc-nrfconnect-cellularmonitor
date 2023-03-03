@@ -45,16 +45,14 @@ export default () => {
     }, [dispatch, timestamp]);
 
     return (
-        <div className="cards-container">
-            <MasonryLayout minWidth={600}>
-                <Device />
-                <LTENetwork />
-                <Sim />
-                <PacketDomainNetwork />
-                {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
-                <ConnectivityStaistics />
-                <Temp />
-            </MasonryLayout>
-        </div>
+        <MasonryLayout className="cards-container" minWidth={350}>
+            <Device />
+            <LTENetwork />
+            <Sim />
+            <PacketDomainNetwork />
+            {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
+            <ConnectivityStaistics />
+            <Temp />
+        </MasonryLayout>
     );
 };

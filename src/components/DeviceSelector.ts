@@ -22,6 +22,7 @@ import {
     setAvailableSerialPorts,
     setDetectingTraceDb,
     setSerialPort,
+    setUartSerialPort,
 } from '../features/tracing/traceSlice';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import type { TAction } from '../utils/thunk';
@@ -52,6 +53,7 @@ export default connect(mapState, mapDispatch)(DeviceSelector);
 
 const closeDevice = (): TAction => (dispatch, getState) => {
     logger.info('Closing device');
+    dispatch(setUartSerialPort(null));
     dispatch(setAvailableSerialPorts([]));
     dispatch(setSerialPort(null));
     const taskId = getTaskId(getState());
