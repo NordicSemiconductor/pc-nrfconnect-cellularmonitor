@@ -220,12 +220,16 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
+    const chartTopBottomOffset = 30.4;
+    const sectionHeight = 24;
+
     return (
         <>
             <div
                 style={{
                     height: `${
-                        30 + (170 / 6) * (traceEventFilter.length + 2)
+                        chartTopBottomOffset +
+                        traceEventFilter.length * sectionHeight
                     }px`,
                 }}
             >
