@@ -97,8 +97,13 @@
         display: flex;
         justify-content: center;
         text-decoration: underline;
-
+        color: $nordic-blue;
+        text-decoration-color: $nordic-blue;
         flex-direction: column;
+
+        li:hover {
+            opacity: 0.8;
+        }
     }
 }
 

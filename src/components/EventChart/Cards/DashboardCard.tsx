@@ -7,7 +7,7 @@
 import React, { useRef, useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { Card } from 'pc-nrfconnect-shared';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 import {
     ATCommands,
@@ -155,9 +155,19 @@ const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => (
             <p>AT commands:</p>
             <ul>
                 {commands !== undefined
-                    ? commands.map(cmd => (
+                    ? commands.map((cmd, index) => (
                           <li key={`${cmd}`}>
-                              <a href={documentationMap[cmd]}>{cmd}</a>
+                              <span
+                                  onClick={() => openUrl(documentationMap[cmd])}
+                                  onKeyDown={e => {
+                                      if (e.key === 'Enter')
+                                          openUrl(documentationMap[cmd]);
+                                  }}
+                                  role="button"
+                                  tabIndex={index}
+                              >
+                                  {cmd}
+                              </span>
                           </li>
                       ))
                     : null}
