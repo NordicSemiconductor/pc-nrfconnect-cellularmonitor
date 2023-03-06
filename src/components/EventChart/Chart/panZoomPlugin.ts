@@ -84,20 +84,22 @@ const getMinMaxX = (chart: Chart) => {
     }
 
     if (options.mode === 'Event') {
+        const min = -getOffset(chart);
         return [
-            0,
+            min,
             Math.max(
                 data.filter(e => options.traceEventFilter.includes(e.format))
                     .length -
                     1 +
                     getOffset(chart),
-                0 + options.resolution
+                min + options.resolution
             ),
         ];
     }
 
     const min =
-        data[0].timestamp ?? defaultOptions(options.mode).currentRange.min;
+        (data[0].timestamp ?? defaultOptions(options.mode).currentRange.min) -
+        getOffset(chart);
 
     return [
         min,
@@ -155,8 +157,8 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
             options.onRangeChanged(
                 {
                     min:
-                        filteredData[Math.ceil(range.min)].timestamp -
-                        data[0].timestamp,
+                        filteredData[Math.ceil(Math.max(range.min, 0))]
+                            .timestamp - data[0].timestamp,
                     max: maxTimestamp - data[0].timestamp,
                 },
                 maxTimestamp
@@ -196,7 +198,7 @@ const mutateData = (chart: Chart) => {
     );
 
     if (options.mode === 'Event') {
-        const start = Math.floor(options.currentRange.min);
+        const start = Math.floor(Math.max(options.currentRange.min, 0));
 
         return filteredData
             .slice(
