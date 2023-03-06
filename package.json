@@ -59,9 +59,6 @@
     "dependencies": {
         "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
     },
-    "bundledDependencies": [
-        "@nordicsemiconductor/nrf-monitor-lib-js"
-    ],
     "eslintConfig": {
         "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
     },
