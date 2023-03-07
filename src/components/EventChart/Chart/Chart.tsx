@@ -220,7 +220,7 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
-    const chartTopBottomOffset = 30.4;
+    const chartTopBottomOffset = 20.4;
     const sectionHeight = 24;
 
     return (
