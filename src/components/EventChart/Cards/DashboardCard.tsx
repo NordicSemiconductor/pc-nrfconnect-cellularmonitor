@@ -80,15 +80,12 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
 
-    const onMouseMove = () => {
-        if (keepShowing) return;
-        setKeepShowing(true);
-    };
-
     return (
         <div
             className="card-entry"
-            onMouseMove={onMouseMove}
+            onMouseEnter={() => {
+                setKeepShowing(true);
+            }}
             onMouseLeave={() => {
                 setKeepShowing(false);
             }}
