@@ -5,19 +5,16 @@
  */
 
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Button, isDevelopment, logger } from 'pc-nrfconnect-shared';
-
-import './FeedbackForm.scss';
 
 export default () => {
     const [feedback, setFeedback] = useState('');
-    const [sayThankYou, setSayThankYou] = useState(true);
+    const [sayThankYou, setSayThankYou] = useState(false);
 
     if (sayThankYou === true) {
         return (
-            <div className="feedback-form-wrapper">
-                <div className="feedback-form-container">
+            <div className="w-100 d-flex justify-content-center">
+                <div className="d-flex flex-column justify-content-center align-items-start bg-white px-3 py-4">
                     <h2 className="mb-3">Thank you!</h2>
                     <section>
                         <p>
@@ -32,7 +29,10 @@ export default () => {
                     <Button
                         large
                         className="btn-secondary"
-                        onClick={() => setSayThankYou(false)}
+                        onClick={() => {
+                            setSayThankYou(false);
+                            setFeedback('');
+                        }}
                     >
                         Give more feedback
                     </Button>
@@ -42,8 +42,8 @@ export default () => {
     }
 
     return (
-        <div className="feedback-form-wrapper">
-            <div className="feedback-form-container">
+        <div className="w-100 d-flex justify-content-center">
+            <div className="d-flex flex-column justify-content-center align-items-start bg-white px-3 py-4">
                 <h2 className="mb-3">Give Feedback</h2>
                 <section>
                     <p>
@@ -60,12 +60,13 @@ export default () => {
                         .
                     </p>
                 </section>
-                <form className="feedback-form">
+                <form className="d-flex flex-column w-100">
                     <label htmlFor="feedback-text">
                         <b>What is your feedback?</b>
                         <textarea
                             name="feedback-text"
-                            className="feedback-text mb-3"
+                            className="w-100 mb-3"
+                            style={{ height: '8rem' }}
                             required
                             value={feedback}
                             onChange={e => setFeedback(e.target.value)}
@@ -89,7 +90,7 @@ const formURL =
         ? 'https://formkeep.com/f/8deb409a565'
         : 'https://formkeep.com/f/36b394b92851';
 
-const handleFormData = (
+const handleFormData = async (
     feedback: string,
     setResponse: (response: boolean) => void
 ) => {
@@ -99,22 +100,27 @@ const handleFormData = (
         platform: process.platform,
     };
 
-    axios
-        .post(formURL, JSON.stringify(data), {
+    try {
+        const response = await fetch(formURL, {
+            method: 'POST',
+            body: JSON.stringify(data),
             headers: {
-                'Cotent-Type': 'application/json',
+                'Content-Type': 'application/json',
                 enctype: 'multipart/form-data',
             },
-        })
-        .then(response => {
-            console.log(response);
-            setResponse(true);
-        })
-        .catch(error => {
-            if (error.response) {
-                logger.error(
-                    `FeedbackForm: Could not send feedback, got status code=${error.response.status} with response: ${error.response.data}`
-                );
-            }
         });
+
+        if (response.ok) {
+            setResponse(true);
+            return;
+        }
+
+        logger.error(
+            `FeedbackForm: Server responded with status code ${response.status}`
+        );
+    } catch (error: unknown) {
+        logger.error(
+            `FeedbackForm: Could not send feedback. ${JSON.stringify(error)}`
+        );
+    }
 };
