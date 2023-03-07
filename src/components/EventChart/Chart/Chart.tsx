@@ -138,6 +138,7 @@ export default () => {
                                 : undefined,
                         stepSize: 0.5,
                     },
+                    reverse: true,
                     grid: {
                         display: true,
                         offset: true,
