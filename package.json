@@ -56,8 +56,7 @@
         "xterm-for-react": "^1.0.4"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre",
-        "axios": "^1.3.4"
+        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
     },
     "eslintConfig": {
         "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
