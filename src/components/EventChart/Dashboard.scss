@@ -76,12 +76,25 @@
         flex-direction: row;
         justify-content: space-between;
         flex-wrap: wrap;
+        position: relative;
+    }
+
+    .tooltip-helper {
+        position: absolute;
+        bottom: 4px;
+        right: 0px;
     }
 }
 
 .tooltip {
+    div.arrow {
+        top: -6px;
+        width: 12px;
+        height: 12px;
+    }
     div.arrow::before {
-        border-right-color: $gray-900;
+        border-bottom-color: $gray-900;
+        border-width: 0 6px 6px 6px;
     }
     .tooltip-inner {
         background: $gray-900;

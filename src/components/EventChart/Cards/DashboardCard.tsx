@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { Card, openUrl } from 'pc-nrfconnect-shared';
@@ -33,105 +33,73 @@ export default ({
     iconName = 'mdi-border-none-variant',
     information = '',
     fields,
-}: DashboardCard) => {
-    const target = useRef(null);
-
-    return (
-        <div ref={target}>
-            <Card
-                title={
-                    <>
-                        <span className={`mdi ${iconName} icon`} />
-                        <span className="title">{title}</span>
-                        {information.length > 0 && (
-                            <span className="mdi mdi-information-outline info-icon">
-                                <span className="info">{information}</span>
-                            </span>
-                        )}
-                    </>
-                }
-            >
-                {Object.entries(fields).map(([fieldKey, fieldValues]) => (
-                    <li key={fieldKey}>
-                        <CardEntry
-                            fieldKey={fieldKey}
-                            value={fieldValues.value}
-                            commands={fieldValues.commands}
-                            parent={target.current as HTMLElement | null}
-                        />
-                    </li>
-                ))}
-            </Card>
-        </div>
-    );
-};
+}: DashboardCard) => (
+    <div>
+        <Card
+            title={
+                <>
+                    <span className={`mdi ${iconName} icon`} />
+                    <span className="title">{title}</span>
+                    {information.length > 0 && (
+                        <span className="mdi mdi-information-outline info-icon">
+                            <span className="info">{information}</span>
+                        </span>
+                    )}
+                </>
+            }
+        >
+            {Object.entries(fields).map(([fieldKey, fieldValues]) => (
+                <li key={fieldKey}>
+                    <CardEntry
+                        fieldKey={fieldKey}
+                        value={fieldValues.value}
+                        commands={fieldValues.commands}
+                    />
+                </li>
+            ))}
+        </Card>
+    </div>
+);
 
 type CardEntry = {
     fieldKey: string;
     value: string | number;
     commands: readonly ATCommands[];
-    parent: HTMLElement | null;
 };
 
 let toolTipTimeout: NodeJS.Timeout;
 
-const CardEntry = ({ fieldKey, value, commands, parent }: CardEntry) => {
+const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
     const [keepShowing, setKeepShowing] = useState(false);
-    const [toolTipLocation, setToolTipLocation] = useState<{
-        x: number;
-        y: number;
-    } | null>(null);
-    const target = useRef(null);
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
-    const parentBoundingClientRect = parent?.getBoundingClientRect();
 
-    const onMouseMove = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>
-    ) => {
+    const onMouseMove = () => {
         if (keepShowing) return;
-        setToolTipLocation({
-            x: event.clientX,
-            y: event.clientY,
-        });
         clearTimeout(toolTipTimeout);
-        toolTipTimeout = setTimeout(() => setKeepShowing(true), 500);
+        toolTipTimeout = setTimeout(() => setKeepShowing(true), 100);
     };
 
     return (
         <div
-            ref={target}
             className="card-entry"
-            onMouseMove={event => onMouseMove(event)}
+            onMouseMove={onMouseMove}
             onMouseLeave={() => {
                 setKeepShowing(false);
-                setToolTipLocation(null);
                 clearTimeout(toolTipTimeout);
             }}
         >
             <p className="card-key">{fieldKey}</p>
             <p className="card-value">{value}</p>
 
-            {toolTipLocation ? (
+            {keepShowing ? (
                 <OverlayTrigger
                     key={`overlay-${fieldKey}`}
-                    placement="bottom-start"
+                    placement="bottom-end"
                     overlay={CardTooltip({ fieldKey, commands, showTooltip })}
                     show={keepShowing}
                 >
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: `${
-                                toolTipLocation.y -
-                                (parentBoundingClientRect?.y ?? 0)
-                            }px`,
-                            left: `${
-                                toolTipLocation.x -
-                                (parentBoundingClientRect?.x ?? 0)
-                            }px`,
-                        }}
-                    />
+                    <div className="tooltip-helper" />
                 </OverlayTrigger>
             ) : null}
         </div>
