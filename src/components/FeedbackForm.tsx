@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Button, isDevelopment, logger } from 'pc-nrfconnect-shared';
+import { Button, isDevelopment, logger, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => {
     const [feedback, setFeedback] = useState('');
@@ -73,6 +73,27 @@ export default () => {
                         />
                     </label>
                 </form>
+                <section>
+                    <p>
+                        We only collect this information when you send feedback:
+                    </p>
+                    <ul>
+                        <li>Application Name</li>
+                        <li>Your feedback</li>
+                        <li>
+                            <a
+                                onClick={() =>
+                                    openUrl(
+                                        'https://nodejs.org/api/process.html#processplatform'
+                                    )
+                                }
+                                href="https://nodejs.org/api/process.html#processplatform"
+                            >
+                                Platform
+                            </a>
+                        </li>
+                    </ul>
+                </section>
                 <Button
                     large
                     className="btn-primary"
