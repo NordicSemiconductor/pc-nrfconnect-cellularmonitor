@@ -75,8 +75,6 @@ type CardEntry = {
     commands: readonly ATCommands[];
 };
 
-let toolTipTimeout: NodeJS.Timeout;
-
 const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
     const [keepShowing, setKeepShowing] = useState(false);
 
@@ -84,8 +82,7 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
 
     const onMouseMove = () => {
         if (keepShowing) return;
-        clearTimeout(toolTipTimeout);
-        toolTipTimeout = setTimeout(() => setKeepShowing(true), 100);
+        setKeepShowing(true);
     };
 
     return (
@@ -94,7 +91,6 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
             onMouseMove={onMouseMove}
             onMouseLeave={() => {
                 setKeepShowing(false);
-                clearTimeout(toolTipTimeout);
             }}
         >
             <p className="card-key">{fieldKey}</p>
