@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { Card } from 'pc-nrfconnect-shared';
+import { Card, openUrl } from 'pc-nrfconnect-shared';
 
 import {
     ATCommands,
@@ -34,29 +34,39 @@ export default ({
     information = '',
     fields,
 }: DashboardCard) => (
-    <Card
-        title={
-            <>
-                <span className={`mdi ${iconName} icon`} />
-                <span className="title">{title}</span>
-                {information.length > 0 && (
-                    <span className="mdi mdi-information-outline info-icon">
-                        <span className="info">{information}</span>
-                    </span>
-                )}
-            </>
-        }
-    >
-        {Object.entries(fields).map(([fieldKey, fieldValues]) => (
-            <li key={fieldKey}>
-                <CardEntry
-                    fieldKey={fieldKey}
-                    value={fieldValues.value}
-                    commands={fieldValues.commands}
-                />
-            </li>
-        ))}
-    </Card>
+    <div>
+        <Card
+            title={
+                <>
+                    <span className={`mdi ${iconName} icon`} />
+                    <span className="title">{title}</span>
+                    {information.length > 0 && (
+                        <OverlayTrigger
+                            key={`overlay-${title}`}
+                            placement="bottom-end"
+                            overlay={
+                                <Tooltip id={`tooltip-${title}`}>
+                                    <span className="info">{information}</span>
+                                </Tooltip>
+                            }
+                        >
+                            <span className="mdi mdi-information-outline info-icon" />
+                        </OverlayTrigger>
+                    )}
+                </>
+            }
+        >
+            {Object.entries(fields).map(([fieldKey, fieldValues]) => (
+                <li key={fieldKey}>
+                    <CardEntry
+                        fieldKey={fieldKey}
+                        value={fieldValues.value}
+                        commands={fieldValues.commands}
+                    />
+                </li>
+            ))}
+        </Card>
+    </div>
 );
 
 type CardEntry = {
@@ -67,27 +77,33 @@ type CardEntry = {
 
 const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
     const [keepShowing, setKeepShowing] = useState(false);
-    const target = useRef(null);
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
 
     return (
-        <OverlayTrigger
-            key={`overlay-${fieldKey}`}
-            placement="right-start"
-            overlay={CardTooltip({ fieldKey, commands, showTooltip })}
-            show={keepShowing}
+        <div
+            className="card-entry"
+            onMouseEnter={() => {
+                setKeepShowing(true);
+            }}
+            onMouseLeave={() => {
+                setKeepShowing(false);
+            }}
         >
-            <div
-                ref={target}
-                className="card-entry"
-                onMouseLeave={() => setKeepShowing(false)}
-                onMouseEnter={() => setKeepShowing(true)}
-            >
-                <p className="card-key">{fieldKey}</p>
-                <p className="card-value">{value}</p>
-            </div>
-        </OverlayTrigger>
+            <p className="card-key">{fieldKey}</p>
+            <p className="card-value">{value}</p>
+
+            {keepShowing ? (
+                <OverlayTrigger
+                    key={`overlay-${fieldKey}`}
+                    placement="bottom-end"
+                    overlay={CardTooltip({ fieldKey, commands, showTooltip })}
+                    show={keepShowing}
+                >
+                    <div className="tooltip-helper" />
+                </OverlayTrigger>
+            ) : null}
+        </div>
     );
 };
 
@@ -108,9 +124,19 @@ const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => (
             <p>AT commands:</p>
             <ul>
                 {commands !== undefined
-                    ? commands.map(cmd => (
+                    ? commands.map((cmd, index) => (
                           <li key={`${cmd}`}>
-                              <a href={documentationMap[cmd]}>{cmd}</a>
+                              <span
+                                  onClick={() => openUrl(documentationMap[cmd])}
+                                  onKeyDown={e => {
+                                      if (e.key === 'Enter')
+                                          openUrl(documentationMap[cmd]);
+                                  }}
+                                  role="button"
+                                  tabIndex={index}
+                              >
+                                  {cmd}
+                              </span>
                           </li>
                       ))
                     : null}

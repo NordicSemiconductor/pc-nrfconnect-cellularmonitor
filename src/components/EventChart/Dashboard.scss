@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+@import '~pc-nrfconnect-shared/src/variables';
 @import '~pc-nrfconnect-shared/styles';
 
 .events-container {
@@ -76,20 +77,33 @@
         flex-direction: row;
         justify-content: space-between;
         flex-wrap: wrap;
+        position: relative;
+    }
+
+    .tooltip-helper {
+        position: absolute;
+        bottom: 4px;
+        right: 0px;
     }
 }
 
 .tooltip {
+    div.arrow {
+        top: -6px;
+        width: 12px;
+        height: 12px;
+    }
     div.arrow::before {
-        border-right-color: $gray-900;
+        border-bottom-color: $tooltip-bg;
+        border-width: 0 6px 6px 6px;
     }
     .tooltip-inner {
-        background: $gray-900;
+        background: $tooltip-bg;
     }
 }
 
 .card-tooltip {
-    background: $gray-900;
+    background: $tooltip-bg;
     padding: 8px 16px;
     ul {
         list-style-type: none;
@@ -97,8 +111,13 @@
         display: flex;
         justify-content: center;
         text-decoration: underline;
-
+        color: $nordic-blue;
+        text-decoration-color: $nordic-blue;
         flex-direction: column;
+
+        li:hover {
+            opacity: 0.8;
+        }
     }
 }
 
