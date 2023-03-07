@@ -41,9 +41,17 @@ export default ({
                     <span className={`mdi ${iconName} icon`} />
                     <span className="title">{title}</span>
                     {information.length > 0 && (
-                        <span className="mdi mdi-information-outline info-icon">
-                            <span className="info">{information}</span>
-                        </span>
+                        <OverlayTrigger
+                            key={`overlay-${title}`}
+                            placement="bottom-end"
+                            overlay={
+                                <Tooltip id={`tooltip-${title}`}>
+                                    <span className="info">{information}</span>
+                                </Tooltip>
+                            }
+                        >
+                            <span className="mdi mdi-information-outline info-icon" />
+                        </OverlayTrigger>
                     )}
                 </>
             }

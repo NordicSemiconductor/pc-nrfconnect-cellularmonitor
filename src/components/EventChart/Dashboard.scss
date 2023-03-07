@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+@import '~pc-nrfconnect-shared/src/variables';
 @import '~pc-nrfconnect-shared/styles';
 
 .events-container {
@@ -93,16 +94,16 @@
         height: 12px;
     }
     div.arrow::before {
-        border-bottom-color: $gray-900;
+        border-bottom-color: $tooltip-bg;
         border-width: 0 6px 6px 6px;
     }
     .tooltip-inner {
-        background: $gray-900;
+        background: $tooltip-bg;
     }
 }
 
 .card-tooltip {
-    background: $gray-900;
+    background: $tooltip-bg;
     padding: 8px 16px;
     ul {
         list-style-type: none;
