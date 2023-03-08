@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { Card, openUrl } from 'pc-nrfconnect-shared';
+import { Button, Card, openUrl } from 'pc-nrfconnect-shared';
 
 const NCD_EMAIL_ADDRESS = 'ncd-noreply@nordicsemi.no';
 const USER_GUIDE_VIDEO = 'https://www.youtube.com/watch?v=8kB5XA5a2pI';
@@ -22,7 +21,7 @@ export default () => (
                 <b>ncd-noreply@nordicsemi.no</b> by clicking the button below.
             </p>
             <Button
-                className="secondary-btn w-100 mt-2"
+                className="w-100 mt-2"
                 variant="secondary"
                 onClick={() => openUrl(`mailto:${NCD_EMAIL_ADDRESS}`)}
                 title={`mailto:${NCD_EMAIL_ADDRESS}`}
@@ -35,7 +34,6 @@ export default () => (
             Click{' '}
             <Button
                 variant="link"
-                className="card-links"
                 title={USER_GUIDE_VIDEO}
                 onClick={() => openUrl(USER_GUIDE_VIDEO)}
             >

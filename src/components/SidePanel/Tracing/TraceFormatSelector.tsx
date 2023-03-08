@@ -5,9 +5,8 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { Group } from 'pc-nrfconnect-shared';
+import { Button, Group } from 'pc-nrfconnect-shared';
 
 import {
     ALL_TRACE_FORMATS,
@@ -51,8 +50,8 @@ export default ({
                     <Button
                         variant={
                             selectedTraceFormats.includes(format)
-                                ? 'set'
-                                : 'unset'
+                                ? 'primary'
+                                : 'secondary'
                         }
                         onClick={selectTraceFormat(format)}
                         key={format}
