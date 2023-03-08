@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { net } from '@electron/remote';
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';

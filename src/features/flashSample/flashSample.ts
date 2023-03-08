@@ -1,9 +1,9 @@
-/* eslint-disable no-await-in-loop */
 /*
  * Copyright (c) 2023 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
+/* eslint-disable no-await-in-loop */
 
 import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';

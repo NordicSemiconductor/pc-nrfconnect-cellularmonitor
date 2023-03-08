@@ -27,7 +27,7 @@
         "build:dev": "run-esbuild",
         "build:prod": "run-esbuild --prod",
         "test": "jest",
-        "check": "run-p --silent --continue-on-error --print-label 'check:*'",
+        "check": "run-p --silent --continue-on-error --print-label check:*",
         "check:app": "check-app-properties",
         "check:lint": "eslint --color .",
         "check:types": "check-for-typescript tsc --noEmit --pretty",
@@ -36,7 +36,6 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@types/node": "15.14.1",
         "@types/plotly.js": "^1.54.19",
         "@types/redux-mock-store": "^1.0.2",
         "ansi-colors": "^4.1.1",
