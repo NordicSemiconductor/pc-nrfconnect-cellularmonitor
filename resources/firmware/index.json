@@ -2,16 +2,23 @@
     "thingy91": [
         {
             "title": "Asset Tracker V2",
-            "description": "This is the default application on your development kit.",
+            "description": "This is the default application on your Thingy91.",
+            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html",
+            "fw": [
+                {
+                    "type": "Application",
+                    "file": "thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex"
+                }
+            ]
+        },
+        {
+            "title": "Modem 1.3.3",
+            "description": "This is a modem that can be used by the Thingy91",
             "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html",
             "fw": [
                 {
                     "type": "Modem",
                     "file": "mfw_nrf9160_1.3.3.zip"
-                },
-                {
-                    "type": "Application",
-                    "file": "thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex"
                 }
             ]
         }

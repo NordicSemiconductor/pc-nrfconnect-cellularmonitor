@@ -6,7 +6,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { shell } from 'electron';
 import { basename, dirname } from 'path';
 import {
@@ -21,12 +21,14 @@ import {
     Spinner,
 } from 'pc-nrfconnect-shared';
 
+import { setUartSerialPort } from '../tracing/traceSlice';
 import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
 import {
     downloadedFilePath,
     downloadSample,
     downloadSampleIndex,
     initialSamples,
+    readBundledIndex,
     Sample,
 } from './samples';
 
@@ -83,7 +85,10 @@ const SelectSample = ({
     const [samples, setSamples] = useState(initialSamples);
 
     useEffect(() => {
-        downloadSampleIndex.then(setSamples);
+        readBundledIndex()
+            .then(setSamples)
+            .then(() => downloadSampleIndex)
+            .then(setSamples);
     }, []);
 
     const deviceName = device
@@ -139,6 +144,7 @@ const ProgramSample = ({
     selectSample: (sample?: Sample) => void;
     close: () => void;
 }) => {
+    const dispatch = useDispatch();
     const device = useSelector(selectedDevice);
 
     const [progress, setProgress] = useState(
@@ -165,7 +171,6 @@ const ProgramSample = ({
 
     if (!device) return <WaitingForReconnect />;
     const isMcuBoot = isThingy91(device);
-
     return (
         <>
             <Dialog.Header title={`Program ${sample.title}`} />
@@ -235,6 +240,7 @@ const ProgramSample = ({
                         setErrorMessage(undefined);
                         try {
                             await downloadSample(sample);
+                            dispatch(setUartSerialPort(null));
                             await flash(device, sample, progressCb);
                             setIsProgramming(false);
                         } catch (error) {
