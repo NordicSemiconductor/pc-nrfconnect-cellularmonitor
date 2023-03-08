@@ -21,6 +21,7 @@
 -   Open Serial Terminal app with the selected device and serial port.
 -   Macro button, which sends recommended AT commands, in order to read state
     from device.
+-   Programming sample apps from the sidebar.
 
 ### Changed
 
