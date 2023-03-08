@@ -115,9 +115,9 @@ const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
 const DOWNLOAD_FOLDER = getAppDataDir();
 
-export const downloadSampleIndex = fetch(
-    `${SERVER_URL}/index.json`
-).then<Samples>(result => result.json());
+export const downloadSampleIndex = fetch(`${SERVER_URL}/index.json`, {
+    cache: 'no-cache',
+}).then<Samples>(result => result.json());
 
 export const downloadSample = (sample: Sample) =>
     Promise.all(sample.fw.map(fw => downloadFile(fw.file)));
@@ -133,6 +133,13 @@ export const downloadFile = async (fileName: string) => {
         const buffer: Buffer[] = [];
         net.request({ url })
             .on('response', response => {
+                if (response.statusCode >= 400) {
+                    reject(
+                        new Error(
+                            `Unable to download resource, maybe try to manually download ${url} into ${targetFile}`
+                        )
+                    );
+                }
                 response.on('data', data => buffer.push(data));
                 response.on('end', () => resolve(Buffer.concat(buffer)));
                 response.on('error', reject);

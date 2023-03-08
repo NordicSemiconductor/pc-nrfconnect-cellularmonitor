@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { shell } from 'electron';
 import { basename, dirname } from 'path';
 import {
+    Alert,
     Button,
     deviceInfo,
     Dialog,
@@ -21,6 +22,7 @@ import {
 
 import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
 import {
+    downloadedFilePath,
     downloadSample,
     downloadSampleIndex,
     initialSamples,
@@ -143,6 +145,7 @@ const ProgramSample = ({
     );
 
     const [isProgramming, setIsProgramming] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     const progressCb = useCallback(
         ({ progressJson: json, fw }: SampleProgress) => {
@@ -159,7 +162,7 @@ const ProgramSample = ({
         [progress]
     );
 
-    if (!device) return null;
+    if (!device) return <WaitingForReconnect />;
     const isMcuBoot = isThingy91(device);
 
     return (
@@ -179,7 +182,11 @@ const ProgramSample = ({
                         <button
                             type="button"
                             className="btn btn-link"
-                            onClick={() => shell.openPath(dirname(fw.file))}
+                            onClick={() =>
+                                shell.openPath(
+                                    dirname(downloadedFilePath(fw.file))
+                                )
+                            }
                         >
                             {basename(fw.file)}
                         </button>
@@ -203,6 +210,8 @@ const ProgramSample = ({
                         {sample.documentation}
                     </a>
                 </p>
+
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             </Dialog.Body>
             <Dialog.Footer>
                 {isProgramming && <Spinner />}
@@ -222,9 +231,18 @@ const ProgramSample = ({
                     disabled={isProgramming}
                     onClick={async () => {
                         setIsProgramming(true);
-                        await downloadSample(sample);
-                        await flash(device, sample, progressCb);
-                        setIsProgramming(false);
+                        setErrorMessage(undefined);
+                        try {
+                            await downloadSample(sample);
+                            await flash(device, sample, progressCb);
+                            setIsProgramming(false);
+                        } catch (error) {
+                            logger.error(error);
+                            setErrorMessage(
+                                'Unable to program device, please check the log.'
+                            );
+                            setIsProgramming(false);
+                        }
                     }}
                 >
                     Program
@@ -233,3 +251,12 @@ const ProgramSample = ({
         </>
     );
 };
+
+const WaitingForReconnect = () => (
+    <>
+        <Dialog.Header title="Reconnect device" />
+        <Dialog.Body>
+            <p>Waiting for the device to reconnect</p>
+        </Dialog.Body>
+    </>
+);
