@@ -11,7 +11,6 @@ import { Step } from 'pc-nrfconnect-shared/src/Steppers/Steppers';
 
 import {
     getTraceDataReceived,
-    getTraceProgress,
     getTraceTaskId,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
@@ -73,7 +72,50 @@ const SIM_FAIL_STATE: Step = {
     caption: 'SIM is not enabled',
 };
 
+// PDN state
+const PDN_DEFAULT_STATE: Step = {
+    title: 'PDN',
+};
+const PDN_LOADING_STATE: Step = {
+    title: 'PDN',
+    active: true,
+};
+const PDN_SUCCESS_STATE: Step = {
+    title: 'PDN',
+    success: true,
+    caption: 'PDN is enabled',
+};
+const PDN_FAIL_STATE: Step = {
+    title: 'PDN',
+    fail: true,
+    caption: 'PDN is not enabled',
+};
+
+// LTE state
+const LTE_DEFAULT_STATE: Step = {
+    title: 'LTE',
+};
+const LTE_LOADING_STATE: Step = {
+    title: 'LTE',
+    active: true,
+};
+const LTE_SUCCESS_STATE: Step = {
+    title: 'LTE',
+    success: true,
+    caption: 'LTE is enabled',
+};
+const LTE_FAIL_STATE: Step = {
+    title: 'LTE',
+    fail: true,
+    caption: 'LTE is not enabled',
+};
+
+const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
+
 export default () => {
+    const { functionalMode, AcTState, accessPointNames } =
+        useSelector(getDashboardState);
+
     // Handle trace state
     const [traceFailed, setTraceFailed] = useState(false);
     const traceTaskId = useSelector(getTraceTaskId);
@@ -98,7 +140,6 @@ export default () => {
     }, [traceTaskId, traceDataReceived]);
 
     // Handle modem state
-    const functionalMode = useSelector(getDashboardState).functionalMode;
     const [modemFailed, setModemFailed] = useState(false);
     const modemEnabled = functionalMode === 1; // value 1 indicates modem enabled;
     let modemState = MODEM_DEFAULT_STATE;
@@ -110,7 +151,7 @@ export default () => {
         if (traceEnabled && !modemEnabled) {
             timer = setTimeout(() => {
                 setModemFailed(true);
-            }, 10000);
+            }, STATUS_CHECK_TIMEOUT);
         }
         return () => {
             setModemFailed(false);
@@ -123,14 +164,15 @@ export default () => {
     const simEnabled = functionalMode === 1 || functionalMode === 41; // value 1 or 41 indicates SIM enabled;
     let simState = SIM_DEFAULT_STATE;
     if (modemEnabled && !simFailed) simState = SIM_LOADING_STATE;
-    if (modemEnabled && simEnabled) simState = SIM_SUCCESS_STATE;
+    if (traceEnabled && modemEnabled && simEnabled)
+        simState = SIM_SUCCESS_STATE;
     if (simFailed) simState = SIM_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
         if (modemEnabled && !simEnabled) {
             timer = setTimeout(() => {
                 setSimFailed(true);
-            }, 10000);
+            }, STATUS_CHECK_TIMEOUT);
         }
         return () => {
             setSimFailed(false);
@@ -138,16 +180,57 @@ export default () => {
         };
     }, [modemEnabled, simEnabled]);
 
-    const steps: Step[] = [
-        traceState,
-        modemState,
-        simState,
-        { title: 'LTE', caption: 'caption', fail: true },
-        { title: 'PDN', caption: 'caption' },
-    ];
+    // Handle LTE state
+    const [lteFailed, setLteFailed] = useState(false);
+    const lteEnabled =
+        AcTState === 4 || // value 4  indicates LTE-M
+        AcTState === 7 || // value  7 indicates LTE-M
+        AcTState === 5 || // value 5 indicates NB-IoT
+        AcTState === 9; // value 9 indicates NB-IoT
+    let lteState = LTE_DEFAULT_STATE;
+    if (simEnabled && !lteFailed) lteState = LTE_LOADING_STATE;
+    if (traceEnabled && modemEnabled && simEnabled && lteEnabled)
+        lteState = LTE_SUCCESS_STATE;
+    if (lteFailed) lteState = LTE_FAIL_STATE;
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
+        if (simEnabled && !lteEnabled) {
+            timer = setTimeout(() => {
+                setLteFailed(true);
+            }, STATUS_CHECK_TIMEOUT);
+        }
+        return () => {
+            setLteFailed(false);
+            clearTimeout(timer);
+        };
+    }, [simEnabled, lteEnabled]);
+
+    // Handle PDN state
+    const [pdnFailed, setPdnFailed] = useState(false);
+    const pdnEnabled = accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
+    let pdnState = PDN_DEFAULT_STATE;
+    if (lteEnabled && !pdnFailed) pdnState = PDN_LOADING_STATE;
+    if (traceEnabled && modemEnabled && simEnabled && lteEnabled && pdnEnabled)
+        pdnState = PDN_SUCCESS_STATE;
+    if (pdnFailed) pdnState = PDN_FAIL_STATE;
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
+        if (lteEnabled && !pdnEnabled) {
+            timer = setTimeout(() => {
+                setPdnFailed(true);
+            }, STATUS_CHECK_TIMEOUT);
+        }
+        return () => {
+            setPdnFailed(false);
+            clearTimeout(timer);
+        };
+    }, [lteEnabled, pdnEnabled]);
+
     return (
         <div className="connection-status-container">
-            <Steppers steps={steps} />
+            <Steppers
+                steps={[traceState, modemState, simState, lteState, pdnState]}
+            />
         </div>
     );
 };
