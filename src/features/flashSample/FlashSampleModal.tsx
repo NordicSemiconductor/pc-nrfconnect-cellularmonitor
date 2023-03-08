@@ -15,6 +15,7 @@ import {
     deviceInfo,
     Dialog,
     DialogButton,
+    getAutoReselect,
     logger,
     selectedDevice,
     Spinner,
@@ -252,11 +253,19 @@ const ProgramSample = ({
     );
 };
 
-const WaitingForReconnect = () => (
-    <>
-        <Dialog.Header title="Reconnect device" />
-        <Dialog.Body>
-            <p>Waiting for the device to reconnect</p>
-        </Dialog.Body>
-    </>
-);
+const WaitingForReconnect = () => {
+    const autoReselect = useSelector(getAutoReselect);
+
+    return (
+        <>
+            <Dialog.Header title="Reconnect device" />
+            <Dialog.Body>
+                {autoReselect ? (
+                    <p>Waiting for the device to reconnect</p>
+                ) : (
+                    <p>Device disconnected, please start over</p>
+                )}
+            </Dialog.Body>
+        </>
+    );
+};
