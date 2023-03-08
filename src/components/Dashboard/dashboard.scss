@@ -66,42 +66,6 @@
         grid-column: auto/ span 2;
     }
 }
-@media only screen and (max-width: 860px) {
-    .card:nth-child(n) {
-        .info-icon .info {
-            right: 3em !important;
-        }
-        .info::after {
-            left: 100%;
-            border-color: transparent transparent transparent
-                $tooltip-arrow-color;
-        }
-    }
-}
-@media only screen and (max-width: 1600px) {
-    .card:nth-child(3n) {
-        .info-icon .info {
-            right: 3em !important;
-        }
-        .info::after {
-            left: 100%;
-            border-color: transparent transparent transparent
-                $tooltip-arrow-color;
-        }
-    }
-}
-@media only screen and (max-width: 1145px) {
-    .card:nth-child(2n) {
-        .info-icon .info {
-            right: 3em !important;
-        }
-        .info::after {
-            left: 100%;
-            border-color: transparent transparent transparent
-                $tooltip-arrow-color;
-        }
-    }
-}
 
 .icon {
     float: left;
@@ -110,37 +74,5 @@
 }
 .info-icon {
     float: right;
-    .info {
-        flex: 1;
-        flex-shrink: 0;
-        position: absolute;
-        top: 1em;
-        right: -16.5em;
-        padding: 8px;
-        width: $tooltip-max-width;
-        visibility: hidden;
-        background-color: $tooltip-bg;
-        border-color: $tooltip-bg;
-        border-radius: 5px;
-        color: $tooltip-color;
-        font-family: 'Roboto-Regular';
-        font-size: 12px;
-        text-align: left;
-        z-index: 100;
-        opacity: $tooltip-opacity;
-    }
-    .info::after {
-        content: '';
-        position: absolute;
-        top: 8px;
-        left: -5%;
-        border-width: $tooltip-arrow-width;
-        border-style: solid;
-        border-color: transparent $tooltip-arrow-color transparent transparent;
-    }
-}
-
-.info-icon:hover .info {
-    visibility: visible;
 }
 

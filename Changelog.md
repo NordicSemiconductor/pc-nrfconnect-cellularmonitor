@@ -2,9 +2,10 @@
 
 ### Added
 
--   `Dashboard` pane showing states updated based on trace events.
--   `Event Chart` component which shows trace events in time and updates
-    `Dashboard` when selecting timestamps.
+-   Dashboard pane showing states updated based on trace events.
+-   Masonry Layout in the Dashboard pane.
+-   Event Chart component which shows trace events in time and updates Dashboard
+    when selecting timestamps.
 -   Load raw trace files to view in `Dashboard` and `Event Chart`.
 -   Support for AT Commands:
     -   AT+CSCON
@@ -15,6 +16,11 @@
     -   AT%XCONNSTAT
     -   AT+CEDRXRDP
     -   AT%XTIME
+-   Loading state on **Convert RAW trace to PCAP** and **Read Trace from RAW
+    file**.
+-   Open Serial Terminal app with the selected device and serial port.
+-   Macro button, which sends recommended AT commands, in order to read state
+    from device.
 
 ### Changed
 
@@ -24,6 +30,7 @@
     -   T3324: Active Timer
     -   T3412 extended: Periodic TAU
     -   T3412: Periodic TAU (Legacy)
+-   Reordered components in the Side Panel.
 
 ## 0.3.6 - 2022-11-11
 

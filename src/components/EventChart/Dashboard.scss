@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+@import '~pc-nrfconnect-shared/src/variables';
 @import '~pc-nrfconnect-shared/styles';
 
 .events-container {
@@ -13,20 +14,18 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    .events-dashboard-cards {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        flex: 1 1 auto;
+
+        @include scrollbars-helper($gray-100, $gray-500, $gray-500);
+    }
 }
 
 .cards-container {
-    display: flex;
-    flex-wrap: nowrap;
-    width: 100%;
-    gap: 8px;
-    overflow-x: auto;
-    @include scrollbars($gray-100);
-
     .card {
-        //width: 244px;
-        min-width: 276px;
-        max-width: 276px;
         .card-body {
             display: flex;
             flex-direction: column;
@@ -78,24 +77,48 @@
         flex-direction: row;
         justify-content: space-between;
         flex-wrap: wrap;
+        position: relative;
+    }
+
+    .tooltip-helper {
+        position: absolute;
+        bottom: 4px;
+        right: 0px;
+    }
+}
+
+.tooltip {
+    div.arrow {
+        top: -6px;
+        width: 12px;
+        height: 12px;
+    }
+    div.arrow::before {
+        border-bottom-color: $tooltip-bg;
+        border-width: 0 6px 6px 6px;
+    }
+    .tooltip-inner {
+        background: $tooltip-bg;
     }
 }
 
 .card-tooltip {
+    background: $tooltip-bg;
     padding: 8px 16px;
-
     ul {
         list-style-type: none;
         padding: 0;
         display: flex;
         justify-content: center;
         text-decoration: underline;
-
+        color: $nordic-blue;
+        text-decoration-color: $nordic-blue;
         flex-direction: column;
+
+        li:hover {
+            opacity: 0.8;
+        }
     }
-
-
-
 }
 
 #tooltip {

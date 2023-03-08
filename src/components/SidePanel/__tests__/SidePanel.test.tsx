@@ -35,6 +35,37 @@ jest.mock('pc-nrfconnect-shared', () => ({
     getAppDataDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
     currentPane: jest.fn().mockReturnValue(0),
+    createSerialPort: () => ({
+        path: '/dev/ROBOT',
+    }),
+}));
+
+jest.mock('electron', () => ({
+    ...jest.requireActual('electron'),
+    ipcRenderer: {
+        invoke: (channel: string) => {
+            if (channel === 'apps:get-downloadable-apps') {
+                return {
+                    apps: [
+                        {
+                            name: 'pc-nrfconnect-serial-terminal',
+                            source: 'official',
+                            currentVersion: 'v1.0.0',
+                        },
+                    ],
+                };
+            }
+            if (channel === 'apps:get-local-apps') {
+                return [
+                    {
+                        name: 'pc-nrfconnect-serial-terminal',
+                        source: 'local',
+                    },
+                ];
+            }
+            return 'Unexpected IPC Channel used in test';
+        },
+    },
 }));
 
 const serialPortActions = [

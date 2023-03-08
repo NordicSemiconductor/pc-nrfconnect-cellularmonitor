@@ -138,6 +138,7 @@ export default () => {
                                 : undefined,
                         stepSize: 0.5,
                     },
+                    reverse: true,
                     grid: {
                         display: true,
                         offset: true,
@@ -220,12 +221,16 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
+    const chartTopBottomOffset = 20.4;
+    const sectionHeight = 24;
+
     return (
         <>
             <div
                 style={{
                     height: `${
-                        30 + (170 / 6) * (traceEventFilter.length + 2)
+                        chartTopBottomOffset +
+                        traceEventFilter.length * sectionHeight
                     }px`,
                 }}
             >

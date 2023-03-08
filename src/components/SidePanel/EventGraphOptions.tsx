@@ -5,10 +5,8 @@
  */
 
 import React from 'react';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import { Group, StateSelector } from 'pc-nrfconnect-shared';
+import { Group, StateSelector, Toggle } from 'pc-nrfconnect-shared';
 
 import { EVENT_TYPES } from '../../features/tracing/formats';
 import {
@@ -34,31 +32,22 @@ export default () => {
                     dispatch(toggleMode());
                 }}
             />
-            <ToggleButtonGroup className="event-types" type="checkbox">
-                {EVENT_TYPES.map((type, i) => {
-                    const isEnabled = traceEventFilter.includes(type);
-                    return (
-                        <ToggleButton
-                            key={`d${i + 1}`}
-                            checked={isEnabled}
-                            variant={isEnabled ? 'set' : 'unset'}
-                            className="event-type"
-                            value={i}
-                            onChange={event =>
-                                dispatch(
-                                    changeTraceEventFilter({
-                                        type,
-                                        enable: event.target.checked,
-                                    })
-                                )
-                            }
-                            active
-                        >
-                            {type}
-                        </ToggleButton>
-                    );
-                })}
-            </ToggleButtonGroup>
+
+            {EVENT_TYPES.map(type => (
+                <Toggle
+                    key={type}
+                    label={type}
+                    isToggled={traceEventFilter.includes(type)}
+                    onToggle={isToggled =>
+                        dispatch(
+                            changeTraceEventFilter({
+                                type,
+                                enable: isToggled,
+                            })
+                        )
+                    }
+                />
+            ))}
         </Group>
     );
 };

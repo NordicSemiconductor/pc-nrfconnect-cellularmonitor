@@ -5,9 +5,8 @@
  */
 
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger, usageData } from 'pc-nrfconnect-shared';
+import { Button, logger, usageData } from 'pc-nrfconnect-shared';
 
 import {
     getManualDbFilePath,
@@ -41,8 +40,7 @@ const SelectTraceDbManually = () => {
 
     return (
         <Button
-            variant="secondary"
-            className="w-100 btn-sm"
+            className="w-100 secondary-btn"
             onClick={updateManualDbFilePath}
         >
             Select Trace DB
@@ -60,8 +58,7 @@ const SelectTraceDbAutomatically = () => {
 
     return (
         <Button
-            variant="secondary"
-            className="w-100 btn-sm"
+            className="w-100 secondary-btn"
             onClick={selectTraceDbAutomatically}
         >
             Autoselect Trace DB

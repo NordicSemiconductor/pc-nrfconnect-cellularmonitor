@@ -20,12 +20,6 @@ export default () => {
         xModemTraceOperation,
         xModemTraceSetID,
 
-        // xSystemMode
-        modemSupportLTEM,
-        modemSupportNBIoT,
-        modemSupportGNSS,
-        modemSystemPreference,
-
         // +CEREG Notifications
         networkStatusNotifications,
 
@@ -61,29 +55,6 @@ export default () => {
         networkTimeNotification,
     } = useSelector(getDashboardState);
 
-    const parseSupportedValue = (supported: boolean | undefined) => {
-        if (supported === undefined) return 'Unknown';
-
-        return supported ? 'Yes' : 'No';
-    };
-
-    const parsePreferredBearer = (preferred: number) => {
-        switch (preferred) {
-            case 0:
-                return 'No Preference';
-            case 1:
-                return 'LTE-M';
-            case 2:
-                return 'NB-IoT';
-            case 3:
-                return 'Network Selection (LTE-M)';
-            case 4:
-                return 'Network Selection (LTE-M)';
-            default:
-                return 'Unknown';
-        }
-    };
-
     const fields: DashboardCardFields = {
         'Trace State Operation': {
             value: xModemTraceOperation ?? 'Unknown',
@@ -92,22 +63,6 @@ export default () => {
         'Trace State Set ID': {
             value: xModemTraceSetID ?? 'Unknown',
             commands: ['AT%XMODEMTRACE'] as const,
-        },
-        'LTE-M Support': {
-            value: parseSupportedValue(modemSupportLTEM),
-            commands: ['AT%XSYSTEMMODE'] as const,
-        },
-        'NB-IoT Support': {
-            value: parseSupportedValue(modemSupportNBIoT),
-            commands: ['AT%XSYSTEMMODE'] as const,
-        },
-        'GNSS Support': {
-            value: parseSupportedValue(modemSupportGNSS),
-            commands: ['AT%XSYSTEMMODE'] as const,
-        },
-        'Preferred Bearer': {
-            value: parsePreferredBearer(modemSystemPreference),
-            commands: ['AT%XSYSTEMMODE'] as const,
         },
         'Network Status Notifications': {
             value: parseNotificationStatus(networkStatusNotifications),

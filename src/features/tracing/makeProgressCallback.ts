@@ -52,11 +52,9 @@ export default (
     {
         detectingTraceDb,
         displayDetectingTraceDbMessage,
-        throttleUpdatingProgress,
     }: {
         detectingTraceDb: boolean;
         displayDetectingTraceDbMessage: boolean;
-        throttleUpdatingProgress: boolean;
     }
 ) => {
     let progressCallbackCounter = 0;
@@ -68,24 +66,11 @@ export default (
         dispatch(setDetectingTraceDb(true));
     }
 
-    return (progress: nrfml.Progress) => {
-        if (displayDetectingTraceDbMessage && progressCallbackCounter === 0) {
-            dispatch(setDetectingTraceDb(false));
-        }
-
-        detectModemFwUuid(progress);
-        detectTraceDB(progress);
-
-        /*
-            This callback is triggered quite often, and it can negatively affect the
-            performance, so it should be fine to only process every nth sample. The offset
-            property received from nrfml is accumulated size, so we don't lose any data this way
-        */
-        progressCallbackCounter += 1;
-        if (progressCallbackCounter % 20 !== 0 && throttleUpdatingProgress)
-            return;
+    let latestProgress: nrfml.Progress | null = null;
+    let destroyIntervalTimeout: NodeJS.Timeout;
+    const interval = setInterval(() => {
         try {
-            progress?.data_offsets?.forEach(progressItem => {
+            latestProgress?.data_offsets?.forEach(progressItem => {
                 dispatch(
                     setTraceProgress({
                         path: progressItem.path,
@@ -100,5 +85,22 @@ export default (
                 )}`
             );
         }
+    }, 200);
+
+    destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
+
+    return (progress: nrfml.Progress) => {
+        if (displayDetectingTraceDbMessage && progressCallbackCounter === 0) {
+            dispatch(setDetectingTraceDb(false));
+        }
+        detectModemFwUuid(progress);
+        detectTraceDB(progress);
+
+        latestProgress = progress;
+
+        progressCallbackCounter += 1;
+
+        clearTimeout(destroyIntervalTimeout);
+        destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
     };
 };

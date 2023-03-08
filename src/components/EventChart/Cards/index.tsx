@@ -6,6 +6,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { MasonryLayout } from 'pc-nrfconnect-shared';
 
 import { events } from '../../../features/tracing/tracePacketEvents';
 import { convert } from '../../../features/tracingEvents';
@@ -44,14 +45,14 @@ export default () => {
     }, [dispatch, timestamp]);
 
     return (
-        <div className="cards-container">
-            <Temp />
+        <MasonryLayout className="cards-container" minWidth={350}>
             <Device />
-            <Sim />
             <LTENetwork />
-            {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
+            <Sim />
             <PacketDomainNetwork />
+            {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
             <ConnectivityStaistics />
-        </div>
+            <Temp />
+        </MasonryLayout>
     );
 };

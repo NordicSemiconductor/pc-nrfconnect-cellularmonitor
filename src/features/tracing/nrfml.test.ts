@@ -30,6 +30,7 @@ jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
+    selectedDevice: () => {},
 }));
 
 const mockStore = getMockStore();
