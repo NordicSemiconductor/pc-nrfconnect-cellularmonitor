@@ -7,6 +7,7 @@
 /* eslint-disable no-restricted-syntax */
 
 import React from 'react';
+import { enableFetchMocks } from 'jest-fetch-mock';
 
 import { TraceFormat } from '../../../features/tracing/formats';
 import {
@@ -29,10 +30,13 @@ import {
     TraceCollectorSidePanel,
 } from '../SidePanel';
 
+enableFetchMocks();
+
 jest.mock('../../../features/wireshark/wireshark');
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
+    getAppDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
     currentPane: jest.fn().mockReturnValue(0),
     createSerialPort: () => ({

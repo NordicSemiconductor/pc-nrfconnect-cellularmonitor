@@ -32,11 +32,11 @@ import PowerEstimation from './PowerEstimation';
 jest.mock('../../features/wireshark/wireshark');
 
 enableFetchMocks();
-
 jest.mock('plotly.js', () => ({}));
 jest.mock('pc-nrfconnect-shared', () => ({
     ...jest.requireActual('pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
+    getAppDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
 }));
 const serialPortActions = [
