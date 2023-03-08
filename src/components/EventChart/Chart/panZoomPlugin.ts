@@ -515,7 +515,7 @@ export default {
                     .filter(e => traceEventFilter.includes(e.format))
                     .findIndex(e => e.timestamp >= timestampRef);
 
-                if (newFirstDataIndex === -1) newRange = getRange(chart);
+                if (newFirstDataIndex === -1) newRange = { ...currentRange };
                 else {
                     const min = newFirstDataIndex + (currentRange.min % 1);
                     newRange = {
