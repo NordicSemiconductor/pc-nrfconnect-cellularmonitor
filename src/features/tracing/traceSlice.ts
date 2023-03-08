@@ -24,6 +24,7 @@ export interface TraceProgress {
 interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;
+    dataReceived: boolean;
     serialPort: string | null;
     availableSerialPorts: string[];
     manualDbFilePath?: string;
@@ -34,6 +35,7 @@ interface TraceState {
 const initialState = (): TraceState => ({
     traceProgress: [],
     taskId: null,
+    dataReceived: false,
     serialPort: null,
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
@@ -71,6 +73,10 @@ const traceSlice = createSlice({
             if (progressToUpdate != null) {
                 progressToUpdate.size = action.payload.size;
             }
+        },
+        setTraceDataReceived: (state, action: PayloadAction<boolean>) => {
+            console.log('action', action);
+            state.dataReceived = action.payload;
         },
 
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
@@ -115,6 +121,8 @@ export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
 export const getTraceProgress = (state: RootState) =>
     state.app.trace.traceProgress;
+export const getTraceDataReceived = (state: RootState) =>
+    state.app.trace.dataReceived;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
 export const getSelectedSerialNumber = (state: RootState) =>
@@ -130,6 +138,7 @@ export const {
     setTraceIsStarted,
     setTraceIsStopped,
     setTraceProgress,
+    setTraceDataReceived,
     setSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,

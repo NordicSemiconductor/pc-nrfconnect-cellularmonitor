@@ -10,6 +10,7 @@ import { Steppers } from 'pc-nrfconnect-shared';
 import { Step } from 'pc-nrfconnect-shared/src/Steppers/Steppers';
 
 import {
+    getTraceDataReceived,
     getTraceProgress,
     getTraceTaskId,
 } from '../../features/tracing/traceSlice';
@@ -37,13 +38,12 @@ const TRACE_FAIL_STATE: Step = {
 
 export default () => {
     const [isTraceFailed, setIsTraceFailed] = useState(false);
-    const progress = useSelector(getTraceProgress);
     const traceTaskId = useSelector(getTraceTaskId);
-    const isTraceFileEmpty = !progress.find(p => p.size && p.size > 0);
+    const traceDataReceived = useSelector(getTraceDataReceived);
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
-        if (traceTaskId && isTraceFileEmpty) {
+        if (traceTaskId && !traceDataReceived) {
             timer = setTimeout(() => {
                 setIsTraceFailed(true);
             }, 10000);
@@ -52,11 +52,11 @@ export default () => {
             setIsTraceFailed(false);
             clearTimeout(timer);
         };
-    }, [traceTaskId, isTraceFileEmpty]);
+    }, [traceTaskId, traceDataReceived]);
 
     let traceState = TRACE_DEFAULT_STATE;
     if (traceTaskId && !isTraceFailed) traceState = TRACE_LOADING_STATE;
-    if (traceTaskId && !isTraceFileEmpty && !isTraceFailed)
+    if (traceTaskId && traceDataReceived && !isTraceFailed)
         traceState = TRACE_SUCCESS_STATE;
     if (isTraceFailed) traceState = TRACE_FAIL_STATE;
 

@@ -30,6 +30,7 @@ import {
 import {
     getManualDbFilePath,
     getSerialPort,
+    setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
 } from './traceSlice';
@@ -167,6 +168,9 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
             }),
             data => {
+                const dataReceived = getState().app.trace.dataReceived;
+                if (!dataReceived) dispatch(setTraceDataReceived(true));
+
                 if (data.format !== 'modem_trace') {
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
@@ -228,5 +232,6 @@ export const stopTrace =
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
         dispatch(setTraceIsStopped());
+        dispatch(setTraceDataReceived(false));
         tracePacketEvents.emit('stop-process');
     };
