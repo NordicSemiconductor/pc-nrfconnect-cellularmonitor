@@ -29,6 +29,7 @@ import {
 } from '../../../features/tracing/tracePacketEvents';
 import chartAreaBorderPlugin from './chartAreaBorderPlugin';
 import {
+    getGroupEvents,
     getLive,
     getMode,
     getTraceEventFilter,
@@ -82,6 +83,7 @@ export default () => {
     const traceEventFilter = useSelector(getTraceEventFilter);
     const isLive = useSelector(getLive);
     const mode = useSelector(getMode);
+    const grouped = useSelector(getGroupEvents);
     const [range, setRange] = useState(defaultOptions(mode).currentRange);
     const [chartArea, setChartCanvas] = useState(chart.current?.chartArea);
 
@@ -193,6 +195,7 @@ export default () => {
                         setRange(relativeRange);
                     },
                     traceEventFilter,
+                    grouped,
                 },
 
                 tooltip: {
@@ -218,7 +221,7 @@ export default () => {
                 },
             },
         }),
-        [dispatch, traceEventFilter]
+        [dispatch, traceEventFilter, grouped]
     );
 
     const chartTopBottomOffset = 20.4;

@@ -88,21 +88,30 @@ const getMinMaxX = (chart: Chart) => {
 
     if (options.mode === 'Event') {
         const min = -getOffset(chart);
+
+        let numberOfPoints;
+        if (options.grouped) {
+            numberOfPoints = data.filter(e =>
+                options.traceEventFilter.includes(e[0].format)
+            ).length;
+        } else {
+            numberOfPoints = data
+                .filter(e => options.traceEventFilter.includes(e[0].format))
+                .flat().length;
+        }
+
         return [
             min,
             Math.max(
-                data.filter(e => options.traceEventFilter.includes(e.format))
-                    .length -
-                    1 +
-                    getOffset(chart),
+                numberOfPoints - 1 + getOffset(chart),
                 min + options.resolution
             ),
         ];
     }
 
     const min =
-        (data[0].timestamp ?? defaultOptions(options.mode).currentRange.min) -
-        getOffset(chart);
+        (data[0][0].timestamp ??
+            defaultOptions(options.mode).currentRange.min) - getOffset(chart);
 
     return [
         min,
@@ -147,22 +156,42 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
     // This is only relevant during the start when the range is bigger than data displayed
     if (options.mode === 'Event') {
         const filteredData = data.filter(event =>
-            options.traceEventFilter.includes(event.format)
+            options.traceEventFilter.includes(event[0].format)
         );
         if (filteredData.length === 0) {
             options.onRangeChanged({ min: 0, max: 0 }, 0);
-        } else {
+        } else if (options.grouped) {
             const maxTimestamp =
-                filteredData[
+                filteredData.flat()[
                     Math.min(Math.floor(range.max), filteredData.length - 1)
                 ].timestamp;
 
             options.onRangeChanged(
                 {
                     min:
-                        filteredData[Math.ceil(Math.max(range.min, 0))]
-                            .timestamp - data[0].timestamp,
-                    max: maxTimestamp - data[0].timestamp,
+                        filteredData.flat()[Math.ceil(Math.max(range.min, 0))]
+                            .timestamp - data[0][0].timestamp,
+                    max: maxTimestamp - data[0][0].timestamp,
+                },
+                maxTimestamp
+            );
+        } else {
+            const maxIndex = Math.min(
+                Math.floor(range.max),
+                filteredData.length - 1
+            );
+            const maxTimestamp =
+                filteredData[maxIndex][filteredData[maxIndex].length - 1]
+                    .timestamp;
+
+            const minIndex = Math.ceil(Math.max(range.min, 0));
+            options.onRangeChanged(
+                {
+                    min:
+                        filteredData[minIndex][
+                            filteredData[minIndex].length - 1
+                        ].timestamp - data[0][0].timestamp,
+                    max: maxTimestamp - data[0][0].timestamp,
                 },
                 maxTimestamp
             );
@@ -197,11 +226,31 @@ const mutateData = (chart: Chart) => {
     if (data.length === 0) return [];
 
     const filteredData = data.filter(event =>
-        options.traceEventFilter.includes(event.format)
+        options.traceEventFilter.includes(event[0].format)
     );
 
     if (options.mode === 'Event') {
         const start = Math.floor(Math.max(options.currentRange.min, 0));
+
+        if (options.grouped) {
+            return filteredData
+                .flat()
+                .slice(
+                    start,
+                    Math.min(
+                        Math.ceil(options.currentRange.max) + 1,
+                        filteredData.length
+                    )
+                )
+                .map(
+                    (event, index) =>
+                        ({
+                            x: start + index,
+                            y: options.traceEventFilter.indexOf(event.format),
+                            event,
+                        } as ScatterDataPoint)
+                );
+        }
 
         return filteredData
             .slice(
@@ -215,8 +264,9 @@ const mutateData = (chart: Chart) => {
                 (event, index) =>
                     ({
                         x: start + index,
-                        y: options.traceEventFilter.indexOf(event.format),
+                        y: options.traceEventFilter.indexOf(event[0].format),
                         event,
+                        count: event.length,
                     } as ScatterDataPoint)
             );
     }
@@ -224,6 +274,7 @@ const mutateData = (chart: Chart) => {
     const offset = getOffset(chart);
 
     return filteredData
+        .flat()
         .filter(
             event =>
                 event.timestamp >= options.currentRange.min - offset &&
@@ -280,7 +331,9 @@ export default {
             }
 
             const { data, options } = getState(chart);
-            options.maxRange = data[data.length - 1].timestamp;
+            const lastDataIndex = data.length - 1;
+            options.maxRange =
+                data[lastDataIndex][data[lastDataIndex].length - 1].timestamp;
             updateRange(chart, getRange(chart));
             chart.update('none');
         });
@@ -324,7 +377,15 @@ export default {
             if (!liveIntervalId) setupLiveInterval(chart);
 
             const { options, data } = getState(chart);
-            data.push(...newData);
+            newData.forEach(e => {
+                if (
+                    data.length === 0 ||
+                    e.format !== data[data.length - 1][0].format
+                ) {
+                    data.push([]);
+                }
+                data[data.length - 1].push(e);
+            });
 
             if (options.live) {
                 const offset = getOffset(chart);
@@ -333,16 +394,16 @@ export default {
                     updateRange(chart, getRange(chart));
                     chart.update('none');
                 } else if (
-                    data[data.length - 1].timestamp >
+                    newData[newData.length - 1].timestamp >
                         options.maxRange + offset + liveInterval * 2 ||
-                    data[data.length - 1].timestamp <
+                    newData[newData.length - 1].timestamp <
                         options.maxRange - liveInterval * 2
                 ) {
                     const alpha = 0.3;
 
                     options.maxRange =
                         alpha * options.maxRange +
-                        (1.0 - alpha) * data[data.length - 1].timestamp;
+                        (1.0 - alpha) * newData[newData.length - 1].timestamp;
                 }
             }
         };
@@ -364,7 +425,7 @@ export default {
                     max: number;
                 }) ?? defaultOptions(mode).resolutionLimits;
 
-            if (options.live) {
+            if (options.live || data.length === 0) {
                 if (updateRange(chart, getRange(chart))) {
                     chart.update('none');
                 }
@@ -373,23 +434,25 @@ export default {
 
             const offset = getOffset(chart);
             if (mode === 'Event') {
-                const refEvent = data.findLast(
-                    e => e.timestamp < options.currentRange.max
-                );
+                const ref = (
+                    chart.data.datasets[
+                        chart.data.datasets.length - 1
+                    ] as unknown as { event: TraceEvent }
+                ).event.sequenceNumber;
 
-                max = refEvent
-                    ? data.indexOf(refEvent) + offset
-                    : defaultOptions(mode).currentRange.max;
+                max = options.grouped
+                    ? data.findIndex(e =>
+                          e.find(event => event.sequenceNumber === ref)
+                      ) + offset
+                    : data.flat().findIndex(e => e.sequenceNumber === ref) +
+                      offset;
             } else {
                 max =
-                    data.length > 0
-                        ? data[
-                              Math.min(
-                                  Math.floor(options.currentRange.max),
-                                  data.length - 1
-                              )
-                          ].timestamp + offset
-                        : defaultOptions('Time').currentRange.max;
+                    (
+                        chart.data.datasets[
+                            chart.data.datasets.length - 1
+                        ] as unknown as { event: TraceEvent }
+                    ).event.timestamp + offset;
             }
 
             if (updateRange(chart, { min: max - options.resolution, max })) {
@@ -496,6 +559,7 @@ export default {
                     mode,
                     traceEventFilter,
                     resolution,
+                    grouped,
                 },
             } = getState(chart);
 
@@ -510,10 +574,23 @@ export default {
                     }
                 ).event.timestamp;
 
-                const newFirstDataIndex = data
-                    .filter(e => traceEventFilter.includes(e.format))
-                    .findIndex(e => e.timestamp >= timestampRef);
+                const filteredData = data.filter(e =>
+                    traceEventFilter.includes(e[0].format)
+                );
 
+                let newFirstDataIndex;
+
+                if (grouped) {
+                    newFirstDataIndex = filteredData.findIndex(
+                        e =>
+                            e[0].timestamp >= timestampRef ||
+                            e[e.length - 1].timestamp >= timestampRef
+                    );
+                } else {
+                    newFirstDataIndex = filteredData
+                        .flat()
+                        .findIndex(e => e.timestamp >= timestampRef);
+                }
                 if (newFirstDataIndex === -1) newRange = { ...currentRange };
                 else {
                     // Use modulo to avoid snapping data points into default position.

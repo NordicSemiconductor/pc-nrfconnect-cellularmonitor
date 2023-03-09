@@ -38,11 +38,12 @@ export type InternalPanPluginOptions = Required<PanPluginOptions> & {
     maxRange: number;
     currentRange: XAxisRange;
     mode: 'Event' | 'Time';
+    grouped: boolean;
 };
 
 interface ChartState {
     options: InternalPanPluginOptions;
-    data: TraceEvent[];
+    data: TraceEvent[][];
 }
 
 const chartStates = new WeakMap<Chart, ChartState>();
@@ -65,6 +66,7 @@ export const defaultOptions = (mode: 'Event' | 'Time') => ({
     onLiveChanged: () => {},
     onRangeChanged: () => {},
     mode,
+    grouped: false,
 });
 
 export const getState = (chart: Chart) => {

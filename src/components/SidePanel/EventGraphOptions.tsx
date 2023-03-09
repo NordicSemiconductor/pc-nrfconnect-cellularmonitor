@@ -11,8 +11,10 @@ import { Group, StateSelector, Toggle } from 'pc-nrfconnect-shared';
 import { EVENT_TYPES } from '../../features/tracing/formats';
 import {
     changeTraceEventFilter,
+    getGroupEvents,
     getMode,
     getTraceEventFilter,
+    toggleGroupEvents,
     toggleMode,
 } from '../EventChart/Chart/chartSlice';
 
@@ -23,6 +25,7 @@ export default () => {
     const dispatch = useDispatch();
     const traceEventFilter = useSelector(getTraceEventFilter);
     const mode = useSelector(getMode);
+    const groupEvents = useSelector(getGroupEvents);
     return (
         <Group heading="Event Graph Options">
             <StateSelector
@@ -32,7 +35,13 @@ export default () => {
                     dispatch(toggleMode());
                 }}
             />
-
+            {mode === 'Event' && (
+                <Toggle
+                    label="Group events"
+                    isToggled={groupEvents}
+                    onToggle={() => dispatch(toggleGroupEvents())}
+                />
+            )}
             {EVENT_TYPES.map(type => (
                 <Toggle
                     key={type}
