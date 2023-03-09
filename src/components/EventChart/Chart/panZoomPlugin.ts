@@ -484,11 +484,8 @@ export default {
         // This clears the scales and leads to visual glitches
         if (chart.data.datasets[0].data.length <= 0) return;
 
-        if (
-            (chart.scales.x.options as CartesianScaleOptions).min ===
-                undefined ||
-            (chart.scales.x.options as CartesianScaleOptions).max === undefined
-        ) {
+        const options = chart.scales.x.options as CartesianScaleOptions;
+        if (options.min === undefined || options.max === undefined) {
             const {
                 data,
                 options: {
@@ -517,6 +514,7 @@ export default {
 
                 if (newFirstDataIndex === -1) newRange = { ...currentRange };
                 else {
+                    // Use modulo to avoid snapping data points into default position.
                     const min = newFirstDataIndex + (currentRange.min % 1);
                     newRange = {
                         min,
