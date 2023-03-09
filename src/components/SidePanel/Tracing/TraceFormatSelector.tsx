@@ -48,10 +48,11 @@ export default ({
                     (format: TraceFormat) => format !== 'tshark'
                 ).map((format: TraceFormat) => (
                     <Button
-                        variant={
+                        variant="custom"
+                        className={
                             selectedTraceFormats.includes(format)
-                                ? 'primary'
-                                : 'secondary'
+                                ? 'set'
+                                : 'unset'
                         }
                         onClick={selectTraceFormat(format)}
                         key={format}
