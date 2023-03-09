@@ -364,7 +364,7 @@ export default {
                     max: number;
                 }) ?? defaultOptions(mode).resolutionLimits;
 
-            if (options.live) {
+            if (options.live || data.length === 0) {
                 if (updateRange(chart, getRange(chart))) {
                     chart.update('none');
                 }
