@@ -5,10 +5,15 @@
  */
 
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import InnerHTML from 'dangerously-set-html-content';
-import { Alert, PaneProps, Spinner, usageData } from 'pc-nrfconnect-shared';
+import {
+    Alert,
+    Button,
+    PaneProps,
+    Spinner,
+    usageData,
+} from 'pc-nrfconnect-shared';
 import Plotly from 'plotly.js';
 
 import {
@@ -31,6 +36,9 @@ import EventAction from '../../usageDataActions';
 import { Tshark } from '../Wireshark/Tshark';
 
 import './powerEstimation.scss';
+
+const scrollIntoView = (id: string) =>
+    document.getElementById(id)?.scrollIntoView();
 
 export default ({ active }: PaneProps) => {
     const dispatch = useDispatch();
@@ -181,21 +189,25 @@ export default ({ active }: PaneProps) => {
                             <Button
                                 className="opp-nav-btn"
                                 variant="secondary"
-                                href="#general-information"
+                                onClick={() =>
+                                    scrollIntoView('general-information')
+                                }
                             >
                                 Information
                             </Button>
                             <Button
                                 className="opp-nav-btn"
                                 variant="secondary"
-                                href="#opp-plot"
+                                onClick={() => scrollIntoView('opp-plot')}
                             >
                                 Chart
                             </Button>
                             <Button
                                 className="opp-nav-btn"
                                 variant="secondary"
-                                href="#opp-params-form"
+                                onClick={() =>
+                                    scrollIntoView('opp-params-form')
+                                }
                             >
                                 Settings
                             </Button>

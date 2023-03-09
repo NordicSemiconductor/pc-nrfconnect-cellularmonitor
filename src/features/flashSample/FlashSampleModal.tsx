@@ -51,6 +51,7 @@ export default () => {
             {compatible && (
                 <Button
                     className="w-100"
+                    variant="secondary"
                     onClick={() => setModalVisible(!modalVisible)}
                 >
                     Program device
@@ -117,6 +118,7 @@ const SelectSample = ({
                             </p>
                             <Button
                                 className="w-100"
+                                variant="secondary"
                                 onClick={() => {
                                     selectSample(sample);
                                 }}

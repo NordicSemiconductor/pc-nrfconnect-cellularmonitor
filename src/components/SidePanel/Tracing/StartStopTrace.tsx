@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
+import { StartStopButton } from 'pc-nrfconnect-shared';
 
 import { TraceFormat } from '../../../features/tracing/formats';
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
@@ -29,24 +29,17 @@ export default ({ traceFormats = [] }: StartStopProps) => {
         dispatch(stopTrace(nrfmlTaskId));
     };
 
-    return isTracing ? (
-        <Button
-            className="w-100 secondary-btn start-stop active-animation"
+    return (
+        <StartStopButton
             variant="secondary"
-            onClick={stop}
-        >
-            <span className="mdi mdi-stop-circle" />
-            Stop tracing
-        </Button>
-    ) : (
-        <Button
-            className="w-100 secondary-btn start-stop"
-            variant="secondary"
-            onClick={start}
-            disabled={traceFormats.length === 0}
-        >
-            <span className="mdi mdi-play-circle" />
-            Start tracing
-        </Button>
+            onClick={() => {
+                if (isTracing) stop();
+                else start();
+            }}
+            started={isTracing}
+            startText="Start tracing"
+            stopText="Stop tracing"
+            disabled={!isTracing && traceFormats.length === 0}
+        />
     );
 };

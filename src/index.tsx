@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { App, FeedbackPane } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -40,6 +40,11 @@ export default () => (
             {
                 name: 'Events Dashboard',
                 Main: EventChartDashboard,
+                SidePanel: TraceCollectorSidePanel,
+            },
+            {
+                name: 'Feedback',
+                Main: FeedbackPane,
                 SidePanel: TraceCollectorSidePanel,
             },
         ]}

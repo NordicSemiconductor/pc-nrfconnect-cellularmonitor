@@ -2,6 +2,7 @@
 
 ### Added
 
+-   Feedback Pane, to anonymously give feedback about the app.
 -   Dashboard pane showing states updated based on trace events.
 -   Masonry Layout in the Dashboard pane.
 -   Event Chart component which shows trace events in time and updates Dashboard

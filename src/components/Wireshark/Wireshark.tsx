@@ -5,9 +5,8 @@
  */
 
 import React, { FC } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { openUrl, usageData } from 'pc-nrfconnect-shared';
+import { Button, openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import {
     findWireshark,
@@ -39,12 +38,7 @@ const SelectWireshark: FC = ({ children }) => {
     };
 
     return (
-        <Button
-            onClick={updateWiresharkPath}
-            role="button"
-            variant="link"
-            className="card-links"
-        >
+        <Button onClick={updateWiresharkPath} variant="link">
             {children}
         </Button>
     );
@@ -67,7 +61,7 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
             {wiresharkPath != null ? (
                 <>
                     <Button
-                        className="w-100 secondary-btn"
+                        className="w-100"
                         variant="secondary"
                         onClick={loadPcap}
                     >
@@ -91,7 +85,6 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
                         )}
                         <Button
                             variant="link"
-                            className="card-links"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
                         >
                             Install Wireshark

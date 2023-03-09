@@ -18,7 +18,8 @@ export const Macros = () => {
             <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
                 <Button
                     large
-                    className="btn-secondary w-100"
+                    className="w-100"
+                    variant="secondary"
                     onClick={() => subscribe(serialPort)}
                     title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
                 >

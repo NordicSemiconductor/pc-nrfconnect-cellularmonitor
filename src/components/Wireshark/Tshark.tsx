@@ -5,9 +5,8 @@
  */
 
 import React, { FC } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
-import { openUrl, usageData } from 'pc-nrfconnect-shared';
+import { Button, openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import { WIRESHARK_DOWNLOAD_URL } from '../../features/wireshark/wireshark';
 import { setTsharkPath } from '../../features/wireshark/wiresharkSlice';
@@ -28,7 +27,6 @@ const SelectTshark: FC = ({ children }) => {
     return (
         <Button
             onClick={updateTsharkPath}
-            role="button"
             variant="secondary"
             className="tshark-btn"
         >
