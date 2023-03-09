@@ -5,10 +5,9 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spinner } from 'pc-nrfconnect-shared';
+import { Button, Spinner } from 'pc-nrfconnect-shared';
 
 import {
     getDetectingTraceDb,

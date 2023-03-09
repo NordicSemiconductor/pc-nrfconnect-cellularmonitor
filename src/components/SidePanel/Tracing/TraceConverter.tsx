@@ -24,9 +24,10 @@ export default () => {
 
     return (
         <Button
-            className={`w-100 secondary-btn ${loading && 'active-animation'}`}
+            className={`w-100 ${loading && 'active-animation'}`}
             onClick={loadTrace}
             disabled={loading}
+            variant="secondary"
         >
             {loading === true
                 ? 'Converting file to PCAP'

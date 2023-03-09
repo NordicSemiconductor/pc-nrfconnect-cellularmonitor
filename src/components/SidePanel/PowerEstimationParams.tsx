@@ -5,12 +5,12 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialog } from '@electron/remote';
 import { writeFile } from 'fs';
 import { join } from 'path';
 import {
+    Button,
     CollapsibleGroup,
     getAppDataDir,
     openUrl,
@@ -78,7 +78,7 @@ const SavePowerDataFromRunningTrace = ({
         <Button
             variant="secondary"
             disabled={!powerDataExists}
-            className="w-100 btn-sm"
+            className="w-100"
             title={title}
             onClick={onSave}
         >
@@ -128,7 +128,7 @@ export default () => {
             </p>
             <Button
                 variant="secondary"
-                className="w-100 btn-sm"
+                className="w-100"
                 onClick={() => {
                     usageData.sendUsageData(EventAction.VISIT_OPP);
                     openUrl(OPE_URL);

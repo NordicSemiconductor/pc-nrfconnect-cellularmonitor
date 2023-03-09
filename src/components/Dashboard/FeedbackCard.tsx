@@ -21,7 +21,8 @@ export default () => (
                 <b>ncd-noreply@nordicsemi.no</b> by clicking the button below.
             </p>
             <Button
-                className="secondary-btn w-100 mt-2"
+                className="w-100 mt-2"
+                variant="secondary"
                 onClick={() => openUrl(`mailto:${NCD_EMAIL_ADDRESS}`)}
                 title={`mailto:${NCD_EMAIL_ADDRESS}`}
             >
@@ -30,19 +31,17 @@ export default () => (
         </section>
         <section>
             <h5>User guide</h5>
-            <p>
-                Click{' '}
-                <Button
-                    className="p-0 btn-link border-0"
-                    title={USER_GUIDE_VIDEO}
-                    onClick={() => openUrl(USER_GUIDE_VIDEO)}
-                >
-                    here
-                </Button>{' '}
-                for a short introductory video showing how to use the{' '}
-                <b>Trace Collector v2</b> for recording modem traces and how to
-                generate files for Wireshark.
-            </p>
+            Click{' '}
+            <Button
+                variant="link"
+                title={USER_GUIDE_VIDEO}
+                onClick={() => openUrl(USER_GUIDE_VIDEO)}
+            >
+                here
+            </Button>{' '}
+            for a short introductory video showing how to use the{' '}
+            <b>Trace Collector v2</b> for recording modem traces and how to
+            generate files for Wireshark.
         </section>
     </Card>
 );

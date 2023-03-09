@@ -28,11 +28,10 @@ export const LoadTraceFile = () => {
     return (
         <CollapsibleGroup heading="Read Trace">
             <Button
-                className={`w-100 secondary-btn ${
-                    loading && 'active-animation'
-                }`}
+                className={`w-100 ${loading && 'active-animation'}`}
                 onClick={readRawFile}
                 disabled={loading}
+                variant="secondary"
             >
                 {loading === true
                     ? 'Reading trace file'

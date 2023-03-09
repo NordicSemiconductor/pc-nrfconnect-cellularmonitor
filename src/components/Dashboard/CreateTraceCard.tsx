@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import { Card, openUrl } from 'pc-nrfconnect-shared';
+import { Button, Card, openUrl } from 'pc-nrfconnect-shared';
 
 export default () => (
     <Card title="Creating a trace">
@@ -17,7 +16,6 @@ export default () => (
                     according to{' '}
                     <Button
                         variant="link"
-                        className="card-links"
                         onClick={() =>
                             openUrl(
                                 'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_trace_collector%2FUG%2Ftrace_collector%2Fcollect_modem_trace.html'
