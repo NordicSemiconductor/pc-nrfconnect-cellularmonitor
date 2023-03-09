@@ -32,6 +32,7 @@ const deviceListing: DeviceTraits = {
     nordicUsb: true,
     serialPorts: true,
     jlink: true,
+    mcuBoot: true,
 };
 
 const mapState = (): DeviceSelectorProps => ({
@@ -67,8 +68,9 @@ const openDevice =
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = device.serialPorts ?? [];
-        if (ports?.length > 0) {
+        const ports = device.serialPorts;
+
+        if (ports && ports.length > 0) {
             dispatch(
                 setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
             );
@@ -78,7 +80,7 @@ const openDevice =
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = autoSelectPort(ports);
+        const port = autoSelectPort(ports ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));

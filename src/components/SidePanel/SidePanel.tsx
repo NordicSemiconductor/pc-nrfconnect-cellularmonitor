@@ -21,6 +21,7 @@ import {
 } from 'pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 
+import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
 import {
     getAvailableSerialPorts,
     getUartSerialPort,
@@ -55,6 +56,8 @@ export const TraceCollectorSidePanel = () => (
         <LoadTraceFile />
 
         <EventGraphOptions />
+
+        <FlashSampleModal />
     </SidePanel>
 );
 
