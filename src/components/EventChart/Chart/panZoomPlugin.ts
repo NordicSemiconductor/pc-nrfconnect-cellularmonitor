@@ -373,12 +373,15 @@ export default {
 
             const offset = getOffset(chart);
             if (mode === 'Event') {
-                const refEvent = data.findLast(
+                const filteredData = data.filter(e =>
+                    options.traceEventFilter.includes(e.format)
+                );
+                const refEvent = filteredData.findLast(
                     e => e.timestamp < options.currentRange.max
                 );
 
                 max = refEvent
-                    ? data.indexOf(refEvent) + offset
+                    ? filteredData.indexOf(refEvent) + offset
                     : defaultOptions(mode).currentRange.max;
             } else {
                 max =
