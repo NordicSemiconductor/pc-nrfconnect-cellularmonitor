@@ -174,7 +174,7 @@ const OpenSerialTerminal = () => {
             {selectedUartSerialPort != null ? (
                 <Button
                     large
-                    className="btn-secondary w-100 mt-2"
+                    className="w-100 mt-2"
                     onClick={() =>
                         openSerialTerminal(
                             device,
@@ -184,6 +184,7 @@ const OpenSerialTerminal = () => {
                     }
                     disabled={sources.length === 0}
                     title={`Open Serial Terminal and auto connect to port ${selectedUartSerialPort.path} on device with S\\N ${device.serialNumber}`}
+                    variant="secondary"
                 >
                     Open Serial Terminal
                 </Button>

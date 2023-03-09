@@ -128,7 +128,7 @@ export default () => {
             </p>
             <Button
                 variant="secondary"
-                className="w-100 btn-sm"
+                className="w-100"
                 onClick={() => {
                     usageData.sendUsageData(EventAction.VISIT_OPP);
                     openUrl(OPE_URL);
