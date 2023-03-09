@@ -12,7 +12,10 @@ import type {
     ScatterDataPoint,
 } from 'chart.js';
 
-import { tracePacketEvents } from '../../../features/tracing/tracePacketEvents';
+import {
+    TraceEvent,
+    tracePacketEvents,
+} from '../../../features/tracing/tracePacketEvents';
 import {
     defaultOptions,
     getState,
@@ -475,6 +478,61 @@ export default {
                 (event.offsetX - chart.chartArea.left) / chart.chartArea.width;
             chart.zoom(newResolution, offset);
         });
+    },
+    beforeUpdate(chart) {
+        // When changing the trace event filter the chart is partially reset
+        // This clears the scales and leads to visual glitches
+        if (chart.data.datasets[0].data.length <= 0) return;
+
+        const options = chart.scales.x.options as CartesianScaleOptions;
+        if (options.min === undefined || options.max === undefined) {
+            const {
+                data,
+                options: {
+                    live,
+                    currentRange,
+                    mode,
+                    traceEventFilter,
+                    resolution,
+                },
+            } = getState(chart);
+
+            let newRange;
+
+            if (live) {
+                newRange = getRange(chart);
+            } else if (mode === 'Event') {
+                const timestampRef = (
+                    chart.data.datasets[0].data[0] as unknown as {
+                        event: TraceEvent;
+                    }
+                ).event.timestamp;
+
+                const newFirstDataIndex = data
+                    .filter(e => traceEventFilter.includes(e.format))
+                    .findIndex(e => e.timestamp >= timestampRef);
+
+                if (newFirstDataIndex === -1) newRange = { ...currentRange };
+                else {
+                    // Use modulo to avoid snapping data points into default position.
+                    const min = newFirstDataIndex + (currentRange.min % 1);
+                    newRange = {
+                        min,
+                        max: min + resolution,
+                    };
+                }
+            } else {
+                newRange = { ...currentRange };
+            }
+
+            if (!updateRange(chart, newRange)) {
+                // Guarantee that range is valid and that scales have assigned values
+                (chart.scales.x.options as CartesianScaleOptions).min =
+                    newRange.min;
+                (chart.scales.x.options as CartesianScaleOptions).max =
+                    newRange.max;
+            }
+        }
     },
     beforeElementsUpdate(chart) {
         chart.data.datasets[0].data = mutateData(chart);
