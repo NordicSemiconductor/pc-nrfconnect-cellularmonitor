@@ -372,10 +372,10 @@ export default {
             }
 
             const offset = getOffset(chart);
+            const filteredData = data.filter(e =>
+                options.traceEventFilter.includes(e.format)
+            );
             if (mode === 'Event') {
-                const filteredData = data.filter(e =>
-                    options.traceEventFilter.includes(e.format)
-                );
                 const refEvent = filteredData.findLast(
                     e => e.timestamp < options.currentRange.max
                 );
@@ -385,8 +385,8 @@ export default {
                     : defaultOptions(mode).currentRange.max;
             } else {
                 max =
-                    data.length > 0
-                        ? data[
+                    filteredData.length > 0
+                        ? filteredData[
                               Math.min(
                                   Math.floor(options.currentRange.max),
                                   data.length - 1
