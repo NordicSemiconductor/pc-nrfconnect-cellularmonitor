@@ -20,7 +20,7 @@ export const Macros = () => {
                     large
                     className="w-100"
                     variant="secondary"
-                    onClick={() => subscribe(serialPort)}
+                    onClick={() => sendMacros(serialPort)}
                     title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
                 >
                     Send Recommended AT
@@ -78,7 +78,32 @@ const recommendedAt = [
     'AT%XSYSTEMMODE?',
 ];
 
-const subscribe = (serialPort: SerialPort) => {
+const sendMacros = (serialPort: SerialPort) => {
+    testMode(serialPort);
+};
+
+const testMode = (serialPort: SerialPort) => {
+    const decoder = new TextDecoder();
+    let prefix = 'at ';
+    let response = '';
+
+    const testHandler = serialPort.onData(data => {
+        response += decoder.decode(data);
+        const doCompare = response.endsWith('\r\n');
+        if (doCompare) {
+            if (response.includes('ERROR')) {
+                prefix = '';
+            }
+
+            testHandler();
+            subscribe(serialPort, prefix);
+        }
+    });
+
+    serialPort.write(`${prefix} AT\r\n`);
+};
+
+const subscribe = (serialPort: SerialPort, prefix: string) => {
     const decoder = new TextDecoder();
     let commandIndex = 0;
     let response = '';
@@ -93,7 +118,7 @@ const subscribe = (serialPort: SerialPort) => {
             commandIndex += 1;
 
             if (commandIndex < recommendedAt.length) {
-                serialPort.write(`${recommendedAt[commandIndex]}\r\n`);
+                serialPort.write(`${prefix}${recommendedAt[commandIndex]}\r\n`);
             } else {
                 // Cleanup when all commands have been sent.
                 handler();
@@ -102,5 +127,5 @@ const subscribe = (serialPort: SerialPort) => {
         }
     });
 
-    serialPort.write(`${recommendedAt[commandIndex]}\r\n`);
+    serialPort.write(`${prefix}${recommendedAt[commandIndex]}\r\n`);
 };
