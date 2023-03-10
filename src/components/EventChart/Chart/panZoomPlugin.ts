@@ -364,7 +364,11 @@ export default {
                     max: number;
                 }) ?? defaultOptions(mode).resolutionLimits;
 
-            if (options.live || data.length === 0) {
+            const filteredData = data.filter(e =>
+                options.traceEventFilter.includes(e.format)
+            );
+
+            if (options.live || filteredData.length === 0) {
                 if (updateRange(chart, getRange(chart))) {
                     chart.update('none');
                 }
@@ -372,9 +376,7 @@ export default {
             }
 
             const offset = getOffset(chart);
-            const filteredData = data.filter(e =>
-                options.traceEventFilter.includes(e.format)
-            );
+
             if (mode === 'Event') {
                 const refEvent = filteredData.findLast(
                     e => e.timestamp < options.currentRange.max
@@ -385,14 +387,12 @@ export default {
                     : defaultOptions(mode).currentRange.max;
             } else {
                 max =
-                    filteredData.length > 0
-                        ? filteredData[
-                              Math.min(
-                                  Math.floor(options.currentRange.max),
-                                  data.length - 1
-                              )
-                          ].timestamp + offset
-                        : defaultOptions('Time').currentRange.max;
+                    filteredData[
+                        Math.min(
+                            Math.floor(options.currentRange.max),
+                            data.length - 1
+                        )
+                    ].timestamp + offset;
             }
 
             if (updateRange(chart, { min: max - options.resolution, max })) {
