@@ -12,7 +12,6 @@ import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
 import EventChartDashboard from './components/EventChart/Dashboard';
-import PowerEstimation from './components/PowerEstimation/PowerEstimation';
 import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
 import logLibVersions from './utils/logLibVersions';
 
@@ -30,11 +29,6 @@ export default () => (
             {
                 name: 'Trace Collector',
                 Main: Dashboard,
-                SidePanel: TraceCollectorSidePanel,
-            },
-            {
-                name: 'Power Estimation',
-                Main: PowerEstimation,
                 SidePanel: TraceCollectorSidePanel,
             },
             {

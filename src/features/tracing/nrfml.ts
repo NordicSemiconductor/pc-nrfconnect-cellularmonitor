@@ -14,7 +14,6 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import type { TAction } from '../../utils/thunk';
-import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -113,7 +112,6 @@ export const startTrace =
             port,
             startTime: new Date(),
         };
-        dispatch(resetPowerEstimationParams());
 
         const isDetectingTraceDb =
             getManualDbFilePath(state) == null &&

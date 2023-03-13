@@ -9,7 +9,6 @@ import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
-import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
@@ -84,7 +83,6 @@ describe('nrfml', () => {
         it('should start tracing to pcap', () => {
             store.dispatch(startTrace(['pcap']));
             expect(store.getActions()).toEqual([
-                { type: resetPowerEstimationParams.type, payload: undefined },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -107,7 +105,6 @@ describe('nrfml', () => {
         it('should start tracing to raw binary', () => {
             store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
-                { type: resetPowerEstimationParams.type, payload: undefined },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
@@ -129,7 +126,6 @@ describe('nrfml', () => {
         it('does not create a progress config for live traces', () => {
             store.dispatch(startTrace(['raw', 'live']));
             expect(store.getActions()).toEqual([
-                { type: resetPowerEstimationParams.type, payload: undefined },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -152,7 +148,6 @@ describe('nrfml', () => {
         it('does not create a progress config for live traces', () => {
             store.dispatch(startTrace(['live']));
             expect(store.getActions()).toEqual([
-                { type: resetPowerEstimationParams.type, payload: undefined },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,

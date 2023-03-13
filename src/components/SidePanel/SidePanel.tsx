@@ -32,18 +32,11 @@ import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
 import { LoadTraceFile } from './LoadTraceFile';
 import { Macros } from './Macros';
-import PowerEstimationParams from './PowerEstimationParams';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
-
-export const PowerEstimationSidePanel = () => (
-    <SidePanel>
-        <PowerEstimationParams />
-    </SidePanel>
-);
 
 export const TraceCollectorSidePanel = () => (
     <SidePanel className="side-panel">
