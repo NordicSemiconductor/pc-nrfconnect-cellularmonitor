@@ -51,6 +51,7 @@ export const TraceCollectorSidePanel = () => (
         <Instructions />
         <OpenSerialTerminal />
         <TraceCollector />
+        <ConnectionStatus />
         <TraceFileInformation />
         <Macros />
         <AdvancedOptions />

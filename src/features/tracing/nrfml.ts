@@ -168,7 +168,7 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
             }),
             data => {
-                const dataReceived = getState().app.trace.dataReceived;
+                const { dataReceived } = getState().app.trace;
                 if (!dataReceived) dispatch(setTraceDataReceived(true));
 
                 if (data.format !== 'modem_trace') {
@@ -216,6 +216,9 @@ export const readRawTrace =
             },
             () => {},
             data => {
+                const { dataReceived } = getState().app.trace;
+                if (!dataReceived) dispatch(setTraceDataReceived(true));
+
                 if (data.format !== 'modem_trace') {
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);

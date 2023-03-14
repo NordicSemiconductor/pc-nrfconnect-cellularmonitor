@@ -14,6 +14,7 @@ import {
     getTraceTaskId,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
+import { getManualDbFilePath } from '../../utils/store';
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {
@@ -119,25 +120,30 @@ export default () => {
     // Handle trace state
     const [traceFailed, setTraceFailed] = useState(false);
     const traceTaskId = useSelector(getTraceTaskId);
+    const traceManualDbFilePath = useSelector(getManualDbFilePath);
     const traceDataReceived = useSelector(getTraceDataReceived);
-    const traceEnabled = traceTaskId && traceDataReceived && !traceFailed;
+    const traceEnabled =
+        (traceTaskId || traceManualDbFilePath) &&
+        traceDataReceived &&
+        !traceFailed;
 
     let traceState = TRACE_DEFAULT_STATE;
-    if (traceTaskId && !traceFailed) traceState = TRACE_LOADING_STATE;
+    if ((traceTaskId || traceManualDbFilePath) && !traceFailed)
+        traceState = TRACE_LOADING_STATE;
     if (traceEnabled) traceState = TRACE_SUCCESS_STATE;
     if (traceFailed) traceState = TRACE_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
-        if (traceTaskId && !traceDataReceived) {
+        if ((traceTaskId || traceManualDbFilePath) && !traceDataReceived) {
             timer = setTimeout(() => {
                 setTraceFailed(true);
-            }, 10000);
+            }, STATUS_CHECK_TIMEOUT);
         }
         return () => {
             setTraceFailed(false);
             clearTimeout(timer);
         };
-    }, [traceTaskId, traceDataReceived]);
+    }, [traceTaskId, traceManualDbFilePath, traceDataReceived]);
 
     // Handle modem state
     const [modemFailed, setModemFailed] = useState(false);

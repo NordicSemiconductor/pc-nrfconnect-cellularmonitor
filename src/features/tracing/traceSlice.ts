@@ -75,7 +75,6 @@ const traceSlice = createSlice({
             }
         },
         setTraceDataReceived: (state, action: PayloadAction<boolean>) => {
-            console.log('action', action);
             state.dataReceived = action.payload;
         },
 
