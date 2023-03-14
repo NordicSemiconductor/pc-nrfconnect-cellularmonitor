@@ -17,6 +17,7 @@ import {
     openAppWindow,
     selectedDevice,
     SidePanel,
+    Steppers,
     truncateMiddle,
 } from 'pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
@@ -56,7 +57,6 @@ export const TraceCollectorSidePanel = () => (
         <LoadTraceFile />
 
         <EventGraphOptions />
-
         <FlashSampleModal />
     </SidePanel>
 );
