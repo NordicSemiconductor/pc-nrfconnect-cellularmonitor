@@ -17,7 +17,6 @@ import {
     openAppWindow,
     selectedDevice,
     SidePanel,
-    Steppers,
     truncateMiddle,
 } from 'pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
@@ -29,6 +28,7 @@ import {
     setUartSerialPort,
 } from '../../features/tracing/traceSlice';
 import AdvancedOptions from './AdvancedOptions';
+import ConnectionStatus from './ConnectionStatus';
 import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
 import { LoadTraceFile } from './LoadTraceFile';

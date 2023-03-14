@@ -121,6 +121,7 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
+export const getTraceTaskId = (state: RootState) => state.app.trace.taskId;
 
 export const getUartSerialPort = (state: RootState) =>
     state.app.trace.uartSerialPort;
