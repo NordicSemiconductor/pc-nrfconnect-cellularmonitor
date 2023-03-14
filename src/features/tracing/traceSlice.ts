@@ -25,6 +25,7 @@ interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;
     dataReceived: boolean;
+    sourceFilePath: string | null;
     serialPort: string | null;
     availableSerialPorts: string[];
     manualDbFilePath?: string;
@@ -36,6 +37,7 @@ const initialState = (): TraceState => ({
     traceProgress: [],
     taskId: null,
     dataReceived: false,
+    sourceFilePath: null,
     serialPort: null,
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
@@ -77,6 +79,10 @@ const traceSlice = createSlice({
         setTraceDataReceived: (state, action: PayloadAction<boolean>) => {
             state.dataReceived = action.payload;
         },
+        setTraceSourceFilePath: (state, action: PayloadAction<string>) => {
+            state.sourceFilePath = action.payload;
+        },
+
 
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
             state.availableSerialPorts = action.payload;
@@ -122,6 +128,8 @@ export const getTraceProgress = (state: RootState) =>
     state.app.trace.traceProgress;
 export const getTraceDataReceived = (state: RootState) =>
     state.app.trace.dataReceived;
+export const getTraceSourceFilePath = (state: RootState) =>
+    state.app.trace.sourceFilePath;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
 export const getSelectedSerialNumber = (state: RootState) =>
@@ -138,6 +146,7 @@ export const {
     setTraceIsStopped,
     setTraceProgress,
     setTraceDataReceived,
+    setTraceSourceFilePath,
     setSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,

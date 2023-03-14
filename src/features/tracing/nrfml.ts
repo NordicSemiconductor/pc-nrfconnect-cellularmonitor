@@ -33,6 +33,7 @@ import {
     setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
+    setTraceSourceFilePath,
 } from './traceSlice';
 
 export type TaskId = number;
@@ -225,6 +226,7 @@ export const readRawTrace =
                 }
             }
         );
+        dispatch(setTraceSourceFilePath(sourceFile));
         logger.info(`Started reading trace from ${sourceFile}`);
     };
 

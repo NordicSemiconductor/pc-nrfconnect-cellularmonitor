@@ -111,6 +111,9 @@
     }
 
     .connection-status-container {
-        background-color: black;
+        border-style: solid;
+        border-width: 1px;
+        border-color: $gray-700;
+        padding: 8px 8px 0 8px;
     }
 }

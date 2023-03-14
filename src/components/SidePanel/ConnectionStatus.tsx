@@ -11,10 +11,10 @@ import { Step } from 'pc-nrfconnect-shared/src/Steppers/Steppers';
 
 import {
     getTraceDataReceived,
+    getTraceSourceFilePath,
     getTraceTaskId,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
-import { getManualDbFilePath } from '../../utils/store';
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {
@@ -22,16 +22,16 @@ const TRACE_DEFAULT_STATE: Step = {
 };
 const TRACE_LOADING_STATE: Step = {
     title: 'TRACE',
-    active: true,
+    state: 'active',
 };
 const TRACE_SUCCESS_STATE: Step = {
     title: 'TRACE',
-    success: true,
+    state: 'success',
     caption: 'Trace is enabled',
 };
 const TRACE_FAIL_STATE: Step = {
     title: 'TRACE',
-    fail: true,
+    state: 'failure',
     caption: 'Failed to get trace',
 };
 
@@ -41,16 +41,16 @@ const MODEM_DEFAULT_STATE: Step = {
 };
 const MODEM_LOADING_STATE: Step = {
     title: 'MODEM',
-    active: true,
+    state: 'active',
 };
 const MODEM_SUCCESS_STATE: Step = {
     title: 'MODEM',
-    success: true,
+    state: 'success',
     caption: 'Modem is enabled',
 };
 const MODEM_FAIL_STATE: Step = {
     title: 'MODEM',
-    fail: true,
+    state: 'failure',
     caption: 'Modem is not enabled',
 };
 
@@ -60,16 +60,16 @@ const SIM_DEFAULT_STATE: Step = {
 };
 const SIM_LOADING_STATE: Step = {
     title: 'SIM',
-    active: true,
+    state: 'active',
 };
 const SIM_SUCCESS_STATE: Step = {
     title: 'SIM',
-    success: true,
+    state: 'success',
     caption: 'SIM is enabled',
 };
 const SIM_FAIL_STATE: Step = {
     title: 'SIM',
-    fail: true,
+    state: 'failure',
     caption: 'SIM is not enabled',
 };
 
@@ -79,16 +79,16 @@ const PDN_DEFAULT_STATE: Step = {
 };
 const PDN_LOADING_STATE: Step = {
     title: 'PDN',
-    active: true,
+    state: 'active',
 };
 const PDN_SUCCESS_STATE: Step = {
     title: 'PDN',
-    success: true,
+    state: 'success',
     caption: 'PDN is enabled',
 };
 const PDN_FAIL_STATE: Step = {
     title: 'PDN',
-    fail: true,
+    state: 'failure',
     caption: 'PDN is not enabled',
 };
 
@@ -98,20 +98,20 @@ const LTE_DEFAULT_STATE: Step = {
 };
 const LTE_LOADING_STATE: Step = {
     title: 'LTE',
-    active: true,
+    state: 'active',
 };
 const LTE_SUCCESS_STATE: Step = {
     title: 'LTE',
-    success: true,
+    state: 'success',
     caption: 'LTE is enabled',
 };
 const LTE_FAIL_STATE: Step = {
     title: 'LTE',
-    fail: true,
+    state: 'failure',
     caption: 'LTE is not enabled',
 };
 
-const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
+const STATUS_CHECK_TIMEOUT = 10 * 1000; // 1 minute
 
 export default () => {
     const { functionalMode, AcTState, accessPointNames } =
@@ -120,21 +120,21 @@ export default () => {
     // Handle trace state
     const [traceFailed, setTraceFailed] = useState(false);
     const traceTaskId = useSelector(getTraceTaskId);
-    const traceManualDbFilePath = useSelector(getManualDbFilePath);
+    const traceSourceFilePath = useSelector(getTraceSourceFilePath);
     const traceDataReceived = useSelector(getTraceDataReceived);
     const traceEnabled =
-        (traceTaskId || traceManualDbFilePath) &&
+        (traceTaskId || traceSourceFilePath) &&
         traceDataReceived &&
         !traceFailed;
 
     let traceState = TRACE_DEFAULT_STATE;
-    if ((traceTaskId || traceManualDbFilePath) && !traceFailed)
+    if ((traceTaskId || traceSourceFilePath) && !traceFailed)
         traceState = TRACE_LOADING_STATE;
     if (traceEnabled) traceState = TRACE_SUCCESS_STATE;
     if (traceFailed) traceState = TRACE_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
-        if ((traceTaskId || traceManualDbFilePath) && !traceDataReceived) {
+        if ((traceTaskId || traceSourceFilePath) && !traceDataReceived) {
             timer = setTimeout(() => {
                 setTraceFailed(true);
             }, STATUS_CHECK_TIMEOUT);
@@ -143,7 +143,7 @@ export default () => {
             setTraceFailed(false);
             clearTimeout(timer);
         };
-    }, [traceTaskId, traceManualDbFilePath, traceDataReceived]);
+    }, [traceTaskId, traceSourceFilePath, traceDataReceived]);
 
     // Handle modem state
     const [modemFailed, setModemFailed] = useState(false);
@@ -169,7 +169,8 @@ export default () => {
     const [simFailed, setSimFailed] = useState(false);
     const simEnabled = functionalMode === 1 || functionalMode === 41; // value 1 or 41 indicates SIM enabled;
     let simState = SIM_DEFAULT_STATE;
-    if (modemEnabled && !simFailed) simState = SIM_LOADING_STATE;
+    if (traceEnabled && modemEnabled && !simFailed)
+        simState = SIM_LOADING_STATE;
     if (traceEnabled && modemEnabled && simEnabled)
         simState = SIM_SUCCESS_STATE;
     if (simFailed) simState = SIM_FAIL_STATE;
@@ -194,7 +195,8 @@ export default () => {
         AcTState === 5 || // value 5 indicates NB-IoT
         AcTState === 9; // value 9 indicates NB-IoT
     let lteState = LTE_DEFAULT_STATE;
-    if (simEnabled && !lteFailed) lteState = LTE_LOADING_STATE;
+    if (traceEnabled && modemEnabled && simEnabled && !lteEnabled)
+        lteState = LTE_LOADING_STATE;
     if (traceEnabled && modemEnabled && simEnabled && lteEnabled)
         lteState = LTE_SUCCESS_STATE;
     if (lteFailed) lteState = LTE_FAIL_STATE;
@@ -215,7 +217,8 @@ export default () => {
     const [pdnFailed, setPdnFailed] = useState(false);
     const pdnEnabled = accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
     let pdnState = PDN_DEFAULT_STATE;
-    if (lteEnabled && !pdnFailed) pdnState = PDN_LOADING_STATE;
+    if (traceEnabled && modemEnabled && simEnabled && lteEnabled && !pdnEnabled)
+        pdnState = PDN_LOADING_STATE;
     if (traceEnabled && modemEnabled && simEnabled && lteEnabled && pdnEnabled)
         pdnState = PDN_SUCCESS_STATE;
     if (pdnFailed) pdnState = PDN_FAIL_STATE;
@@ -235,7 +238,35 @@ export default () => {
     return (
         <div className="connection-status-container">
             <Steppers
-                steps={[traceState, modemState, simState, lteState, pdnState]}
+                steps={[
+                    { title: 'Primary', caption: 'Some caption' },
+                    {
+                        title: 'Loading',
+                        caption: 'Some caption',
+                        state: 'active',
+                    },
+                    {
+                        title: 'Warning',
+                        caption: 'Some caption',
+                        state: 'warning',
+                    },
+                    {
+                        title: 'Success',
+                        caption: 'Some caption',
+                        state: 'success',
+                    },
+                    {
+                        title: 'Fail',
+                        caption:
+                            'Some captionSome captionSome captionSome captionSome captionSome captionSome captionSome captionSome caption',
+                        state: 'failure',
+                    },
+                    traceState,
+                    modemState,
+                    simState,
+                    lteState,
+                    pdnState,
+                ]}
             />
         </div>
     );
