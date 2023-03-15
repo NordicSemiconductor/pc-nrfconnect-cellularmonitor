@@ -111,7 +111,7 @@ const LTE_FAIL_STATE: Step = {
     caption: 'LTE is not enabled',
 };
 
-const STATUS_CHECK_TIMEOUT = 10 * 1000; // 1 minute
+const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
 
 export default () => {
     const { functionalMode, AcTState, accessPointNames } =
@@ -138,6 +138,13 @@ export default () => {
             timer = setTimeout(() => {
                 setTraceFailed(true);
             }, STATUS_CHECK_TIMEOUT);
+        }
+        if (!(traceTaskId || traceSourceFilePath)) {
+            setTraceFailed(false);
+            setModemFailed(false);
+            setSimFailed(false);
+            setLteFailed(false);
+            setPdnFailed(false);
         }
         return () => {
             setTraceFailed(false);
@@ -238,35 +245,7 @@ export default () => {
     return (
         <div className="connection-status-container">
             <Steppers
-                steps={[
-                    { title: 'Primary', caption: 'Some caption' },
-                    {
-                        title: 'Loading',
-                        caption: 'Some caption',
-                        state: 'active',
-                    },
-                    {
-                        title: 'Warning',
-                        caption: 'Some caption',
-                        state: 'warning',
-                    },
-                    {
-                        title: 'Success',
-                        caption: 'Some caption',
-                        state: 'success',
-                    },
-                    {
-                        title: 'Fail',
-                        caption:
-                            'Some captionSome captionSome captionSome captionSome captionSome captionSome captionSome captionSome caption',
-                        state: 'failure',
-                    },
-                    traceState,
-                    modemState,
-                    simState,
-                    lteState,
-                    pdnState,
-                ]}
+                steps={[traceState, modemState, simState, lteState, pdnState]}
             />
         </div>
     );
