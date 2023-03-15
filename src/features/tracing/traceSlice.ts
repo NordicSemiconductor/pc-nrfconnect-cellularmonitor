@@ -79,10 +79,12 @@ const traceSlice = createSlice({
         setTraceDataReceived: (state, action: PayloadAction<boolean>) => {
             state.dataReceived = action.payload;
         },
-        setTraceSourceFilePath: (state, action: PayloadAction<string>) => {
+        setTraceSourceFilePath: (
+            state,
+            action: PayloadAction<string | null>
+        ) => {
             state.sourceFilePath = action.payload;
         },
-
 
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
             state.availableSerialPorts = action.payload;
