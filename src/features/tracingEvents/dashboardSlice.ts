@@ -14,6 +14,9 @@ const dashboardSlice = createSlice({
     name: 'dashboard',
     initialState: initialState(),
     reducers: {
+        resetDashboardState: () => ({
+            ...initialState(),
+        }),
         setDashboardState: (state, action: PayloadAction<State>) => ({
             ...state,
             ...action.payload,
@@ -28,5 +31,6 @@ const dashboardSlice = createSlice({
 export const getDashboardState = (state: RootState) => state.app.dashboard;
 export const getPowerSavingMode = (state: RootState) =>
     state.app.dashboard.powerSavingMode;
-export const { setDashboardState } = dashboardSlice.actions;
+export const { resetDashboardState, setDashboardState } =
+    dashboardSlice.actions;
 export default dashboardSlice.reducer;

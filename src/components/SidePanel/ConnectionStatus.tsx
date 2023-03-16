@@ -77,25 +77,6 @@ const SIM_FAIL_STATE: Step = {
     caption: 'SIM is not enabled',
 };
 
-// PDN state
-const PDN_DEFAULT_STATE: Step = {
-    title: 'PDN',
-};
-const PDN_LOADING_STATE: Step = {
-    title: 'PDN',
-    state: 'active',
-};
-const PDN_SUCCESS_STATE: Step = {
-    title: 'PDN',
-    state: 'success',
-    caption: 'PDN is enabled',
-};
-const PDN_FAIL_STATE: Step = {
-    title: 'PDN',
-    state: 'failure',
-    caption: 'PDN is not enabled',
-};
-
 // LTE state
 const LTE_DEFAULT_STATE: Step = {
     title: 'LTE',
@@ -113,6 +94,25 @@ const LTE_FAIL_STATE: Step = {
     title: 'LTE',
     state: 'failure',
     caption: 'LTE is not enabled',
+};
+
+// PDN state
+const PDN_DEFAULT_STATE: Step = {
+    title: 'PDN',
+};
+const PDN_LOADING_STATE: Step = {
+    title: 'PDN',
+    state: 'active',
+};
+const PDN_SUCCESS_STATE: Step = {
+    title: 'PDN',
+    state: 'success',
+    caption: 'PDN is enabled',
+};
+const PDN_FAIL_STATE: Step = {
+    title: 'PDN',
+    state: 'failure',
+    caption: 'PDN is not enabled',
 };
 
 const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
@@ -181,10 +181,8 @@ export default () => {
     const simEnabled =
         modemEnabled && (functionalMode === 1 || functionalMode === 41); // value 1 or 41 indicates SIM enabled;
     let simState = SIM_DEFAULT_STATE;
-    if (traceEnabled && modemEnabled && !simFailed)
-        simState = SIM_LOADING_STATE;
-    if (traceEnabled && modemEnabled && simEnabled)
-        simState = SIM_SUCCESS_STATE;
+    if (modemEnabled && !simFailed) simState = SIM_LOADING_STATE;
+    if (modemEnabled && simEnabled) simState = SIM_SUCCESS_STATE;
     if (simFailed) simState = SIM_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
@@ -208,10 +206,8 @@ export default () => {
             AcTState === 5 || // value 5 indicates NB-IoT
             AcTState === 9); // value 9 indicates NB-IoT
     let lteState = LTE_DEFAULT_STATE;
-    if (traceEnabled && modemEnabled && simEnabled && !lteEnabled)
-        lteState = LTE_LOADING_STATE;
-    if (traceEnabled && modemEnabled && simEnabled && lteEnabled)
-        lteState = LTE_SUCCESS_STATE;
+    if (simEnabled && !lteEnabled) lteState = LTE_LOADING_STATE;
+    if (simEnabled && lteEnabled) lteState = LTE_SUCCESS_STATE;
     if (lteFailed) lteState = LTE_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
@@ -231,10 +227,8 @@ export default () => {
     const pdnEnabled =
         lteEnabled && accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
     let pdnState = PDN_DEFAULT_STATE;
-    if (traceEnabled && modemEnabled && simEnabled && lteEnabled && !pdnEnabled)
-        pdnState = PDN_LOADING_STATE;
-    if (traceEnabled && modemEnabled && simEnabled && lteEnabled && pdnEnabled)
-        pdnState = PDN_SUCCESS_STATE;
+    if (lteEnabled && !pdnEnabled) pdnState = PDN_LOADING_STATE;
+    if (lteEnabled && pdnEnabled) pdnState = PDN_SUCCESS_STATE;
     if (pdnFailed) pdnState = PDN_FAIL_STATE;
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;

@@ -27,7 +27,7 @@ export default (packet: TraceEvent, state: State): State => {
             apnToTest.ipv6Postfix ===
             parseIPv6Postfix(incomingPDN['nas_eps.esm.pdn_ipv6_if_id']);
 
-        const apn = accessPointNames && accessPointNames.find(predicate);
+        const apn = accessPointNames?.find(predicate);
 
         // Don't do anything if the APN isn't already in state.
         if (apn == null) return state;

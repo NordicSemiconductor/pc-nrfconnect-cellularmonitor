@@ -13,10 +13,10 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
+import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
 import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
-import { initialState } from '../tracingEvents/at';
-import { setDashboardState } from '../tracingEvents/dashboardSlice';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -139,9 +139,10 @@ export const startTrace =
             }
         }, 30);
 
+        dispatch(resetDashboardState());
         dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
-        dispatch(setDashboardState(initialState()));
+        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -205,8 +206,10 @@ export const readRawTrace =
         const packets: Packet[] = [];
 
         setLoading(true);
-        dispatch(setDashboardState(initialState()));
+        dispatch(resetDashboardState());
+        dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
+        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),

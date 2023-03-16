@@ -125,7 +125,7 @@ const assertIsAttachCompletePacket = (
 
 const assertIsAttachRejectPacket = (
     packet: AttachPacket
-): packet is AttachRejectPacket => parseInt(packet.nas_msg_emm_type, 10) === 68; // '0x44' or '68';
+): packet is AttachRejectPacket => parseInt(packet.nas_msg_emm_type) === 68; // '0x44' or '68';
 
 export default (packet: TraceEvent, state: State) => {
     if (packet.jsonData) {
