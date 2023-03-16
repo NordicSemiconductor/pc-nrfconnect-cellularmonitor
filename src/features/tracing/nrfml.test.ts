@@ -10,6 +10,7 @@ import { testUtils } from 'pc-nrfconnect-shared/test';
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
 import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
@@ -20,7 +21,6 @@ import {
     setTraceIsStopped,
     setTraceSourceFilePath,
 } from './traceSlice';
-import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
