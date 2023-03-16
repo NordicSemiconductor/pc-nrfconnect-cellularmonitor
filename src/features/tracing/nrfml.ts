@@ -246,7 +246,7 @@ export const stopTrace =
         if (taskId === null) return;
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
-        dispatch(setTraceIsStopped());
         dispatch(setTraceDataReceived(false));
+        dispatch(setTraceIsStopped());
         tracePacketEvents.emit('stop-process');
     };

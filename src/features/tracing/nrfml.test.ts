@@ -15,9 +15,12 @@ import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
 import {
     setDetectingTraceDb,
+    setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
+    setTraceSourceFilePath,
 } from './traceSlice';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
@@ -85,6 +88,9 @@ describe('nrfml', () => {
             store.dispatch(startTrace(['pcap']));
             expect(store.getActions()).toEqual([
                 { type: resetPowerEstimationParams.type, payload: undefined },
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -108,6 +114,9 @@ describe('nrfml', () => {
             store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
                 { type: resetPowerEstimationParams.type, payload: undefined },
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
@@ -130,6 +139,9 @@ describe('nrfml', () => {
             store.dispatch(startTrace(['raw', 'live']));
             expect(store.getActions()).toEqual([
                 { type: resetPowerEstimationParams.type, payload: undefined },
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -153,6 +165,9 @@ describe('nrfml', () => {
             store.dispatch(startTrace(['live']));
             expect(store.getActions()).toEqual([
                 { type: resetPowerEstimationParams.type, payload: undefined },
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
