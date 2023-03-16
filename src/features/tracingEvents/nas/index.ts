@@ -22,7 +22,16 @@ import {
     Timers,
 } from '../types';
 
-const attachValues = ['0x41', '0x42', '0x43', '0x44'] as const;
+const attachValues = [
+    '0x41',
+    '0x42',
+    '0x43',
+    '0x44',
+    '65',
+    '66',
+    '67',
+    '68',
+] as const;
 
 // Only relevant timers for PSM
 const timers: Timers[] = [
@@ -103,19 +112,21 @@ const assertIsAttachPacket = (packet: unknown): packet is AttachPacket => {
 
 const assertIsAttachRequestPacket = (
     packet: AttachPacket
-): packet is AttachRequestPacket => packet.nas_msg_emm_type === '0x41';
+): packet is AttachRequestPacket =>
+    parseInt(packet.nas_msg_emm_type, 10) === 65; // '0x41' or '65';
 
 const assertIsAttachAcceptPacket = (
     packet: AttachPacket
-): packet is AttachAcceptPacket => packet.nas_msg_emm_type === '0x42';
+): packet is AttachAcceptPacket => parseInt(packet.nas_msg_emm_type, 10) === 66; // '0x42' or '66';
 
 const assertIsAttachCompletePacket = (
     packet: AttachPacket
-): packet is AttachCompletePacket => packet.nas_msg_emm_type === '0x43';
+): packet is AttachCompletePacket =>
+    parseInt(packet.nas_msg_emm_type, 10) === 67; // '0x43' or '67';
 
 const assertIsAttachRejectPacket = (
     packet: AttachPacket
-): packet is AttachRejectPacket => packet.nas_msg_emm_type === '0x44';
+): packet is AttachRejectPacket => parseInt(packet.nas_msg_emm_type, 10) === 68; // '0x44' or '68';
 
 export default (packet: TraceEvent, state: State) => {
     if (packet.jsonData) {

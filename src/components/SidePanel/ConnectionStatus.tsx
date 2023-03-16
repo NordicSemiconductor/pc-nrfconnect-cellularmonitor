@@ -154,7 +154,7 @@ export default () => {
 
     // Handle modem state
     const [modemFailed, setModemFailed] = useState(false);
-    const modemEnabled = functionalMode === 1; // value 1 indicates modem enabled;
+    const modemEnabled = traceEnabled && functionalMode === 1; // value 1 indicates modem enabled;
     let modemState = MODEM_DEFAULT_STATE;
     if (traceEnabled && !modemFailed) modemState = MODEM_LOADING_STATE;
     if (traceEnabled && modemEnabled) modemState = MODEM_SUCCESS_STATE;
@@ -174,7 +174,8 @@ export default () => {
 
     // Handle SIM state
     const [simFailed, setSimFailed] = useState(false);
-    const simEnabled = functionalMode === 1 || functionalMode === 41; // value 1 or 41 indicates SIM enabled;
+    const simEnabled =
+        modemEnabled && (functionalMode === 1 || functionalMode === 41); // value 1 or 41 indicates SIM enabled;
     let simState = SIM_DEFAULT_STATE;
     if (traceEnabled && modemEnabled && !simFailed)
         simState = SIM_LOADING_STATE;
@@ -197,10 +198,11 @@ export default () => {
     // Handle LTE state
     const [lteFailed, setLteFailed] = useState(false);
     const lteEnabled =
-        AcTState === 4 || // value 4  indicates LTE-M
-        AcTState === 7 || // value  7 indicates LTE-M
-        AcTState === 5 || // value 5 indicates NB-IoT
-        AcTState === 9; // value 9 indicates NB-IoT
+        simEnabled &&
+        (AcTState === 4 || // value 4  indicates LTE-M
+            AcTState === 7 || // value  7 indicates LTE-M
+            AcTState === 5 || // value 5 indicates NB-IoT
+            AcTState === 9); // value 9 indicates NB-IoT
     let lteState = LTE_DEFAULT_STATE;
     if (traceEnabled && modemEnabled && simEnabled && !lteEnabled)
         lteState = LTE_LOADING_STATE;
@@ -222,7 +224,8 @@ export default () => {
 
     // Handle PDN state
     const [pdnFailed, setPdnFailed] = useState(false);
-    const pdnEnabled = accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
+    const pdnEnabled =
+        lteEnabled && accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
     let pdnState = PDN_DEFAULT_STATE;
     if (traceEnabled && modemEnabled && simEnabled && lteEnabled && !pdnEnabled)
         pdnState = PDN_LOADING_STATE;
