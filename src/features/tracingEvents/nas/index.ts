@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
+/* eslint-disable radix */
 
 import {
     parsePowerSavingMode,
@@ -112,17 +113,15 @@ const assertIsAttachPacket = (packet: unknown): packet is AttachPacket => {
 
 const assertIsAttachRequestPacket = (
     packet: AttachPacket
-): packet is AttachRequestPacket =>
-    parseInt(packet.nas_msg_emm_type, 10) === 65; // '0x41' or '65';
+): packet is AttachRequestPacket => parseInt(packet.nas_msg_emm_type) === 65; // '0x41' or '65';
 
 const assertIsAttachAcceptPacket = (
     packet: AttachPacket
-): packet is AttachAcceptPacket => parseInt(packet.nas_msg_emm_type, 10) === 66; // '0x42' or '66';
+): packet is AttachAcceptPacket => parseInt(packet.nas_msg_emm_type) === 66; // '0x42' or '66';
 
 const assertIsAttachCompletePacket = (
     packet: AttachPacket
-): packet is AttachCompletePacket =>
-    parseInt(packet.nas_msg_emm_type, 10) === 67; // '0x43' or '67';
+): packet is AttachCompletePacket => parseInt(packet.nas_msg_emm_type) === 67; // '0x43' or '67';
 
 const assertIsAttachRejectPacket = (
     packet: AttachPacket

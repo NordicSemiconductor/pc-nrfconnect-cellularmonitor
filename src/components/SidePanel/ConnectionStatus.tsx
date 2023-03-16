@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Steppers } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, Steppers } from 'pc-nrfconnect-shared';
 import { Step } from 'pc-nrfconnect-shared/src/Steppers/Steppers';
 
 import {
@@ -15,6 +15,10 @@ import {
     getTraceTaskId,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
+import {
+    getCollapseConnectionStatusSection,
+    setCollapseConnectionStatusSection,
+} from '../../utils/store';
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {
@@ -246,10 +250,24 @@ export default () => {
     }, [lteEnabled, pdnEnabled]);
 
     return (
-        <div className="connection-status-container">
-            <Steppers
-                steps={[traceState, modemState, simState, lteState, pdnState]}
-            />
-        </div>
+        <CollapsibleGroup
+            heading="Connection Status"
+            defaultCollapsed={getCollapseConnectionStatusSection()}
+            onToggled={isNowExpanded =>
+                setCollapseConnectionStatusSection(!isNowExpanded)
+            }
+        >
+            <div className="connection-status-container">
+                <Steppers
+                    steps={[
+                        traceState,
+                        modemState,
+                        simState,
+                        lteState,
+                        pdnState,
+                    ]}
+                />
+            </div>
+        </CollapsibleGroup>
     );
 };
