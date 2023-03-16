@@ -20,6 +20,7 @@ const TRACE_FORMATS = 'traceFormats';
 const SERIALPORTS = 'serialPorts';
 const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
 const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
+const COLLAPSE_CONNECTION_STATUS_SECTION = 'connectionStatusSection';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
@@ -29,6 +30,7 @@ interface StoreSchema {
     [SERIALPORTS]: DevicePort;
     [COLLAPSE_POWER_SECTION]: boolean;
     [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
+    [COLLAPSE_CONNECTION_STATUS_SECTION]: boolean;
 }
 
 export const autoDetectDbRootFolder = () =>
@@ -79,4 +81,14 @@ export const setCollapseTraceDetailsSection = (
     store<StoreSchema>().set(
         COLLAPSE_TRACE_DETAILS_SECTION,
         collapseTraceDetailsSection
+    );
+
+export const getCollapseConnectionStatusSection = () =>
+    store<StoreSchema>().get(COLLAPSE_CONNECTION_STATUS_SECTION, false);
+export const setCollapseConnectionStatusSection = (
+    collapseConnectionStatusSection: boolean
+) =>
+    store<StoreSchema>().set(
+        COLLAPSE_CONNECTION_STATUS_SECTION,
+        collapseConnectionStatusSection
     );

@@ -24,6 +24,8 @@ export interface TraceProgress {
 interface TraceState {
     traceProgress: TraceProgress[];
     taskId: TaskId | null;
+    dataReceived: boolean;
+    sourceFilePath: string | null;
     serialPort: string | null;
     availableSerialPorts: string[];
     manualDbFilePath?: string;
@@ -34,6 +36,8 @@ interface TraceState {
 const initialState = (): TraceState => ({
     traceProgress: [],
     taskId: null,
+    dataReceived: false,
+    sourceFilePath: null,
     serialPort: null,
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
@@ -71,6 +75,15 @@ const traceSlice = createSlice({
             if (progressToUpdate != null) {
                 progressToUpdate.size = action.payload.size;
             }
+        },
+        setTraceDataReceived: (state, action: PayloadAction<boolean>) => {
+            state.dataReceived = action.payload;
+        },
+        setTraceSourceFilePath: (
+            state,
+            action: PayloadAction<string | null>
+        ) => {
+            state.sourceFilePath = action.payload;
         },
 
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
@@ -115,12 +128,17 @@ export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
 export const getTraceProgress = (state: RootState) =>
     state.app.trace.traceProgress;
+export const getTraceDataReceived = (state: RootState) =>
+    state.app.trace.dataReceived;
+export const getTraceSourceFilePath = (state: RootState) =>
+    state.app.trace.sourceFilePath;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
 export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
+export const getTraceTaskId = (state: RootState) => state.app.trace.taskId;
 
 export const getUartSerialPort = (state: RootState) =>
     state.app.trace.uartSerialPort;
@@ -129,6 +147,8 @@ export const {
     setTraceIsStarted,
     setTraceIsStopped,
     setTraceProgress,
+    setTraceDataReceived,
+    setTraceSourceFilePath,
     setSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,

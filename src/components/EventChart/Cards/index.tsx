@@ -21,7 +21,7 @@ import LTENetwork from './LTENetwork';
 import PacketDomainNetwork from './PacketDomainNetwork';
 import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
-import ConnectivityStaistics from './Statistics';
+import ConnectivityStatistics from './Statistics';
 import Temp from './Temp';
 
 export default () => {
@@ -51,7 +51,7 @@ export default () => {
             <Sim />
             <PacketDomainNetwork />
             {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
-            <ConnectivityStaistics />
+            <ConnectivityStatistics />
             <Temp />
         </MasonryLayout>
     );
