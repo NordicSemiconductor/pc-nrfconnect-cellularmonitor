@@ -32,10 +32,6 @@ export default () => {
 
     return (
         <>
-            <Serialports
-                disabled={isTracing}
-                selectedSerialPort={selectedSerialPort}
-            />
             <TraceFormatSelector
                 selectedTraceFormats={selectedTraceFormats}
                 setSelectedTraceFormats={setSelectedTraceFormats}

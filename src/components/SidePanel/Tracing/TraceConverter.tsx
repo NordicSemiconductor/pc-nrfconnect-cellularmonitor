@@ -5,15 +5,17 @@
  */
 
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
+import { getIsTracing } from '../../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const isTracing = useSelector(getIsTracing);
 
     const loadTrace = () => {
         const file = askForTraceFile();
@@ -26,7 +28,7 @@ export default () => {
         <Button
             className={`w-100 ${loading && 'active-animation'}`}
             onClick={loadTrace}
-            disabled={loading}
+            disabled={loading || isTracing}
             variant="secondary"
         >
             {loading === true

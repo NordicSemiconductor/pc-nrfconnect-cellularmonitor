@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, CollapsibleGroup, SerialPort } from 'pc-nrfconnect-shared';
+import { Button, SerialPort } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 
@@ -15,17 +15,14 @@ export const Macros = () => {
 
     if (serialPort != null) {
         return (
-            <CollapsibleGroup heading="Macros" defaultCollapsed={false}>
-                <Button
-                    large
-                    className="w-100"
-                    variant="secondary"
-                    onClick={() => sendMacros(serialPort)}
-                    title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
-                >
-                    Send Recommended AT
-                </Button>
-            </CollapsibleGroup>
+            <Button
+                className="w-100"
+                variant="secondary"
+                onClick={() => sendMacros(serialPort)}
+                title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
+            >
+                Send Recommended AT
+            </Button>
         );
     }
     return null;

@@ -17,14 +17,12 @@ import {
     setCollapseTraceDetailsSection,
 } from '../../../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
 import TraceFileDetails from './TraceFileDetails';
 
 export default () => {
     const progress = useSelector(getTraceProgress);
-    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
-    if (isDeviceSelected && progress.length === 0) {
+    if (progress.length === 0) {
         return null;
     }
 
@@ -36,7 +34,6 @@ export default () => {
                 setCollapseTraceDetailsSection(!isNowExpanded)
             }
         >
-            {!isDeviceSelected && <TraceConverter />}
             {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails
