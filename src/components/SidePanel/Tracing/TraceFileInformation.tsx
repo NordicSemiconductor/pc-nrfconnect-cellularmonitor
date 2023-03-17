@@ -8,10 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
-import {
-    getIsDeviceSelected,
-    getTraceProgress,
-} from '../../../features/tracing/traceSlice';
+import { getTraceProgress } from '../../../features/tracing/traceSlice';
 import {
     getCollapseTraceDetailsSection,
     setCollapseTraceDetailsSection,

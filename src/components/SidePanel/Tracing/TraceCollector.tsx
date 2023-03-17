@@ -13,7 +13,6 @@ import {
     getSerialPort,
 } from '../../../features/tracing/traceSlice';
 import { getTraceFormats as getStoredTraceFormats } from '../../../utils/store';
-import Serialports from '../Serialports';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
 import StartStopTrace from './StartStopTrace';
 import TraceFormatSelector from './TraceFormatSelector';
