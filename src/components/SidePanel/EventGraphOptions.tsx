@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Group, StateSelector, Toggle } from 'pc-nrfconnect-shared';
+import { CollapsibleGroup, StateSelector, Toggle } from 'pc-nrfconnect-shared';
 
 import { EVENT_TYPES } from '../../features/tracing/formats';
 import {
@@ -24,7 +24,7 @@ export default () => {
     const traceEventFilter = useSelector(getTraceEventFilter);
     const mode = useSelector(getMode);
     return (
-        <Group heading="Event Graph Options">
+        <CollapsibleGroup heading="Event Graph Options">
             <StateSelector
                 items={['Event', 'Time']}
                 selectedItem={mode}
@@ -48,6 +48,6 @@ export default () => {
                     }
                 />
             ))}
-        </Group>
+        </CollapsibleGroup>
     );
 };

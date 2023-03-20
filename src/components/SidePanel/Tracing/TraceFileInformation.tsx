@@ -8,23 +8,18 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
-import {
-    getIsDeviceSelected,
-    getTraceProgress,
-} from '../../../features/tracing/traceSlice';
+import { getTraceProgress } from '../../../features/tracing/traceSlice';
 import {
     getCollapseTraceDetailsSection,
     setCollapseTraceDetailsSection,
 } from '../../../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
-import TraceConverter from './TraceConverter';
 import TraceFileDetails from './TraceFileDetails';
 
 export default () => {
     const progress = useSelector(getTraceProgress);
-    const isDeviceSelected = useSelector(getIsDeviceSelected);
 
-    if (isDeviceSelected && progress.length === 0) {
+    if (progress.length === 0) {
         return null;
     }
 
@@ -36,7 +31,6 @@ export default () => {
                 setCollapseTraceDetailsSection(!isNowExpanded)
             }
         >
-            {!isDeviceSelected && <TraceConverter />}
             {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails

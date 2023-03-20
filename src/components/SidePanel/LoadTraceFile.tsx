@@ -5,15 +5,17 @@
  */
 
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Button, CollapsibleGroup } from 'pc-nrfconnect-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
+import { getSerialPort } from '../../features/tracing/traceSlice';
 import { askForTraceFile } from '../../utils/fileUtils';
 
 export const LoadTraceFile = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const hasSerialPort = useSelector(getSerialPort) != null;
 
     const readRawFile = () => {
         const sourceFile = askForTraceFile();
@@ -26,17 +28,15 @@ export const LoadTraceFile = () => {
     };
 
     return (
-        <CollapsibleGroup heading="Read Trace">
-            <Button
-                className={`w-100 ${loading && 'active-animation'}`}
-                onClick={readRawFile}
-                disabled={loading}
-                variant="secondary"
-            >
-                {loading === true
-                    ? 'Reading trace file'
-                    : 'Read Trace from Raw File'}
-            </Button>
-        </CollapsibleGroup>
+        <Button
+            className={`w-100 ${loading && 'active-animation'}`}
+            onClick={readRawFile}
+            disabled={loading || hasSerialPort}
+            variant="secondary"
+        >
+            {loading === true
+                ? 'Reading trace file'
+                : 'Read Trace from Raw File'}
+        </Button>
     );
 };
