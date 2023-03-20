@@ -12,12 +12,14 @@ import { basename, dirname } from 'path';
 import {
     Alert,
     Button,
+    clearWaitForDevice,
     deviceInfo,
     Dialog,
     DialogButton,
-    getAutoReselect,
+    getWaitingForDeviceTimeout,
     logger,
     selectedDevice,
+    setWaitForDevice,
     Spinner,
 } from 'pc-nrfconnect-shared';
 
@@ -147,14 +149,30 @@ const ProgramSample = ({
     close: () => void;
 }) => {
     const dispatch = useDispatch();
-    const device = useSelector(selectedDevice);
 
+    const device = useSelector(selectedDevice);
+    const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
     const [progress, setProgress] = useState(
         new Map(sample.fw.map(fw => [fw, 0]))
     );
 
     const [isProgramming, setIsProgramming] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
+
+    useEffect(() => {
+        dispatch(
+            setWaitForDevice({
+                once: false,
+                timeout: 60_000,
+                when: 'always',
+                onFail: setErrorMessage,
+            })
+        );
+
+        return () => {
+            dispatch(clearWaitForDevice());
+        };
+    }, [dispatch]);
 
     const progressCb = useCallback(
         ({ progressJson: json, fw }: SampleProgress) => {
@@ -171,7 +189,6 @@ const ProgramSample = ({
         [progress]
     );
 
-    if (!device) return <WaitingForReconnect />;
     const isMcuBoot = isThingy91(device);
     return (
         <>
@@ -180,8 +197,11 @@ const ProgramSample = ({
                 <p>This will program the following:</p>
                 {isMcuBoot && (
                     <p>
-                        Remember to put the device in MCUBoot mode. Press down
-                        the center black button on the device while powering on.
+                        <em>
+                            Remember to put the device in MCUBoot mode. Press
+                            down the center black button on the device while
+                            powering on.
+                        </em>
                     </p>
                 )}
                 {sample.fw.map(fw => (
@@ -222,11 +242,17 @@ const ProgramSample = ({
                 {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             </Dialog.Body>
             <Dialog.Footer>
+                {waitingForReconnect && device && (
+                    <span className="text-muted">
+                        Waiting for device to reconnect
+                        <Spinner />
+                    </span>
+                )}
                 {isProgramming && <Spinner />}
 
                 <DialogButton
                     onClick={() => selectSample(undefined)}
-                    disabled={isProgramming}
+                    disabled={isProgramming || !device}
                 >
                     Back
                 </DialogButton>
@@ -236,14 +262,15 @@ const ProgramSample = ({
                 </DialogButton>
                 <DialogButton
                     variant="primary"
-                    disabled={isProgramming}
+                    disabled={isProgramming || waitingForReconnect || !device}
                     onClick={async () => {
                         setIsProgramming(true);
                         setErrorMessage(undefined);
                         try {
                             await downloadSample(sample);
                             dispatch(setUartSerialPort(null));
-                            await flash(device, sample, progressCb);
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                            await flash(device!, sample, progressCb);
                             setIsProgramming(false);
                         } catch (error) {
                             logger.error(error);
@@ -257,23 +284,6 @@ const ProgramSample = ({
                     Program
                 </DialogButton>
             </Dialog.Footer>
-        </>
-    );
-};
-
-const WaitingForReconnect = () => {
-    const autoReselect = useSelector(getAutoReselect);
-
-    return (
-        <>
-            <Dialog.Header title="Reconnect device" />
-            <Dialog.Body>
-                {autoReselect ? (
-                    <p>Waiting for the device to reconnect</p>
-                ) : (
-                    <p>Device disconnected, please start over</p>
-                )}
-            </Dialog.Body>
         </>
     );
 };

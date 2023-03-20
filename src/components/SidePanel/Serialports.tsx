@@ -6,24 +6,23 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, Group, truncateMiddle } from 'pc-nrfconnect-shared';
+import { Dropdown, truncateMiddle } from 'pc-nrfconnect-shared';
 
 import {
     getAvailableSerialPorts,
+    getIsTracing,
     getSelectedSerialNumber,
+    getSerialPort,
     setSerialPort,
 } from '../../features/tracing/traceSlice';
 import { setSerialPort as persistSerialPort } from '../../utils/store';
 
-type SerialPortProps = {
-    disabled: boolean;
-    selectedSerialPort: string;
-};
-
-export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
+export default () => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
     const serialNumber = useSelector(getSelectedSerialNumber) ?? '';
+    const selectedSerialPort = useSelector(getSerialPort);
+    const isTracing = useSelector(getIsTracing);
 
     const updateSerialPort = ({ value: port }: { value: string }) => {
         dispatch(setSerialPort(port));
@@ -39,16 +38,19 @@ export default ({ selectedSerialPort, disabled }: SerialPortProps) => {
         item => item.value === selectedSerialPort
     ) ?? { label: '', value: '' };
 
+    if (selectedSerialPort == null) return null;
+
     return (
-        <Group heading="Serialport trace capture">
+        <>
+            <p>Serialport trace capture</p>
             <div className="serialport-selection">
                 <Dropdown
-                    disabled={disabled}
+                    disabled={isTracing}
                     onSelect={updateSerialPort}
                     selectedItem={selectedItem}
                     items={dropdownItems}
                 />
             </div>
-        </Group>
+        </>
     );
 };

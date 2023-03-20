@@ -9,13 +9,16 @@ import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
 import {
     setDetectingTraceDb,
+    setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
+    setTraceSourceFilePath,
 } from './traceSlice';
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
@@ -83,6 +86,9 @@ describe('nrfml', () => {
         it('should start tracing to pcap', () => {
             store.dispatch(startTrace(['pcap']));
             expect(store.getActions()).toEqual([
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -105,6 +111,9 @@ describe('nrfml', () => {
         it('should start tracing to raw binary', () => {
             store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
@@ -126,6 +135,9 @@ describe('nrfml', () => {
         it('does not create a progress config for live traces', () => {
             store.dispatch(startTrace(['raw', 'live']));
             expect(store.getActions()).toEqual([
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
@@ -148,6 +160,9 @@ describe('nrfml', () => {
         it('does not create a progress config for live traces', () => {
             store.dispatch(startTrace(['live']));
             expect(store.getActions()).toEqual([
+                { type: resetDashboardState.type, payload: undefined },
+                { type: setTraceSourceFilePath.type, payload: null },
+                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,

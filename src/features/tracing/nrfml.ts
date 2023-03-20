@@ -13,7 +13,9 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
+import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -29,8 +31,10 @@ import {
 import {
     getManualDbFilePath,
     getSerialPort,
+    setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
+    setTraceSourceFilePath,
 } from './traceSlice';
 
 export type TaskId = number;
@@ -133,6 +137,10 @@ export const startTrace =
             }
         }, 30);
 
+        dispatch(resetDashboardState());
+        dispatch(setTraceSourceFilePath(null));
+        dispatch(setTraceDataReceived(false));
+        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -165,6 +173,9 @@ export const startTrace =
                 displayDetectingTraceDbMessage: isDetectingTraceDb,
             }),
             data => {
+                const { dataReceived } = getState().app.trace;
+                if (!dataReceived) dispatch(setTraceDataReceived(true));
+
                 if (data.format !== 'modem_trace') {
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
@@ -193,6 +204,10 @@ export const readRawTrace =
         const packets: Packet[] = [];
 
         setLoading(true);
+        dispatch(resetDashboardState());
+        dispatch(setTraceSourceFilePath(null));
+        dispatch(setTraceDataReceived(false));
+        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),
@@ -210,12 +225,16 @@ export const readRawTrace =
             },
             () => {},
             data => {
+                const { dataReceived } = getState().app.trace;
+                if (!dataReceived) dispatch(setTraceDataReceived(true));
+
                 if (data.format !== 'modem_trace') {
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
                 }
             }
         );
+        dispatch(setTraceSourceFilePath(sourceFile));
         logger.info(`Started reading trace from ${sourceFile}`);
     };
 
@@ -225,6 +244,7 @@ export const stopTrace =
         if (taskId === null) return;
         nrfml.stop(taskId);
         usageData.sendUsageData(EventAction.STOP_TRACE);
+        dispatch(setTraceDataReceived(false));
         dispatch(setTraceIsStopped());
         tracePacketEvents.emit('stop-process');
     };
