@@ -34,6 +34,11 @@
     -   T3412: Periodic TAU (Legacy)
 -   Reordered components in the Side Panel.
 
+### Removed
+
+-   Power Estimation, please use the official Online Power Profiler for LTE
+    -   https://devzone.nordicsemi.com/power/w/opp/3/online-power-profiler-for-lte
+
 ## 0.3.6 - 2022-11-11
 
 ### Added

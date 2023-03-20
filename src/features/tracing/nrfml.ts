@@ -15,7 +15,6 @@ import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
-import { resetParams as resetPowerEstimationParams } from '../powerEstimation/powerEstimationSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
@@ -117,7 +116,6 @@ export const startTrace =
             port,
             startTime: new Date(),
         };
-        dispatch(resetPowerEstimationParams());
 
         const isDetectingTraceDb =
             getManualDbFilePath(state) == null &&

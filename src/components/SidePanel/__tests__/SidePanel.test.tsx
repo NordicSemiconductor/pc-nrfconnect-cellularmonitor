@@ -14,21 +14,15 @@ import {
     setAvailableSerialPorts,
     setSerialPort,
 } from '../../../features/tracing/traceSlice';
-import * as wireshark from '../../../features/wireshark/wireshark';
 import {
-    expectNrfmlStartCalledWithSinks,
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
-    mockedCurrentPane,
     mockedDataDir,
     render,
     screen,
 } from '../../../utils/testUtils';
-import {
-    PowerEstimationSidePanel,
-    TraceCollectorSidePanel,
-} from '../SidePanel';
+import { TraceCollectorSidePanel } from '../SidePanel';
 
 enableFetchMocks();
 
@@ -199,80 +193,5 @@ describe('Sidepanel functionality', () => {
                 })
             ).not.toBeInTheDocument();
         });
-    });
-
-    describe('Power Estimation flow', () => {
-        beforeEach(() => {
-            jest.spyOn(wireshark, 'findTshark').mockReturnValue(
-                'path/to/tshark'
-            );
-        });
-
-        test.skip.failing(
-            'should update button text when tracing begins',
-            async () => {
-                render(
-                    <>
-                        <PowerEstimationSidePanel />
-                        <TraceCollectorSidePanel />
-                    </>,
-                    serialPortActions
-                );
-                expect(
-                    screen.getByText('Start trace to get power data...')
-                ).toBeInTheDocument();
-                await startTrace('raw');
-
-                expect(
-                    await screen.findByText('Waiting for power data...')
-                ).toBeInTheDocument();
-            }
-        );
-
-        test.skip.failing(
-            'should start fetching power estimation params in the background',
-            async () => {
-                const callbacks = getNrfmlCallbacks();
-                const waitingText = 'Start trace to get power data...';
-                render(
-                    <>
-                        <PowerEstimationSidePanel />
-                        <TraceCollectorSidePanel />
-                    </>,
-                    serialPortActions
-                );
-                expect(screen.getByText(waitingText)).toBeInTheDocument();
-                await startTrace('raw');
-                expectNrfmlStartCalledWithSinks(
-                    'nrfml-tshark-sink',
-                    'nrfml-raw-file-sink'
-                );
-
-                mockedCurrentPane.mockReturnValue(1); // Emulate PowerEstimation pane
-
-                /*
-            Currently missing a good solution to test cross-pane functionality.
-            So we unfortunately have to comment out some checks, testing the transition
-            between waiting for data and when we have data, because we are
-            not able to re-render properly. `screen.rerender` seems to have unintended
-            consequences, and unmounting and doing a new render doesn't work either.
-            */
-
-                const { jsonCallback } = await callbacks;
-                // Invoke the JSON callback to test the remainder of the initial flow
-                jsonCallback!([
-                    {
-                        onlinePowerProfiler: {
-                            crdx_len: 'data',
-                        },
-                    },
-                ]);
-
-                expect(
-                    await screen.findByText('Save power estimation data')
-                ).toBeInTheDocument();
-                expect(screen.queryByText(waitingText)).not.toBeInTheDocument();
-            }
-        );
     });
 });
