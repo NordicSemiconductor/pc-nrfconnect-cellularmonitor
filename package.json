@@ -36,24 +36,15 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@types/plotly.js": "^1.54.19",
         "@types/redux-mock-store": "^1.0.2",
-        "ansi-colors": "^4.1.1",
-        "ansi-escapes": "^4.3.1",
         "chart.js": "^4.1.2",
-        "chartjs-adapter-date-fns": "^2.0.0",
         "check-disk-space": "^2.1.0",
         "dangerously-set-html-content": "1.0.9",
-        "ify-loader": "^1.1.0",
         "jest-fetch-mock": "^3.0.3",
         "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v23",
-        "pc-xterm-lib": "git+https://github.com/NordicPlayground/pc-xterm-lib#6934b5b769b942945527a79787732bec6874309f",
-        "plotly.js": "2.8.3",
         "pretty-bytes": "^5.6.0",
         "react-chartjs-2": "^5.2.0",
-        "redux-mock-store": "^1.5.4",
-        "xterm-addon-fit": "^0.5.0",
-        "xterm-for-react": "^1.0.4"
+        "redux-mock-store": "^1.5.4"
     },
     "dependencies": {
         "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre"
