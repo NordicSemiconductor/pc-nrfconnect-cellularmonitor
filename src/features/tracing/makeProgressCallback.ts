@@ -57,8 +57,6 @@ export default (
         displayDetectingTraceDbMessage: boolean;
     }
 ) => {
-    let progressCallbackCounter = 0;
-
     const detectModemFwUuid = detectingTraceDb ? makeDetectModemFwUuid() : noop;
     const detectTraceDB = detectingTraceDb ? makeDetectTraceDB() : noop;
 
@@ -66,13 +64,13 @@ export default (
         dispatch(setDetectingTraceDb(true));
     }
 
-    let latestProgress: nrfml.Progress | null = null;
     let lastUpdate = Date.now();
     let pendingUpdate: NodeJS.Timeout;
+    let lookingForDb = displayDetectingTraceDbMessage;
 
-    const update = () => {
+    const update = (progress: nrfml.Progress) => {
         try {
-            latestProgress?.data_offsets?.forEach(progressItem => {
+            progress?.data_offsets?.forEach(progressItem => {
                 dispatch(
                     setTraceProgress({
                         path: progressItem.path,
@@ -91,21 +89,18 @@ export default (
     };
 
     return (progress: nrfml.Progress) => {
-        if (displayDetectingTraceDbMessage && progressCallbackCounter === 0) {
+        if (lookingForDb) {
             dispatch(setDetectingTraceDb(false));
         }
+        lookingForDb = false;
         detectModemFwUuid(progress);
         detectTraceDB(progress);
 
-        latestProgress = progress;
-
         if (Date.now() - lastUpdate > 200) {
-            update();
+            update(progress);
         } else {
             clearTimeout(pendingUpdate);
-            pendingUpdate = setTimeout(update, 200);
+            pendingUpdate = setTimeout(() => update(progress), 200);
         }
-
-        progressCallbackCounter += 1;
     };
 };
