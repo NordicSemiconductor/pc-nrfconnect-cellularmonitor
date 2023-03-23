@@ -67,8 +67,10 @@ export default (
     }
 
     let latestProgress: nrfml.Progress | null = null;
-    let destroyIntervalTimeout: NodeJS.Timeout;
-    const interval = setInterval(() => {
+    let lastUpdate = Date.now();
+    let pendingUpdate: NodeJS.Timeout;
+
+    const update = () => {
         try {
             latestProgress?.data_offsets?.forEach(progressItem => {
                 dispatch(
@@ -78,6 +80,7 @@ export default (
                     })
                 );
             });
+            lastUpdate = Date.now();
         } catch (err) {
             logger.debug(
                 `Error in progress callback, discarding sample ${JSON.stringify(
@@ -85,9 +88,7 @@ export default (
                 )}`
             );
         }
-    }, 200);
-
-    destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
+    };
 
     return (progress: nrfml.Progress) => {
         if (displayDetectingTraceDbMessage && progressCallbackCounter === 0) {
@@ -98,9 +99,13 @@ export default (
 
         latestProgress = progress;
 
-        progressCallbackCounter += 1;
+        if (Date.now() - lastUpdate > 200) {
+            update();
+        } else {
+            clearTimeout(pendingUpdate);
+            pendingUpdate = setTimeout(update, 200);
+        }
 
-        clearTimeout(destroyIntervalTimeout);
-        destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
+        progressCallbackCounter += 1;
     };
 };
