@@ -13,14 +13,13 @@ import {
 } from '../types';
 import { NrfmlPDN, RawTsharkOutput } from './types';
 
-export const compareHexAndDecimalStrings = (
+export const matchPacketIdWithHexValues = (
     hexValueList: string[],
     valueToCompare: string
 ) =>
     hexValueList.some(
-        hexValue =>
-            hexValue === valueToCompare ||
-            parseInt(hexValue, 16) === parseInt(valueToCompare, 10)
+        // eslint-disable-next-line radix -- valueToCompare may be hexadecimal or decimal
+        hexValue => parseInt(hexValue, 16) === parseInt(valueToCompare)
     );
 
 export const parseIPv6Postfix = (postfix: string | undefined) => {

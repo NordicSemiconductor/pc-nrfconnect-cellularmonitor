@@ -12,12 +12,12 @@ import {
     PdnConnectivityRequest,
 } from './types';
 import {
-    compareHexAndDecimalStrings,
     extractPdnInfo,
+    matchPacketIdWithHexValues,
     updateAccessPointNames,
 } from './utils';
 
-const esmTypes = ['0xd0', '0xc1', '0xc2'] as const;
+const esmTypes = [0xd0, 0xc1, 0xc2] as const;
 
 enum ESMTypes {
     ConnectivityRequest = 0xd0,
@@ -113,7 +113,7 @@ export function assertIsPdnConnectivityPacket(
     packetData: unknown
 ): packetData is ConnectivityPacket {
     if (packetData && extractESM(packetData) != null) {
-        return compareHexAndDecimalStrings(
+        return matchPacketIdWithHexValues(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             esmTypes as any as string[],
             extractESM(packetData)

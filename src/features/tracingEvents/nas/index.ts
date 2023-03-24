@@ -29,8 +29,8 @@ import {
     AttachRequestPacket,
 } from './types';
 import {
-    compareHexAndDecimalStrings,
     extractPdnInfo,
+    matchPacketIdWithHexValues,
     updateAccessPointNames,
 } from './utils';
 
@@ -45,7 +45,7 @@ const timers: Timers[] = [
 
 const assertIsAttachPacket = (packet: unknown): packet is AttachPacket => {
     if (packet && (packet as AttachPacket).nas_msg_emm_type) {
-        return compareHexAndDecimalStrings(
+        return matchPacketIdWithHexValues(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             attachValues as any as string[],
             (packet as AttachPacket).nas_msg_emm_type
