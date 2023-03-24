@@ -11,6 +11,7 @@ import { OpenSerialTerminal } from '../../features/terminal';
 import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
 import EventGraphOptions from './EventGraphOptions';
+import FileActions from './FileActions';
 import Instructions from './Instructions';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
@@ -21,12 +22,13 @@ import './Tracing/tracing.scss';
 export const TraceCollectorSidePanel = () => (
     <SidePanel className="side-panel">
         <Instructions />
+        <FileActions />
+
         <TraceCollector />
         <ConnectionStatus />
         <TraceFileInformation />
         <AdvancedOptions />
 
-        <EventGraphOptions />
         <OpenSerialTerminal />
     </SidePanel>
 );

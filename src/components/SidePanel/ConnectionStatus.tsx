@@ -6,7 +6,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, Step, Stepper } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    selectedDevice,
+    Step,
+    Stepper,
+} from 'pc-nrfconnect-shared';
 
 import {
     getTraceDataReceived,
@@ -137,6 +142,7 @@ const PDN_FAIL_STATE: Step = {
 const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
 
 export default () => {
+    const device = useSelector(selectedDevice);
     const { functionalMode, AcTState, accessPointNames } =
         useSelector(getDashboardState);
 
@@ -261,6 +267,10 @@ export default () => {
             clearTimeout(timer);
         };
     }, [lteEnabled, pdnEnabled]);
+
+    if (!device) {
+        return null;
+    }
 
     return (
         <CollapsibleGroup
