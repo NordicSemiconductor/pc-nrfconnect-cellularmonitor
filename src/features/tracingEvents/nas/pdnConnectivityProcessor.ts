@@ -103,21 +103,19 @@ const processActivateDefaultEpsBearerAccept = (
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const extractESM = (packetData: any) => {
-    const result =
+    const esm =
         // eslint-disable-next-line no-underscore-dangle
         packetData?.raw?._source?.layers['nas-eps']['nas_eps.nas_msg_esm_type'];
-    return result;
+    // eslint-disable-next-line radix -- esm could possibly be decimal or hexadecimal
+    return esm != null ? parseInt(esm) : undefined;
 };
 
 export function assertIsPdnConnectivityPacket(
-    packetData: unknown
-): packetData is ConnectivityPacket {
-    if (packetData && extractESM(packetData) != null) {
-        return matchPacketIdWithHexValues(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            esmTypes as any as string[],
-            extractESM(packetData)
-        );
+    packet: unknown
+): packet is ConnectivityPacket {
+    const packetId = extractESM(packet);
+    if (packet && packetId != null) {
+        return matchPacketIdWithHexValues(esmTypes, packetId);
     }
 
     return false;
@@ -126,16 +124,14 @@ export function assertIsPdnConnectivityPacket(
 const assertIsPdnConnectivityRequest = (
     packet: ConnectivityPacket
 ): packet is PdnConnectivityRequest =>
-    parseInt(extractESM(packet), 16) === ESMTypes.ConnectivityRequest;
+    extractESM(packet) === ESMTypes.ConnectivityRequest;
 
 const assertIsActivateDefaultEpsBearerRequest = (
     packet: ConnectivityPacket
 ): packet is ActivateDefaultEpsBearerContextRequest =>
-    parseInt(extractESM(packet), 16) ===
-    ESMTypes.ActivateDefaultEPSBearerContextRequest;
+    extractESM(packet) === ESMTypes.ActivateDefaultEPSBearerContextRequest;
 
 const assertIsActivateDefaultEpsBearerAccept = (
     packet: ConnectivityPacket
 ): packet is ActivateDefaultEpsBearerContextRequest =>
-    parseInt(extractESM(packet), 16) ===
-    ESMTypes.ActivateDefaultEPSBearerContextAccept;
+    extractESM(packet) === ESMTypes.ActivateDefaultEPSBearerContextAccept;

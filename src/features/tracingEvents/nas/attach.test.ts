@@ -6,11 +6,12 @@
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import type { State } from '../types';
-import NASConverter, {
+import {
     processAttachAcceptPacket,
     processAttachRequestPacket,
-} from './index';
-import { AttachAcceptPacket, AttachRequestPacket } from './types';
+} from './attachProcessor';
+import NASConverter from './index';
+import { AttachAcceptPacket, AttachPacket, AttachRequestPacket } from './types';
 import { parseIPv6Postfix } from './utils';
 
 test('processAttachRequest sets state', () => {

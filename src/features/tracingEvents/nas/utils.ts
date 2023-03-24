@@ -10,17 +10,15 @@ import {
     IPv6Address,
     parsePDNType,
     parseRawPDN,
+    TimerKey,
+    Timers,
 } from '../types';
-import { NrfmlPDN, RawTsharkOutput } from './types';
+import { AttachPacket, NrfmlPDN, RawTsharkOutput } from './types';
 
 export const matchPacketIdWithHexValues = (
-    hexValueList: string[],
-    valueToCompare: string
-) =>
-    hexValueList.some(
-        // eslint-disable-next-line radix -- valueToCompare may be hexadecimal or decimal
-        hexValue => parseInt(hexValue, 16) === parseInt(valueToCompare)
-    );
+    hexValueList: readonly number[],
+    valueToCompare: number
+) => hexValueList.some(hexValue => hexValue === valueToCompare);
 
 export const parseIPv6Postfix = (postfix: string | undefined) => {
     if (postfix == null) return;
@@ -140,4 +138,16 @@ export const updateAccessPointNames = (
     }
 
     return accessPointNames;
+};
+
+export const getKeyOfPacket = (
+    packet: AttachPacket,
+    lookup: Timers
+): TimerKey | undefined => {
+    const predicate = lookup.includes('Extended')
+        ? (key: string) => key.includes(lookup.replace('Extended', '_extended'))
+        : (key: string) => key.includes(lookup) && !key.includes('extended');
+    return Object.keys(packet).find(key => predicate(key)) as
+        | TimerKey
+        | undefined;
 };
