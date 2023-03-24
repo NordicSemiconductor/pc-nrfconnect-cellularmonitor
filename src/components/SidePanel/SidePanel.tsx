@@ -13,6 +13,8 @@ import ConnectionStatus from './ConnectionStatus';
 import EventGraphOptions from './EventGraphOptions';
 import FileActions from './FileActions';
 import Instructions from './Instructions';
+import { Macros } from './Macros';
+import TraceOptions from './TraceOptions';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
 
@@ -25,10 +27,13 @@ export const TraceCollectorSidePanel = () => (
         <FileActions />
 
         <TraceCollector />
+        <Macros />
+        <OpenSerialTerminal />
+
         <ConnectionStatus />
-        <TraceFileInformation />
+        <TraceOptions />
         <AdvancedOptions />
 
-        <OpenSerialTerminal />
+        <TraceFileInformation />
     </SidePanel>
 );

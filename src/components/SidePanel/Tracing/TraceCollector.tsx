@@ -18,7 +18,6 @@ import StartStopTrace from './StartStopTrace';
 import TraceFormatSelector from './TraceFormatSelector';
 
 export default () => {
-    const isTracing = useSelector(getIsTracing);
     const [selectedTraceFormats, setSelectedTraceFormats] = useState<
         TraceFormat[]
     >(getStoredTraceFormats());
@@ -31,11 +30,6 @@ export default () => {
 
     return (
         <>
-            <TraceFormatSelector
-                selectedTraceFormats={selectedTraceFormats}
-                setSelectedTraceFormats={setSelectedTraceFormats}
-                isTracing={isTracing}
-            />
             <StartStopTrace traceFormats={selectedTraceFormats} />
             <DetectTraceDbDialog />
         </>

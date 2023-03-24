@@ -23,12 +23,6 @@ export default () => {
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
             <FlashSampleModal />
-            <Macros />
-            <LoadTraceFile />
-            <TraceConverter />
-            <DatabaseFileOverride />
-
-            <Serialports />
         </CollapsibleGroup>
     );
 };

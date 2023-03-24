@@ -21,7 +21,7 @@ export const Macros = () => {
                 onClick={() => sendMacros(serialPort)}
                 title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
             >
-                Send Recommended AT
+                Run recommended AT commands
             </Button>
         );
     }

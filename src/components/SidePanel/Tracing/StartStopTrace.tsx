@@ -37,8 +37,8 @@ export default ({ traceFormats = [] }: StartStopProps) => {
                 else start();
             }}
             started={isTracing}
-            startText="Start tracing"
-            stopText="Stop tracing"
+            startText="Start"
+            stopText="Stop"
             disabled={!isTracing && traceFormats.length === 0}
         />
     );

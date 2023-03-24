@@ -1,19 +1,19 @@
 import React from 'react';
-import { Button, Group } from 'pc-nrfconnect-shared';
+import { useSelector } from 'react-redux';
+import { Group, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { LoadTraceFile } from './LoadTraceFile';
+import TraceConverter from './Tracing/TraceConverter';
 
-export default () => (
-    <Group heading="FILE ACTIONS">
-        <LoadTraceFile />
-        <Button
-            variant="secondary"
-            className="w-100"
-            onClick={() => {
-                alert('Sorry! Not implemented yet');
-            }}
-        >
-            Open file in Wireshark...
-        </Button>
-    </Group>
-);
+export default () => {
+    const device = useSelector(selectedDevice);
+
+    if (device) return null;
+
+    return (
+        <Group heading="FILE ACTIONS">
+            <LoadTraceFile />
+            <TraceConverter />
+        </Group>
+    );
+};

@@ -33,7 +33,7 @@ export default () => {
         >
             {loading === true
                 ? 'Converting file to PCAP'
-                : 'Convert RAW trace to PCAP'}
+                : 'Open file in Wireshark...'}
         </Button>
     );
 };
