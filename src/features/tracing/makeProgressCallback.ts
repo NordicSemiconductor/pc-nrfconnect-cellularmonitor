@@ -57,8 +57,6 @@ export default (
         displayDetectingTraceDbMessage: boolean;
     }
 ) => {
-    let progressCallbackCounter = 0;
-
     const detectModemFwUuid = detectingTraceDb ? makeDetectModemFwUuid() : noop;
     const detectTraceDB = detectingTraceDb ? makeDetectTraceDB() : noop;
 
@@ -66,11 +64,13 @@ export default (
         dispatch(setDetectingTraceDb(true));
     }
 
-    let latestProgress: nrfml.Progress | null = null;
-    let destroyIntervalTimeout: NodeJS.Timeout;
-    const interval = setInterval(() => {
+    let lastUpdate = Date.now();
+    let pendingUpdate: NodeJS.Timeout;
+    let lookingForDb = displayDetectingTraceDbMessage;
+
+    const update = (progress: nrfml.Progress) => {
         try {
-            latestProgress?.data_offsets?.forEach(progressItem => {
+            progress?.data_offsets?.forEach(progressItem => {
                 dispatch(
                     setTraceProgress({
                         path: progressItem.path,
@@ -78,6 +78,7 @@ export default (
                     })
                 );
             });
+            lastUpdate = Date.now();
         } catch (err) {
             logger.debug(
                 `Error in progress callback, discarding sample ${JSON.stringify(
@@ -85,22 +86,21 @@ export default (
                 )}`
             );
         }
-    }, 200);
-
-    destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
+    };
 
     return (progress: nrfml.Progress) => {
-        if (displayDetectingTraceDbMessage && progressCallbackCounter === 0) {
+        if (lookingForDb) {
             dispatch(setDetectingTraceDb(false));
         }
+        lookingForDb = false;
         detectModemFwUuid(progress);
         detectTraceDB(progress);
 
-        latestProgress = progress;
-
-        progressCallbackCounter += 1;
-
-        clearTimeout(destroyIntervalTimeout);
-        destroyIntervalTimeout = setTimeout(() => clearInterval(interval), 800);
+        if (Date.now() - lastUpdate > 200) {
+            update(progress);
+        } else {
+            clearTimeout(pendingUpdate);
+            pendingUpdate = setTimeout(() => update(progress), 200);
+        }
     };
 };

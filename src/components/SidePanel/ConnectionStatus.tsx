@@ -6,8 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, Steppers } from 'pc-nrfconnect-shared';
-import { Step } from 'pc-nrfconnect-shared/src/Steppers/Steppers';
+import { CollapsibleGroup, Step, Stepper } from 'pc-nrfconnect-shared';
 
 import {
     getTraceDataReceived,
@@ -22,18 +21,22 @@ import {
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {
+    id: 'TRACE_DEFAULT',
     title: 'TRACE',
 };
 const TRACE_LOADING_STATE: Step = {
+    id: 'TRACE_LOADING',
     title: 'TRACE',
     state: 'active',
 };
 const TRACE_SUCCESS_STATE: Step = {
+    id: 'TRACE_SUCCESS',
     title: 'TRACE',
     state: 'success',
     caption: 'Trace is enabled',
 };
 const TRACE_FAIL_STATE: Step = {
+    id: 'TRACE_FAIL',
     title: 'TRACE',
     state: 'failure',
     caption: 'Failed to get trace',
@@ -41,18 +44,22 @@ const TRACE_FAIL_STATE: Step = {
 
 // Modem state
 const MODEM_DEFAULT_STATE: Step = {
+    id: 'MODEM_DEFAULT',
     title: 'MODEM',
 };
 const MODEM_LOADING_STATE: Step = {
+    id: 'MODEM_LOADING',
     title: 'MODEM',
     state: 'active',
 };
 const MODEM_SUCCESS_STATE: Step = {
+    id: 'MODEM_SUCCESS',
     title: 'MODEM',
     state: 'success',
     caption: 'Modem is enabled',
 };
 const MODEM_FAIL_STATE: Step = {
+    id: 'MODEM_FAIL',
     title: 'MODEM',
     state: 'failure',
     caption: 'Modem is not enabled',
@@ -60,18 +67,22 @@ const MODEM_FAIL_STATE: Step = {
 
 // SIM state
 const SIM_DEFAULT_STATE: Step = {
+    id: 'SIM_DEFAULT',
     title: 'SIM',
 };
 const SIM_LOADING_STATE: Step = {
+    id: 'SIM_LOADING',
     title: 'SIM',
     state: 'active',
 };
 const SIM_SUCCESS_STATE: Step = {
+    id: 'SIM_SUCCESS',
     title: 'SIM',
     state: 'success',
     caption: 'SIM is enabled',
 };
 const SIM_FAIL_STATE: Step = {
+    id: 'SIM_FAIL',
     title: 'SIM',
     state: 'failure',
     caption: 'SIM is not enabled',
@@ -79,18 +90,22 @@ const SIM_FAIL_STATE: Step = {
 
 // LTE state
 const LTE_DEFAULT_STATE: Step = {
+    id: 'LTE_DEFAULT',
     title: 'LTE',
 };
 const LTE_LOADING_STATE: Step = {
+    id: 'LTE_LOADING',
     title: 'LTE',
     state: 'active',
 };
 const LTE_SUCCESS_STATE: Step = {
+    id: 'LTE_SUCCESS',
     title: 'LTE',
     state: 'success',
     caption: 'LTE is enabled',
 };
 const LTE_FAIL_STATE: Step = {
+    id: 'LTE_FAIL',
     title: 'LTE',
     state: 'failure',
     caption: 'LTE is not enabled',
@@ -98,18 +113,22 @@ const LTE_FAIL_STATE: Step = {
 
 // PDN state
 const PDN_DEFAULT_STATE: Step = {
+    id: 'PDN_DEFAULT',
     title: 'PDN',
 };
 const PDN_LOADING_STATE: Step = {
+    id: 'PDN_LOADING',
     title: 'PDN',
     state: 'active',
 };
 const PDN_SUCCESS_STATE: Step = {
+    id: 'PDN_SUCCESS',
     title: 'PDN',
     state: 'success',
     caption: 'PDN is enabled',
 };
 const PDN_FAIL_STATE: Step = {
+    id: 'PDN_FAIL',
     title: 'PDN',
     state: 'failure',
     caption: 'PDN is not enabled',
@@ -251,8 +270,8 @@ export default () => {
                 setCollapseConnectionStatusSection(!isNowExpanded)
             }
         >
-            <div className="connection-status-container">
-                <Steppers
+            <div className="my-2">
+                <Stepper
                     steps={[
                         traceState,
                         modemState,
