@@ -156,8 +156,12 @@ const ProgramSample = ({
         new Map(sample.fw.map(fw => [fw, 0]))
     );
 
-    const [isProgramming, setIsProgramming] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [stage, setStage] = useState<
+        'unstarted' | 'programming' | 'success' | 'failed'
+    >('unstarted');
+
+    const isProgramming = stage === 'programming';
 
     useEffect(() => {
         dispatch(
@@ -238,7 +242,11 @@ const ProgramSample = ({
                         {sample.documentation}
                     </a>
                 </p>
-
+                {stage === 'success' && (
+                    <Alert variant="success">
+                        Successfully programmed device
+                    </Alert>
+                )}
                 {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             </Dialog.Body>
             <Dialog.Footer>
@@ -264,20 +272,20 @@ const ProgramSample = ({
                     variant="primary"
                     disabled={isProgramming || waitingForReconnect || !device}
                     onClick={async () => {
-                        setIsProgramming(true);
+                        setStage('programming');
                         setErrorMessage(undefined);
                         try {
                             await downloadSample(sample);
                             dispatch(setUartSerialPort(null));
                             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             await flash(device!, sample, progressCb);
-                            setIsProgramming(false);
+                            setStage('success');
                         } catch (error) {
                             logger.error(error);
                             setErrorMessage(
                                 'Unable to program device, please check the log.'
                             );
-                            setIsProgramming(false);
+                            setStage('failed');
                         }
                     }}
                 >

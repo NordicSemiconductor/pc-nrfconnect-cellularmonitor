@@ -46,6 +46,7 @@ export const flash = async (
         }
     } catch (error) {
         logger.error(error);
+        throw error;
     }
 };
 
