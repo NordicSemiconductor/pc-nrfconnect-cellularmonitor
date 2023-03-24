@@ -7,17 +7,19 @@
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 import type { State } from '../types';
 import NASConverter, {
-    AttachAcceptPacket,
-    AttachRequestPacket,
-    parseIPv6Postfix,
     processAttachAcceptPacket,
     processAttachRequestPacket,
 } from './index';
+import { AttachAcceptPacket, AttachRequestPacket } from './types';
+import { parseIPv6Postfix } from './utils';
 
 test('processAttachRequest sets state', () => {
     const attachRequestPacket =
         actualAttachRequestPacket.jsonData as AttachRequestPacket;
-    const actualState = processAttachRequestPacket(attachRequestPacket);
+    const actualState = processAttachRequestPacket(
+        attachRequestPacket,
+        {} as State
+    );
 
     expect(actualState).toEqual(expectedRequestState);
 });
@@ -25,7 +27,10 @@ test('processAttachRequest sets state', () => {
 test('processAttachAccept sets correct state', () => {
     const attachAcceptPacket =
         actualAttachAcceptPacket.jsonData as AttachAcceptPacket;
-    const actualState = processAttachAcceptPacket(attachAcceptPacket);
+    const actualState = processAttachAcceptPacket(
+        attachAcceptPacket,
+        {} as State
+    );
 
     expect(actualState).toEqual(expectedAcceptState);
 });
@@ -39,12 +44,12 @@ test('Process Request and then Accept sets correct state', () => {
                 ...expectedRequestState.powerSavingMode.requested,
             },
             granted: {
-                ...expectedAcceptState.powerSavingMode.granted,
+                ...expectedAcceptState?.powerSavingMode?.granted,
             },
         },
     } as Partial<State>;
 
-    let actualState = {};
+    let actualState = {} as Partial<State>;
     [actualAttachRequestPacket, actualAttachAcceptPacket].forEach(packet => {
         actualState = NASConverter(packet, actualState as State);
     });
@@ -74,10 +79,11 @@ const expectedRequestState = {
                 value: 3600,
             },
         },
+        granted: {},
     },
 };
 
-const expectedAcceptState = {
+const expectedAcceptState: Partial<State> = {
     powerSavingMode: {
         granted: {
             T3324: {
@@ -99,17 +105,19 @@ const expectedAcceptState = {
                 value: 1_116_000,
             },
         },
+        requested: {},
     },
-    accessPointNames: [
-        {
-            apn: 'telenor.smart.mnc001.mcc242.gprs',
+    accessPointNames: {
+        'telenor.smart': {
+            apn: 'telenor.smart',
             ipv4: '10.166.181.52',
             ipv6Postfix: '0000:0000:39a7:3f79',
             pdnType: 'IPv4v6',
             rawPDNType: '3',
             ipv6Complete: false,
+            state: 'Activate Default EPS Bearer Context Request',
         },
-    ],
+    },
 
     mnc: 'Telenor Norge AS',
     mncCode: 1,

@@ -154,6 +154,7 @@ export const startTrace =
             nrfmlConfig(state, source, formats),
             err => {
                 clearInterval(throttle);
+                notifyListeners(packets.splice(0, packets.length));
                 if (err?.message.includes('tshark')) {
                     logger.logError('Error while tracing', err);
                 } else if (err != null) {

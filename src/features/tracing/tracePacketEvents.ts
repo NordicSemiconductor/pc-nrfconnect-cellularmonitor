@@ -6,7 +6,7 @@
 
 import EventEmitter from 'events';
 
-import type { AttachPacket } from '../tracingEvents/nas';
+import type { AttachPacket } from '../tracingEvents/nas/types';
 import type { NetworkType } from '../tracingEvents/types';
 import { eventType } from './formats';
 
@@ -76,7 +76,6 @@ tracePacketEvents.on('start-process', () => events.splice(0, events.length));
 
 export const notifyListeners = (packets: Packet[]) => {
     const formattedEvents: TraceEvent[] = [];
-
     packets.forEach(packet => {
         if (!packet.interpreted_json) {
             formattedEvents.push(packetsToEvent(packet));

@@ -8,7 +8,7 @@ import type { Packet } from '../tracing/tracePacketEvents';
 import { PowerLevel } from './at/commandProcessors/dataProfile';
 import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
 import { Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
-import type { AttachPacket } from './nas/index';
+import type { AttachPacket } from './nas/types';
 
 export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
     packet.format === 'nas-eps' && packet.interpreted_json !== undefined;
@@ -73,7 +73,7 @@ export interface State {
         granted?: PowerSavingModeEntries;
     };
 
-    accessPointNames: AccessPointName[];
+    accessPointNames: { [key: string]: AccessPointName };
 
     mnc: string;
     mncCode: number;
@@ -189,7 +189,16 @@ export type TAUTriggered = 0 | 1 | 255 | undefined;
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
+    // Both the bearerId and the apn can be used to identify the connection
+    // procedure's APN.
+    bearerId?: string;
     apn?: string;
+
+    state?:
+        | 'PDN Connectivity Request'
+        | 'Activate Default EPS Bearer Context Request'
+        | 'Activate Default EPS Bearer Context Accept';
+    defaultApn?: boolean;
     pdnType?: PDNType;
     rawPDNType?: RawPDNType;
     ipv4?: IPv4Address;
@@ -198,7 +207,7 @@ export interface AccessPointName {
     ipv6Prefix?: IPv6Partial | undefined;
     // First IPv6 postfix is retrieved from Attach Accept, and ipv6Complete=false
     // Then IPv6 prefix is retrieved from an IP packet, and ipv6Complete is set to true.
-    ipv6Complete: boolean;
+    ipv6Complete?: boolean;
     info?: 'IPv4 Only' | 'IPv6 Only';
 }
 
@@ -207,7 +216,7 @@ export type NetworkType = 'NB-IoT' | 'LTE-M';
 export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
 export type RawPDNType = '1' | '2' | '3' | '4';
 
-export const parseCrudePDN = (rawPDN: unknown): RawPDNType => {
+export const parseRawPDN = (rawPDN: unknown): RawPDNType => {
     if (rawPDN === '1') return rawPDN;
     if (rawPDN === '2') return rawPDN;
     if (rawPDN === '3') return rawPDN;

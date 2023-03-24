@@ -6,7 +6,6 @@
 
 import type { TraceEvent } from '../tracing/tracePacketEvents';
 import ATConverter from './at';
-import IPConverter from './ip';
 import LTEConverter from './lte';
 import NASConverter from './nas';
 import type { State } from './types';
@@ -19,10 +18,6 @@ export const convert = (packet: TraceEvent, state: State): State => {
     if (packet.jsonData) {
         if (packet.format === 'NAS') {
             return NASConverter(packet, state);
-        }
-
-        if (packet.format === 'IP') {
-            return IPConverter(packet, state);
         }
     }
     if (packet.format === 'RRC') {
