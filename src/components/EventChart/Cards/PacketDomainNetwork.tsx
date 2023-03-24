@@ -5,19 +5,18 @@
  */
 
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import { AccessPointName } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
-const PacketDomainNetwork = ({
+export default ({
     apn,
     pdnType,
     rawPDNType,
     ipv4,
     ipv6,
     info,
+    state: connection,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
         'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
@@ -26,9 +25,11 @@ const PacketDomainNetwork = ({
         'IPv4 Address': { value: ipv4 ?? 'Unknown', commands: [] },
         'IPv6 Address': { value: `${ipv6}` ?? 'Unknown', commands: [] },
         info: { value: info ?? 'Unknown', commands: [] },
+        Connection: { value: connection ?? 'Unknown', commands: [] },
     };
     return (
         <DashboardCard
+            key={`dashboard-apn-${apn}-card`}
             title={
                 apn
                     ? apn
@@ -42,15 +43,4 @@ const PacketDomainNetwork = ({
             fields={fields}
         />
     );
-};
-
-export default () => {
-    // Each instance in the list of accessPointNames is a "Packet Domain Network".
-    const { accessPointNames } = useSelector(getDashboardState);
-
-    if (accessPointNames == null) {
-        return null;
-    }
-
-    return <>{accessPointNames.map(apn => PacketDomainNetwork(apn))}</>;
 };

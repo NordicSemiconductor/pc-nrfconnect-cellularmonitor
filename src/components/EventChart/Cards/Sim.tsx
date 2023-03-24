@@ -75,5 +75,12 @@ export default () => {
         ISSUER: { value: 'NOT IMPLEMENTED', commands: [] },
     };
 
-    return <DashboardCard title="Sim" iconName="mdi-sim" fields={fields} />;
+    return (
+        <DashboardCard
+            key="dashboard-sim-card"
+            title="Sim"
+            iconName="mdi-sim"
+            fields={fields}
+        />
+    );
 };

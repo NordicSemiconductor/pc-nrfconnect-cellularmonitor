@@ -181,6 +181,7 @@ export default () => {
 
     return (
         <DashboardCard
+            key="dashboard-temp-card"
             title="Temp Card"
             iconName="mdi-cellphone-wireless"
             information="This card is used as temporary card until we get some feedback on where values should actually be placed."
