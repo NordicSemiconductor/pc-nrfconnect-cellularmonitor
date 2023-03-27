@@ -38,7 +38,9 @@ export default ({
     };
 
     return (
-        <Group heading="Trace output format">
+        <>
+            <p>Trace outputs</p>
+
             <ButtonGroup
                 className={`trace-selector w-100 ${
                     isTracing ? 'disabled' : ''
@@ -63,6 +65,6 @@ export default ({
                 ))}
             </ButtonGroup>
             <WiresharkWarning selectedTraceFormats={selectedTraceFormats} />
-        </Group>
+        </>
     );
 };
