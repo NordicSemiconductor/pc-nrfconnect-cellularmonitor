@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
