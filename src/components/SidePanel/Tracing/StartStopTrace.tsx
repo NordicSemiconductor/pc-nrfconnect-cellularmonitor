@@ -8,25 +8,23 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StartStopButton } from 'pc-nrfconnect-shared';
 
-import { TraceFormat } from '../../../features/tracing/formats';
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
-import { getIsTracing, getTaskId } from '../../../features/tracing/traceSlice';
+import {
+    getIsTracing,
+    getTraceFormats,
+} from '../../../features/tracing/traceSlice';
 
-type StartStopProps = {
-    traceFormats: TraceFormat[];
-};
-
-export default ({ traceFormats = [] }: StartStopProps) => {
+export default () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
-    const nrfmlTaskId = useSelector(getTaskId);
+    const traceFormats = useSelector(getTraceFormats);
 
     const start = () => {
         dispatch(startTrace(traceFormats));
     };
 
     const stop = () => {
-        dispatch(stopTrace(nrfmlTaskId));
+        dispatch(stopTrace());
     };
 
     return (

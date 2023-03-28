@@ -17,22 +17,16 @@ import TraceFormatSelector from './Tracing/TraceFormatSelector';
 
 export default () => {
     const device = useSelector(selectedDevice);
-    const [selectedTraceFormats, setSelectedTraceFormats] = useState<
-        TraceFormat[]
-    >(getStoredTraceFormats());
+
     const isTracing = useSelector(getIsTracing);
 
     if (!device) return null;
 
     return (
-        <CollapsibleGroup heading="TRACE OPTIONS">
+        <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
 
-            <TraceFormatSelector
-                selectedTraceFormats={selectedTraceFormats}
-                setSelectedTraceFormats={setSelectedTraceFormats}
-                isTracing={isTracing}
-            />
+            <TraceFormatSelector isTracing={isTracing} />
             <Serialports />
         </CollapsibleGroup>
     );

@@ -11,7 +11,9 @@ import type { RootState } from '../../appReducer';
 import {
     deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
+    getTraceFormats as restoreTraceFormats,
     setManualDbFilePath as setPersistedManualDbFilePath,
+    setTraceFormats as storeTraceFormats,
 } from '../../utils/store';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
@@ -31,6 +33,7 @@ interface TraceState {
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
     readonly uartSerialPort: SerialPort | null;
+    selectedFormats: TraceFormat[];
 }
 
 const initialState = (): TraceState => ({
@@ -43,6 +46,7 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
     uartSerialPort: null,
+    selectedFormats: restoreTraceFormats(),
 });
 
 const traceSlice = createSlice({
@@ -113,6 +117,10 @@ const traceSlice = createSlice({
             }
             state.uartSerialPort = action.payload;
         },
+        setTraceFormats: (state, action: PayloadAction<TraceFormat[]>) => {
+            state.selectedFormats = action.payload;
+            storeTraceFormats(action.payload);
+        },
     },
 });
 
@@ -143,6 +151,9 @@ export const getTraceTaskId = (state: RootState) => state.app.trace.taskId;
 export const getUartSerialPort = (state: RootState) =>
     state.app.trace.uartSerialPort;
 
+export const getTraceFormats = (state: RootState) =>
+    state.app.trace.selectedFormats;
+
 export const {
     setTraceIsStarted,
     setTraceIsStopped,
@@ -155,6 +166,7 @@ export const {
     resetManualDbFilePath,
     setDetectingTraceDb,
     setUartSerialPort,
+    setTraceFormats,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

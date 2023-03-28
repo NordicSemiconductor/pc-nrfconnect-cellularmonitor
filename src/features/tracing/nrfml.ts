@@ -238,13 +238,12 @@ export const readRawTrace =
         logger.info(`Started reading trace from ${sourceFile}`);
     };
 
-export const stopTrace =
-    (taskId: TaskId | null): TAction =>
-    dispatch => {
-        if (taskId === null) return;
-        nrfml.stop(taskId);
-        usageData.sendUsageData(EventAction.STOP_TRACE);
-        dispatch(setTraceDataReceived(false));
-        dispatch(setTraceIsStopped());
-        tracePacketEvents.emit('stop-process');
-    };
+export const stopTrace = (): TAction => (dispatch, getState) => {
+    const { taskId } = getState().app.trace;
+    if (taskId === null) return;
+    nrfml.stop(taskId);
+    usageData.sendUsageData(EventAction.STOP_TRACE);
+    dispatch(setTraceDataReceived(false));
+    dispatch(setTraceIsStopped());
+    tracePacketEvents.emit('stop-process');
+};

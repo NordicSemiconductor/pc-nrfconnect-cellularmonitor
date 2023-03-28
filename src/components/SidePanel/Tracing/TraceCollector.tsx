@@ -8,20 +8,12 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { TraceFormat } from '../../../features/tracing/formats';
-import {
-    getIsTracing,
-    getSerialPort,
-} from '../../../features/tracing/traceSlice';
+import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { getTraceFormats as getStoredTraceFormats } from '../../../utils/store';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
 import StartStopTrace from './StartStopTrace';
-import TraceFormatSelector from './TraceFormatSelector';
 
 export default () => {
-    const [selectedTraceFormats, setSelectedTraceFormats] = useState<
-        TraceFormat[]
-    >(getStoredTraceFormats());
-
     const selectedSerialPort = useSelector(getSerialPort);
 
     if (!selectedSerialPort) {
@@ -30,7 +22,7 @@ export default () => {
 
     return (
         <>
-            <StartStopTrace traceFormats={selectedTraceFormats} />
+            <StartStopTrace />
             <DetectTraceDbDialog />
         </>
     );
