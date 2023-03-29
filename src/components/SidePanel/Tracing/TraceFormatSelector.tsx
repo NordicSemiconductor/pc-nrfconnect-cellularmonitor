@@ -14,16 +14,14 @@ import {
     TraceFormat,
 } from '../../../features/tracing/formats';
 import {
+    getIsTracing,
     getTraceFormats,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../Wireshark/WiresharkWarning';
 
-interface TraceFormatSelectorProps {
-    isTracing: boolean;
-}
-
-export default ({ isTracing }: TraceFormatSelectorProps) => {
+export default () => {
+    const isTracing = useSelector(getIsTracing);
     const selectedFormats = useSelector(getTraceFormats);
     const dispatch = useDispatch();
     const selectTraceFormat = (format: TraceFormat) => () => {
