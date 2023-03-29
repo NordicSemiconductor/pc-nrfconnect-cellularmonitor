@@ -8,7 +8,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Toggle } from 'pc-nrfconnect-shared';
 
-import { getLive, setLive } from './chartSlice';
+import { getLive, setLive, setShowOptionsDialog } from './chartSlice';
 
 export default ({ marginLeft }: { marginLeft: number }) => {
     const dispatch = useDispatch();
@@ -22,7 +22,10 @@ export default ({ marginLeft }: { marginLeft: number }) => {
         >
             <p>Packet Event Viewer</p>
             <div className="d-flex flex-row justify-content-end">
-                <Button variant="custom" onClick={() => {}}>
+                <Button
+                    variant="custom"
+                    onClick={() => dispatch(setShowOptionsDialog(true))}
+                >
                     <span className="mdi mdi-cog" /> <p>SETTINGS</p>
                 </Button>
                 <Toggle
