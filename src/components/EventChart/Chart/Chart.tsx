@@ -27,7 +27,7 @@ import {
     TraceEvent,
     tracePacketEvents,
 } from '../../../features/tracing/tracePacketEvents';
-import chartAreaBorderPlugin from './chartAreaBorderPlugin';
+import chartAreaColorPlugin from './chartAreaColorPlugin';
 import {
     getLive,
     getMode,
@@ -35,6 +35,7 @@ import {
     setLive,
     setSelectedTime,
 } from './chartSlice';
+import ChartTop from './ChartTop';
 import panZoomPlugin from './panZoomPlugin';
 import { defaultOptions } from './state';
 import TimeSpanDeltaLine from './TimeSpanDeltaLine';
@@ -67,8 +68,8 @@ const datasets = {
                           )
                       ]
                     : undefined,
-            pointRadius: 6,
-            pointHoverRadius: 6,
+            pointRadius: 4.5,
+            pointHoverRadius: 4.5,
             pointHoverBorderWidth: 0,
             pointBorderWidth: 0,
             pointHoverBackgroundColor: 'white',
@@ -131,6 +132,13 @@ export default () => {
             scales: {
                 y: {
                     ticks: {
+                        padding: 10,
+                        color: sharedColors.gray700,
+                        font: {
+                            size: 10,
+                            lineHeight: 1,
+                        },
+                        backdropPadding: 0,
                         callback: tickValue =>
                             (tickValue as number) >= 0 &&
                             Math.ceil(tickValue as number) === tickValue
@@ -138,22 +146,17 @@ export default () => {
                                 : undefined,
                         stepSize: 0.5,
                     },
+                    afterFit: scale => {
+                        scale.paddingTop = 0;
+                        scale.paddingBottom = 0;
+                    },
                     reverse: true,
                     grid: {
                         display: true,
                         offset: true,
+                        color: sharedColors.gray200,
                         drawTicks: false,
-                        lineWidth: tick => {
-                            // remove top and bottom offset gridline to avoid overlap with chartAreaBorderPlugin
-                            if (
-                                // Chartjs has incorrect typings
-                                (tick as unknown as { type: string }).type ===
-                                    'scale' ||
-                                tick.index === 0
-                            )
-                                return 0;
-                            return 1;
-                        },
+                        lineWidth: 1,
                     },
                     border: {
                         display: false,
@@ -164,7 +167,7 @@ export default () => {
                 x: {
                     type: 'linear',
                     afterFit: scale => {
-                        scale.paddingRight = 16;
+                        scale.paddingRight = 0;
                     },
                     grid: {
                         display: false,
@@ -221,15 +224,19 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
-    const chartTopBottomOffset = 20.4;
-    const sectionHeight = 24;
-
+    const sectionHeight = 12;
+    const chartTopAndBottomMargin = chart.current
+        ? chart.current.height - chart.current.chartArea.height
+        : 0;
+    console.log(chartTopAndBottomMargin);
     return (
         <>
+            <ChartTop marginLeft={chart.current?.chartArea.left ?? 0} />
             <div
+                className="chart-data"
                 style={{
                     height: `${
-                        chartTopBottomOffset +
+                        chartTopAndBottomMargin +
                         traceEventFilter.length * sectionHeight
                     }px`,
                 }}
@@ -238,7 +245,7 @@ export default () => {
                     ref={chart}
                     options={options}
                     data={datasets as ChartData<'scatter'>}
-                    plugins={[panZoomPlugin, chartAreaBorderPlugin]}
+                    plugins={[panZoomPlugin, chartAreaColorPlugin]}
                 />
             </div>
             <TimeSpanDeltaLine range={range} chartArea={chartArea} />

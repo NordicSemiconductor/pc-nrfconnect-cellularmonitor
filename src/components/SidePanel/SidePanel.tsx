@@ -10,7 +10,6 @@ import { SidePanel } from 'pc-nrfconnect-shared';
 import { OpenSerialTerminal } from '../../features/terminal';
 import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
-import EventGraphOptions from './EventGraphOptions';
 import Instructions from './Instructions';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
@@ -26,7 +25,6 @@ export const TraceCollectorSidePanel = () => (
         <TraceFileInformation />
         <AdvancedOptions />
 
-        <EventGraphOptions />
         <OpenSerialTerminal />
     </SidePanel>
 );

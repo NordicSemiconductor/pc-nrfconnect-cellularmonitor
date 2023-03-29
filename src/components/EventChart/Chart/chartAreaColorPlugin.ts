@@ -5,17 +5,18 @@
  */
 
 import { Plugin } from 'chart.js';
+import { colors } from 'pc-nrfconnect-shared';
 
 export default {
-    id: 'chartAreaBorder',
+    id: 'chartAreaColor',
     beforeDraw(chart) {
         const {
             ctx,
             chartArea: { left, top, width, height },
         } = chart;
         ctx.save();
-        ctx.lineWidth = 0.05;
-        ctx.strokeRect(left, top, width, height);
+        ctx.fillStyle = colors.gray700;
+        ctx.fillRect(left, top, width, height);
         ctx.restore();
     },
 } as Plugin<'scatter'>;

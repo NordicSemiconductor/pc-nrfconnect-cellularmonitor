@@ -7,7 +7,7 @@
 import React from 'react';
 
 import DashboardCards from './Cards';
-import Chart from './Chart/Chart';
+import Chart from './Chart';
 
 import './Dashboard.scss';
 
@@ -16,10 +16,7 @@ const Dashboard = () => (
         <div className="events-dashboard-cards">
             <DashboardCards />
         </div>
-        <div className="chart">
-            <div id="tooltip" />
-            <Chart />
-        </div>
+        <Chart />
     </div>
 );
 
