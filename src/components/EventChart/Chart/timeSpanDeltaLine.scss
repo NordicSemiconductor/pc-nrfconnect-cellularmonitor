@@ -10,25 +10,25 @@
     &::before,
     &::after {
         content: '';
-        border-right: 1px solid $gray-500;
+        border-right: 1px solid $gray-700;
         position: relative;
-        top: 10px;
+        top: -9px;
     }
 
     font-size: 12px;
 
-    margin-bottom: 10px;
+    margin-top: 8px;
 
-    color: $gray-500;
+    color: $gray-700;
 
     text-align: center;
-    border-bottom: 1px solid $gray-500;
+    border-top: 1px solid $gray-700;
 
     display: flex;
     justify-content: space-between;
 
     .content {
-        margin: 0 5px;
+        margin: 0 8px;
         width: 100%;
         display: flex;
         justify-content: space-between;
