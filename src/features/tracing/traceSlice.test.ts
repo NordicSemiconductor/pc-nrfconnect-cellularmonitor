@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { configureStore } from '@reduxjs/toolkit';
 import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import {
     getIsTracing,
     getTaskId,
+    getTraceFormats,
     getTraceProgress,
     setTraceIsStarted,
     setTraceIsStopped,
@@ -24,6 +26,14 @@ const A_PATH = 'a/path';
 const ANOTHER_PATH = 'another/path';
 
 describe('trace slice', () => {
+    describe('initial state', () => {
+        test('trace formats are set to default', () => {
+            const store = configureStore({ reducer: appReducer });
+            const { selectedFormats } = store.getState().trace;
+            expect(selectedFormats.length).toBe(1);
+        });
+    });
+
     describe('when starting a trace', () => {
         const startTrace = setTraceIsStarted({
             taskId: A_TRACE_ID,

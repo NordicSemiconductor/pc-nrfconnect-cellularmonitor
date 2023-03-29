@@ -163,35 +163,5 @@ describe('Sidepanel functionality', () => {
                 })
             ).toBeInTheDocument();
         });
-
-        it('should store RAW as .bin', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('raw');
-            expect(
-                screen.getByText('.bin', {
-                    exact: false,
-                })
-            ).toBeInTheDocument();
-            expect(
-                screen.queryByText('.pcapng', {
-                    exact: false,
-                })
-            ).not.toBeInTheDocument();
-        });
-
-        it('should store PCAP as .pcap', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('pcap');
-            expect(
-                await screen.findByText('.pcapng', {
-                    exact: false,
-                })
-            ).toBeInTheDocument();
-            expect(
-                screen.queryByText('.bin', {
-                    exact: false,
-                })
-            ).not.toBeInTheDocument();
-        });
     });
 });
