@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChartType, ChartTypeRegistry } from 'chart.js';
 
 import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
