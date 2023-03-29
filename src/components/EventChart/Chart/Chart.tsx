@@ -128,6 +128,11 @@ export default () => {
             onResize: c => {
                 setTimeout(() => setChartCanvas(c.chartArea));
             },
+            layout: {
+                padding: {
+                    bottom: 0,
+                },
+            },
 
             scales: {
                 y: {
@@ -171,6 +176,7 @@ export default () => {
                     },
                     grid: {
                         display: false,
+                        tickLength: 0,
                     },
                     border: {
                         display: false,
@@ -224,21 +230,19 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
-    const sectionHeight = 12;
-    const chartTopAndBottomMargin = chart.current
-        ? chart.current.height - chart.current.chartArea.height
-        : 0;
-    console.log(chartTopAndBottomMargin);
+    const sectionHeight = 13;
+    const sectionSeperatorHeight = 1;
+    const chartHeight =
+        sectionHeight * traceEventFilter.length +
+        sectionSeperatorHeight * (traceEventFilter.length - 1);
+
     return (
         <>
             <ChartTop marginLeft={chart.current?.chartArea.left ?? 0} />
             <div
                 className="chart-data"
                 style={{
-                    height: `${
-                        chartTopAndBottomMargin +
-                        traceEventFilter.length * sectionHeight
-                    }px`,
+                    height: `${chartHeight}px`,
                 }}
             >
                 <Scatter
