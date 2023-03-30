@@ -8,7 +8,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 // eslint-disable-next-line import/no-unresolved
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Chart as ChartJS,
@@ -39,7 +38,7 @@ import ChartTop from './ChartTop';
 import panZoomPlugin from './panZoomPlugin';
 import { defaultOptions } from './state';
 import TimeSpanDeltaLine from './TimeSpanDeltaLine';
-import { PacketTooltip } from './Tooltip';
+import { tooltipHandler } from './Tooltip';
 
 ChartJS.register(LinearScale, PointElement, Title, Tooltip, Legend);
 
@@ -129,9 +128,7 @@ export default () => {
                 setTimeout(() => setChartCanvas(c.chartArea));
             },
             layout: {
-                padding: {
-                    bottom: 0,
-                },
+                autoPadding: false,
             },
 
             scales: {
@@ -207,22 +204,7 @@ export default () => {
                 tooltip: {
                     enabled: false,
                     external(context) {
-                        const showing = context.tooltip.opacity === 1;
-
-                        if (showing) {
-                            const tooltip = PacketTooltip(context.tooltip);
-                            if (tooltip) {
-                                ReactDOM.render(
-                                    tooltip,
-                                    document.getElementById('tooltip')
-                                );
-                            }
-                        } else {
-                            ReactDOM.render(
-                                <div />,
-                                document.getElementById('tooltip')
-                            );
-                        }
+                        tooltipHandler(context);
                     },
                 },
             },
