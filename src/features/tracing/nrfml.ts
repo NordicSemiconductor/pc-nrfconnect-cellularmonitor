@@ -201,8 +201,13 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
         const sinks: TraceFormat[] = ['tshark'];
-        const packets: Packet[] = [];
 
+        const packets: Packet[] = [];
+        const throttle = setInterval(() => {
+            if (packets.length > 0) {
+                notifyListeners(packets.splice(0, packets.length));
+            }
+        }, 30);
         setLoading(true);
         dispatch(resetDashboardState());
         dispatch(setTraceSourceFilePath(null));
@@ -212,6 +217,7 @@ export const readRawTrace =
         nrfml.start(
             nrfmlConfig(state, source, sinks),
             error => {
+                clearInterval(throttle);
                 if (error) {
                     logger.error(
                         `Error when reading trace from ${sourceFile}: ${error.message}`
@@ -219,7 +225,6 @@ export const readRawTrace =
                 } else {
                     logger.info(`Completed reading trace from ${sourceFile}`);
                 }
-                notifyListeners(packets);
                 setLoading(false);
                 tracePacketEvents.emit('stop-process');
             },
