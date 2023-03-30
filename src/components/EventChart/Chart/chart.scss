@@ -1,0 +1,68 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
+@import '~pc-nrfconnect-shared/styles';
+
+.chart {
+    background: $gray-200;
+    width: calc(100% + 32px);
+    position: relative;
+    left: -16px;
+    bottom: -16px;
+
+    padding: 8px 16px;
+    flex-shrink: 0;
+
+    .chart-top {
+        margin-bottom: 8px;
+
+        button {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-right: 8px;
+            border: 0;
+            background: $gray-200;
+            font-size: 10px;
+            .mdi {
+                line-height: 1;
+                margin-top: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                margin-right: 4px;
+                color: $gray-700;
+            }
+        }
+
+        p {
+            font-size: 10px;
+            margin: 0;
+            color: $gray-700;
+        }
+
+        .toggle {
+            label {
+                span {
+                    color: $gray-700;
+                }
+            }
+            .toggle-label {
+                font-size: 10px;
+            }
+            .toggle-handle {
+                height: 8px;
+                width: 8px;
+                &-toggled {
+                    transform: translate3d(8px, 0, 0);
+                }
+            }
+            .toggle-bar {
+                height: 12px;
+                min-width: 20px;
+            }
+        }
+    }
+}

@@ -10,7 +10,6 @@ import { SidePanel } from 'pc-nrfconnect-shared';
 import { OpenSerialTerminal } from '../../features/terminal';
 import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
-import EventGraphOptions from './EventGraphOptions';
 import FileActions from './FileActions';
 import Instructions from './Instructions';
 import { Macros } from './Macros';

@@ -10,25 +10,26 @@
     &::before,
     &::after {
         content: '';
-        border-right: 1px solid $gray-500;
+        border-right: 1px solid $gray-700;
         position: relative;
-        top: 10px;
+        top: -9px;
     }
 
     font-size: 12px;
 
-    margin-bottom: 10px;
+    // 8 for the border left/right and 8 for above that
+    margin-top: 16px;
 
-    color: $gray-500;
+    color: $gray-700;
 
     text-align: center;
-    border-bottom: 1px solid $gray-500;
+    border-top: 1px solid $gray-700;
 
     display: flex;
     justify-content: space-between;
 
     .content {
-        margin: 0 5px;
+        margin: 0 8px;
         width: 100%;
         display: flex;
         justify-content: space-between;

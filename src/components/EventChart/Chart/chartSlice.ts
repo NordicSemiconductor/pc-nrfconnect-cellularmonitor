@@ -16,6 +16,7 @@ interface State {
     inactivityThreshold: number;
     traceEventFilter: eventType[];
     live: boolean;
+    showOptionsDialog: boolean;
 }
 
 const initialState = (): State => ({
@@ -25,6 +26,7 @@ const initialState = (): State => ({
     inactivityThreshold: 0,
     traceEventFilter: [...EVENT_TYPES],
     live: true,
+    showOptionsDialog: false,
 });
 
 const slice = createSlice({
@@ -61,6 +63,9 @@ const slice = createSlice({
         setLive: (state, action: PayloadAction<boolean>) => {
             state.live = action.payload;
         },
+        setShowOptionsDialog: (state, action: PayloadAction<boolean>) => {
+            state.showOptionsDialog = action.payload;
+        },
     },
 });
 
@@ -72,6 +77,8 @@ export const getSelectedTime = (state: RootState) => state.app.chart.time;
 export const getTraceEventFilter = (state: RootState) =>
     state.app.chart.traceEventFilter;
 export const getLive = (state: RootState) => state.app.chart.live;
+export const showOptionsDialog = (state: RootState) =>
+    state.app.chart.showOptionsDialog;
 
 export const {
     setSelectedTime,
@@ -80,5 +87,6 @@ export const {
     setInactivityThreshold,
     changeTraceEventFilter,
     setLive,
+    setShowOptionsDialog,
 } = slice.actions;
 export default slice.reducer;

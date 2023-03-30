@@ -33,14 +33,14 @@ export const tracePacketEvents = new EventEmitter();
 
 export const events: TraceEvent[] = [];
 
-const formatToLabel = (format: string): eventType => {
+const formatToLabel = (format: string): eventType | '' => {
     // TODO: review lte_rrc format ==> this overwrites information about NB-IoT / LTE-M
     if (format.startsWith('lte_rrc')) return 'RRC';
     if (format === 'at') return 'AT';
     if (format.startsWith('nas')) return 'NAS';
     if (format === 'ip') return 'IP';
 
-    return 'OTHER';
+    return '';
 };
 
 const parseNetworkType = (format: string): NetworkType => {
