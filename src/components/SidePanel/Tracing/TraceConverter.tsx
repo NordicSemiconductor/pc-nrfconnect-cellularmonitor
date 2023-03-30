@@ -35,7 +35,7 @@ export default () => {
         >
             {loading === true
                 ? 'Converting file to PCAP'
-                : 'Open file in Wireshark...'}
+                : 'Open RAW in Wireshark...'}
         </Button>
     );
 };
