@@ -8,7 +8,7 @@ import type { Packet } from '../tracing/tracePacketEvents';
 import { PowerLevel } from './at/commandProcessors/dataProfile';
 import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
 import { Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
-import type { AttachPacket } from './nas/index';
+import type { AttachPacket } from './nas/types';
 
 export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
     packet.format === 'nas-eps' && packet.interpreted_json !== undefined;
@@ -73,7 +73,7 @@ export interface State {
         granted?: PowerSavingModeEntries;
     };
 
-    accessPointNames: AccessPointName[];
+    accessPointNames: { [key: string]: AccessPointName };
 
     mnc: string;
     mncCode: number;
@@ -95,6 +95,8 @@ export interface State {
     // +CSCON
     signalingConnectionStatusNotifications: SignalingConnectionStatusNotifications;
 
+    // Read from LTE NAS packets
+    lteState?: LTEState;
     // Evaluating Connection Parameters %CONEVAL
     conevalResult?: ConnectionEvaluationResult;
     conevalEnergyEstimate?: ConevalEnergyEstimate;
@@ -139,7 +141,7 @@ export interface State {
 
     // +CEDRXRDP eDRX Dynamic Parameters
     AcTState?: AcTState;
-    requested_eDRX_value: string; // 4 bit string
+    requested_eDRX_value: string; // 4 bit string (either NB-iot or LTE-M)
     NW_provided_eDRX_value: string; // 4 bit string
     pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
 
@@ -152,6 +154,8 @@ export interface State {
         daylightSavingTime?: string; // 1 byte in hexadecimal string
     };
 }
+
+export type LTEState = 'IDLE' | 'CONNECTED' | 'HANDOVER';
 
 export type AcTState = 0 | 4 | 5 | 7 | 9;
 export const isValidAcTState = (state: number): state is AcTState => {
@@ -189,7 +193,18 @@ export type TAUTriggered = 0 | 1 | 255 | undefined;
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
+    // Identification properties
+    imsi?: string;
+    bearerId?: string;
     apn?: string;
+
+    state?:
+        | 'PDN Connectivity Request'
+        | 'Activate Default EPS Bearer Context Request'
+        | 'Activate Default EPS Bearer Context Accept'
+        | 'PDN Connectivity Reject';
+    cause?: Cause;
+    defaultApn?: boolean;
     pdnType?: PDNType;
     rawPDNType?: RawPDNType;
     ipv4?: IPv4Address;
@@ -198,7 +213,7 @@ export interface AccessPointName {
     ipv6Prefix?: IPv6Partial | undefined;
     // First IPv6 postfix is retrieved from Attach Accept, and ipv6Complete=false
     // Then IPv6 prefix is retrieved from an IP packet, and ipv6Complete is set to true.
-    ipv6Complete: boolean;
+    ipv6Complete?: boolean;
     info?: 'IPv4 Only' | 'IPv6 Only';
 }
 
@@ -206,8 +221,12 @@ export interface AccessPointName {
 export type NetworkType = 'NB-IoT' | 'LTE-M';
 export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
 export type RawPDNType = '1' | '2' | '3' | '4';
+export type Cause = {
+    code: number;
+    reason: string;
+};
 
-export const parseCrudePDN = (rawPDN: unknown): RawPDNType => {
+export const parseRawPDN = (rawPDN: unknown): RawPDNType => {
     if (rawPDN === '1') return rawPDN;
     if (rawPDN === '2') return rawPDN;
     if (rawPDN === '3') return rawPDN;

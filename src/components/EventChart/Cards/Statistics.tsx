@@ -49,6 +49,7 @@ export default () => {
 
     return (
         <DashboardCard
+            key="dashboard-statistics-card"
             title="Connectivity Statistics"
             iconName="mdi-cellphone-wireless"
             information="Subject to change"

@@ -114,6 +114,7 @@ export default () => {
     };
     return (
         <DashboardCard
+            key="dashboard-device-card"
             title="Device"
             iconName="mdi-integrated-circuit-chip"
             fields={fields}

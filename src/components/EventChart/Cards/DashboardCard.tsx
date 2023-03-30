@@ -17,7 +17,7 @@ import {
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
     value: string | number;
-    description?: string[];
+    description?: string;
     commands: readonly ATCommands[];
 };
 
@@ -62,6 +62,7 @@ export default ({
                         fieldKey={fieldKey}
                         value={fieldValues.value}
                         commands={fieldValues.commands}
+                        description={fieldValues.description}
                     />
                 </li>
             ))}
@@ -73,9 +74,10 @@ type CardEntry = {
     fieldKey: string;
     value: string | number;
     commands: readonly ATCommands[];
+    description?: string;
 };
 
-const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
+const CardEntry = ({ fieldKey, value, commands, description }: CardEntry) => {
     const [keepShowing, setKeepShowing] = useState(false);
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
@@ -97,7 +99,12 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
                 <OverlayTrigger
                     key={`overlay-${fieldKey}`}
                     placement="bottom-end"
-                    overlay={CardTooltip({ fieldKey, commands, showTooltip })}
+                    overlay={CardTooltip({
+                        fieldKey,
+                        description,
+                        commands,
+                        showTooltip,
+                    })}
                     show={keepShowing}
                 >
                     <div className="tooltip-helper" />
@@ -109,11 +116,17 @@ const CardEntry = ({ fieldKey, value, commands }: CardEntry) => {
 
 type CardTooltip = {
     fieldKey: string;
+    description?: string;
     commands: readonly ATCommands[];
     showTooltip: (show: boolean) => void;
 };
 
-const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => (
+const CardTooltip = ({
+    fieldKey,
+    description,
+    commands,
+    showTooltip,
+}: CardTooltip) => (
     <Tooltip id={`tooltip-${fieldKey}`}>
         <div
             className="card-tooltip"
@@ -121,26 +134,40 @@ const CardTooltip = ({ fieldKey, commands, showTooltip }: CardTooltip) => (
             onMouseLeave={() => showTooltip(false)}
         >
             <h4>{fieldKey}</h4>
-            <p>AT commands:</p>
-            <ul>
-                {commands !== undefined
-                    ? commands.map((cmd, index) => (
-                          <li key={`${cmd}`}>
-                              <span
-                                  onClick={() => openUrl(documentationMap[cmd])}
-                                  onKeyDown={e => {
-                                      if (e.key === 'Enter')
-                                          openUrl(documentationMap[cmd]);
-                                  }}
-                                  role="button"
-                                  tabIndex={index}
-                              >
-                                  {cmd}
-                              </span>
-                          </li>
-                      ))
-                    : null}
-            </ul>
+            {description !== undefined ? (
+                <>
+                    <h3>Description</h3>
+                    <p>{description}</p>
+                </>
+            ) : null}
+            {commands.length > 0 ? (
+                <>
+                    <p>AT commands:</p>
+                    <ul>
+                        {commands !== undefined
+                            ? commands.map((cmd, index) => (
+                                  <li key={`${cmd}`}>
+                                      <span
+                                          onClick={() =>
+                                              openUrl(documentationMap[cmd])
+                                          }
+                                          onKeyDown={e => {
+                                              if (e.key === 'Enter')
+                                                  openUrl(
+                                                      documentationMap[cmd]
+                                                  );
+                                          }}
+                                          role="button"
+                                          tabIndex={index}
+                                      >
+                                          {cmd}
+                                      </span>
+                                  </li>
+                              ))
+                            : null}
+                    </ul>
+                </>
+            ) : null}
         </div>
     </Tooltip>
 );

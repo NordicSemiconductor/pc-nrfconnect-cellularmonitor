@@ -12,6 +12,7 @@ import { events } from '../../../features/tracing/tracePacketEvents';
 import { convert } from '../../../features/tracingEvents';
 import { initialState } from '../../../features/tracingEvents/at';
 import {
+    getDashboardState,
     getPowerSavingMode,
     setDashboardState,
 } from '../../../features/tracingEvents/dashboardSlice';
@@ -28,7 +29,7 @@ export default () => {
     const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
     const powerSavingMode = useSelector(getPowerSavingMode);
-
+    const { accessPointNames } = useSelector(getDashboardState);
     useEffect(() => {
         // TODO: Create new state based on atState
         // TODO: Filter out events later than selected time
@@ -49,7 +50,11 @@ export default () => {
             <Device />
             <LTENetwork />
             <Sim />
-            <PacketDomainNetwork />
+            {accessPointNames != null
+                ? Object.values(accessPointNames).map(apn =>
+                      PacketDomainNetwork(apn)
+                  )
+                : null}
             {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
             <ConnectivityStatistics />
             <Temp />

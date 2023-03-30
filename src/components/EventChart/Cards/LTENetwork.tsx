@@ -89,6 +89,7 @@ export default () => {
     };
     return (
         <DashboardCard
+            key="dashboard-LTE-card"
             title="LTE Network"
             iconName="mdi-access-point-network"
             fields={fields}
