@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-/* eslint-disable no-restricted-syntax */
-
 import React from 'react';
 import { enableFetchMocks } from 'jest-fetch-mock';
 
@@ -13,6 +11,7 @@ import { TraceFormat } from '../../../features/tracing/formats';
 import {
     setAvailableSerialPorts,
     setSerialPort,
+    setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import {
     fireEvent,
@@ -66,18 +65,13 @@ jest.mock('electron', () => ({
     },
 }));
 
-const serialPortActions = [
+const serialPortActions = (formats: TraceFormat[] = []) => [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setSerialPort('COM1'),
+    setTraceFormats(formats),
 ];
 
-const startTrace = async (...sinks: TraceFormat[]) => {
-    for (const sink of sinks) {
-        // eslint-disable-next-line no-await-in-loop
-        fireEvent.click(await screen.findByText(sink));
-    }
-    fireEvent.click(screen.getByText('Start tracing'));
-};
+const startTrace = () => fireEvent.click(screen.getByText('Start'));
 
 describe('Sidepanel functionality', () => {
     beforeEach(() => {
@@ -87,25 +81,27 @@ describe('Sidepanel functionality', () => {
 
     describe('DetectTraceDbDialog', () => {
         it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('pcap');
-            expect(
-                screen.getByText('Detecting modem firmware version')
-            ).toBeInTheDocument();
+            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            startTrace();
+
+            await expect(
+                screen.findByText('Detecting modem firmware version')
+            ).resolves.toBeDefined();
         });
 
         it('should not show dialog when tracing to RAW', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('raw');
-            const modal = screen.queryByText(
-                'Detecting modem firmware version'
-            );
-            expect(modal).not.toBeInTheDocument();
+            render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
+
+            startTrace();
+
+            await expect(
+                screen.findByText('Detecting modem firmware version')
+            ).rejects.toBeDefined();
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            startTrace();
             expect(
                 screen.getByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -113,7 +109,7 @@ describe('Sidepanel functionality', () => {
             expect(
                 screen.queryByText('Detecting modem firmware version')
             ).not.toBeInTheDocument();
-            expect(screen.getByText('Stop tracing')).toBeInTheDocument();
+            expect(screen.getByText('Stop')).toBeInTheDocument();
         });
 
         it('should hide dialog when fw is detected', async () => {
@@ -133,8 +129,8 @@ describe('Sidepanel functionality', () => {
 
             const callbacks = getNrfmlCallbacks();
 
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('pcap');
+            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            startTrace();
             expect(
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
@@ -150,8 +146,11 @@ describe('Sidepanel functionality', () => {
 
     describe('multiple sinks', () => {
         it('should show file details for multiple sinks', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions);
-            await startTrace('raw', 'pcap');
+            render(
+                <TraceCollectorSidePanel />,
+                serialPortActions(['pcap', 'raw'])
+            );
+            startTrace();
             expect(
                 screen.getByText('.bin', {
                     exact: false,

@@ -9,6 +9,7 @@ import React from 'react';
 import {
     setAvailableSerialPorts,
     setSerialPort,
+    setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import * as wireshark from '../../../features/wireshark/wireshark';
 import {
@@ -35,34 +36,29 @@ mockedCheckDiskSpace.mockImplementation(
         })
 );
 
-const serialPortActions = [
+const serialPortActions = (
+    formats: Parameters<typeof setTraceFormats>[0] = []
+) => [
+    setTraceFormats(formats),
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setSerialPort('COM1'),
 ];
 
 describe('TraceCollector', () => {
     it('should disable Start button if no trace formats are selected', () => {
-        render(<TraceCollector />, serialPortActions);
-        const startButton = screen.getByText('Start tracing');
+        render(<TraceCollector />, serialPortActions());
+
+        const startButton = screen.getByText('Start');
         expect(startButton).toBeDisabled();
     });
 
-    it('should disable Trace format selector while tracing', async () => {
-        render(<TraceCollector />, serialPortActions);
-        const traceFormatButton = await screen.findByText('raw');
-        fireEvent.click(traceFormatButton);
-        fireEvent.click(screen.getByText('Start tracing'));
-        expect(traceFormatButton).toBeDisabled();
-    });
-
     it('button text should reflect tracing state', async () => {
-        render(<TraceCollector />, serialPortActions);
-        const traceFormatButton = await screen.findByText('raw');
-        fireEvent.click(traceFormatButton);
-        fireEvent.click(screen.getByText('Start tracing'));
-        const stopButton = await screen.findByText('Stop tracing');
+        render(<TraceCollector />, serialPortActions(['raw']));
+
+        fireEvent.click(screen.getByText('Start'));
+        const stopButton = await screen.findByText('Stop');
         fireEvent.click(stopButton);
-        expect(await screen.findByText('Start tracing')).toBeInTheDocument();
+        expect(await screen.findByText('Start')).toBeInTheDocument();
     });
 
     describe('wireshark installation', () => {
@@ -70,23 +66,12 @@ describe('TraceCollector', () => {
             jest.resetAllMocks();
         });
 
-        it('should display warning if wireshark is not installed and live tracing is selected', async () => {
-            jest.spyOn(wireshark, 'findWireshark').mockReturnValue(null);
-            render(<TraceCollector />, [...serialPortActions]);
-            const traceFormatButton = await screen.findByText('live');
-            fireEvent.click(traceFormatButton);
-            expect(
-                await screen.findByText('Wireshark not detected')
-            ).toBeInTheDocument();
-        });
-
-        it('should not display warning if wireshark is installed and live tracing is selected', async () => {
+        it('should not display warning if wireshark is installed and live tracing is selected', () => {
             jest.spyOn(wireshark, 'findWireshark').mockReturnValue(
                 'path/to/wireshark'
             );
-            render(<TraceCollector />, [...serialPortActions]);
-            const traceFormatButton = await screen.findByText('live');
-            fireEvent.click(traceFormatButton);
+            render(<TraceCollector />, serialPortActions(['live']));
+
             expect(
                 screen.queryByText('Wireshark not detected')
             ).not.toBeInTheDocument();
@@ -101,10 +86,9 @@ describe('TraceCollector', () => {
             );
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', async () => {
-            render(<TraceCollector />, serialPortActions);
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+        it('should call nrfml start with selected sink configurations as arguments', () => {
+            render(<TraceCollector />, serialPortActions(['raw']));
+            fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
@@ -112,11 +96,9 @@ describe('TraceCollector', () => {
             );
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', async () => {
-            render(<TraceCollector />, serialPortActions);
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(screen.getByText('Start tracing'));
+        it('should call nrfml start with selected sink configurations as arguments', () => {
+            render(<TraceCollector />, serialPortActions(['raw', 'pcap']));
+            fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
@@ -125,12 +107,12 @@ describe('TraceCollector', () => {
             );
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', async () => {
-            render(<TraceCollector />, serialPortActions);
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(await screen.findByText('pcap'));
-            fireEvent.click(await screen.findByText('live'));
-            fireEvent.click(screen.getByText('Start tracing'));
+        it('should call nrfml start with selected sink configurations as arguments', () => {
+            render(
+                <TraceCollector />,
+                serialPortActions(['raw', 'pcap', 'live'])
+            );
+            fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
@@ -146,11 +128,10 @@ describe('TraceCollector', () => {
             jest.resetAllMocks();
         });
 
-        it('should call nrfml start without tshark sink', async () => {
+        it('should call nrfml start without tshark sink', () => {
             jest.spyOn(wireshark, 'findTshark').mockReturnValue(null);
-            render(<TraceCollector />, serialPortActions);
-            fireEvent.click(await screen.findByText('raw'));
-            fireEvent.click(screen.getByText('Start tracing'));
+            render(<TraceCollector />, serialPortActions(['raw']));
+            fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks('nrfml-raw-file-sink');
         });

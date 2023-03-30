@@ -32,13 +32,15 @@ type Version = {
     version: string;
 };
 
-const traceFiles = readFile(join(autoDetectDbRootFolder(), 'config.json'), {
-    encoding: 'utf-8',
-})
-    .then(JSON.parse)
-    .then(
-        config => config.firmwares.devices[0].versions.reverse() as Version[]
-    );
+const traceFiles = () =>
+    readFile(join(autoDetectDbRootFolder(), 'config.json'), {
+        encoding: 'utf-8',
+    })
+        .then(JSON.parse)
+        .then(
+            config =>
+                config.firmwares.devices[0].versions.reverse() as Version[]
+        );
 
 const autoSelectItem = {
     label: 'Autoselect',
@@ -64,7 +66,7 @@ export default () => {
     ];
 
     useEffect(() => {
-        traceFiles.then(setVersions);
+        traceFiles().then(setVersions);
     }, []);
 
     const onSelect = (item: DropdownItem) => {

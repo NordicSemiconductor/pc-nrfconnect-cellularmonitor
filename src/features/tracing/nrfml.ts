@@ -105,6 +105,7 @@ export const convertTraceFile =
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
     (dispatch, getState) => {
+        const formats = [...sinks];
         const state = getState();
         const port = getSerialPort(state);
         if (!port) {
@@ -119,14 +120,14 @@ export const startTrace =
 
         const isDetectingTraceDb =
             getManualDbFilePath(state) == null &&
-            !(sinks.length === 1 && sinks[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
+            !(formats.length === 1 && formats[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath) && !sinks.includes('tshark')) {
-            sinks.push('tshark');
+        if (findTshark(selectedTsharkPath) && !formats.includes('tshark')) {
+            formats.push('tshark');
         }
 
-        sinks.forEach(format => {
+        formats.forEach(format => {
             usageData.sendUsageData(sinkEvent(format));
         });
 
@@ -143,7 +144,7 @@ export const startTrace =
         setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, formats),
             err => {
                 clearInterval(throttle);
                 if (err?.message.includes('tshark')) {
@@ -161,11 +162,11 @@ export const startTrace =
 
                 // stop tracing if Completed callback is called and we are only doing live tracing
                 if (
-                    sinks.length === 2 &&
-                    sinks.includes('live') &&
-                    sinks.includes('tshark')
+                    formats.length === 2 &&
+                    formats.includes('live') &&
+                    formats.includes('tshark')
                 ) {
-                    dispatch(stopTrace(taskId));
+                    dispatch(stopTrace());
                 }
             },
             makeProgressCallback(dispatch, {
@@ -186,7 +187,7 @@ export const startTrace =
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: progressConfigs(source, sinks),
+                progressConfigs: progressConfigs(source, formats),
             })
         );
         reloadHandler = () => {
