@@ -70,36 +70,43 @@ export const convertTraceFile =
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
 
         setLoading(true);
-        const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
-            err => {
-                if (err?.error_code === 100) {
-                    logger.error(
-                        'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
-                    );
-                } else if (err != null) {
-                    logger.error(`Failed conversion to pcap: ${err.message}`);
-                    logger.debug(`Full error: ${JSON.stringify(err)}`);
-                } else {
-                    logger.info(`Successfully converted ${path} to pcap`);
-                }
-                dispatch(setTraceIsStopped());
-                setLoading(false);
-            },
-            makeProgressCallback(dispatch, {
-                detectingTraceDb: isDetectingTraceDb,
-                displayDetectingTraceDbMessage: false,
-            }),
-            () => {}
-        );
+        return new Promise<void>((resolve, reject) => {
+            const taskId = nrfml.start(
+                nrfmlConfig(state, source, sinks),
+                err => {
+                    dispatch(setTraceIsStopped());
+                    setLoading(false);
 
-        logger.info(`Started converting ${path} to pcap.`);
-        dispatch(
-            setTraceIsStarted({
-                taskId,
-                progressConfigs: progressConfigs(source, sinks),
-            })
-        );
+                    if (err?.error_code === 100) {
+                        logger.error(
+                            'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
+                        );
+                    } else if (err != null) {
+                        logger.error(
+                            `Failed conversion to pcap: ${err.message}`
+                        );
+                        logger.debug(`Full error: ${JSON.stringify(err)}`);
+                    } else {
+                        logger.info(`Successfully converted ${path} to pcap`);
+                        return resolve();
+                    }
+                    return reject();
+                },
+                makeProgressCallback(dispatch, {
+                    detectingTraceDb: isDetectingTraceDb,
+                    displayDetectingTraceDbMessage: false,
+                }),
+                () => {}
+            );
+
+            logger.info(`Started converting ${path} to pcap.`);
+            dispatch(
+                setTraceIsStarted({
+                    taskId,
+                    progressConfigs: progressConfigs(source, sinks),
+                })
+            );
+        });
     };
 
 export const startTrace =

@@ -47,12 +47,13 @@ const SelectWireshark: FC = ({ children }) => {
 export default ({ extendedDescription = false }: WiresharkProps) => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
+    const dispatch = useDispatch();
 
     const loadPcap = () => {
         const filename = askForPcapFile();
         if (filename) {
             usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
-            openInWireshark(filename, wiresharkPath);
+            dispatch(openInWireshark(filename));
         }
     };
 
