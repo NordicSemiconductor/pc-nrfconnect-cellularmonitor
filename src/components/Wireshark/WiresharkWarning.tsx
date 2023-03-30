@@ -7,17 +7,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { TraceFormat } from '../../features/tracing/formats';
+import { getTraceFormats } from '../../features/tracing/traceSlice';
 import { findWireshark } from '../../features/wireshark/wireshark';
 import { getWiresharkPath } from '../../features/wireshark/wiresharkSlice';
 import Wireshark from './Wireshark';
 
-interface WiresharkWarningProps {
-    selectedTraceFormats: TraceFormat[];
-}
-
-export default ({ selectedTraceFormats }: WiresharkWarningProps) => {
+export default () => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
+    const selectedTraceFormats = useSelector(getTraceFormats);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
 
     const showWiresharkWarning =

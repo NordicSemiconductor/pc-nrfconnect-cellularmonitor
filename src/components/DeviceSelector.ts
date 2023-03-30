@@ -58,7 +58,7 @@ const closeDevice = (): TAction => (dispatch, getState) => {
     dispatch(setAvailableSerialPorts([]));
     dispatch(setSerialPort(null));
     const taskId = getTaskId(getState());
-    dispatch(stopTrace(taskId));
+    dispatch(stopTrace());
     dispatch(setDetectingTraceDb(false));
 };
 

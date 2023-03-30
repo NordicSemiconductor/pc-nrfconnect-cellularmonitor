@@ -96,13 +96,10 @@ export const processor: Processor<'+CPSMS'> = {
 const parsePowerSavingModePayload = (payload: string) => {
     const [
         mode,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _ignored,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _ignored2,
         T3412ExtendedBitmask,
         T3324Bitmask,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ..._rest
     ] = getParametersFromResponse(payload);
 

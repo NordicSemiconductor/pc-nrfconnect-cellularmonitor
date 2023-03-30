@@ -270,13 +270,11 @@ export const processAttachAcceptPacket = (
 
 // TODO: Must decide if this is needed at all?
 export const processAttachCompletePacket = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     packet: AttachCompletePacket
 ): Partial<State> => ({});
 
 // Should report that attach was rejected.
 export const processAttachRejectPacket = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     packet: AttachRejectPacket
 ): Partial<State> => ({});
 

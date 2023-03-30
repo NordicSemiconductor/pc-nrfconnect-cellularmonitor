@@ -10,6 +10,7 @@ import { Button } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
 import { getSerialPort } from '../../../features/tracing/traceSlice';
+import { openInWireshark } from '../../../features/wireshark/wireshark';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
@@ -17,10 +18,11 @@ export default () => {
     const [loading, setLoading] = useState(false);
     const hasSerialPort = useSelector(getSerialPort) != null;
 
-    const loadTrace = () => {
+    const loadTrace = async () => {
         const file = askForTraceFile();
         if (file) {
-            dispatch(convertTraceFile(file, setLoading));
+            await dispatch(convertTraceFile(file, setLoading));
+            dispatch(openInWireshark(file.replace('.bin', '.pcapng')));
         }
     };
 
@@ -33,7 +35,7 @@ export default () => {
         >
             {loading === true
                 ? 'Converting file to PCAP'
-                : 'Convert RAW trace to PCAP'}
+                : 'Open RAW in Wireshark...'}
         </Button>
     );
 };

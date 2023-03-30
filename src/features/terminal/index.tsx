@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import {
     Button,
-    CollapsibleGroup,
     createSerialPort,
     Device,
     Dropdown,
@@ -115,10 +114,10 @@ export const OpenSerialTerminal = () => {
         return null;
     }
     return (
-        <CollapsibleGroup heading="Serial Terminal">
+        <>
             {selectedSerialPortItem !== null ? (
                 <Dropdown
-                    label="Port"
+                    label="Terminal Serial Port"
                     onSelect={item => {
                         if (item !== selectedSerialPortItem) {
                             setSelectedSerialPortItem(item);
@@ -141,7 +140,6 @@ export const OpenSerialTerminal = () => {
 
             {selectedUartSerialPort != null ? (
                 <Button
-                    large
                     className="w-100 mt-2"
                     onClick={() =>
                         openSerialTerminal(
@@ -157,7 +155,7 @@ export const OpenSerialTerminal = () => {
                     Open Serial Terminal
                 </Button>
             ) : null}
-        </CollapsibleGroup>
+        </>
     );
 };
 

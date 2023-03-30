@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Nordic Semiconductor ASA
+ * Copyright (c) 2023 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
@@ -8,21 +8,20 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
-import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
 import DatabaseFileOverride from './DatabaseFileOverride';
-import { LoadTraceFile } from './LoadTraceFile';
-import { Macros } from './Macros';
 import Serialports from './Serialports';
-import TraceConverter from './Tracing/TraceConverter';
+import TraceFormatSelector from './Tracing/TraceFormatSelector';
 
 export default () => {
     const device = useSelector(selectedDevice);
-
     if (!device) return null;
 
     return (
-        <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
-            <FlashSampleModal />
+        <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
+            <DatabaseFileOverride />
+
+            <TraceFormatSelector />
+            <Serialports />
         </CollapsibleGroup>
     );
 };

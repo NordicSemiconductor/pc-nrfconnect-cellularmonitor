@@ -4,104 +4,105 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, logger, usageData } from 'pc-nrfconnect-shared';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+import {
+    Dropdown,
+    DropdownItem,
+    logger,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
 import {
-    getManualDbFilePath,
     resetManualDbFilePath,
     setManualDbFilePath,
 } from '../../features/tracing/traceSlice';
 import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
-import FilePathLink from './FilePathLink';
+import { autoDetectDbRootFolder } from '../../utils/store';
 
-const HelpOnTraceDb = () => (
-    <span
-        className="mdi mdi-help-circle-outline advanced-options-help"
-        title="A trace database file is used to decode trace data"
-    />
-);
+type Version = {
+    database: {
+        path: string;
+        sha256: string;
+    };
+    uuid: string;
+    version: string;
+};
 
-const SelectTraceDbManually = () => {
+const traceFiles = () =>
+    readFile(join(autoDetectDbRootFolder(), 'config.json'), {
+        encoding: 'utf-8',
+    })
+        .then(JSON.parse)
+        .then(
+            config =>
+                config.firmwares.devices[0].versions.reverse() as Version[]
+        );
+
+const autoSelectItem = {
+    label: 'Autoselect',
+    value: 'autoselect',
+};
+
+const selectFromDiskItem = {
+    label: 'Select Trace DB',
+    value: 'select-trace-db',
+};
+
+export default () => {
     const dispatch = useDispatch();
+    const [versions, setVersions] = useState<Version[]>([]);
+    const [selectedItem, setSelectedItem] = useState(autoSelectItem);
+    const items = [
+        autoSelectItem,
+        selectFromDiskItem,
+        ...versions.map(version => ({
+            label: version.version,
+            value: version.uuid,
+        })),
+    ];
 
-    const updateManualDbFilePath = () => {
-        const manualDbPath = askForTraceDbFile();
-        if (manualDbPath) {
-            dispatch(setManualDbFilePath(manualDbPath));
-            usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
-            logger.info(
-                `Database path successfully updated to ${manualDbPath}`
+    useEffect(() => {
+        traceFiles().then(setVersions);
+    }, []);
+
+    const onSelect = (item: DropdownItem) => {
+        setSelectedItem(item);
+        if (item.value === selectFromDiskItem.value) {
+            const manualDbPath = askForTraceDbFile();
+            if (manualDbPath) {
+                dispatch(setManualDbFilePath(manualDbPath));
+                usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
+                logger.info(
+                    `Database path successfully updated to ${manualDbPath}`
+                );
+            }
+        } else if (item.value === autoSelectItem.value) {
+            dispatch(resetManualDbFilePath());
+            logger.info(`Database path successfully reset to default value`);
+        } else {
+            const selectedVersion = versions.find(
+                version => version.uuid === item.value
             );
+            const file = join(
+                autoDetectDbRootFolder(),
+                selectedVersion?.database.path.replace(`\${root}`, '') ?? ''
+            );
+            dispatch(setManualDbFilePath(file));
         }
     };
 
     return (
-        <Button
-            className="w-100"
-            onClick={updateManualDbFilePath}
-            variant="secondary"
-        >
-            Select Trace DB
-        </Button>
-    );
-};
-
-const SelectTraceDbAutomatically = () => {
-    const dispatch = useDispatch();
-
-    const selectTraceDbAutomatically = () => {
-        dispatch(resetManualDbFilePath());
-        logger.info(`Database path successfully reset to default value`);
-    };
-
-    return (
-        <Button
-            className="w-100"
-            onClick={selectTraceDbAutomatically}
-            variant="secondary"
-        >
-            Autoselect Trace DB
-        </Button>
-    );
-};
-
-const FilePathLabel = () => (
-    <div className="db-help-section">
-        <span>Override trace database</span>
-        <HelpOnTraceDb />
-    </div>
-);
-
-export default () => {
-    const manualDbFilePath = useSelector(getManualDbFilePath);
-
-    if (manualDbFilePath == null) {
-        return (
-            <>
-                <div className="db-help-section">
-                    <div>Trace database</div>
-                    <HelpOnTraceDb />
-                </div>
-                <p>
-                    A trace database matching the modem firmware of your device
-                    is automatically chosen. You can also select one explicitly.
-                </p>
-                <SelectTraceDbManually />
-            </>
-        );
-    }
-
-    return (
         <>
-            <FilePathLink
-                filePath={manualDbFilePath}
-                label={<FilePathLabel />}
+            <p>Trace database</p>
+            <Dropdown
+                items={items}
+                onSelect={onSelect}
+                selectedItem={selectedItem}
             />
-            <SelectTraceDbManually />
-            <SelectTraceDbAutomatically />
         </>
     );
 };

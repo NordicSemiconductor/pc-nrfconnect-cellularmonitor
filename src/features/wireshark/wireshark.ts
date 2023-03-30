@@ -9,6 +9,9 @@ import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 
+import { TAction } from '../../utils/thunk';
+import { getWiresharkPath } from './wiresharkSlice';
+
 export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
 type Shark = 'wireshark' | 'tshark';
@@ -82,18 +85,20 @@ const locateSharkPathOnLinux = (shark: Shark) => {
     }
 };
 
-export const openInWireshark = (
-    pcapPath: string,
-    wiresharkPath: string | null
-) => {
-    if (wiresharkPath == null) {
-        logger.error('No Wireshark executable found');
-        return;
-    }
+export const openInWireshark =
+    (pcapPath: string): TAction =>
+    (_, getState) => {
+        const path = getWiresharkPath(getState());
+        const wiresharkPath = findWireshark(path);
 
-    return exec(`"${wiresharkPath}" -r "${pcapPath}"`, err => {
-        if (err) {
-            logger.error(err);
+        if (wiresharkPath == null) {
+            logger.error('No Wireshark executable found');
+            return;
         }
-    });
-};
+
+        return exec(`"${wiresharkPath}" -r "${pcapPath}"`, err => {
+            if (err) {
+                logger.error(err);
+            }
+        });
+    };

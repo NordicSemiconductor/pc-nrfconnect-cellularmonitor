@@ -27,12 +27,7 @@ export default () => (
         sidePanel={<div />}
         panes={[
             {
-                name: 'Trace Collector',
-                Main: Dashboard,
-                SidePanel: TraceCollectorSidePanel,
-            },
-            {
-                name: 'Events Dashboard',
+                name: 'Dashboard',
                 Main: EventChartDashboard,
                 SidePanel: TraceCollectorSidePanel,
             },

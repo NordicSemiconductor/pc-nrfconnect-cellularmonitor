@@ -6,39 +6,36 @@
 
 import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { Button, Group } from 'pc-nrfconnect-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'pc-nrfconnect-shared';
 
 import {
     ALL_TRACE_FORMATS,
     TraceFormat,
 } from '../../../features/tracing/formats';
-import { setTraceFormats as setStoredTraceFormats } from '../../../utils/store';
+import {
+    getIsTracing,
+    getTraceFormats,
+    setTraceFormats,
+} from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../Wireshark/WiresharkWarning';
 
-interface TraceFormatSelectorProps {
-    isTracing: boolean;
-    selectedTraceFormats: TraceFormat[];
-    setSelectedTraceFormats: (formats: TraceFormat[]) => void;
-}
-
-export default ({
-    isTracing,
-    selectedTraceFormats = [],
-    setSelectedTraceFormats,
-}: TraceFormatSelectorProps) => {
+export default () => {
+    const isTracing = useSelector(getIsTracing);
+    const selectedFormats = useSelector(getTraceFormats);
+    const dispatch = useDispatch();
     const selectTraceFormat = (format: TraceFormat) => () => {
-        let newFormats;
-        if (selectedTraceFormats.includes(format)) {
-            newFormats = selectedTraceFormats.filter(f => f !== format);
-        } else {
-            newFormats = [...selectedTraceFormats, format];
-        }
-        setSelectedTraceFormats(newFormats);
-        setStoredTraceFormats(newFormats);
+        const newFormats = selectedFormats.includes(format)
+            ? selectedFormats.filter(f => f !== format)
+            : [...selectedFormats, format];
+
+        dispatch(setTraceFormats(newFormats));
     };
 
     return (
-        <Group heading="Trace output format">
+        <>
+            <p>Trace outputs</p>
+
             <ButtonGroup
                 className={`trace-selector w-100 ${
                     isTracing ? 'disabled' : ''
@@ -50,9 +47,7 @@ export default ({
                     <Button
                         variant="custom"
                         className={
-                            selectedTraceFormats.includes(format)
-                                ? 'set'
-                                : 'unset'
+                            selectedFormats.includes(format) ? 'set' : 'unset'
                         }
                         onClick={selectTraceFormat(format)}
                         key={format}
@@ -62,7 +57,7 @@ export default ({
                     </Button>
                 ))}
             </ButtonGroup>
-            <WiresharkWarning selectedTraceFormats={selectedTraceFormats} />
-        </Group>
+            <WiresharkWarning />
+        </>
     );
 };
