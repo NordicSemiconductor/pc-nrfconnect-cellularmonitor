@@ -17,6 +17,7 @@ export default ({
     ipv6,
     info,
     state: connection,
+    cause,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
         'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
@@ -27,6 +28,14 @@ export default ({
         info: { value: info ?? 'Unknown', commands: [] },
         Connection: { value: connection ?? 'Unknown', commands: [] },
     };
+
+    if (cause) {
+        fields['Cause Code'] = {
+            value: cause.code,
+            commands: [],
+            description: cause.reason,
+        };
+    }
     return (
         <DashboardCard
             key={`dashboard-apn-${apn}-card`}
