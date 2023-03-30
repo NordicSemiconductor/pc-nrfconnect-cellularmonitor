@@ -13,7 +13,6 @@ import './chart.scss';
 
 export default () => (
     <div className="chart">
-        <div id="tooltip" />
         <Chart />
         <ChartOptionsDialog />
     </div>
