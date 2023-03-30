@@ -20,6 +20,8 @@ import {
     AttachPacket,
     AttachRejectPacket,
     AttachRequestPacket,
+    DetachAcceptPacket,
+    DetachRequestPacket,
 } from './types';
 import {
     extractPdnInfo,
@@ -28,12 +30,14 @@ import {
     updateAccessPointNames,
 } from './utils';
 
-const emmTypes = [0x41, 0x42, 0x43, 0x44] as const;
+const emmTypes = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46] as const;
 enum NAS_MSG_EMM_TYPES {
     AttachRequest = 0x41,
     AttachAccept = 0x42,
     AttachComplete = 0x43,
     AttachReject = 0x44,
+    DetachRequest = 0x45,
+    DetachAccept = 0x46,
 }
 
 export default (packet: AttachPacket, state: State) => {
@@ -52,6 +56,15 @@ export default (packet: AttachPacket, state: State) => {
     if (assertIsAttachRejectPacket(packet)) {
         return processAttachRejectPacket(packet, state);
     }
+
+    if (assertIsDetachRequestPacket(packet)) {
+        return processDetachRequestPacket(packet, state);
+    }
+
+    if (assertIsDetachAcceptPacket(packet)) {
+        return processDetachAcceptPacket(packet, state);
+    }
+
     return state;
 };
 
@@ -60,6 +73,15 @@ export const processAttachRequestPacket = (
     state: State
 ): State => {
     const newPsmValues = getPowerSavingEntriesFromPacket(packet);
+    const pdnInfo: AccessPointName = {
+        ...extractPdnInfo(packet),
+        state: 'Activate Default EPS Bearer Context Accept',
+    };
+
+    const accessPointNames = updateAccessPointNames(
+        pdnInfo,
+        state.accessPointNames
+    );
     return {
         ...state,
         powerSavingMode: {
@@ -72,6 +94,7 @@ export const processAttachRequestPacket = (
                 ...state.powerSavingMode?.granted,
             },
         },
+        accessPointNames,
     };
 };
 
@@ -128,14 +151,53 @@ export const processAttachCompletePacket = (
     return {
         ...state,
         accessPointNames,
+        lteState: 'CONNECTED',
     };
 };
 
-// Should report that attach was rejected.
 export const processAttachRejectPacket = (
-    _packet: AttachRejectPacket,
+    packet: AttachRejectPacket,
     state: State
-): State => state;
+): State => {
+    const pdnInfo: AccessPointName = {
+        ...extractPdnInfo(packet),
+        state: 'PDN Connectivity Reject',
+    };
+
+    const accessPointNames = updateAccessPointNames(
+        pdnInfo,
+        state.accessPointNames
+    );
+
+    return {
+        ...state,
+        accessPointNames,
+        lteState: 'IDLE',
+    };
+};
+
+export const processDetachRequestPacket = (
+    packet: DetachRequestPacket,
+    state: State
+): State => {
+    const detachType =
+        // eslint-disable-next-line no-underscore-dangle
+        packet.raw?._source?.layers['nas-eps']?.['nas_eps.emm.switch_off'];
+    // if the detach type is power off, then no response will be sent from the network.
+    if (detachType && Number.parseInt(detachType, 10) === 1) {
+        state.lteState = 'IDLE';
+    }
+
+    return state;
+};
+
+export const processDetachAcceptPacket = (
+    packet: DetachAcceptPacket,
+    state: State
+): State => ({
+    ...state,
+    lteState: 'IDLE',
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const extractEMM = (packet: any) => {
@@ -174,6 +236,16 @@ const assertIsAttachRejectPacket = (
     packet: AttachPacket
 ): packet is AttachRejectPacket =>
     extractEMM(packet) === NAS_MSG_EMM_TYPES.AttachReject;
+
+const assertIsDetachRequestPacket = (
+    packet: AttachPacket
+): packet is DetachRequestPacket =>
+    extractEMM(packet) === NAS_MSG_EMM_TYPES.DetachRequest;
+
+const assertIsDetachAcceptPacket = (
+    packet: AttachPacket
+): packet is DetachAcceptPacket =>
+    extractEMM(packet) === NAS_MSG_EMM_TYPES.DetachAccept;
 
 // Only relevant timers for PSM
 const timers: Timers[] = [

@@ -95,6 +95,8 @@ export interface State {
     // +CSCON
     signalingConnectionStatusNotifications: SignalingConnectionStatusNotifications;
 
+    // Read from LTE NAS packets
+    lteState?: LTEState;
     // Evaluating Connection Parameters %CONEVAL
     conevalResult?: ConnectionEvaluationResult;
     conevalEnergyEstimate?: ConevalEnergyEstimate;
@@ -139,7 +141,7 @@ export interface State {
 
     // +CEDRXRDP eDRX Dynamic Parameters
     AcTState?: AcTState;
-    requested_eDRX_value: string; // 4 bit string
+    requested_eDRX_value: string; // 4 bit string (either NB-iot or LTE-M)
     NW_provided_eDRX_value: string; // 4 bit string
     pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
 
@@ -152,6 +154,8 @@ export interface State {
         daylightSavingTime?: string; // 1 byte in hexadecimal string
     };
 }
+
+export type LTEState = 'IDLE' | 'CONNECTED' | 'HANDOVER';
 
 export type AcTState = 0 | 4 | 5 | 7 | 9;
 export const isValidAcTState = (state: number): state is AcTState => {
@@ -189,15 +193,17 @@ export type TAUTriggered = 0 | 1 | 255 | undefined;
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
-    // Both the bearerId and the apn can be used to identify the connection
-    // procedure's APN.
+    // Identification properties
+    imsi?: string;
     bearerId?: string;
     apn?: string;
 
     state?:
         | 'PDN Connectivity Request'
         | 'Activate Default EPS Bearer Context Request'
-        | 'Activate Default EPS Bearer Context Accept';
+        | 'Activate Default EPS Bearer Context Accept'
+        | 'PDN Connectivity Reject';
+    cause?: Cause;
     defaultApn?: boolean;
     pdnType?: PDNType;
     rawPDNType?: RawPDNType;
@@ -215,6 +221,10 @@ export interface AccessPointName {
 export type NetworkType = 'NB-IoT' | 'LTE-M';
 export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
 export type RawPDNType = '1' | '2' | '3' | '4';
+export type Cause = {
+    code: number;
+    reason: string;
+};
 
 export const parseRawPDN = (rawPDN: unknown): RawPDNType => {
     if (rawPDN === '1') return rawPDN;

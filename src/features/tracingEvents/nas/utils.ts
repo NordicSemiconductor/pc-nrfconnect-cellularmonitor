@@ -7,6 +7,7 @@
 
 import {
     AccessPointName,
+    Cause,
     IPv6Address,
     parsePDNType,
     parseRawPDN,
@@ -46,6 +47,7 @@ export const prettifyApn = (apn: string) => {
 export const extractPdnInfo = (packet: {
     apn?: string;
     pdn?: NrfmlPDN;
+    cause?: Cause;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     raw?: any;
 }) => {
@@ -64,6 +66,11 @@ export const extractPdnInfo = (packet: {
     const rawData = packet.raw;
     if (rawData) {
         pdnInfo = { ...pdnInfo, ...parsedRawPdnInfo(rawData) };
+    }
+
+    const cause = packet.cause;
+    if (cause) {
+        pdnInfo = { ...pdnInfo, ...cause };
     }
 
     return pdnInfo;
@@ -93,6 +100,14 @@ const parsedPdnInfo = (pdnObject: NrfmlPDN) => {
 
 const parsedRawPdnInfo = (rawTsharkOutput: RawTsharkOutput) => {
     const pdnInfo: AccessPointName = {};
+
+    const imsi =
+        rawTsharkOutput._source.layers['nas-eps']?.['EPS Mobile Identity']?.[
+            'e212.assoc.imsi'
+        ];
+    if (imsi) {
+        pdnInfo.imsi = imsi;
+    }
 
     const bearerId =
         rawTsharkOutput._source.layers['nas-eps']?.['nas_eps.bearer_id'] ??

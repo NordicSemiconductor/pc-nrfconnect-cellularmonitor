@@ -8,6 +8,11 @@
  Reference: 3GPP 24.301 V14100 Annex A
 */
 
+export const assertIsCauseKey = (key: string | number): key is CauseKey =>
+    key in causeValues;
+
+type CauseKey = keyof typeof causeValues;
+
 const causeValues = {
     // A.1 Causes related to UE identification
     2: {
@@ -171,6 +176,6 @@ const causeValues = {
         short: 'Protocol error, unspecified.',
         long: 'See 3GPP TS 24.008 [13], annex H, subclause H.6.8.',
     },
-};
+} as const;
 
 export default causeValues;

@@ -11,7 +11,7 @@ import {
     processAttachRequestPacket,
 } from './attachProcessor';
 import NASConverter from './index';
-import { AttachAcceptPacket, AttachPacket, AttachRequestPacket } from './types';
+import { AttachAcceptPacket, AttachRequestPacket } from './types';
 import { parseIPv6Postfix } from './utils';
 
 test('processAttachRequest sets state', () => {
@@ -82,6 +82,7 @@ const expectedRequestState = {
         },
         granted: {},
     },
+    accessPointNames: {},
 };
 
 const expectedAcceptState: Partial<State> = {

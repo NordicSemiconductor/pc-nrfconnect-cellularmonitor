@@ -13,17 +13,18 @@ import {
     Timers,
 } from '../types';
 
-export type AttachPacket =
-    | AttachRequestPacket
-    | AttachAcceptPacket
-    | AttachCompletePacket
-    | AttachRejectPacket;
+export type AttachPacket = {
+    imsi?: string;
+    raw?: RawTsharkOutput;
+    pdn?: NrfmlPDN;
+    [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
+};
 
 export type AttachRequestPacket = {
     nas_msg_emm_type: '0x41';
     dns_server_address_config: DNSServerAddressConfig;
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
-};
+} & AttachPacket;
 
 export type AttachAcceptPacket = {
     nas_msg_emm_type: '0x42';
@@ -45,26 +46,28 @@ export type AttachAcceptPacket = {
 
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
 
-    pdn?: NrfmlPDN;
-
     cause?: {
         code: number;
         reason: string;
     };
-    raw?: RawTsharkOutput;
-};
+} & AttachPacket;
 
 export type AttachCompletePacket = {
     nas_msg_emm_type: '0x43';
     [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
-    pdn?: NrfmlPDN;
-    raw?: RawTsharkOutput;
-};
+} & AttachPacket;
 
 export type AttachRejectPacket = {
     nas_msg_emm_type: '0x44';
-    [timer: `${string}${Timers}${string}`]: PowerSavingModeValues;
-};
+} & AttachPacket;
+
+export type DetachRequestPacket = {
+    nas_msg_emm_type: '0x45';
+} & AttachPacket;
+
+export type DetachAcceptPacket = {
+    nas_msg_emm_type: '0x46';
+} & AttachPacket;
 
 type DNSServerAddressConfig = {
     [key: `Options:${string}`]: {
@@ -175,7 +178,9 @@ export type RawTsharkOutput = {
         layers: {
             'nas-eps'?: {
                 // Identifying type:
+                'nas_eps.emm.switch_off'?: string;
                 'nas_eps.nas_msg_esm_type'?: string;
+                nas_eps_detach_type?: string;
 
                 'nas_eps.bearer_id'?: string; // string as a number ...
                 'Access Point Name'?: {
@@ -191,6 +196,9 @@ export type RawTsharkOutput = {
                     'nas_eps.emm.esm_msg_cont_tree'?: {
                         'nas_eps.bearer_id': string;
                     };
+                };
+                'EPS Mobile Identity'?: {
+                    'e212.assoc.imsi'?: string;
                 };
             };
         };

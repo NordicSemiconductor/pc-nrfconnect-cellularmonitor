@@ -26,7 +26,7 @@ export interface TraceEvent {
     networkType?: NetworkType;
     sequenceNumber: number;
     data: Uint8Array;
-    jsonData?: AttachPacket;
+    jsonData?: unknown;
 }
 
 export const tracePacketEvents = new EventEmitter();
