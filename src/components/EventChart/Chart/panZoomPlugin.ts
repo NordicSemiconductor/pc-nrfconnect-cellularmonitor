@@ -350,6 +350,10 @@ export default {
             const { options } = getState(chart);
 
             options.live = live;
+            if (options.live) {
+                updateRange(chart, getRange(chart));
+                chart.update('none');
+            }
         };
         chart.setMode = mode => {
             const { data, options } = getState(chart);
