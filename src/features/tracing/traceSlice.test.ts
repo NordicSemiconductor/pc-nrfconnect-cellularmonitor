@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import '../../utils/testUtils';
+
 import { configureStore } from '@reduxjs/toolkit';
 import { testUtils } from 'pc-nrfconnect-shared/test';
 
