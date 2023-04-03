@@ -20,6 +20,9 @@ const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
+});
+
+const timeFormatter = new Intl.DateTimeFormat('nb-NO', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -39,12 +42,15 @@ const getOrCreateTooltip = (
 
     if (!tooltipEl && chart.canvas.parentNode) {
         tooltipEl = document.createElement('div');
-        tooltipEl.style.background = 'rgba(0, 0, 0, 0.7)';
-        tooltipEl.style.borderRadius = '3px';
-        tooltipEl.style.color = 'white';
+        tooltipEl.className = 'packet-tooltip';
+        tooltipEl.style.borderWidth = '1px';
+        tooltipEl.style.borderStyle = 'solid';
         tooltipEl.style.pointerEvents = 'none';
         tooltipEl.style.position = 'absolute';
         tooltipEl.style.transition = 'all .1s ease';
+        tooltipEl.style.padding = '16px';
+        tooltipEl.style.zIndex = '5';
+        tooltipEl.style.boxShadow = '2px 3px 3px #00000082';
 
         chart.canvas.parentNode.appendChild(tooltipEl);
 
@@ -100,43 +106,52 @@ export const tooltipHandler = (context: {
     }
 
     const packet = (dataPoints[0].raw as { event: TraceEvent }).event;
-    const timestamp = dateFormatter.format(new Date(packet.timestamp));
 
     const children = [];
     if (tooltip.body) {
-        const hoveringMultiple =
-            dataPoints.length === 1 ? '' : `+${dataPoints.length - 1} others`;
-        if (hoveringMultiple) {
-            const multipleDiv = document.createElement('div');
-            const multipleSpan = document.createElement('span');
-            const multipleText = document.createTextNode(hoveringMultiple);
-            multipleSpan.appendChild(multipleText);
-            multipleDiv.appendChild(multipleSpan);
-            children.push(multipleDiv);
-        }
-
-        if (
-            dataPoints.length === 1 &&
-            (packet.format === 'AT' || packet.jsonData)
-        ) {
-            const p = document.createElement('p');
         tooltipEl.style.background = EventColours[packet.format].light;
         tooltipEl.style.borderColor = EventColours[packet.format].dark;
         tooltipEl.style.color = EventColours[packet.format].dark;
 
+        const hoveringMultiple = dataPoints.length > 1;
+        if (hoveringMultiple) {
+            const multipleP = document.createElement('p');
+            const multipleText = document.createTextNode('MULTIPLE EVENTS');
+            multipleP.appendChild(multipleText);
+            multipleP.style.fontSize = '12px';
+            children.push(multipleP);
+        } else {
+            // Data/Event Type
+            const dataP = document.createElement('p');
             const data =
-                packet.format === 'AT'
-                    ? packet.data.toString()
-                    : 'Parsed data here';
+                packet.format === 'AT' ? packet.data.toString() : packet.format;
             const textP = document.createTextNode(data as string);
-            p.appendChild(textP);
-            children.push(p);
-        }
+            dataP.appendChild(textP);
+            children.push(dataP);
+            dataP.style.fontSize = '12px';
+            dataP.style.marginBottom = '16px';
 
-        const timestampSpan = document.createElement('span');
-        const timestampText = document.createTextNode(timestamp);
-        timestampSpan.appendChild(timestampText);
-        children.push(timestampSpan);
+            // Timestamp
+            const timestampDiv = document.createElement('div');
+            timestampDiv.style.display = 'flex';
+            timestampDiv.style.flexDirection = 'row';
+            timestampDiv.style.fontSize = '10px';
+
+            const dateDiv = document.createElement('div');
+            const date = dateFormatter.format(new Date(packet.timestamp));
+            const dateText = document.createTextNode(date);
+            dateDiv.appendChild(dateText);
+            dateDiv.style.marginRight = '16px';
+            timestampDiv.appendChild(dateDiv);
+
+            const timeDiv = document.createElement('div');
+            const time = timeFormatter.format(new Date(packet.timestamp));
+            const timeText = document.createTextNode(time);
+            timeDiv.appendChild(timeText);
+            timestampDiv.appendChild(timeDiv);
+
+            children.push(timestampDiv);
+        }
     }
 
     while (tooltipEl.firstChild) {
@@ -146,6 +161,4 @@ export const tooltipHandler = (context: {
     children.forEach(e => tooltipEl.appendChild(e));
 
     tooltipEl.style.opacity = '1';
-    tooltipEl.style.padding = `${tooltip.options.padding}px ${tooltip.options.padding}px`;
-    tooltipEl.style.zIndex = '5';
 };
