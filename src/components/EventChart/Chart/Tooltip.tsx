@@ -13,6 +13,7 @@ import {
     TooltipModel,
 } from 'chart.js';
 
+import { EventColours } from '../../../features/tracing/formats';
 import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
 
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
@@ -119,6 +120,9 @@ export const tooltipHandler = (context: {
             (packet.format === 'AT' || packet.jsonData)
         ) {
             const p = document.createElement('p');
+        tooltipEl.style.background = EventColours[packet.format].light;
+        tooltipEl.style.borderColor = EventColours[packet.format].dark;
+        tooltipEl.style.color = EventColours[packet.format].dark;
 
             const data =
                 packet.format === 'AT'

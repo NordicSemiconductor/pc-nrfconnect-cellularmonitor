@@ -6,8 +6,26 @@
 
 import EventAction from '../../usageDataActions';
 
-export const EVENT_TYPES = ['IP', 'AT', 'RRC', 'NAS'] as const;
+export const EVENT_TYPES = ['AT', 'RRC', 'NAS', 'IP'] as const;
 export type eventType = typeof EVENT_TYPES[number];
+export const EventColours = {
+    AT: {
+        light: '#C8E6C9',
+        dark: '#1B5E20',
+    },
+    RRC: {
+        light: '#FFCDD2',
+        dark: '#B71C1C',
+    },
+    NAS: {
+        light: '#FFE0B2',
+        dark: '#E65100',
+    },
+    IP: {
+        light: '#C5CAE9',
+        dark: '#1A237E',
+    },
+} as { [K in eventType]: { light: string; dark: string } };
 export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live', 'tshark'] as const;
 export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
 
