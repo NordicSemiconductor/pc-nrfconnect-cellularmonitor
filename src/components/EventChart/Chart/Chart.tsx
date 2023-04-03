@@ -54,7 +54,6 @@ const datasets = {
             pointHoverRadius: 4.5,
             pointHoverBorderWidth: 0,
             pointBorderWidth: 0,
-            pointHoverBackgroundColor: 'white',
         },
     ],
 };
