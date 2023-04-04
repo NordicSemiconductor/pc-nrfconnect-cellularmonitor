@@ -75,11 +75,13 @@ const getOrCreateTooltip = (
                 tooltip.caretY +
                 chart.canvas.offsetTop -
                 tooltipEl.clientHeight -
-                pointRadius
+                pointRadius -
+                7 // give space for arrow underneath the tooltip
             }px`;
         });
         observer.observe(tooltipEl, {
             childList: true,
+            attributes: true,
         });
     }
 
@@ -135,6 +137,7 @@ export const tooltipHandler = (context: {
             const timestampDiv = document.createElement('div');
             timestampDiv.style.display = 'flex';
             timestampDiv.style.flexDirection = 'row';
+            timestampDiv.style.justifyContent = 'space-between';
             timestampDiv.style.fontSize = '10px';
 
             const dateDiv = document.createElement('div');
@@ -153,6 +156,39 @@ export const tooltipHandler = (context: {
             children.push(timestampDiv);
         }
     }
+
+    // Arrow
+    const arrowDiv = document.createElement('div');
+    arrowDiv.style.position = 'absolute';
+    arrowDiv.style.transform = 'rotate(45deg)';
+    arrowDiv.style.background = `linear-gradient(to bottom right, transparent 50%, ${
+        EventColours[packet.format].light
+    } 50%`;
+    arrowDiv.style.boxShadow = '2px 3px 3px #00000080';
+    arrowDiv.style.borderWidth = '0 1px 1px 0';
+    arrowDiv.style.borderStyle = 'solid';
+    arrowDiv.style.borderColor = `${EventColours[packet.format].dark}`;
+    arrowDiv.style.width = '12px';
+    arrowDiv.style.height = '12px';
+    const observer = new MutationObserver(() => {
+        arrowDiv.style.left = `${
+            tooltip.caretX -
+            Number(
+                tooltipEl.style.left.substring(
+                    0,
+                    tooltipEl.style.left.length - 2
+                )
+            ) +
+            9 // half the hypotenuse of the div + border 1 px
+        }px`;
+    });
+    observer.observe(tooltipEl, {
+        childList: true,
+        attributes: true,
+    });
+    arrowDiv.style.bottom = `-7px`; // half the width + 1px border
+
+    children.push(arrowDiv);
 
     while (tooltipEl.firstChild) {
         tooltipEl.firstChild.remove();
