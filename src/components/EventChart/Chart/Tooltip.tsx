@@ -82,6 +82,7 @@ const getOrCreateTooltip = (
         tooltipEl.style.padding = '16px';
         tooltipEl.style.zIndex = '5';
         tooltipEl.style.boxShadow = '2px 3px 3px #00000082';
+        tooltipEl.style.maxWidth = '400px';
 
         chart.canvas.parentNode.appendChild(tooltipEl);
 
@@ -159,7 +160,8 @@ export const tooltipHandler = (context: {
             children.push(dataP);
             dataP.style.fontSize = '12px';
             dataP.style.marginBottom = '16px';
-            dataP.style.whiteSpace = 'nowrap';
+            dataP.style.whiteSpace = 'normal';
+            dataP.style.overflowWrap = 'break-word';
 
             // Timestamp
             const timestampDiv = document.createElement('div');
