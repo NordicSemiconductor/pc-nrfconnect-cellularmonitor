@@ -21,7 +21,7 @@ import {
 } from 'chart.js';
 import { colors as sharedColors } from 'pc-nrfconnect-shared';
 
-import { EVENT_TYPES } from '../../../features/tracing/formats';
+import { EventColours } from '../../../features/tracing/formats';
 import {
     TraceEvent,
     tracePacketEvents,
@@ -42,36 +42,18 @@ import { tooltipHandler } from './Tooltip';
 
 ChartJS.register(LinearScale, PointElement, Title, Tooltip, Legend);
 
-const colors = [
-    sharedColors.primary,
-    sharedColors.deepPurple,
-    sharedColors.indigo,
-    sharedColors.amber,
-    sharedColors.purple,
-    sharedColors.green,
-    sharedColors.deepPurple,
-    sharedColors.orange,
-    sharedColors.lime,
-    sharedColors.pink,
-];
-
 const datasets = {
     datasets: [
         {
             data: [],
             pointBackgroundColor: (ctx: { raw: { event: TraceEvent } }) =>
                 ctx.raw?.event
-                    ? colors[
-                          EVENT_TYPES.findIndex(
-                              type => type === ctx.raw.event.format
-                          )
-                      ]
+                    ? EventColours[ctx.raw.event.format].light
                     : undefined,
             pointRadius: 4.5,
             pointHoverRadius: 4.5,
             pointHoverBorderWidth: 0,
             pointBorderWidth: 0,
-            pointHoverBackgroundColor: 'white',
         },
     ],
 };
