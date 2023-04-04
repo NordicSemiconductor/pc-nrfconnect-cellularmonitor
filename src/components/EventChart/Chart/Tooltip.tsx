@@ -36,6 +36,8 @@ const tooltipArrowDiagonal =
     Math.round(Math.hypot(tooltipArrowInnerSide, tooltipArrowInnerSide) / 2) +
     tooltipArrowBorder; // half the hypotenuse floored + border
 
+let tooltipIsBeingHovered = false;
+
 const getTooltipLeft = (
     chart: Chart<
         keyof ChartTypeRegistry,
@@ -76,7 +78,7 @@ const getOrCreateTooltip = (
         tooltipEl.className = 'packet-tooltip';
         tooltipEl.style.borderWidth = '1px';
         tooltipEl.style.borderStyle = 'solid';
-        tooltipEl.style.pointerEvents = 'none';
+        tooltipEl.style.userSelect = 'text';
         tooltipEl.style.position = 'absolute';
         tooltipEl.style.transition = 'all .1s ease';
         tooltipEl.style.padding = '16px';
@@ -111,6 +113,17 @@ const getOrCreateTooltip = (
             childList: true,
             attributes: true,
         });
+
+        tooltipEl.classList.add('hoverable');
+        tooltipEl.addEventListener('mouseenter', () => {
+            tooltipIsBeingHovered = true;
+        });
+        tooltipEl.addEventListener('mouseleave', () => {
+            tooltipIsBeingHovered = false;
+            if (tooltip.opacity === 0 && tooltipEl) {
+                tooltipEl.style.opacity = '0';
+            }
+        });
     }
 
     return tooltipEl;
@@ -130,7 +143,7 @@ export const tooltipHandler = (context: {
 
     if (!tooltipEl) return;
 
-    if (tooltip.opacity === 0 || !dataPoints[0]) {
+    if ((tooltip.opacity === 0 || !dataPoints[0]) && !tooltipIsBeingHovered) {
         tooltipEl.style.opacity = '0';
         return;
     }
