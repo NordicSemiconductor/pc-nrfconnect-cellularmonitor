@@ -344,6 +344,10 @@ export default {
                         alpha * options.maxRange +
                         (1.0 - alpha) * data[data.length - 1].timestamp;
                 }
+            } else {
+                // This forces new events to appear even if live is off
+                // This will occur when the very first events are being loaded in (range < min range)
+                chart.update('none');
             }
         };
         chart.setLive = live => {
