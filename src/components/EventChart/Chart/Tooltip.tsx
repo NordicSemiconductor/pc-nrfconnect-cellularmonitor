@@ -30,6 +30,37 @@ const timeFormatter = new Intl.DateTimeFormat('nb-NO', {
     fractionalSecondDigits: 3,
 });
 
+const tooltipArrowInnerSide = 12;
+const tooltipArrowBorder = 1;
+const tooltipArrowDiagonal =
+    Math.round(Math.hypot(tooltipArrowInnerSide, tooltipArrowInnerSide) / 2) +
+    tooltipArrowBorder; // half the hypotenuse floored + border
+
+const getTooltipLeft = (
+    chart: Chart<
+        keyof ChartTypeRegistry,
+        (number | Point | [number, number] | BubbleDataPoint | null)[],
+        unknown
+    >,
+    tooltip: TooltipModel<'scatter'>,
+    tooltipEl: HTMLDivElement
+) => {
+    // Restrict by the chart border of the chart or the outermost part of the tooltip arrow
+    const min = Math.min(
+        chart.chartArea.left,
+        tooltip.caretX - tooltipArrowDiagonal
+    );
+    const max =
+        Math.max(chart.chartArea.right, tooltip.caretX + tooltipArrowDiagonal) -
+        tooltipEl.offsetWidth;
+
+    return (
+        Math.min(
+            Math.max(tooltip.caretX - tooltipEl.offsetWidth / 2, min),
+            max
+        ) + chart.canvas.offsetLeft
+    );
+};
 const getOrCreateTooltip = (
     chart: Chart<
         keyof ChartTypeRegistry,
@@ -57,15 +88,11 @@ const getOrCreateTooltip = (
         const observer = new MutationObserver(() => {
             if (!tooltipEl || tooltipEl.style.opacity !== '1') return;
 
-            tooltipEl.style.left = `${
-                Math.min(
-                    Math.max(
-                        tooltip.caretX - tooltipEl.offsetWidth / 2,
-                        chart.chartArea.left
-                    ),
-                    chart.chartArea.right - tooltipEl.offsetWidth
-                ) + chart.canvas.offsetLeft
-            }px`;
+            tooltipEl.style.left = `${getTooltipLeft(
+                chart,
+                tooltip,
+                tooltipEl
+            )}px`;
 
             const pointRadius = (
                 chart.data.datasets[0] as ChartDataset<'scatter'>
@@ -132,6 +159,7 @@ export const tooltipHandler = (context: {
             children.push(dataP);
             dataP.style.fontSize = '12px';
             dataP.style.marginBottom = '16px';
+            dataP.style.whiteSpace = 'nowrap';
 
             // Timestamp
             const timestampDiv = document.createElement('div');
@@ -168,8 +196,8 @@ export const tooltipHandler = (context: {
     arrowDiv.style.borderWidth = '0 1px 1px 0';
     arrowDiv.style.borderStyle = 'solid';
     arrowDiv.style.borderColor = `${EventColours[packet.format].dark}`;
-    arrowDiv.style.width = '12px';
-    arrowDiv.style.height = '12px';
+    arrowDiv.style.width = `${tooltipArrowInnerSide}px`;
+    arrowDiv.style.height = `${tooltipArrowInnerSide}px`;
     const observer = new MutationObserver(() => {
         arrowDiv.style.left = `${
             tooltip.caretX -
@@ -179,14 +207,16 @@ export const tooltipHandler = (context: {
                     tooltipEl.style.left.length - 2
                 )
             ) +
-            9 // half the hypotenuse of the div + border 1 px
+            tooltipArrowDiagonal
         }px`;
     });
     observer.observe(tooltipEl, {
         childList: true,
         attributes: true,
     });
-    arrowDiv.style.bottom = `-7px`; // half the width + 1px border
+    arrowDiv.style.bottom = `-${
+        tooltipArrowInnerSide / 2 + tooltipArrowBorder
+    }px`;
 
     children.push(arrowDiv);
 
