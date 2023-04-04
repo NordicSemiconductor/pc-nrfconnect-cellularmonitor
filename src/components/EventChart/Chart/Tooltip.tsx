@@ -122,6 +122,7 @@ const getOrCreateTooltip = (
             tooltipIsBeingHovered = false;
             if (tooltip.opacity === 0 && tooltipEl) {
                 tooltipEl.style.opacity = '0';
+                tooltipEl.style.pointerEvents = 'none';
             }
         });
     }
@@ -145,6 +146,7 @@ export const tooltipHandler = (context: {
 
     if ((tooltip.opacity === 0 || !dataPoints[0]) && !tooltipIsBeingHovered) {
         tooltipEl.style.opacity = '0';
+        tooltipEl.style.pointerEvents = 'none';
         return;
     }
 
@@ -242,4 +244,5 @@ export const tooltipHandler = (context: {
     children.forEach(e => tooltipEl.appendChild(e));
 
     tooltipEl.style.opacity = '1';
+    tooltipEl.style.pointerEvents = 'auto';
 };
