@@ -28,14 +28,7 @@ export const processor: Processor<'%CESQ'> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/proc_cesq.html',
     initialState: () => ({
         notifySignalQuality: false,
-        signalQuality: {
-            rsrp: 255,
-            rsrp_threshold_index: 255,
-            rsrp_decibel: 255,
-            rsrq: 255,
-            rsrq_threshold_index: 255,
-            rsrq_decibel: 255,
-        },
+        signalQuality: {},
     }),
     onRequest: (packet, state) => {
         if (packet.payload) {

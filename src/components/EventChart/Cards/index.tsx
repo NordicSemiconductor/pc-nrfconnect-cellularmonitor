@@ -23,7 +23,6 @@ import PacketDomainNetwork from './PacketDomainNetwork';
 import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
 import ConnectivityStatistics from './Statistics';
-import Temp from './Temp';
 
 export default () => {
     const timestamp = useSelector(getSelectedTime);
@@ -47,8 +46,8 @@ export default () => {
 
     return (
         <MasonryLayout className="cards-container" minWidth={350}>
-            <Device />
             <LTENetwork />
+            <Device />
             <Sim />
             {accessPointNames != null
                 ? Object.values(accessPointNames).map(apn =>
@@ -57,7 +56,6 @@ export default () => {
                 : null}
             {powerSavingMode !== undefined ? <PowerSavingMode /> : null}
             <ConnectivityStatistics />
-            <Temp />
         </MasonryLayout>
     );
 };

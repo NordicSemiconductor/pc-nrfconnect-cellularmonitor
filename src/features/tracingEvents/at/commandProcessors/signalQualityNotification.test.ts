@@ -100,9 +100,7 @@ test('%CESQ notification properly updates signal quality', () => {
     if (state.signalQuality === undefined) {
         expect(state.signalQuality).toBeDefined();
     } else {
-        expect(Object.values(state.signalQuality)).toEqual([
-            255, 255, 255, 255, 255, 255,
-        ]);
+        expect(Object.values(state.signalQuality)).toEqual([]);
     }
 
     signalQualityNotifications.forEach(notification => {

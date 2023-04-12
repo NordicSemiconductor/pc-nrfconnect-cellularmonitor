@@ -20,30 +20,10 @@ const readCommandPackets = [
         },
     },
     {
-        command: atPacket('AT+CESQ=?'),
-        response: atPacket(
-            '+CESQ: (99),(99),(255),(255),(0-34,255),(0-97,255)\r\nOK\r\n'
-        ),
-        expected: {
-            rsrq: 255,
-            rsrq_threshold_index: 255,
-            rsrq_decibel: 255,
-            rsrp: 255,
-            rsrp_threshold_index: 255,
-            rsrp_decibel: 255,
-        },
-    },
-    {
+        // In practice, this tests that the initial state of signalQuality is {}
         command: atPacket('AT+CESQ?'),
         response: ErrorPacket,
-        expected: {
-            rsrq: 255,
-            rsrq_threshold_index: 255,
-            rsrq_decibel: 255,
-            rsrp: 255,
-            rsrp_threshold_index: 255,
-            rsrp_decibel: 255,
-        },
+        expected: {},
     },
 ];
 

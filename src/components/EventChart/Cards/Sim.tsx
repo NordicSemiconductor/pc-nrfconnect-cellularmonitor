@@ -60,19 +60,6 @@ export default () => {
             value: remainingPUK2 ?? 'Unknown',
             commands: ['AT+CPINR'] as ATCommands[],
         },
-        'LTE-M': { value: 'NOT IMPLEMENTED', commands: [] },
-        'NB-IoT': { value: 'NOT IMPLEMENTED', commands: [] },
-        IPV4: { value: 'NOT IMPLEMENTED', commands: [] },
-        IPV6: { value: 'NOT IMPLEMENTED', commands: [] },
-        'NON-IP': { value: 'NOT IMPLEMENTED', commands: [] },
-        PSM: { value: 'NOT IMPLEMENTED', commands: [] },
-        CDRX: { value: 'NOT IMPLEMENTED', commands: [] },
-        EDRX: { value: 'NOT IMPLEMENTED', commands: [] },
-        RAI: { value: 'NOT IMPLEMENTED', commands: [] },
-        'AS-RAI': { value: 'NOT IMPLEMENTED', commands: [] },
-        'CP-RAI': { value: 'NOT IMPLEMENTED', commands: [] },
-        NETWORK: { value: 'NOT IMPLEMENTED', commands: [] },
-        ISSUER: { value: 'NOT IMPLEMENTED', commands: [] },
     };
 
     return (

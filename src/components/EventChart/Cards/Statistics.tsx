@@ -15,31 +15,31 @@ export default () => {
     const { connStat } = useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
-        'Collecting data': {
+        'COLLECTING DATA': {
             value: parseCollecting(connStat?.collecting),
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Successfull SMS Tx': {
+        'SUCCESSFULL SMS TX': {
             value: connStat?.smsTX ?? 'Unknown',
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Successfull SMS Rx': {
+        'SUCCESSFULL SMS RX': {
             value: connStat?.smsRX ?? 'Unknown',
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Data Transmitted': {
+        'DATA TRANSMITTED': {
             value: connStat?.dataTX ? `${connStat?.dataTX} kB` : 'Unknown',
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Data Recieved': {
+        'DATA RECIEVED': {
             value: connStat?.dataRX ? `${connStat?.dataRX} kB` : 'Unknown',
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Max Packet Size Tx or Rx': {
+        'MAX PACKET SIZE TX OR RX': {
             value: connStat?.packetMax ? `${connStat.packetMax} kB` : 'Unknown',
             commands: ['AT%XCONNSTAT'] as ATCommands[],
         },
-        'Average Packet Size': {
+        'AVERAGE PACKET SIZE': {
             value: connStat?.packetAverage
                 ? `${connStat.packetAverage} kB`
                 : 'Unknown',
