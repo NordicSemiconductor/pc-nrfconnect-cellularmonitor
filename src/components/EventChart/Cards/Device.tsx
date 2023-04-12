@@ -32,6 +32,9 @@ export default () => {
         modemSupportLTEM,
         modemSupportNBIoT,
         modemSupportGNSS,
+        // xModemTrace
+        xModemTraceOperation,
+        xModemTraceSetID,
     } = useSelector(getDashboardState);
 
     const haveRecievedModemSupport = !(
@@ -75,7 +78,7 @@ export default () => {
             value: manufacturer ?? 'Unknown',
             commands: ['AT+CGMI'] as const,
         },
-        'Preferred Bearer': {
+        'PREFERRED BEARER': {
             value: parsePreferredBearer(modemSystemPreference),
             commands: ['AT%XSYSTEMMODE'] as const,
         },
@@ -94,13 +97,21 @@ export default () => {
             commands: ['AT+CFUN'] as const,
         },
         // Should be removed:
-        'LTE-M TX Reduction': {
+        'LTE-M TX REDUCTION': {
             value: formatMode(ltemTXReduction) ?? 'Unknown',
             commands: [] as const,
         },
-        'NB-IoT TX Reduction': {
+        'NB-IOT TX REDUCTION': {
             value: formatMode(nbiotTXReduction) ?? 'Unknown',
             commands: [] as const,
+        },
+        'TRACE STATE OPERATION': {
+            value: xModemTraceOperation ?? 'Unknown',
+            commands: ['AT%XMODEMTRACE'],
+        },
+        'TRACE STATE SET ID': {
+            value: xModemTraceSetID ?? 'Unknown',
+            commands: ['AT%XMODEMTRACE'],
         },
     };
     return (
