@@ -16,21 +16,6 @@ import type {
 } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
-type RRCStateFlag = '🟡' | '🟢' | '🔴';
-
-const getRRCStateColor = (
-    state: RRCState | undefined
-): `${RRCStateFlag}${string}` => {
-    switch (state) {
-        case 0:
-            return '🟡 Idle';
-        case 1:
-            return '🟢 Connected';
-        default:
-            return '🔴 Unknown';
-    }
-};
-
 export default () => {
     const {
         AcTState,
@@ -83,7 +68,7 @@ export default () => {
         },
         // TODO: need to look into how to properly get correct value for this
         'RRC STATE': {
-            value: getRRCStateColor(rrcState),
+            value: parseRRCState(rrcState),
             commands: ['AT%CONEVAL', 'AT+CSCON'],
         },
         'ACT STATE': {
@@ -217,6 +202,14 @@ export default () => {
             fields={fields}
         />
     );
+};
+
+const parseRRCState = (rrcState: number | undefined) => {
+    if (rrcState === undefined) return 'Unknown';
+    if (rrcState === 0) return 'RRC IDLE';
+    if (rrcState === 1) return 'RRC CONNECTED';
+
+    return '' as never;
 };
 
 const parseModeFromAcT = (AcTState: AcTState) => {
