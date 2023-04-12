@@ -34,6 +34,12 @@ export default () => {
         modemSupportGNSS,
     } = useSelector(getDashboardState);
 
+    const haveRecievedModemSupport = !(
+        modemSupportLTEM === undefined ||
+        modemSupportNBIoT === undefined ||
+        modemSupportGNSS === undefined
+    );
+
     const fields: DashboardCardFields = {
         IMEI: {
             value: IMEI ?? 'Unknown',
@@ -69,39 +75,24 @@ export default () => {
             value: manufacturer ?? 'Unknown',
             commands: ['AT+CGMI'] as const,
         },
-        VOLTAGE: {
-            value: 'NOT IMPLEMENTED',
-            commands: [],
-        },
         'Preferred Bearer': {
             value: parsePreferredBearer(modemSystemPreference),
             commands: ['AT%XSYSTEMMODE'] as const,
         },
-        'ENABLED BEARERS': {
-            value: parseSupportedValue([
-                modemSupportLTEM ?? false,
-                modemSupportNBIoT ?? false,
-                modemSupportGNSS ?? false,
-            ]),
+        'ENABLED BEARER': {
+            value: haveRecievedModemSupport
+                ? parseSupportedValue([
+                      modemSupportLTEM ?? false,
+                      modemSupportNBIoT ?? false,
+                      modemSupportGNSS ?? false,
+                  ])
+                : 'Unknown',
             commands: ['AT%XSYSTEMMODE'] as const,
-        },
-        'BATTERY WARNING': {
-            value: 'NOT IMPLEMENTED',
-            commands: [],
         },
         'FUNCTIONAL MODE': {
             value: parseFunctionalMode(functionalMode),
             commands: ['AT+CFUN'] as const,
         },
-        GNSS: {
-            value: 'NOT IMPLEMENTED',
-            commands: [],
-        },
-        OVERHEATING: {
-            value: 'NOT IMPLEMENTED',
-            commands: [],
-        },
-
         // Should be removed:
         'LTE-M TX Reduction': {
             value: formatMode(ltemTXReduction) ?? 'Unknown',
