@@ -53,33 +53,20 @@ export default () => {
             commands: ['AT%CONEVAL', 'AT+CSCON'],
         },
         'NETWORK TYPE': { value: networkType ?? 'Unknown', commands: [] },
-        PCI: { value: 'NOT IMPLEMENTED', commands: [] },
-        SNR: { value: 'NOT IMPLEMENTED', commands: [] },
         MNC: { value: parseMCC(mnc, mncCode), commands: [] },
-        'CELL ID': { value: 'NOT IMPLEMENTED', commands: [] },
-        'RRC STATE CHANGE CAUSE': { value: 'NOT IMPLEMENTED', commands: [] },
         EARFCN: {
             value: earfcn ?? 'Unknown',
             commands: ['AT%CONEVAL'],
         },
-        'PUCCH TX POWER': { value: 'NOT IMPLEMENTED', commands: [] },
         MCC: { value: parseMCC(mcc, mccCode), commands: [] },
-        'NEIGHBOR CELLS': { value: 'NOT IMPLEMENTED', commands: [] },
-        'EMM STATE': { value: 'NOT IMPLEMENTED', commands: [] },
         RSRP: {
             value: signalQuality?.rsrp_decibel ?? 'Unknown',
             commands: ['AT%CESQ'],
         },
-        'CE MODE': { value: 'NOT IMPLEMENTED', commands: [] },
-        'BAND INDICATOR': { value: 'NOT IMPLEMENTED', commands: [] },
-        'EMM SUBSTATE': { value: 'NOT IMPLEMENTED', commands: [] },
         RSRQ: {
             value: signalQuality?.rsrq_decibel ?? 'Unknown',
             commands: ['AT%CESQ'],
         },
-        'CE LEVEL': { value: 'NOT IMPLEMENTED', commands: [] },
-        'TRACKING AREA': { value: 'NOT IMPLEMENTED', commands: [] },
-
         // TODO: To be removed?
         'ACTIVITY STATUS': {
             value: activityStatus ?? 'Unknown',
