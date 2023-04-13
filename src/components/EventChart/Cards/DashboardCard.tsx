@@ -7,7 +7,9 @@
 import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { Card, openUrl } from 'pc-nrfconnect-shared';
+import { mdiPlayBox, mdiTextBox } from '@mdi/js';
+import Icon from '@mdi/react';
+import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
 
 import {
     ATCommands,
@@ -142,32 +144,72 @@ const CardTooltip = ({
             ) : null}
             {commands.length > 0 ? (
                 <>
-                    <p>AT commands:</p>
-                    <ul>
-                        {commands !== undefined
-                            ? commands.map((cmd, index) => (
-                                  <li key={`${cmd}`}>
-                                      <span
-                                          onClick={() =>
-                                              openUrl(documentationMap[cmd])
-                                          }
-                                          onKeyDown={e => {
-                                              if (e.key === 'Enter')
-                                                  openUrl(
-                                                      documentationMap[cmd]
-                                                  );
-                                          }}
-                                          role="button"
-                                          tabIndex={index}
-                                      >
-                                          {cmd}
-                                      </span>
-                                  </li>
-                              ))
-                            : null}
-                    </ul>
+                    <h4>RELATED COMMAND{commands.length > 1 ? 'S' : ''}</h4>
+                    {commands.map((cmd, index) => (
+                        <div
+                            key={`${cmd}`}
+                            style={{
+                                marginBottom: '16px',
+                            }}
+                        >
+                            <p style={{ fontSize: '14px', marginBottom: '0' }}>
+                                {cmd}
+                            </p>
+
+                            <div style={{ display: 'flex' }}>
+                                <span
+                                    role="button"
+                                    tabIndex={index}
+                                    style={{
+                                        marginRight: '8px',
+                                        ...linkStyle,
+                                    }}
+                                    onClick={() => console.log(`Run ${cmd}`)}
+                                    onKeyDown={event =>
+                                        event.key === 'Enter'
+                                            ? console.log(`Run ${cmd}`)
+                                            : null
+                                    }
+                                >
+                                    <Icon
+                                        style={{ marginRight: '4px' }}
+                                        path={mdiPlayBox}
+                                        size={0.6}
+                                    />{' '}
+                                    Run command{' '}
+                                </span>
+                                <span
+                                    role="button"
+                                    tabIndex={index}
+                                    style={linkStyle}
+                                    onClick={() =>
+                                        openUrl(documentationMap[cmd])
+                                    }
+                                    onKeyDown={event =>
+                                        event.key === 'Enter'
+                                            ? openUrl(documentationMap[cmd])
+                                            : null
+                                    }
+                                >
+                                    <Icon
+                                        style={{ marginRight: '4px' }}
+                                        path={mdiTextBox}
+                                        size={0.6}
+                                    />{' '}
+                                    Doc
+                                </span>
+                            </div>
+                        </div>
+                    ))}
                 </>
             ) : null}
         </div>
     </Tooltip>
 );
+
+const linkStyle: React.CSSProperties = {
+    fontSize: '14px',
+    color: colors.nordicBlue,
+    display: 'flex',
+    alignItems: 'center',
+};
