@@ -30,18 +30,19 @@ export default () => {
     const powerSavingMode = useSelector(getPowerSavingMode);
     const { accessPointNames } = useSelector(getDashboardState);
     useEffect(() => {
-        // TODO: Create new state based on atState
-        // TODO: Filter out events later than selected time
-        const newState = events
-            .filter(packet => packet.timestamp < timestamp)
-            .reduce(
-                (current, packet) => ({
-                    ...current,
-                    ...convert(packet, current),
-                }),
-                initialState()
-            );
-        dispatch(setDashboardState(newState));
+        const delayedProcess = setTimeout(() => {
+            const newState = events
+                .filter(packet => packet.timestamp <= timestamp)
+                .reduce(
+                    (current, packet) => ({
+                        ...current,
+                        ...convert(packet, current),
+                    }),
+                    initialState()
+                );
+            dispatch(setDashboardState(newState));
+        });
+        return () => clearTimeout(delayedProcess);
     }, [dispatch, timestamp]);
 
     return (
