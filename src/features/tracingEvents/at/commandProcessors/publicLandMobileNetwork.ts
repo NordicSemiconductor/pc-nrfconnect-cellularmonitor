@@ -10,7 +10,6 @@ import type {
     PlmnFormat,
     PlmnMode,
 } from '../../types';
-import { PlmnStatus } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { getNumber, getParametersFromResponse } from '../utils';

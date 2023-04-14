@@ -50,7 +50,10 @@ export default () => {
         conevalResult,
         conevalEnergyEstimate,
         cellID,
+        plmnMode,
+        plmnFormat,
         plmn,
+        availablePlmns,
         physicalCellID,
         band,
         conevalCellEvaluationLevel,
@@ -161,10 +164,25 @@ export default () => {
             value: cellID ?? 'Unknown',
             commands: ['AT%CONEVAL'],
         },
+        'PLMN MODE': {
+            value: plmnMode ?? 'Unknown',
+            description:
+                'PLMN mode (Public Land Mobile Network mode) is a setting that determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: automatic, manual, or deregister. In automatic mode, the device automatically selects and connects to the best available network based on its signal strength and other factors. In manual mode, the device only connects to a network that has been manually selected by the user. In deregister mode, the device disconnects from the current network and deregisters from all available networks.',
+            commands: ['AT+COPS'],
+        },
+        'PLMN FORMAT': {
+            value: plmnFormat ?? 'Unknown',
+            commands: ['AT+COPS'],
+        },
         PLMN: {
             value: plmn ?? 'Unknown',
-            commands: ['AT%CONEVAL'],
+            commands: ['AT+COPS', 'AT%CONEVAL'],
         },
+        // TODO: Need to look into how to display available PLMNS
+        // 'AVAILABLE PLMNS': {
+        //     value: availablePlmns ?? 'Unknown',
+        //     commands: ['AT+COPS'],
+        // },
         'PHYSICAL CELL ID': {
             value: physicalCellID ?? 'Unknown',
             commands: ['AT%CONEVAL'],
