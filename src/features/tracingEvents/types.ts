@@ -113,7 +113,10 @@ export interface State {
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]
     earfcn?: number;
+    plmnMode?: PlmnMode;
+    plmnFormat?: PlmnFormat;
     plmn?: string; // Actually just <MCC + MNC>
+    availablePlmns?: AvailablePlmn[];
     band?: number; // 0 = unavailable, Integer [0, 88]
     TAUTriggered?: TAUTriggered;
 
@@ -154,6 +157,32 @@ export interface State {
         daylightSavingTime?: string; // 1 byte in hexadecimal string
     };
 }
+
+export enum PlmnStatus {
+    Available = 0,
+    Current = 1,
+    Forbidden = 2,
+    Unknown = 3,
+}
+
+export type AvailablePlmn = {
+    stat: PlmnStatus;
+    longOperatorName: string;
+    shortOperatorName: string;
+    operatorNumeric: string;
+    AcTState?: AcTState;
+};
+
+export type PlmnMode =
+    | 0 // Automatic network selection
+    | 1 // Manual network selection
+    | 2 // Deregister from the network
+    | 3; // Set only format of <oper>
+
+export type PlmnFormat =
+    | 0 // Long alphanumeric format (only for plmnMode 3)
+    | 1 // Short alphanumeric format (only for plmnMode 3)
+    | 2; // Numeric format
 
 export type LTEState = 'IDLE' | 'CONNECTED' | 'HANDOVER';
 

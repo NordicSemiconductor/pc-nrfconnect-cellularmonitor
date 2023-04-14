@@ -30,6 +30,7 @@ import { processor as pinCode } from './commandProcessors/pinCode';
 import { processor as pinRetries } from './commandProcessors/pinRetries';
 import { processor as powerSavingModeSettings } from './commandProcessors/powerSavingModeSettings';
 import { processor as productSerialNumber } from './commandProcessors/productSerialNumberId';
+import { processor as publicLandMobileNetwork } from './commandProcessors/publicLandMobileNetwork';
 import { processor as revisionIdentification } from './commandProcessors/revisionIdentification';
 import { processor as signalingConnectionStatus } from './commandProcessors/signalingConnectionStatusNotification';
 import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
@@ -38,6 +39,7 @@ import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduct
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
+    publicLandMobileNetwork,
     activityStatus,
     connectivityStatistics,
     networkTimeNotification,
