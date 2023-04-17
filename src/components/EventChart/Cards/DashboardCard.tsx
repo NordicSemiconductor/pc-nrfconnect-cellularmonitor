@@ -144,10 +144,7 @@ const CardTooltip = ({
             >
                 <h4>{fieldKey}</h4>
                 {description !== undefined ? (
-                    <>
-                        <h3>Description</h3>
-                        <p>{description}</p>
-                    </>
+                    <p style={{ color: colors.gray100 }}>{description}</p>
                 ) : null}
                 {commands.length > 0 ? (
                     <>
