@@ -121,7 +121,7 @@ export interface State {
     TAUTriggered?: TAUTriggered;
 
     // Don't actually know if ce=Cell Evaluation
-    conevalCellEvaluationLevel?: CellEvaluationLevel;
+    conevalCoverageEnhancementLevel?: CoverageEnhancementLevel;
     conevalTXPower?: number;
     conevalTXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
     conevalRXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
@@ -216,7 +216,7 @@ export type ConnectionEvaluationResult =
     | undefined;
 // Higher values means smaller energy consumption.
 export type ConevalEnergyEstimate = 5 | 6 | 7 | 8 | 9 | undefined;
-export type CellEvaluationLevel = 0 | 1 | 2 | 3 | 255 | undefined;
+export type CoverageEnhancementLevel = 0 | 1 | 2 | 3 | 255 | undefined;
 export type TAUTriggered = 0 | 1 | 255 | undefined;
 
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;

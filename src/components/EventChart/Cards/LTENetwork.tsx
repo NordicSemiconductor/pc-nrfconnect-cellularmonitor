@@ -56,7 +56,7 @@ export default () => {
         availablePlmns,
         physicalCellID,
         band,
-        conevalCellEvaluationLevel,
+        conevalCoverageEnhancementLevel,
         conevalTXPower,
         conevalTXRepetitions,
         conevalRXRepetitions,
@@ -209,10 +209,13 @@ export default () => {
         },
         'CONNECTION EVALUATION RESULT': {
             value: conevalResult ?? 'Unknown',
+            description: `Possible result values are: 0="Connection pre-evaluation successful", 1="No Cell Available", 2="UICC not available", 3="Only barred cells available", 4="Busy (for example, GNSS activity)", 5="Aborted because of higher priority operation", 6="Not registered", 7="Unspecified".`,
             commands: ['AT%CONEVAL'],
         },
         'ENERGY ESTIMATE': {
             value: conevalEnergyEstimate ?? 'Unknown',
+            description:
+                'Energy Estimate is a useful parameter for estimating the overall quality of the received signal and for assessing the suitability of the signal for use in data transmission. In general, a higher Energy Estimate value indicates a stronger and more reliable signal. However, the actual interpretation of the Energy Estimate value depends on the specific use case and the requirements of the application.',
             commands: ['AT%CONEVAL'],
         },
         'CELL ID': {
@@ -256,24 +259,33 @@ export default () => {
                 'The band, or current band, refers to the specific frequency range within the electromagnetic spectrum that a mobile device is using to communicate with the cellular network. Knowing the current band can help a user ensure that their device is operating on the appropriate network for their location and service provider.',
             commands: ['AT%XCBAND', 'AT%CONEVAL'],
         },
-        'CONEVAL CELL EVALUATION LEVEL': {
-            value: conevalCellEvaluationLevel ?? 'Unknown',
+        'COVERAGE ENHANCEMENT LEVEL': {
+            value: conevalCoverageEnhancementLevel ?? 'Unknown',
+            description:
+                'Coverage Enhancement Level (CEL), indicates the level of Coverage Enhancement (CE) that the modem is currently configured for. Coverage Enhancement is a feature of the LTE cellular network that can improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
             commands: ['AT%CONEVAL'],
         },
         'CONEVAL TX POWER': {
             value: conevalTXPower ?? 'Unknown',
+            description: 'The transmit power used by the User Equipment (UE).',
             commands: ['AT%CONEVAL'],
         },
         'CONEVAL TX REPETITIONS': {
             value: conevalTXRepetitions ?? 'Unknown',
+            description:
+                'The number of times the transmit procedure was repeated.',
             commands: ['AT%CONEVAL'],
         },
         'CONEVAL RX REPETITIONS': {
             value: conevalRXRepetitions ?? 'Unknown',
+            description:
+                'The number of times the receive procedure was repeated.',
             commands: ['AT%CONEVAL'],
         },
         'CONEVAL DL PATH LOSS': {
             value: conevalDLPathLoss ?? 'Unknown',
+            description:
+                'The downlink path loss, which is a measure of the attenuation of the signal as it travels from the serving cell to the device.',
             commands: ['AT%CONEVAL'],
         },
     };
