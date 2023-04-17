@@ -31,6 +31,7 @@ export const recommendedAT: recommendedAT = {
     'AT%XTIME': 'AT%XTIME=1',
     'AT%CONEVAL': 'AT%CONEVAL',
     'AT%XCBAND': 'AT%XCBAND',
+    'AT%HWVERSION': 'AT%HWVERSION',
 };
 
 export const sendRecommendedCommand =
@@ -46,8 +47,8 @@ export const sendRecommendedCommand =
                 sendMacros(
                     uartSerialPort,
                     recommendedAT[atCommand] as string[],
-                    true
-                );
+                        true
+                    );
+                }
             }
-        }
-    };
+        };

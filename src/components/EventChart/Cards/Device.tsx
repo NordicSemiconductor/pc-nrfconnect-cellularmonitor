@@ -46,18 +46,23 @@ export default () => {
     const fields: DashboardCardFields = {
         IMEI: {
             value: IMEI ?? 'Unknown',
+            description: `The International Mobile Equipment Identity (IMEI) is a unique 15-digit code that identifies a mobile device. Every device has a unique IMEI, which can be used to track the device, block it from being used on a cellular network if it's been reported as lost or stolen, and for other purposes such as device authentication.`,
             commands: ['AT+CGSN'] as const,
         },
         'MODEM FIRMWARE': {
             value: revisionID ?? 'Unknown',
+            description: `The modem firmware version is the version of the firmware that is currently running on the modem. This version can be used in order to select the correct trace database, and you do not get any AT activity in a trace, try going to the Serial Terminal and run the command "AT+CGMR".`,
             commands: ['AT+CGMR'] as const,
         },
         'HARDWARE VERSION': {
             value: hardwareVersion ?? 'Unknown',
+            description: 'The hardware revision of the User Equipment (UE).',
             commands: ['AT%HWVERSION'] as const,
         },
         'MODEM UUID': {
             value: modemUUID ?? 'Unknown',
+            description:
+                'The Modem UUID is a unique identifier that is generated during the manufacturing of the modem firmware, and can be used to track the specific version of the firmware that is running on a device.',
             commands: ['AT%XMODEMUUID'] as const,
         },
         'CURRENT BAND': {
@@ -76,6 +81,7 @@ export default () => {
         },
         'DATA PROFILE': {
             value: dataProfile ?? 'Unknown',
+
             commands: ['AT%XDATAPRFL'] as const,
         },
         MANUFACTURER: {
