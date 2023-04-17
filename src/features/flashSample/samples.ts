@@ -6,8 +6,8 @@
 
 import { net } from '@electron/remote';
 import { existsSync } from 'fs';
-import { copyFile, readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
+import { dirname, join } from 'path';
 import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 export interface Firmware {
@@ -27,6 +27,10 @@ export interface Samples {
     dk91: Sample[];
 }
 
+const SERVER_URL =
+    'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
+const DOWNLOAD_FOLDER = join(getAppDataDir(), 'firmware');
+
 const fullPath = (file: string) =>
     join(getAppDir(), 'resources', 'firmware', file);
 
@@ -41,10 +45,6 @@ export const readBundledIndex = () =>
         encoding: 'utf8',
     }).then(file => JSON.parse(file) as Samples);
 
-const SERVER_URL =
-    'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
-const DOWNLOAD_FOLDER = getAppDataDir();
-
 export const downloadSampleIndex = fetch(`${SERVER_URL}/index.json`, {
     cache: 'no-cache',
 }).then<Samples>(result => result.json());
@@ -58,6 +58,10 @@ export const downloadFile = async (fileName: string) => {
 
     if (existsSync(targetFile)) return;
     logger.info(`Sample not found locally, downloading ${url}`);
+
+    if (!existsSync(dirname(targetFile))) {
+        await mkdir(dirname(targetFile));
+    }
 
     if (existsSync(fullPath(fileName))) {
         logger.info(`Sample is bundled with app, copying.`);
