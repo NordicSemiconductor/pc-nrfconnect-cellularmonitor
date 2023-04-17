@@ -23,9 +23,14 @@ export const processor: Processor<'%XCBAND'> = {
                     availableBands: getNumberArray(packet.payload),
                 };
             }
-            return { ...state, currentBand: getNumber(packet.payload) };
-
-            // Response to a set command e.g. %XCBAND: 13
+            if (packet.payload) {
+                const band = getNumber(packet.payload);
+                return {
+                    ...state,
+                    band,
+                    currentBand: band,
+                };
+            }
         }
         return state;
     },

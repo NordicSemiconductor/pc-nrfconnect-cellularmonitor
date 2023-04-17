@@ -62,12 +62,16 @@ export default () => {
         },
         'CURRENT BAND': {
             value: currentBand ?? 'Unknown',
-            commands: ['AT%XCBAND'] as const,
+            description:
+                'The band, or current band, refers to the specific frequency range within the electromagnetic spectrum that a mobile device is using to communicate with the cellular network. Knowing the current band can help a user ensure that their device is operating on the appropriate network for their location and service provider.',
+            commands: ['AT%XCBAND', 'AT%CONEVAL'] as const,
         },
         'SUPPORTED BANDS': {
             value: availableBands
                 ? formatAvailableBands(availableBands)
                 : 'Unknown',
+            description:
+                'The Supported Bands returned by the AT command %XCBAND=? represents a list of the different frequency bands that the mobile device is capable of using for its cellular communication. This information can be useful for determining which networks and service providers are compatible with the device, as well as for troubleshooting connection issues related to network compatibility.',
             commands: ['AT%XCBAND'] as const,
         },
         'DATA PROFILE': {
