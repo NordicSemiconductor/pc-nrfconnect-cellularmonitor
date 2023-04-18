@@ -19,18 +19,14 @@ const version = (module: ModuleVersion) => {
     }
 };
 
-const describe = (module: ModuleVersion) =>
-    `${module.module_name} ${version(module)}`;
-
 export default async () => {
     const { modules } = await nrfml.apiVersion();
 
-    if (modules.length > 0) {
-        logger.debug('Lib module versions:');
-        modules.forEach(module => logger.debug(`- ${describe(module)}`));
-    }
-
-    logger.debug(
-        `- ${nrfMonitorLibJsPackageJson.name} ${nrfMonitorLibJsPackageJson.version}`
+    logger.info(
+        `Using nrf-monitor-lib-js version  ${nrfMonitorLibJsPackageJson.version}`
     );
+    if (modules.length > 0) {
+        // In this case, we always expect to only have one module, namely nrfml
+        logger.info(`Using nrf-monitor-lib version ${version(modules[0])}`);
+    }
 };
