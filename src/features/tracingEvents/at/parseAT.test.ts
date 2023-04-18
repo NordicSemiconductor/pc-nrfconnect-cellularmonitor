@@ -76,7 +76,7 @@ const tests = [
         expected: {
             command: '%XEMPR',
             requestType: RequestType.NOT_A_REQUEST,
-            payload: '0,0,2,1,3,5,2,8,2,13,1',
+            payload: '0,0,2\r\n1,3,5,2,8,2,13,1',
             status: 'OK',
         },
     },

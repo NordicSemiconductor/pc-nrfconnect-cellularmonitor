@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import type { State } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getNumberArray } from '../utils';
+import { getLines, getNumberArray } from '../utils';
 
 export type Reduction = {
     0: '0dB';
@@ -37,6 +38,14 @@ export const processor: Processor<'%XEMPR'> = {
             packet.requestType === RequestType.SET_WITH_VALUE &&
             packet.payload
         ) {
+            /*
+             * There are two possible syntaxes for this command:
+             * 1. payload: <system_mode>,0,<pr_for_all_bands>
+             * 2. payload: <system_mode>,<k>,<pr_for_band_1>,<band_1>,<pr_for_band_2>,<band_2>,...
+             * Where:
+             * - <system_mode> is 0 for NB-IoT and 1 for LTE-M
+             * - <k> is the number of bands for which the power reduction is set
+             */
             const requestArgumentArray = getNumberArray(packet.payload);
             requestedReduction = parseToTXReduction(requestArgumentArray);
         }
@@ -58,21 +67,24 @@ export const processor: Processor<'%XEMPR'> = {
                 return { ...state, ...requestedReduction };
             }
             if (requestType === RequestType.READ && packet.payload) {
-                const responseArray = getNumberArray(packet.payload);
-                const firstSegmentLen = responseArray[2];
-                if (firstSegmentLen < (responseArray.length - 2) * 2) {
-                    const secondSegmentStart = 1 + firstSegmentLen * 2;
-                    return {
-                        ...state,
-                        ...parseToTXReduction(
-                            responseArray.slice(0, secondSegmentStart)
-                        ),
-                        ...parseToTXReduction(
-                            responseArray.slice(secondSegmentStart)
-                        ),
-                    };
+                const modeLines = getLines(packet.payload);
+
+                if (modeLines.length === 0) {
+                    return state;
                 }
-                return { ...state, ...parseToTXReduction(responseArray) };
+
+                const result = modeLines.reduce<Partial<State>>(
+                    (txPowerState, line) => {
+                        const modeValues = getNumberArray(line);
+                        return Object.assign(
+                            txPowerState,
+                            parseToTXReduction(modeValues)
+                        );
+                    },
+                    {}
+                );
+
+                return { ...state, ...result };
             }
         }
         return state;
@@ -101,7 +113,10 @@ const parseToTXReduction = (values: number[]) => {
             nbiotTXReduction: reductions,
         };
     }
-    return {
-        ltemTXReduction: reductions,
-    };
+    if (values[0] === 1) {
+        return {
+            ltemTXReduction: reductions,
+        };
+    }
+    return {};
 };

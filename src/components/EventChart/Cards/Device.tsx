@@ -81,7 +81,8 @@ export default () => {
         },
         'DATA PROFILE': {
             value: dataProfile ?? 'Unknown',
-            description: 'A data profile specifies the settings for a cellular data connection, such as the APN (Access Point Name), authentication settings, and other parameters',
+            description:
+                'A data profile specifies the settings for a cellular data connection, such as the APN (Access Point Name), authentication settings, and other parameters',
             commands: ['AT%XDATAPRFL'],
         },
         MANUFACTURER: {
@@ -91,7 +92,8 @@ export default () => {
         },
         'PREFERRED BEARER': {
             value: parsePreferredBearer(modemSystemPreference),
-            description: 'The preferred bearer is the preferred network type for the modem. The preferred bearer can be set to LTE-M or NB-IoT, please read the documentation for more information.',
+            description:
+                'The preferred bearer is the preferred network type for the modem. The preferred bearer can be set to LTE-M or NB-IoT, please read the documentation for more information.',
             commands: ['AT%XSYSTEMMODE'],
         },
         'SUPPORTED BEARERS': {
@@ -102,33 +104,39 @@ export default () => {
                       modemSupportGNSS ?? false,
                   ])
                 : 'Unknown',
-            description: 'List of supported bearers. Possible bearers are LTE-M, NB-IoT and GNSS.',
+            description:
+                'List of supported bearers. Possible bearers are LTE-M, NB-IoT and GNSS.',
             commands: ['AT%XSYSTEMMODE'],
         },
         'FUNCTIONAL MODE': {
             value: parseFunctionalMode(functionalMode),
-            description: 'The functional mode of the modem. E.g. Power off, Normal, Offline/Flight mode, etc.',
+            description:
+                'The functional mode of the modem. E.g. Power off, Normal, Offline/Flight mode, etc.',
             commands: ['AT+CFUN'],
         },
         'TRACE STATE OPERATION': {
             value: xModemTraceOperation ?? 'Unknown',
-            description: 'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
+            description:
+                'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
             commands: ['AT%XMODEMTRACE'],
         },
         'TRACE STATE SET ID': {
             value: xModemTraceSetID ?? 'Unknown',
-            description: 'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
+            description:
+                'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
             commands: ['AT%XMODEMTRACE'],
         },
         // Should be removed:
         'LTE-M TX REDUCTION': {
             value: formatMode(ltemTXReduction) ?? 'Unknown',
-            description: 'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+            description:
+                'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
             commands: ['AT%XEMPR'],
         },
         'NB-IOT TX REDUCTION': {
             value: formatMode(nbiotTXReduction) ?? 'Unknown',
-            description: 'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+            description:
+                'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
             commands: ['AT%XEMPR'],
         },
     };
@@ -171,9 +179,28 @@ const formatMode = (mode?: Mode) => {
         return 'Unknown';
     }
     if (typeof mode === 'number') {
-        return mode;
+        return `Maximum power reduced ${txPowerReductionToDecibel(
+            mode
+        )} on all bands`;
     }
-    return mode.map(band => `${band.band}: ${band.reduction}`).join(', ');
+    return mode
+        .map(
+            band => `${band.band}: ${txPowerReductionToDecibel(band.reduction)}`
+        )
+        .join(', ');
+};
+
+const txPowerReductionToDecibel = (reduction: number) => {
+    switch (reduction) {
+        case 0:
+            return '0 dB';
+        case 1:
+            return '0.5 dB';
+        case 2:
+            return '1 dB';
+        default:
+            return 'Unknown' as never;
+    }
 };
 
 const parseSupportedValue = (supported: [boolean, boolean, boolean]) => {

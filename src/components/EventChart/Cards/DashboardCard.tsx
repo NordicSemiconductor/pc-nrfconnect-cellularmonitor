@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { TDispatch, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
 import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
@@ -20,6 +20,7 @@ import {
     recommendedAT,
     sendRecommendedCommand,
 } from '../../../features/tracingEvents/at/recommeneded';
+import { TDispatch } from '../../../utils/thunk';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
