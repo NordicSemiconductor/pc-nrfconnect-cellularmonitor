@@ -94,31 +94,23 @@
         height: 12px;
     }
     div.arrow::before {
-        border-bottom-color: $tooltip-bg;
+        border-bottom-color: $gray-900;
         border-width: 0 6px 6px 6px;
     }
     .tooltip-inner {
-        background: $tooltip-bg;
+        background: $gray-900;
+        text-align: left;
     }
 }
 
-.card-tooltip {
-    background: $tooltip-bg;
-    padding: 8px 16px;
-    ul {
-        list-style-type: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        text-decoration: underline;
-        color: $nordic-blue;
-        text-decoration-color: $nordic-blue;
-        flex-direction: column;
+.tooltip-inner {
+    padding-top: 16px;
+    min-width: 240px;
+}
 
-        li:hover {
-            opacity: 0.8;
-        }
-    }
+.card-tooltip {
+    background: $gray-900;
+    padding: 8px 16px;
 }
 
 #tooltip {

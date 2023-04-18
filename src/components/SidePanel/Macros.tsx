@@ -18,7 +18,7 @@ export const Macros = () => {
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={() => sendMacros(serialPort)}
+                onClick={() => sendMacros(serialPort, recommendedAt)}
                 title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
             >
                 Run recommended AT commands
@@ -75,11 +75,20 @@ const recommendedAt = [
     'AT%XSYSTEMMODE?',
 ];
 
-const sendMacros = (serialPort: SerialPort) => {
-    testMode(serialPort);
+// Todo: need to set mode in store, in order to not always check for mode
+export const sendMacros = (
+    serialPort: SerialPort,
+    commands: string[],
+    mode?: boolean
+) => {
+    if (mode) {
+        subscribe(serialPort, '', commands);
+    } else {
+        testMode(serialPort, commands);
+    }
 };
 
-const testMode = (serialPort: SerialPort) => {
+const testMode = (serialPort: SerialPort, commands: string[]) => {
     const decoder = new TextDecoder();
     let prefix = 'at ';
     let response = '';
@@ -93,14 +102,18 @@ const testMode = (serialPort: SerialPort) => {
             }
 
             testHandler();
-            subscribe(serialPort, prefix);
+            subscribe(serialPort, prefix, commands);
         }
     });
 
     serialPort.write(`${prefix} AT\r\n`);
 };
 
-const subscribe = (serialPort: SerialPort, prefix: string) => {
+const subscribe = (
+    serialPort: SerialPort,
+    prefix: string,
+    commands: string[]
+) => {
     const decoder = new TextDecoder();
     let commandIndex = 0;
     let response = '';
@@ -114,8 +127,8 @@ const subscribe = (serialPort: SerialPort, prefix: string) => {
         if (doContinue) {
             commandIndex += 1;
 
-            if (commandIndex < recommendedAt.length) {
-                serialPort.write(`${prefix}${recommendedAt[commandIndex]}\r\n`);
+            if (commandIndex < commands.length) {
+                serialPort.write(`${prefix}${commands[commandIndex]}\r\n`);
             } else {
                 // Cleanup when all commands have been sent.
                 handler();
@@ -124,5 +137,5 @@ const subscribe = (serialPort: SerialPort, prefix: string) => {
         }
     });
 
-    serialPort.write(`${prefix}${recommendedAt[commandIndex]}\r\n`);
+    serialPort.write(`${prefix}${commands[commandIndex]}\r\n`);
 };

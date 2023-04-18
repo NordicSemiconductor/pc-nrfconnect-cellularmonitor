@@ -57,7 +57,7 @@ const removeStatusFromBody = (body: string): string => {
             status => status === payloadArray[payloadArray.length - 1]
         )
     ) {
-        return payloadArray.slice(0, -1).join();
+        return payloadArray.slice(0, -1).join('\r\n');
     }
     return body;
 };

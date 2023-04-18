@@ -27,11 +27,12 @@ const bandTestResponses = listsOfAvailableBands.map(bands => ({
 
 test('%XCBAND set command reads the current band and sets it in the viewModel', () => {
     bandResponses.forEach(response => {
-        const getBandView = convertPackets([
+        const state = convertPackets([
             setCommandPacket,
             response.responsePacket,
         ]);
-        expect(getBandView.currentBand).toBe(response.result);
+        expect(state.band).toBe(response.result);
+        expect(state.currentBand).toBe(response.result);
     });
 });
 

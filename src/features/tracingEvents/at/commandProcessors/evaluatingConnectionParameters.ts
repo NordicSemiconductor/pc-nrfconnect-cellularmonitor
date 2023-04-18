@@ -5,9 +5,9 @@
  */
 
 import {
-    CellEvaluationLevel,
     ConevalEnergyEstimate,
     ConnectionEvaluationResult,
+    CoverageEnhancementLevel,
     RRCState,
     TAUTriggered,
 } from '../../types';
@@ -42,9 +42,8 @@ export const processor: Processor<'%CONEVAL'> = {
                     earfcn: validateNumberValue(parsedPayload[9]),
                     band: validateNumberValue(parsedPayload[10]),
                     TAUTriggered: validateTAUTriggered(parsedPayload[11]),
-                    conevalCellEvaluationLevel: validateCellEvaluationLevel(
-                        parsedPayload[12]
-                    ),
+                    conevalCoverageEnhancementLevel:
+                        validateCoverageEnhancementLevel(parsedPayload[12]),
                     conevalTXPower: validateNumberValue(parsedPayload[13]),
                     conevalTXRepetitions: validateNumberValue(
                         parsedPayload[14]
@@ -91,12 +90,14 @@ const validateConevalEnergyEstimate = (
     return undefined as never;
 };
 
-const validateCellEvaluationLevel = (value: string): CellEvaluationLevel => {
+const validateCoverageEnhancementLevel = (
+    value: string
+): CoverageEnhancementLevel => {
     const validValues = [0, 1, 2, 3, 255];
     const numberValue = Number.parseInt(value, 10);
 
     if (validValues.includes(numberValue))
-        return numberValue as CellEvaluationLevel;
+        return numberValue as CoverageEnhancementLevel;
 
     return undefined as never;
 };

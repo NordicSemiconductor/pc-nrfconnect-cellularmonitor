@@ -12,6 +12,9 @@ export const getStringNumberPair = (payload: string): [string, number] => {
 export const getNumber = (payload: string): number =>
     parseInt(payload.trim(), 10);
 
+export const getLines = (payload: string): string[] =>
+    payload.split(/(?:\r\n|\\r\\n)/).filter(line => line);
+
 export const getNumberArray = (payload: string): number[] =>
     payload
         .split(',')

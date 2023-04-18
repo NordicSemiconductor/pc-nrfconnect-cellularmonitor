@@ -28,7 +28,7 @@ const setCommands = {
         earfcn: 1575,
         band: 3,
         TAUTriggered: 1,
-        conevalCellEvaluationLevel: 1,
+        conevalCoverageEnhancementLevel: 1,
         conevalTXPower: 23,
         conevalTXRepetitions: 16,
         conevalRXRepetitions: 32,

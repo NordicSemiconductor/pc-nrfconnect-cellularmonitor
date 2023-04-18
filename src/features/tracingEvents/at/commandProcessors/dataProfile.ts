@@ -6,6 +6,7 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
+import { getNumber } from '../utils';
 
 export const PowerLevel = {
     0: 'Ultra-low power',
@@ -26,11 +27,11 @@ export const processor: Processor<'%XDATAPRFL'> = {
     initialState: () => ({}),
     onRequest: (packet, state) => {
         if (packet.payload) {
-            const powerLevel = Object.keys(PowerLevel).find(
+            const powerLevel = (Object.keys(PowerLevel) as string[]).find(
                 key => key === packet.payload
             );
             requestedDataProfile = powerLevel
-                ? (parseInt(powerLevel, 10) as PowerLevel)
+                ? (getNumber(powerLevel) as PowerLevel)
                 : undefined;
         }
         return state;
@@ -41,11 +42,10 @@ export const processor: Processor<'%XDATAPRFL'> = {
                 return { ...state, dataProfile: requestedDataProfile };
             }
 
-            const dataProfile = packet.payload;
-            if (dataProfile) {
+            if (packet.payload) {
                 return {
                     ...state,
-                    dataProfile: parseInt(dataProfile, 10) as PowerLevel,
+                    dataProfile: getNumber(packet.payload) as PowerLevel,
                 };
             }
         }

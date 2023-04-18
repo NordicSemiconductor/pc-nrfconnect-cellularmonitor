@@ -113,12 +113,15 @@ export interface State {
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]
     earfcn?: number;
+    plmnMode?: PlmnMode;
+    plmnFormat?: PlmnFormat;
     plmn?: string; // Actually just <MCC + MNC>
+    availablePlmns?: AvailablePlmn[];
     band?: number; // 0 = unavailable, Integer [0, 88]
     TAUTriggered?: TAUTriggered;
 
     // Don't actually know if ce=Cell Evaluation
-    conevalCellEvaluationLevel?: CellEvaluationLevel;
+    conevalCoverageEnhancementLevel?: CoverageEnhancementLevel;
     conevalTXPower?: number;
     conevalTXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
     conevalRXRepetitions?: number; // Integer [1, 2048], special 0 and 1.
@@ -155,6 +158,32 @@ export interface State {
     };
 }
 
+export enum PlmnStatus {
+    Available = 0,
+    Current = 1,
+    Forbidden = 2,
+    Unknown = 3,
+}
+
+export type AvailablePlmn = {
+    stat: PlmnStatus;
+    longOperatorName: string;
+    shortOperatorName: string;
+    operatorNumeric: string;
+    AcTState?: AcTState;
+};
+
+export type PlmnMode =
+    | 0 // Automatic network selection
+    | 1 // Manual network selection
+    | 2 // Deregister from the network
+    | 3; // Set only format of <oper>
+
+export type PlmnFormat =
+    | 0 // Long alphanumeric format (only for plmnMode 3)
+    | 1 // Short alphanumeric format (only for plmnMode 3)
+    | 2; // Numeric format
+
 export type LTEState = 'IDLE' | 'CONNECTED' | 'HANDOVER';
 
 export type AcTState = 0 | 4 | 5 | 7 | 9;
@@ -187,7 +216,7 @@ export type ConnectionEvaluationResult =
     | undefined;
 // Higher values means smaller energy consumption.
 export type ConevalEnergyEstimate = 5 | 6 | 7 | 8 | 9 | undefined;
-export type CellEvaluationLevel = 0 | 1 | 2 | 3 | 255 | undefined;
+export type CoverageEnhancementLevel = 0 | 1 | 2 | 3 | 255 | undefined;
 export type TAUTriggered = 0 | 1 | 255 | undefined;
 
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;

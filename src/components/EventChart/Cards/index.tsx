@@ -16,7 +16,7 @@ import {
     getPowerSavingMode,
     setDashboardState,
 } from '../../../features/tracingEvents/dashboardSlice';
-import { getSelectedTime } from '../Chart/chartSlice';
+import { getLive, getSelectedTime } from '../Chart/chartSlice';
 import Device from './Device';
 import LTENetwork from './LTENetwork';
 import PacketDomainNetwork from './PacketDomainNetwork';
@@ -24,25 +24,41 @@ import PowerSavingMode from './PowerSavingMode';
 import Sim from './Sim';
 import ConnectivityStatistics from './Statistics';
 
+const getNewDashboardState = (live: boolean, timestamp: number) => {
+    if (live) {
+        return events.reduce(
+            (current, packet) => ({
+                ...current,
+                ...convert(packet, current),
+            }),
+            initialState()
+        );
+    }
+
+    return events
+        .filter(packet => packet.timestamp <= timestamp)
+        .reduce(
+            (current, packet) => ({
+                ...current,
+                ...convert(packet, current),
+            }),
+            initialState()
+        );
+};
+
 export default () => {
-    const timestamp = useSelector(getSelectedTime);
     const dispatch = useDispatch();
+    const timestamp = useSelector(getSelectedTime);
+    const live = useSelector(getLive);
     const powerSavingMode = useSelector(getPowerSavingMode);
     const { accessPointNames } = useSelector(getDashboardState);
     useEffect(() => {
-        // TODO: Create new state based on atState
-        // TODO: Filter out events later than selected time
-        const newState = events
-            .filter(packet => packet.timestamp < timestamp)
-            .reduce(
-                (current, packet) => ({
-                    ...current,
-                    ...convert(packet, current),
-                }),
-                initialState()
-            );
-        dispatch(setDashboardState(newState));
-    }, [dispatch, timestamp]);
+        const delayedProcess = setTimeout(() => {
+            const newState = getNewDashboardState(live, timestamp);
+            dispatch(setDashboardState(newState));
+        });
+        return () => clearTimeout(delayedProcess);
+    }, [dispatch, live, timestamp]);
 
     return (
         <MasonryLayout className="cards-container" minWidth={350}>
