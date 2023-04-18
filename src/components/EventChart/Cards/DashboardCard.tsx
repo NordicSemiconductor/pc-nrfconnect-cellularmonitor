@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { useDispatch } from 'react-redux';
+import { TDispatch, useDispatch } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
 import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
@@ -85,6 +85,7 @@ type CardEntry = {
 };
 
 const CardEntry = ({ fieldKey, value, commands, description }: CardEntry) => {
+    const dispatch = useDispatch();
     const [keepShowing, setKeepShowing] = useState(false);
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
@@ -111,6 +112,7 @@ const CardEntry = ({ fieldKey, value, commands, description }: CardEntry) => {
                         description,
                         commands,
                         showTooltip,
+                        dispatch,
                     })}
                     show={keepShowing}
                 >
@@ -126,6 +128,7 @@ type CardTooltip = {
     description?: string;
     commands: readonly ATCommands[];
     showTooltip: (show: boolean) => void;
+    dispatch: TDispatch;
 };
 
 const CardTooltip = ({
@@ -133,99 +136,97 @@ const CardTooltip = ({
     description,
     commands,
     showTooltip,
-}: CardTooltip) => {
-    const dispatch = useDispatch();
-    return (
-        <Tooltip id={`tooltip-${fieldKey}`}>
-            <div
-                className="card-tooltip"
-                onMouseEnter={() => showTooltip(true)}
-                onMouseLeave={() => showTooltip(false)}
-            >
-                <h4>{fieldKey}</h4>
-                {description !== undefined ? (
-                    <p style={{ color: colors.gray100 }}>{description}</p>
-                ) : null}
-                {commands.length > 0 ? (
-                    <>
-                        <h4>RELATED COMMAND{commands.length > 1 ? 'S' : ''}</h4>
-                        {commands.map((cmd, index) => (
-                            <div
-                                key={`${cmd}`}
+    dispatch,
+}: CardTooltip) => (
+    <Tooltip id={`tooltip-${fieldKey}`}>
+        <div
+            className="card-tooltip"
+            onMouseEnter={() => showTooltip(true)}
+            onMouseLeave={() => showTooltip(false)}
+        >
+            <h4>{fieldKey}</h4>
+            {description !== undefined ? (
+                <p style={{ color: colors.gray100 }}>{description}</p>
+            ) : null}
+            {commands.length > 0 ? (
+                <>
+                    <h4>RELATED COMMAND{commands.length > 1 ? 'S' : ''}</h4>
+                    {commands.map((cmd, index) => (
+                        <div
+                            key={`${cmd}`}
+                            style={{
+                                marginBottom: '16px',
+                            }}
+                        >
+                            <p
                                 style={{
-                                    marginBottom: '16px',
+                                    fontSize: '14px',
+                                    marginBottom: '0',
                                 }}
                             >
-                                <p
-                                    style={{
-                                        fontSize: '14px',
-                                        marginBottom: '0',
-                                    }}
-                                >
-                                    {cmd}
-                                </p>
+                                {cmd}
+                            </p>
 
-                                <div style={{ display: 'flex' }}>
-                                    {cmd in recommendedAT ? (
-                                        <span
-                                            role="button"
-                                            tabIndex={index}
-                                            style={{
-                                                marginRight: '8px',
-                                                ...linkStyle,
-                                            }}
-                                            onClick={() =>
-                                                dispatch(
-                                                    sendRecommendedCommand(cmd)
-                                                )
-                                            }
-                                            onKeyDown={event =>
-                                                event.key === 'Enter'
-                                                    ? dispatch(
-                                                          sendRecommendedCommand(
-                                                              cmd
-                                                          )
-                                                      )
-                                                    : null
-                                            }
-                                        >
-                                            <Icon
-                                                style={{ marginRight: '4px' }}
-                                                path={mdiPlayBox}
-                                                size={0.6}
-                                            />{' '}
-                                            Run command{' '}
-                                        </span>
-                                    ) : null}
+                            <div style={{ display: 'flex' }}>
+                                {cmd in recommendedAT ? (
                                     <span
                                         role="button"
                                         tabIndex={index}
-                                        style={linkStyle}
+                                        style={{
+                                            marginRight: '8px',
+                                            ...linkStyle,
+                                        }}
                                         onClick={() =>
-                                            openUrl(documentationMap[cmd])
+                                            dispatch(
+                                                sendRecommendedCommand(cmd)
+                                            )
                                         }
                                         onKeyDown={event =>
                                             event.key === 'Enter'
-                                                ? openUrl(documentationMap[cmd])
+                                                ? dispatch(
+                                                      sendRecommendedCommand(
+                                                          cmd
+                                                      )
+                                                  )
                                                 : null
                                         }
                                     >
                                         <Icon
                                             style={{ marginRight: '4px' }}
-                                            path={mdiTextBox}
+                                            path={mdiPlayBox}
                                             size={0.6}
                                         />{' '}
-                                        Doc
+                                        Run command{' '}
                                     </span>
-                                </div>
+                                ) : null}
+                                <span
+                                    role="button"
+                                    tabIndex={index}
+                                    style={linkStyle}
+                                    onClick={() =>
+                                        openUrl(documentationMap[cmd])
+                                    }
+                                    onKeyDown={event =>
+                                        event.key === 'Enter'
+                                            ? openUrl(documentationMap[cmd])
+                                            : null
+                                    }
+                                >
+                                    <Icon
+                                        style={{ marginRight: '4px' }}
+                                        path={mdiTextBox}
+                                        size={0.6}
+                                    />{' '}
+                                    Doc
+                                </span>
                             </div>
-                        ))}
-                    </>
-                ) : null}
-            </div>
-        </Tooltip>
-    );
-};
+                        </div>
+                    ))}
+                </>
+            ) : null}
+        </div>
+    </Tooltip>
+);
 
 const linkStyle: React.CSSProperties = {
     fontSize: '14px',

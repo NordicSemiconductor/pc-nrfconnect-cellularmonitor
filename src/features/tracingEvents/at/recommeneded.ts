@@ -20,7 +20,13 @@ type recommendedAT = Partial<
 // which will be used to easily run the command and populate the given field
 // in the dashboard.
 export const recommendedAT: recommendedAT = {
+    'AT+CGMI': 'AT+CGMI',
+    'AT+CGMR': 'AT+CGMR',
+    'AT+CGSN': 'AT+CGSN',
+    'AT%XMODEMUUID': 'AT%XMODEMUUID',
+    'AT%XDATAPRFL': 'AT%XDATAPRFL?',
     'AT+CEREG': 'AT+CEREG?',
+    'AT+CFUN': 'AT+CFUN?',
     'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
     // TODO: write processor for XCONNSTAT
     // 'AT+XCONNSTAT': 'AT+XCONNSTAT?',
@@ -32,6 +38,10 @@ export const recommendedAT: recommendedAT = {
     'AT%CONEVAL': 'AT%CONEVAL',
     'AT%XCBAND': 'AT%XCBAND',
     'AT%HWVERSION': 'AT%HWVERSION',
+    'AT%XMODEMTRACE': 'AT%XMODEMTRACE=1,2',
+    'AT%XSYSTEMMODE': 'AT%XSYSTEMMODE?',
+
+    'AT%XEMPR': 'AT%XEMPR?',
 };
 
 export const sendRecommendedCommand =
@@ -47,8 +57,8 @@ export const sendRecommendedCommand =
                 sendMacros(
                     uartSerialPort,
                     recommendedAT[atCommand] as string[],
-                        true
-                    );
-                }
+                    true
+                );
             }
-        };
+        }
+    };

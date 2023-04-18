@@ -47,29 +47,29 @@ export default () => {
         IMEI: {
             value: IMEI ?? 'Unknown',
             description: `The International Mobile Equipment Identity (IMEI) is a unique 15-digit code that identifies a mobile device. Every device has a unique IMEI, which can be used to track the device, block it from being used on a cellular network if it's been reported as lost or stolen, and for other purposes such as device authentication.`,
-            commands: ['AT+CGSN'] as const,
+            commands: ['AT+CGSN'],
         },
         'MODEM FIRMWARE': {
             value: revisionID ?? 'Unknown',
             description: `The modem firmware version is the version of the firmware that is currently running on the modem. This version can be used in order to select the correct trace database, and you do not get any AT activity in a trace, try going to the Serial Terminal and run the command "AT+CGMR".`,
-            commands: ['AT+CGMR'] as const,
+            commands: ['AT+CGMR'],
         },
         'HARDWARE VERSION': {
             value: hardwareVersion ?? 'Unknown',
             description: 'The hardware revision of the User Equipment (UE).',
-            commands: ['AT%HWVERSION'] as const,
+            commands: ['AT%HWVERSION'],
         },
         'MODEM UUID': {
             value: modemUUID ?? 'Unknown',
             description:
                 'The Modem UUID is a unique identifier that is generated during the manufacturing of the modem firmware, and can be used to track the specific version of the firmware that is running on a device.',
-            commands: ['AT%XMODEMUUID'] as const,
+            commands: ['AT%XMODEMUUID'],
         },
         'CURRENT BAND': {
             value: currentBand ?? 'Unknown',
             description:
                 'The band, or current band, refers to the specific frequency range within the electromagnetic spectrum that a mobile device is using to communicate with the cellular network. Knowing the current band can help a user ensure that their device is operating on the appropriate network for their location and service provider.',
-            commands: ['AT%XCBAND', 'AT%CONEVAL'] as const,
+            commands: ['AT%XCBAND', 'AT%CONEVAL'],
         },
         'SUPPORTED BANDS': {
             value: availableBands
@@ -77,22 +77,24 @@ export default () => {
                 : 'Unknown',
             description:
                 'The Supported Bands returned by the AT command %XCBAND=? represents a list of the different frequency bands that the mobile device is capable of using for its cellular communication. This information can be useful for determining which networks and service providers are compatible with the device, as well as for troubleshooting connection issues related to network compatibility.',
-            commands: ['AT%XCBAND'] as const,
+            commands: ['AT%XCBAND'],
         },
         'DATA PROFILE': {
             value: dataProfile ?? 'Unknown',
-
-            commands: ['AT%XDATAPRFL'] as const,
+            description: 'A data profile specifies the settings for a cellular data connection, such as the APN (Access Point Name), authentication settings, and other parameters',
+            commands: ['AT%XDATAPRFL'],
         },
         MANUFACTURER: {
             value: manufacturer ?? 'Unknown',
-            commands: ['AT+CGMI'] as const,
+            description: 'Identification of the manufacturer of the modem.',
+            commands: ['AT+CGMI'],
         },
         'PREFERRED BEARER': {
             value: parsePreferredBearer(modemSystemPreference),
-            commands: ['AT%XSYSTEMMODE'] as const,
+            description: 'The preferred bearer is the preferred network type for the modem. The preferred bearer can be set to LTE-M or NB-IoT, please read the documentation for more information.',
+            commands: ['AT%XSYSTEMMODE'],
         },
-        'ENABLED BEARER': {
+        'SUPPORTED BEARERS': {
             value: haveRecievedModemSupport
                 ? parseSupportedValue([
                       modemSupportLTEM ?? false,
@@ -100,28 +102,34 @@ export default () => {
                       modemSupportGNSS ?? false,
                   ])
                 : 'Unknown',
-            commands: ['AT%XSYSTEMMODE'] as const,
+            description: 'List of supported bearers. Possible bearers are LTE-M, NB-IoT and GNSS.',
+            commands: ['AT%XSYSTEMMODE'],
         },
         'FUNCTIONAL MODE': {
             value: parseFunctionalMode(functionalMode),
-            commands: ['AT+CFUN'] as const,
-        },
-        // Should be removed:
-        'LTE-M TX REDUCTION': {
-            value: formatMode(ltemTXReduction) ?? 'Unknown',
-            commands: [] as const,
-        },
-        'NB-IOT TX REDUCTION': {
-            value: formatMode(nbiotTXReduction) ?? 'Unknown',
-            commands: [] as const,
+            description: 'The functional mode of the modem. E.g. Power off, Normal, Offline/Flight mode, etc.',
+            commands: ['AT+CFUN'],
         },
         'TRACE STATE OPERATION': {
             value: xModemTraceOperation ?? 'Unknown',
+            description: 'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
             commands: ['AT%XMODEMTRACE'],
         },
         'TRACE STATE SET ID': {
             value: xModemTraceSetID ?? 'Unknown',
+            description: 'The Trace State Operation of the modem. Recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
             commands: ['AT%XMODEMTRACE'],
+        },
+        // Should be removed:
+        'LTE-M TX REDUCTION': {
+            value: formatMode(ltemTXReduction) ?? 'Unknown',
+            description: 'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+            commands: ['AT%XEMPR'],
+        },
+        'NB-IOT TX REDUCTION': {
+            value: formatMode(nbiotTXReduction) ?? 'Unknown',
+            description: 'The Nordic-proprietary %XEMPR command allows to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+            commands: ['AT%XEMPR'],
         },
     };
     return (
