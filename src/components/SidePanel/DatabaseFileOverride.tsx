@@ -5,9 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     Dropdown,
     DropdownItem,
@@ -16,31 +14,17 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import {
+    setSelectedTraceDatabaseFromVersion,
+    traceFiles,
+    Version,
+} from '../../features/tracing/traceDatabase';
+import {
+    getManualDbFilePath,
     resetManualDbFilePath,
     setManualDbFilePath,
 } from '../../features/tracing/traceSlice';
 import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
-import { autoDetectDbRootFolder } from '../../utils/store';
-
-type Version = {
-    database: {
-        path: string;
-        sha256: string;
-    };
-    uuid: string;
-    version: string;
-};
-
-export const traceFiles = () =>
-    readFile(join(autoDetectDbRootFolder(), 'config.json'), {
-        encoding: 'utf-8',
-    })
-        .then(JSON.parse)
-        .then(
-            config =>
-                config.firmwares.devices[0].versions.reverse() as Version[]
-        );
 
 const autoSelectItem = {
     label: 'Autoselect',
@@ -54,6 +38,7 @@ const selectFromDiskItem = {
 
 export default () => {
     const dispatch = useDispatch();
+    const manualDbFilePath = useSelector(getManualDbFilePath);
     const [versions, setVersions] = useState<Version[]>([]);
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const items = [
@@ -66,8 +51,23 @@ export default () => {
     ];
 
     useEffect(() => {
-        traceFiles().then(setVersions);
-    }, []);
+        (async () => {
+            const files = await traceFiles();
+            const selectedFile = files.find(file =>
+                manualDbFilePath?.includes(
+                    // eslint-disable-next-line no-template-curly-in-string
+                    file.database.path.replace('${root}', '')
+                )
+            );
+            setVersions(files);
+            if (selectedFile) {
+                setSelectedItem({
+                    label: selectedFile?.version,
+                    value: selectedFile?.uuid,
+                });
+            }
+        })();
+    }, [manualDbFilePath]);
 
     const onSelect = (item: DropdownItem) => {
         setSelectedItem(item);
@@ -84,14 +84,7 @@ export default () => {
             dispatch(resetManualDbFilePath());
             logger.info(`Database path successfully reset to default value`);
         } else {
-            const selectedVersion = versions.find(
-                version => version.uuid === item.value
-            );
-            const file = join(
-                autoDetectDbRootFolder(),
-                selectedVersion?.database.path.replace(`\${root}`, '') ?? ''
-            );
-            dispatch(setManualDbFilePath(file));
+            dispatch(setSelectedTraceDatabaseFromVersion(item.label));
         }
     };
 

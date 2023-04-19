@@ -252,7 +252,7 @@ export const fullReport = [...ltemReport, ...nbIotReport];
 const atGetModemVersion = 'AT+CGMR';
 
 export const getModemVersionFromResponse = (response: string) => {
-    const versionRegex = /(?<=_)\d+\.\d+\.\d+/;
+    const versionRegex = /(\d+\.\d+\.\d+)(-FOTA)?/;
     const version = response.match(versionRegex);
     return version ? version[0] : null;
 };

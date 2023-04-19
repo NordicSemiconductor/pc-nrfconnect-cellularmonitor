@@ -12,7 +12,6 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
-import { traceFiles } from '../../components/SidePanel/DatabaseFileOverride';
 import EventAction from '../../usageDataActions';
 import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
@@ -25,6 +24,7 @@ import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
+import { setSelectedTraceDatabaseFromVersion } from './traceDatabase';
 import {
     notifyListeners,
     Packet,
@@ -134,21 +134,13 @@ export const startTrace =
             getManualDbFilePath(state) == null &&
             !(formats.length === 1 && formats[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
-        if (uartPort != null && isDetectingTraceDb) {
+        if (uartPort && isDetectingTraceDb) {
             const version = await detectDatabaseVersion(uartPort);
-            if (version != null) {
-                const matchedVersion = (await traceFiles()).find(
-                    ({ version: v }) => v === version
-                );
 
-                const matchedDatabasePath = matchedVersion?.uuid ?? null;
-                if (matchedDatabasePath != null) {
-                    dispatch(setManualDbFilePath(matchedDatabasePath));
-                    logger.info(
-                        `Detected trace database version ${version} located at  ${matchedDatabasePath}`
-                    );
-                    isDetectingTraceDb = false;
-                }
+            if (version) {
+                dispatch(setSelectedTraceDatabaseFromVersion(version));
+                logger.info(`Detected trace database version ${version}`);
+                isDetectingTraceDb = false;
             }
         }
 
