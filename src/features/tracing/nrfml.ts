@@ -12,9 +12,11 @@ import {
 import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
+import { traceFiles } from '../../components/SidePanel/DatabaseFileOverride';
 import EventAction from '../../usageDataActions';
 import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
+import { detectDatabaseVersion } from '../tracingEvents/at/recommeneded';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
@@ -31,6 +33,8 @@ import {
 import {
     getManualDbFilePath,
     getSerialPort,
+    getUartSerialPort,
+    setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
@@ -111,23 +115,42 @@ export const convertTraceFile =
 
 export const startTrace =
     (sinks: TraceFormat[]): TAction =>
-    (dispatch, getState) => {
+    async (dispatch, getState) => {
         const formats = [...sinks];
         const state = getState();
-        const port = getSerialPort(state);
-        if (!port) {
+        const uartPort = getUartSerialPort(state);
+        const tracePort = getSerialPort(state);
+        if (!tracePort) {
             logger.error('Select serial port to start tracing');
             return;
         }
         const source: SourceFormat = {
             type: 'device',
-            port,
+            port: tracePort,
             startTime: new Date(),
         };
 
-        const isDetectingTraceDb =
+        let isDetectingTraceDb =
             getManualDbFilePath(state) == null &&
             !(formats.length === 1 && formats[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
+
+        if (uartPort != null && isDetectingTraceDb) {
+            const version = await detectDatabaseVersion(uartPort);
+            if (version != null) {
+                const matchedVersion = (await traceFiles()).find(
+                    ({ version: v }) => v === version
+                );
+
+                const matchedDatabasePath = matchedVersion?.uuid ?? null;
+                if (matchedDatabasePath != null) {
+                    dispatch(setManualDbFilePath(matchedDatabasePath));
+                    logger.info(
+                        `Detected trace database version ${version} located at  ${matchedDatabasePath}`
+                    );
+                    isDetectingTraceDb = false;
+                }
+            }
+        }
 
         const selectedTsharkPath = getTsharkPath(getState());
         if (findTshark(selectedTsharkPath) && !formats.includes('tshark')) {

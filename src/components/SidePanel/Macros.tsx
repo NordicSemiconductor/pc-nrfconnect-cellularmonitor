@@ -10,7 +10,6 @@ import { Button, SerialPort } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 import {
-    fullReport,
     recommendedAt,
     sendMacros,
 } from '../../features/tracingEvents/at/recommeneded';

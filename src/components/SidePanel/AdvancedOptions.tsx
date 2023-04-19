@@ -19,7 +19,7 @@ export default () => {
     const device = useSelector(selectedDevice);
     const serialPort = useSelector(getUartSerialPort);
 
-    // if (!device) return null;
+    if (!device) return null;
 
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>

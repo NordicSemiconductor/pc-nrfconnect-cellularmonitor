@@ -32,7 +32,7 @@ type Version = {
     version: string;
 };
 
-const traceFiles = () =>
+export const traceFiles = () =>
     readFile(join(autoDetectDbRootFolder(), 'config.json'), {
         encoding: 'utf-8',
     })

@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { useSelector } from 'react-redux';
 import { logger, SerialPort } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
 
 import { RootState } from '../../../appReducer';
+import { TAction } from '../../../utils/thunk';
 import { getUartSerialPort } from '../../tracing/traceSlice';
 import { documentationMap } from './index';
 
@@ -246,3 +248,50 @@ export const nbIotReport = [
 ];
 
 export const fullReport = [...ltemReport, ...nbIotReport];
+
+const atGetModemVersion = 'AT+CGMR';
+
+export const getModemVersionFromResponse = (response: string) => {
+    const versionRegex = /(?<=_)\d+\.\d+\.\d+/;
+    const version = response.match(versionRegex);
+    return version ? version[0] : null;
+};
+
+export const detectDatabaseVersion = async (serialPort: SerialPort) => {
+    const decoder = new TextDecoder();
+    let response = '';
+
+    const responsePromise = new Promise<string | null>(resolve => {
+        const handler = serialPort.onData(data => {
+            response += decoder.decode(data);
+            const responseComplete =
+                (response.endsWith('\r\n') && response.includes('OK')) ||
+                response.includes('ERROR');
+
+            if (responseComplete) {
+                if (response.includes('ERROR')) {
+                    logger.warn(
+                        `Error when getting modem version: "${response}"`
+                    );
+                    clearTimeout(timeout);
+                    resolve(null);
+                } else {
+                    clearTimeout(timeout);
+                    resolve(getModemVersionFromResponse(response));
+                }
+            }
+        });
+        const timeout = setTimeout(() => {
+            handler();
+            logger.warn(
+                'Timed out while getting modem version from AT command'
+            );
+            resolve(null);
+        }, 1500);
+    });
+
+    serialPort.write(`${atGetModemVersion}\r\n`);
+
+    const version = await responsePromise;
+    return version;
+};
