@@ -14,9 +14,9 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import {
+    Database,
+    databases,
     setSelectedTraceDatabaseFromVersion,
-    traceFiles,
-    Version,
 } from '../../features/tracing/traceDatabase';
 import {
     getManualDbFilePath,
@@ -39,7 +39,7 @@ const selectFromDiskItem = {
 export default () => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
-    const [versions, setVersions] = useState<Version[]>([]);
+    const [versions, setVersions] = useState<Database[]>([]);
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const items = [
         autoSelectItem,
@@ -52,11 +52,11 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            const files = await traceFiles();
+            const files = await databases();
             const selectedFile = files.find(file =>
                 manualDbFilePath?.includes(
                     // eslint-disable-next-line no-template-curly-in-string
-                    file.database.path.replace('${root}', '')
+                    file.path.replace('${root}', '')
                 )
             );
             setVersions(files);
