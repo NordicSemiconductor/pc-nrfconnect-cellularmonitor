@@ -4,164 +4,124 @@
         "devices": [
             {
                 "type": "nRF9160",
-                "versions": [
+                "databases": [
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.1.4_trace-db.json",
-                            "sha256": "7cf0d30183787dcc3eb3e76885092ed81c725235ef907b74e28c942d720d120c"
-                        },
+                        "path": "${root}mfw_nrf9160_1.1.4_trace-db.json",
+                        "sha256": "7cf0d30183787dcc3eb3e76885092ed81c725235ef907b74e28c942d720d120c",
                         "uuid": "4325d595-7b69-4474-ba39-9c177930aac3",
                         "version": "1.1.4"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.1.4-FOTA-TEST_trace-db.json",
-                            "sha256": "d196548c0cf96e1b58b5a23e7e010463071a91a24a440b508e34321926148359"
-                        },
+                        "path": "${root}mfw_nrf9160_1.1.4-FOTA-TEST_trace-db.json",
+                        "sha256": "d196548c0cf96e1b58b5a23e7e010463071a91a24a440b508e34321926148359",
                         "uuid": "9e65fb58-aaa2-4e69-b918-c332ab857854",
                         "version": "1.1.4-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.1.5_trace-db.json",
-                            "sha256": "6735d77f81546d0e485d664bd7a1545e0c29e62f17338ae1559841031a58ad3e"
-                        },
+                        "path": "${root}mfw_nrf9160_1.1.5_trace-db.json",
+                        "sha256": "6735d77f81546d0e485d664bd7a1545e0c29e62f17338ae1559841031a58ad3e",
                         "uuid": "2299293a-194b-40d5-a0e7-9cc7a27b3c6d",
                         "version": "1.1.5"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.1.5-FOTA-TEST_trace-db.json",
-                            "sha256": "fc2d2989afb1bae7426ea06093587d34f14a7f75feaee8c8ad21dfc32eec92d2"
-                        },
+                        "path": "${root}mfw_nrf9160_1.1.5-FOTA-TEST_trace-db.json",
+                        "sha256": "fc2d2989afb1bae7426ea06093587d34f14a7f75feaee8c8ad21dfc32eec92d2",
                         "uuid": "4e9ad958-2f51-4269-9732-5d835f71ce0c",
                         "version": "1.1.5-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.3_trace-db.json",
-                            "sha256": "57785f808d7af8befef2f25c97d4768a2b939be2a04aa6b5cd5ad812cbc24275"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.3_trace-db.json",
+                        "sha256": "57785f808d7af8befef2f25c97d4768a2b939be2a04aa6b5cd5ad812cbc24275",
                         "uuid": "0191538f-d3a5-4fe9-8f54-ba7cad9460c0",
                         "version": "1.2.3"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.3-FOTA-TEST_trace-db.json",
-                            "sha256": "8b6934ac312e2e6fa5311b03b2d6519900b0be95d2a61e5e815d22b79cb787ab"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.3-FOTA-TEST_trace-db.json",
+                        "sha256": "8b6934ac312e2e6fa5311b03b2d6519900b0be95d2a61e5e815d22b79cb787ab",
                         "uuid": "ab0fdbbb-2dba-4817-b0cd-013edfa9215b",
                         "version": "1.2.3-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.7_trace-db.json",
-                            "sha256": "51031ee25d360e65e33dd0c77c6726ba7a971661e30eeee6a332dfd0f978f8f8"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.7_trace-db.json",
+                        "sha256": "51031ee25d360e65e33dd0c77c6726ba7a971661e30eeee6a332dfd0f978f8f8",
                         "uuid": "20059fb4-0ad6-4128-8e96-f3d348e219c8",
                         "version": "1.2.7"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.7-FOTA-TEST_trace-db.json",
-                            "sha256": "27925c737b6252692089c21318c86fe5faf81c30180eb15efa1b34b13d4527df"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.7-FOTA-TEST_trace-db.json",
+                        "sha256": "27925c737b6252692089c21318c86fe5faf81c30180eb15efa1b34b13d4527df",
                         "uuid": "fa59a46f-0681-41e6-b2b6-1d5bd7556f27",
                         "version": "1.2.7-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.8_trace-db.json",
-                            "sha256": "8a9ed056789428c9c8d72e044f8d81d727af3ba2b96621e356ac488ef48e73a4"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.8_trace-db.json",
+                        "sha256": "8a9ed056789428c9c8d72e044f8d81d727af3ba2b96621e356ac488ef48e73a4",
                         "uuid": "18ab15ef-5620-4c18-b171-e424f7303683",
                         "version": "1.2.8"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.2.8-FOTA-TEST_trace-db.json",
-                            "sha256": "b1b2607e221ef39ef36ee31812e092a37fd0f8d80da3fa48eec9e110d7a43b3e"
-                        },
+                        "path": "${root}mfw_nrf9160_1.2.8-FOTA-TEST_trace-db.json",
+                        "sha256": "b1b2607e221ef39ef36ee31812e092a37fd0f8d80da3fa48eec9e110d7a43b3e",
                         "uuid": "a6436dac-ee92-413d-a33a-b41d042b1d0e",
                         "version": "1.2.8-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.0_trace-db.json",
-                            "sha256": "0404d9d7bab3ecc75b9fdaa8204752f17c6136eebc17232cb413a620fefcc44c"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.0_trace-db.json",
+                        "sha256": "0404d9d7bab3ecc75b9fdaa8204752f17c6136eebc17232cb413a620fefcc44c",
                         "uuid": "e7f4d5d4-f607-43a6-b383-cfdb6d725c82",
                         "version": "1.3.0"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.0-FOTA-TEST_trace-db.json",
-                            "sha256": "f4d48cb41b55721583afb603801870bab9f9e068c002e3d56eb756bdaf53c196"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.0-FOTA-TEST_trace-db.json",
+                        "sha256": "f4d48cb41b55721583afb603801870bab9f9e068c002e3d56eb756bdaf53c196",
                         "uuid": "553d5734-9fbd-47de-8c32-86a37cd0ea49",
                         "version": "1.3.0-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.1_trace-db.json",
-                            "sha256": "a808dd8d8b2bfb7efc36c6a9df3d89c12049d3041cf0bd5598b113ae41fd1921"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.1_trace-db.json",
+                        "sha256": "a808dd8d8b2bfb7efc36c6a9df3d89c12049d3041cf0bd5598b113ae41fd1921",
                         "uuid": "6100e43d-e06f-4017-9a5c-11550b8cc347",
                         "version": "1.3.1"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.1-FOTA-TEST_trace-db.json",
-                            "sha256": "2f38c379c575b4604b3e205e2ee4f1b8a049fc3037680a19ec98407ab1cd1105"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.1-FOTA-TEST_trace-db.json",
+                        "sha256": "2f38c379c575b4604b3e205e2ee4f1b8a049fc3037680a19ec98407ab1cd1105",
                         "uuid": "492e44a8-1e75-48dc-843e-ffdc314af1aa",
                         "version": "1.3.1-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.2_trace-db.json",
-                            "sha256": "c42967e63bd87ac086877f7a961928390fae996e183b74bf39e3d0d49c2b95fb"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.2_trace-db.json",
+                        "sha256": "c42967e63bd87ac086877f7a961928390fae996e183b74bf39e3d0d49c2b95fb",
                         "uuid": "c816a44f-c0da-43f3-a72a-92102cd8e13b",
                         "version": "1.3.2"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.2-FOTA-TEST_trace-db.json",
-                            "sha256": "6d63c365feffadc477721be1ed24c37281afea3e493e9f432d2bd487d6644bc3"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.2-FOTA-TEST_trace-db.json",
+                        "sha256": "6d63c365feffadc477721be1ed24c37281afea3e493e9f432d2bd487d6644bc3",
                         "uuid": "4ccd5f94-3209-4a7b-9062-6b7dc75db31a",
                         "version": "1.3.2-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.3_trace-db.json",
-                            "sha256": "ca5c1bc0c0f084db24ee4cd68c7de6ad1b031083a60de2b34cda2757e78da7fc"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.3_trace-db.json",
+                        "sha256": "ca5c1bc0c0f084db24ee4cd68c7de6ad1b031083a60de2b34cda2757e78da7fc",
                         "uuid": "84f941be-2a17-4f30-9809-ae96c1deba40",
                         "version": "1.3.3"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.3-FOTA-TEST_trace-db.json",
-                            "sha256": "1c2c6491b9b0f4c9b07213e2cfb38b25092a3256e646163d46c7795979e64979"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.3-FOTA-TEST_trace-db.json",
+                        "sha256": "1c2c6491b9b0f4c9b07213e2cfb38b25092a3256e646163d46c7795979e64979",
                         "uuid": "9cedd460-5c17-4c00-888b-058f0645a05f",
                         "version": "1.3.3-FOTA"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.4_trace-db.json",
-                            "sha256": "fd6ffe8516b7a5b943e62cc6fe55059ba7622f32575400af01627994d28815a4"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.4_trace-db.json",
+                        "sha256": "fd6ffe8516b7a5b943e62cc6fe55059ba7622f32575400af01627994d28815a4",
                         "uuid": "f6e3bd7b-7df3-4b88-b43a-a7a9766a04ad",
                         "version": "1.3.4"
                     },
                     {
-                        "database": {
-                            "path": "${root}mfw_nrf9160_1.3.4-FOTA-TEST_trace-db.json",
-                            "sha256": "43eb49138a94261cbff5505bc18b4d8e8b68a39fe255c71b833a96741dba9124"
-                        },
+                        "path": "${root}mfw_nrf9160_1.3.4-FOTA-TEST_trace-db.json",
+                        "sha256": "43eb49138a94261cbff5505bc18b4d8e8b68a39fe255c71b833a96741dba9124",
                         "uuid": "ec4458cc-1df7-41b1-9bee-729ccc5d5d02",
                         "version": "1.3.4-FOTA"
                     }

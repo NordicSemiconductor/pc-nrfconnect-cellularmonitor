@@ -250,7 +250,9 @@ export default () => {
     // Handle PDN state
     const [pdnFailed, setPdnFailed] = useState(false);
     const pdnEnabled =
-        lteEnabled && accessPointNames && accessPointNames.length > 0; // the non-empty accessPointNames indicates PDN enabled
+        lteEnabled &&
+        accessPointNames &&
+        Object.keys(accessPointNames).length > 0; // the non-empty accessPointNames indicates PDN enabled
     let pdnState = PDN_DEFAULT_STATE;
     if (lteEnabled && !pdnEnabled) pdnState = PDN_LOADING_STATE;
     if (lteEnabled && pdnEnabled) pdnState = PDN_SUCCESS_STATE;

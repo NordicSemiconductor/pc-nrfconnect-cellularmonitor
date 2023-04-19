@@ -6,23 +6,34 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
+import { Button, CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
-import DatabaseFileOverride from './DatabaseFileOverride';
-import { LoadTraceFile } from './LoadTraceFile';
-import { Macros } from './Macros';
-import Serialports from './Serialports';
-import TraceConverter from './Tracing/TraceConverter';
+import { getUartSerialPort } from '../../features/tracing/traceSlice';
+import {
+    fullReport,
+    sendMacros,
+} from '../../features/tracingEvents/at/recommeneded';
 
 export default () => {
     const device = useSelector(selectedDevice);
+    const serialPort = useSelector(getUartSerialPort);
 
     if (!device) return null;
 
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
             <FlashSampleModal />
+            {serialPort != null ? (
+                <Button
+                    className="w-100"
+                    variant="secondary"
+                    onClick={() => sendMacros(serialPort, fullReport)}
+                    title={`Send AT commands over port ${serialPort.path}.\nRemember to start tracing in order to generate the report.`}
+                >
+                    Run Full Network Test
+                </Button>
+            ) : null}
         </CollapsibleGroup>
     );
 };
