@@ -26,21 +26,23 @@ export const recommendedAT: recommendedAT = {
     'AT%XDATAPRFL': 'AT%XDATAPRFL?',
     'AT+CEREG': 'AT+CEREG?',
     'AT+CFUN': 'AT+CFUN?',
-    'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
     // TODO: write processor for XCONNSTAT
     // 'AT+XCONNSTAT': 'AT+XCONNSTAT?',
-    'AT%CESQ': 'AT%CESQ?',
-    'AT+CSCON': 'AT+CSCON?',
+    'AT%CESQ': ['AT%CESQ=1', 'AT%CESQ?'],
+    'AT+CSCON': ['AT+CSCON=1', 'AT+CSCON?'],
     'AT+CPAS': 'AT+CPAS',
     'AT+CEDRXRDP': 'AT+CEDRXRDP',
     'AT%XTIME': 'AT%XTIME=1',
     'AT%CONEVAL': 'AT%CONEVAL',
-    'AT%XCBAND': 'AT%XCBAND',
+    'AT%XCBAND': ['AT%XCBAND?', 'AT%XCBAND'],
     'AT%HWVERSION': 'AT%HWVERSION',
     'AT%XMODEMTRACE': 'AT%XMODEMTRACE=1,2',
     'AT%XSYSTEMMODE': 'AT%XSYSTEMMODE?',
 
     'AT%XEMPR': 'AT%XEMPR?',
+
+    // Should be last command, since AT+COPS=? is slow
+    'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
 };
 
 export const sendRecommendedCommand =
@@ -62,26 +64,19 @@ export const sendRecommendedCommand =
         }
     };
 
-export const recommendedAt = [
+const recommended = [
     'AT+CFUN=1',
     'AT+CGSN=1',
-    'AT+CGMI',
     'AT+CGMM',
-    'AT+CGMR',
     'AT+CEMODE?',
-    'AT%XCBAND=?',
     'AT+CMEE?',
     'AT+CNEC?',
     'AT+CGEREP?',
     'AT+CIND=1,1,1',
     'AT+CEREG=5',
-    'AT+CEREG?',
     'AT+COPS=3,2',
-    'AT+COPS?',
-    'AT%XCBAND',
     'AT+CGDCONT?',
     'AT+CGACT?',
-    'AT%CESQ=1',
     'AT+CESQ',
     'AT%XSIM=1',
     'AT%XSIM?',
@@ -94,19 +89,17 @@ export const recommendedAt = [
     'AT%MDMEV=1',
     'AT%CESQ=1',
     'AT+CGEREP=1',
-    'AT%XTIME=1',
-    'AT+CSCON=1',
     'AT%XPOFWARN=1,30',
     'AT%XVBATLVL=1',
     'AT%XMONITOR',
-    'AT%CONEVAL',
     'AT%XCONNSTAT=1',
     'AT#XPING="www.google.com",45,5000,5,1000',
     'AT%XCONNSTAT?',
-    'AT%HWVERSION',
-    'AT%XMODEMUUID',
-    'AT%XDATAPRFL?',
-    'AT%XSYSTEMMODE?',
+];
+
+export const recommendedAt = [
+    ...recommended,
+    ...Object.values(recommendedAT).flat(),
 ];
 
 // Todo: need to set mode in store, in order to not always check for mode
