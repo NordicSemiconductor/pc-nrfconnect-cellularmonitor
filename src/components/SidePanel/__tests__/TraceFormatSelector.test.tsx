@@ -13,7 +13,6 @@ import {
     render,
     screen,
 } from '../../../utils/testUtils';
-import { TraceCollectorSidePanel } from '../SidePanel';
 import TraceFormatSelector from '../Tracing/TraceFormatSelector';
 
 jest.mock('../../../features/wireshark/wireshark');

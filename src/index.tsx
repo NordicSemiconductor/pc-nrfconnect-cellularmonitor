@@ -8,7 +8,6 @@ import React from 'react';
 import { App, FeedbackPane } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
-import Dashboard from './components/Dashboard/Dashboard';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
 import EventChartDashboard from './components/EventChart/Dashboard';

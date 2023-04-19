@@ -20,7 +20,6 @@ import {
     logger,
     selectedDevice,
     setWaitForDevice,
-    Spinner,
 } from 'pc-nrfconnect-shared';
 
 import { setUartSerialPort } from '../tracing/traceSlice';
@@ -196,7 +195,10 @@ const ProgramSample = ({
     const isMcuBoot = isThingy91(device);
     return (
         <>
-            <Dialog.Header title={`Program ${sample.title}`} />
+            <Dialog.Header
+                title={`Program ${sample.title}`}
+                showSpinner={isProgramming || waitingForReconnect}
+            />
             <Dialog.Body>
                 <p>This will program the following:</p>
                 {isMcuBoot && (
@@ -253,10 +255,8 @@ const ProgramSample = ({
                 {waitingForReconnect && device && (
                     <span className="text-muted">
                         Waiting for device to reconnect
-                        <Spinner />
                     </span>
                 )}
-                {isProgramming && <Spinner />}
 
                 <DialogButton
                     onClick={() => selectSample(undefined)}

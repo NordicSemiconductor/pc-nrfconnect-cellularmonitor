@@ -22,7 +22,8 @@ export const functionalMode = {
     OFFLINE_MODE_UICC: 44,
 };
 
-export type FunctionalMode = typeof functionalMode[keyof typeof functionalMode];
+export type FunctionalMode =
+    (typeof functionalMode)[keyof typeof functionalMode];
 
 let requestedMode: FunctionalMode;
 

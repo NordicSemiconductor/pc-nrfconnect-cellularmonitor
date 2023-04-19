@@ -19,7 +19,7 @@ export interface ParsedPacket {
     command?: string;
     requestType?: RequestType;
     payload: string | undefined;
-    status?: typeof validStatus[number];
+    status?: (typeof validStatus)[number];
 }
 
 const operatorToRequestType = (operator?: string) => {

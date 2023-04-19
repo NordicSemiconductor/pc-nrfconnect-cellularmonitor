@@ -155,7 +155,7 @@ export const initialState = (): State =>
         {} as State
     );
 
-type ProcessorCommands = typeof processors[number]['command'];
+type ProcessorCommands = (typeof processors)[number]['command'];
 
 export type ATCommands = ProcessorCommands extends `${infer CMD}`
     ? `AT${CMD}`

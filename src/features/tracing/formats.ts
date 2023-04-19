@@ -7,7 +7,7 @@
 import EventAction from '../../usageDataActions';
 
 export const EVENT_TYPES = ['AT', 'RRC', 'NAS', 'IP'] as const;
-export type eventType = typeof EVENT_TYPES[number];
+export type eventType = (typeof EVENT_TYPES)[number];
 export const EventColours = {
     AT: {
         light: '#C8E6C9',
@@ -27,7 +27,7 @@ export const EventColours = {
     },
 } as { [K in eventType]: { light: string; dark: string } };
 export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live', 'tshark'] as const;
-export type TraceFormat = typeof ALL_TRACE_FORMATS[number];
+export type TraceFormat = (typeof ALL_TRACE_FORMATS)[number];
 
 export const sinkEvent = (format: TraceFormat) =>
     ({
