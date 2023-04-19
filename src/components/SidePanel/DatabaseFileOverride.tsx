@@ -15,7 +15,7 @@ import {
 
 import {
     Database,
-    databases,
+    getDatabases,
     setSelectedTraceDatabaseFromVersion,
 } from '../../features/tracing/traceDatabase';
 import {
@@ -39,35 +39,35 @@ const selectFromDiskItem = {
 export default () => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
-    const [versions, setVersions] = useState<Database[]>([]);
+    const [databases, setDatabases] = useState<Database[]>([]);
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const items = [
         autoSelectItem,
         selectFromDiskItem,
-        ...versions.map(version => ({
-            label: version.version,
-            value: version.uuid,
+        ...databases.map(database => ({
+            label: database.version,
+            value: database.uuid,
         })),
     ];
 
     useEffect(() => {
-        (async () => {
-            const files = await databases();
-            const selectedFile = files.find(file =>
-                manualDbFilePath?.includes(
-                    // eslint-disable-next-line no-template-curly-in-string
-                    file.path.replace('${root}', '')
-                )
-            );
-            setVersions(files);
-            if (selectedFile) {
-                setSelectedItem({
-                    label: selectedFile?.version,
-                    value: selectedFile?.uuid,
-                });
-            }
-        })();
-    }, [manualDbFilePath]);
+        getDatabases().then(setDatabases);
+    }, []);
+
+    useEffect(() => {
+        const selectedDatabase = databases.find(file =>
+            manualDbFilePath?.includes(
+                // eslint-disable-next-line no-template-curly-in-string
+                file.path.replace('${root}', '')
+            )
+        );
+        if (selectedDatabase) {
+            setSelectedItem({
+                label: selectedDatabase?.version,
+                value: selectedDatabase?.uuid,
+            });
+        }
+    }, [databases, manualDbFilePath]);
 
     const onSelect = (item: DropdownItem) => {
         setSelectedItem(item);

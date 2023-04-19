@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
@@ -13,7 +19,7 @@ export type Database = {
 };
 
 let databasesCache: Database[];
-export const databases = async () => {
+export const getDatabases = async () => {
     if (!databasesCache) {
         const json = await readFile(
             join(autoDetectDbRootFolder(), 'config.json'),
@@ -23,7 +29,7 @@ export const databases = async () => {
         );
         const config = JSON.parse(json);
         databasesCache =
-            config.firmwares.devices[0].versions.reverse() as Database[];
+            config.firmwares.devices[0].databases.reverse() as Database[];
     }
 
     return databasesCache;
@@ -31,7 +37,7 @@ export const databases = async () => {
 
 export const setSelectedTraceDatabaseFromVersion =
     (version: string) => async (dispatch: TDispatch) => {
-        const versions = await databases();
+        const versions = await getDatabases();
         const selectedVersion = versions.find(v => v.version === version);
         const file = join(
             autoDetectDbRootFolder(),
