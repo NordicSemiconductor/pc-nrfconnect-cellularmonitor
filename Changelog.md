@@ -23,6 +23,7 @@
 -   Macro button, which sends recommended AT commands, in order to read state
     from device.
 -   Programming sample apps from the sidebar.
+-   Macro to generate Network Report under Advanced Options
 
 ### Changed
 

@@ -20,24 +20,14 @@ export const Macros = () => {
 
     if (serialPort != null) {
         return (
-            <>
-                <Button
-                    className="w-100"
-                    variant="secondary"
-                    onClick={() => sendMacros(serialPort, recommendedAt)}
-                    title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
-                >
-                    Run recommended AT commands
-                </Button>
-                <Button
-                    className="w-100"
-                    variant="secondary"
-                    onClick={() => sendMacros(serialPort, fullReport)}
-                    title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
-                >
-                    Run Full Network Test
-                </Button>
-            </>
+            <Button
+                className="w-100"
+                variant="secondary"
+                onClick={() => sendMacros(serialPort, recommendedAt)}
+                title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
+            >
+                Run recommended AT commands
+            </Button>
         );
     }
     return null;
