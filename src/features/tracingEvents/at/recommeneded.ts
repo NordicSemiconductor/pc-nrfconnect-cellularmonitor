@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { useSelector } from 'react-redux';
 import { logger, SerialPort } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
 
 import { RootState } from '../../../appReducer';
-import { TAction } from '../../../utils/thunk';
 import { getUartSerialPort } from '../../tracing/traceSlice';
 import { documentationMap } from './index';
 

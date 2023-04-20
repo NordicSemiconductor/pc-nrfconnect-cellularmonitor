@@ -30,10 +30,10 @@ export default () => {
     const mode = useSelector(getMode);
     return (
         <InfoDialog
-            isVisible={isVisible}
-            onClose={() => dispatch(setShowOptionsDialog(false))}
             title="Chart Options"
             headerIcon="cog"
+            isVisible={isVisible}
+            onHide={() => dispatch(setShowOptionsDialog(false))}
         >
             <Dialog.Body>
                 <StateSelector

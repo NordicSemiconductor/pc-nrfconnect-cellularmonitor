@@ -5,9 +5,8 @@
  */
 
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Spinner } from 'pc-nrfconnect-shared';
+import { Button, Dialog } from 'pc-nrfconnect-shared';
 
 import {
     getDetectingTraceDb,
@@ -21,18 +20,16 @@ export default () => {
     if (!detectingTraceDb) return null;
 
     return (
-        <Modal
-            show={detectingTraceDb}
-            backdrop="static"
+        <Dialog
+            isVisible
             size="lg"
             onHide={() => dispatch(setDetectingTraceDb(false))}
         >
-            <Modal.Header closeButton>
-                <Modal.Title data-testid="title">
-                    <h4>Detecting modem firmware version</h4>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+            <Dialog.Header
+                title="Detecting modem firmware version"
+                showSpinner
+            />
+            <Dialog.Body>
                 <p>
                     Starting trace and auto-detecting trace database for parsing
                     data. This might take some time.
@@ -52,9 +49,8 @@ export default () => {
                         the process is taking a long time.
                     </li>
                 </ul>
-            </Modal.Body>
-            <Modal.Footer>
-                <Spinner />
+            </Dialog.Body>
+            <Dialog.Footer>
                 &nbsp;
                 <Button
                     variant="secondary"
@@ -62,7 +58,7 @@ export default () => {
                 >
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </Dialog.Footer>
+        </Dialog>
     );
 };

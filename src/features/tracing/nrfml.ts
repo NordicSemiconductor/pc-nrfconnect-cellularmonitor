@@ -34,7 +34,6 @@ import {
     getManualDbFilePath,
     getSerialPort,
     getUartSerialPort,
-    setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,

@@ -94,14 +94,8 @@ export const processor: Processor<'+CPSMS'> = {
 };
 
 const parsePowerSavingModePayload = (payload: string) => {
-    const [
-        mode,
-        _ignored,
-        _ignored2,
-        T3412ExtendedBitmask,
-        T3324Bitmask,
-        ..._rest
-    ] = getParametersFromResponse(payload);
+    const [mode, , , T3412ExtendedBitmask, T3324Bitmask] =
+        getParametersFromResponse(payload);
 
     const result = {
         state: mode === '1' ? 'on' : 'off',

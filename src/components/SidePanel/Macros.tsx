@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, SerialPort } from 'pc-nrfconnect-shared';
+import { Button } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 import {

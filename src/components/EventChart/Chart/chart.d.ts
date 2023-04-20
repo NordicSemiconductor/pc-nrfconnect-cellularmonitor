@@ -4,19 +4,15 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { ChartType, ChartTypeRegistry } from 'chart.js';
-
 import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
 import { PanPluginOptions } from './state';
 
 declare module 'chart.js' {
-    interface PluginOptionsByType<TType extends ChartType> {
+    interface PluginOptionsByType {
         panZoom?: PanPluginOptions;
     }
 
-    interface Chart<
-        TType extends keyof ChartTypeRegistry = keyof ChartTypeRegistry
-    > {
+    interface Chart {
         zoom: (resolution: number, centerOffset: number) => void;
         addData: (data: TraceEvent[]) => void;
         resetChart: () => void;

@@ -11,7 +11,6 @@ import { getDashboardState } from '../../../features/tracingEvents/dashboardSlic
 import type {
     AcTState,
     NetworkStatusNotifications,
-    RRCState,
     SignalingConnectionStatusNotifications,
 } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
@@ -53,7 +52,6 @@ export default () => {
         plmnMode,
         plmnFormat,
         plmn,
-        availablePlmns,
         physicalCellID,
         band,
         conevalCoverageEnhancementLevel,
