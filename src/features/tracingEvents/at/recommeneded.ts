@@ -257,9 +257,9 @@ export const getModemVersionFromResponse = (response: string) => {
 
 export const detectDatabaseVersion = async (serialPort: SerialPort) => {
     const decoder = new TextDecoder();
-    let response = '';
 
     const responsePromise = new Promise<string | null>(resolve => {
+        let response = '';
         const handler = serialPort.onData(data => {
             response += decoder.decode(data);
             const responseComplete =
@@ -271,12 +271,12 @@ export const detectDatabaseVersion = async (serialPort: SerialPort) => {
                     logger.warn(
                         `Error when getting modem version: "${response}"`
                     );
-                    clearTimeout(timeout);
                     resolve(null);
                 } else {
-                    clearTimeout(timeout);
                     resolve(getModemVersionFromResponse(response));
                 }
+                handler();
+                clearTimeout(timeout);
             }
         });
         const timeout = setTimeout(() => {
