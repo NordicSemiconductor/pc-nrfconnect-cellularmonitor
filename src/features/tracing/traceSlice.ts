@@ -15,6 +15,7 @@ import {
     setManualDbFilePath as setPersistedManualDbFilePath,
     setTraceFormats as storeTraceFormats,
 } from '../../utils/store';
+import { ShellParser } from '../shell/shellParser';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 
@@ -33,6 +34,7 @@ interface TraceState {
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
     readonly uartSerialPort: SerialPort | null;
+    readonly shellParser: ShellParser | null;
     selectedFormats: TraceFormat[];
 }
 
@@ -46,6 +48,7 @@ const initialState = (): TraceState => ({
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
     uartSerialPort: null,
+    shellParser: null,
     selectedFormats: restoreTraceFormats(),
 });
 
@@ -117,6 +120,12 @@ const traceSlice = createSlice({
             }
             state.uartSerialPort = action.payload;
         },
+        setShellParser: (state, action: PayloadAction<ShellParser>) => {
+            state.shellParser = action.payload;
+        },
+        removeShellParser: state => {
+            state.shellParser = null;
+        },
         setTraceFormats: (state, action: PayloadAction<TraceFormat[]>) => {
             state.selectedFormats = action.payload;
             storeTraceFormats(action.payload);
@@ -151,6 +160,8 @@ export const getTraceTaskId = (state: RootState) => state.app.trace.taskId;
 export const getUartSerialPort = (state: RootState) =>
     state.app.trace.uartSerialPort;
 
+export const getShellParser = (state: RootState) => state.app.trace.shellParser;
+
 export const getTraceFormats = (state: RootState) =>
     state.app.trace.selectedFormats;
 
@@ -166,6 +177,8 @@ export const {
     resetManualDbFilePath,
     setDetectingTraceDb,
     setUartSerialPort,
+    setShellParser,
+    removeShellParser,
     setTraceFormats,
 } = traceSlice.actions;
 

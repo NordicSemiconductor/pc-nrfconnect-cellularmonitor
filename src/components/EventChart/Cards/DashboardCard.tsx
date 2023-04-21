@@ -16,10 +16,8 @@ import {
     ATCommands,
     documentationMap,
 } from '../../../features/tracingEvents/at';
-import {
-    recommendedAT,
-    sendRecommendedCommand,
-} from '../../../features/tracingEvents/at/recommeneded';
+import { recommendedAT } from '../../../features/tracingEvents/at/recommeneded';
+import { sendAT } from '../../../features/tracingEvents/at/sendCommand';
 import { TDispatch } from '../../../utils/thunk';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
@@ -177,18 +175,10 @@ const CardTooltip = ({
                                             marginRight: '8px',
                                             ...linkStyle,
                                         }}
-                                        onClick={() =>
-                                            dispatch(
-                                                sendRecommendedCommand(cmd)
-                                            )
-                                        }
+                                        onClick={() => dispatch(sendAT(cmd))}
                                         onKeyDown={event =>
                                             event.key === 'Enter'
-                                                ? dispatch(
-                                                      sendRecommendedCommand(
-                                                          cmd
-                                                      )
-                                                  )
+                                                ? dispatch(sendAT(cmd))
                                                 : null
                                         }
                                     >
