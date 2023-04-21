@@ -9,7 +9,7 @@ import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
 import { Device, getDeviceLibContext, logger } from 'pc-nrfconnect-shared';
 
-import { downloadedFilePath, Firmware, Sample } from './samples';
+import { downloadedFilePath, Firmware } from './samples';
 
 export type SampleProgress = {
     fw: Firmware;
@@ -26,12 +26,12 @@ export const is91DK = (device?: Device) =>
 
 export const flash = async (
     device: Device,
-    sample: Sample,
+    firmwares: Firmware[],
     progress: (progress: SampleProgress) => void
 ) => {
     try {
         // eslint-disable-next-line no-restricted-syntax
-        for (const fw of sample.fw) {
+        for (const fw of firmwares) {
             switch (fw.type) {
                 case 'Modem':
                     await programModem(device, fw, progress);
