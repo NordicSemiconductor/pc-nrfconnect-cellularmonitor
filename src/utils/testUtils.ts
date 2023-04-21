@@ -39,7 +39,7 @@ export const getNrfmlCallbacks = () =>
                     dataCallback,
                     jsonCallback,
                 });
-                return 1; // mocked task id
+                return 1n; // mocked task id
             }
         );
     });
