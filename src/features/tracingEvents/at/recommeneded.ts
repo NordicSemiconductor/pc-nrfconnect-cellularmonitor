@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger, SerialPort } from 'pc-nrfconnect-shared';
-import { TDispatch } from 'pc-nrfconnect-shared/src/state';
-
-import { RootState } from '../../../appReducer';
-import { getUartSerialPort } from '../../tracing/traceSlice';
 import { documentationMap } from './index';
 
 type recommendedAT = Partial<
@@ -45,25 +40,6 @@ export const recommendedAT: recommendedAT = {
     'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
 };
 
-export const sendRecommendedCommand =
-    (atCommand: keyof recommendedAT) =>
-    async (_dispatch: TDispatch, getState: () => RootState) => {
-        const uartSerialPort = getUartSerialPort(getState());
-
-        if (uartSerialPort && (await uartSerialPort.isOpen())) {
-            if (typeof recommendedAT[atCommand] === 'string') {
-                uartSerialPort.write(`${recommendedAT[atCommand]}\r`);
-                logger.info(`Sent AT command: ${atCommand}`);
-            } else {
-                sendMacros(
-                    uartSerialPort,
-                    recommendedAT[atCommand] as string[],
-                    true
-                );
-            }
-        }
-    };
-
 const recommended = [
     'AT+CFUN=1',
     'AT+CGSN=1',
@@ -96,76 +72,6 @@ const recommended = [
     'AT#XPING="www.google.com",45,5000,5,1000',
     'AT%XCONNSTAT?',
 ];
-
-export const recommendedAt = [
-    ...recommended,
-    ...Object.values(recommendedAT).flat(),
-];
-
-// Todo: need to set mode in store, in order to not always check for mode
-export const sendMacros = (
-    serialPort: SerialPort,
-    commands: string[],
-    mode?: boolean
-) => {
-    if (mode) {
-        subscribe(serialPort, '', commands);
-    } else {
-        testMode(serialPort, commands);
-    }
-};
-
-const testMode = (serialPort: SerialPort, commands: string[]) => {
-    const decoder = new TextDecoder();
-    let prefix = 'at ';
-    let response = '';
-
-    const testHandler = serialPort.onData(data => {
-        response += decoder.decode(data);
-        const doCompare = response.endsWith('\r\n');
-        if (doCompare) {
-            if (response.includes('ERROR')) {
-                prefix = '';
-            }
-
-            testHandler();
-            subscribe(serialPort, prefix, commands);
-        }
-    });
-
-    serialPort.write(`${prefix} AT\r\n`);
-};
-
-const subscribe = (
-    serialPort: SerialPort,
-    prefix: string,
-    commands: string[]
-) => {
-    const decoder = new TextDecoder();
-    let commandIndex = 0;
-    let response = '';
-
-    const handler = serialPort.onData(data => {
-        response += decoder.decode(data);
-        const doCompare = response.endsWith('\r\n');
-        const doContinue =
-            (doCompare && response.includes('OK')) ||
-            response.includes('ERROR');
-        if (doContinue) {
-            commandIndex += 1;
-
-            if (commandIndex < commands.length) {
-                serialPort.write(`${prefix}${commands[commandIndex]}\r\n`);
-            } else {
-                // Cleanup when all commands have been sent.
-                handler();
-            }
-            response = '';
-        }
-    });
-
-    serialPort.write(`${prefix}${commands[commandIndex]}\r\n`);
-};
 
 const analysisSetup = [
     // General Initial Setup
@@ -246,50 +152,7 @@ export const nbIotReport = [
 ];
 
 export const fullReport = [...ltemReport, ...nbIotReport];
-
-const atGetModemVersion = 'AT+CGMR';
-
-export const getModemVersionFromResponse = (response: string) => {
-    const versionRegex = /(\d+\.\d+\.\d+)(-FOTA)?/;
-    const version = response.match(versionRegex);
-    return version ? version[0] : null;
-};
-
-export const detectDatabaseVersion = async (serialPort: SerialPort) => {
-    const decoder = new TextDecoder();
-
-    const responsePromise = new Promise<string | null>(resolve => {
-        let response = '';
-        const handler = serialPort.onData(data => {
-            response += decoder.decode(data);
-            const responseComplete =
-                (response.endsWith('\r\n') && response.includes('OK')) ||
-                response.includes('ERROR');
-
-            if (responseComplete) {
-                if (response.includes('ERROR')) {
-                    logger.warn(
-                        `Error when getting modem version: "${response}"`
-                    );
-                    resolve(null);
-                } else {
-                    resolve(getModemVersionFromResponse(response));
-                }
-                handler();
-                clearTimeout(timeout);
-            }
-        });
-        const timeout = setTimeout(() => {
-            handler();
-            logger.warn(
-                'Timed out while getting modem version from AT command'
-            );
-            resolve(null);
-        }, 1500);
-    });
-
-    serialPort.write(`${atGetModemVersion}\r\n`);
-
-    const version = await responsePromise;
-    return version;
-};
+export const recommendedAt = [
+    ...recommended,
+    ...Object.values(recommendedAT).flat(),
+];

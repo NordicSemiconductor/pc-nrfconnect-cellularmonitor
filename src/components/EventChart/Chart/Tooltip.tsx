@@ -26,7 +26,6 @@ const timeFormatter = new Intl.DateTimeFormat('nb-NO', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    // @ts-expect-error This is working in our version of the browser
     fractionalSecondDigits: 3,
 });
 

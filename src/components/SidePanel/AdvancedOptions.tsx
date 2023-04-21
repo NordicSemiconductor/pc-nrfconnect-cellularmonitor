@@ -5,17 +5,16 @@
  */
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
-import {
-    fullReport,
-    sendMacros,
-} from '../../features/tracingEvents/at/recommeneded';
+import { fullReport } from '../../features/tracingEvents/at/recommeneded';
+import { sendAT } from '../../features/tracingEvents/at/sendCommand';
 
 export default () => {
+    const dispatch = useDispatch();
     const device = useSelector(selectedDevice);
     const serialPort = useSelector(getUartSerialPort);
 
@@ -28,7 +27,7 @@ export default () => {
                 <Button
                     className="w-100"
                     variant="secondary"
-                    onClick={() => sendMacros(serialPort, fullReport)}
+                    onClick={() => dispatch(sendAT(fullReport))}
                     title={`Send AT commands over port ${serialPort.path}.\nRemember to start tracing in order to generate the report.`}
                 >
                     Run Full Network Test

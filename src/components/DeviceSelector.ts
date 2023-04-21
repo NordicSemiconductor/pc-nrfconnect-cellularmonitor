@@ -18,6 +18,7 @@ import {
 
 import { stopTrace } from '../features/tracing/nrfml';
 import {
+    removeShellParser,
     setAvailableSerialPorts,
     setDetectingTraceDb,
     setSerialPort,
@@ -58,6 +59,7 @@ const closeDevice = (): TAction => dispatch => {
     dispatch(setSerialPort(null));
     dispatch(stopTrace());
     dispatch(setDetectingTraceDb(false));
+    dispatch(removeShellParser());
 };
 
 const openDevice =
