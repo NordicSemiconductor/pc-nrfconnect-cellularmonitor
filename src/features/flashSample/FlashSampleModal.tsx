@@ -305,7 +305,7 @@ const ProgramSample = ({
                     onClick={async () => {
                         if (!device) {
                             throw new Error(
-                                'Device must be set in order to program'
+                                'Device must be selected in order to program firmware'
                             );
                         }
 
