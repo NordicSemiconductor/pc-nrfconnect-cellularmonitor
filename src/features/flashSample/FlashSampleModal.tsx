@@ -28,6 +28,7 @@ import {
     downloadedFilePath,
     downloadSample,
     downloadSampleIndex,
+    Firmware,
     initialSamples,
     readBundledIndex,
     Sample,
@@ -101,7 +102,7 @@ const SelectSample = ({
 
     return (
         <>
-            <Dialog.Header title="Flash sample app" />
+            <Dialog.Header title="Program sample app" />
             <Dialog.Body>
                 <p>
                     Make a selection to program the {deviceName} with a
@@ -151,6 +152,10 @@ const ProgramSample = ({
 
     const device = useSelector(selectedDevice);
     const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
+
+    const [selectedFirmware, setSelectedFirmware] = useState(
+        sample.fw.map(fw => ({ ...fw, selected: true }))
+    );
     const [progress, setProgress] = useState(
         new Map(sample.fw.map(fw => [fw, 0]))
     );
@@ -192,7 +197,19 @@ const ProgramSample = ({
         [progress]
     );
 
+    const toggleFirmwareChecked =
+        (fw: Firmware & { selected: boolean }) => () => {
+            setSelectedFirmware(previous => {
+                const selectedFw = previous.find(f => f.file === fw.file);
+                if (selectedFw) {
+                    selectedFw.selected = !selectedFw?.selected;
+                }
+                return [...previous];
+            });
+        };
+
     const isMcuBoot = isThingy91(device);
+
     return (
         <>
             <Dialog.Header
@@ -210,20 +227,34 @@ const ProgramSample = ({
                         </em>
                     </p>
                 )}
-                {sample.fw.map(fw => (
+                {selectedFirmware.map(fw => (
                     <div key={fw.file} className="mb-4">
-                        <strong>{fw.type}</strong>
-                        <button
-                            type="button"
-                            className="btn btn-link"
-                            onClick={() =>
-                                shell.openPath(
-                                    dirname(downloadedFilePath(fw.file))
-                                )
-                            }
-                        >
-                            {basename(fw.file)}
-                        </button>
+                        <div className="d-flex align-items-center">
+                            {selectedFirmware.length > 1 && (
+                                <input
+                                    type="checkbox"
+                                    className="mr-2"
+                                    checked={fw.selected}
+                                    onChange={toggleFirmwareChecked(fw)}
+                                    id={fw.file}
+                                />
+                            )}
+
+                            <label htmlFor={fw.file} className="mb-0">
+                                <strong>{fw.type}</strong>
+                            </label>
+                            <button
+                                type="button"
+                                className="btn btn-link"
+                                onClick={() =>
+                                    shell.openPath(
+                                        dirname(downloadedFilePath(fw.file))
+                                    )
+                                }
+                            >
+                                {basename(fw.file)}
+                            </button>
+                        </div>
                         <ProgressBar
                             now={progress.get(fw)}
                             style={{ height: '4px' }}
@@ -272,13 +303,24 @@ const ProgramSample = ({
                     variant="primary"
                     disabled={isProgramming || waitingForReconnect || !device}
                     onClick={async () => {
+                        if (!device) {
+                            throw new Error(
+                                'Device must be selected in order to program firmware'
+                            );
+                        }
+
                         setStage('programming');
                         setErrorMessage(undefined);
+
                         try {
                             await downloadSample(sample);
                             dispatch(setUartSerialPort(null));
-                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                            await flash(device!, sample, progressCb);
+
+                            await flash(
+                                device,
+                                selectedFirmware.filter(fw => fw.selected),
+                                progressCb
+                            );
                             setStage('success');
                         } catch (error) {
                             logger.error(error);
