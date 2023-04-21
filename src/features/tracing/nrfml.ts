@@ -40,7 +40,7 @@ import {
     setTraceSourceFilePath,
 } from './traceSlice';
 
-export type TaskId = number;
+export type TaskId = bigint;
 let reloadHandler: () => void;
 
 const nrfmlConfig = (

@@ -21,7 +21,7 @@ import {
 
 const reducer = testUtils.rootReducer(appReducer);
 
-const A_TRACE_ID = 1;
+const A_TRACE_ID = 1n;
 
 const A_PATH = 'a/path';
 const ANOTHER_PATH = 'another/path';
