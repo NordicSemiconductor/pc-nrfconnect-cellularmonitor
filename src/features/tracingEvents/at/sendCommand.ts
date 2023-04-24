@@ -14,136 +14,61 @@ const decoder = new TextDecoder();
 
 export const sendAT =
     (commands: string | string[], onComplete = () => {}): TAction =>
-    (_dispatch, getState) => {
+    async (_dispatch, getState) => {
         const uartSerialPort = getUartSerialPort(getState());
         const shellParser = getShellParser(getState());
 
         const commandList = Array.isArray(commands) ? commands : [commands];
 
         if (!shellParser && uartSerialPort) {
-            sendCommandLineMode(commandList, uartSerialPort, 0, onComplete);
+            await sendCommandLineMode(commandList, uartSerialPort);
         } else if (shellParser) {
-            sendCommandShellMode(commandList, shellParser, 0, onComplete);
+            await sendCommandShellMode(commandList, shellParser);
         } else {
             logger.warn(
                 'Tried to send AT command to device, but no serial port is open'
             );
         }
+
+        onComplete();
     };
-const sendCommandShellMode = (
+const sendCommandShellMode = async (
     commands: string[],
-    shellParser: ShellParser,
-    counter = 0,
-    onComplete = () => {}
+    shellParser: ShellParser
 ) => {
-    shellParser.enqueueRequest(
-        `at ${commands[counter]}`,
-        () => {
-            if (counter < commands.length - 1) {
-                sendCommandShellMode(
-                    commands,
-                    shellParser,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
-        },
-        response => {
-            logger.error(
-                `${commands[counter]} failed with response=${response}`
-            );
-            if (counter < commands.length - 1) {
-                sendCommandShellMode(
-                    commands,
-                    shellParser,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
-        },
-        response => {
-            logger.error(
-                `${commands[counter]} timed out with response = ${response} `
-            );
-            if (counter < commands.length - 1) {
-                sendCommandShellMode(
-                    commands,
-                    shellParser,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
-        }
-    );
+    // eslint-disable-next-line no-restricted-syntax
+    for (const command of commands) {
+        // eslint-disable-next-line no-await-in-loop
+        await shellParser.enqueueRequest(
+            `at ${command}`,
+            () => {},
+            () => {},
+            () => {}
+        );
+    }
 };
 
-const sendCommandLineMode = (
+const sendCommandLineMode = async (
     commands: string[],
-    serialPort: SerialPort,
-    counter = 0,
-    onComplete = () => {}
+    serialPort: SerialPort
 ) => {
-    sendSingleCommandLineMode(
-        `${commands[counter]}`,
-        serialPort,
-        () => {
-            if (counter < commands.length - 1) {
-                sendCommandLineMode(
-                    commands,
-                    serialPort,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
-        },
-        error => {
-            logger.error(`${commands[counter]} failed with response=${error}`);
-            if (counter < commands.length - 1) {
-                sendCommandLineMode(
-                    commands,
-                    serialPort,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
-        },
-        delay => {
-            logger.error(
-                `${commands[counter]} timed out with after ${delay}ms`
-            );
-            if (counter < commands.length - 1) {
-                sendCommandLineMode(
-                    commands,
-                    serialPort,
-                    counter + 1,
-                    onComplete
-                );
-            } else {
-                onComplete();
-            }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const command of commands) {
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            await sendSingleCommandLineMode(command, serialPort);
+        } catch (error) {
+            logger.error(`AT command ${command} failed: ${error}`);
         }
-    );
+    }
 };
 
 const sendSingleCommandLineMode = (
     command: string,
     serialPort: SerialPort,
-    onSuccess: (response: string, command: string) => void,
-    onError: (message: string, command: string) => void,
-    onTimeout: (delay: number) => void,
     timeoutDelay = 60_000
-) => {
-    const asyncHandler = new Promise<void>(resolve => {
+) =>
+    new Promise<string>((resolve, reject) => {
         let response = '';
         const handler = serialPort.onData(data => {
             response += decoder.decode(data);
@@ -151,29 +76,24 @@ const sendSingleCommandLineMode = (
                 response.includes('OK') || response.includes('ERROR');
 
             if (isCompleteRespose) {
-                resolve();
                 clearTimeout(timeout);
                 handler();
                 if (response.includes('ERROR')) {
-                    onError(response, command);
+                    reject(response);
                 }
                 if (response.includes('OK')) {
-                    onSuccess(response, command);
+                    resolve(response);
                 }
             }
         });
 
         const timeout = setTimeout(() => {
-            resolve();
             handler();
-            onTimeout(timeoutDelay);
+            reject(new Error(`${command} timed out after ${timeoutDelay}ms`));
         }, timeoutDelay);
 
         serialPort.write(`${command}\r\n`);
     });
-
-    return asyncHandler;
-};
 
 const atGetModemVersion = 'AT+CGMR';
 
@@ -183,27 +103,24 @@ export const getModemVersionFromResponse = (response: string) => {
     return version ? version[0] : null;
 };
 
-export const detectDatabaseVersion = (
+export const detectDatabaseVersion = async (
     uartSerialPort: SerialPort,
     shellParser: ShellParser | null
 ) => {
     if (!shellParser && uartSerialPort) {
-        return new Promise<string | null>(resolve => {
-            sendSingleCommandLineMode(
+        try {
+            const modemVersionResponse = await sendSingleCommandLineMode(
                 atGetModemVersion,
                 uartSerialPort,
-                response => {
-                    resolve(getModemVersionFromResponse(response));
-                },
-                () => {
-                    resolve(null);
-                },
-                () => {
-                    resolve(null);
-                },
                 1000
             );
-        });
+            return getModemVersionFromResponse(modemVersionResponse);
+        } catch (error) {
+            logger.debug(
+                `Failed to auto detect modem version using ${atGetModemVersion}: (${error})`
+            );
+            return null;
+        }
     }
 
     if (shellParser) {
@@ -236,16 +153,10 @@ export const detectDatabaseVersion = (
 };
 
 export const testIfShellMode = async (serialPort: SerialPort) => {
-    let isShellMode = false;
-    await sendSingleCommandLineMode(
-        'at AT',
-        serialPort,
-        () => {
-            logger.info('Device seem to be in Shell Mode.');
-            isShellMode = true;
-        },
-        () => {},
-        () => {}
-    );
-    return isShellMode;
+    try {
+        await sendSingleCommandLineMode('at AT', serialPort, 2000);
+        return true;
+    } catch (error) {
+        return false;
+    }
 };
