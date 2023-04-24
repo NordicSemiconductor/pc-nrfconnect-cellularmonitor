@@ -12,7 +12,7 @@ import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
 import FileActions from './FileActions';
 import Instructions from './Instructions';
-import { Macros } from './Macros';
+import { Recommended } from './Macros';
 import TraceOptions from './TraceOptions';
 import TraceCollector from './Tracing/TraceCollector';
 import TraceFileInformation from './Tracing/TraceFileInformation';
@@ -26,7 +26,7 @@ export const TraceCollectorSidePanel = () => (
         <FileActions />
 
         <TraceCollector />
-        <Macros />
+        <Recommended />
         <OpenSerialTerminal />
 
         <ConnectionStatus />

@@ -37,7 +37,7 @@ export const recommendedAT: recommendedAT = {
     'AT%XEMPR': 'AT%XEMPR?',
 
     // Should be last command, since AT+COPS=? is slow
-    // 'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
+    'AT+COPS': ['AT+COPS?', 'AT+COPS=?'],
 };
 
 const recommended = [
