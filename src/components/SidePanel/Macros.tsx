@@ -21,7 +21,7 @@ export const Macros = () => {
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={() => dispatch(sendAT(recommendedAt))}
+                onClick={() => dispatch(sendAT(...recommendedAt))}
                 title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
             >
                 Run recommended AT commands
