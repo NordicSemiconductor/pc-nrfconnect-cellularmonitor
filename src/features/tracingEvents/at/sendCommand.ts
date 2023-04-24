@@ -161,6 +161,9 @@ export const detectDatabaseVersion = (
     }
 
     if (shellParser) {
+        if (shellParser.isPaused()) {
+            shellParser.unPause();
+        }
         return new Promise<string | null>(resolve => {
             shellParser.enqueueRequest(
                 `at ${atGetModemVersion}`,
