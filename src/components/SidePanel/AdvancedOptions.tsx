@@ -28,7 +28,7 @@ export default () => {
                 <Button
                     className="w-100"
                     variant="secondary"
-                    onClick={() => dispatch(sendAT(fullReport))}
+                    onClick={() => dispatch(sendAT(...fullReport))}
                     title={`Send AT commands over port ${serialPort.path}.\nRemember to start tracing in order to generate the report.`}
                 >
                     Run Full Network Test
