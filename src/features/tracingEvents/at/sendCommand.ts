@@ -13,31 +13,39 @@ import { getShellParser, getUartSerialPort } from '../../tracing/traceSlice';
 const decoder = new TextDecoder();
 
 export const sendAT =
-    (...commands: string[]): TAction =>
+    (commands: string[], onComplete = () => {}): TAction =>
     (_dispatch, getState) => {
         const uartSerialPort = getUartSerialPort(getState());
         const shellParser = getShellParser(getState());
 
         if (!shellParser && uartSerialPort) {
-            sendCommandLineMode(commands, uartSerialPort);
+            sendCommandLineMode(commands, uartSerialPort, 0, onComplete);
         } else if (shellParser) {
-            sendCommandShellMode(commands, shellParser);
+            sendCommandShellMode(commands, shellParser, 0, onComplete);
         } else {
             logger.warn(
-                'Tied to send AT command to device, but no serial port is open'
+                'Tried to send AT command to device, but no serial port is open'
             );
         }
     };
 const sendCommandShellMode = (
     commands: string[],
     shellParser: ShellParser,
-    counter = 0
+    counter = 0,
+    onComplete = () => {}
 ) => {
     shellParser.enqueueRequest(
         `at ${commands[counter]}`,
         () => {
             if (counter < commands.length - 1) {
-                sendCommandShellMode(commands, shellParser, counter + 1);
+                sendCommandShellMode(
+                    commands,
+                    shellParser,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         },
         response => {
@@ -45,7 +53,14 @@ const sendCommandShellMode = (
                 `${commands[counter]} failed with response=${response}`
             );
             if (counter < commands.length - 1) {
-                sendCommandShellMode(commands, shellParser, counter + 1);
+                sendCommandShellMode(
+                    commands,
+                    shellParser,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         },
         response => {
@@ -53,7 +68,14 @@ const sendCommandShellMode = (
                 `${commands[counter]} timed out with response = ${response} `
             );
             if (counter < commands.length - 1) {
-                sendCommandShellMode(commands, shellParser, counter + 1);
+                sendCommandShellMode(
+                    commands,
+                    shellParser,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         }
     );
@@ -62,20 +84,35 @@ const sendCommandShellMode = (
 const sendCommandLineMode = (
     commands: string[],
     serialPort: SerialPort,
-    counter = 0
+    counter = 0,
+    onComplete = () => {}
 ) => {
     sendSingleCommandLineMode(
         `${commands[counter]}`,
         serialPort,
         () => {
             if (counter < commands.length - 1) {
-                sendCommandLineMode(commands, serialPort, counter + 1);
+                sendCommandLineMode(
+                    commands,
+                    serialPort,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         },
         error => {
             logger.error(`${commands[counter]} failed with response=${error}`);
             if (counter < commands.length - 1) {
-                sendCommandLineMode(commands, serialPort, counter + 1);
+                sendCommandLineMode(
+                    commands,
+                    serialPort,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         },
         delay => {
@@ -83,7 +120,14 @@ const sendCommandLineMode = (
                 `${commands[counter]} timed out with after ${delay}ms`
             );
             if (counter < commands.length - 1) {
-                sendCommandLineMode(commands, serialPort, counter + 1);
+                sendCommandLineMode(
+                    commands,
+                    serialPort,
+                    counter + 1,
+                    onComplete
+                );
+            } else {
+                onComplete();
             }
         }
     );
