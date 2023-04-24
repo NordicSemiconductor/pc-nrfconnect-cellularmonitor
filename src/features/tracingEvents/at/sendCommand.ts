@@ -13,15 +13,17 @@ import { getShellParser, getUartSerialPort } from '../../tracing/traceSlice';
 const decoder = new TextDecoder();
 
 export const sendAT =
-    (commands: string[], onComplete = () => {}): TAction =>
+    (commands: string | string[], onComplete = () => {}): TAction =>
     (_dispatch, getState) => {
         const uartSerialPort = getUartSerialPort(getState());
         const shellParser = getShellParser(getState());
 
+        const commandList = Array.isArray(commands) ? commands : [commands];
+
         if (!shellParser && uartSerialPort) {
-            sendCommandLineMode(commands, uartSerialPort, 0, onComplete);
+            sendCommandLineMode(commandList, uartSerialPort, 0, onComplete);
         } else if (shellParser) {
-            sendCommandShellMode(commands, shellParser, 0, onComplete);
+            sendCommandShellMode(commandList, shellParser, 0, onComplete);
         } else {
             logger.warn(
                 'Tried to send AT command to device, but no serial port is open'
