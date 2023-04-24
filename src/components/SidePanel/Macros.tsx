@@ -9,10 +9,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
-import { recommendedAt } from '../../features/tracingEvents/at/recommeneded';
+import {
+    fullReport,
+    recommendedAt,
+} from '../../features/tracingEvents/at/recommeneded';
 import { sendAT } from '../../features/tracingEvents/at/sendCommand';
 
-export const Macros = () => {
+export const Recommended = () => (
+    <Macro commands={recommendedAt} title="Run recommended AT commands" />
+);
+
+export const FullNetworkReport = () => (
+    <Macro commands={fullReport} title="Run full network test" />
+);
+
+type Macro = {
+    commands: string[];
+    title: string;
+};
+
+export const Macro = ({ commands, title }: Macro) => {
     const dispatch = useDispatch();
     const serialPort = useSelector(getUartSerialPort);
     const [isSending, setIsSending] = useState(false);
@@ -28,14 +44,12 @@ export const Macros = () => {
                 variant="secondary"
                 onClick={() => {
                     setIsSending(true);
-                    dispatch(sendAT(recommendedAt, onComplete));
+                    dispatch(sendAT(commands, onComplete));
                 }}
-                title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
+                title={`Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`}
                 disabled={isSending}
             >
-                {isSending
-                    ? 'Sending commands'
-                    : 'Send recommended AT commands'}
+                {isSending ? 'Sending commands' : title}
             </Button>
         );
     }
