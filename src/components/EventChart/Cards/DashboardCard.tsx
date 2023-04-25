@@ -16,7 +16,10 @@ import {
     ATCommands,
     documentationMap,
 } from '../../../features/tracingEvents/at';
-import { recommendedAT } from '../../../features/tracingEvents/at/recommeneded';
+import {
+    commandHasRecommeneded,
+    recommendedAT,
+} from '../../../features/tracingEvents/at/recommeneded';
 import { sendAT } from '../../../features/tracingEvents/at/sendCommand';
 import { TDispatch } from '../../../utils/thunk';
 
@@ -167,7 +170,7 @@ const CardTooltip = ({
                             </p>
 
                             <div style={{ display: 'flex' }}>
-                                {cmd in recommendedAT ? (
+                                {commandHasRecommeneded(cmd) ? (
                                     <span
                                         role="button"
                                         tabIndex={index}
@@ -175,12 +178,26 @@ const CardTooltip = ({
                                             marginRight: '8px',
                                             ...linkStyle,
                                         }}
-                                        onClick={() => dispatch(sendAT(cmd))}
-                                        onKeyDown={event =>
-                                            event.key === 'Enter'
-                                                ? dispatch(sendAT(cmd))
-                                                : null
-                                        }
+                                        onClick={() => {
+                                            const commandsToSend =
+                                                recommendedAT[cmd];
+                                            if (commandsToSend) {
+                                                dispatch(
+                                                    sendAT(commandsToSend)
+                                                );
+                                            }
+                                        }}
+                                        onKeyDown={event => {
+                                            if (event.key === 'Enter') {
+                                                const commandsToSend =
+                                                    recommendedAT[cmd];
+                                                if (commandsToSend) {
+                                                    dispatch(
+                                                        sendAT(commandsToSend)
+                                                    );
+                                                }
+                                            }
+                                        }}
                                     >
                                         <Icon
                                             style={{ marginRight: '4px' }}
