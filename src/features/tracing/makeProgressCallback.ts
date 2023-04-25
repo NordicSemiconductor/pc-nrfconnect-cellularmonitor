@@ -10,7 +10,11 @@ import nrfml, {
 import { logger } from 'pc-nrfconnect-shared';
 import { Dispatch } from 'redux';
 
-import { setDetectingTraceDb, setTraceProgress } from './traceSlice';
+import {
+    setDetectingTraceDb,
+    setManualDbFilePath,
+    setTraceProgress,
+} from './traceSlice';
 
 type MetaField = nrfml.MetaFields[keyof nrfml.MetaFields];
 
@@ -34,7 +38,7 @@ const makeDetectModemFwUuid = () => {
     };
 };
 
-const makeDetectTraceDB = () => {
+const makeDetectTraceDB = (dispatch: Dispatch) => {
     let detectedTraceDB: MetaField;
 
     return (progress: nrfml.Progress) => {
@@ -42,6 +46,7 @@ const makeDetectTraceDB = () => {
 
         if (detectedTraceDB == null && detectedTraceDB !== reportedTraceDB) {
             detectedTraceDB = reportedTraceDB;
+            dispatch(setManualDbFilePath(reportedTraceDB as string));
             logger.info(`Using trace DB ${detectedTraceDB}`);
         }
     };
@@ -58,7 +63,7 @@ export default (
     }
 ) => {
     const detectModemFwUuid = detectingTraceDb ? makeDetectModemFwUuid() : noop;
-    const detectTraceDB = detectingTraceDb ? makeDetectTraceDB() : noop;
+    const detectTraceDB = detectingTraceDb ? makeDetectTraceDB(dispatch) : noop;
 
     if (displayDetectingTraceDbMessage) {
         dispatch(setDetectingTraceDb(true));
