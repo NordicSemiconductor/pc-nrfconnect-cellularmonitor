@@ -156,3 +156,7 @@ export const recommendedAt = [
     ...recommended,
     ...Object.values(recommendedAT).flat(),
 ];
+
+export const commandHasRecommeneded = (
+    command: string
+): command is keyof typeof recommendedAT => command in recommendedAT;
