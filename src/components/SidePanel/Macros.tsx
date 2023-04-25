@@ -33,18 +33,15 @@ export const Macro = ({ commands, title }: Macro) => {
     const serialPort = useSelector(getUartSerialPort);
     const [isSending, setIsSending] = useState(false);
 
-    const onComplete = () => {
-        setIsSending(false);
-    };
-
     if (serialPort != null) {
         return (
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={() => {
+                onClick={async () => {
                     setIsSending(true);
-                    dispatch(sendAT(commands, onComplete));
+                    await dispatch(sendAT(commands));
+                    setIsSending(false);
                 }}
                 title={`Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`}
                 disabled={isSending}

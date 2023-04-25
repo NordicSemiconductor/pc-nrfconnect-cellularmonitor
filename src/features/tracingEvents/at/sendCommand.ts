@@ -11,33 +11,37 @@ import { ShellParser } from '../../shell/shellParser';
 import { getShellParser, getUartSerialPort } from '../../tracing/traceSlice';
 
 const decoder = new TextDecoder();
+const queue: string[] = [];
 
 export const sendAT =
-    (commands: string | string[], onComplete = () => {}): TAction =>
+    (commands: string | string[]): TAction =>
     async (_dispatch, getState) => {
         const uartSerialPort = getUartSerialPort(getState());
         const shellParser = getShellParser(getState());
 
         const commandList = Array.isArray(commands) ? commands : [commands];
 
+        queue.push(...commandList);
+
+        if (queue.length > commandList.length) {
+            // Something is already processing the queue, exit early
+            return;
+        }
+
         if (!shellParser && uartSerialPort) {
-            await sendCommandLineMode(commandList, uartSerialPort);
+            await sendCommandLineMode(uartSerialPort);
         } else if (shellParser) {
-            await sendCommandShellMode(commandList, shellParser);
+            await sendCommandShellMode(shellParser);
         } else {
             logger.warn(
                 'Tried to send AT command to device, but no serial port is open'
             );
         }
-
-        onComplete();
     };
-const sendCommandShellMode = async (
-    commands: string[],
-    shellParser: ShellParser
-) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const command of commands) {
+
+const sendCommandShellMode = async (shellParser: ShellParser) => {
+    do {
+        const command = queue.shift();
         // eslint-disable-next-line no-await-in-loop
         await shellParser.enqueueRequest(
             `at ${command}`,
@@ -45,22 +49,23 @@ const sendCommandShellMode = async (
             () => {},
             () => {}
         );
-    }
+    } while (queue.length);
 };
 
-const sendCommandLineMode = async (
-    commands: string[],
-    serialPort: SerialPort
-) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const command of commands) {
+const sendCommandLineMode = async (serialPort: SerialPort) => {
+    do {
+        const command = queue.shift();
+        console.log(
+            `Processing the ${command} command. ${queue.length} left to go`
+        );
+
         try {
             // eslint-disable-next-line no-await-in-loop
-            await sendSingleCommandLineMode(command, serialPort);
+            await sendSingleCommandLineMode(command!, serialPort);
         } catch (error) {
             logger.error(`AT command ${command} failed: ${error}`);
         }
-    }
+    } while (queue.length);
 };
 
 const sendSingleCommandLineMode = (
