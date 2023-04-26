@@ -34,7 +34,7 @@ export const LoadTraceFile = () => {
             disabled={loading || hasSerialPort}
             variant="secondary"
         >
-            {loading === true ? 'Reading trace file' : 'Load RAW File...'}
+            {loading === true ? 'Reading trace file' : 'Load trace file...'}
         </Button>
     );
 };

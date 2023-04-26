@@ -82,6 +82,7 @@
                 "run-script", "app:debug",  "--", "--open-local-app", "${workspaceFolderBasename}"
             ],
             "preLaunchTask": "build:dev"
+          
         },
     ],
     "compounds": [
