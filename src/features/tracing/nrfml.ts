@@ -137,7 +137,6 @@ export const startTrace =
 
         if (uartPort && isDetectingTraceDb) {
             const version = await detectDatabaseVersion(uartPort, shellParser);
-            console.log(`Got version: ${version}`);
 
             if (version) {
                 dispatch(setSelectedTraceDatabaseFromVersion(version));
