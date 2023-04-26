@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Button, CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
+import SourceSelector from '../../features/terminal/SourceSelector';
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 import {
     fullReport,
@@ -34,6 +35,7 @@ export default () => {
                     Run Full Network Test
                 </Button>
             ) : null}
+            <SourceSelector />
         </CollapsibleGroup>
     );
 };

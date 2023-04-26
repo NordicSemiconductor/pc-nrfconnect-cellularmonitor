@@ -27,6 +27,7 @@ export const TraceCollectorSidePanel = () => (
 
         <TraceCollector />
         <Macros />
+
         <OpenSerialTerminal />
 
         <ConnectionStatus />
