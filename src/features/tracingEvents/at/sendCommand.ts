@@ -57,13 +57,10 @@ const sendCommandShellMode = async (shellParser: ShellParser) => {
 const sendCommandLineMode = async (serialPort: SerialPort) => {
     do {
         const [command] = queue;
-        console.log(
-            `Processing the ${command} command. ${queue.length - 1} left to go`
-        );
 
         try {
             // eslint-disable-next-line no-await-in-loop
-            await sendSingleCommandLineMode(command!, serialPort);
+            await sendSingleCommandLineMode(command, serialPort);
         } catch (error) {
             logger.error(`AT command ${command} failed: ${error}`);
         }
