@@ -58,7 +58,7 @@ describe('nrfml', () => {
     });
 
     it('should start converting', () => {
-        store.dispatch(convertTraceFile('somePath.bin'));
+        store.dispatch(convertTraceFile('somePath.mtrace'));
         expect(store.getActions()).toEqual([
             {
                 type: setTraceIsStarted.type,
@@ -123,7 +123,7 @@ describe('nrfml', () => {
                                 format: 'raw',
                                 path: path.join(
                                     mockedDataDir,
-                                    'trace-2000-01-01T00-00-00.000Z.bin'
+                                    'trace-2000-01-01T00-00-00.000Z.mtrace'
                                 ),
                             },
                         ],
@@ -148,7 +148,7 @@ describe('nrfml', () => {
                                 format: 'raw',
                                 path: path.join(
                                     mockedDataDir,
-                                    'trace-2000-01-01T00-00-00.000Z.bin'
+                                    'trace-2000-01-01T00-00-00.000Z.mtrace'
                                 ),
                             },
                         ],
@@ -211,13 +211,13 @@ describe('nrfml', () => {
         it('should return proper configuration for raw trace', () => {
             const rawConfig = sinkConfig(
                 state,
-                { type: 'file', path: 'some/path.bin' },
+                { type: 'file', path: 'some/path.mtrace' },
                 'raw'
             );
             expect(rawConfig).toEqual({
                 name: 'nrfml-raw-file-sink',
                 init_parameters: {
-                    file_path: path.join('some', 'path.bin'),
+                    file_path: path.join('some', 'path.mtrace'),
                 },
             });
         });
@@ -225,7 +225,7 @@ describe('nrfml', () => {
         it('should return proper configuration for live trace', () => {
             const liveConfig = sinkConfig(
                 state,
-                { type: 'file', path: 'some/path.bin' },
+                { type: 'file', path: 'some/path.mtrace' },
                 'live'
             );
             expect(liveConfig).toEqual({
@@ -242,7 +242,7 @@ describe('nrfml', () => {
         it('should return proper configuration for pcap trace', () => {
             const pcapConfig = sinkConfig(
                 state,
-                { type: 'file', path: 'some/path.bin' },
+                { type: 'file', path: 'some/path.mtrace' },
                 'pcap'
             );
             expect(pcapConfig).toEqual({
