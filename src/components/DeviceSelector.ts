@@ -24,6 +24,7 @@ import {
     setSerialPort,
     setUartSerialPort,
 } from '../features/tracing/traceSlice';
+import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import type { TAction } from '../utils/thunk';
 import { TDispatch } from '../utils/thunk';
@@ -47,6 +48,7 @@ const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
     onDeviceDeselected: () => {
         logger.info('Deselected device');
         dispatch(closeDevice());
+        clearATQueue();
     },
 });
 
