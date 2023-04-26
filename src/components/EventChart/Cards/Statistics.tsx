@@ -7,9 +7,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { ATCommands } from '../../../features/tracingEvents/at';
+import { documentation } from '../../../../resources/docs/dashboard_fields';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
+
+const { ConnectivityStatistics: docs } = documentation;
 
 export default () => {
     const { connStat } = useSelector(getDashboardState);
@@ -17,33 +19,33 @@ export default () => {
     const fields: DashboardCardFields = {
         'COLLECTING DATA': {
             value: parseCollecting(connStat?.collecting),
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['COLLECTING DATA'],
         },
         'SUCCESSFULL SMS TX': {
             value: connStat?.smsTX ?? 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['SUCCESSFUL SMS TX'],
         },
         'SUCCESSFULL SMS RX': {
             value: connStat?.smsRX ?? 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['SUCCESSFUL SMS RX'],
         },
         'DATA TRANSMITTED': {
             value: connStat?.dataTX ? `${connStat?.dataTX} kB` : 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['DATA TRANSMITTED'],
         },
         'DATA RECIEVED': {
             value: connStat?.dataRX ? `${connStat?.dataRX} kB` : 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['DATA RECIEVED'],
         },
         'MAX PACKET SIZE TX OR RX': {
             value: connStat?.packetMax ? `${connStat.packetMax} kB` : 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['MAX PACKET SIZE TX OR RX'],
         },
         'AVERAGE PACKET SIZE': {
             value: connStat?.packetAverage
                 ? `${connStat.packetAverage} kB`
                 : 'Unknown',
-            commands: ['AT%XCONNSTAT'] as ATCommands[],
+            ...docs['AVERAGE PACKET SIZE'],
         },
     };
 

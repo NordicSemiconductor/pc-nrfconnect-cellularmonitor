@@ -7,9 +7,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { ATCommands } from '../../../features/tracingEvents/at';
+import { documentation } from '../../../../resources/docs/dashboard_fields';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
+
+const { Sim: docs } = documentation;
 
 export default () => {
     const {
@@ -29,36 +31,36 @@ export default () => {
     const fields: DashboardCardFields = {
         IMSI: {
             value: imsi ?? 'Unknown',
-            commands: ['AT+CIMI'] as ATCommands[],
+            ...docs.IMSI,
         },
         OPERATOR: {
             value: operatorFullName ?? 'Unknown',
-            commands: ['AT%XMONITOR'] as ATCommands[],
+            ...docs.OPERATOR,
         },
         MANUFACTURER: {
             value: manufacturer ?? 'Unknown',
-            commands: ['AT+CGMI'] as ATCommands[] as ATCommands[],
+            ...docs.MANUFACTURER,
         },
         ICCID: {
             value: iccid ?? 'Unknown',
-            commands: ['AT%XICCID'] as ATCommands[],
+            ...docs.ICCID,
         },
-        PIN: { value: pin, commands: ['AT+CPIN'] as ATCommands[] },
+        PIN: { value: pin, ...docs.PIN },
         'PIN RETRIED': {
             value: remainingPIN ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
+            ...docs['PIN RETRIES'],
         },
         'PUK RETRIED': {
             value: remainingPUK ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
+            ...docs['PUK RETRIES'],
         },
         'PIN2 RETRIED': {
             value: remainingPIN2 ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
+            ...docs['PIN2 RETRIES'],
         },
         'PUK2 RETRIED': {
             value: remainingPUK2 ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
+            ...docs['PUK2 RETRIES'],
         },
     };
 

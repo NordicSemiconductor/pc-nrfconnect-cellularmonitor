@@ -6,8 +6,11 @@
 
 import React from 'react';
 
+import { documentation } from '../../../../resources/docs/dashboard_fields';
 import { AccessPointName } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
+
+const { 'Packet Domain Network': docs } = documentation;
 
 export default ({
     apn,
@@ -20,13 +23,22 @@ export default ({
     cause,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
-        'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
-        'PDN Type': { value: pdnType ?? 'Unknown', commands: [] },
-        'PDN Type Raw': { value: rawPDNType ?? 'Unknown', commands: [] },
-        'IPv4 Address': { value: ipv4 ?? 'Unknown', commands: [] },
-        'IPv6 Address': { value: `${ipv6}` ?? 'Unknown', commands: [] },
-        info: { value: info ?? 'Unknown', commands: [] },
-        Connection: { value: connection ?? 'Unknown', commands: [] },
+        'Access Point Name': {
+            value: apn ?? 'Unknown',
+            ...docs['Access Point Name'],
+        },
+        'PDN Type': { value: pdnType ?? 'Unknown', ...docs['PDN Type'] },
+        'PDN Type Raw': {
+            value: rawPDNType ?? 'Unknown',
+            ...docs['PDN Type Raw'],
+        },
+        'IPv4 Address': { value: ipv4 ?? 'Unknown', ...docs['IPv4 Address'] },
+        'IPv6 Address': {
+            value: `${ipv6}` ?? 'Unknown',
+            ...docs['IPv6 Address'],
+        },
+        info: { value: info ?? 'Unknown', ...docs.info },
+        Connection: { value: connection ?? 'Unknown', ...docs.Connection },
     };
 
     if (cause) {
