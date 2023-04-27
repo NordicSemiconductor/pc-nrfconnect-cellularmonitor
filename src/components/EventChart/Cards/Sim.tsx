@@ -7,11 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { documentation } from '../../../../resources/docs/dashboard_fields';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
-
-const { Sim: docs } = documentation;
 
 export default () => {
     const {
@@ -31,36 +28,28 @@ export default () => {
     const fields: DashboardCardFields = {
         IMSI: {
             value: imsi ?? 'Unknown',
-            ...docs.IMSI,
         },
         OPERATOR: {
             value: operatorFullName ?? 'Unknown',
-            ...docs.OPERATOR,
         },
         MANUFACTURER: {
             value: manufacturer ?? 'Unknown',
-            ...docs.MANUFACTURER,
         },
         ICCID: {
             value: iccid ?? 'Unknown',
-            ...docs.ICCID,
         },
-        PIN: { value: pin, ...docs.PIN },
-        'PIN RETRIED': {
+        PIN: { value: pin },
+        'PIN RETRIES': {
             value: remainingPIN ?? 'Unknown',
-            ...docs['PIN RETRIES'],
         },
-        'PUK RETRIED': {
+        'PUK RETRIES': {
             value: remainingPUK ?? 'Unknown',
-            ...docs['PUK RETRIES'],
         },
-        'PIN2 RETRIED': {
+        'PIN2 RETRIES': {
             value: remainingPIN2 ?? 'Unknown',
-            ...docs['PIN2 RETRIES'],
         },
-        'PUK2 RETRIED': {
+        'PUK2 RETRIES': {
             value: remainingPUK2 ?? 'Unknown',
-            ...docs['PUK2 RETRIES'],
         },
     };
 

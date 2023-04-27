@@ -7,13 +7,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { documentation } from '../../../../resources/docs/dashboard_fields';
 import { FunctionalMode } from '../../../features/tracingEvents/at/commandProcessors/functionMode';
 import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
-
-const { Device: docs } = documentation;
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;
@@ -49,41 +46,32 @@ export default () => {
     const fields: DashboardCardFields = {
         IMEI: {
             value: IMEI ?? 'Unknown',
-            ...docs.IMEI,
         },
         'MODEM FIRMWARE': {
             value: revisionID ?? 'Unknown',
-            ...docs['MODEM FIRMWARE'],
         },
         'HARDWARE VERSION': {
             value: hardwareVersion ?? 'Unknown',
-            ...docs['HARDWARE VERSION'],
         },
         'MODEM UUID': {
             value: modemUUID ?? 'Unknown',
-            ...docs['MODEM UUID'],
         },
         'CURRENT BAND': {
             value: currentBand ?? 'Unknown',
-            ...docs['CURRENT BAND'],
         },
         'SUPPORTED BANDS': {
             value: availableBands
                 ? formatAvailableBands(availableBands)
                 : 'Unknown',
-            ...docs['SUPPORTED BANDS'],
         },
         'DATA PROFILE': {
             value: dataProfile ?? 'Unknown',
-            ...docs['DATA PROFILE'],
         },
         MANUFACTURER: {
             value: manufacturer ?? 'Unknown',
-            ...docs.MANUFACTURER,
         },
         'PREFERRED BEARER': {
             value: parsePreferredBearer(modemSystemPreference),
-            ...docs['PREFERRED BEARER'],
         },
         'SUPPORTED BEARERS': {
             value: haveRecievedModemSupport
@@ -93,28 +81,22 @@ export default () => {
                       modemSupportGNSS ?? false,
                   ])
                 : 'Unknown',
-            ...docs['SUPPORTED BEARERS'],
         },
         'FUNCTIONAL MODE': {
             value: parseFunctionalMode(functionalMode),
-            ...docs['FUNCTIONAL MODE'],
         },
         'TRACE STATE OPERATION': {
             value: xModemTraceOperation ?? 'Unknown',
-            ...docs['TRACE STATE OPERATION'],
         },
         'TRACE STATE SET ID': {
             value: xModemTraceSetID ?? 'Unknown',
-            ...docs['TRACE STATE SET ID'],
         },
         // Should be removed:
         'LTE-M TX REDUCTION': {
             value: formatMode(ltemTXReduction) ?? 'Unknown',
-            ...docs['LTE-M TX REDUCTION'],
         },
         'NB-IOT TX REDUCTION': {
             value: formatMode(nbiotTXReduction) ?? 'Unknown',
-            ...docs['NB-IOT TX REDUCTION'],
         },
     };
     return (
