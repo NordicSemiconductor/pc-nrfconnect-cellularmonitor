@@ -4,9 +4,20 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-export const documentation = {
-    LTENetwork: {
-        AcT: {
+import { recommendedAT } from '../../src/features/tracingEvents/at/recommeneded';
+
+export type Documentation = {
+    [key: string]: {
+        [key: string]: {
+            description?: string;
+            commands: readonly (keyof typeof recommendedAT)[];
+        };
+    };
+};
+
+export const documentation: Documentation = {
+    'LTE Network': {
+        ACT: {
             description:
                 "AcT (Access Technology) refers to the current operational state of a mobile device's cellular network connection. It indicates which type of cellular technology (e.g. LTE-M or NB-IoT) the device is currently using to connect to the network.",
             commands: ['AT+CEREG', 'AT%XMONITOR', 'AT+CEDRXRDP'] as const,
@@ -288,7 +299,7 @@ export const documentation = {
             commands: ['AT+CPINR'] as const,
         },
     },
-    PowerSavingMode: {
+    'Power Saving Mode': {
         'REQUESTED ACTIVE TIMER(T3324)': {
             commands: ['AT+CPSMS'] as const,
         },
@@ -311,7 +322,7 @@ export const documentation = {
             commands: ['AT%CONEVAL'] as const,
         },
     },
-    ConnectivityStatistics: {
+    'Connectivity Statistics': {
         'COLLECTING DATA': {
             commands: ['AT%XCONNSTAT'] as const,
         },

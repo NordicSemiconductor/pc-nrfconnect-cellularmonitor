@@ -7,15 +7,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { documentation } from '../../../../resources/docs/dashboard_fields';
 import {
     getDashboardState,
     getPowerSavingMode,
 } from '../../../features/tracingEvents/dashboardSlice';
 import { PowerSavingModeValues } from '../../../features/tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
-
-const { PowerSavingMode: docs } = documentation;
 
 const formatPSMValuesToString = (
     values: PowerSavingModeValues | undefined
@@ -43,31 +40,24 @@ export default () => {
     const fields: DashboardCardFields = {
         'REQUESTED ACTIVE TIMER(T3324)': {
             value: formatPSMValuesToString(requested?.T3324),
-            ...docs['REQUESTED ACTIVE TIMER(T3324)'],
         },
         'GRANTED ACTIVE TIMER(T3324)': {
             value: formatPSMValuesToString(granted?.T3324),
-            ...docs['GRANTED ACTIVE TIMER(T3324)'],
         },
         'REQUESTED PERIODIC TAU(T3412 EXTENDED)': {
             value: formatPSMValuesToString(requested?.T3412Extended),
-            ...docs['REQUESTED PERIODIC TAU(T3412 EXTENDED)'],
         },
         'GRANTED PERIODIC TAU(T3412 EXTENDED)': {
             value: formatPSMValuesToString(granted?.T3412Extended),
-            ...docs['GRANTED PERIODIC TAU(T3412 EXTENDED)'],
         },
         'GRANTED PERIODIC TAU(T3412 / LEGACY)': {
             value: formatPSMValuesToString(granted?.T3412),
-            ...docs['GRANTED PERIODIC TAU(T3412 / LEGACY)'],
         },
         'POWER SAVING MODE STATE (GRANTED)': {
             value: granted?.state?.toUpperCase() ?? 'OFF',
-            ...docs['POWER SAVING MODE STATE (GRANTED)'],
         },
         'TAU TRIGGERED': {
             value: TAUTriggered ?? 'Unknown',
-            ...docs['TAU TRIGGERED'],
         },
     };
 
