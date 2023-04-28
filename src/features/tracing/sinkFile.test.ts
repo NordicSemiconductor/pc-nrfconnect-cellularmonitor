@@ -16,7 +16,7 @@ jest.mock('pc-nrfconnect-shared', () => ({
 describe('sink file names', () => {
     it('is for file sources based on the source file name', () => {
         const sinkFile = createSinkFile(
-            { type: 'file', path: 'some/file.bin' },
+            { type: 'file', path: 'some/file.mtrace' },
             'pcap'
         );
 
@@ -34,7 +34,7 @@ describe('sink file names', () => {
             path.join(
                 'data',
                 'dir',
-                `trace-${startTime.toISOString().replace(/:/g, '-')}.bin`
+                `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`
             )
         );
 
@@ -47,7 +47,7 @@ describe('sink file names', () => {
                 path.join(
                     'data',
                     'dir',
-                    `trace-${startTime.toISOString().replace(/:/g, '-')}.bin`
+                    `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`
                 )
             );
             done();

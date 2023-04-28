@@ -5,58 +5,46 @@
  */
 
 import React from 'react';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Toggle } from 'pc-nrfconnect-shared';
 
+import { TraceFormat } from '../../../features/tracing/formats';
 import {
-    ALL_TRACE_FORMATS,
-    TraceFormat,
-} from '../../../features/tracing/formats';
-import {
-    getIsTracing,
     getTraceFormats,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../Wireshark/WiresharkWarning';
 
 export default () => {
-    const isTracing = useSelector(getIsTracing);
     const selectedFormats = useSelector(getTraceFormats);
     const dispatch = useDispatch();
-    const selectTraceFormat = (format: TraceFormat) => () => {
-        const newFormats = selectedFormats.includes(format)
+
+    const toggle = (format: TraceFormat) => () => {
+        const formats = selectedFormats.includes(format)
             ? selectedFormats.filter(f => f !== format)
             : [...selectedFormats, format];
 
-        dispatch(setTraceFormats(newFormats));
+        dispatch(setTraceFormats(formats));
     };
 
     return (
         <>
-            <p>Trace outputs</p>
+            <p className="d-flex justify-content-between">
+                Open in Wireshark{' '}
+                <Toggle
+                    isToggled={selectedFormats.includes('live')}
+                    onToggle={toggle('live')}
+                />
+            </p>
 
-            <ButtonGroup
-                className={`trace-selector w-100 ${
-                    isTracing ? 'disabled' : ''
-                }`}
-            >
-                {ALL_TRACE_FORMATS.filter(
-                    (format: TraceFormat) => format !== 'tshark'
-                ).map((format: TraceFormat) => (
-                    <Button
-                        variant="custom"
-                        className={
-                            selectedFormats.includes(format) ? 'set' : 'unset'
-                        }
-                        onClick={selectTraceFormat(format)}
-                        key={format}
-                        disabled={isTracing}
-                    >
-                        {format}
-                    </Button>
-                ))}
-            </ButtonGroup>
+            <p className="d-flex justify-content-between">
+                Save trace file to disk{' '}
+                <Toggle
+                    isToggled={selectedFormats.includes('raw')}
+                    onToggle={toggle('raw')}
+                />
+            </p>
+
             <WiresharkWarning />
         </>
     );

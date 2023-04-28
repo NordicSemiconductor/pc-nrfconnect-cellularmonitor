@@ -12,7 +12,7 @@ import { SourceFormat, TraceFormat } from './formats';
 const fileExtension = (format: TraceFormat) => {
     switch (format) {
         case 'raw':
-            return '.bin';
+            return '.mtrace';
         case 'pcap':
             return '.pcapng';
         default:
@@ -24,7 +24,7 @@ const fileExtension = (format: TraceFormat) => {
 
 const extensionlessFilePath = (source: SourceFormat) => {
     if (source.type === 'file') {
-        const basename = path.basename(source.path, '.bin');
+        const basename = path.basename(source.path, '.mtrace');
         const directory = path.dirname(source.path);
         return path.join(directory, basename);
     }

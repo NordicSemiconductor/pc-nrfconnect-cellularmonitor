@@ -22,7 +22,7 @@ export default () => {
         const file = askForTraceFile();
         if (file) {
             await dispatch(convertTraceFile(file, setLoading));
-            dispatch(openInWireshark(file.replace('.bin', '.pcapng')));
+            dispatch(openInWireshark(file.replace('.mtrace', '.pcapng')));
         }
     };
 
@@ -35,7 +35,7 @@ export default () => {
         >
             {loading === true
                 ? 'Converting file to PCAP'
-                : 'Open RAW in Wireshark...'}
+                : 'Open trace file in Wireshark...'}
         </Button>
     );
 };

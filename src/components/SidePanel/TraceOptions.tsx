@@ -18,9 +18,8 @@ export default () => {
 
     return (
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
-            <DatabaseFileOverride />
-
             <TraceFormatSelector />
+            <DatabaseFileOverride />
             <Serialports />
         </CollapsibleGroup>
     );

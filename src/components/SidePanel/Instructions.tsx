@@ -6,8 +6,9 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Group, openUrl } from 'pc-nrfconnect-shared';
+import { Group } from 'pc-nrfconnect-shared';
 
+import BuyDevelopmentkitDialog from '../../features/buyDevelopmetKit/BuyDevelopmentkitDialog';
 import { getIsDeviceSelected } from '../../features/tracing/traceSlice';
 
 export default () => {
@@ -23,17 +24,8 @@ export default () => {
                 A Nordic Semiconductor cellular device is required to use this
                 application.
             </p>
-            <Button
-                onClick={() =>
-                    openUrl(
-                        'https://www.nordicsemi.com/About-us/BuyOnline?search_token=nrf9160-DK&series_token=nRF9160'
-                    )
-                }
-                variant="secondary"
-                className="w-100"
-            >
-                Buy development kit...
-            </Button>
+
+            <BuyDevelopmentkitDialog />
         </Group>
     );
 };

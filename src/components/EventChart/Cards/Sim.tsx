@@ -7,7 +7,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { ATCommands } from '../../../features/tracingEvents/at';
 import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
@@ -29,36 +28,28 @@ export default () => {
     const fields: DashboardCardFields = {
         IMSI: {
             value: imsi ?? 'Unknown',
-            commands: ['AT+CIMI'] as ATCommands[],
         },
         OPERATOR: {
             value: operatorFullName ?? 'Unknown',
-            commands: ['AT%XMONITOR'] as ATCommands[],
         },
         MANUFACTURER: {
             value: manufacturer ?? 'Unknown',
-            commands: ['AT+CGMI'] as ATCommands[] as ATCommands[],
         },
         ICCID: {
             value: iccid ?? 'Unknown',
-            commands: ['AT%XICCID'] as ATCommands[],
         },
-        PIN: { value: pin, commands: ['AT+CPIN'] as ATCommands[] },
-        'PIN RETRIED': {
+        PIN: { value: pin },
+        'PIN RETRIES': {
             value: remainingPIN ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
         },
-        'PUK RETRIED': {
+        'PUK RETRIES': {
             value: remainingPUK ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
         },
-        'PIN2 RETRIED': {
+        'PIN2 RETRIES': {
             value: remainingPIN2 ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
         },
-        'PUK2 RETRIED': {
+        'PUK2 RETRIES': {
             value: remainingPUK2 ?? 'Unknown',
-            commands: ['AT+CPINR'] as ATCommands[],
         },
     };
 

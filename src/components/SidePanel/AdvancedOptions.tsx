@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import FlashSampleModal from '../../features/flashSample/FlashSampleModal';
+import SourceSelector from '../../features/terminal/SourceSelector';
 import { FullNetworkReport } from './Macros';
 
 export default () => {
@@ -19,6 +20,7 @@ export default () => {
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
             <FlashSampleModal />
+            <SourceSelector />
             <FullNetworkReport />
         </CollapsibleGroup>
     );
