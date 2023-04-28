@@ -25,7 +25,7 @@ export const askForTraceDbFile = () =>
 
 export const askForTraceFile = () =>
     askForFile([
-        { name: 'Trace', extensions: ['bin'] },
+        { name: 'Trace', extensions: ['mtrace', 'bin'] },
         { name: 'All Files', extensions: ['*'] },
     ]);
 

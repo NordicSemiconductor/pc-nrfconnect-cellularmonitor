@@ -152,7 +152,7 @@ describe('Sidepanel functionality', () => {
             );
             startTrace();
             expect(
-                screen.getByText('.bin', {
+                screen.getByText('.mtrace', {
                     exact: false,
                 })
             ).toBeInTheDocument();
