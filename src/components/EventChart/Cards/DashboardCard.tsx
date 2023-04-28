@@ -12,7 +12,7 @@ import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
 import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
 
-import { documentation } from '../../../../resources/docs/dashboard_fields';
+import { documentation } from '../../../../resources/docs/dashboardFields';
 import { documentationMap } from '../../../features/tracingEvents/at';
 import {
     commandHasRecommeneded,
@@ -182,13 +182,17 @@ const CardTooltip = ({
                                                     );
                                                 }
                                             }}
-                                            onKeyDown={() => {
-                                                const commandsToSend =
-                                                    recommendedAT[cmd];
-                                                if (commandsToSend) {
-                                                    dispatch(
-                                                        sendAT(commandsToSend)
-                                                    );
+                                            onKeyDown={event => {
+                                                if (event.key === 'Enter') {
+                                                    const commandsToSend =
+                                                        recommendedAT[cmd];
+                                                    if (commandsToSend) {
+                                                        dispatch(
+                                                            sendAT(
+                                                                commandsToSend
+                                                            )
+                                                        );
+                                                    }
                                                 }
                                             }}
                                         >

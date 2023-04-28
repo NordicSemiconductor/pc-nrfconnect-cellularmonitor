@@ -350,13 +350,13 @@ export const documentation: Documentation = {
             commands: [] as const,
         },
         'PDN Type': {
-            commands: [] as const,
+            commands: ['AT+CGDCONT'] as const,
         },
         'PDN Type Raw': {
             commands: [] as const,
         },
         'IPv4 Address': {
-            commands: [] as const,
+            commands: ['AT+CGDCONT'] as const,
         },
         'IPv6 Address': {
             commands: [] as const,

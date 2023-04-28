@@ -100,6 +100,14 @@ const expectedState = {
         universalTime: '22016021225580',
         daylightSavingTime: '01',
     },
+    accessPointNames: {
+        'ibasis.iot': {
+            cid: 0,
+            pdnType: 'IP',
+            apn: 'ibasis.iot',
+            ipv4: '10.160.148.98',
+        },
+    },
 } as Partial<State>;
 
 test('Trace is read properly', () => {

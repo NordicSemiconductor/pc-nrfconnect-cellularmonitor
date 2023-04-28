@@ -223,6 +223,7 @@ export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
 export interface AccessPointName {
     // Identification properties
+    cid?: number;
     imsi?: string;
     bearerId?: string;
     apn?: string;
@@ -234,7 +235,7 @@ export interface AccessPointName {
         | 'PDN Connectivity Reject';
     cause?: Cause;
     defaultApn?: boolean;
-    pdnType?: PDNType;
+    pdnType?: string;
     rawPDNType?: RawPDNType;
     ipv4?: IPv4Address;
     ipv6?: IPv6Address | undefined;
@@ -248,7 +249,7 @@ export interface AccessPointName {
 
 // Need to be cast from RawPDNType with parsePDNType function
 export type NetworkType = 'NB-IoT' | 'LTE-M';
-export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
+// export type PDNType = 'IPv4' | 'IPv6' | 'IPv4v6' | 'Non IP';
 export type RawPDNType = '1' | '2' | '3' | '4';
 export type Cause = {
     code: number;
@@ -263,7 +264,7 @@ export const parseRawPDN = (rawPDN: unknown): RawPDNType => {
     return null as never;
 };
 
-export const parsePDNType = (rawType: RawPDNType): PDNType => {
+export const parsePDNType = (rawType: RawPDNType): string => {
     if (rawType === '1') return 'IPv4';
     if (rawType === '2') return 'IPv6';
     if (rawType === '3') return 'IPv4v6';

@@ -14,12 +14,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 12286,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971613873,
@@ -31,12 +26,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 12286,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971614789,
@@ -51,12 +41,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 15102,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971623425,
@@ -68,12 +53,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 15102,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971623456,
@@ -88,12 +68,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 15102,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971631817,
@@ -105,12 +80,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 15102,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971631848,
@@ -122,12 +92,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 83, 89, 83, 84, 69, 77, 77, 79, 68, 69, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 15870,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971648083,
@@ -142,12 +107,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 15870,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971648114,
@@ -159,12 +119,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 83, 78],
         },
         format: 'at',
-        meta: {
-            data_offset: 15870,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971776501,
@@ -179,12 +134,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 15870,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971776562,
@@ -196,12 +146,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 82, 69, 71, 61, 53],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971785260,
@@ -213,12 +158,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971785290,
@@ -230,12 +170,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 83, 67, 79, 78, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971793469,
@@ -247,12 +182,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971793499,
@@ -268,12 +198,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971795514,
@@ -285,12 +210,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17662,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971795636,
@@ -302,12 +222,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 77, 68, 77, 69, 86, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971804455,
@@ -319,12 +234,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971804455,
@@ -336,12 +246,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 67, 69, 83, 81, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971812970,
@@ -353,12 +258,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971813000,
@@ -370,12 +270,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 82, 69, 71, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971815014,
@@ -390,12 +285,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971815106,
@@ -407,12 +297,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 70, 85, 78, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971823773,
@@ -424,12 +309,7 @@ export const rawTraceData = [
             data: [43, 67, 70, 85, 78, 58, 32, 48, 13, 10, 79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971823864,
@@ -444,12 +324,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971833142,
@@ -461,12 +336,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971834790,
@@ -478,12 +348,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 82, 69, 71, 61, 53],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971844586,
@@ -495,12 +360,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 17918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971844616,
@@ -512,12 +372,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 83, 67, 79, 78, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 18430,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971853100,
@@ -529,12 +384,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 18430,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971853131,
@@ -546,12 +396,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 70, 85, 78, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 18430,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971855084,
@@ -563,12 +408,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 18430,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058971888745,
@@ -586,12 +426,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.bcch_dl_sch',
-        meta: {
-            data_offset: 38398,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058972956830,
@@ -610,12 +445,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.bcch_dl_sch',
-        meta: {
-            data_offset: 38910,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973014874,
@@ -634,12 +464,7 @@ export const rawTraceData = [
             ],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 39422,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973020092,
@@ -654,12 +479,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 39422,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973022046,
@@ -674,12 +494,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 39422,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973022229,
@@ -691,12 +506,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 84, 73, 77, 69, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 39422,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973066388,
@@ -708,12 +518,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 39422,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973066418,
@@ -725,12 +530,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 70, 85, 78, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 40702,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973113202,
@@ -742,12 +542,7 @@ export const rawTraceData = [
             data: [43, 67, 70, 85, 78, 58, 32, 49, 13, 10, 79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 40702,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973113263,
@@ -759,12 +554,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 83, 78, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 40958,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973168469,
@@ -779,12 +569,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 40958,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973168530,
@@ -796,12 +581,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 77, 73],
         },
         format: 'at',
-        meta: {
-            data_offset: 41214,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973195477,
@@ -817,12 +597,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 41214,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973195508,
@@ -834,12 +609,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 77, 77],
         },
         format: 'at',
-        meta: {
-            data_offset: 41470,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973215619,
@@ -854,12 +624,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 41470,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973215832,
@@ -871,12 +636,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 77, 82],
         },
         format: 'at',
-        meta: {
-            data_offset: 41726,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973235943,
@@ -891,12 +651,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 41726,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973235974,
@@ -908,12 +663,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 77, 79, 68, 69, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 42238,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973256115,
@@ -927,12 +677,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 42238,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973256115,
@@ -944,12 +689,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 67, 66, 65, 78, 68, 61, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 45822,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973291455,
@@ -966,12 +706,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 45822,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973291546,
@@ -983,12 +718,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 77, 69, 69, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 46590,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973331494,
@@ -1000,12 +730,7 @@ export const rawTraceData = [
             data: [43, 67, 77, 69, 69, 58, 32, 48, 13, 10, 79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 46590,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973331524,
@@ -1017,12 +742,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 77, 69, 69, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 46590,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973349560,
@@ -1034,12 +754,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 46590,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973349591,
@@ -1051,12 +766,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 78, 69, 67, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 48126,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973358685,
@@ -1068,12 +778,7 @@ export const rawTraceData = [
             data: [43, 67, 78, 69, 67, 58, 32, 48, 13, 10, 79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 48126,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973358685,
@@ -1085,12 +790,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 78, 69, 67, 61, 50, 52],
         },
         format: 'at',
-        meta: {
-            data_offset: 48126,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973377789,
@@ -1102,12 +802,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 48126,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973377850,
@@ -1119,12 +814,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 69, 82, 69, 80, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 49918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973388470,
@@ -1139,12 +829,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 49918,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973388501,
@@ -1156,12 +841,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 68, 67, 79, 78, 84, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 50942,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973406445,
@@ -1176,12 +856,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 50942,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973406567,
@@ -1196,12 +871,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 50942,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973426892,
@@ -1219,12 +889,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.bcch_dl_sch',
-        meta: {
-            data_offset: 50942,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973434826,
@@ -1236,12 +901,7 @@ export const rawTraceData = [
             data: [64, 140, 113, 17, 176, 150],
         },
         format: 'lte_rrc.ul_ccch',
-        meta: {
-            data_offset: 51198,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973437451,
@@ -1253,12 +913,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 65, 67, 84, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973463879,
@@ -1273,12 +928,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973463940,
@@ -1295,12 +945,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_ccch',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973471966,
@@ -1319,12 +964,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973472943,
@@ -1336,12 +976,7 @@ export const rawTraceData = [
             data: [43, 67, 83, 67, 79, 78, 58, 32, 49, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973474347,
@@ -1356,12 +991,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 51454,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973477978,
@@ -1373,12 +1003,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 69, 82, 69, 80, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 51710,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973513043,
@@ -1390,12 +1015,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 51710,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973513043,
@@ -1407,12 +1027,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 73, 78, 68, 61, 49, 44, 49, 44, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 52478,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973539380,
@@ -1424,12 +1039,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 52478,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973539410,
@@ -1441,12 +1051,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 82, 69, 71, 61, 53],
         },
         format: 'at',
-        meta: {
-            data_offset: 53502,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973546856,
@@ -1458,12 +1063,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 53502,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973546887,
@@ -1475,12 +1075,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 82, 69, 71, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 53502,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973556134,
@@ -1496,12 +1091,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 53502,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973556286,
@@ -1513,12 +1103,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 67, 69, 83, 81, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973582043,
@@ -1530,12 +1115,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973582074,
@@ -1547,12 +1127,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 69, 83, 81],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973591015,
@@ -1567,12 +1142,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973591076,
@@ -1584,12 +1154,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 83, 73, 77, 61, 49],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973612347,
@@ -1601,12 +1166,7 @@ export const rawTraceData = [
             data: [79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973612378,
@@ -1618,12 +1178,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 83, 73, 77, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973622387,
@@ -1635,12 +1190,7 @@ export const rawTraceData = [
             data: [37, 88, 83, 73, 77, 58, 32, 49, 13, 10, 79, 75, 13, 10],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973622418,
@@ -1652,12 +1202,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 80, 73, 78],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973640057,
@@ -1672,12 +1217,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 54014,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973640118,
@@ -1692,12 +1232,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 54270,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973658978,
@@ -1712,12 +1247,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 56062,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973664959,
@@ -1729,12 +1259,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 73, 77, 73],
         },
         format: 'at',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973680615,
@@ -1749,12 +1274,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973680645,
@@ -1770,12 +1290,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973728070,
@@ -1791,12 +1306,7 @@ export const rawTraceData = [
             ],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973728131,
@@ -1808,12 +1318,7 @@ export const rawTraceData = [
             data: [7, 83, 8, 98, 116, 202, 65, 31, 153, 21, 247],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973776227,
@@ -1825,12 +1330,7 @@ export const rawTraceData = [
             data: [72, 1, 96, 234, 97, 12, 78, 153, 72, 35, 243, 34, 190, 224],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 58110,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973776349,
@@ -1845,12 +1345,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 60415,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973838971,
@@ -1862,12 +1357,7 @@ export const rawTraceData = [
             data: [55, 187, 234, 142, 84, 0, 7, 93, 17, 3, 2, 240, 240, 193],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 60415,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973839032,
@@ -1879,12 +1369,7 @@ export const rawTraceData = [
             data: [7, 94, 35, 9, 51, 37, 86, 22, 96, 70, 103, 39, 245],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 60415,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973840527,
@@ -1899,12 +1384,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 60415,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058973840741,
@@ -1916,12 +1396,7 @@ export const rawTraceData = [
             data: [48, 2, 32],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 69375,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975509259,
@@ -1933,12 +1408,7 @@ export const rawTraceData = [
             data: [40, 0],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 69375,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975510907,
@@ -1953,12 +1423,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 75263,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975596142,
@@ -1979,12 +1444,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 75263,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975598065,
@@ -2010,12 +1470,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975695385,
@@ -2027,12 +1482,7 @@ export const rawTraceData = [
             data: [16, 0],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975696545,
@@ -2054,12 +1504,7 @@ export const rawTraceData = [
             ],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975696820,
@@ -2071,12 +1516,7 @@ export const rawTraceData = [
             data: [7, 67, 0, 3, 82, 0, 194],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975697278,
@@ -2091,12 +1531,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975697461,
@@ -2111,12 +1546,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750775,
@@ -2129,12 +1559,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 73, 67, 67, 73, 68],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750776,
@@ -2151,12 +1576,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750800,
@@ -2170,12 +1590,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 67, 66, 65, 78, 68],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750800,
@@ -2192,12 +1607,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750800,
@@ -2213,12 +1623,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750866,
@@ -2233,12 +1638,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975750988,
@@ -2255,12 +1655,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975751141,
@@ -2275,12 +1670,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975751507,
@@ -2295,12 +1685,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975751599,
@@ -2317,12 +1702,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975770245,
@@ -2338,12 +1718,7 @@ export const rawTraceData = [
             ],
         },
         format: 'nas-eps',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975770367,
@@ -2359,12 +1734,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975770642,
@@ -2376,12 +1746,7 @@ export const rawTraceData = [
             data: [65, 84, 37, 88, 77, 79, 78, 73, 84, 79, 82],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975804944,
@@ -2402,12 +1767,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 81663,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975805127,
@@ -2419,12 +1779,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 68, 67, 79, 78, 84, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975824536,
@@ -2441,12 +1796,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975824658,
@@ -2461,12 +1811,7 @@ export const rawTraceData = [
             ],
         },
         format: 'lte_rrc.dl_dcch',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975830334,
@@ -2478,12 +1823,7 @@ export const rawTraceData = [
             data: [18, 0],
         },
         format: 'lte_rrc.ul_dcch',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975830975,
@@ -2495,12 +1835,7 @@ export const rawTraceData = [
             data: [65, 84, 43, 67, 71, 65, 67, 84, 63],
         },
         format: 'at',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975860577,
@@ -2515,12 +1850,7 @@ export const rawTraceData = [
             ],
         },
         format: 'at',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
+
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058975860669,
@@ -2537,12 +1867,6 @@ export const rawTraceData = [
             ],
         },
         format: 'ip',
-        meta: {
-            data_offset: 88561,
-            modem_db_path:
-                '/home/jonas/.config/nrfconnect/pc-nrfconnect-cellularmonitor/trace_db_cache/nRF9160/1.3.2/c816a44f-c0da-43f3-a72a-92102cd8e13b/mfw_nrf9160_1.3.2_trace-db.json',
-            modem_db_uuid: 'c816a44f-c0da-43f3-a72a-92102cd8e13b',
-        },
         timestamp: {
             resolution: 'NRFML_TIMESTAMP_MICROSECONDS',
             value: 1665058976037488,

@@ -35,6 +35,7 @@ export const recommendedAT: recommendedAT = {
     'AT%XSYSTEMMODE': 'AT%XSYSTEMMODE?',
 
     'AT%XEMPR': 'AT%XEMPR?',
+    'AT+CGDCONT': 'AT+CGDCONT?',
 
     'AT+COPS': 'AT+COPS?',
 };
