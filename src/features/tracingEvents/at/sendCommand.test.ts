@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { getModemVersionFromResponse } from './recommeneded';
+import { getModemVersionFromResponse } from './sendCommand';
 
 test('Modem version is found', () => {
     expect(getModemVersionFromResponse('mfw_nrf9160_1.1.1')).toBe('1.1.1');

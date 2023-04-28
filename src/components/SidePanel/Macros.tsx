@@ -4,28 +4,49 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 import {
+    fullReport,
     recommendedAt,
-    sendMacros,
 } from '../../features/tracingEvents/at/recommeneded';
+import { sendAT } from '../../features/tracingEvents/at/sendCommand';
 
-export const Macros = () => {
+export const Recommended = () => (
+    <Macro commands={recommendedAt} title="Run recommended AT commands" />
+);
+
+export const FullNetworkReport = () => (
+    <Macro commands={fullReport} title="Run full network test" />
+);
+
+type Macro = {
+    commands: string[];
+    title: string;
+};
+
+export const Macro = ({ commands, title }: Macro) => {
+    const dispatch = useDispatch();
     const serialPort = useSelector(getUartSerialPort);
+    const [isSending, setIsSending] = useState(false);
 
     if (serialPort != null) {
         return (
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={() => sendMacros(serialPort, recommendedAt)}
-                title={`Send recommended AT commands over port ${serialPort.path}.\nRemember to Start tracing, in order to update the dashboard and chart.`}
+                onClick={async () => {
+                    setIsSending(true);
+                    await dispatch(sendAT(commands));
+                    setIsSending(false);
+                }}
+                title={`Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`}
+                disabled={isSending}
             >
-                Run recommended AT commands
+                {isSending ? 'Sending commands' : title}
             </Button>
         );
     }

@@ -15,7 +15,7 @@ import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
-import { detectDatabaseVersion } from '../tracingEvents/at/recommeneded';
+import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
@@ -33,6 +33,7 @@ import {
 import {
     getManualDbFilePath,
     getSerialPort,
+    getShellParser,
     getUartSerialPort,
     setTraceDataReceived,
     setTraceIsStarted,
@@ -118,6 +119,7 @@ export const startTrace =
         const formats = [...sinks];
         const state = getState();
         const uartPort = getUartSerialPort(state);
+        const shellParser = getShellParser(state);
         const tracePort = getSerialPort(state);
         if (!tracePort) {
             logger.error('Select serial port to start tracing');
@@ -134,7 +136,7 @@ export const startTrace =
             !(formats.length === 1 && formats[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
 
         if (uartPort && isDetectingTraceDb) {
-            const version = await detectDatabaseVersion(uartPort);
+            const version = await detectDatabaseVersion(uartPort, shellParser);
 
             if (version) {
                 dispatch(setSelectedTraceDatabaseFromVersion(version));
