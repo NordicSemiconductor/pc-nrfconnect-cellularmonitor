@@ -14,12 +14,20 @@ import {
     truncateMiddle,
 } from 'pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
+import { Terminal } from 'xterm-headless';
 
+import {
+    hookModemToShellParser,
+    xTerminalShellParserWrapper,
+} from '../shell/shellParser';
 import {
     getAvailableSerialPorts,
     getUartSerialPort,
+    removeShellParser,
+    setShellParser,
     setUartSerialPort,
 } from '../tracing/traceSlice';
+import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 
 export default () => {
     const dispatch = useDispatch();
@@ -72,12 +80,37 @@ export default () => {
 };
 
 const connectToSerialPort = async (dispatch: Dispatch, path: string) => {
-    dispatch(
-        setUartSerialPort(
-            await createSerialPort({
-                path,
-                baudRate: 115200,
-            })
-        )
-    );
+    const port = await createSerialPort({
+        path,
+        baudRate: 115200,
+    });
+    dispatch(setUartSerialPort(port));
+
+    /*
+     Some applications that run Line Mode have an issue, where if you power-cycle the device,
+     the first AT command after the power-cycle will return an ERROR. This function `testIfShellMode`
+     makes us avoid this issue, because we emit a command that will return OK if it's in shell mode, and
+     ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
+     the next time we send a command.
+     */
+    const isShellMode = await testIfShellMode(port);
+
+    if (isShellMode) {
+        const shellParser = await hookModemToShellParser(
+            port,
+            xTerminalShellParserWrapper(
+                new Terminal({ allowProposedApi: true, cols: 999 })
+            ),
+            {
+                shellPromptUart: 'mosh:~$',
+                logRegex:
+                    /[[][0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3},[0-9]{3}] <([^<^>]+)> ([^:]+): /,
+                errorRegex: /ERROR/i,
+                timeout: 10_000,
+            }
+        );
+        dispatch(setShellParser(shellParser));
+    } else {
+        dispatch(removeShellParser());
+    }
 };
