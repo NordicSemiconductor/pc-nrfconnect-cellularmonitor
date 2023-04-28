@@ -6,13 +6,8 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup } from 'pc-nrfconnect-shared';
 
 import { getTraceProgress } from '../../../features/tracing/traceSlice';
-import {
-    getCollapseTraceDetailsSection,
-    setCollapseTraceDetailsSection,
-} from '../../../utils/store';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import TraceFileDetails from './TraceFileDetails';
 
@@ -24,13 +19,7 @@ export default () => {
     }
 
     return (
-        <CollapsibleGroup
-            heading="Trace Details"
-            defaultCollapsed={getCollapseTraceDetailsSection()}
-            onToggled={isNowExpanded =>
-                setCollapseTraceDetailsSection(!isNowExpanded)
-            }
-        >
+        <>
             {progress.length > 0 && <DiskSpaceUsage />}
             {progress.map(progressItem => (
                 <TraceFileDetails
@@ -39,6 +28,6 @@ export default () => {
                     truncate
                 />
             ))}
-        </CollapsibleGroup>
+        </>
     );
 };

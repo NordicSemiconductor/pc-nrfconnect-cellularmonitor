@@ -89,13 +89,11 @@ export default () => {
     };
 
     return (
-        <>
-            <p>Trace database</p>
-            <Dropdown
-                items={items}
-                onSelect={onSelect}
-                selectedItem={selectedItem}
-            />
-        </>
+        <Dropdown
+            label="Trace database"
+            items={items}
+            onSelect={onSelect}
+            selectedItem={selectedItem}
+        />
     );
 };

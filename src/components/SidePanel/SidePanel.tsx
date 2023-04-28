@@ -15,7 +15,6 @@ import Instructions from './Instructions';
 import { Recommended } from './Macros';
 import TraceOptions from './TraceOptions';
 import TraceCollector from './Tracing/TraceCollector';
-import TraceFileInformation from './Tracing/TraceFileInformation';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
@@ -32,7 +31,5 @@ export const TraceCollectorSidePanel = () => (
         <ConnectionStatus />
         <TraceOptions />
         <AdvancedOptions />
-
-        <TraceFileInformation />
     </SidePanel>
 );
