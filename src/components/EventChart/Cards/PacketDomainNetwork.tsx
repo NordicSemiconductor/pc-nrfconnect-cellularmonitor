@@ -20,34 +20,30 @@ export default ({
     cause,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
-        'Access Point Name': { value: apn ?? 'Unknown', commands: [] },
-        'PDN Type': { value: pdnType ?? 'Unknown', commands: [] },
-        'PDN Type Raw': { value: rawPDNType ?? 'Unknown', commands: [] },
-        'IPv4 Address': { value: ipv4 ?? 'Unknown', commands: [] },
-        'IPv6 Address': { value: `${ipv6}` ?? 'Unknown', commands: [] },
-        info: { value: info ?? 'Unknown', commands: [] },
-        Connection: { value: connection ?? 'Unknown', commands: [] },
+        'Access Point Name': {
+            value: apn ?? 'Unknown',
+        },
+        'PDN Type': { value: pdnType ?? 'Unknown' },
+        'PDN Type Raw': {
+            value: rawPDNType ?? 'Unknown',
+        },
+        'IPv4 Address': { value: ipv4 ?? 'Unknown' },
+        'IPv6 Address': {
+            value: `${ipv6}` ?? 'Unknown',
+        },
+        info: { value: info ?? 'Unknown' },
+        Connection: { value: connection ?? 'Unknown' },
     };
 
     if (cause) {
         fields['Cause Code'] = {
             value: cause.code,
-            commands: [],
-            description: cause.reason,
         };
     }
     return (
         <DashboardCard
             key={`dashboard-apn-${apn}-card`}
-            title={
-                apn
-                    ? apn
-                          ?.split('.')
-                          .slice(0, 2)
-                          .map(word => word.toUpperCase())
-                          .join(' ')
-                    : 'Unknown APN'
-            }
+            title="PDN"
             iconName="mdi-web"
             fields={fields}
         />

@@ -40,31 +40,24 @@ export default () => {
     const fields: DashboardCardFields = {
         'REQUESTED ACTIVE TIMER(T3324)': {
             value: formatPSMValuesToString(requested?.T3324),
-            commands: ['AT+CPSMS'] as const,
         },
         'GRANTED ACTIVE TIMER(T3324)': {
             value: formatPSMValuesToString(granted?.T3324),
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
         'REQUESTED PERIODIC TAU(T3412 EXTENDED)': {
             value: formatPSMValuesToString(requested?.T3412Extended),
-            commands: ['AT+CPSMS'] as const,
         },
         'GRANTED PERIODIC TAU(T3412 EXTENDED)': {
             value: formatPSMValuesToString(granted?.T3412Extended),
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
         'GRANTED PERIODIC TAU(T3412 / LEGACY)': {
             value: formatPSMValuesToString(granted?.T3412),
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
         'POWER SAVING MODE STATE (GRANTED)': {
             value: granted?.state?.toUpperCase() ?? 'OFF',
-            commands: ['AT+CEREG', 'AT%XMONITOR'],
         },
         'TAU TRIGGERED': {
             value: TAUTriggered ?? 'Unknown',
-            commands: ['AT%CONEVAL'] as const,
         },
     };
 
