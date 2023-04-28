@@ -36,6 +36,7 @@ interface TraceState {
     readonly uartSerialPort: SerialPort | null;
     readonly shellParser: ShellParser | null;
     selectedFormats: TraceFormat[];
+    showConflictingSettingsDialog: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -50,6 +51,7 @@ const initialState = (): TraceState => ({
     uartSerialPort: null,
     shellParser: null,
     selectedFormats: restoreTraceFormats(),
+    showConflictingSettingsDialog: false,
 });
 
 const traceSlice = createSlice({
@@ -130,6 +132,12 @@ const traceSlice = createSlice({
             state.selectedFormats = action.payload;
             storeTraceFormats(action.payload);
         },
+        setShowConflictingSettingsDialog: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.showConflictingSettingsDialog = action.payload;
+        },
     },
 });
 
@@ -165,6 +173,9 @@ export const getShellParser = (state: RootState) => state.app.trace.shellParser;
 export const getTraceFormats = (state: RootState) =>
     state.app.trace.selectedFormats;
 
+export const getShowConflictingSettingsDialog = (state: RootState) =>
+    state.app.trace.showConflictingSettingsDialog;
+
 export const {
     setTraceIsStarted,
     setTraceIsStopped,
@@ -180,6 +191,7 @@ export const {
     setShellParser,
     removeShellParser,
     setTraceFormats,
+    setShowConflictingSettingsDialog,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;
