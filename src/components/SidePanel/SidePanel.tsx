@@ -7,6 +7,7 @@
 import React from 'react';
 import { SidePanel } from 'pc-nrfconnect-shared';
 
+import StartupDialog from '../../features/startup/startupDialog';
 import { OpenSerialTerminal } from '../../features/terminal';
 import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
@@ -21,6 +22,7 @@ import './Tracing/tracing.scss';
 
 export const TraceCollectorSidePanel = () => (
     <SidePanel className="side-panel">
+        <StartupDialog />
         <Instructions />
         <FileActions />
 
