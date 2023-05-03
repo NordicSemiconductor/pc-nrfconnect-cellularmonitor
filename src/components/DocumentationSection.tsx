@@ -7,6 +7,8 @@
 import React from 'react';
 import { DocumentationSection } from 'pc-nrfconnect-shared';
 
+import StartupDialog from '../features/startup/startupDialog';
+
 const DocumentationSections = [
     <DocumentationSection
         key="infocenter"
@@ -15,6 +17,7 @@ const DocumentationSections = [
     >
         Visit our Infocenter for more documentation about using the app.
     </DocumentationSection>,
+    <StartupDialog key="default-startup-dialog" />,
 ];
 
 export default DocumentationSections;

@@ -21,6 +21,7 @@ const SERIALPORTS = 'serialPorts';
 const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
 const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
 const COLLAPSE_CONNECTION_STATUS_SECTION = 'connectionStatusSection';
+const SHOW_STARTUP_DIALOG = 'showStartupDialog';
 
 interface StoreSchema {
     [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
@@ -82,3 +83,8 @@ export const setCollapseConnectionStatusSection = (
         COLLAPSE_CONNECTION_STATUS_SECTION,
         collapseConnectionStatusSection
     );
+
+export const setShowStartupDialog = (showStartupDialog: boolean) =>
+    store<StoreSchema>().set(SHOW_STARTUP_DIALOG, showStartupDialog);
+export const getShowStartupDialog = () =>
+    store<StoreSchema>().get(SHOW_STARTUP_DIALOG, true);
