@@ -41,16 +41,14 @@ export default () => {
     if (selectedSerialPort == null) return null;
 
     return (
-        <>
-            <p>Serialport trace capture</p>
-            <div className="serialport-selection">
-                <Dropdown
-                    disabled={isTracing}
-                    onSelect={updateSerialPort}
-                    selectedItem={selectedItem}
-                    items={dropdownItems}
-                />
-            </div>
-        </>
+        <div className="serialport-selection">
+            <Dropdown
+                label="Serialport trace capture"
+                disabled={isTracing}
+                onSelect={updateSerialPort}
+                selectedItem={selectedItem}
+                items={dropdownItems}
+            />
+        </div>
     );
 };

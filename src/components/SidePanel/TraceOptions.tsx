@@ -10,6 +10,7 @@ import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import DatabaseFileOverride from './DatabaseFileOverride';
 import Serialports from './Serialports';
+import TraceFileInformation from './Tracing/TraceFileInformation';
 import TraceFormatSelector from './Tracing/TraceFormatSelector';
 
 export default () => {
@@ -18,9 +19,10 @@ export default () => {
 
     return (
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
-            <TraceFormatSelector />
             <DatabaseFileOverride />
             <Serialports />
+            <TraceFormatSelector />
+            <TraceFileInformation />
         </CollapsibleGroup>
     );
 };

@@ -73,16 +73,6 @@ export const getCollapsePowerSection = () =>
 export const setCollapsePowerSection = (collapsePowerSection: boolean) =>
     store<StoreSchema>().set(COLLAPSE_POWER_SECTION, collapsePowerSection);
 
-export const getCollapseTraceDetailsSection = () =>
-    store<StoreSchema>().get(COLLAPSE_TRACE_DETAILS_SECTION, false);
-export const setCollapseTraceDetailsSection = (
-    collapseTraceDetailsSection: boolean
-) =>
-    store<StoreSchema>().set(
-        COLLAPSE_TRACE_DETAILS_SECTION,
-        collapseTraceDetailsSection
-    );
-
 export const getCollapseConnectionStatusSection = () =>
     store<StoreSchema>().get(COLLAPSE_CONNECTION_STATUS_SECTION, false);
 export const setCollapseConnectionStatusSection = (

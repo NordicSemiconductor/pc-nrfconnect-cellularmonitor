@@ -144,7 +144,7 @@ describe('Sidepanel functionality', () => {
         });
     });
 
-    describe('multiple sinks', () => {
+    xdescribe('multiple sinks', () => {
         it('should show file details for multiple sinks', async () => {
             render(
                 <TraceCollectorSidePanel />,

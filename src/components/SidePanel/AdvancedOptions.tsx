@@ -20,8 +20,8 @@ export default () => {
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
             <FlashSampleModal />
-            <SourceSelector />
             <FullNetworkReport />
+            <SourceSelector />
         </CollapsibleGroup>
     );
 };
