@@ -8,16 +8,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../appReducer';
 import {
-    getShowStartupDialog as getPersistedShowStartupDialog,
-    setShowStartupDialog as setPersistedShowStartupDialog,
+    getShowStartupDialog as getPersistedShowStartupDialogOnAppStart,
+    setShowStartupDialog as setPersistedShowStartupDialogOnAppStart,
 } from '../../utils/store';
 
 interface Startup {
     showStartupDialog: boolean;
+    showStartupDialogOnAppStart: boolean;
 }
 
 const initialState = (): Startup => ({
-    showStartupDialog: getPersistedShowStartupDialog(),
+    showStartupDialog: false,
+    showStartupDialogOnAppStart: getPersistedShowStartupDialogOnAppStart(),
 });
 
 const startupSlice = createSlice({
@@ -26,14 +28,23 @@ const startupSlice = createSlice({
     reducers: {
         setShowStartupDialog: (state, action: PayloadAction<boolean>) => {
             state.showStartupDialog = action.payload;
-            setPersistedShowStartupDialog(action.payload);
+        },
+        setShowStartupDialogOnAppStart: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.showStartupDialogOnAppStart = action.payload;
+            setPersistedShowStartupDialogOnAppStart(action.payload);
         },
     },
 });
 
 export const getShowStartupDialog = (state: RootState) =>
     state.app.startup.showStartupDialog;
+export const getShowStartupDialogOnAppStart = (state: RootState) =>
+    state.app.startup.showStartupDialogOnAppStart;
 
-export const { setShowStartupDialog } = startupSlice.actions;
+export const { setShowStartupDialog, setShowStartupDialogOnAppStart } =
+    startupSlice.actions;
 
 export default startupSlice.reducer;

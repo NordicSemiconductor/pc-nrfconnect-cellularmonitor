@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -14,49 +14,64 @@ import {
     Toggle,
 } from 'pc-nrfconnect-shared';
 
-import { getShowStartupDialog, setShowStartupDialog } from './startupSlice';
+import {
+    getShowStartupDialog,
+    getShowStartupDialogOnAppStart,
+    setShowStartupDialog,
+    setShowStartupDialogOnAppStart,
+} from './startupSlice';
 
 import './startupDialog.css';
 
 const StartupDialog = () => {
     const dispatch = useDispatch();
+    const showStartupDialogOnAppStart = useSelector(
+        getShowStartupDialogOnAppStart
+    );
     const showStartupDialog = useSelector(getShowStartupDialog);
-    const [visible, setVisible] = useState(showStartupDialog);
-    const [showOnNextStartup, setShowOnNextStartup] =
-        useState(showStartupDialog);
+
+    const [visible, setVisible] = useState(showStartupDialogOnAppStart);
+    const [showOnNextStartup, setShowOnNextStartup] = useState(
+        showStartupDialogOnAppStart
+    );
+
+    useEffect(() => {
+        if (!visible && showStartupDialog) {
+            setVisible(true);
+        }
+    }, [visible, showStartupDialog]);
+
+    const hideDialog = () => {
+        setVisible(false);
+        dispatch(setShowStartupDialog(false));
+        if (showOnNextStartup !== showStartupDialogOnAppStart) {
+            dispatch(setShowStartupDialogOnAppStart(showOnNextStartup));
+        }
+    };
 
     if (!visible) {
-        return null;
+        return (
+            <Button
+                variant="secondary"
+                key="button"
+                className="mt-3"
+                onClick={() => dispatch(setShowStartupDialog(true))}
+            >
+                Open &apos;How to use&apos;
+            </Button>
+        );
     }
 
     return (
         <GenericDialog
-            onHide={() => {
-                setVisible(false);
-                if (showOnNextStartup !== showStartupDialog) {
-                    dispatch(setShowStartupDialog(showOnNextStartup));
-                }
-            }}
+            onHide={hideDialog}
             closeOnEsc
             isVisible={visible}
-            // headerIcon={headerIcon}
             title="How to use Cellular Monitor"
-            // className={className}
             size="xl"
             footer={
                 <>
-                    <DialogButton
-                        onClick={() => {
-                            setVisible(false);
-                            if (showOnNextStartup !== showStartupDialog) {
-                                dispatch(
-                                    setShowStartupDialog(showOnNextStartup)
-                                );
-                            }
-                        }}
-                    >
-                        Close
-                    </DialogButton>
+                    <DialogButton onClick={hideDialog}>Close</DialogButton>
                     <Toggle
                         label="Show on startup"
                         title={
