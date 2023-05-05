@@ -6,14 +6,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { clipboard } from 'electron';
 import {
     Button,
     DialogButton,
     GenericDialog,
-    openUrl,
     Toggle,
 } from 'pc-nrfconnect-shared';
 
+import Copy from '../../components/Copy';
 import {
     getShowStartupDialog,
     getShowStartupDialogOnAppStart,
@@ -22,6 +23,15 @@ import {
 } from './startupSlice';
 
 import './startupDialog.css';
+
+const Config = [
+    'CONFIG_NRF_MODEM_LIB_TRACE=y',
+    'CONFIG_AT_HOST_LIBRARY = y #(note this is optional)',
+];
+
+const copyConfigToClipboard = () => {
+    clipboard.writeText(Config.join('\n'));
+};
 
 const StartupDialog = () => {
     const dispatch = useDispatch();
@@ -87,228 +97,55 @@ const StartupDialog = () => {
                 </>
             }
         >
-            <div
-                style={{
-                    display: 'flex',
-                    marginBottom: '32px',
-                    userSelect: 'text',
-                }}
-                className="startup-dialog"
-            >
-                <div style={boxStyle}>
-                    <b style={boxHeaderStyle}>
-                        1. Before you can use Cellular Monitor
-                    </b>
-                    <p>Enable Trace in your application as follows:</p>
+            <div style={{ padding: '32px' }}>
+                <b style={headerStyle}>
+                    Enable Trace in your application as follows:
+                </b>
+                <p>
+                    If you use nRF Connect SDK v2.0.1 or higher, add the
+                    following Kconfig snippets to enable trace and AT commands*
+                    in your application firmware.
+                </p>
+                <pre
+                    style={{
+                        whiteSpace: 'pre-wrap',
+                        userSelect: 'text',
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                >
+                    {Config.join('\n')}
+                    <Copy
+                        data={Config.join('\n')}
+                        size={0.9}
+                        style={{ marginLeft: '8px' }}
+                    />
+                </pre>
+
+                <p>
+                    Alternatively, in Advanced Options you can program a sample
+                    with trace enabled and upgrade your modem firmware.
+                </p>
+
+                <p>
+                    Minimum requirements:
                     <ul>
                         <li>
-                            If you use nRF Connect SDK v2.0.1 or higher, add the
-                            following Kconfig snippets to enable trace and AT
-                            commands (optional) in your application firmware:
+                            A Nordic Semiconductor cellular device, such as an
+                            nRF91 series DK or Nordic Thingy:91™
                         </li>
-                        <pre
-                            style={{
-                                whiteSpace: 'pre-wrap',
-                                userSelect: 'text',
-                            }}
-                        >
-                            <code>CONFIG_NRF_MODEM_LIB_TRACE=y</code>
-                            <br />
-                            <code>
-                                CONFIG_AT_HOST_LIBRARY=y # (note this is
-                                optional)
-                            </code>
-                        </pre>
-                        <li>
-                            Or you can program a provided sample, which you can
-                            find in the Cellular Monitor left panel under
-                            Advanced Options
-                        </li>
+                        <li>A nano SIM card supporting LTE-M or NB-IoT</li>
+                        <li>Modem firmware version 1.3.1 or higher</li>
                     </ul>
-                    <p>
-                        Attach your device to a USB port on the computer and
-                        turn it on.
-                    </p>
-                    <p>Program the application firmware to your device.</p>
-                </div>
-                <div style={boxStyle}>
-                    <b style={boxHeaderStyle}>2. In Cellular Monitor</b>
-                    <p>
-                        Start a trace:
-                        <ul>
-                            <li>
-                                Click <b>SELECT DEVICE</b> and select your
-                                device.
-                            </li>
-                            <li>
-                                Click <b>START</b> to start tracing.
-                            </li>
-                            <li>
-                                Optionally:
-                                <ul>
-                                    <li>
-                                        Click <b>Run recommended AT commands</b>{' '}
-                                        to gather status information.
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </p>
+                </p>
 
-                    <p>
-                        Monitor the trace output as follows:
-                        <ul>
-                            <li>
-                                Expand the <b>Connection Status</b> in the left
-                                panel to follow progress.
-                            </li>
-                            <li>
-                                You can view connection layer events and
-                                patterns in the <b>Packet Event Viewer</b>.
-                            </li>
-                            <li>
-                                The DASHBOARD cards are populated with
-                                information on the connection and its
-                                components. You can access details in tooltips
-                                by hovering over each attribute.
-                            </li>
-                            <li>
-                                You can also view live trace in Wireshark by
-                                toggling <b>Open in Wireshark</b>.
-                            </li>
-                        </ul>
-                    </p>
-                </div>
-            </div>
-
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <div style={boxStyle}>
-                    <b style={boxHeaderStyle}>
-                        Background information and useful links:
-                    </b>
-                    <p>
-                        A cellular connection involves the interoperation of
-                        diverse components. Sometimes, not everything goes
-                        according to plan, and we need information about what
-                        happened. The modem core of an nRF9160 System in Package
-                        (SiP) collects data about the connection in a modem
-                        trace. Cellular Monitor allows you to access the trace
-                        data, to visualize the connection, and provides tools to
-                        help you understand, optimize, and/or troubleshoot.
-                    </p>
-                </div>
-                <div style={{ display: 'flex', width: '75%' }}>
-                    <div style={boxStyle}>
-                        <p>
-                            Minimum requirements:
-                            <ul style={{ padding: 0 }}>
-                                <li>nRF9160 DK and micro-USB cable</li>
-                                <li>or Nordic Thingy:91™</li>
-                                <li>
-                                    A nano SIM card that supports LTE-M or
-                                    NB-IoT
-                                </li>
-                                <li>Modem firmware version 1.3.1 or higher</li>
-                                <li>Application with Trace enabled</li>
-                                <li>nRF Connect SDK v2.0.1 or higher</li>
-                                <li>Wireshark (optional)</li>
-                            </ul>
-                        </p>
-                    </div>
-                    <div style={boxStyle}>
-                        <p>
-                            Useful links:
-                            <li>
-                                <Button
-                                    className="startup-dialog__button"
-                                    variant="link"
-                                    onClick={() =>
-                                        openUrl(
-                                            'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_nrf91_dk%2FUG%2Fnrf91_DK%2Fintro.html&cp=2_0_4'
-                                        )
-                                    }
-                                    title="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_nrf91_dk%2FUG%2Fnrf91_DK%2Fintro.html&cp=2_0_4"
-                                >
-                                    nRF9160 DK Hardware user guide
-                                </Button>
-                            </li>
-                            <li>
-                                <Button
-                                    className="startup-dialog__button"
-                                    variant="link"
-                                    onClick={() =>
-                                        openUrl(
-                                            'https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_thingy91%2FUG%2Fthingy91%2Fintro%2Ffrontpage.html'
-                                        )
-                                    }
-                                    title="https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_thingy91%2FUG%2Fthingy91%2Fintro%2Ffrontpage.html"
-                                >
-                                    Nordic Thingy:91™ Hardware
-                                </Button>
-                            </li>
-                            <li>
-                                <Button
-                                    className="startup-dialog__button"
-                                    variant="link"
-                                    onClick={() =>
-                                        openUrl(
-                                            'https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/getting_started/modifying.html#modifying-an-application'
-                                        )
-                                    }
-                                    title="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/getting_started/modifying.html#modifying-an-application"
-                                >
-                                    Modifying an NCS application
-                                </Button>
-                            </li>
-                            <li>
-                                <Button
-                                    className="startup-dialog__button"
-                                    variant="link"
-                                    onClick={() =>
-                                        openUrl(
-                                            'https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/kconfig/index.html#CONFIG_NRF_MODEM_LIB_TRACE'
-                                        )
-                                    }
-                                    title="https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/kconfig/index.html#CONFIG_NRF_MODEM_LIB_TRACE"
-                                >
-                                    Kconfig search — CONFIG_NRF_MODEM_LIB_TRACE
-                                </Button>
-                            </li>
-                            <li>
-                                <Button
-                                    className="startup-dialog__button"
-                                    variant="link"
-                                    onClick={() =>
-                                        openUrl(
-                                            'https://academy.nordicsemi.com/lessons/lesson-7-cellular-fundamentals/'
-                                        )
-                                    }
-                                    title="https://academy.nordicsemi.com/lessons/lesson-7-cellular-fundamentals/"
-                                >
-                                    DevAcademy - Lesson 7 – Debugging with a
-                                    modem trace
-                                </Button>
-                            </li>
-                        </p>
-                    </div>
-                </div>
+                <p>* Optional</p>
             </div>
         </GenericDialog>
     );
 };
 
-const boxStyle: React.CSSProperties = {
-    width: '60%',
-    padding: '16px',
-    fontSize: '14px',
-};
-const boxHeaderStyle: React.CSSProperties = {
+const headerStyle: React.CSSProperties = {
     fontSize: '16px',
     marginBottom: '2rem',
 };
