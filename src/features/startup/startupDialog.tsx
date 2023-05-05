@@ -6,7 +6,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clipboard } from 'electron';
 import {
     Button,
     DialogButton,
@@ -28,10 +27,6 @@ const Config = [
     'CONFIG_NRF_MODEM_LIB_TRACE=y',
     'CONFIG_AT_HOST_LIBRARY = y #(note this is optional)',
 ];
-
-const copyConfigToClipboard = () => {
-    clipboard.writeText(Config.join('\n'));
-};
 
 const StartupDialog = () => {
     const dispatch = useDispatch();
