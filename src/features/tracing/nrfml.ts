@@ -24,7 +24,7 @@ import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
 import sourceConfig from './sourceConfig';
-import { setSelectedTraceDatabaseFromVersion } from './traceDatabase';
+import { getSelectedTraceDatabaseFromVersion } from './traceDatabase';
 import {
     notifyListeners,
     Packet,
@@ -35,6 +35,7 @@ import {
     getSerialPort,
     getShellParser,
     getUartSerialPort,
+    setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
     setTraceIsStopped,
@@ -131,17 +132,20 @@ export const startTrace =
             startTime: new Date(),
         };
 
-        let isDetectingTraceDb =
-            getManualDbFilePath(state) == null &&
-            !(formats.length === 1 && formats[0] === 'raw'); // if we originally only do RAW trace, we do not show dialog
-
+        let isDetectingTraceDb = getManualDbFilePath(state) == null;
+        let autoDetectedTraceDbFile: string | null = null;
         if (uartPort && isDetectingTraceDb) {
             const version = await detectDatabaseVersion(uartPort, shellParser);
 
             if (version) {
-                dispatch(setSelectedTraceDatabaseFromVersion(version));
-                logger.info(`Detected trace database version ${version}`);
-                isDetectingTraceDb = false;
+                autoDetectedTraceDbFile =
+                    await getSelectedTraceDatabaseFromVersion(version);
+                if (autoDetectedTraceDbFile) {
+                    isDetectingTraceDb = false;
+                    dispatch(setManualDbFilePath(autoDetectedTraceDbFile));
+                    logger.info(`Detected trace database version ${version}`);
+                    source.autoDetectedManualDbFile = autoDetectedTraceDbFile;
+                }
             }
         }
 
