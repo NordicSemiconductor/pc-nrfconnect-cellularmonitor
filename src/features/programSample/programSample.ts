@@ -5,7 +5,10 @@
  */
 /* eslint-disable no-await-in-loop */
 
-import { firmwareProgram } from '@nordicsemiconductor/nrf-device-lib-js';
+import {
+    deviceControlReset,
+    firmwareProgram,
+} from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
 import { Device, getDeviceLibContext, logger } from 'pc-nrfconnect-shared';
 
@@ -24,7 +27,7 @@ export const isThingy91 = (device?: Device) =>
 export const is91DK = (device?: Device) =>
     device?.jlink?.boardVersion === 'PCA10090';
 
-export const flash = async (
+export const program = async (
     device: Device,
     firmwares: Firmware[],
     progress: (progress: SampleProgress) => void
@@ -44,6 +47,9 @@ export const flash = async (
                     throw new Error(`Unable to program fw type: ${fw.type}`);
             }
         }
+
+        logger.info('Programming complete, reseting device.');
+        deviceControlReset(getDeviceLibContext(), device.id);
     } catch (error) {
         logger.error(error);
         throw error;
