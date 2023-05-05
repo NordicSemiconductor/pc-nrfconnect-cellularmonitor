@@ -46,7 +46,11 @@ export default (
             ? { file_path: source.path }
             : { serialport: { path: source.port } }),
 
-        ...initParameterForTraceDb(getManualDbFilePath(state)),
+        ...initParameterForTraceDb(
+            source.type === 'device' && source.autoDetectedManualDbFile
+                ? source.autoDetectedManualDbFile
+                : getManualDbFilePath(state)
+        ),
         chunk_size: CHUNK_SIZE,
     },
     config: {

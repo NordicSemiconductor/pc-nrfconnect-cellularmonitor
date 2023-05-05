@@ -114,6 +114,7 @@ describe('nrfml', () => {
                 { type: resetDashboardState.type, payload: undefined },
                 { type: setTraceSourceFilePath.type, payload: null },
                 { type: setTraceDataReceived.type, payload: false },
+                { type: setDetectingTraceDb.type, payload: true },
                 {
                     type: setTraceIsStarted.type,
                     payload: {

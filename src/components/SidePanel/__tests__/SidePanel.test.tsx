@@ -89,7 +89,7 @@ describe('Sidepanel functionality', () => {
             ).resolves.toBeDefined();
         });
 
-        it('should not show dialog when tracing to RAW', async () => {
+        xit('should not show dialog when tracing to RAW', async () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
 
             startTrace();

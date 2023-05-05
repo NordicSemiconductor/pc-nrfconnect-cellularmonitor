@@ -35,13 +35,18 @@ export const getDatabases = async () => {
     return databasesCache;
 };
 
+export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
+    const versions = await getDatabases();
+    const selectedVersion = versions.find(v => v.version === version);
+    const file = join(
+        autoDetectDbRootFolder(),
+        selectedVersion?.path.replace(`\${root}`, '') ?? ''
+    );
+    return file;
+};
+
 export const setSelectedTraceDatabaseFromVersion =
     (version: string) => async (dispatch: TDispatch) => {
-        const versions = await getDatabases();
-        const selectedVersion = versions.find(v => v.version === version);
-        const file = join(
-            autoDetectDbRootFolder(),
-            selectedVersion?.path.replace(`\${root}`, '') ?? ''
-        );
-        dispatch(setManualDbFilePath(file));
+        const manualDbFile = await getSelectedTraceDatabaseFromVersion(version);
+        dispatch(setManualDbFilePath(manualDbFile));
     };
