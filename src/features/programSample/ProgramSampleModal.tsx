@@ -23,7 +23,7 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import { setUartSerialPort } from '../tracing/traceSlice';
-import { flash, is91DK, isThingy91, SampleProgress } from './flashSample';
+import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
     downloadedFilePath,
     downloadSample,
@@ -34,7 +34,7 @@ import {
     Sample,
 } from './samples';
 
-import './FlashSampleModal.scss';
+import './ProgramSampleModal.scss';
 
 export default () => {
     const [selectedSample, setSelectedSample] = useState<Sample>();
@@ -316,7 +316,7 @@ const ProgramSample = ({
                             await downloadSample(sample);
                             dispatch(setUartSerialPort(null));
 
-                            await flash(
+                            await program(
                                 device,
                                 selectedFirmware.filter(fw => fw.selected),
                                 progressCb
