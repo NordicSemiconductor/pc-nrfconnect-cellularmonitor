@@ -174,8 +174,8 @@ export type NrfmlPDN = {
 };
 
 export type RawTsharkOutput = {
-    _source: {
-        layers: {
+    _source?: {
+        layers?: {
             'nas-eps'?: {
                 // Identifying type:
                 'nas_eps.emm.switch_off'?: string;

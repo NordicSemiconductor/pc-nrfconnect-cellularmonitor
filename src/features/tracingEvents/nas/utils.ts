@@ -102,7 +102,7 @@ const parsedRawPdnInfo = (rawTsharkOutput: RawTsharkOutput) => {
     const pdnInfo: AccessPointName = {};
 
     const imsi =
-        rawTsharkOutput._source.layers['nas-eps']?.['EPS Mobile Identity']?.[
+        rawTsharkOutput._source?.layers?.['nas-eps']?.['EPS Mobile Identity']?.[
             'e212.assoc.imsi'
         ];
     if (imsi) {
@@ -110,10 +110,10 @@ const parsedRawPdnInfo = (rawTsharkOutput: RawTsharkOutput) => {
     }
 
     const bearerId =
-        rawTsharkOutput._source.layers['nas-eps']?.['nas_eps.bearer_id'] ??
-        rawTsharkOutput._source.layers['nas-eps']?.['ESM message container']?.[
-            'nas_eps.emm.esm_msg_cont_tree'
-        ]?.['nas_eps.bearer_id'];
+        rawTsharkOutput._source?.layers?.['nas-eps']?.['nas_eps.bearer_id'] ??
+        rawTsharkOutput._source?.layers?.['nas-eps']?.[
+            'ESM message container'
+        ]?.['nas_eps.emm.esm_msg_cont_tree']?.['nas_eps.bearer_id'];
     if (bearerId) {
         pdnInfo.bearerId = bearerId;
     }
