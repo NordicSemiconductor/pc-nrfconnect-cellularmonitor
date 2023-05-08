@@ -18,7 +18,7 @@ export default () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const traceFormats = useSelector(getTraceFormats);
-    const [coolingDown, setCoolingDown] = useState(false);
+    const [waitForCleanup, setWaitForCleanup] = useState(false);
 
     const start = () => {
         dispatch(startTrace(traceFormats));
@@ -33,9 +33,9 @@ export default () => {
         }
 
         // Don't let the user immediately start a new trace, since monitor-lib needs to clean up a bit first
-        setCoolingDown(true);
+        setWaitForCleanup(true);
         setTimeout(() => {
-            setCoolingDown(false);
+            setWaitForCleanup(false);
         }, 2000);
     };
 
@@ -49,7 +49,9 @@ export default () => {
             started={isTracing}
             startText="Start"
             stopText="Stop"
-            disabled={(!isTracing && traceFormats.length === 0) || coolingDown}
+            disabled={
+                (!isTracing && traceFormats.length === 0) || waitForCleanup
+            }
         />
     );
 };
