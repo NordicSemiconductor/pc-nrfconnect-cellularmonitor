@@ -96,17 +96,11 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
                 setKeepShowing(false);
             }}
         >
-            <div
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }}
-            >
+            <div className="w-100 d-flex justify-content-between">
                 <p>
                     <b>{fieldKey}</b>
                 </p>
-                <p style={{ textAlign: 'right' }}>{value}</p>
+                <p className="text-right">{value}</p>
             </div>
 
             {keepShowing ? (
@@ -155,33 +149,21 @@ const CardTooltip = ({
                 onMouseEnter={() => showTooltip(true)}
                 onMouseLeave={() => showTooltip(false)}
             >
-                <p style={{ fontWeight: 'bold' }}>{fieldKey}</p>
+                <p className="font-weight-bold">{fieldKey}</p>
                 {description !== undefined ? (
                     <p style={{ color: colors.gray100 }}>{description}</p>
                 ) : null}
                 {commands.length > 0 ? (
                     <>
-                        <p style={{ fontWeight: 'bold' }}>
+                        <p className="font-weight-bold">
                             RELATED{' '}
                             {commands.length > 1 ? 'COMMANDS' : 'COMMAND'}
                         </p>
                         {commands.map((cmd, index) => (
-                            <div
-                                key={`${cmd}`}
-                                style={{
-                                    marginBottom: '16px',
-                                }}
-                            >
-                                <p
-                                    style={{
-                                        fontSize: '14px',
-                                        marginBottom: '0',
-                                    }}
-                                >
-                                    {cmd}
-                                </p>
+                            <div key={`${cmd}`} className="mb-3">
+                                <p className="mb-0">{cmd}</p>
 
-                                <div style={{ display: 'flex' }}>
+                                <div className="d-flex">
                                     {commandHasRecommeneded(cmd) ? (
                                         <span
                                             role="button"
@@ -214,7 +196,7 @@ const CardTooltip = ({
                                             }}
                                         >
                                             <Icon
-                                                style={{ marginRight: '4px' }}
+                                                className="mr-1"
                                                 path={mdiPlayBox}
                                                 size={0.6}
                                             />{' '}
@@ -235,7 +217,7 @@ const CardTooltip = ({
                                         }
                                     >
                                         <Icon
-                                            style={{ marginRight: '4px' }}
+                                            className="mr-1"
                                             path={mdiTextBox}
                                             size={0.6}
                                         />{' '}
