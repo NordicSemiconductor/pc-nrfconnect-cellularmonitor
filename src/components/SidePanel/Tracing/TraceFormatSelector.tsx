@@ -29,21 +29,21 @@ export default () => {
 
     return (
         <>
-            <p className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between">
                 Open in Wireshark{' '}
                 <Toggle
                     isToggled={selectedFormats.includes('live')}
                     onToggle={toggle('live')}
                 />
-            </p>
+            </div>
 
-            <p className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between">
                 Save trace file to disk{' '}
                 <Toggle
                     isToggled={selectedFormats.includes('raw')}
                     onToggle={toggle('raw')}
                 />
-            </p>
+            </div>
 
             <WiresharkWarning />
         </>
