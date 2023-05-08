@@ -300,19 +300,19 @@ export const documentation: Documentation = {
         },
     },
     'Power Saving Mode': {
-        'REQUESTED ACTIVE TIMER(T3324)': {
+        'REQUESTED ACTIVE TIMER (T3324)': {
             commands: ['AT+CPSMS'] as const,
         },
-        'GRANTED ACTIVE TIMER(T3324)': {
+        'GRANTED ACTIVE TIMER (T3324)': {
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
-        'REQUESTED PERIODIC TAU(T3412 EXTENDED)': {
+        'REQUESTED PERIODIC TAU (T3412 EXTENDED)': {
             commands: ['AT+CPSMS'] as const,
         },
-        'GRANTED PERIODIC TAU(T3412 EXTENDED)': {
+        'GRANTED PERIODIC TAU (T3412 EXTENDED)': {
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
-        'GRANTED PERIODIC TAU(T3412 / LEGACY)': {
+        'GRANTED PERIODIC TAU (T3412 / LEGACY)': {
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'POWER SAVING MODE STATE (GRANTED)': {

@@ -10,7 +10,6 @@ import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
 
 import ProgramSampleModal from '../../features/programSample/ProgramSampleModal';
 import SourceSelector from '../../features/terminal/SourceSelector';
-import { FullNetworkReport } from './Macros';
 
 export default () => {
     const device = useSelector(selectedDevice);
@@ -20,7 +19,6 @@ export default () => {
     return (
         <CollapsibleGroup heading="Advanced Options" defaultCollapsed>
             <ProgramSampleModal />
-            <FullNetworkReport />
             <SourceSelector />
         </CollapsibleGroup>
     );

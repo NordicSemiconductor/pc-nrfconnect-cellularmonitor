@@ -25,7 +25,7 @@ const formatPSMValuesToString = (
         return `Deactivated = ${values.bitmask}`;
     }
     if (values.unit && values.value) {
-        return `${values.value} ${values.unit} = ${values.bitmask}`;
+        return `${values.bitmask}`;
     }
     return `${values.bitmask}`;
 };
@@ -38,19 +38,19 @@ export default () => {
     };
 
     const fields: DashboardCardFields = {
-        'REQUESTED ACTIVE TIMER(T3324)': {
+        'REQUESTED ACTIVE TIMER (T3324)': {
             value: formatPSMValuesToString(requested?.T3324),
         },
-        'GRANTED ACTIVE TIMER(T3324)': {
+        'GRANTED ACTIVE TIMER (T3324)': {
             value: formatPSMValuesToString(granted?.T3324),
         },
-        'REQUESTED PERIODIC TAU(T3412 EXTENDED)': {
+        'REQUESTED PERIODIC TAU (T3412 EXTENDED)': {
             value: formatPSMValuesToString(requested?.T3412Extended),
         },
-        'GRANTED PERIODIC TAU(T3412 EXTENDED)': {
+        'GRANTED PERIODIC TAU (T3412 EXTENDED)': {
             value: formatPSMValuesToString(granted?.T3412Extended),
         },
-        'GRANTED PERIODIC TAU(T3412 / LEGACY)': {
+        'GRANTED PERIODIC TAU (T3412 / LEGACY)': {
             value: formatPSMValuesToString(granted?.T3412),
         },
         'POWER SAVING MODE STATE (GRANTED)': {
