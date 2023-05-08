@@ -151,13 +151,16 @@ const CardTooltip = ({
                 onMouseEnter={() => showTooltip(true)}
                 onMouseLeave={() => showTooltip(false)}
             >
-                <h4>{fieldKey}</h4>
+                <p style={{ fontWeight: 'bold' }}>{fieldKey}</p>
                 {description !== undefined ? (
                     <p style={{ color: colors.gray100 }}>{description}</p>
                 ) : null}
                 {commands.length > 0 ? (
                     <>
-                        <h4>RELATED COMMAND{commands.length > 1 ? 'S' : ''}</h4>
+                        <p style={{ fontWeight: 'bold' }}>
+                            RELATED{' '}
+                            {commands.length > 1 ? 'COMMANDS' : 'COMMAND'}
+                        </p>
                         {commands.map((cmd, index) => (
                             <div
                                 key={`${cmd}`}
