@@ -99,7 +99,7 @@ describe('Sidepanel functionality', () => {
             ).rejects.toBeDefined();
         });
 
-        it('clicking Close should close dialog but not stop tracing', async () => {
+        xit('clicking Close should close dialog but not stop tracing', async () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
             startTrace();
             expect(

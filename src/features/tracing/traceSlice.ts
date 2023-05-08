@@ -173,6 +173,9 @@ export const getShellParser = (state: RootState) => state.app.trace.shellParser;
 export const getTraceFormats = (state: RootState) =>
     state.app.trace.selectedFormats;
 
+export const getOpenInWiresharkSelected = (state: RootState) =>
+    state.app.trace.selectedFormats.includes('live');
+
 export const getShowConflictingSettingsDialog = (state: RootState) =>
     state.app.trace.showConflictingSettingsDialog;
 
