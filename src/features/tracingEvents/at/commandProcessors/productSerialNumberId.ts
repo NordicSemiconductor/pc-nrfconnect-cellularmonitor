@@ -14,7 +14,11 @@ export const processor: Processor<'+CGSN'> = {
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/cgsn.html',
     initialState: () => ({}),
     onResponse: (packet, state, requestType) => {
-        if (requestType === RequestType.SET_WITH_VALUE && packet.payload) {
+        if (
+            (requestType === RequestType.SET ||
+                requestType === RequestType.SET_WITH_VALUE) &&
+            packet.payload
+        ) {
             const IMEI = parseStringValue(packet.payload);
             if (IMEI != null) {
                 return { ...state, IMEI: IMEI ?? undefined };

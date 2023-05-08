@@ -182,7 +182,7 @@ export const processDetachRequestPacket = (
 ): State => {
     const detachType =
         // eslint-disable-next-line no-underscore-dangle
-        packet.raw?._source?.layers['nas-eps']?.['nas_eps.emm.switch_off'];
+        packet.raw?._source?.layers?.['nas-eps']?.['nas_eps.emm.switch_off'];
     // if the detach type is power off, then no response will be sent from the network.
     if (detachType && Number.parseInt(detachType, 10) === 1) {
         state.lteState = 'IDLE';

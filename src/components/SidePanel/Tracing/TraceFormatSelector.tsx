@@ -10,6 +10,7 @@ import { Toggle } from 'pc-nrfconnect-shared';
 
 import { TraceFormat } from '../../../features/tracing/formats';
 import {
+    getIsTracing,
     getTraceFormats,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
@@ -17,6 +18,8 @@ import WiresharkWarning from '../../Wireshark/WiresharkWarning';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);
+    const isTracing = useSelector(getIsTracing);
+
     const dispatch = useDispatch();
 
     const toggle = (format: TraceFormat) => () => {
@@ -32,6 +35,7 @@ export default () => {
             <p className="d-flex justify-content-between">
                 Open in Wireshark{' '}
                 <Toggle
+                    disabled={isTracing}
                     isToggled={selectedFormats.includes('live')}
                     onToggle={toggle('live')}
                 />
@@ -40,6 +44,7 @@ export default () => {
             <p className="d-flex justify-content-between">
                 Save trace file to disk{' '}
                 <Toggle
+                    disabled={isTracing}
                     isToggled={selectedFormats.includes('raw')}
                     onToggle={toggle('raw')}
                 />

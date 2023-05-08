@@ -19,6 +19,7 @@ import {
     setSelectedTraceDatabaseFromVersion,
 } from '../../features/tracing/traceDatabase';
 import {
+    getIsTracing,
     getManualDbFilePath,
     resetManualDbFilePath,
     setManualDbFilePath,
@@ -41,6 +42,8 @@ export default () => {
     const manualDbFilePath = useSelector(getManualDbFilePath);
     const [databases, setDatabases] = useState<Database[]>([]);
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
+    const isTracing = useSelector(getIsTracing);
+
     const items = [
         autoSelectItem,
         selectFromDiskItem,
@@ -90,6 +93,7 @@ export default () => {
 
     return (
         <Dropdown
+            disabled={isTracing}
             label="Trace database"
             items={items}
             onSelect={onSelect}
