@@ -142,7 +142,11 @@ const CardTooltip = ({
     dispatch,
 }: CardTooltip) => {
     const cardType = title.includes('PDN') ? 'Packet Domain Network' : title;
-    const { commands, description } = documentation[cardType][fieldKey];
+    const tooltipDocumentation = documentation[cardType][fieldKey];
+    const { commands, description } = tooltipDocumentation ?? {
+        commands: [],
+        description: undefined,
+    };
 
     return (
         <Tooltip id={`tooltip-${fieldKey}`}>
