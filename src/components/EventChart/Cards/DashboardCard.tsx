@@ -10,7 +10,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useDispatch } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Card, colors, openUrl, Toggle } from 'pc-nrfconnect-shared';
+import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
 import { documentationMap } from '../../../features/tracingEvents/at';
@@ -20,7 +20,6 @@ import {
 } from '../../../features/tracingEvents/at/recommeneded';
 import { sendAT } from '../../../features/tracingEvents/at/sendCommand';
 import { TDispatch } from '../../../utils/thunk';
-import Copy from '../../Copy';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
@@ -39,75 +38,41 @@ export default ({
     iconName = 'mdi-border-none-variant',
     information = '',
     fields,
-}: DashboardCard) => {
-    const [hideUnknown, setHideUnknown] = useState(false);
-
-    let fieldsToDisplay: typeof fields;
-
-    if (hideUnknown) {
-        fieldsToDisplay = Object.fromEntries(
-            Object.entries(fields).filter(
-                ([, fieldValue]) => fieldValue.value !== 'Unknown'
-            )
-        );
-    } else {
-        fieldsToDisplay = fields;
-    }
-
-    return (
-        <div>
-            <Card
-                title={
-                    <>
-                        <span className={`mdi ${iconName} icon`} />
-                        <span className="title">{title}</span>
-                        {information.length > 0 && (
-                            <OverlayTrigger
-                                key={`overlay-${title}`}
-                                placement="bottom-end"
-                                overlay={
-                                    <Tooltip id={`tooltip-${title}`}>
-                                        <span className="info">
-                                            {information}
-                                        </span>
-                                    </Tooltip>
-                                }
-                            >
-                                <span className="mdi mdi-information-outline info-icon" />
-                            </OverlayTrigger>
-                        )}
-                    </>
-                }
-            >
-                {Object.entries(fieldsToDisplay).map(
-                    ([fieldKey, fieldValues]) => (
-                        <li key={fieldKey}>
-                            <CardEntry
-                                fieldKey={fieldKey}
-                                value={fieldValues.value}
-                                title={title}
-                            />
-                        </li>
-                    )
-                )}
-
-                <div
-                    style={{
-                        marginTop: '32px',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                    }}
-                >
-                    <Toggle
-                        label="Hide Unknown"
-                        isToggled={hideUnknown}
-                        onToggle={() => setHideUnknown(!hideUnknown)}
+}: DashboardCard) => (
+    <div>
+        <Card
+            title={
+                <>
+                    <span className={`mdi ${iconName} icon`} />
+                    <span className="title">{title}</span>
+                    {information.length > 0 && (
+                        <OverlayTrigger
+                            key={`overlay-${title}`}
+                            placement="bottom-end"
+                            overlay={
+                                <Tooltip id={`tooltip-${title}`}>
+                                    <span className="info">{information}</span>
+                                </Tooltip>
+                            }
+                        >
+                            <span className="mdi mdi-information-outline info-icon" />
+                        </OverlayTrigger>
+                    )}
+                </>
+            }
+        >
+            {Object.entries(fields).map(([fieldKey, fieldValues]) => (
+                <li key={fieldKey}>
+                    <CardEntry
+                        fieldKey={fieldKey}
+                        value={fieldValues.value}
+                        title={title}
                     />
-                </div>
-            </Card>
-        </div>
-    );
-};
+                </li>
+            ))}
+        </Card>
+    </div>
+);
 
 type CardEntry = {
     fieldKey: string;
@@ -121,8 +86,6 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
 
     const showTooltip = (show: boolean) => setKeepShowing(show);
 
-    const valueIsDefined = value !== 'Unknown';
-
     return (
         <div
             className="card-entry"
@@ -132,14 +95,19 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
             onMouseLeave={() => {
                 setKeepShowing(false);
             }}
-            style={{ display: 'flex', alignItems: 'center' }}
         >
-            <div style={{ width: valueIsDefined ? '80%' : '100%' }}>
+            <div
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
                 <p>
-                    <b>{fieldKey}</b> {value}
+                    <b>{fieldKey}</b>
                 </p>
+                <p style={{ textAlign: 'right' }}>{value}</p>
             </div>
-            {valueIsDefined ? <Copy data={`${value}`} size={0.6} /> : null}
 
             {keepShowing ? (
                 <OverlayTrigger
