@@ -26,7 +26,6 @@ export default () => {
         mccCode,
         mnc,
         mncCode,
-        networkType,
         earfcn,
 
         // +CEREG Notifications
@@ -73,14 +72,17 @@ export default () => {
         'RRC STATE': {
             value: parseRRCState(rrcState),
         },
-        'NETWORK TYPE': {
-            value: networkType ?? 'Unknown',
-        },
         MNC: {
-            value: parseMCC(mnc, mncCode),
+            value:
+                mnc || mncCode
+                    ? parseMCC(mnc, mncCode)
+                    : parsePlmnToMccOrMnc(parsePlmnType.MNC, plmn),
         },
         MCC: {
-            value: parseMCC(mcc, mccCode),
+            value:
+                mcc || mccCode
+                    ? parseMCC(mcc, mccCode)
+                    : parsePlmnToMccOrMnc(parsePlmnType.MCC, plmn),
         },
         EARFCN: {
             value: earfcn ?? 'Unknown',
@@ -236,6 +238,22 @@ const parseNotificationStatus = (
         if (notification === 0) return 'Unsubscribed';
 
         return `Subscribed with value: ${notification}`;
+    }
+
+    return 'Unknown';
+};
+
+enum parsePlmnType {
+    MCC = 'MCC',
+    MNC = 'MNC',
+}
+const parsePlmnToMccOrMnc = (type: parsePlmnType, plmn?: string) => {
+    if (!plmn) return 'Unknown';
+    if (type === parsePlmnType.MCC) {
+        return plmn.slice(0, 3);
+    }
+    if (type === parsePlmnType.MNC) {
+        return plmn.slice(3);
     }
 
     return 'Unknown';
