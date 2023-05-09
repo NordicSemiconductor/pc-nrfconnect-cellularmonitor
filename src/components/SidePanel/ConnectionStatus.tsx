@@ -14,6 +14,7 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import {
+    getIsTracing,
     getTraceDataReceived,
     getTraceSourceFilePath,
     getTraceTaskId,
@@ -38,36 +39,11 @@ const TRACE_SUCCESS_STATE: Step = {
     id: 'TRACE_SUCCESS',
     title: 'TRACE',
     state: 'success',
-    caption: 'Trace is enabled',
 };
 const TRACE_FAIL_STATE: Step = {
     id: 'TRACE_FAIL',
     title: 'TRACE',
     state: 'failure',
-    caption: 'Failed to get trace',
-};
-
-// Modem state
-const MODEM_DEFAULT_STATE: Step = {
-    id: 'MODEM_DEFAULT',
-    title: 'MODEM',
-};
-const MODEM_LOADING_STATE: Step = {
-    id: 'MODEM_LOADING',
-    title: 'MODEM',
-    state: 'active',
-};
-const MODEM_SUCCESS_STATE: Step = {
-    id: 'MODEM_SUCCESS',
-    title: 'MODEM',
-    state: 'success',
-    caption: 'Modem is enabled',
-};
-const MODEM_FAIL_STATE: Step = {
-    id: 'MODEM_FAIL',
-    title: 'MODEM',
-    state: 'failure',
-    caption: 'Modem is not enabled',
 };
 
 // SIM state
@@ -75,22 +51,16 @@ const SIM_DEFAULT_STATE: Step = {
     id: 'SIM_DEFAULT',
     title: 'SIM',
 };
-const SIM_LOADING_STATE: Step = {
-    id: 'SIM_LOADING',
-    title: 'SIM',
-    state: 'active',
-};
 const SIM_SUCCESS_STATE: Step = {
     id: 'SIM_SUCCESS',
     title: 'SIM',
     state: 'success',
-    caption: 'SIM is enabled',
 };
 const SIM_FAIL_STATE: Step = {
     id: 'SIM_FAIL',
     title: 'SIM',
     state: 'failure',
-    caption: 'SIM is not enabled',
+    caption: 'Not initialized',
 };
 
 // LTE state
@@ -107,13 +77,11 @@ const LTE_SUCCESS_STATE: Step = {
     id: 'LTE_SUCCESS',
     title: 'LTE',
     state: 'success',
-    caption: 'LTE is enabled',
 };
 const LTE_FAIL_STATE: Step = {
     id: 'LTE_FAIL',
     title: 'LTE',
     state: 'failure',
-    caption: 'LTE is not enabled',
 };
 
 // PDN state
@@ -121,30 +89,37 @@ const PDN_DEFAULT_STATE: Step = {
     id: 'PDN_DEFAULT',
     title: 'PDN',
 };
-const PDN_LOADING_STATE: Step = {
-    id: 'PDN_LOADING',
-    title: 'PDN',
-    state: 'active',
-};
 const PDN_SUCCESS_STATE: Step = {
     id: 'PDN_SUCCESS',
     title: 'PDN',
     state: 'success',
-    caption: 'PDN is enabled',
-};
-const PDN_FAIL_STATE: Step = {
-    id: 'PDN_FAIL',
-    title: 'PDN',
-    state: 'failure',
-    caption: 'PDN is not enabled',
 };
 
 const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
 
 export default () => {
     const device = useSelector(selectedDevice);
-    const { functionalMode, AcTState, accessPointNames } =
-        useSelector(getDashboardState);
+    const {
+        networkStatus,
+        accessPointNames,
+        uiccInitialised,
+        uiccInitialisedErrorCause,
+    } = useSelector(getDashboardState);
+    const sourceFilePath = useSelector(getTraceSourceFilePath);
+    const isTracing = useSelector(getIsTracing);
+
+    useEffect(() => {
+        if (isTracing) {
+            // Since this is fired in on out of two scenarios
+            // from False --> True
+            // or from True --> False, we know that tracing just started.
+
+            // Should at least get some raw data in trace quite early.
+            setTimeout(() => {
+                setTraceFailed(true);
+            }, STATUS_CHECK_TIMEOUT);
+        }
+    }, [isTracing]);
 
     // Handle trace state
     const [traceFailed, setTraceFailed] = useState(false);
@@ -157,120 +132,69 @@ export default () => {
         !traceFailed;
 
     let traceState = TRACE_DEFAULT_STATE;
-    if ((traceTaskId || traceSourceFilePath) && !traceFailed)
+    if (traceEnabled) {
+        traceState = TRACE_SUCCESS_STATE;
+    } else if (traceFailed) {
+        traceState = TRACE_FAIL_STATE;
+    } else if (isTracing) {
         traceState = TRACE_LOADING_STATE;
-    if (traceEnabled) traceState = TRACE_SUCCESS_STATE;
-    if (traceFailed) traceState = TRACE_FAIL_STATE;
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        if ((traceTaskId || traceSourceFilePath) && !traceDataReceived) {
-            timer = setTimeout(() => {
-                setTraceFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
-        }
-        if (!(traceTaskId || traceSourceFilePath)) {
-            setTraceFailed(false);
-            setModemFailed(false);
-            setSimFailed(false);
-            setLteFailed(false);
-            setPdnFailed(false);
-        }
-        return () => {
-            setTraceFailed(false);
-            clearTimeout(timer);
-        };
-    }, [traceTaskId, traceSourceFilePath, traceDataReceived]);
-
-    // Handle modem state
-    const [modemFailed, setModemFailed] = useState(false);
-    const modemEnabled = traceEnabled && functionalMode === 1; // value 1 indicates modem enabled;
-    let modemState = MODEM_DEFAULT_STATE;
-    if (traceEnabled && !modemFailed) modemState = MODEM_LOADING_STATE;
-    if (traceEnabled && modemEnabled) modemState = MODEM_SUCCESS_STATE;
-    if (modemFailed) modemState = MODEM_FAIL_STATE;
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        if (traceEnabled && !modemEnabled) {
-            timer = setTimeout(() => {
-                setModemFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
-        }
-        return () => {
-            setModemFailed(false);
-            clearTimeout(timer);
-        };
-    }, [traceEnabled, modemEnabled]);
+    }
 
     // Handle SIM state
-    const [simFailed, setSimFailed] = useState(false);
-    const simEnabled =
-        modemEnabled && (functionalMode === 1 || functionalMode === 41); // value 1 or 41 indicates SIM enabled;
     let simState = SIM_DEFAULT_STATE;
-    if (modemEnabled && !simFailed) simState = SIM_LOADING_STATE;
-    if (modemEnabled && simEnabled) simState = SIM_SUCCESS_STATE;
-    if (simFailed) simState = SIM_FAIL_STATE;
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        if (modemEnabled && !simEnabled) {
-            timer = setTimeout(() => {
-                setSimFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
+    if (uiccInitialised) {
+        simState = SIM_SUCCESS_STATE;
+    } else if (uiccInitialised === false) {
+        if (uiccInitialisedErrorCause) {
+            simState = {
+                ...SIM_FAIL_STATE,
+                caption: uiccInitialisedErrorCause,
+            };
+        } else {
+            simState = SIM_FAIL_STATE;
         }
-        return () => {
-            setSimFailed(false);
-            clearTimeout(timer);
-        };
-    }, [modemEnabled, simEnabled]);
+    }
 
-    // Handle LTE state
-    const [lteFailed, setLteFailed] = useState(false);
-    const lteEnabled =
-        simEnabled &&
-        (AcTState === 4 || // value 4  indicates LTE-M
-            AcTState === 7 || // value  7 indicates LTE-M
-            AcTState === 5 || // value 5 indicates NB-IoT
-            AcTState === 9); // value 9 indicates NB-IoT
-    let lteState = LTE_DEFAULT_STATE;
-    if (simEnabled && !lteEnabled) lteState = LTE_LOADING_STATE;
-    if (simEnabled && lteEnabled) lteState = LTE_SUCCESS_STATE;
-    if (lteFailed) lteState = LTE_FAIL_STATE;
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        if (simEnabled && !lteEnabled) {
-            timer = setTimeout(() => {
-                setLteFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
-        }
-        return () => {
-            setLteFailed(false);
-            clearTimeout(timer);
+    // Handle LTE Connection State
+    let lteConnectionState = LTE_DEFAULT_STATE;
+    if (networkStatus === 1 || networkStatus === 5) {
+        lteConnectionState = LTE_SUCCESS_STATE;
+    } else if (networkStatus === 0) {
+        lteConnectionState = {
+            ...LTE_LOADING_STATE,
+            caption:
+                'Not registered. UE is not currently searching for an operator to register to.',
         };
-    }, [simEnabled, lteEnabled]);
+    } else if (networkStatus === 2) {
+        lteConnectionState = {
+            ...LTE_LOADING_STATE,
+            caption:
+                'Not registered, but UE is currently trying to attach or searching an operator to register to.',
+        };
+    } else if (networkStatus === 3) {
+        lteConnectionState = {
+            ...LTE_FAIL_STATE,
+            caption: 'Registration failed.',
+        };
+    } else if (networkStatus === 4) {
+        lteConnectionState = {
+            ...LTE_FAIL_STATE,
+            caption: 'Unknown (for example, out of E-UTRAN coverage).',
+        };
+    } else if (networkStatus === 90) {
+        lteConnectionState = {
+            ...LTE_FAIL_STATE,
+            caption: 'Not registered due to UICC failure.',
+        };
+    }
 
     // Handle PDN state
-    const [pdnFailed, setPdnFailed] = useState(false);
-    const pdnEnabled =
-        lteEnabled &&
-        accessPointNames &&
-        Object.keys(accessPointNames).length > 0; // the non-empty accessPointNames indicates PDN enabled
     let pdnState = PDN_DEFAULT_STATE;
-    if (lteEnabled && !pdnEnabled) pdnState = PDN_LOADING_STATE;
-    if (lteEnabled && pdnEnabled) pdnState = PDN_SUCCESS_STATE;
-    if (pdnFailed) pdnState = PDN_FAIL_STATE;
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        if (lteEnabled && !pdnEnabled) {
-            timer = setTimeout(() => {
-                setPdnFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
-        }
-        return () => {
-            setPdnFailed(false);
-            clearTimeout(timer);
-        };
-    }, [lteEnabled, pdnEnabled]);
+    if (Object.values(accessPointNames).length > 0) {
+        pdnState = PDN_SUCCESS_STATE;
+    }
 
-    if (!device) {
+    if (!device && !sourceFilePath) {
         return null;
     }
 
@@ -284,13 +208,7 @@ export default () => {
         >
             <div className="my-2">
                 <Stepper
-                    steps={[
-                        traceState,
-                        modemState,
-                        simState,
-                        lteState,
-                        pdnState,
-                    ]}
+                    steps={[traceState, simState, lteConnectionState, pdnState]}
                 />
             </div>
         </CollapsibleGroup>
