@@ -48,41 +48,58 @@ const InstallWiresharkDialog = ({
             <p>
                 Could not find Wireshark on your system, you have three options.
             </p>
-            <ol>
-                <li>
-                    <a
-                        rel="noreferrer"
-                        target="_blank"
-                        href={WIRESHARK_DOWNLOAD_URL}
-                    >
-                        Install Wireshark
-                    </a>
-                </li>
-                {process.platform === 'darwin' ||
-                process.platform === 'win32' ? (
-                    <li>
+            <div className="d-flex justify-content-between">
+                <div style={cardStyle}>
+                    <b className="mb-3">Option 1</b>
+                    <div>
+                        <a
+                            rel="noreferrer"
+                            target="_blank"
+                            href={WIRESHARK_DOWNLOAD_URL}
+                        >
+                            Install Wireshark
+                        </a>
+                    </div>
+                </div>
+                <div style={cardStyle}>
+                    <b className="mb-3">Option 2</b>
+                    {process.platform === 'darwin' ||
+                    process.platform === 'win32' ? (
                         <SelectWireshark>
                             Manually specify install path
                         </SelectWireshark>
-                    </li>
-                ) : (
-                    <li>Add Wiershark to your PATH</li>
-                )}
-                <li>
-                    Disable
-                    <Toggle
-                        label="Open in Wireshark"
-                        isToggled={openInWiresharkSelected}
-                        onToggle={
-                            openInWiresharkSelected
-                                ? removeOpenInWireshark
-                                : addOpenInWireshark
-                        }
-                    />
-                </li>
-            </ol>
+                    ) : (
+                        <p className="mb-0">Add Wireshark to your PATH</p>
+                    )}
+                </div>
+                <div style={cardStyle}>
+                    <b className="mb-3">Option 3</b>
+                    <div>
+                        Disable
+                        <Toggle
+                            label="Open in Wireshark"
+                            isToggled={openInWiresharkSelected}
+                            onToggle={
+                                openInWiresharkSelected
+                                    ? removeOpenInWireshark
+                                    : addOpenInWireshark
+                            }
+                        />
+                    </div>
+                </div>
+            </div>
         </InfoDialog>
     );
+};
+
+const cardStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'justify-content-between',
+    border: '1px solid black',
+    padding: '8px',
+    height: '128px',
+    width: '30%',
 };
 
 export default InstallWiresharkDialog;
