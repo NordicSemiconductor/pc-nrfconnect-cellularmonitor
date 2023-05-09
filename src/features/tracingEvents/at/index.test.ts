@@ -11,6 +11,7 @@ import { initialState } from '.';
 import { rawTraceData } from './traceSample';
 
 const expectedState = {
+    uiccInitialised: true,
     notifySignalQuality: true,
     signalQuality: {
         rsrp: 54,
