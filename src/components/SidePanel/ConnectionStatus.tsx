@@ -107,34 +107,31 @@ export default () => {
     } = useSelector(getDashboardState);
     const sourceFilePath = useSelector(getTraceSourceFilePath);
     const isTracing = useSelector(getIsTracing);
+    const traceDataReceived = useSelector(getTraceDataReceived);
+    const [traceTimedOut, setTraceTimedOut] = useState(false);
 
     useEffect(() => {
-        if (isTracing) {
-            // Since this is fired in on out of two scenarios
-            // from False --> True
-            // or from True --> False, we know that tracing just started.
-
-            // Should at least get some raw data in trace quite early.
-            setTimeout(() => {
-                setTraceFailed(true);
-            }, STATUS_CHECK_TIMEOUT);
+        if (isTracing && !traceDataReceived) {
+            const timeout = setTimeout(
+                () => setTraceTimedOut(true),
+                STATUS_CHECK_TIMEOUT
+            );
+            return () => clearTimeout(timeout);
         }
-    }, [isTracing]);
+    }, [isTracing, traceDataReceived]);
 
     // Handle trace state
-    const [traceFailed, setTraceFailed] = useState(false);
     const traceTaskId = useSelector(getTraceTaskId);
     const traceSourceFilePath = useSelector(getTraceSourceFilePath);
-    const traceDataReceived = useSelector(getTraceDataReceived);
     const traceEnabled =
         (traceTaskId || traceSourceFilePath) &&
         traceDataReceived &&
-        !traceFailed;
+        !traceTimedOut;
 
     let traceState = TRACE_DEFAULT_STATE;
     if (traceEnabled) {
         traceState = TRACE_SUCCESS_STATE;
-    } else if (traceFailed) {
+    } else if (traceTimedOut) {
         traceState = TRACE_FAIL_STATE;
     } else if (isTracing) {
         traceState = TRACE_LOADING_STATE;
