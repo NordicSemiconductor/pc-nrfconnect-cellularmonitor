@@ -14,6 +14,7 @@ import {
     getOpenInWiresharkSelected,
     getTraceFormats,
 } from '../../../features/tracing/traceSlice';
+import { defaultSharkPath } from '../../../features/wireshark/wireshark';
 import { getWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import InstallWiresharkDialog from '../../InstallWiresharkDialog';
 
@@ -24,13 +25,15 @@ export default () => {
     const openWiresharkOnStart = useSelector(getOpenInWiresharkSelected);
     const wiresharkPath = useSelector(getWiresharkPath);
     const [waitForCleanup, setWaitForCleanup] = useState(false);
-    const [showWiresharkDialog, setShowWiresharkDialog] = useState(true);
+    const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
     const start = () => {
-        if (openWiresharkOnStart && !wiresharkPath) {
+        const locatedWireshark = wiresharkPath ?? defaultSharkPath('wireshark');
+        if (openWiresharkOnStart && !locatedWireshark) {
             setShowWiresharkDialog(true);
+        } else {
+            dispatch(startTrace(traceFormats));
         }
-        dispatch(startTrace(traceFormats));
     };
 
     const stop = () => {

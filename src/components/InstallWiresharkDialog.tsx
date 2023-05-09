@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, InfoDialog, Toggle } from 'pc-nrfconnect-shared';
+import { InfoDialog, Toggle } from 'pc-nrfconnect-shared';
 
 import {
     getOpenInWiresharkSelected,
