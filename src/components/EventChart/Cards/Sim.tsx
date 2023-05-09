@@ -13,6 +13,8 @@ import DashboardCard, { DashboardCardFields } from './DashboardCard';
 export default () => {
     const {
         iccid,
+        uiccInitialised,
+        uiccInitialisedErrorCause,
         imsi,
         manufacturer,
         operatorFullName,
@@ -26,6 +28,9 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
+        'UICC STATUS': {
+            value: uiccStatus(uiccInitialised),
+        },
         IMSI: {
             value: imsi ?? 'Unknown',
         },
@@ -53,6 +58,12 @@ export default () => {
         },
     };
 
+    if (uiccInitialisedErrorCause && uiccInitialised === false) {
+        Object.assign(fields, {
+            'UICC FAIL CAUSE': { value: uiccInitialisedErrorCause },
+        });
+    }
+
     return (
         <DashboardCard
             key="dashboard-sim-card"
@@ -61,4 +72,11 @@ export default () => {
             fields={fields}
         />
     );
+};
+
+const uiccStatus = (status?: boolean) => {
+    if (status === undefined) return 'Unknown';
+
+    // string status according to documentation on infocenter
+    return status ? 'Initialization OK' : 'Not Initialized';
 };

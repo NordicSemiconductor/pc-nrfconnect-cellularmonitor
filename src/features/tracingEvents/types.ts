@@ -25,6 +25,9 @@ export type PacketFormat =
     | 'modem_trace';
 
 export interface State {
+    uiccInitialised?: boolean;
+    uiccInitialisedErrorCause?: string;
+    uiccInitialisedErrorCauseCode?: number;
     notifySignalQuality: boolean;
     notifyPeriodicTAU: boolean;
     regStatus?: number;

@@ -37,9 +37,11 @@ import { processor as signalingConnectionStatus } from './commandProcessors/sign
 import { processor as signalQualityNotification } from './commandProcessors/signalQualityNotification';
 import { processor as systemMode } from './commandProcessors/systemMode';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
+import { processor as xsim } from './commandProcessors/xsim';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
+    xsim,
     pdpContext,
     publicLandMobileNetwork,
     activityStatus,
