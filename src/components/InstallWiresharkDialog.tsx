@@ -48,8 +48,11 @@ const InstallWiresharkDialog = ({
             <p>
                 Could not find Wireshark on your system, you have three options.
             </p>
-            <div className="d-flex justify-content-between">
-                <div style={cardStyle}>
+            <div
+                className="d-flex justify-content-between"
+                style={{ gap: '4px' }}
+            >
+                <div className="border" style={cardStyle}>
                     <b className="mb-3">Option 1</b>
                     <div>
                         <a
@@ -61,7 +64,7 @@ const InstallWiresharkDialog = ({
                         </a>
                     </div>
                 </div>
-                <div style={cardStyle}>
+                <div className="border" style={cardStyle}>
                     <b className="mb-3">Option 2</b>
                     {process.platform === 'darwin' ||
                     process.platform === 'win32' ? (
@@ -72,7 +75,7 @@ const InstallWiresharkDialog = ({
                         <p className="mb-0">Add Wireshark to your PATH</p>
                     )}
                 </div>
-                <div style={cardStyle}>
+                <div className="border" style={cardStyle}>
                     <b className="mb-3">Option 3</b>
                     <div>
                         Disable
@@ -93,13 +96,12 @@ const InstallWiresharkDialog = ({
 };
 
 const cardStyle: React.CSSProperties = {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'justify-content-between',
-    border: '1px solid black',
     padding: '8px',
     height: '128px',
-    width: '30%',
 };
 
 export default InstallWiresharkDialog;
