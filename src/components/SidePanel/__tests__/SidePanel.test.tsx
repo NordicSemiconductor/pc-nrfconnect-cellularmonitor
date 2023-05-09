@@ -13,6 +13,7 @@ import {
     setSerialPort,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
+import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import {
     fireEvent,
     getNrfmlCallbacks,
@@ -99,7 +100,7 @@ describe('Sidepanel functionality', () => {
             ).rejects.toBeDefined();
         });
 
-        xit('clicking Close should close dialog but not stop tracing', async () => {
+        it('clicking Close should close dialog but not stop tracing', async () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
             startTrace();
             expect(
