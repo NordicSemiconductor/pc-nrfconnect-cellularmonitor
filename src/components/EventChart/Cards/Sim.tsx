@@ -59,9 +59,7 @@ export default () => {
     };
 
     if (uiccInitialisedErrorCause && uiccInitialised === false) {
-        Object.assign(fields, {
-            'UICC FAIL CAUSE': { value: uiccInitialisedErrorCause },
-        });
+        fields['UICC FAIL CAUSE'] = { value: uiccInitialisedErrorCause };
     }
 
     return (
