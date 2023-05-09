@@ -12,6 +12,7 @@ import {
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import * as wireshark from '../../../features/wireshark/wireshark';
+import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import {
     expectNrfmlStartCalledWithSinks,
     fireEvent,
@@ -78,6 +79,19 @@ describe('TraceCollector', () => {
         });
     });
 
+    test('renders InstallWiresharkDialog if wireshak is not found', () => {
+        jest.spyOn(wireshark, 'findWireshark').mockReturnValue(null);
+        render(<TraceCollector />, serialPortActions(['live']));
+
+        fireEvent.click(screen.getByText('Start'));
+
+        expect(
+            screen.getByText('Could not find Wireshark')
+        ).toBeInTheDocument();
+        expect(screen.getByText('Start')).toBeInTheDocument();
+        expect(screen.queryByText('Stop')).not.toBeInTheDocument();
+    });
+
     describe('sink configurations', () => {
         beforeEach(() => {
             jest.resetAllMocks();
@@ -87,7 +101,10 @@ describe('TraceCollector', () => {
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
-            render(<TraceCollector />, serialPortActions(['raw']));
+            render(<TraceCollector />, [
+                ...serialPortActions(['raw']),
+                setWiresharkPath('path/to/wireshark'),
+            ]);
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
@@ -97,7 +114,10 @@ describe('TraceCollector', () => {
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
-            render(<TraceCollector />, serialPortActions(['raw', 'pcap']));
+            render(<TraceCollector />, [
+                ...serialPortActions(['raw', 'pcap']),
+                setWiresharkPath('path/to/wireshark'),
+            ]);
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
@@ -108,10 +128,10 @@ describe('TraceCollector', () => {
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
-            render(
-                <TraceCollector />,
-                serialPortActions(['raw', 'pcap', 'live'])
-            );
+            render(<TraceCollector />, [
+                ...serialPortActions(['raw', 'pcap', 'live']),
+                setWiresharkPath('path/to/wireshark'),
+            ]);
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
