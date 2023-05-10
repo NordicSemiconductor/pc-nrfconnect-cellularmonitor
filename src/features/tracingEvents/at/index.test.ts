@@ -14,12 +14,16 @@ const expectedState = {
     uiccInitialised: true,
     notifySignalQuality: true,
     signalQuality: {
-        rsrp: 54,
+        rsrp: 53,
         rsrp_threshold_index: 255,
-        rsrp_decibel: 54 - 140,
+        rsrp_decibel: 53 - 140,
+
         rsrq: 11,
         rsrq_threshold_index: 255,
         rsrq_decibel: 11 / 2 - 19.5,
+
+        snr: 53,
+        snr_decibel: 53 - 24,
     },
     notifyPeriodicTAU: false,
     regStatus: 5,
@@ -32,8 +36,6 @@ const expectedState = {
     cell_id: '02024720',
     phys_cell_id: 428,
     earfcn: 6300,
-    rsrp: 53,
-    snr: 22,
     NW_provided_eDRX_value: '',
     pinCodeStatus: 'READY',
     functionalMode: 1,

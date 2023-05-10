@@ -25,6 +25,7 @@ export const processor: Processor<'+CESQ'> = {
             return {
                 ...state,
                 signalQuality: {
+                    ...state.signalQuality,
                     // Unused,Unused,Unused,Unused,rsrq,rsrp
                     rsrq: responseArray[4],
                     rsrq_decibel: responseArray[4] / 2 - 19.5,

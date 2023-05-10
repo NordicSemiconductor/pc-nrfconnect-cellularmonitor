@@ -21,6 +21,7 @@ export const processor: Processor<'+CPINR'> = {
                         return {
                             ...state,
                             pinRetries: {
+                                ...state.pinRetries,
                                 SIM_PIN: responseArray[1],
                             },
                         };
@@ -28,6 +29,7 @@ export const processor: Processor<'+CPINR'> = {
                         return {
                             ...state,
                             pinRetries: {
+                                ...state.pinRetries,
                                 SIM_PIN2: responseArray[1],
                             },
                         };
@@ -35,6 +37,7 @@ export const processor: Processor<'+CPINR'> = {
                         return {
                             ...state,
                             pinRetries: {
+                                ...state.pinRetries,
                                 SIM_PUK: responseArray[1],
                             },
                         };
@@ -42,6 +45,7 @@ export const processor: Processor<'+CPINR'> = {
                         return {
                             ...state,
                             pinRetries: {
+                                ...state.pinRetries,
                                 SIM_PUK2: responseArray[1],
                             },
                         };

@@ -36,8 +36,6 @@ export interface State {
     tac?: string;
     cell_id?: string;
     phys_cell_id?: number;
-    rsrp?: number;
-    snr?: number;
     activeTime?: string;
     periodicTAU?: string;
     periodicTAUext?: string;
@@ -112,6 +110,7 @@ export interface State {
         rsrq_threshold_index?: number;
         rsrq_decibel?: number;
         snr?: number;
+        snr_decibel?: number;
     };
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]

@@ -24,6 +24,9 @@ export const processor: Processor<'%CONEVAL'> = {
             const parsedPayload = getParametersFromResponse(packet.payload);
             const conevalResult = validateConevalResult(parsedPayload[0]);
             if (conevalResult === 0) {
+                const rsrp = validateNumberValue(parsedPayload[3]);
+                const rsrq = validateNumberValue(parsedPayload[4]);
+                const snr = validateNumberValue(parsedPayload[5]);
                 return {
                     ...state,
                     conevalResult: validateConevalResult(parsedPayload[0]),
@@ -32,9 +35,19 @@ export const processor: Processor<'%CONEVAL'> = {
                         parsedPayload[2]
                     ),
                     signalQuality: {
-                        rsrp: validateNumberValue(parsedPayload[3]),
-                        rsrq: validateNumberValue(parsedPayload[4]),
-                        snr: validateNumberValue(parsedPayload[5]),
+                        ...state.signalQuality,
+                        rsrp: rsrp ?? state.signalQuality?.rsrp,
+                        rsrp_decibel: rsrp
+                            ? rsrp - 140
+                            : state.signalQuality?.rsrp_decibel,
+                        rsrq: rsrq ?? state.signalQuality?.rsrq,
+                        rsrq_decibel: rsrq
+                            ? rsrq / 2 - 19.5
+                            : state.signalQuality?.rsrq_decibel,
+                        snr: snr ?? state.signalQuality?.snr,
+                        snr_decibel: snr
+                            ? snr - 24
+                            : state.signalQuality?.snr_decibel,
                     },
                     cellID: parsedPayload[6],
                     plmn: parsedPayload[7],

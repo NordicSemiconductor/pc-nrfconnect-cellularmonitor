@@ -24,18 +24,24 @@ export default () => {
             value: connStat?.smsRX ?? 'Unknown',
         },
         'DATA TRANSMITTED': {
-            value: connStat?.dataTX ? `${connStat?.dataTX} kB` : 'Unknown',
+            value:
+                connStat?.dataTX != null ? `${connStat?.dataTX} kB` : 'Unknown',
         },
         'DATA RECIEVED': {
-            value: connStat?.dataRX ? `${connStat?.dataRX} kB` : 'Unknown',
+            value:
+                connStat?.dataRX != null ? `${connStat?.dataRX} kB` : 'Unknown',
         },
         'MAX PACKET SIZE TX OR RX': {
-            value: connStat?.packetMax ? `${connStat.packetMax} kB` : 'Unknown',
+            value:
+                connStat?.packetMax != null
+                    ? `${connStat.packetMax} B`
+                    : 'Unknown',
         },
         'AVERAGE PACKET SIZE': {
-            value: connStat?.packetAverage
-                ? `${connStat.packetAverage} kB`
-                : 'Unknown',
+            value:
+                connStat?.packetAverage != null
+                    ? `${connStat.packetAverage} B`
+                    : 'Unknown',
         },
     };
 
@@ -44,7 +50,6 @@ export default () => {
             key="dashboard-statistics-card"
             title="Connectivity Statistics"
             iconName="mdi-cellphone-wireless"
-            information="Subject to change"
             fields={fields}
         />
     );

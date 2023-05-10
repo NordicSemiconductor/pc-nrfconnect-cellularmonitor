@@ -49,6 +49,9 @@ export const processor: Processor<'%XMONITOR'> = {
                 PsmValues = undefined as never;
             }
 
+            const rsrp = getNumber(responseArray[10]);
+            const snr = getNumber(responseArray[10]);
+
             return {
                 ...state,
                 regStatus: getNumber(responseArray[0]),
@@ -61,8 +64,17 @@ export const processor: Processor<'%XMONITOR'> = {
                 cell_id: responseArray[7],
                 phys_cell_id: getNumber(responseArray[8]),
                 earfcn: getNumber(responseArray[9]),
-                rsrp: getNumber(responseArray[10]),
-                snr: getNumber(responseArray[11]),
+                signalQuality: {
+                    ...state.signalQuality,
+                    rsrp: rsrp ?? state.signalQuality?.rsrp,
+                    rsrp_decibel: rsrp
+                        ? rsrp - 140
+                        : state.signalQuality?.rsrp_decibel,
+                    snr: snr ?? state.signalQuality?.snr,
+                    snr_decibel: snr
+                        ? snr - 24
+                        : state.signalQuality?.snr_decibel,
+                },
                 NW_provided_eDRX_value: responseArray[12],
 
                 powerSavingMode: {

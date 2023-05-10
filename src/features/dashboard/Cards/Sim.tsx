@@ -16,7 +16,6 @@ export default () => {
         uiccInitialised,
         uiccInitialisedErrorCause,
         imsi,
-        manufacturer,
         operatorFullName,
         pinCodeStatus: pin,
         pinRetries: {
@@ -36,9 +35,6 @@ export default () => {
         },
         OPERATOR: {
             value: operatorFullName ?? 'Unknown',
-        },
-        MANUFACTURER: {
-            value: manufacturer ?? 'Unknown',
         },
         ICCID: {
             value: iccid ?? 'Unknown',

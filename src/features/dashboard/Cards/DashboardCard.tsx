@@ -136,6 +136,7 @@ const CardTooltip = ({
     dispatch,
 }: CardTooltip) => {
     const cardType = title.includes('PDN') ? 'Packet Domain Network' : title;
+    const tooltipTitle = documentation[cardType]?.[fieldKey]?.title ?? fieldKey;
     const tooltipDocumentation = documentation[cardType][fieldKey];
     const { commands, description } = tooltipDocumentation ?? {
         commands: [],
@@ -149,7 +150,7 @@ const CardTooltip = ({
                 onMouseEnter={() => showTooltip(true)}
                 onMouseLeave={() => showTooltip(false)}
             >
-                <p className="font-weight-bold">{fieldKey}</p>
+                <p className="font-weight-bold">{tooltipTitle}</p>
                 {description !== undefined ? (
                     <p style={{ color: colors.gray100 }}>{description}</p>
                 ) : null}

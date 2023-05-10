@@ -36,28 +36,42 @@ export default () => {
         requested: undefined,
         granted: undefined,
     };
+    // eslint-disable-next-line camelcase
+    const { requested_eDRX_value, NW_provided_eDRX_value, pagingTimeWindow } =
+        useSelector(getDashboardState);
+    useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
-        'REQUESTED ACTIVE TIMER (T3324)': {
+        'REQUESTED ACTIVE TIMER': {
             value: formatPSMValuesToString(requested?.T3324),
         },
-        'GRANTED ACTIVE TIMER (T3324)': {
-            value: formatPSMValuesToString(granted?.T3324),
-        },
-        'REQUESTED PERIODIC TAU (T3412 EXTENDED)': {
+        'REQUESTED PERIODIC TAU': {
             value: formatPSMValuesToString(requested?.T3412Extended),
         },
-        'GRANTED PERIODIC TAU (T3412 EXTENDED)': {
+        'PROVIDED ACTIVE TIMER': {
+            value: formatPSMValuesToString(granted?.T3324),
+        },
+        'PROVIDED PERIODIC TAU': {
             value: formatPSMValuesToString(granted?.T3412Extended),
         },
-        'GRANTED PERIODIC TAU (T3412 / LEGACY)': {
+        'LEGACY PROVIDED PERIODIC TAU': {
             value: formatPSMValuesToString(granted?.T3412),
         },
-        'POWER SAVING MODE STATE (GRANTED)': {
+        'POWER SAVING MODE STATE (PROVIDED)': {
             value: granted?.state?.toUpperCase() ?? 'OFF',
         },
         'TAU TRIGGERED': {
             value: TAUTriggered ?? 'Unknown',
+        },
+        /* eslint-disable camelcase */
+        'REQUESTED EDRX': {
+            value: requested_eDRX_value ?? 'Unknown',
+        },
+        'NW PROVIDED EDRX': {
+            value: NW_provided_eDRX_value ?? 'Unknown',
+        },
+        'PAGING TIME WINDOW': {
+            value: pagingTimeWindow ?? 'Unknown',
         },
     };
 
