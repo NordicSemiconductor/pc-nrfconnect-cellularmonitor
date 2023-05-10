@@ -7,7 +7,7 @@
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
-import chartSlice from './components/EventChart/Chart/chartSlice';
+import chartSlice from './features/dashboard/Chart/chartSlice';
 import modemReducer from './features/modem/modemSlice';
 import startupReducer from './features/startup/startupSlice';
 import traceReducer from './features/tracing/traceSlice';
