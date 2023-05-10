@@ -19,7 +19,7 @@ type Band = {
     band: number;
     reduction: keyof Reduction;
 };
-export type Mode = keyof Reduction | Band[];
+export type Mode = keyof Reduction | Band[] | 'Not set';
 
 type ViewModel = {
     ltemTXReduction?: Mode;
@@ -66,25 +66,37 @@ export const processor: Processor<'%XEMPR'> = {
             ) {
                 return { ...state, ...requestedReduction };
             }
-            if (requestType === RequestType.READ && packet.payload) {
-                const modeLines = getLines(packet.payload);
+            if (requestType === RequestType.READ) {
+                if (packet.payload) {
+                    const modeLines = getLines(packet.payload);
 
-                if (modeLines.length === 0) {
-                    return state;
+                    if (modeLines.length === 0) {
+                        return state;
+                    }
+
+                    const result = modeLines.reduce<Partial<State>>(
+                        (txPowerState, line) => {
+                            const modeValues = getNumberArray(line);
+                            return Object.assign(
+                                txPowerState,
+                                parseToTXReduction(modeValues)
+                            );
+                        },
+                        {}
+                    );
+                    return {
+                        ...state,
+                        nbiotTXReduction: 'Not set',
+                        ltemTXReduction: 'Not set',
+                        ...result,
+                    };
                 }
-
-                const result = modeLines.reduce<Partial<State>>(
-                    (txPowerState, line) => {
-                        const modeValues = getNumberArray(line);
-                        return Object.assign(
-                            txPowerState,
-                            parseToTXReduction(modeValues)
-                        );
-                    },
-                    {}
-                );
-
-                return { ...state, ...result };
+                console.log('This is hello?');
+                return {
+                    ...state,
+                    nbiotTXReduction: 'Not set',
+                    ltemTXReduction: 'Not set',
+                };
             }
         }
         return state;

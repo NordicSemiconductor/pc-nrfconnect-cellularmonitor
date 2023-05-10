@@ -137,6 +137,11 @@ const formatMode = (mode?: Mode) => {
     if (mode === undefined) {
         return 'Unknown';
     }
+
+    if (mode === 'Not set') {
+        return mode;
+    }
+
     if (typeof mode === 'number') {
         return `Maximum power reduced ${txPowerReductionToDecibel(
             mode
