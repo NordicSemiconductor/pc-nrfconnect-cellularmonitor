@@ -66,21 +66,21 @@ const SIM_FAIL_STATE: Step = {
 // LTE state
 const LTE_DEFAULT_STATE: Step = {
     id: 'LTE_DEFAULT',
-    title: 'LTE',
+    title: 'LTE CONNECTION',
 };
 const LTE_LOADING_STATE: Step = {
     id: 'LTE_LOADING',
-    title: 'LTE',
+    title: 'LTE CONNECTION',
     state: 'active',
 };
 const LTE_SUCCESS_STATE: Step = {
     id: 'LTE_SUCCESS',
-    title: 'LTE',
+    title: 'LTE CONNECTION',
     state: 'success',
 };
 const LTE_FAIL_STATE: Step = {
     id: 'LTE_FAIL',
-    title: 'LTE',
+    title: 'LTE CONNECTION',
     state: 'failure',
 };
 
@@ -110,51 +110,19 @@ export default () => {
     const traceDataReceived = useSelector(getTraceDataReceived);
     const [traceTimedOut, setTraceTimedOut] = useState(false);
 
-    useEffect(() => {
-        if (isTracing && !traceDataReceived) {
-            const timeout = setTimeout(
-                () => setTraceTimedOut(true),
-                STATUS_CHECK_TIMEOUT
-            );
-            return () => clearTimeout(timeout);
-        }
-    }, [isTracing, traceDataReceived]);
-
-    // Handle trace state
-    const traceTaskId = useSelector(getTraceTaskId);
-    const traceSourceFilePath = useSelector(getTraceSourceFilePath);
-    const traceEnabled =
-        (traceTaskId || traceSourceFilePath) &&
-        traceDataReceived &&
-        !traceTimedOut;
-
-    let traceState = TRACE_DEFAULT_STATE;
-    if (traceEnabled) {
-        traceState = TRACE_SUCCESS_STATE;
-    } else if (traceTimedOut) {
-        traceState = TRACE_FAIL_STATE;
-    } else if (isTracing) {
-        traceState = TRACE_LOADING_STATE;
-    }
-
-    // Handle SIM state
-    let simState = SIM_DEFAULT_STATE;
-    if (uiccInitialised) {
-        simState = SIM_SUCCESS_STATE;
-    } else if (uiccInitialised === false) {
-        if (uiccInitialisedErrorCause) {
-            simState = {
-                ...SIM_FAIL_STATE,
-                caption: uiccInitialisedErrorCause,
-            };
-        } else {
-            simState = SIM_FAIL_STATE;
-        }
+    // Handle PDN state
+    let pdnState = PDN_DEFAULT_STATE;
+    if (Object.values(accessPointNames).length > 0) {
+        pdnState = PDN_SUCCESS_STATE;
     }
 
     // Handle LTE Connection State
     let lteConnectionState = LTE_DEFAULT_STATE;
-    if (networkStatus === 1 || networkStatus === 5) {
+    if (
+        pdnState === PDN_SUCCESS_STATE ||
+        networkStatus === 1 ||
+        networkStatus === 5
+    ) {
         lteConnectionState = LTE_SUCCESS_STATE;
     } else if (networkStatus === 0) {
         lteConnectionState = {
@@ -185,10 +153,50 @@ export default () => {
         };
     }
 
-    // Handle PDN state
-    let pdnState = PDN_DEFAULT_STATE;
-    if (Object.values(accessPointNames).length > 0) {
-        pdnState = PDN_SUCCESS_STATE;
+    // Handle SIM state
+    let simState = SIM_DEFAULT_STATE;
+    if (
+        pdnState === PDN_SUCCESS_STATE ||
+        lteConnectionState === LTE_SUCCESS_STATE ||
+        uiccInitialised
+    ) {
+        simState = SIM_SUCCESS_STATE;
+    } else if (uiccInitialised === false) {
+        if (uiccInitialisedErrorCause) {
+            simState = {
+                ...SIM_FAIL_STATE,
+                caption: uiccInitialisedErrorCause,
+            };
+        } else {
+            simState = SIM_FAIL_STATE;
+        }
+    }
+
+    useEffect(() => {
+        if (isTracing && !traceDataReceived) {
+            const timeout = setTimeout(
+                () => setTraceTimedOut(true),
+                STATUS_CHECK_TIMEOUT
+            );
+            return () => clearTimeout(timeout);
+        }
+    }, [isTracing, traceDataReceived]);
+
+    // Handle trace state
+    const traceTaskId = useSelector(getTraceTaskId);
+    const traceSourceFilePath = useSelector(getTraceSourceFilePath);
+    const traceEnabled =
+        (traceTaskId || traceSourceFilePath) &&
+        traceDataReceived &&
+        !traceTimedOut;
+
+    let traceState = TRACE_DEFAULT_STATE;
+    if (traceEnabled) {
+        traceState = TRACE_SUCCESS_STATE;
+    } else if (traceTimedOut) {
+        traceState = TRACE_FAIL_STATE;
+    } else if (isTracing) {
+        traceState = TRACE_LOADING_STATE;
     }
 
     if (!device && !sourceFilePath) {
