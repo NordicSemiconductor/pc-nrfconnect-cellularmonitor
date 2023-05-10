@@ -13,8 +13,8 @@ import {
     TooltipModel,
 } from 'chart.js';
 
-import { EventColours } from '../../../features/tracing/formats';
-import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
+import { EventColours } from '../../tracing/formats';
+import { TraceEvent } from '../../tracing/tracePacketEvents';
 
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
     day: '2-digit',

@@ -21,11 +21,8 @@ import {
 } from 'chart.js';
 import { colors as sharedColors } from 'pc-nrfconnect-shared';
 
-import { EventColours } from '../../../features/tracing/formats';
-import {
-    TraceEvent,
-    tracePacketEvents,
-} from '../../../features/tracing/tracePacketEvents';
+import { EventColours } from '../../tracing/formats';
+import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
 import chartAreaColorPlugin from './chartAreaColorPlugin';
 import {
     getLive,

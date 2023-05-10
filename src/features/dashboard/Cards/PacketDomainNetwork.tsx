@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { AccessPointName } from '../../../features/tracingEvents/types';
+import { AccessPointName } from '../../tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default ({

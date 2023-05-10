@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
+import { TraceEvent } from '../../tracing/tracePacketEvents';
 import { PanPluginOptions } from './state';
 
 declare module 'chart.js' {

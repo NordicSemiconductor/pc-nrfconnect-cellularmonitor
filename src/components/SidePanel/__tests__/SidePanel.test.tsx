@@ -13,7 +13,6 @@ import {
     setSerialPort,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
-import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import {
     fireEvent,
     getNrfmlCallbacks,

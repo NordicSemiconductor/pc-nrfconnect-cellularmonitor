@@ -7,7 +7,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../../appReducer';
-import { EVENT_TYPES, eventType } from '../../../features/tracing/formats';
+import { EVENT_TYPES, eventType } from '../../tracing/formats';
 
 interface State {
     time: number;

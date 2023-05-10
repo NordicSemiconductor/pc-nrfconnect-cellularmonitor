@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 import {
     getDashboardState,
     getPowerSavingMode,
-} from '../../../features/tracingEvents/dashboardSlice';
-import { PowerSavingModeValues } from '../../../features/tracingEvents/types';
+} from '../../tracingEvents/dashboardSlice';
+import { PowerSavingModeValues } from '../../tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 const formatPSMValuesToString = (

@@ -13,7 +13,7 @@ import {
     Toggle,
 } from 'pc-nrfconnect-shared';
 
-import { EVENT_TYPES } from '../../../features/tracing/formats';
+import { EVENT_TYPES } from '../../tracing/formats';
 import {
     changeTraceEventFilter,
     getMode,

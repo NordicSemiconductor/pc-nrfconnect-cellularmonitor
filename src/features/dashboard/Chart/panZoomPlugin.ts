@@ -12,10 +12,7 @@ import type {
     ScatterDataPoint,
 } from 'chart.js';
 
-import {
-    TraceEvent,
-    tracePacketEvents,
-} from '../../../features/tracing/tracePacketEvents';
+import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
 import {
     defaultOptions,
     getState,

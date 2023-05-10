@@ -7,12 +7,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
+import { getDashboardState } from '../../tracingEvents/dashboardSlice';
 import type {
     AcTState,
     NetworkStatusNotifications,
     SignalingConnectionStatusNotifications,
-} from '../../../features/tracingEvents/types';
+} from '../../tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default () => {
