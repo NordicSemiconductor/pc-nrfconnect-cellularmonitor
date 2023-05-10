@@ -17,7 +17,6 @@ import {
     getIsTracing,
     getTraceDataReceived,
     getTraceSourceFilePath,
-    getTraceTaskId,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
 import {
@@ -183,15 +182,9 @@ export default () => {
     }, [isTracing, traceDataReceived]);
 
     // Handle trace state
-    const traceTaskId = useSelector(getTraceTaskId);
-    const traceSourceFilePath = useSelector(getTraceSourceFilePath);
-    const traceEnabled =
-        (traceTaskId || traceSourceFilePath) &&
-        traceDataReceived &&
-        !traceTimedOut;
 
     let traceState = TRACE_DEFAULT_STATE;
-    if (traceEnabled) {
+    if (traceDataReceived) {
         traceState = TRACE_SUCCESS_STATE;
     } else if (traceTimedOut) {
         traceState = TRACE_FAIL_STATE;
