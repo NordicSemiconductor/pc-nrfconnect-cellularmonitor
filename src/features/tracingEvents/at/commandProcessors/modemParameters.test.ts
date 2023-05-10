@@ -64,8 +64,6 @@ const modernModemVersionPacket = {
         cell_id: '02024720',
         phys_cell_id: 428,
         earfcn: 6300,
-        rsrp: 53,
-        snr: 22,
         NW_provided_eDRX_value: '',
 
         powerSavingMode: {
@@ -111,8 +109,6 @@ const legacyModemVersionPacket = {
         cell_id: '02024720',
         phys_cell_id: 428,
         earfcn: 6300,
-        rsrp: 53,
-        snr: 22,
         NW_provided_eDRX_value: '',
 
         powerSavingMode: {

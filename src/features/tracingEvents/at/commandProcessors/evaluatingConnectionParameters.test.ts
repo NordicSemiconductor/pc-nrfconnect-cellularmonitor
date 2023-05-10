@@ -19,8 +19,11 @@ const setCommands = {
         conevalEnergyEstimate: 5,
         signalQuality: {
             rsrp: 8,
+            rsrp_decibel: 8 - 140,
             rsrq: 2,
+            rsrq_decibel: 2 / 2 - 19.5,
             snr: 14,
+            snr_decibel: 14 - 24,
         },
         cellID: '011B0780',
         plmn: '26295',
