@@ -17,10 +17,7 @@ const dashboardSlice = createSlice({
         resetDashboardState: () => ({
             ...initialState(),
         }),
-        setDashboardState: (state, action: PayloadAction<State>) => ({
-            ...state,
-            ...action.payload,
-        }),
+        setDashboardState: (_, action: PayloadAction<State>) => action.payload,
 
         setRRCState: (state, action: PayloadAction<RRCState>) => {
             state.rrcState = action.payload;
