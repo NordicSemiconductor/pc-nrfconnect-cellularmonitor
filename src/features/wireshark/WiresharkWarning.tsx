@@ -8,8 +8,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getTraceFormats } from '../tracing/traceSlice';
-import Wireshark from './Wireshark';
 import { findWireshark } from './wireshark';
+import Wireshark from './WiresharkButton';
 import { getWiresharkPath } from './wiresharkSlice';
 
 export default () => {
