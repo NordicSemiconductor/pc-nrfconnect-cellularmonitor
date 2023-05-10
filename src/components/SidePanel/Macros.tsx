@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Button, usageData } from 'pc-nrfconnect-shared';
 
 import { getUartSerialPort } from '../../features/tracing/traceSlice';
 import {
@@ -14,6 +14,7 @@ import {
     recommendedAt,
 } from '../../features/tracingEvents/at/recommeneded';
 import { sendAT } from '../../features/tracingEvents/at/sendCommand';
+import EventAction from '../../usageDataActions';
 
 export const Recommended = () => (
     <Macro commands={recommendedAt} title="Run recommended AT commands" />
@@ -39,6 +40,10 @@ export const Macro = ({ commands, title }: Macro) => {
                 className="w-100"
                 variant="secondary"
                 onClick={async () => {
+                    usageData.sendUsageData(
+                        EventAction.SEND_AT_COMMANDS_MACRO,
+                        title
+                    );
                     setIsSending(true);
                     await dispatch(sendAT(commands));
                     setIsSending(false);

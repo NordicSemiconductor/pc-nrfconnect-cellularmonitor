@@ -6,8 +6,9 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InfoDialog, Toggle } from 'pc-nrfconnect-shared';
+import { InfoDialog, Toggle, usageData } from 'pc-nrfconnect-shared';
 
+import EventAction from '../../usageDataActions';
 import {
     getOpenInWiresharkSelected,
     getTraceFormats,
@@ -28,15 +29,16 @@ const InstallWiresharkDialog = ({
     const traceFormats = useSelector(getTraceFormats);
     const openInWiresharkSelected = useSelector(getOpenInWiresharkSelected);
 
-    const removeOpenInWireshark = () => {
-        const traceFormatsWithoutWireshark = traceFormats.filter(
-            format => format !== 'live'
-        );
-        dispatch(setTraceFormats(traceFormatsWithoutWireshark));
-    };
-
-    const addOpenInWireshark = () => {
-        dispatch(setTraceFormats([...traceFormats, 'live']));
+    const toggleOpenInWireshark = () => {
+        usageData.sendUsageData(EventAction.TOGGLE_OPEN_IN_WIRESHARK);
+        if (openInWiresharkSelected) {
+            const traceFormatsWithoutWireshark = traceFormats.filter(
+                format => format !== 'live'
+            );
+            dispatch(setTraceFormats(traceFormatsWithoutWireshark));
+        } else {
+            dispatch(setTraceFormats([...traceFormats, 'live']));
+        }
     };
 
     return (
@@ -82,11 +84,7 @@ const InstallWiresharkDialog = ({
                         <Toggle
                             label="Open in Wireshark"
                             isToggled={openInWiresharkSelected}
-                            onToggle={
-                                openInWiresharkSelected
-                                    ? removeOpenInWireshark
-                                    : addOpenInWireshark
-                            }
+                            onToggle={toggleOpenInWireshark}
                         />
                     </div>
                 </div>

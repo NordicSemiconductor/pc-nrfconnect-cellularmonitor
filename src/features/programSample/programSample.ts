@@ -10,8 +10,14 @@ import {
     firmwareProgram,
 } from '@nordicsemiconductor/nrf-device-lib-js';
 import { readFileSync } from 'fs';
-import { Device, getDeviceLibContext, logger } from 'pc-nrfconnect-shared';
+import {
+    Device,
+    getDeviceLibContext,
+    logger,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
+import EventAction from '../../usageDataActions';
 import { downloadedFilePath, Firmware } from './samples';
 
 export type SampleProgress = {
@@ -35,6 +41,7 @@ export const program = async (
     try {
         // eslint-disable-next-line no-restricted-syntax
         for (const fw of firmwares) {
+            usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, fw.file);
             switch (fw.type) {
                 case 'Modem':
                     await programModem(device, fw, progress);
@@ -51,6 +58,7 @@ export const program = async (
         logger.info('Programming complete, reseting device.');
         deviceControlReset(getDeviceLibContext(), device.id);
     } catch (error) {
+        usageData.sendErrorReport('Failed to program a sample');
         logger.error(error);
         throw error;
     }
