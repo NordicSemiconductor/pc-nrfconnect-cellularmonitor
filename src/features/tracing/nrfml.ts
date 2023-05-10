@@ -13,7 +13,6 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
-import { setCollapseConnectionStatusSection } from '../../utils/store';
 import type { TAction } from '../../utils/thunk';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
@@ -168,7 +167,6 @@ export const startTrace =
         dispatch(resetDashboardState());
         dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
-        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
             nrfmlConfig(state, source, formats),
@@ -241,7 +239,6 @@ export const readRawTrace =
         dispatch(resetDashboardState());
         dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
-        setCollapseConnectionStatusSection(true);
         tracePacketEvents.emit('start-process');
         nrfml.start(
             nrfmlConfig(state, source, sinks),
