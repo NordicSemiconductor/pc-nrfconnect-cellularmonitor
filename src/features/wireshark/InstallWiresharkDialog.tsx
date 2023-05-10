@@ -12,9 +12,9 @@ import {
     getOpenInWiresharkSelected,
     getTraceFormats,
     setTraceFormats,
-} from '../features/tracing/traceSlice';
-import { WIRESHARK_DOWNLOAD_URL } from '../features/wireshark/wireshark';
-import { SelectWireshark } from './Wireshark/Wireshark';
+} from '../tracing/traceSlice';
+import { WIRESHARK_DOWNLOAD_URL } from './wireshark';
+import { SelectWireshark } from './WiresharkButton';
 
 interface InstallWiresharkDialog {
     isVisible: boolean;

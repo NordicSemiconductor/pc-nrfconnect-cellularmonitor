@@ -7,10 +7,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getTraceFormats } from '../../features/tracing/traceSlice';
-import { findWireshark } from '../../features/wireshark/wireshark';
-import { getWiresharkPath } from '../../features/wireshark/wiresharkSlice';
-import Wireshark from './Wireshark';
+import { getTraceFormats } from '../tracing/traceSlice';
+import { findWireshark } from './wireshark';
+import Wireshark from './WiresharkButton';
+import { getWiresharkPath } from './wiresharkSlice';
 
 export default () => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);

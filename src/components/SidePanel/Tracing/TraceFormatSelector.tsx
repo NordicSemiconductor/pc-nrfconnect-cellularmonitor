@@ -14,7 +14,7 @@ import {
     getTraceFormats,
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
-import WiresharkWarning from '../../Wireshark/WiresharkWarning';
+import WiresharkWarning from '../../../features/wireshark/WiresharkWarning';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);
