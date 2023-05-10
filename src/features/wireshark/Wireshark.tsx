@@ -8,17 +8,14 @@ import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, openUrl, usageData } from 'pc-nrfconnect-shared';
 
+import EventAction from '../../usageDataActions';
+import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
 import {
     findWireshark,
     openInWireshark,
     WIRESHARK_DOWNLOAD_URL,
-} from '../../features/wireshark/wireshark';
-import {
-    getWiresharkPath,
-    setWiresharkPath,
-} from '../../features/wireshark/wiresharkSlice';
-import EventAction from '../../usageDataActions';
-import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
+} from './wireshark';
+import { getWiresharkPath, setWiresharkPath } from './wiresharkSlice';
 
 import './wireshark.scss';
 

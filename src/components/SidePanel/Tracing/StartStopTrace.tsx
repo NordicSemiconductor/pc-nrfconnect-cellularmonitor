@@ -14,9 +14,9 @@ import {
     getOpenInWiresharkSelected,
     getTraceFormats,
 } from '../../../features/tracing/traceSlice';
+import InstallWiresharkDialog from '../../../features/wireshark/InstallWiresharkDialog';
 import { defaultSharkPath } from '../../../features/wireshark/wireshark';
 import { getWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
-import InstallWiresharkDialog from '../../InstallWiresharkDialog';
 
 export default () => {
     const dispatch = useDispatch();

@@ -98,4 +98,4 @@ const openDevice =
  * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
  * @returns {SerialPort} the selected serialport object
  */
-const autoSelectPort = (ports: SerialPort[]) => ports?.slice(-1)[0];
+const autoSelectPort = (ports: SerialPort[]) => ports?.at(-1);

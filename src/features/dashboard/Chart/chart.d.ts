@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../../tracing/tracePacketEvents';
-import { PanPluginOptions } from './state';
+import type { ChartType } from 'chart.js';
+
+import type { TraceEvent } from '../../tracing/tracePacketEvents';
+import type { PanPluginOptions } from './state';
 
 declare module 'chart.js' {
-    interface PluginOptionsByType {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface PluginOptionsByType<TType extends ChartType> {
         panZoom?: PanPluginOptions;
     }
 

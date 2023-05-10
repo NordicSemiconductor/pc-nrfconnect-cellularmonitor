@@ -8,10 +8,10 @@ import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, openUrl, usageData } from 'pc-nrfconnect-shared';
 
-import { WIRESHARK_DOWNLOAD_URL } from '../../features/wireshark/wireshark';
-import { setTsharkPath } from '../../features/wireshark/wiresharkSlice';
 import EventAction from '../../usageDataActions';
 import { askForWiresharkPath } from '../../utils/fileUtils';
+import { WIRESHARK_DOWNLOAD_URL } from './wireshark';
+import { setTsharkPath } from './wiresharkSlice';
 
 const SelectTshark: FC = ({ children }) => {
     const dispatch = useDispatch();
