@@ -11,17 +11,29 @@ import { logger, StartStopButton } from 'pc-nrfconnect-shared';
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
 import {
     getIsTracing,
+    getOpenInWiresharkSelected,
     getTraceFormats,
 } from '../../../features/tracing/traceSlice';
+import { defaultSharkPath } from '../../../features/wireshark/wireshark';
+import { getWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
+import InstallWiresharkDialog from '../../InstallWiresharkDialog';
 
 export default () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const traceFormats = useSelector(getTraceFormats);
+    const openWiresharkOnStart = useSelector(getOpenInWiresharkSelected);
+    const wiresharkPath = useSelector(getWiresharkPath);
     const [waitForCleanup, setWaitForCleanup] = useState(false);
+    const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
     const start = () => {
-        dispatch(startTrace(traceFormats));
+        const locatedWireshark = wiresharkPath ?? defaultSharkPath('wireshark');
+        if (openWiresharkOnStart && !locatedWireshark) {
+            setShowWiresharkDialog(true);
+        } else {
+            dispatch(startTrace(traceFormats));
+        }
     };
 
     const stop = () => {
@@ -40,18 +52,24 @@ export default () => {
     };
 
     return (
-        <StartStopButton
-            variant="secondary"
-            onClick={() => {
-                if (isTracing) stop();
-                else start();
-            }}
-            started={isTracing}
-            startText="Start"
-            stopText="Stop"
-            disabled={
-                (!isTracing && traceFormats.length === 0) || waitForCleanup
-            }
-        />
+        <>
+            <StartStopButton
+                variant="secondary"
+                onClick={() => {
+                    if (isTracing) stop();
+                    else start();
+                }}
+                started={isTracing}
+                startText="Start"
+                stopText="Stop"
+                disabled={
+                    (!isTracing && traceFormats.length === 0) || waitForCleanup
+                }
+            />
+            <InstallWiresharkDialog
+                isVisible={showWiresharkDialog}
+                setIsVisible={setShowWiresharkDialog}
+            />
+        </>
     );
 };

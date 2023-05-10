@@ -26,7 +26,7 @@ type WiresharkProps = {
     extendedDescription?: boolean;
 };
 
-const SelectWireshark: FC = ({ children }) => {
+export const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
     const updateWiresharkPath = () => {
