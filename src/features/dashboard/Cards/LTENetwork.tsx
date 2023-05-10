@@ -220,7 +220,7 @@ const parseNotificationStatus = (
     if (notification != null) {
         if (notification === 0) return 'Unsubscribed';
 
-        return `Subscribed with value: ${notification}`;
+        return `Subscribed ${notification}`;
     }
 
     return 'Unknown';
