@@ -29,15 +29,22 @@ export const recommendedAT: recommendedAT = {
     'AT+CEDRXRDP': 'AT+CEDRXRDP',
     'AT%XTIME': 'AT%XTIME=1',
     'AT%CONEVAL': 'AT%CONEVAL',
-    'AT%XCBAND': ['AT%XCBAND?', 'AT%XCBAND'],
+    'AT%XCBAND': ['AT%XCBAND=?', 'AT%XCBAND'],
     'AT%HWVERSION': 'AT%HWVERSION',
     'AT%XMODEMTRACE': 'AT%XMODEMTRACE=1,2',
     'AT%XSYSTEMMODE': 'AT%XSYSTEMMODE?',
 
+    'AT%XICCID': 'AT%XICCID',
     'AT%XEMPR': 'AT%XEMPR?',
     'AT+CGDCONT': 'AT+CGDCONT?',
 
     'AT+COPS': 'AT+COPS?',
+    'AT+CPINR': [
+        'AT+CPINR="SIM PIN"',
+        'AT+CPINR="SIM PIN2"',
+        'AT+CPINR="SIM PUK"',
+        'AT+CPINR="SIM PUK2"',
+    ],
 };
 
 const recommended = [
