@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
     "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicPlayground/pc-nrfconnect-cellularmonitor",
@@ -50,7 +50,7 @@
         "xterm-headless": "^5.1.0"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.0-pre4"
+        "@nordicsemiconductor/nrf-monitor-lib-js": "0.8.0-pre3"
     },
     "eslintConfig": {
         "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
