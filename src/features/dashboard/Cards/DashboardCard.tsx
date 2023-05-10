@@ -13,13 +13,13 @@ import Icon from '@mdi/react';
 import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
-import { documentationMap } from '../../../features/tracingEvents/at';
+import { TDispatch } from '../../../utils/thunk';
+import { documentationMap } from '../../tracingEvents/at';
 import {
     commandHasRecommeneded,
     recommendedAT,
-} from '../../../features/tracingEvents/at/recommeneded';
-import { sendAT } from '../../../features/tracingEvents/at/sendCommand';
-import { TDispatch } from '../../../utils/thunk';
+} from '../../tracingEvents/at/recommeneded';
+import { sendAT } from '../../tracingEvents/at/sendCommand';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {

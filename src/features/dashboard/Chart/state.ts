@@ -8,8 +8,8 @@ import { Chart } from 'chart.js';
 // eslint-disable-next-line import/no-unresolved
 import { AnyObject } from 'chart.js/dist/types/basic';
 
-import { eventType } from '../../../features/tracing/formats';
-import { TraceEvent } from '../../../features/tracing/tracePacketEvents';
+import { eventType } from '../../tracing/formats';
+import { TraceEvent } from '../../tracing/tracePacketEvents';
 
 export interface XAxisRange {
     min: number;

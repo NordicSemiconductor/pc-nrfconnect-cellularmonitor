@@ -8,14 +8,14 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MasonryLayout } from 'pc-nrfconnect-shared';
 
-import { events } from '../../../features/tracing/tracePacketEvents';
-import { convert } from '../../../features/tracingEvents';
-import { initialState } from '../../../features/tracingEvents/at';
+import { events } from '../../tracing/tracePacketEvents';
+import { convert } from '../../tracingEvents';
+import { initialState } from '../../tracingEvents/at';
 import {
     getDashboardState,
     getPowerSavingMode,
     setDashboardState,
-} from '../../../features/tracingEvents/dashboardSlice';
+} from '../../tracingEvents/dashboardSlice';
 import { getLive, getSelectedTime } from '../Chart/chartSlice';
 import Device from './Device';
 import LTENetwork from './LTENetwork';

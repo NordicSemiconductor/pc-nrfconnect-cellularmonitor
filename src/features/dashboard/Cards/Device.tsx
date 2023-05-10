@@ -7,9 +7,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { FunctionalMode } from '../../../features/tracingEvents/at/commandProcessors/functionMode';
-import { Mode } from '../../../features/tracingEvents/at/commandProcessors/TXPowerReduction';
-import { getDashboardState } from '../../../features/tracingEvents/dashboardSlice';
+import { FunctionalMode } from '../../tracingEvents/at/commandProcessors/functionMode';
+import { Mode } from '../../tracingEvents/at/commandProcessors/TXPowerReduction';
+import { getDashboardState } from '../../tracingEvents/dashboardSlice';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
