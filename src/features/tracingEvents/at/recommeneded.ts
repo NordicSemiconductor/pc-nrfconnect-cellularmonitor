@@ -76,7 +76,6 @@ const recommended = [
     'AT%XVBATLVL=1',
     'AT%XMONITOR',
     'AT%XCONNSTAT=1',
-    'AT#XPING="www.google.com",45,5000,5,1000',
     'AT%XCONNSTAT?',
 ];
 
