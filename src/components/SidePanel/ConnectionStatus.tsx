@@ -191,7 +191,7 @@ export default () => {
         !traceTimedOut;
 
     let traceState = TRACE_DEFAULT_STATE;
-    if (traceEnabled) {
+    if (traceEnabled || traceDataReceived) {
         traceState = TRACE_SUCCESS_STATE;
     } else if (traceTimedOut) {
         traceState = TRACE_FAIL_STATE;
