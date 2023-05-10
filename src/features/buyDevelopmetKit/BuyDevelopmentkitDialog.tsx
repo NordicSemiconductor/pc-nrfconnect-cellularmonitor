@@ -5,8 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Button, InfoDialog, openUrl } from 'pc-nrfconnect-shared';
-import { sendUsageData } from 'pc-nrfconnect-shared/typings/generated/src/utils/usageData';
+import { Button, InfoDialog, openUrl, usageData } from 'pc-nrfconnect-shared';
 
 import EventAction from '../../usageDataActions';
 
@@ -18,7 +17,7 @@ export default () => {
     };
 
     const open = () => {
-        sendUsageData(EventAction.OPEN_BUY_DK_DIALOG);
+        usageData.sendUsageData(EventAction.OPEN_BUY_DK_DIALOG);
         setModalVisible(true);
     };
 
