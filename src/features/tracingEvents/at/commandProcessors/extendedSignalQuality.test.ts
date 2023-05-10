@@ -12,11 +12,9 @@ const readCommandPackets = [
         response: atPacket('+CESQ: 99,99,255,255,31,62\r\nOK\r\n'),
         expected: {
             rsrq: 31,
-            rsrq_threshold_index: 255,
             rsrq_decibel: -4,
             rsrp: 62,
             rsrp_decibel: -78,
-            rsrp_threshold_index: 255,
         },
     },
     {
