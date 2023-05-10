@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { State } from '../../types';
 import { atPacket, convertPackets, ErrorPacket, OkPacket } from '../testUtils';
 
 const subscribePacket = atPacket('AT%CESQ=1');
@@ -113,4 +114,16 @@ test('%CESQ notification properly updates signal quality', () => {
             );
         }
     });
+});
+
+test('%CESQ notification does set snr back to undefined', () => {
+    const state = convertPackets(
+        [atPacket('AT%CESQ=1'), OkPacket, atPacket('%CESQ: 57,2,8,1')],
+        {
+            signalQuality: { snr: 13, snr_decibel: 13 - 24 },
+        } as State
+    );
+
+    expect(state.signalQuality?.snr).toBe(13);
+    expect(state.signalQuality?.snr_decibel).toBe(13 - 24);
 });

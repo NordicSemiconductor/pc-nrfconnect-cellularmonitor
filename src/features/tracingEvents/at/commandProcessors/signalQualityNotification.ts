@@ -60,6 +60,7 @@ export const processor: Processor<'%CESQ'> = {
                 return {
                     ...state,
                     signalQuality: {
+                        ...state.signalQuality,
                         rsrp: signalQualityValues[0],
                         rsrp_threshold_index: signalQualityValues[1],
                         rsrp_decibel: signalQualityValues[0] - 140,

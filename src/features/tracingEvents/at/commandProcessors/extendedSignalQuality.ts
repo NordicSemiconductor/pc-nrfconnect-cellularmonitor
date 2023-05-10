@@ -31,8 +31,6 @@ export const processor: Processor<'+CESQ'> = {
                     rsrq_decibel: responseArray[4] / 2 - 19.5,
                     rsrp: responseArray[5],
                     rsrp_decibel: responseArray[5] - 140,
-                    rsrq_threshold_index: 255, // Not supported by this command, look at %CESQ
-                    rsrp_threshold_index: 255, // Not supported  by this command, look at %CESQ
                 },
             };
         }
