@@ -11,8 +11,10 @@ import {
     Device,
     openAppWindow,
     selectedDevice,
+    usageData,
 } from 'pc-nrfconnect-shared';
 
+import EventAction from '../../usageDataActions';
 import { getUartSerialPort } from '../tracing/traceSlice';
 
 export const OpenSerialTerminal = () => {
@@ -38,6 +40,7 @@ export const OpenSerialTerminal = () => {
 };
 
 const openSerialTerminal = (device: Device, serialPortPath: string) => {
+    usageData.sendUsageData(EventAction.OPEN_SERIAL_TERMINAL);
     openAppWindow(
         { name: 'pc-nrfconnect-serial-terminal', source: 'official' },
         {

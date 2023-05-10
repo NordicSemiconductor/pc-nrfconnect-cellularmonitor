@@ -4,15 +4,23 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, InfoDialog, openUrl } from 'pc-nrfconnect-shared';
+import { sendUsageData } from 'pc-nrfconnect-shared/typings/generated/src/utils/usageData';
+
+import EventAction from '../../usageDataActions';
 
 export default () => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const close = useCallback(() => {
+    const close = () => {
         setModalVisible(false);
-    }, []);
+    };
+
+    const open = () => {
+        sendUsageData(EventAction.OPEN_BUY_DK_DIALOG);
+        setModalVisible(true);
+    };
 
     const kits = [
         {
@@ -27,11 +35,7 @@ export default () => {
 
     return (
         <>
-            <Button
-                className="w-100"
-                variant="secondary"
-                onClick={() => setModalVisible(!modalVisible)}
-            >
+            <Button className="w-100" variant="secondary" onClick={open}>
                 Buy development kit...
             </Button>
 

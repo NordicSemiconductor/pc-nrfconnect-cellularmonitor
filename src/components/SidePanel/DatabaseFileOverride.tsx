@@ -73,6 +73,7 @@ export default () => {
     }, [databases, manualDbFilePath]);
 
     const onSelect = (item: DropdownItem) => {
+        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, item.label);
         setSelectedItem(item);
         if (item.value === selectFromDiskItem.value) {
             const manualDbPath = askForTraceDbFile();

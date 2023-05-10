@@ -11,8 +11,10 @@ import {
     InfoDialog,
     StateSelector,
     Toggle,
+    usageData,
 } from 'pc-nrfconnect-shared';
 
+import EventAction from '../../../usageDataActions';
 import { EVENT_TYPES } from '../../tracing/formats';
 import {
     changeTraceEventFilter,
@@ -49,14 +51,17 @@ export default () => {
                         key={type}
                         label={type}
                         isToggled={traceEventFilter.includes(type)}
-                        onToggle={isToggled =>
+                        onToggle={isToggled => {
+                            usageData.sendUsageData(
+                                EventAction.OPEN_CHART_OPTIONS
+                            );
                             dispatch(
                                 changeTraceEventFilter({
                                     type,
                                     enable: isToggled,
                                 })
-                            )
-                        }
+                            );
+                        }}
                     />
                 ))}
             </Dialog.Body>

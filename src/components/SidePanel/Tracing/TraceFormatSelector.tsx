@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Toggle } from 'pc-nrfconnect-shared';
+import { Toggle, usageData } from 'pc-nrfconnect-shared';
 
 import { TraceFormat } from '../../../features/tracing/formats';
 import {
@@ -15,6 +15,7 @@ import {
     setTraceFormats,
 } from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../../features/wireshark/WiresharkWarning';
+import EventAction from '../../../usageDataActions';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);
@@ -23,6 +24,7 @@ export default () => {
     const dispatch = useDispatch();
 
     const toggle = (format: TraceFormat) => () => {
+        usageData.sendUsageData(EventAction.TOGGLE_SAVE_TRACE_TO_FILE);
         const formats = selectedFormats.includes(format)
             ? selectedFormats.filter(f => f !== format)
             : [...selectedFormats, format];

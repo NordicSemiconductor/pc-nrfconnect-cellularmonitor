@@ -6,11 +6,12 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Button, usageData } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
 import { getSerialPort } from '../../../features/tracing/traceSlice';
 import { openInWireshark } from '../../../features/wireshark/wireshark';
+import EventAction from '../../../usageDataActions';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
 export default () => {
@@ -21,6 +22,7 @@ export default () => {
     const loadTrace = async () => {
         const file = askForTraceFile();
         if (file) {
+            usageData.sendUsageData(EventAction.OPEN_TRACE_IN_WIRESHARK);
             await dispatch(convertTraceFile(file, setLoading));
             dispatch(openInWireshark(file.replace('.mtrace', '.pcapng')));
         }

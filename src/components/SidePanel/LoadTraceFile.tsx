@@ -6,10 +6,11 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Button, usageData } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import { getSerialPort } from '../../features/tracing/traceSlice';
+import EventAction from '../../usageDataActions';
 import { askForTraceFile } from '../../utils/fileUtils';
 
 export const LoadTraceFile = () => {
@@ -24,6 +25,8 @@ export const LoadTraceFile = () => {
             console.error('Could not select the provided file.');
             return;
         }
+
+        usageData.sendUsageData(EventAction.READ_TRACE_FILE);
         dispatch(readRawTrace(sourceFile, setLoading));
     };
 

@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
-
 enum EventAction {
     RAW_TRACE = 'Starting Raw trace',
     PCAP_TRACE = 'Starting Pcap trace',
@@ -20,6 +19,16 @@ enum EventAction {
     OPEN_FILE_DIRECTORY = 'Open file directory',
     VISIT_OPP = 'Visit OPP website',
     POWER_ESTIMATION_PANE = 'Open Power Estimation pane',
+    PROGRAM_SAMPLE = 'Program sample application',
+    OPEN_BUY_DK_DIALOG = 'Open buy DK dialog',
+    READ_TRACE_FILE = 'Read trace file',
+    OPEN_TRACE_IN_WIRESHARK = 'Open trace in wireshark',
+    SELECT_TRACE_DATABASE = 'Select trace database',
+    TOGGLE_OPEN_IN_WIRESHARK = 'Toggle open in wireshark',
+    TOGGLE_SAVE_TRACE_TO_FILE = 'Toggle save trace to file',
+    OPEN_SERIAL_TERMINAL = 'Open serial terminal',
+    OPEN_CHART_OPTIONS = 'Open chart options',
+    SEND_AT_COMMANDS_MACRO = 'Send AT Commands Macro',
 }
 
 export default EventAction;
