@@ -50,7 +50,6 @@ export default () => {
             key="dashboard-statistics-card"
             title="Connectivity Statistics"
             iconName="mdi-cellphone-wireless"
-            information="Subject to change"
             fields={fields}
         />
     );
