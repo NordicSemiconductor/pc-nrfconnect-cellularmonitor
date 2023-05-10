@@ -23,7 +23,7 @@ export const recommendedAT: recommendedAT = {
     'AT+CFUN': 'AT+CFUN?',
     // TODO: write processor for XCONNSTAT
     // 'AT+XCONNSTAT': 'AT+XCONNSTAT?',
-    'AT%CESQ': ['AT%CESQ=1', 'AT%CESQ?'],
+    'AT%CESQ': ['AT%CESQ=1'],
     'AT+CSCON': ['AT+CSCON=1', 'AT+CSCON?'],
     'AT+CPAS': 'AT+CPAS',
     'AT+CEDRXRDP': 'AT+CEDRXRDP',

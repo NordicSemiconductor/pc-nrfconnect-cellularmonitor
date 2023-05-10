@@ -34,12 +34,6 @@ export default () => {
         // +CSCON Notifications
         signalingConnectionStatusNotifications,
 
-        // +CEDRXRDP
-        /* eslint-disable camelcase */
-        requested_eDRX_value,
-        NW_provided_eDRX_value,
-        pagingTimeWindow,
-
         // %XTIME
         networkTimeNotifications,
         networkTimeNotification,
@@ -88,20 +82,19 @@ export default () => {
             value: earfcn ?? 'Unknown',
         },
         RSRP: {
-            value: signalQuality?.rsrp_decibel ?? 'Unknown',
+            value: signalQuality?.rsrp_decibel
+                ? `${signalQuality?.rsrp_decibel} dB`
+                : 'Unknown',
         },
         RSRQ: {
-            value: signalQuality?.rsrq_decibel ?? 'Unknown',
+            value: signalQuality?.rsrq_decibel
+                ? `${signalQuality?.rsrq_decibel} dB`
+                : 'Unknown',
         },
-        // TODO: Do we need to change to decibel, and then replace the two above?
-        'SIGNAL QUALITY (RSRP)': {
-            value: signalQuality?.rsrp ?? 'Unknown',
-        },
-        'SIGNAL QUALITY (RSRQ)': {
-            value: signalQuality?.rsrq ?? 'Unknown',
-        },
-        'SIGNAL QUALITY (SNR)': {
-            value: signalQuality?.snr ?? 'Unknown',
+        SNR: {
+            value: signalQuality?.snr_decibel
+                ? `${signalQuality?.snr_decibel} dB`
+                : 'Unknown',
         },
         'NETWORK STATUS NOTIFICATIONS': {
             value: parseNotificationStatus(networkStatusNotifications),
@@ -117,16 +110,6 @@ export default () => {
         },
         'EPS NETWORK REGISTRATION STATUS': {
             value: networkStatus ?? 'Unknown',
-        },
-        /* eslint-disable camelcase */
-        'REQUESTED EDRX': {
-            value: requested_eDRX_value ?? 'Unknown',
-        },
-        'NW PROVIDED EDRX': {
-            value: NW_provided_eDRX_value ?? 'Unknown',
-        },
-        'PAGING TIME WINDOW': {
-            value: pagingTimeWindow ?? 'Unknown',
         },
 
         'NETWORK TIME NOTIFICATIONS': {

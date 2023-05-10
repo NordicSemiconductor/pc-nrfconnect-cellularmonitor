@@ -9,6 +9,7 @@ import { recommendedAT } from '../../src/features/tracingEvents/at/recommeneded'
 export type Documentation = {
     [key: string]: {
         [key: string]: {
+            title?: string;
             description?: string;
             commands: readonly (keyof typeof recommendedAT)[];
         };
@@ -18,16 +19,19 @@ export type Documentation = {
 export const documentation: Documentation = {
     'LTE Network': {
         ACT: {
+            title: 'Access Technology',
             description:
                 "AcT (Access Technology) refers to the current operational state of a mobile device's cellular network connection. It indicates which type of cellular technology (e.g. LTE-M or NB-IoT) the device is currently using to connect to the network.",
             commands: ['AT+CEREG', 'AT%XMONITOR', 'AT+CEDRXRDP'] as const,
         },
         'ACT STATE': {
+            title: 'Access Technology State',
             description:
                 "The Access Technology (AcT) state indicates the current operational state of a mobile device's cellular network connection. It indicates which type of cellular technology (e.g. LTE-M or NB-IoT) the device is currently using to connect to the network.",
             commands: ['AT+CEDRXRDP'] as const,
         },
         'RRC STATE': {
+            title: 'Radio Resource Control State',
             description:
                 "RRC (Radio Resource Control) State refers to the state of the radio resources being used by a mobile device's cellular network connection. It indicates whether the device is in an active or idle state.",
             commands: ['AT%CONEVAL', 'AT+CSCON'] as const,
@@ -38,44 +42,40 @@ export const documentation: Documentation = {
             commands: [] as const,
         },
         MNC: {
+            title: 'Mobile Network Code (MNC)',
             description:
                 'Mobile Network Code (MNC) is a code identifying the telecommunications network. The code is defined by ITU-T Recommendation E.212, consists of two or three decimal digits, and is used together with the Mobile Country Code (MCC)',
             commands: [] as const,
         },
         MCC: {
+            title: 'Mobile Country Code (MCC)',
             description:
                 'Mobile Country Code (MCC) is a unique three-digit part of an IMSI code identifying the country of domicile of the mobile subscriber. MCC is used together with the Mobile Network Code (MNC).',
             commands: [] as const,
         },
         EARFCN: {
+            title: 'E-UTRA Absolute Radio Frequency Channel Number (EARFCN)',
             description:
                 'E-UTRA Absolute Radio Frequency Channel Number (EARFCN), is an LTE carrier channel number for unique identification of LTE band and carrier frequency.',
             commands: ['AT%CONEVAL'] as const,
         },
         RSRP: {
+            title: 'Reference Signal Received Power (RSRP)',
             description:
                 'Reference Signal Received Power (RSRP), is the average power level received from a single reference signal in an LTE (Long-Term Evolution) network.',
-            commands: ['AT%CESQ'] as const,
+            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         RSRQ: {
+            title: 'Reference Signal Received Quality (RSRQ)',
             description:
                 'Reference Signal Received Quality (RSRQ), is the quality of a single reference signal received in an LTE (Long-Term Evolution) network and calculated from RSRP.',
-            commands: ['AT%CESQ'] as const,
+            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
-        'SIGNAL QUALITY (RSRP)': {
-            description:
-                'Reference Signal Received Power (RSRP), is the average power level received from a single reference signal in an LTE (Long-Term Evolution) network.',
-            commands: ['AT%CONEVAL'] as const,
-        },
-        'SIGNAL QUALITY (RSRQ)': {
-            description:
-                'Reference Signal Received Quality (RSRQ), is the quality of a single reference signal received in an LTE (Long-Term Evolution) network and calculated from RSRP.',
-            commands: ['AT%CONEVAL'] as const,
-        },
-        'SIGNAL QUALITY (SNR)': {
+        SNR: {
+            title: 'Signal-to-Noise Ratio (SNR)',
             description:
                 'Signal-to-Noise Ratio (SNR), returned by the AT command %CONEVAL, is a measure of the quality of the cellular signal received by the mobile device. It represents the ratio of the signal power to the noise power present in the received signal. A higher SNR value indicates a better-quality signal with less noise, while a lower value indicates a weaker or noisier signal.',
-            commands: ['AT%CONEVAL'] as const,
+            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         'NETWORK STATUS NOTIFICATIONS': {
             description:
@@ -102,21 +102,6 @@ export const documentation: Documentation = {
             description:
                 'The EPS Network Registration Status field indicates whether a mobile device is currently registered with a cellular network, and if so, which network it is registered with. This information can be useful for ensuring that the device is able to communicate with other devices and services over the network, and for troubleshooting connection issues.',
             commands: [] as const,
-        },
-        'REQUESTED EDRX': {
-            description:
-                'The requested eDRX value is a value that is requested by the mobile device during its registration process with the cellular network. This value indicates the desired eDRX (extended Discontinuous Reception) cycle length that the device would like to use to conserve power while maintaining an acceptable level of network connectivity.',
-            commands: ['AT+CEDRXRDP'] as const,
-        },
-        'NW PROVIDED EDRX': {
-            description:
-                'The NW Provided eDRX value is a value that is provided by the cellular network to a mobile device during its registration process. This value indicates the suggested eDRX (extended Discontinuous Reception) cycle length that the device should use to conserve power while maintaining a reasonable level of network connectivity.',
-            commands: ['AT+CEDRXRDP'] as const,
-        },
-        'PAGING TIME WINDOW': {
-            description:
-                'Paging Time Window (PTW), is the period of time during which the User Equipment (UE) attempts to receive a paging message.',
-            commands: ['AT+CEDRXRDP'] as const,
         },
         'NETWORK TIME NOTIFICATIONS': {
             commands: ['AT%XTIME'] as const,
@@ -146,16 +131,19 @@ export const documentation: Documentation = {
             commands: ['AT%CONEVAL'] as const,
         },
         PLMN: {
+            title: 'Public Land Mobile Network (PLMN)',
             description:
                 'PLMN (Public Land Mobile Network) is the name of the network that the device is connected to.',
             commands: ['AT+COPS', 'AT%CONEVAL'] as const,
         },
         'PLMN MODE': {
+            title: 'Public Land Mobile Network Mode (PLMN mode)',
             description:
                 'PLMN mode (Public Land Mobile Network mode) is a setting that determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: automatic, manual, or deregister. In automatic mode, the device automatically selects and connects to the best available network based on its signal strength and other factors. In manual mode, the device only connects to a network that has been manually selected by the user. In deregister mode, the device disconnects from the current network and deregisters from all available networks.',
             commands: ['AT+COPS'] as const,
         },
         'PLMN FORMAT': {
+            title: 'Public Land Mobile Network Format (PLMN format)',
             description:
                 'PLMN format (Public Land Mobile Network format) is a setting that determines how a mobile device displays the name of the network it is connected to. It can be set to one of three formats: long alphanumeric, short alphanumeric, or numeric. In long alphanumeric format, the device displays the full name of the network. In short alphanumeric format, the device displays the abbreviated name of the network. In numeric format, the device displays the network’s MCC and MNC codes.',
             commands: ['AT+COPS'] as const,
@@ -197,6 +185,7 @@ export const documentation: Documentation = {
     },
     Device: {
         IMEI: {
+            title: 'International Mobile Equipment Identity (IMEI)',
             description:
                 "The International Mobile Equipment Identity (IMEI) is a unique 15-digit code that identifies a mobile device. Every device has a unique IMEI, which can be used to track the device, block it from being used on a cellular network if it's been reported as lost or stolen, and for other purposes such as device authentication.",
             commands: ['AT+CGSN'] as const,
@@ -211,6 +200,7 @@ export const documentation: Documentation = {
             commands: ['AT%HWVERSION'] as const,
         },
         'MODEM UUID': {
+            title: 'Modem Universally Unique Identifier (UUID)',
             description:
                 'The Modem UUID is a unique identifier that is generated during the manufacturing of the modem firmware and can be used to track the specific version of the firmware that is running on a device.',
             commands: ['AT%XMODEMUUID'] as const,
@@ -272,6 +262,7 @@ export const documentation: Documentation = {
     },
     Sim: {
         IMSI: {
+            title: 'International Mobile Subscriber Identity (IMSI)',
             commands: ['AT+CIMI'] as const,
         },
         OPERATOR: {
@@ -281,6 +272,7 @@ export const documentation: Documentation = {
             commands: ['AT+CGMI'] as const,
         },
         ICCID: {
+            title: 'Integrated Circuit Card Identifier (ICCID)',
             commands: ['AT%XICCID'] as const,
         },
         PIN: {
@@ -300,26 +292,57 @@ export const documentation: Documentation = {
         },
     },
     'Power Saving Mode': {
-        'REQUESTED ACTIVE TIMER (T3324)': {
+        'REQUESTED ACTIVE TIMER': {
+            title: 'Requested Active Timer (T3324)',
+            description:
+                'The requested T3324 timer is the timer that the modem has requested from the network, and is not guaranteed to be provided by the network.',
             commands: ['AT+CPSMS'] as const,
         },
-        'GRANTED ACTIVE TIMER (T3324)': {
+        'PROVIDED ACTIVE TIMER': {
+            title: 'Provided Active Timer (T3324)',
+            description:
+                'The provided T3324 timer is the T3324 timer that is provided by the network.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
-        'REQUESTED PERIODIC TAU (T3412 EXTENDED)': {
+        'REQUESTED PERIODIC TAU': {
+            title: 'Requested Periodic TAU (T3412 EXTENDED)',
+            description:
+                'The requested T3412 extended timer is the timer that the modem has requested from the network, and is not guaranteed to be provided by the network.',
             commands: ['AT+CPSMS'] as const,
         },
-        'GRANTED PERIODIC TAU (T3412 EXTENDED)': {
+        'PROVIDED PERIODIC TAU': {
+            title: 'Provided Periodic TAU (T3412 EXTENDED)',
+            description:
+                'The provided T3412 extended timer is the T3412 timer that is provided by the network, and should be preferred before the Legacy T3412 value.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
-        'GRANTED PERIODIC TAU (T3412 / LEGACY)': {
+        'LEGACY PROVIDED PERIODIC TAU': {
+            title: 'Legacy Provided Periodic TAU (T3412)',
+            description:
+                'The provided legacy T3412 timer is the T3412 timer that is provided by the network.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
-        'POWER SAVING MODE STATE (GRANTED)': {
+        'PROVIDED POWER SAVING MODE STATE': {
+            title: 'Provided Power Saving Mode State',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'TAU TRIGGERED': {
             commands: ['AT%CONEVAL'] as const,
+        },
+        'REQUESTED EDRX': {
+            description:
+                'The requested eDRX value is a value that is requested by the mobile device during its registration process with the cellular network. This value indicates the desired eDRX (extended Discontinuous Reception) cycle length that the device would like to use to conserve power while maintaining an acceptable level of network connectivity.',
+            commands: ['AT+CEDRXRDP'] as const,
+        },
+        'NW PROVIDED EDRX': {
+            description:
+                'The NW Provided eDRX value is a value that is provided by the cellular network to a mobile device during its registration process. This value indicates the suggested eDRX (extended Discontinuous Reception) cycle length that the device should use to conserve power while maintaining a reasonable level of network connectivity.',
+            commands: ['AT+CEDRXRDP'] as const,
+        },
+        'PAGING TIME WINDOW': {
+            description:
+                'Paging Time Window (PTW), is the period of time during which the User Equipment (UE) attempts to receive a paging message.',
+            commands: ['AT+CEDRXRDP'] as const,
         },
     },
     'Connectivity Statistics': {
@@ -350,9 +373,11 @@ export const documentation: Documentation = {
             commands: [] as const,
         },
         'PDN Type': {
+            title: 'Packet Domain Network Type',
             commands: ['AT+CGDCONT'] as const,
         },
         'PDN Type Raw': {
+            title: 'Raw Packet Domain Network Type',
             commands: [] as const,
         },
         'IPv4 Address': {
