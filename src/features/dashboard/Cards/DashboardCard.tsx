@@ -44,7 +44,7 @@ export default ({
             title={
                 <>
                     <span className={`mdi ${iconName} icon`} />
-                    <span className="title">{title}</span>
+                    {title}
                     {information.length > 0 && (
                         <OverlayTrigger
                             key={`overlay-${title}`}
