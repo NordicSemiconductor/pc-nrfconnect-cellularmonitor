@@ -80,7 +80,7 @@ export default () => {
             const filePath = await askForTraceDbFile();
             if (filePath) {
                 dispatch(setManualDbFilePath(filePath));
-                storeManualDbFilePath(manualDbPath);
+                storeManualDbFilePath(filePath);
                 usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
                 logger.info(
                     `Database path successfully updated to ${filePath}`
