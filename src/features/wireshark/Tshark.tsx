@@ -17,11 +17,12 @@ const SelectTshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
     const updateTsharkPath = () => {
-        const selectedTsharkPath = askForWiresharkPath();
-        if (selectedTsharkPath != null) {
-            usageData.sendUsageData(EventAction.SET_TSHARK_PATH);
-            dispatch(setTsharkPath(selectedTsharkPath));
-        }
+        askForWiresharkPath()?.then(({ canceled, filePaths }) => {
+            if (!canceled) {
+                usageData.sendUsageData(EventAction.SET_TSHARK_PATH);
+                dispatch(setTsharkPath(filePaths[0]));
+            }
+        });
     };
 
     return (

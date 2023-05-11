@@ -76,14 +76,15 @@ export default () => {
         usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, item.label);
         setSelectedItem(item);
         if (item.value === selectFromDiskItem.value) {
-            const manualDbPath = askForTraceDbFile();
-            if (manualDbPath) {
-                dispatch(setManualDbFilePath(manualDbPath));
-                usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
-                logger.info(
-                    `Database path successfully updated to ${manualDbPath}`
-                );
-            }
+            askForTraceDbFile().then(({ canceled, filePaths }) => {
+                if (!canceled) {
+                    dispatch(setManualDbFilePath(filePaths[0]));
+                    usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
+                    logger.info(
+                        `Database path successfully updated to ${filePaths[0]}`
+                    );
+                }
+            });
         } else if (item.value === autoSelectItem.value) {
             dispatch(resetManualDbFilePath());
             logger.info(`Database path successfully reset to default value`);

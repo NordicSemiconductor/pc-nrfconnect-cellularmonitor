@@ -20,11 +20,13 @@ export default () => {
     const hasSerialPort = useSelector(getSerialPort) != null;
 
     const loadTrace = async () => {
-        const file = askForTraceFile();
-        if (file) {
+        const { canceled, filePaths } = await askForTraceFile();
+        if (!canceled) {
             usageData.sendUsageData(EventAction.OPEN_TRACE_IN_WIRESHARK);
-            await dispatch(convertTraceFile(file, setLoading));
-            dispatch(openInWireshark(file.replace('.mtrace', '.pcapng')));
+            await dispatch(convertTraceFile(filePaths[0], setLoading));
+            dispatch(
+                openInWireshark(filePaths[0].replace('.mtrace', '.pcapng'))
+            );
         }
     };
 
