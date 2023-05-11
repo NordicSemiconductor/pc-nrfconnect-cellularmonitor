@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { net } from '@electron/remote';
 import { existsSync } from 'fs';
 import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
@@ -68,26 +67,11 @@ export const downloadFile = async (fileName: string) => {
         await copyFile(fullPath(fileName), targetFile);
     }
 
-    const file = await new Promise<Buffer>((resolve, reject) => {
-        const buffer: Buffer[] = [];
-        net.request({ url })
-            .on('response', response => {
-                if (response.statusCode >= 400) {
-                    reject(
-                        new Error(
-                            `Unable to download resource, maybe try to manually download ${url} into ${targetFile}`
-                        )
-                    );
-                }
-                response.on('data', data => buffer.push(data));
-                response.on('end', () => resolve(Buffer.concat(buffer)));
-                response.on('error', reject);
-            })
-            .on('error', reject)
-            .end();
-    });
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const buffer = await blob.arrayBuffer();
 
-    await writeFile(targetFile, file);
+    await writeFile(targetFile, Buffer.from(buffer));
 };
 
 export const downloadedFilePath = (file: string) => join(DOWNLOAD_FOLDER, file);

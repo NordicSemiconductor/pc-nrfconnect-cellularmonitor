@@ -1,8 +1,8 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "0.4.6",
-    "description": "EXPERIMENTAL: Capture and convert nRF91 modem traces",
-    "displayName": "Cellular Monitor",
+    "version": "0.9.0",
+    "description": "Capture and analyze modem traces",
+    "displayName": "Cellular Monitor Preview",
     "homepage": "https://github.com/NordicPlayground/pc-nrfconnect-cellularmonitor",
     "repository": {
         "type": "git",
@@ -11,7 +11,7 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": ">=4.0.1"
+        "nrfconnect": ">=4.1.0"
     },
     "main": "dist/bundle.js",
     "files": [

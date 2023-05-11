@@ -9,10 +9,8 @@ import { SerialPort } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import {
-    deleteDbFilePath as deletePersistedDbFilePath,
     getManualDbFilePath as getPersistedManualDbFilePath,
     getTraceFormats as restoreTraceFormats,
-    setManualDbFilePath as setPersistedManualDbFilePath,
     setTraceFormats as storeTraceFormats,
 } from '../../utils/store';
 import { ShellParser } from '../shell/shellParser';
@@ -103,10 +101,8 @@ const traceSlice = createSlice({
         },
         setManualDbFilePath: (state, action: PayloadAction<string>) => {
             state.manualDbFilePath = action.payload;
-            setPersistedManualDbFilePath(action.payload);
         },
         resetManualDbFilePath: state => {
-            deletePersistedDbFilePath();
             state.manualDbFilePath = getPersistedManualDbFilePath();
         },
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
@@ -142,6 +138,7 @@ const traceSlice = createSlice({
 });
 
 export const getTaskId = (state: RootState) => state.app.trace.taskId;
+
 export const getIsTracing = (state: RootState) =>
     state.app.trace.taskId != null;
 
@@ -163,7 +160,6 @@ export const getSelectedSerialNumber = (state: RootState) =>
     state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
-export const getTraceTaskId = (state: RootState) => state.app.trace.taskId;
 
 export const getUartSerialPort = (state: RootState) =>
     state.app.trace.uartSerialPort;

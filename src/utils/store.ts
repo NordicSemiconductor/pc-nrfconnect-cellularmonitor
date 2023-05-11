@@ -46,7 +46,7 @@ export const autoDetectDbRootFolder = () =>
     getAppFile(path.join('resources', 'traceDB')) as string;
 
 export const getManualDbFilePath = () => store.get(MANUAL_DB_FILE_PATH_KEY);
-export const setManualDbFilePath = (manualDbFilePath: string) =>
+export const storeManualDbFilePath = (manualDbFilePath: string) =>
     store.set(MANUAL_DB_FILE_PATH_KEY, manualDbFilePath);
 export const deleteDbFilePath = () => store.delete(MANUAL_DB_FILE_PATH_KEY);
 

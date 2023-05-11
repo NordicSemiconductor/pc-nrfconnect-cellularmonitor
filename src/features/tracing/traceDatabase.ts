@@ -8,7 +8,10 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
 
-import { autoDetectDbRootFolder } from '../../utils/store';
+import {
+    autoDetectDbRootFolder,
+    storeManualDbFilePath,
+} from '../../utils/store';
 import { setManualDbFilePath } from './traceSlice';
 
 export type Database = {
@@ -48,5 +51,7 @@ export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
 export const setSelectedTraceDatabaseFromVersion =
     (version: string) => async (dispatch: TDispatch) => {
         const manualDbFile = await getSelectedTraceDatabaseFromVersion(version);
+        storeManualDbFilePath(manualDbFile);
+
         dispatch(setManualDbFilePath(manualDbFile));
     };

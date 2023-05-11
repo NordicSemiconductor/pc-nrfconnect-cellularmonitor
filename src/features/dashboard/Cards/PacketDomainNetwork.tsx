@@ -20,15 +20,15 @@ export default ({
     cause,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
-        'Access Point Name': {
+        'ACCESS POINT NAME': {
             value: apn ?? 'Unknown',
         },
-        'PDN Type': { value: pdnType ?? 'Unknown' },
-        'PDN Type Raw': { value: rawPDNType ?? 'Unknown' },
-        'IPv4 Address': { value: ipv4 ?? 'Unknown' },
-        'IPv6 Address': { value: `${ipv6}` ?? 'Unknown' },
-        info: { value: info ?? 'Unknown' },
-        Connection: { value: connection ?? 'Unknown' },
+        'PDN TYPE': { value: pdnType ?? 'Unknown' },
+        'PDN TYPE RAW': { value: rawPDNType ?? 'Unknown' },
+        'IPV4 ADDRESS': { value: ipv4 ?? 'Unknown' },
+        'IPV6 ADDRESS': { value: `${ipv6}` ?? 'Unknown' },
+        INFO: { value: info ?? 'Unknown' },
+        CONNECTION: { value: connection ?? 'Unknown' },
     };
     const fieldsToDisplay = Object.keys(fields)
         .filter(field => {

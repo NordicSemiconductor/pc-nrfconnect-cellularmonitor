@@ -369,27 +369,27 @@ export const documentation: Documentation = {
         },
     },
     'Packet Domain Network': {
-        'Access Point Name': {
+        'ACCESS POINT NAME': {
             commands: [] as const,
         },
-        'PDN Type': {
+        'PDN TYPE': {
             title: 'Packet Domain Network Type',
             commands: ['AT+CGDCONT'] as const,
         },
-        'PDN Type Raw': {
+        'PDN TYPE RAW': {
             title: 'Raw Packet Domain Network Type',
             commands: [] as const,
         },
-        'IPv4 Address': {
+        'IPV4 ADDRESS': {
             commands: ['AT+CGDCONT'] as const,
         },
-        'IPv6 Address': {
+        'IPV6 ADDRESS': {
             commands: [] as const,
         },
-        info: {
+        INFO: {
             commands: [] as const,
         },
-        Connection: {
+        CONNECTION: {
             commands: [] as const,
         },
     },
