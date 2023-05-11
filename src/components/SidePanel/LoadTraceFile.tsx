@@ -18,16 +18,12 @@ export const LoadTraceFile = () => {
     const [loading, setLoading] = useState(false);
     const hasSerialPort = useSelector(getSerialPort) != null;
 
-    const readRawFile = () => {
-        const sourceFile = askForTraceFile();
-
-        if (!sourceFile) {
-            console.error('Could not select the provided file.');
-            return;
+    const readRawFile = async () => {
+        const filePath = await askForTraceFile();
+        if (filePath) {
+            usageData.sendUsageData(EventAction.READ_TRACE_FILE);
+            dispatch(readRawTrace(filePath, setLoading));
         }
-
-        usageData.sendUsageData(EventAction.READ_TRACE_FILE);
-        dispatch(readRawTrace(sourceFile, setLoading));
     };
 
     return (

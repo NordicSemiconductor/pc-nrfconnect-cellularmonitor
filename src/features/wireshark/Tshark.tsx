@@ -16,11 +16,11 @@ import { setTsharkPath } from './wiresharkSlice';
 const SelectTshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
-    const updateTsharkPath = () => {
-        const selectedTsharkPath = askForWiresharkPath();
-        if (selectedTsharkPath != null) {
+    const updateTsharkPath = async () => {
+        const filePath = await askForWiresharkPath();
+        if (filePath) {
             usageData.sendUsageData(EventAction.SET_TSHARK_PATH);
-            dispatch(setTsharkPath(selectedTsharkPath));
+            dispatch(setTsharkPath(filePath));
         }
     };
 

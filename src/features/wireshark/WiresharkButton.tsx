@@ -26,11 +26,11 @@ type WiresharkProps = {
 export const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
-    const updateWiresharkPath = () => {
-        const selectedWiresharkPath = askForWiresharkPath();
-        if (selectedWiresharkPath != null) {
+    const updateWiresharkPath = async () => {
+        const filePath = await askForWiresharkPath();
+        if (filePath) {
             usageData.sendUsageData(EventAction.SET_WIRESHARK_PATH);
-            dispatch(setWiresharkPath(selectedWiresharkPath));
+            dispatch(setWiresharkPath(filePath));
         }
     };
 
@@ -46,11 +46,11 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
     const wiresharkPath = findWireshark(selectedWiresharkPath);
     const dispatch = useDispatch();
 
-    const loadPcap = () => {
-        const filename = askForPcapFile();
-        if (filename) {
+    const loadPcap = async () => {
+        const filePath = await askForPcapFile();
+        if (filePath) {
             usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
-            dispatch(openInWireshark(filename));
+            dispatch(openInWireshark(filePath));
         }
     };
 

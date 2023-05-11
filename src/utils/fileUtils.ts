@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { dialog, shell } from '@electron/remote';
+import { dialog, getCurrentWindow, shell } from '@electron/remote';
 import { FileFilter } from 'electron';
 import path from 'path';
 import { getAppDataDir } from 'pc-nrfconnect-shared';
@@ -56,11 +56,22 @@ export const askForWiresharkPath = () => {
     }
 };
 
-const askForFile = (filters: FileFilter[], defaultPath = getAppDataDir()) =>
-    dialog.showOpenDialogSync({
+const askForFile = async (
+    filters: FileFilter[],
+    defaultPath = getAppDataDir()
+) => {
+    const selection = await dialog.showOpenDialog(getCurrentWindow(), {
         defaultPath,
         filters,
-    })?.[0];
+        properties: ['openFile'],
+    });
+
+    if (selection.canceled || selection.filePaths.length !== 1) {
+        return undefined;
+    }
+
+    return selection.filePaths[0];
+};
 
 export const openInFolder = (filepath: string) =>
     shell.showItemInFolder(filepath);

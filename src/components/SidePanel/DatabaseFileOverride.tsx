@@ -72,16 +72,16 @@ export default () => {
         }
     }, [databases, manualDbFilePath]);
 
-    const onSelect = (item: DropdownItem) => {
+    const onSelect = async (item: DropdownItem) => {
         usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, item.label);
         setSelectedItem(item);
         if (item.value === selectFromDiskItem.value) {
-            const manualDbPath = askForTraceDbFile();
-            if (manualDbPath) {
-                dispatch(setManualDbFilePath(manualDbPath));
+            const filePath = await askForTraceDbFile();
+            if (filePath) {
+                dispatch(setManualDbFilePath(filePath));
                 usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
                 logger.info(
-                    `Database path successfully updated to ${manualDbPath}`
+                    `Database path successfully updated to ${filePath}`
                 );
             }
         } else if (item.value === autoSelectItem.value) {
