@@ -91,7 +91,6 @@ export const processor: Processor<'%XEMPR'> = {
                         ...result,
                     };
                 }
-                console.log('This is hello?');
                 return {
                     ...state,
                     nbiotTXReduction: 'Not set',
