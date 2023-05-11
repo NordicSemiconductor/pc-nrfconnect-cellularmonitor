@@ -26,6 +26,7 @@ import {
 } from '../../features/tracing/traceSlice';
 import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
+import { deleteDbFilePath, storeManualDbFilePath } from '../../utils/store';
 
 const autoSelectItem = {
     label: 'Autoselect',
@@ -79,12 +80,14 @@ export default () => {
             const manualDbPath = askForTraceDbFile();
             if (manualDbPath) {
                 dispatch(setManualDbFilePath(manualDbPath));
+                storeManualDbFilePath(manualDbPath);
                 usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
                 logger.info(
                     `Database path successfully updated to ${manualDbPath}`
                 );
             }
         } else if (item.value === autoSelectItem.value) {
+            deleteDbFilePath();
             dispatch(resetManualDbFilePath());
             logger.info(`Database path successfully reset to default value`);
         } else {

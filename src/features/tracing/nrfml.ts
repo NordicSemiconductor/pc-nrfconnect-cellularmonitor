@@ -33,6 +33,7 @@ import {
     getManualDbFilePath,
     getSerialPort,
     getShellParser,
+    getTaskId,
     getUartSerialPort,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -270,7 +271,7 @@ export const readRawTrace =
     };
 
 export const stopTrace = (): TAction => (dispatch, getState) => {
-    const { taskId } = getState().app.trace;
+    const taskId = getTaskId(getState());
     if (taskId === null) return;
     nrfml.stop(taskId);
     usageData.sendUsageData(EventAction.STOP_TRACE);
