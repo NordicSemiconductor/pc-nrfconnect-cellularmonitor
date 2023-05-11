@@ -56,11 +56,22 @@ export const askForWiresharkPath = () => {
     }
 };
 
-const askForFile = (filters: FileFilter[], defaultPath = getAppDataDir()) =>
-    dialog.showOpenDialog(getCurrentWindow(), {
+const askForFile = async (
+    filters: FileFilter[],
+    defaultPath = getAppDataDir()
+) => {
+    const selection = await dialog.showOpenDialog(getCurrentWindow(), {
         defaultPath,
         filters,
+        properties: ['openFile'],
     });
+
+    if (selection.canceled || selection.filePaths.length !== 1) {
+        return undefined;
+    }
+
+    return selection.filePaths[0];
+};
 
 export const openInFolder = (filepath: string) =>
     shell.showItemInFolder(filepath);
