@@ -26,7 +26,6 @@ const expectedState = {
         snr_decibel: 53 - 24,
     },
     notifyPeriodicTAU: false,
-    regStatus: 5,
     operatorFullName: 'Telia N@',
     operatorShortName: 'Telia N@',
     plmn: '24202',

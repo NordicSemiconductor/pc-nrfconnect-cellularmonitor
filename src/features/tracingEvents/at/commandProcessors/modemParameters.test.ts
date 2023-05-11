@@ -54,7 +54,7 @@ const modernModemVersionPacket = {
         '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","00100010","01001001"\r\nOK'
     ),
     expected: {
-        regStatus: 5,
+        networkStatus: 5,
         operatorFullName: 'Telia N@',
         operatorShortName: 'Telia N@',
         plmn: '24202',
@@ -99,7 +99,7 @@ const legacyModemVersionPacket = {
         '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","01001001"\r\nOK'
     ),
     expected: {
-        regStatus: 5,
+        networkStatus: 5,
         operatorFullName: 'Telia N@',
         operatorShortName: 'Telia N@',
         plmn: '24202',
