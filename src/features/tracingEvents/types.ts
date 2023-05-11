@@ -30,7 +30,6 @@ export interface State {
     uiccInitialisedErrorCauseCode?: number;
     notifySignalQuality: boolean;
     notifyPeriodicTAU: boolean;
-    regStatus?: number;
     operatorFullName?: string;
     operatorShortName?: string;
     tac?: string;

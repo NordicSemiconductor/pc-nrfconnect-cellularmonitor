@@ -16,9 +16,7 @@ export const processor: Processor<'%XMONITOR'> = {
     command: '%XMONITOR',
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xmonitor.html',
-    initialState: () => ({
-        regStatus: 0,
-    }),
+    initialState: () => ({}),
     onResponse: (packet, state) => {
         if (packet.status === 'OK') {
             const responseArray = getParametersFromResponse(packet.payload);
@@ -54,7 +52,7 @@ export const processor: Processor<'%XMONITOR'> = {
 
             return {
                 ...state,
-                regStatus: getNumber(responseArray[0]),
+                networkStatus: getNumber(responseArray[0]),
                 operatorFullName: responseArray[1],
                 operatorShortName: responseArray[2],
                 plmn: responseArray[3],
