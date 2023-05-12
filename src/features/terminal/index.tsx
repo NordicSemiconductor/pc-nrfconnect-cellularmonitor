@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ipcRenderer } from 'electron/renderer';
+import { ipcRenderer } from 'electron';
 import {
     Button,
     Device,

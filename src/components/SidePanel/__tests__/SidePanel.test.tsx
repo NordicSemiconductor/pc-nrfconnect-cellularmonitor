@@ -48,6 +48,7 @@ jest.mock('electron', () => ({
                             name: 'pc-nrfconnect-serial-terminal',
                             source: 'official',
                             currentVersion: 'v1.0.0',
+                            installed: {},
                         },
                     ],
                 };
