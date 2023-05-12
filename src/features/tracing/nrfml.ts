@@ -13,6 +13,7 @@ import { logger, usageData } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
+import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
@@ -135,9 +136,15 @@ export const startTrace =
         let isDetectingTraceDb = getManualDbFilePath(state) == null;
         let autoDetectedTraceDbFile: string | null = null;
         if (uartPort && isDetectingTraceDb) {
-            const version = await detectDatabaseVersion(uartPort, shellParser);
+            console.log(uartPort.isOpen());
+            console.log(uartPort.getOptions());
 
-            if (version) {
+            const version = await raceTimeout(
+                detectDatabaseVersion(uartPort, shellParser),
+                1000
+            );
+
+            if (typeof version === 'string') {
                 autoDetectedTraceDbFile =
                     await getSelectedTraceDatabaseFromVersion(version);
                 if (autoDetectedTraceDbFile) {

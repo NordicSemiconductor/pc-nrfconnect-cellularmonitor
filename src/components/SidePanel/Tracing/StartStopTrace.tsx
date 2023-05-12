@@ -24,7 +24,7 @@ export default () => {
     const traceFormats = useSelector(getTraceFormats);
     const openWiresharkOnStart = useSelector(getOpenInWiresharkSelected);
     const wiresharkPath = useSelector(getWiresharkPath);
-    const [waitForCleanup, setWaitForCleanup] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
     const start = () => {
@@ -43,11 +43,13 @@ export default () => {
             // This is expected to fail sometimes, not sure why it does, but the event is complete.
             logger.debug('Error stopping trace', e);
         }
+    };
 
+    const disableForAWhile = () => {
         // Don't let the user immediately start a new trace, since monitor-lib needs to clean up a bit first
-        setWaitForCleanup(true);
+        setDisabled(true);
         setTimeout(() => {
-            setWaitForCleanup(false);
+            setDisabled(false);
         }, 2000);
     };
 
@@ -56,15 +58,14 @@ export default () => {
             <StartStopButton
                 variant="secondary"
                 onClick={() => {
+                    disableForAWhile();
                     if (isTracing) stop();
                     else start();
                 }}
                 started={isTracing}
                 startText="Start"
                 stopText="Stop"
-                disabled={
-                    (!isTracing && traceFormats.length === 0) || waitForCleanup
-                }
+                disabled={(!isTracing && traceFormats.length === 0) || disabled}
             />
             <InstallWiresharkDialog
                 isVisible={showWiresharkDialog}
