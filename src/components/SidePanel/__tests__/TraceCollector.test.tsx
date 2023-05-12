@@ -14,12 +14,14 @@ import {
 import * as wireshark from '../../../features/wireshark/wireshark';
 import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
 import {
+    act,
     expectNrfmlStartCalledWithSinks,
     fireEvent,
     mockedCheckDiskSpace,
     mockedDataDir,
     render,
     screen,
+    waitFor,
 } from '../../../utils/testUtils';
 import TraceCollector from '../Tracing/TraceCollector';
 
@@ -54,12 +56,17 @@ describe('TraceCollector', () => {
     });
 
     it('button text should reflect tracing state', async () => {
+        jest.useFakeTimers();
         render(<TraceCollector />, serialPortActions(['raw']));
-
         fireEvent.click(screen.getByText('Start'));
+
+        act(jest.runOnlyPendingTimers);
+
         const stopButton = await screen.findByText('Stop');
         fireEvent.click(stopButton);
         expect(await screen.findByText('Start')).toBeInTheDocument();
+
+        jest.useRealTimers();
     });
 
     describe('wireshark installation', () => {
