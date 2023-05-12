@@ -136,9 +136,6 @@ export const startTrace =
         let isDetectingTraceDb = getManualDbFilePath(state) == null;
         let autoDetectedTraceDbFile: string | null = null;
         if (uartPort && isDetectingTraceDb) {
-            console.log(uartPort.isOpen());
-            console.log(uartPort.getOptions());
-
             const version = await raceTimeout(
                 detectDatabaseVersion(uartPort, shellParser),
                 1000
