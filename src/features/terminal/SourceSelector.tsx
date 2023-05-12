@@ -21,6 +21,7 @@ import type { Dispatch } from 'redux';
 import { SerialPortOpenOptions } from 'serialport';
 import { Terminal } from 'xterm-headless';
 
+import { raceTimeout } from '../../utils/promise';
 import {
     hookModemToShellParser,
     xTerminalShellParserWrapper,
@@ -30,6 +31,7 @@ import {
     getShowConflictingSettingsDialog,
     getUartSerialPort,
     removeShellParser,
+    setDetectedAtHostLibrary,
     setShellParser,
     setShowConflictingSettingsDialog,
     setUartSerialPort,
@@ -159,8 +161,14 @@ const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await testIfShellMode(port);
+    const isShellMode = await raceTimeout(testIfShellMode(port), 1000);
 
+    if (isShellMode === undefined) {
+        dispatch(setDetectedAtHostLibrary(false));
+        return;
+    }
+
+    dispatch(setDetectedAtHostLibrary(true));
     if (isShellMode) {
         const shellParser = await hookModemToShellParser(
             port,
