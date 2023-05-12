@@ -16,8 +16,6 @@ export default () => {
         uiccInitialised,
         uiccInitialisedErrorCause,
         imsi,
-        operatorFullName,
-        operatorShortName,
         pinCodeStatus: pin,
         pinRetries: {
             SIM_PIN: remainingPIN,
@@ -33,9 +31,6 @@ export default () => {
         },
         IMSI: {
             value: imsi ?? 'Unknown',
-        },
-        OPERATOR: {
-            value: parseOperator(operatorFullName, operatorShortName),
         },
         ICCID: {
             value: iccid ?? 'Unknown',
@@ -74,14 +69,4 @@ const uiccStatus = (status?: boolean) => {
 
     // string status according to documentation on infocenter
     return status ? 'Initialization OK' : 'Not Initialized';
-};
-
-const parseOperator = (
-    operatorFullName?: string,
-    operatorShortName?: string
-) => {
-    if (operatorFullName === '' && operatorShortName === '') {
-        return 'Not Available';
-    }
-    return operatorFullName ?? operatorShortName ?? 'Unknown';
 };

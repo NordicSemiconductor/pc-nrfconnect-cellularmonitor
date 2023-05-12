@@ -22,6 +22,8 @@ export default () => {
         signalQuality,
         networkStatus,
         activityStatus,
+        operatorFullName,
+        operatorShortName,
         mcc,
         mccCode,
         mnc,
@@ -65,6 +67,9 @@ export default () => {
         // TODO: need to look into how to properly get correct value for this
         'RRC STATE': {
             value: parseRRCState(rrcState),
+        },
+        OPERATOR: {
+            value: parseOperator(operatorFullName, operatorShortName),
         },
         MNC: {
             value:
@@ -197,6 +202,16 @@ const parseModeFromAcT = (AcTState: AcTState) => {
     }
 
     return null as never;
+};
+
+const parseOperator = (
+    operatorFullName?: string,
+    operatorShortName?: string
+) => {
+    if (operatorFullName === '' && operatorShortName === '') {
+        return 'Not Available';
+    }
+    return operatorFullName ?? operatorShortName ?? 'Unknown';
 };
 
 const parseMCC = (mcc: string | undefined, mccCode: number | undefined) => {

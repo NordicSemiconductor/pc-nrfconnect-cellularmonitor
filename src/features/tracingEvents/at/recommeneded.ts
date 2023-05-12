@@ -45,6 +45,7 @@ export const recommendedAT: recommendedAT = {
         'AT+CPINR="SIM PUK"',
         'AT+CPINR="SIM PUK2"',
     ],
+    'AT%XSIM': 'AT%XSIM?',
 };
 
 const recommended = [

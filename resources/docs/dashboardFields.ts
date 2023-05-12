@@ -19,67 +19,72 @@ export type Documentation = {
 export const documentation: Documentation = {
     'LTE Network': {
         ACT: {
-            title: 'Access Technology',
+            title: 'Access Technology (AcT)',
             description:
-                "AcT (Access Technology) refers to the current operational state of a mobile device's cellular network connection. It indicates which type of cellular technology (e.g. LTE-M or NB-IoT) the device is currently using to connect to the network.",
+                "The current state of a mobile device's cellular network connection, such as LTE-M or NB-IoT.",
             commands: ['AT+CEREG', 'AT%XMONITOR', 'AT+CEDRXRDP'] as const,
         },
         'ACT STATE': {
             title: 'Access Technology State',
             description:
-                "The Access Technology (AcT) state indicates the current operational state of a mobile device's cellular network connection. It indicates which type of cellular technology (e.g. LTE-M or NB-IoT) the device is currently using to connect to the network.",
+                "Indicates the current state of a mobile device's cellular network connection.",
             commands: ['AT+CEDRXRDP'] as const,
         },
         'RRC STATE': {
-            title: 'Radio Resource Control State',
+            title: 'Radio Resource Control State (RRC)',
             description:
-                "RRC (Radio Resource Control) State refers to the state of the radio resources being used by a mobile device's cellular network connection. It indicates whether the device is in an active or idle state.",
+                "The state of the radio resources being used by a mobile device's cellular network connection, such as active or idle state.",
             commands: ['AT%CONEVAL', 'AT+CSCON'] as const,
         },
         'NETWORK TYPE': {
             description:
-                "Same as AcT (Access Technology) State, but derived from IP packet, in contrast to the fields above, which are derived from AT 'commands'.",
+                "Similar to AcT (Access Technology) State, derived from Internet Protocol (IP) rather than AT 'commands'.",
             commands: [] as const,
+        },
+        OPERATOR: {
+            description:
+                'The name of the operator whose network the mobile device is currently registered to.',
+            commands: ['AT%XMONITOR'] as const,
         },
         MNC: {
             title: 'Mobile Network Code (MNC)',
             description:
-                'Mobile Network Code (MNC) is a code identifying the telecommunications network. The code is defined by ITU-T Recommendation E.212, consists of two or three decimal digits, and is used together with the Mobile Country Code (MCC)',
+                'A code identifying the telecommunications network. Defined in ITU-T Recommendation E.212, it consists of 2 or 3 digits, and is used together with the Mobile Country Code (MCC)',
             commands: [] as const,
         },
         MCC: {
             title: 'Mobile Country Code (MCC)',
             description:
-                'Mobile Country Code (MCC) is a unique three-digit part of an IMSI code identifying the country of domicile of the mobile subscriber. MCC is used together with the Mobile Network Code (MNC).',
+                'A unique three-digit part of an IMSI code identifying the country of domicile of the mobile subscriber. MCC is used together with the Mobile Network Code (MNC).',
             commands: [] as const,
         },
         EARFCN: {
             title: 'E-UTRA Absolute Radio Frequency Channel Number (EARFCN)',
             description:
-                'E-UTRA Absolute Radio Frequency Channel Number (EARFCN), is an LTE carrier channel number for unique identification of LTE band and carrier frequency.',
+                'An LTE carrier channel number for unique identification of LTE band and carrier frequency.',
             commands: ['AT%CONEVAL'] as const,
         },
         RSRP: {
             title: 'Reference Signal Received Power (RSRP)',
             description:
-                'Reference Signal Received Power (RSRP), is the average power level received from a single reference signal in an LTE (Long-Term Evolution) network.',
+                'The average power level received from a single reference signal in an LTE (Long-Term Evolution) network.',
             commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         RSRQ: {
             title: 'Reference Signal Received Quality (RSRQ)',
             description:
-                'Reference Signal Received Quality (RSRQ), is the quality of a single reference signal received in an LTE (Long-Term Evolution) network and calculated from RSRP.',
+                'The quality of a single reference signal received in an LTE (Long-Term Evolution) network and calculated from RSRP.',
             commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         SNR: {
             title: 'Signal-to-Noise Ratio (SNR)',
             description:
-                'Signal-to-Noise Ratio (SNR), returned by the AT command %CONEVAL, is a measure of the quality of the cellular signal received by the mobile device. It represents the ratio of the signal power to the noise power present in the received signal. A higher SNR value indicates a better-quality signal with less noise, while a lower value indicates a weaker or noisier signal.',
+                'A measure of the quality of the cellular signal received by the mobile device. It represents the ratio of the signal power to the noise power in the received signal. A higher SNR value indicates a better-quality signal, while a lower value indicates a weaker or noisier signal.',
             commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         'NETWORK STATUS NOTIFICATIONS': {
             description:
-                'The +CEREG command subscribes unsolicited network status notifications. Possible values are 0 (disabled), 1 (enabled), 2 (enabled with location information), 3 (same as 2, but with cause and reject type), 4 (same as 2, but with PSM values), 5 (same as 3, but with PSM values).',
+                'The subscription status for unsolicited network status notifications. Possible values are 0 (disabled), 1 (enabled), 2 (enabled with location information), 3 (same as 2, with cause and reject type), 4 (same as 2, with PSM values), 5 (same as 3, with PSM values).',
             commands: ['AT+CEREG'] as const,
         },
         'SIGNALING CONNECTING STATUS NOTIFICATIONS': {
@@ -88,7 +93,8 @@ export const documentation: Documentation = {
             commands: ['AT+CSCON'] as const,
         },
         'ACTIVITY STATUS': {
-            description: `The AT command +CPAS (Device Activity Status) is used to query the current state of a mobile device's radio interface. This command returns a value that indicates whether the device is currently in one of the following states:0: Device is powered off
+            description: `The current state of a mobile device's radio interface. This command returns one of the following values:
+                0: Device is powered off
                 1: Device is powered on and is not currently searching for a network
                 2: Device is currently searching for a network to register with
                 3: Device is currently registering with a network
@@ -100,7 +106,7 @@ export const documentation: Documentation = {
         },
         'EPS NETWORK REGISTRATION STATUS': {
             description:
-                'The EPS Network Registration Status field indicates whether a mobile device is currently registered with a cellular network, and if so, which network it is registered with. This information can be useful for ensuring that the device is able to communicate with other devices and services over the network, and for troubleshooting connection issues.',
+                'This indicates whether a mobile device is registered with a cellular network, and to which network. This can be useful to check that the device can communicate with other devices and services over the network, and for troubleshooting connection issues.',
             commands: [] as const,
         },
         'NETWORK TIME NOTIFICATIONS': {
@@ -122,62 +128,67 @@ export const documentation: Documentation = {
         },
         'ENERGY ESTIMATE': {
             description:
-                'Energy Estimate is a useful parameter for estimating the overall quality of the received signal and assessing the suitability of the signal for data transmission. In general, a higher Energy Estimate value indicates a stronger and more reliable signal. However, the interpretation of the Energy Estimate value depends on the specific use case and the requirements of the application.',
+                'A parameter indicating the overall quality of the received signal, to assess its suitability for data transmission. In general, a higher Energy Estimate value indicates a stronger and more reliable signal. However, the interpretation of the Energy Estimate value depends on the specific use case and the requirements of the application.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CELL ID': {
             description:
-                'The Cell ID is a unique identifier assigned to the cellular base station that is currently serving the mobile device. It can be used to identify the specific base station that the device is connected to and can be useful for location tracking and network optimization.',
+                'A unique identifier assigned to the cellular base station currently serving the mobile device. It can be useful for location tracking and network optimization.',
             commands: ['AT%CONEVAL'] as const,
         },
         PLMN: {
             title: 'Public Land Mobile Network (PLMN)',
             description:
-                'PLMN (Public Land Mobile Network) is the name of the network that the device is connected to.',
+                'The name of the cellular network that the device is connected to.',
             commands: ['AT+COPS', 'AT%CONEVAL'] as const,
         },
         'PLMN MODE': {
             title: 'Public Land Mobile Network Mode (PLMN mode)',
             description:
-                'PLMN mode (Public Land Mobile Network mode) is a setting that determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: automatic, manual, or deregister. In automatic mode, the device automatically selects and connects to the best available network based on its signal strength and other factors. In manual mode, the device only connects to a network that has been manually selected by the user. In deregister mode, the device disconnects from the current network and deregisters from all available networks.',
+                'A setting that determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: automatic, manual, or deregister. In automatic mode, the device automatically selects and connects to the best available network based on its signal strength and other factors. In manual mode, the device only connects to a network that has been manually selected by the user. In deregister mode, the device disconnects from the current network and deregisters from all available networks.',
             commands: ['AT+COPS'] as const,
         },
         'PLMN FORMAT': {
             title: 'Public Land Mobile Network Format (PLMN format)',
             description:
-                'PLMN format (Public Land Mobile Network format) is a setting that determines how a mobile device displays the name of the network it is connected to. It can be set to one of three formats: long alphanumeric, short alphanumeric, or numeric. In long alphanumeric format, the device displays the full name of the network. In short alphanumeric format, the device displays the abbreviated name of the network. In numeric format, the device displays the network’s MCC and MNC codes.',
+                'This setting determines how a mobile device displays the name of the connected network. It can be set to one of three formats: long alphanumeric, short alphanumeric, or numeric. In long alphanumeric format, the device displays the full name of the network. In short alphanumeric format, the device displays the abbreviated name of the network. In numeric format, the device displays the network’s MCC and MNC codes.',
             commands: ['AT+COPS'] as const,
         },
         'PHYSICAL CELL ID': {
+            title: 'PHYSICAL CELL ID (PCI)',
             description:
-                'The Physical Cell ID (PCI) is a unique identifier for the specific physical cell within the base station to which the mobile device is connected. Each base station typically contains multiple physical cells, and the PCI is used to distinguish between them.',
+                'A unique identifier for the specific physical cell within the base station to which the mobile device is connected.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CURRENT BAND': {
             description:
-                'The band, or current band, refers to the specific frequency range within the electromagnetic spectrum that a mobile device is using to communicate with the cellular network. Knowing the current band can help a user ensure that their device is operating on the appropriate network for their location and service provider.',
+                'The frequency range that a mobile device uses to communicate with the cellular network. Knowing the current band can help ensure that the device is operating on the appropriate network for its location and service provider.',
             commands: ['AT%XCBAND', 'AT%CONEVAL'] as const,
         },
-        'COVERAGE ENHANCEMENT LEVEL': {
+        'COVERAGE ENHANCEMENT LEVEL (CEL)': {
             description:
-                'Coverage Enhancement Level (CEL), indicates the level of Coverage Enhancement (CE) that the modem is currently configured for. Coverage Enhancement is a feature of the LTE cellular network that can improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
+                'This indicates the level of Coverage Enhancement (CE) that the modem is configured for. This can help to improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL TX POWER': {
+            title: 'CONEVAL Transmit power)',
             description: 'The transmit power used by the User Equipment (UE).',
             commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL TX REPETITIONS': {
+            title: 'CONEVAL Transmit Repetitions',
             description:
                 'The number of times the transmit procedure was repeated.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL RX REPETITIONS': {
+            title: 'CONEVAL Receive Repetitions',
             description:
                 'The number of times the receive procedure was repeated.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL DL PATH LOSS': {
+            title: 'CONEVAL Downlink Path Loss',
             description:
                 'The downlink path loss, which is a measure of the attenuation of the signal as it travels from the serving cell to the device.',
             commands: ['AT%CONEVAL'] as const,
@@ -187,46 +198,45 @@ export const documentation: Documentation = {
         IMEI: {
             title: 'International Mobile Equipment Identity (IMEI)',
             description:
-                "The International Mobile Equipment Identity (IMEI) is a unique 15-digit code that identifies a mobile device. Every device has a unique IMEI, which can be used to track the device, block it from being used on a cellular network if it's been reported as lost or stolen, and for other purposes such as device authentication.",
+                "A unique 15-digit code that identifies a mobile device. It can be used to track the device, block it from being used on a cellular network if it's been reported as lost or stolen, and for other purposes such as device authentication.",
             commands: ['AT+CGSN'] as const,
         },
         'MODEM FIRMWARE': {
             description:
-                "The current modem firmware version. The trace database used by Cellular Monitor depends on the modem firmware version. If your trace has no AT activity, open Serial Terminal and try running the command 'AT+CGMR'. Use the response to select the correct trace database.",
+                "The current modem firmware version. The trace database used by Cellular Monitor depends on the modem firmware version. If your trace has no AT activity, open Serial Terminal and run the command 'AT+CGMR'. Use the response to select the correct trace database.",
             commands: ['AT+CGMR'] as const,
         },
         'HARDWARE VERSION': {
-            description: 'The hardware revision of the User Equipment (UE).',
+            description: 'The hardware revision of the mobile device.',
             commands: ['AT%HWVERSION'] as const,
         },
         'MODEM UUID': {
             title: 'Modem Universally Unique Identifier (UUID)',
-            description:
-                'The Modem UUID is a unique identifier that is generated during the manufacturing of the modem firmware and can be used to track the specific version of the firmware that is running on a device.',
+            description: `A unique identifier generated when modem firmware is built. It can be used to track the specific version of a device's modem firmware.`,
             commands: ['AT%XMODEMUUID'] as const,
         },
         'CURRENT BAND': {
             description:
-                'The current band refers to the specific frequency range within the electromagnetic spectrum that a mobile device is using to communicate with the cellular network. Knowing the current band can help ensure that your device is operating on the appropriate network for your location and service provider.',
+                'The frequency range that a mobile device uses to communicate with the cellular network. Knowing the current band can help ensure that the device is operating on the appropriate network for its location and service provider.',
             commands: ['AT%XCBAND', 'AT%CONEVAL'] as const,
         },
         'SUPPORTED BANDS': {
             description:
-                'The Supported Bands returned by the AT command %XCBAND=? is a list of the different frequency bands that the mobile device is capable of using for its cellular communication. This information can be useful for determining which networks and service providers are compatible with the device, as well as for troubleshooting connection issues related to network compatibility.',
+                'A list of the frequency bands that the mobile device can use for cellular communication. This can be useful for determining which networks and service providers are compatible with the device, as well as for troubleshooting connection issues related to network compatibility.',
             commands: ['AT%XCBAND'] as const,
         },
         'DATA PROFILE': {
             description:
-                'A data profile specifies the settings for a cellular data connection, such as the APN (Access Point Name), authentication settings, and other parameters',
+                'Provides information on the application use case to the modem for power consumption optimization. The command is Nordic-proprietary, see the documentation at the following link for more information.',
             commands: ['AT%XDATAPRFL'] as const,
         },
         MANUFACTURER: {
-            description: 'Identification of the manufacturer of the modem.',
+            description:
+                'Identification of the manufacturer of the modem on the mobile device.',
             commands: ['AT+CGMI'] as const,
         },
         'PREFERRED BEARER': {
-            description:
-                'The preferred bearer is the preferred network type for the modem. The preferred bearer can be set to LTE-M or NB-IoT, please read the documentation for more information.',
+            description: `The modem's preferred network type.It can be set to LTE- M or NB- IoT, see the documentation at the following link for more information.`,
             commands: ['AT%XSYSTEMMODE'] as const,
         },
         'SUPPORTED BEARERS': {
@@ -236,7 +246,7 @@ export const documentation: Documentation = {
         },
         'FUNCTIONAL MODE': {
             description:
-                'The functional mode of the modem. E.g. Power off, Normal, Offline/Flight mode, etc.',
+                'The functional mode of the modem. Such as: Power off, Normal, Offline/Flight mode',
             commands: ['AT+CFUN'] as const,
         },
         'TRACE STATE OPERATION': {
@@ -245,28 +255,34 @@ export const documentation: Documentation = {
             commands: ['AT%XMODEMTRACE'] as const,
         },
         'TRACE STATE SET ID': {
+            title: 'Trace State Identifier',
             description:
                 'The Trace State Operation of the modem. The recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
             commands: ['AT%XMODEMTRACE'] as const,
         },
         'LTE-M TX REDUCTION': {
+            title: 'LTE-M Transmission Reduction',
             description:
-                'The Nordic-proprietary %XEMPR command allows you to configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+                'If set before modem activation this configures an extra reduction of 0.5 or 1 dB to the maximum transmission power on LTE-M. The command is Nordic-proprietary, see the documentation at the following link for more information.',
             commands: ['AT%XEMPR'] as const,
         },
         'NB-IOT TX REDUCTION': {
+            title: 'NB-IOT Transmission Reduction',
             description:
-                'The Nordic-proprietary %XEMPR command allows to you configure an extra reduction of 0.5 or 1 dB to the maximum transmission power on all or selected supported 3GPP bands separately in the NB-IoT and LTEM modes. %XEMPR should be given before the activation of the modem to be effective',
+                'If set before modem activation this configures an extra reduction of 0.5 or 1 dB to the maximum transmission power on NB-IOT. The command is Nordic-proprietary, see the documentation at the following link for more information.',
             commands: ['AT%XEMPR'] as const,
         },
     },
     Sim: {
+        'UICC STATUS': {
+            title: 'Universal Integrated Circuit Card (UICC) Status',
+            description:
+                'Status of the UICC, a new generation Subscriber Identity Module (SIM) used in mobile device for ensuring the integrity and security of personal data.',
+            commands: ['AT%XSIM'] as const,
+        },
         IMSI: {
             title: 'International Mobile Subscriber Identity (IMSI)',
             commands: ['AT+CIMI'] as const,
-        },
-        OPERATOR: {
-            commands: ['AT%XMONITOR'] as const,
         },
         MANUFACTURER: {
             commands: ['AT+CGMI'] as const,
@@ -276,18 +292,31 @@ export const documentation: Documentation = {
             commands: ['AT%XICCID'] as const,
         },
         PIN: {
+            title: 'Personal Identification Number (PIN)',
+            description:
+                'An optional security feature on the SIM. If enabled, a PIN is a numeric code which must be entered each time a mobile device is started.',
             commands: ['AT+CPIN'] as const,
         },
         'PIN RETRIES': {
+            title: 'Personal Identification Number (PIN) Retries',
+            description: 'The number of remaining PIN retries',
             commands: ['AT+CPINR'] as const,
         },
         'PUK RETRIES': {
+            title: 'Personal Unblocking Key (PUK) Retries',
+            description:
+                'The number of remaining (PUK) Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining Personal Identification Number (PIN) retries is exceeded.',
             commands: ['AT+CPINR'] as const,
         },
         'PIN2 RETRIES': {
+            title: 'Personal Identification Number (PIN) 2 Retries',
+            description: 'The number of remaining PIN2 retries',
             commands: ['AT+CPINR'] as const,
         },
         'PUK2 RETRIES': {
+            title: 'Personal Unblocking Key (PUK) 2 Retries',
+            description:
+                'The number of remaining PUK2 Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining Personal Identification Number (PIN) retries is exceeded.',
             commands: ['AT+CPINR'] as const,
         },
     },
@@ -295,31 +324,30 @@ export const documentation: Documentation = {
         'REQUESTED ACTIVE TIMER': {
             title: 'Requested Active Timer (T3324)',
             description:
-                'The requested T3324 timer is the timer that the modem has requested from the network, and is not guaranteed to be provided by the network.',
+                'The T3324 timer that the modem has requested from the network. Network provision of the timer is not guaranteed.',
             commands: ['AT+CPSMS'] as const,
         },
         'PROVIDED ACTIVE TIMER': {
             title: 'Provided Active Timer (T3324)',
-            description:
-                'The provided T3324 timer is the T3324 timer that is provided by the network.',
+            description: 'The T3324 timer that is provided by the network.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'REQUESTED PERIODIC TAU': {
             title: 'Requested Periodic TAU (T3412 EXTENDED)',
             description:
-                'The requested T3412 extended timer is the timer that the modem has requested from the network, and is not guaranteed to be provided by the network.',
+                'The T3412 timer that the modem has requested from the network. Network provision of the timer is not guaranteed.',
             commands: ['AT+CPSMS'] as const,
         },
         'PROVIDED PERIODIC TAU': {
             title: 'Provided Periodic TAU (T3412 EXTENDED)',
             description:
-                'The provided T3412 extended timer is the T3412 timer that is provided by the network, and should be preferred before the Legacy T3412 value.',
+                'The T3412 timer that is provided by the network, and should be preferred over the Legacy T3412 value.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'LEGACY PROVIDED PERIODIC TAU': {
             title: 'Legacy Provided Periodic TAU (T3412)',
             description:
-                'The provided legacy T3412 timer is the T3412 timer that is provided by the network.',
+                'The legacy T3412 timer that is provided by the network.',
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'PROVIDED POWER SAVING MODE STATE': {
@@ -330,18 +358,20 @@ export const documentation: Documentation = {
             commands: ['AT%CONEVAL'] as const,
         },
         'REQUESTED EDRX': {
+            title: 'Requested extended Discontinuous Reception (eDRX)',
             description:
-                'The requested eDRX value is a value that is requested by the mobile device during its registration process with the cellular network. This value indicates the desired eDRX (extended Discontinuous Reception) cycle length that the device would like to use to conserve power while maintaining an acceptable level of network connectivity.',
+                'This is requested by the mobile device during its cellular network registration. The value indicates the desired eDRX cycle length that the device would like to use to conserve power, while maintaining an acceptable level of network connectivity.',
             commands: ['AT+CEDRXRDP'] as const,
         },
         'NW PROVIDED EDRX': {
+            title: 'Network provided extended Discontinuous Reception (eDRX)',
             description:
-                'The NW Provided eDRX value is a value that is provided by the cellular network to a mobile device during its registration process. This value indicates the suggested eDRX (extended Discontinuous Reception) cycle length that the device should use to conserve power while maintaining a reasonable level of network connectivity.',
+                'This is provided by the cellular network to a mobile device during its registration process. The value indicates the suggested eDRX cycle length that the device should use to conserve power, while maintaining a reasonable level of network connectivity.',
             commands: ['AT+CEDRXRDP'] as const,
         },
         'PAGING TIME WINDOW': {
             description:
-                'Paging Time Window (PTW), is the period of time during which the User Equipment (UE) attempts to receive a paging message.',
+                'The period of time during which the mobile device attempts to receive a paging message.',
             commands: ['AT+CEDRXRDP'] as const,
         },
     },
@@ -350,9 +380,11 @@ export const documentation: Documentation = {
             commands: ['AT%XCONNSTAT'] as const,
         },
         'SUCCESSFUL SMS TX': {
+            title: 'Successful SMS Transmitted',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'SUCCESSFUL SMS RX': {
+            title: 'Successful SMS Received',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'DATA TRANSMITTED': {
@@ -362,6 +394,7 @@ export const documentation: Documentation = {
             commands: ['AT%XCONNSTAT'] as const,
         },
         'MAX PACKET SIZE TX OR RX': {
+            title: 'Maximum Packet Size Transmitted or Received',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'AVERAGE PACKET SIZE': {

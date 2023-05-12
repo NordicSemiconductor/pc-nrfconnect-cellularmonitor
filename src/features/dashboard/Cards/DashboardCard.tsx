@@ -137,7 +137,7 @@ const CardTooltip = ({
 }: CardTooltip) => {
     const cardType = title.includes('PDN') ? 'Packet Domain Network' : title;
     const tooltipTitle = documentation[cardType]?.[fieldKey]?.title ?? fieldKey;
-    const tooltipDocumentation = documentation[cardType][fieldKey];
+    const tooltipDocumentation = documentation[cardType]?.[fieldKey];
     const { commands, description } = tooltipDocumentation ?? {
         commands: [],
         description: undefined,
