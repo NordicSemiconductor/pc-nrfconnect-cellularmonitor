@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ipcRenderer } from 'electron/renderer';
 import {
     Button,
     Device,
@@ -20,10 +21,19 @@ import { getUartSerialPort } from '../tracing/traceSlice';
 export const OpenSerialTerminal = () => {
     const device = useSelector(selectedDevice);
     const selectedUartSerialPort = useSelector(getUartSerialPort);
+    const [appInstalled, setAppInstalled] = useState(false);
+
+    useEffect(() => {
+        detectInstalledApp().then(setAppInstalled);
+    }, []);
 
     if (!device || !selectedUartSerialPort) {
         return null;
     }
+
+    const title = appInstalled
+        ? `Open Serial Terminal and auto connect to port ${selectedUartSerialPort.path} on device with S\\N ${device.serialNumber}`
+        : 'Serial Terminal is not installed, install it from nRF Connect For Desktop';
 
     return (
         <Button
@@ -31,8 +41,9 @@ export const OpenSerialTerminal = () => {
             onClick={() =>
                 openSerialTerminal(device, selectedUartSerialPort.path)
             }
-            title={`Open Serial Terminal and auto connect to port ${selectedUartSerialPort.path} on device with S\\N ${device.serialNumber}`}
+            title={title}
             variant="secondary"
+            disabled={!appInstalled}
         >
             Open Serial Terminal
         </Button>
@@ -49,5 +60,24 @@ const openSerialTerminal = (device: Device, serialPortPath: string) => {
                 serialPortPath,
             },
         }
+    );
+};
+
+const detectInstalledApp = async () => {
+    const downloadableApps = (await ipcRenderer.invoke(
+        'apps:get-downloadable-apps'
+    )) as {
+        apps: {
+            name: string;
+            source: string;
+            installed?: object;
+        }[];
+    };
+
+    return downloadableApps.apps.some(
+        app =>
+            app.source === 'official' &&
+            app.name === 'pc-nrfconnect-serial-terminal' &&
+            app.installed !== undefined
     );
 };
