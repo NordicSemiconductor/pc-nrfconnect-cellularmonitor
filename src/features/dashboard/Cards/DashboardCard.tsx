@@ -7,13 +7,14 @@
 import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Card, colors, openUrl } from 'pc-nrfconnect-shared';
+import { Card, colors, openUrl, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
 import { TDispatch } from '../../../utils/thunk';
+import { getDetectedAtHostLibrary } from '../../tracing/traceSlice';
 import { documentationMap } from '../../tracingEvents/at';
 import {
     commandHasRecommeneded,
@@ -82,8 +83,11 @@ type CardEntry = {
 
 const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
     const dispatch = useDispatch();
+    const device = useSelector(selectedDevice);
+    const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
     const [keepShowing, setKeepShowing] = useState(false);
 
+    const canSendCommand = device != null && detectedAtHostLibrary;
     const showTooltip = (show: boolean) => setKeepShowing(show);
 
     return (
@@ -111,6 +115,7 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
                         fieldKey,
                         title,
                         showTooltip,
+                        canSendCommand,
                         dispatch,
                     })}
                     show={keepShowing}
@@ -126,6 +131,7 @@ type CardTooltip = {
     fieldKey: string;
     title: string;
     showTooltip: (show: boolean) => void;
+    canSendCommand: boolean;
     dispatch: TDispatch;
 };
 
@@ -133,6 +139,7 @@ const CardTooltip = ({
     fieldKey,
     title,
     showTooltip,
+    canSendCommand,
     dispatch,
 }: CardTooltip) => {
     const cardType = title.includes('PDN') ? 'Packet Domain Network' : title;
@@ -165,7 +172,8 @@ const CardTooltip = ({
                                 <p className="mb-0">{cmd}</p>
 
                                 <div className="d-flex">
-                                    {commandHasRecommeneded(cmd) ? (
+                                    {canSendCommand &&
+                                    commandHasRecommeneded(cmd) ? (
                                         <span
                                             role="button"
                                             tabIndex={index}
