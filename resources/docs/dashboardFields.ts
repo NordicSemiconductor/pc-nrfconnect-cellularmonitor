@@ -41,6 +41,11 @@ export const documentation: Documentation = {
                 "Similar to AcT (Access Technology) State, derived from Internet Protocol (IP) rather than AT 'commands'.",
             commands: [] as const,
         },
+        OPERATOR: {
+            description:
+                'The name of the operator whose network the mobile device is currently registered to.',
+            commands: ['AT%XMONITOR'] as const,
+        },
         MNC: {
             title: 'Mobile Network Code (MNC)',
             description:
@@ -189,7 +194,7 @@ export const documentation: Documentation = {
             commands: ['AT%CONEVAL'] as const,
         },
     },
-    DEVICE: {
+    Device: {
         IMEI: {
             title: 'International Mobile Equipment Identity (IMEI)',
             description:
@@ -273,16 +278,11 @@ export const documentation: Documentation = {
             title: 'Universal Integrated Circuit Card (UICC) Status',
             description:
                 'Status of the UICC, a new generation Subscriber Identity Module (SIM) used in mobile device for ensuring the integrity and security of personal data.',
-            commands: [] as const,
+            commands: ['AT%XSIM'] as const,
         },
         IMSI: {
             title: 'International Mobile Subscriber Identity (IMSI)',
             commands: ['AT+CIMI'] as const,
-        },
-        OPERATOR: {
-            description:
-                'The name of the operator whose network the mobile device is currently registered to.',
-            commands: ['AT%XMONITOR'] as const,
         },
         MANUFACTURER: {
             commands: ['AT+CGMI'] as const,
