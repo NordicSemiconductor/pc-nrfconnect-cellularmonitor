@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, usageData } from 'pc-nrfconnect-shared';
 
 import {
     getDetectedAtHostLibrary,
+    getIsSendingATCommands,
     getUartSerialPort,
 } from '../../features/tracing/traceSlice';
 import {
@@ -36,7 +37,7 @@ export const Macro = ({ commands, title }: Macro) => {
     const dispatch = useDispatch();
     const serialPort = useSelector(getUartSerialPort);
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
-    const [isSending, setIsSending] = useState(false);
+    const isSending = useSelector(getIsSendingATCommands);
 
     if (serialPort != null) {
         return (
@@ -48,9 +49,7 @@ export const Macro = ({ commands, title }: Macro) => {
                         EventAction.SEND_AT_COMMANDS_MACRO,
                         title
                     );
-                    setIsSending(true);
                     dispatch(sendAT(commands));
-                    setIsSending(false);
                 }}
                 title={
                     detectedAtHostLibrary

@@ -8,7 +8,11 @@ import { logger, SerialPort } from 'pc-nrfconnect-shared';
 
 import { TAction } from '../../../utils/thunk';
 import { ShellParser } from '../../shell/shellParser';
-import { getShellParser, getUartSerialPort } from '../../tracing/traceSlice';
+import {
+    getShellParser,
+    getUartSerialPort,
+    setIsSendingATCommands,
+} from '../../tracing/traceSlice';
 
 const decoder = new TextDecoder();
 const queue: string[] = [];
@@ -17,7 +21,7 @@ export const clearATQueue = () => queue.splice(0, queue.length);
 
 export const sendAT =
     (commands: string | string[]): TAction =>
-    async (_dispatch, getState) => {
+    async (dispatch, getState) => {
         const uartSerialPort = getUartSerialPort(getState());
         const shellParser = getShellParser(getState());
 
@@ -30,6 +34,7 @@ export const sendAT =
             return;
         }
 
+        dispatch(setIsSendingATCommands(true));
         if (!shellParser && uartSerialPort) {
             await sendCommandLineMode(uartSerialPort);
         } else if (shellParser) {
@@ -39,6 +44,7 @@ export const sendAT =
                 'Tried to send AT command to device, but no serial port is open'
             );
         }
+        dispatch(setIsSendingATCommands(false));
     };
 
 const sendCommandShellMode = async (shellParser: ShellParser) => {
