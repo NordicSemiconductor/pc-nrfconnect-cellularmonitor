@@ -57,9 +57,6 @@ export default () => {
         'LEGACY PROVIDED PERIODIC TAU': {
             value: formatPSMValuesToString(granted?.T3412),
         },
-        'POWER SAVING MODE STATE (PROVIDED)': {
-            value: granted?.state?.toUpperCase() ?? 'OFF',
-        },
         'TAU TRIGGERED': {
             value: TAUTriggered ?? 'Unknown',
         },
