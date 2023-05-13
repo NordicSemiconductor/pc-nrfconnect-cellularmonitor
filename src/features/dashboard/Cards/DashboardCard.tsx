@@ -14,7 +14,10 @@ import { Card, colors, openUrl, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
 import { TDispatch } from '../../../utils/thunk';
-import { getDetectedAtHostLibrary } from '../../tracing/traceSlice';
+import {
+    getDetectedAtHostLibrary,
+    getIsTracing,
+} from '../../tracing/traceSlice';
 import { documentationMap } from '../../tracingEvents/at';
 import {
     commandHasRecommeneded,
@@ -84,10 +87,11 @@ type CardEntry = {
 const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
     const dispatch = useDispatch();
     const device = useSelector(selectedDevice);
+    const isTracing = useSelector(getIsTracing);
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
     const [keepShowing, setKeepShowing] = useState(false);
 
-    const canSendCommand = device != null && detectedAtHostLibrary;
+    const canSendCommand = device != null && detectedAtHostLibrary && isTracing;
     const showTooltip = (show: boolean) => setKeepShowing(show);
 
     return (
