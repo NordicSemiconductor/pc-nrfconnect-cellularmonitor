@@ -161,7 +161,7 @@ const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await raceTimeout(testIfShellMode(port), 1000);
+    const isShellMode = await raceTimeout(testIfShellMode(port));
 
     if (isShellMode === undefined) {
         dispatch(setDetectedAtHostLibrary(false));
