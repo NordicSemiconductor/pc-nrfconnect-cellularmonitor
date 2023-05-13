@@ -22,7 +22,7 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
-import { setUartSerialPort } from '../tracing/traceSlice';
+import { getIsTracing, setUartSerialPort } from '../tracing/traceSlice';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
     downloadedFilePath,
@@ -41,6 +41,7 @@ export default () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const device = useSelector(selectedDevice);
+    const isTracing = useSelector(getIsTracing);
     const compatible = device && (isThingy91(device) || is91DK(device));
 
     const close = useCallback(() => {
@@ -55,6 +56,7 @@ export default () => {
                     className="w-100"
                     variant="secondary"
                     onClick={() => setModalVisible(!modalVisible)}
+                    disabled={isTracing}
                 >
                     Program device
                 </Button>
