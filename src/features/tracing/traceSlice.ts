@@ -62,6 +62,11 @@ const traceSlice = createSlice({
     name: 'trace',
     initialState: initialState(),
     reducers: {
+        resetTraceInfo: state => {
+            state.traceProgress = [];
+            state.dataReceived = false;
+            state.sourceFilePath = null;
+        },
         setTraceIsStarted: (
             state,
             action: PayloadAction<{
@@ -194,6 +199,7 @@ export const getIsSendingATCommands = (state: RootState) =>
     state.app.trace.isSendingATCommands;
 
 export const {
+    resetTraceInfo,
     setTraceIsStarted,
     setTraceIsStopped,
     setTraceProgress,

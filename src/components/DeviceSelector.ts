@@ -17,15 +17,21 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import { stopTrace } from '../features/tracing/nrfml';
+import { resetTraceEvents } from '../features/tracing/tracePacketEvents';
 import {
     removeShellParser,
     resetManualDbFilePath,
+    resetTraceInfo,
     setAvailableSerialPorts,
     setDetectingTraceDb,
     setSerialPort,
     setUartSerialPort,
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
+import {
+    resetDashboardState,
+    setDashboardState,
+} from '../features/tracingEvents/dashboardSlice';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import type { TAction } from '../utils/thunk';
 import { TDispatch } from '../utils/thunk';
@@ -69,6 +75,9 @@ const closeDevice = (): TAction => dispatch => {
 const openDevice =
     (device: Device): TAction =>
     dispatch => {
+        dispatch(resetDashboardState());
+        dispatch(resetTraceInfo());
+        resetTraceEvents();
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
