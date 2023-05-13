@@ -11,6 +11,7 @@ import { Button, usageData } from 'pc-nrfconnect-shared';
 import {
     getDetectedAtHostLibrary,
     getIsSendingATCommands,
+    getIsTracing,
     getUartSerialPort,
 } from '../../features/tracing/traceSlice';
 import {
@@ -37,6 +38,7 @@ export const Macro = ({ commands, title }: Macro) => {
     const dispatch = useDispatch();
     const serialPort = useSelector(getUartSerialPort);
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
+    const isTracing = useSelector(getIsTracing);
     const isSending = useSelector(getIsSendingATCommands);
 
     if (serialPort != null) {
@@ -56,7 +58,7 @@ export const Macro = ({ commands, title }: Macro) => {
                         ? `Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`
                         : `We could not detect AT host library on the connected device, for more information visit our documentation.`
                 }
-                disabled={!detectedAtHostLibrary || isSending}
+                disabled={!detectedAtHostLibrary || !isTracing || isSending}
             >
                 {isSending ? 'Sending commands' : title}
             </Button>
