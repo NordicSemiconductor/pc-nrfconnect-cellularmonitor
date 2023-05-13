@@ -43,7 +43,7 @@ export default () => {
     return (
         <div className="serialport-selection">
             <Dropdown
-                label="Serialport trace capture"
+                label="Serial port trace capture"
                 disabled={isTracing}
                 onSelect={updateSerialPort}
                 selectedItem={selectedItem}

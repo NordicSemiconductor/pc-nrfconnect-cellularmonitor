@@ -39,6 +39,8 @@ export const recommendedAT: recommendedAT = {
     'AT+CGDCONT': 'AT+CGDCONT?',
 
     'AT+COPS': 'AT+COPS?',
+    'AT%XMONITOR': 'AT%XMONITOR',
+
     'AT+CPINR': [
         'AT+CPINR="SIM PIN"',
         'AT+CPINR="SIM PIN2"',
@@ -76,7 +78,6 @@ const recommended = [
     'AT+CGEREP=1',
     'AT%XPOFWARN=1,30',
     'AT%XVBATLVL=1',
-    'AT%XMONITOR',
 ];
 
 const analysisSetup = [
