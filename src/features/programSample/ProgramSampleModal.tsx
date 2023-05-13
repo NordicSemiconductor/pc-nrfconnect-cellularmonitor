@@ -22,6 +22,7 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
+import { reselectDevice } from '../../components/DeviceSelector';
 import { getIsTracing, setUartSerialPort } from '../tracing/traceSlice';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
@@ -324,6 +325,7 @@ const ProgramSample = ({
                                 progressCb
                             );
                             setStage('success');
+                            dispatch(reselectDevice());
                         } catch (error) {
                             logger.error(error);
                             setErrorMessage(
