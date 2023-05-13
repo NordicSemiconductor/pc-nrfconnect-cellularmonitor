@@ -4,11 +4,15 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, usageData } from 'pc-nrfconnect-shared';
 
-import { getUartSerialPort } from '../../features/tracing/traceSlice';
+import {
+    getDetectedAtHostLibrary,
+    getIsSendingATCommands,
+    getUartSerialPort,
+} from '../../features/tracing/traceSlice';
 import {
     fullReport,
     recommendedAt,
@@ -32,24 +36,27 @@ type Macro = {
 export const Macro = ({ commands, title }: Macro) => {
     const dispatch = useDispatch();
     const serialPort = useSelector(getUartSerialPort);
-    const [isSending, setIsSending] = useState(false);
+    const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
+    const isSending = useSelector(getIsSendingATCommands);
 
     if (serialPort != null) {
         return (
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={async () => {
+                onClick={() => {
                     usageData.sendUsageData(
                         EventAction.SEND_AT_COMMANDS_MACRO,
                         title
                     );
-                    setIsSending(true);
-                    await dispatch(sendAT(commands));
-                    setIsSending(false);
+                    dispatch(sendAT(commands));
                 }}
-                title={`Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`}
-                disabled={isSending}
+                title={
+                    detectedAtHostLibrary
+                        ? `Send a series of AT commands over ${serialPort.path}.\nRemember to click Start, in order to update the dashboard and chart.`
+                        : `We could not detect AT host library on the connected device, for more information visit our documentation.`
+                }
+                disabled={!detectedAtHostLibrary || isSending}
             >
                 {isSending ? 'Sending commands' : title}
             </Button>

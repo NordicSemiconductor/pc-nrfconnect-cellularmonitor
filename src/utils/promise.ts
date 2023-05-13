@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-export const raceTimeout = <T>(promise: Promise<T>, timeout: number) =>
+export const raceTimeout = <T>(promise: Promise<T>, timeout = 1000) =>
     Promise.race([
         promise,
         new Promise<void>(resolve => {

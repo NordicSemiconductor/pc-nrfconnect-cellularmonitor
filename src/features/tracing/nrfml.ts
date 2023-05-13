@@ -137,8 +137,7 @@ export const startTrace =
         let autoDetectedTraceDbFile: string | null = null;
         if (uartPort && isDetectingTraceDb) {
             const version = await raceTimeout(
-                detectDatabaseVersion(uartPort, shellParser),
-                1000
+                detectDatabaseVersion(uartPort, shellParser)
             );
 
             if (typeof version === 'string') {

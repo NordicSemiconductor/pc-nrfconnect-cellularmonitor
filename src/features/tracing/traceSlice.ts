@@ -35,6 +35,10 @@ interface TraceState {
     readonly shellParser: ShellParser | null;
     selectedFormats: TraceFormat[];
     showConflictingSettingsDialog: boolean;
+    // From Device config.prj --> AT_HOST=y
+    // Which is optional from our documentation
+    detectedAtHostLibrary: boolean;
+    isSendingATCommands: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -50,6 +54,8 @@ const initialState = (): TraceState => ({
     shellParser: null,
     selectedFormats: restoreTraceFormats(),
     showConflictingSettingsDialog: false,
+    detectedAtHostLibrary: false,
+    isSendingATCommands: false,
 });
 
 const traceSlice = createSlice({
@@ -134,6 +140,12 @@ const traceSlice = createSlice({
         ) => {
             state.showConflictingSettingsDialog = action.payload;
         },
+        setDetectedAtHostLibrary: (state, action: PayloadAction<boolean>) => {
+            state.detectedAtHostLibrary = action.payload;
+        },
+        setIsSendingATCommands: (state, action: PayloadAction<boolean>) => {
+            state.isSendingATCommands = action.payload;
+        },
     },
 });
 
@@ -175,6 +187,12 @@ export const getOpenInWiresharkSelected = (state: RootState) =>
 export const getShowConflictingSettingsDialog = (state: RootState) =>
     state.app.trace.showConflictingSettingsDialog;
 
+export const getDetectedAtHostLibrary = (state: RootState) =>
+    state.app.trace.detectedAtHostLibrary;
+
+export const getIsSendingATCommands = (state: RootState) =>
+    state.app.trace.isSendingATCommands;
+
 export const {
     setTraceIsStarted,
     setTraceIsStopped,
@@ -191,6 +209,8 @@ export const {
     removeShellParser,
     setTraceFormats,
     setShowConflictingSettingsDialog,
+    setDetectedAtHostLibrary,
+    setIsSendingATCommands,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;
