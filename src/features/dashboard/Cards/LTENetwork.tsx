@@ -21,7 +21,6 @@ export default () => {
         rrcState,
         signalQuality,
         networkStatus,
-        activityStatus,
         operatorFullName,
         operatorShortName,
         mcc,
@@ -57,16 +56,15 @@ export default () => {
     } = useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
+        RRC: {
+            value: parseRRCState(rrcState),
+        },
+        'ACTIVITY STATUS': {
+            value: networkStatus ?? 'Unknown',
+        },
         ACT: {
             value:
                 AcTState !== undefined ? parseModeFromAcT(AcTState) : 'Unknown',
-        },
-        'ACT STATE': {
-            value: AcTState ?? 'Unknown',
-        },
-        // TODO: need to look into how to properly get correct value for this
-        'RRC STATE': {
-            value: parseRRCState(rrcState),
         },
         OPERATOR: {
             value: parseOperator(operatorFullName, operatorShortName),
@@ -101,24 +99,8 @@ export default () => {
                 ? `${signalQuality?.snr_decibel} dB`
                 : 'Unknown',
         },
-        'NETWORK STATUS NOTIFICATIONS': {
-            value: parseNotificationStatus(networkStatusNotifications),
-        },
-        'SIGNALING CONNECTING STATUS NOTIFICATIONS': {
-            value: parseNotificationStatus(
-                signalingConnectionStatusNotifications
-            ),
-        },
-        // TODO: To be removed?
-        'ACTIVITY STATUS': {
-            value: activityStatus ?? 'Unknown',
-        },
         'EPS NETWORK REGISTRATION STATUS': {
             value: networkStatus ?? 'Unknown',
-        },
-
-        'NETWORK TIME NOTIFICATIONS': {
-            value: parseNotificationStatus(networkTimeNotifications),
         },
         'LOCAL TIME ZONE': {
             value: networkTimeNotification?.localTimeZone ?? 'Unknown',
@@ -154,9 +136,6 @@ export default () => {
         // },
         'PHYSICAL CELL ID': {
             value: physicalCellID ?? 'Unknown',
-        },
-        'CURRENT BAND': {
-            value: band ?? 'Unknown',
         },
         'COVERAGE ENHANCEMENT LEVEL': {
             value: conevalCoverageEnhancementLevel ?? 'Unknown',

@@ -30,7 +30,7 @@ export const documentation: Documentation = {
                 "Indicates the current state of a mobile device's cellular network connection.",
             commands: ['AT+CEDRXRDP'] as const,
         },
-        'RRC STATE': {
+        RRC: {
             title: 'Radio Resource Control State (RRC)',
             description:
                 "The state of the radio resources being used by a mobile device's cellular network connection, such as active or idle state.",
@@ -94,15 +94,16 @@ export const documentation: Documentation = {
         },
         'ACTIVITY STATUS': {
             description: `The current state of a mobile device's radio interface. This command returns one of the following values:
-                0: Device is powered off
-                1: Device is powered on and is not currently searching for a network
-                2: Device is currently searching for a network to register with
-                3: Device is currently registering with a network
-                4: Device is registered with a network and is currently idle
-                5: Device is currently engaged in a data call or voice call
-                6: Device is in a reserved state
+                0: Not registered. UE is not currently searching for an operator to register to.
+                1:  Registered, home network.
+                2: Not registered, but UE is currently trying to attach or searching an operator to
+register to
+                3: Registration denied.
+                4: Unknown  (for example, out of E-UTRAN coverage).
+                5: Registered, roaming.
+                90: Not registered due to UICC failure
         `,
-            commands: ['AT+CPAS'] as const,
+            commands: ['AT+CEREG'] as const,
         },
         'EPS NETWORK REGISTRATION STATUS': {
             description:

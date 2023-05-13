@@ -40,6 +40,7 @@ export const recommendedAT: recommendedAT = {
 
     'AT+COPS': 'AT+COPS?',
     'AT%XMONITOR': 'AT%XMONITOR',
+
     'AT+CPINR': [
         'AT+CPINR="SIM PIN"',
         'AT+CPINR="SIM PIN2"',
