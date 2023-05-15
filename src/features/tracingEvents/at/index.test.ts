@@ -11,6 +11,8 @@ import { initialState } from '.';
 import { rawTraceData } from './traceSample';
 
 const expectedState = {
+    networkStatusLastUpdate: 'networkStatus',
+
     uiccInitialised: true,
     notifySignalQuality: true,
     signalQuality: {

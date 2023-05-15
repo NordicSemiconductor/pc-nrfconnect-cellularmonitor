@@ -29,6 +29,7 @@ export const processor: Processor<'%CONEVAL'> = {
                 const snr = validateNumberValue(parsedPayload[5]);
                 return {
                     ...state,
+                    networkStatusLastUpdate: 'coneval',
                     conevalResult: validateConevalResult(parsedPayload[0]),
                     rrcState: validateRRCState(parsedPayload[1]),
                     conevalEnergyEstimate: validateConevalEnergyEstimate(
@@ -68,7 +69,11 @@ export const processor: Processor<'%CONEVAL'> = {
                 };
             }
 
-            return { ...state, conevalResult };
+            return {
+                ...state,
+                conevalResult,
+                networkStatusLastUpdate: 'coneval',
+            };
         }
         return state;
     },

@@ -19,6 +19,7 @@ import {
     getTraceSourceFilePath,
 } from '../../features/tracing/traceSlice';
 import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
+import { ConnectionEvaluationResult } from '../../features/tracingEvents/types';
 import {
     getCollapseConnectionStatusSection,
     setCollapseConnectionStatusSection,
@@ -99,7 +100,9 @@ const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
 export default () => {
     const device = useSelector(selectedDevice);
     const {
+        networkStatusLastUpdate,
         networkStatus,
+        conevalResult,
         accessPointNames,
         uiccInitialised,
         uiccInitialisedErrorCause,
@@ -117,48 +120,18 @@ export default () => {
 
     // Handle LTE Connection State
     let lteConnectionState = LTE_DEFAULT_STATE;
-    if (
-        pdnState === PDN_SUCCESS_STATE ||
-        networkStatus === 1 ||
-        networkStatus === 5
-    ) {
-        lteConnectionState = LTE_SUCCESS_STATE;
-    } else if (networkStatus === 0) {
-        lteConnectionState = {
-            ...LTE_LOADING_STATE,
-            caption:
-                'Not registered. UE is not currently searching for an operator to register to.',
-        };
-    } else if (networkStatus === 2) {
-        lteConnectionState = {
-            ...LTE_LOADING_STATE,
-            caption:
-                'Not registered, but UE is currently trying to attach or searching an operator to register to.',
-        };
-    } else if (networkStatus === 3) {
-        lteConnectionState = {
-            ...LTE_FAIL_STATE,
-            caption: 'Registration failed.',
-        };
-    } else if (networkStatus === 4) {
-        lteConnectionState = {
-            ...LTE_FAIL_STATE,
-            caption: 'Unknown (for example, out of E-UTRAN coverage).',
-        };
-    } else if (networkStatus === 90) {
-        lteConnectionState = {
-            ...LTE_FAIL_STATE,
-            caption: 'Not registered due to UICC failure.',
-        };
+    if (networkStatusLastUpdate === 'coneval') {
+        lteConnectionState = validateConeval(conevalResult, lteConnectionState);
+    } else if (networkStatusLastUpdate === 'networkStatus' && networkStatus) {
+        lteConnectionState = validateNetworkStatus(
+            networkStatus,
+            lteConnectionState
+        );
     }
 
     // Handle SIM state
     let simState = SIM_DEFAULT_STATE;
-    if (
-        pdnState === PDN_SUCCESS_STATE ||
-        lteConnectionState === LTE_SUCCESS_STATE ||
-        uiccInitialised
-    ) {
+    if (lteConnectionState === LTE_SUCCESS_STATE || uiccInitialised) {
         simState = SIM_SUCCESS_STATE;
     } else if (uiccInitialised === false) {
         if (uiccInitialisedErrorCause) {
@@ -211,4 +184,96 @@ export default () => {
             </div>
         </CollapsibleGroup>
     );
+};
+
+const validateConeval = (
+    conevalResult: ConnectionEvaluationResult,
+    lteConnectionState: Step
+) => {
+    switch (conevalResult) {
+        case 0:
+            return LTE_SUCCESS_STATE;
+        case 1:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, no cell available',
+            };
+        case 2:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, UICC not available',
+            };
+        case 3:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, only barred cells available',
+            };
+        case 4:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, busy (for example, GNSS activity)',
+            };
+        case 5:
+            return {
+                ...LTE_FAIL_STATE,
+                caption:
+                    'Evaluation failed, aborted because of higher priority operation',
+            };
+        case 6:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, not registered',
+            };
+        case 7:
+            return {
+                ...LTE_FAIL_STATE,
+                caption: 'Evaluation failed, unspecified',
+            };
+        default: {
+            return lteConnectionState;
+        }
+    }
+};
+
+const validateNetworkStatus = (
+    networkStatus: number,
+    lteConnectionState: Step
+) => {
+    if (networkStatus === 0) {
+        return {
+            ...LTE_LOADING_STATE,
+            caption:
+                'Not registered. UE is not currently searching for an operator to register to.',
+        };
+    }
+    if (networkStatus === 2) {
+        return {
+            ...LTE_LOADING_STATE,
+            caption:
+                'Not registered, but UE is currently trying to attach or searching an operator to register to.',
+        };
+    }
+    if (networkStatus === 3) {
+        return {
+            ...LTE_FAIL_STATE,
+            caption: 'Registration failed.',
+        };
+    }
+    if (networkStatus === 4) {
+        return {
+            ...LTE_FAIL_STATE,
+            caption: 'Unknown (for example, out of E-UTRAN coverage).',
+        };
+    }
+    if (networkStatus === 90) {
+        return {
+            ...LTE_FAIL_STATE,
+            caption: 'Not registered due to UICC failure.',
+        };
+    }
+    if (networkStatus === 1 || networkStatus === 5) {
+        return LTE_SUCCESS_STATE;
+    }
+
+    return lteConnectionState;
 };

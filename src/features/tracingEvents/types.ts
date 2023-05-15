@@ -25,6 +25,10 @@ export type PacketFormat =
     | 'modem_trace';
 
 export interface State {
+    // What value to use in order to show the latest LTE network connection
+    // status in the Connection Status Component
+    networkStatusLastUpdate?: 'coneval' | 'networkStatus';
+
     uiccInitialised?: boolean;
     uiccInitialisedErrorCause?: string;
     uiccInitialisedErrorCauseCode?: number;
