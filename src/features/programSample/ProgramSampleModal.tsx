@@ -299,16 +299,6 @@ const ProgramSample = ({
                 )}
 
                 <DialogButton
-                    onClick={() => selectSample(undefined)}
-                    disabled={isProgramming || !device}
-                >
-                    Back
-                </DialogButton>
-
-                <DialogButton onClick={close} disabled={isProgramming}>
-                    Close
-                </DialogButton>
-                <DialogButton
                     variant="primary"
                     disabled={isProgramming || waitingForReconnect || !device}
                     onClick={async () => {
@@ -349,6 +339,15 @@ const ProgramSample = ({
                     }}
                 >
                     Program
+                </DialogButton>
+                <DialogButton
+                    onClick={() => selectSample(undefined)}
+                    disabled={isProgramming || !device}
+                >
+                    Back
+                </DialogButton>
+                <DialogButton onClick={close} disabled={isProgramming}>
+                    Close
                 </DialogButton>
             </Dialog.Footer>
         </>
