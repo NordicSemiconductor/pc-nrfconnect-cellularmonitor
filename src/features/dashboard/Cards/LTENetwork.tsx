@@ -8,11 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../tracingEvents/dashboardSlice';
-import type {
-    AcTState,
-    NetworkStatusNotifications,
-    SignalingConnectionStatusNotifications,
-} from '../../tracingEvents/types';
+import type { AcTState } from '../../tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
 export default () => {
@@ -28,17 +24,7 @@ export default () => {
         mnc,
         mncCode,
         earfcn,
-
-        // +CEREG Notifications
-        networkStatusNotifications,
-
-        // +CSCON Notifications
-        signalingConnectionStatusNotifications,
-
-        // %XTIME
-        networkTimeNotifications,
         networkTimeNotification,
-
         // %CONEVAL
         conevalResult,
         conevalEnergyEstimate,
@@ -47,7 +33,6 @@ export default () => {
         plmnFormat,
         plmn,
         physicalCellID,
-        band,
         conevalCoverageEnhancementLevel,
         conevalTXPower,
         conevalTXRepetitions,
@@ -203,21 +188,6 @@ const parseMCC = (mcc: string | undefined, mccCode: number | undefined) => {
     }
     if (result === '') return 'Unknown';
     return result.trim();
-};
-
-const parseNotificationStatus = (
-    notification:
-        | NetworkStatusNotifications
-        | SignalingConnectionStatusNotifications
-        | (0 | 1)
-) => {
-    if (notification != null) {
-        if (notification === 0) return 'Unsubscribed';
-
-        return `Subscribed ${notification}`;
-    }
-
-    return 'Unknown';
 };
 
 enum parsePlmnType {

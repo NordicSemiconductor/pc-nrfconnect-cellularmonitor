@@ -29,7 +29,6 @@ import {
     resetTraceInfo,
     setUartSerialPort,
 } from '../tracing/traceSlice';
-import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {

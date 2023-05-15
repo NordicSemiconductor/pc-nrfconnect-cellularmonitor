@@ -14,7 +14,6 @@ import {
     DeviceSelector,
     DeviceSelectorProps,
     logger,
-    selectedDevice,
 } from 'pc-nrfconnect-shared';
 
 import { connectToSerialPort } from '../features/terminal/uartSerialPort';
