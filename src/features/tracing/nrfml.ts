@@ -236,8 +236,8 @@ export const startTrace =
         }
 
         if (refreshDashboard) {
-            logger.info(`Refreshing values`);
-            dispatch(sendAT(recommendedAt));
+            logger.info(`Refreshing values in 3 seconds`);
+            setTimeout(() => dispatch(sendAT(recommendedAt)), 3000);
         }
 
         dispatch(
