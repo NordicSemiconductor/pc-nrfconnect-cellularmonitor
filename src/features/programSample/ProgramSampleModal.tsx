@@ -23,8 +23,14 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import { connectToSerialPort } from '../terminal/uartSerialPort';
-import { getIsTracing, setUartSerialPort } from '../tracing/traceSlice';
+import { resetTraceEvents } from '../tracing/tracePacketEvents';
+import {
+    getIsTracing,
+    resetTraceInfo,
+    setUartSerialPort,
+} from '../tracing/traceSlice';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
     downloadedFilePath,
@@ -346,6 +352,9 @@ const ProgramSample = ({
                                                 logger.error(err);
                                             })
                                             .finally(() => {
+                                                dispatch(resetDashboardState());
+                                                dispatch(resetTraceInfo());
+                                                resetTraceEvents();
                                                 setStage('success');
                                             });
                                     }
