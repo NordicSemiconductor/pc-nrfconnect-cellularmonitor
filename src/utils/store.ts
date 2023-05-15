@@ -9,91 +9,75 @@ import { getAppFile, getPersistentStore } from 'pc-nrfconnect-shared';
 
 import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
 
-interface DevicePort {
-    [serialNumber: string]: string;
-}
-
-const MANUAL_DB_FILE_PATH_KEY = 'dbFilePath';
-const WIRESHARK_EXECUTABLE_PATH_KEY = 'wiresharkExecutablePath';
-const TSHARK_EXECUTABLE_PATH_KEY = 'tsharkExecutablePath';
-const TRACE_FORMATS = 'traceFormats';
-const SERIALPORTS = 'serialPorts';
-const COLLAPSE_TRACE_DETAILS_SECTION = 'collapseTraceDetailsSection';
-const COLLAPSE_POWER_SECTION = 'collapsePowerSection';
-const COLLAPSE_CONNECTION_STATUS_SECTION = 'connectionStatusSection';
-const SHOW_STARTUP_DIALOG = 'showStartupDialog';
-
-const store = getPersistentStore<StoreSchema>({
-    migrations: {
-        '0.4.5': instance => {
-            instance.set(TRACE_FORMATS, ['raw', 'tshark']);
-        },
-    },
-});
-
 interface StoreSchema {
-    [MANUAL_DB_FILE_PATH_KEY]: string | undefined;
-    [WIRESHARK_EXECUTABLE_PATH_KEY]: string | null;
-    [TSHARK_EXECUTABLE_PATH_KEY]: string | null;
-    [TRACE_FORMATS]: TraceFormat[];
-    [SERIALPORTS]: DevicePort;
-    [COLLAPSE_POWER_SECTION]: boolean;
-    [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
-    [COLLAPSE_CONNECTION_STATUS_SECTION]: boolean;
+    dbFilePath: string | undefined;
+    wiresharkExecutablePath: string | null;
+    tsharkExecutablePath: string | null;
+    traceFormats: TraceFormat[];
+    serialPorts: {
+        [serialNumber: string]: string;
+    };
+    collapsePowerSection: boolean;
+    collapseTraceDetailsSection: boolean;
+    connectionStatusSection: boolean;
     resetDevice: boolean;
     refreshDashboard: boolean;
 }
 
+const store = getPersistentStore<StoreSchema>({
+    migrations: {
+        '0.4.5': instance => {
+            instance.set('traceFormats', ['raw', 'tshark']);
+        },
+    },
+});
+
 export const autoDetectDbRootFolder = () =>
     getAppFile(path.join('resources', 'traceDB')) as string;
 
-export const getManualDbFilePath = () => store.get(MANUAL_DB_FILE_PATH_KEY);
+export const getManualDbFilePath = () => store.get('dbFilePath');
 export const storeManualDbFilePath = (manualDbFilePath: string) =>
-    store.set(MANUAL_DB_FILE_PATH_KEY, manualDbFilePath);
-export const deleteDbFilePath = () => store.delete(MANUAL_DB_FILE_PATH_KEY);
+    store.set('dbFilePath', manualDbFilePath);
+export const deleteDbFilePath = () => store.delete('dbFilePath');
 
 export const getWiresharkPath = () =>
-    store.get(WIRESHARK_EXECUTABLE_PATH_KEY, null);
+    store.get('wiresharkExecutablePath', null);
 export const setWiresharkPath = (wiresharkPath: string) =>
-    store.set(WIRESHARK_EXECUTABLE_PATH_KEY, wiresharkPath);
+    store.set('wiresharkExecutablePath', wiresharkPath);
 
-export const getTsharkPath = () => store.get(TSHARK_EXECUTABLE_PATH_KEY, null);
+export const getTsharkPath = () => store.get('tsharkExecutablePath', null);
 export const setTsharkPath = (tsharkPath: string) =>
-    store.set(TSHARK_EXECUTABLE_PATH_KEY, tsharkPath);
+    store.set('tsharkExecutablePath', tsharkPath);
 
 export const getTraceFormats = () =>
-    store.get(TRACE_FORMATS, [ALL_TRACE_FORMATS[0]]);
+    store.get('traceFormats', [ALL_TRACE_FORMATS[0]]);
 export const setTraceFormats = (traceFormats: TraceFormat[]) =>
-    store.set(TRACE_FORMATS, traceFormats);
+    store.set('traceFormats', traceFormats);
 
-const serialPorts = () => store.get(SERIALPORTS, {});
+const serialPorts = () => store.get('serialPorts', {});
 export const getSerialPort = (serialNumber: string) =>
     serialPorts()[serialNumber];
 
 export const setSerialPort = (serialNumber: string, port: string) =>
-    store.set(SERIALPORTS, {
+    store.set('serialPorts', {
         ...serialPorts(),
         [serialNumber]: port,
     });
 
 export const getCollapsePowerSection = () =>
-    store.get(COLLAPSE_POWER_SECTION, false);
+    store.get('collapsePowerSection', false);
 export const setCollapsePowerSection = (collapsePowerSection: boolean) =>
-    store.set(COLLAPSE_POWER_SECTION, collapsePowerSection);
+    store.set('collapsePowerSection', collapsePowerSection);
 
 export const getCollapseConnectionStatusSection = () =>
-    store.get(COLLAPSE_CONNECTION_STATUS_SECTION, false);
+    store.get('connectionStatusSection', false);
 export const setCollapseConnectionStatusSection = (
     collapseConnectionStatusSection: boolean
-) =>
-    store.set(
-        COLLAPSE_CONNECTION_STATUS_SECTION,
-        collapseConnectionStatusSection
-    );
+) => store.set('connectionStatusSection', collapseConnectionStatusSection);
 
 export const setShowStartupDialog = (showStartupDialog: boolean) =>
-    store.set(SHOW_STARTUP_DIALOG, showStartupDialog);
-export const getShowStartupDialog = () => store.get(SHOW_STARTUP_DIALOG, true);
+    store.set('showStartupDialog', showStartupDialog);
+export const getShowStartupDialog = () => store.get('showStartupDialog', true);
 
 export const storeResetDevice = (resetDevice: boolean) =>
     store.set('resetDevice', resetDevice);
