@@ -22,8 +22,9 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
-import { reselectDevice } from '../../components/DeviceSelector';
+import { connectToSerialPort } from '../terminal/uartSerialPort';
 import { getIsTracing, setUartSerialPort } from '../tracing/traceSlice';
+import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
     downloadedFilePath,
@@ -324,8 +325,32 @@ const ProgramSample = ({
                                 selectedFirmware.filter(fw => fw.selected),
                                 progressCb
                             );
-                            setStage('success');
-                            dispatch(reselectDevice());
+
+                            setTimeout(() => {
+                                // Test if new fw uses shell mode
+                                const ports = device.serialPorts;
+                                if (ports) {
+                                    const port = ports.at(0);
+                                    if (port && port.path) {
+                                        connectToSerialPort(dispatch, port.path)
+                                            .then(uartSerialPort => {
+                                                if (uartSerialPort) {
+                                                    dispatch(
+                                                        setUartSerialPort(
+                                                            uartSerialPort
+                                                        )
+                                                    );
+                                                }
+                                            })
+                                            .catch(err => {
+                                                logger.error(err);
+                                            })
+                                            .finally(() => {
+                                                setStage('success');
+                                            });
+                                    }
+                                }
+                            }, 3000);
                         } catch (error) {
                             logger.error(error);
                             setErrorMessage(

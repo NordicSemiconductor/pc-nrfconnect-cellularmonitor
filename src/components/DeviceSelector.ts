@@ -17,6 +17,7 @@ import {
     selectedDevice,
 } from 'pc-nrfconnect-shared';
 
+import { connectToSerialPort } from '../features/terminal/uartSerialPort';
 import { stopTrace } from '../features/tracing/nrfml';
 import { resetTraceEvents } from '../features/tracing/tracePacketEvents';
 import {
@@ -86,17 +87,43 @@ const openDevice =
                 setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
             );
         }
+
+        dispatch(autoSetTraceSerialPort(device, ports));
+        dispatch(autoSetUartSerialPort(ports));
+    };
+
+const autoSetTraceSerialPort =
+    (device: Device, ports: SerialPort[] | undefined): TAction =>
+    dispatch => {
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = autoSelectPort(ports ?? []);
+        const port = autoSelectTraceSerialPort(ports ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
         } else {
-            logger.error("Couldn't identify serial port");
+            logger.error("Couldn't identify trace serial port");
+        }
+    };
+
+const autoSetUartSerialPort =
+    (ports: SerialPort[] | undefined): TAction =>
+    async dispatch => {
+        const port = autoSelectUartSerialPort(ports ?? []);
+        if (port && port.path) {
+            const uartSerialPort = await connectToSerialPort(
+                dispatch,
+                port.path
+            );
+
+            if (uartSerialPort) {
+                dispatch(setUartSerialPort(uartSerialPort));
+            }
+        } else {
+            logger.error('Could not identify serial port');
         }
     };
 
@@ -107,13 +134,5 @@ const openDevice =
  * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
  * @returns {SerialPort} the selected serialport object
  */
-const autoSelectPort = (ports: SerialPort[]) => ports?.at(-1);
-
-export const reselectDevice = (): TAction => (dispatch, getState) => {
-    const device = selectedDevice(getState());
-    dispatch(closeDevice());
-
-    if (device) {
-        dispatch(openDevice(device));
-    }
-};
+const autoSelectTraceSerialPort = (ports: SerialPort[]) => ports?.at(-1);
+const autoSelectUartSerialPort = (ports: SerialPort[]) => ports?.at(0);
