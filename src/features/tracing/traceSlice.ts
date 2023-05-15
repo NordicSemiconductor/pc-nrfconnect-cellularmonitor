@@ -11,7 +11,11 @@ import type { RootState } from '../../appReducer';
 import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     getTraceFormats as restoreTraceFormats,
+    restoreRefreshDashboard,
+    restoreResetDevice,
     setTraceFormats as storeTraceFormats,
+    storeRefreshDashboard,
+    storeResetDevice,
 } from '../../utils/store';
 import { ShellParser } from '../shell/shellParser';
 import { TraceFormat } from './formats';
@@ -39,6 +43,8 @@ interface TraceState {
     // Which is optional from our documentation
     detectedAtHostLibrary: boolean;
     isSendingATCommands: boolean;
+    resetDevice: boolean;
+    refreshDashboard: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -56,6 +62,8 @@ const initialState = (): TraceState => ({
     showConflictingSettingsDialog: false,
     detectedAtHostLibrary: false,
     isSendingATCommands: false,
+    resetDevice: restoreResetDevice(),
+    refreshDashboard: restoreRefreshDashboard(),
 });
 
 const traceSlice = createSlice({
@@ -146,6 +154,14 @@ const traceSlice = createSlice({
         setIsSendingATCommands: (state, action: PayloadAction<boolean>) => {
             state.isSendingATCommands = action.payload;
         },
+        setResetDevice: (state, action: PayloadAction<boolean>) => {
+            state.resetDevice = action.payload;
+            storeResetDevice(action.payload);
+        },
+        setRefreshDashboard: (state, action: PayloadAction<boolean>) => {
+            state.refreshDashboard = action.payload;
+            storeRefreshDashboard(action.payload);
+        },
     },
 });
 
@@ -193,6 +209,11 @@ export const getDetectedAtHostLibrary = (state: RootState) =>
 export const getIsSendingATCommands = (state: RootState) =>
     state.app.trace.isSendingATCommands;
 
+export const getResetDevice = (state: RootState) => state.app.trace.resetDevice;
+
+export const getRefreshDashboard = (state: RootState) =>
+    state.app.trace.refreshDashboard;
+
 export const {
     setTraceIsStarted,
     setTraceIsStopped,
@@ -211,6 +232,8 @@ export const {
     setShowConflictingSettingsDialog,
     setDetectedAtHostLibrary,
     setIsSendingATCommands,
+    setResetDevice,
+    setRefreshDashboard,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

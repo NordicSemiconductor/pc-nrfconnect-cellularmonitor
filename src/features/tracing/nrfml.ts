@@ -4,18 +4,22 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { deviceControlReset } from '@nordicsemiconductor/nrf-device-lib-js';
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
+import type { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import {
-    Configuration,
-    // eslint-disable-next-line import/no-unresolved
-} from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
-import { logger, usageData } from 'pc-nrfconnect-shared';
+    getDeviceLibContext,
+    logger,
+    selectedDevice,
+    usageData,
+} from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
-import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
+import { recommendedAt } from '../tracingEvents/at/recommeneded';
+import { detectDatabaseVersion, sendAT } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { findTshark } from '../wireshark/wireshark';
 import { getTsharkPath } from '../wireshark/wiresharkSlice';
@@ -32,6 +36,8 @@ import {
 } from './tracePacketEvents';
 import {
     getManualDbFilePath,
+    getRefreshDashboard,
+    getResetDevice,
     getSerialPort,
     getShellParser,
     getTaskId,
@@ -123,6 +129,9 @@ export const startTrace =
         const uartPort = getUartSerialPort(state);
         const shellParser = getShellParser(state);
         const tracePort = getSerialPort(state);
+        const resetDevice = getResetDevice(state);
+        const refreshDashboard = getRefreshDashboard(state);
+
         if (!tracePort) {
             logger.error('Select serial port to start tracing');
             return;
@@ -213,7 +222,24 @@ export const startTrace =
                 }
             }
         );
+
         logger.info('Started tracefile');
+
+        if (resetDevice) {
+            logger.info(`Reseting device`);
+            const device = selectedDevice(state);
+            if (!device) {
+                throw new Error('No device selected, unable to reset');
+            }
+
+            await deviceControlReset(getDeviceLibContext(), device.id);
+        }
+
+        if (refreshDashboard) {
+            logger.info(`Refreshing values`);
+            dispatch(sendAT(recommendedAt));
+        }
+
         dispatch(
             setTraceIsStarted({
                 taskId,

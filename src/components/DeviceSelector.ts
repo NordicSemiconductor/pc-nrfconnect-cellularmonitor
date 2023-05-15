@@ -5,7 +5,7 @@
  */
 
 import { connect } from 'react-redux';
-import {
+import type {
     DeviceTraits,
     SerialPort,
 } from '@nordicsemiconductor/nrf-device-lib-js';
