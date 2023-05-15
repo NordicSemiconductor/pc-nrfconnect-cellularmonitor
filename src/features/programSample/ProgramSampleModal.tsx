@@ -22,7 +22,7 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
-import { connectToSerialPort } from '../terminal/uartSerialPort';
+import { autoSetUartSerialPort } from '../terminal/uartSerialPort';
 import { resetTraceEvents } from '../tracing/tracePacketEvents';
 import {
     getIsTracing,
@@ -333,31 +333,11 @@ const ProgramSample = ({
 
                             setTimeout(() => {
                                 // Test if new fw uses shell mode
-                                const ports = device.serialPorts;
-                                if (ports) {
-                                    const port = ports.at(0);
-                                    if (port && port.path) {
-                                        connectToSerialPort(dispatch, port.path)
-                                            .then(uartSerialPort => {
-                                                if (uartSerialPort) {
-                                                    dispatch(
-                                                        setUartSerialPort(
-                                                            uartSerialPort
-                                                        )
-                                                    );
-                                                }
-                                            })
-                                            .catch(err => {
-                                                logger.error(err);
-                                            })
-                                            .finally(() => {
-                                                dispatch(resetDashboardState());
-                                                dispatch(resetTraceInfo());
-                                                resetTraceEvents();
-                                                setStage('success');
-                                            });
-                                    }
-                                }
+                                dispatch(autoSetUartSerialPort(device));
+                                dispatch(resetDashboardState());
+                                dispatch(resetTraceInfo());
+                                resetTraceEvents();
+                                setStage('success');
                             }, 3000);
                         } catch (error) {
                             logger.error(error);

@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSerialPort, logger } from 'pc-nrfconnect-shared';
+import { createSerialPort, Device, logger } from 'pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
 
 import { raceTimeout } from '../../utils/promise';
+import { TAction } from '../../utils/thunk';
 import {
     hookModemToShellParser,
     xTerminalShellParserWrapper,
@@ -18,6 +19,7 @@ import {
     setDetectedAtHostLibrary,
     setShellParser,
     setShowConflictingSettingsDialog,
+    setUartSerialPort,
 } from '../tracing/traceSlice';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 
@@ -83,3 +85,21 @@ export const connectToSerialPort = async (
 
     return port;
 };
+
+export const autoSetUartSerialPort =
+    (device: Device): TAction =>
+    async dispatch => {
+        const port = device.serialPorts?.at(0);
+        if (port && port.path) {
+            const uartSerialPort = await connectToSerialPort(
+                dispatch,
+                port.path
+            );
+
+            if (uartSerialPort) {
+                dispatch(setUartSerialPort(uartSerialPort));
+            }
+        } else {
+            logger.error('Could not identify serial port');
+        }
+    };

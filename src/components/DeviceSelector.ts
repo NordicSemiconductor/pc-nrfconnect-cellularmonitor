@@ -16,7 +16,7 @@ import {
     logger,
 } from 'pc-nrfconnect-shared';
 
-import { connectToSerialPort } from '../features/terminal/uartSerialPort';
+import { autoSetUartSerialPort } from '../features/terminal/uartSerialPort';
 import { stopTrace } from '../features/tracing/nrfml';
 import { resetTraceEvents } from '../features/tracing/tracePacketEvents';
 import {
@@ -79,50 +79,31 @@ const openDevice =
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = device.serialPorts;
 
-        if (ports && ports.length > 0) {
-            dispatch(
-                setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
-            );
-        }
+        dispatch(
+            setAvailableSerialPorts(
+                device.serialPorts?.map(port => port.comName ?? '') ?? []
+            )
+        );
 
-        dispatch(autoSetTraceSerialPort(device, ports));
-        dispatch(autoSetUartSerialPort(ports));
+        dispatch(autoSetTraceSerialPort(device));
+        dispatch(autoSetUartSerialPort(device));
     };
 
 const autoSetTraceSerialPort =
-    (device: Device, ports: SerialPort[] | undefined): TAction =>
+    (device: Device): TAction =>
     dispatch => {
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = autoSelectTraceSerialPort(ports ?? []);
+        const port = autoSelectTraceSerialPort(device?.serialPorts ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
         } else {
             logger.error("Couldn't identify trace serial port");
-        }
-    };
-
-const autoSetUartSerialPort =
-    (ports: SerialPort[] | undefined): TAction =>
-    async dispatch => {
-        const port = autoSelectUartSerialPort(ports ?? []);
-        if (port && port.path) {
-            const uartSerialPort = await connectToSerialPort(
-                dispatch,
-                port.path
-            );
-
-            if (uartSerialPort) {
-                dispatch(setUartSerialPort(uartSerialPort));
-            }
-        } else {
-            logger.error('Could not identify serial port');
         }
     };
 
@@ -134,4 +115,3 @@ const autoSetUartSerialPort =
  * @returns {SerialPort} the selected serialport object
  */
 const autoSelectTraceSerialPort = (ports: SerialPort[]) => ports?.at(-1);
-const autoSelectUartSerialPort = (ports: SerialPort[]) => ports?.at(0);
