@@ -40,6 +40,8 @@ interface StoreSchema {
     [COLLAPSE_POWER_SECTION]: boolean;
     [COLLAPSE_TRACE_DETAILS_SECTION]: boolean;
     [COLLAPSE_CONNECTION_STATUS_SECTION]: boolean;
+    resetDevice: boolean;
+    refreshDashboard: boolean;
 }
 
 export const autoDetectDbRootFolder = () =>
@@ -92,3 +94,12 @@ export const setCollapseConnectionStatusSection = (
 export const setShowStartupDialog = (showStartupDialog: boolean) =>
     store.set(SHOW_STARTUP_DIALOG, showStartupDialog);
 export const getShowStartupDialog = () => store.get(SHOW_STARTUP_DIALOG, true);
+
+export const storeResetDevice = (resetDevice: boolean) =>
+    store.set('resetDevice', resetDevice);
+export const restoreResetDevice = () => store.get('resetDevice', false);
+
+export const storeRefreshDashboard = (refreshDashboard: boolean) =>
+    store.set('refreshDashboard', refreshDashboard);
+export const restoreRefreshDashboard = () =>
+    store.get('refreshDashboard', false);
