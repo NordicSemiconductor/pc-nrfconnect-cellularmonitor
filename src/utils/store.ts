@@ -20,6 +20,7 @@ interface StoreSchema {
     collapsePowerSection: boolean;
     collapseTraceDetailsSection: boolean;
     connectionStatusSection: boolean;
+    showStartupDialog: boolean;
     resetDevice: boolean;
     refreshDashboard: boolean;
 }
@@ -32,27 +33,15 @@ const store = getPersistentStore<StoreSchema>({
     },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fromStore = <T extends keyof StoreSchema>(key: T, defaultValue?: any) =>
+    [
+        () => store.get(key, defaultValue),
+        (value: StoreSchema[T]) => store.set(key, value),
+    ] as const;
+
 export const autoDetectDbRootFolder = () =>
     getAppFile(path.join('resources', 'traceDB')) as string;
-
-export const getManualDbFilePath = () => store.get('dbFilePath');
-export const storeManualDbFilePath = (manualDbFilePath: string) =>
-    store.set('dbFilePath', manualDbFilePath);
-export const deleteDbFilePath = () => store.delete('dbFilePath');
-
-export const getWiresharkPath = () =>
-    store.get('wiresharkExecutablePath', null);
-export const setWiresharkPath = (wiresharkPath: string) =>
-    store.set('wiresharkExecutablePath', wiresharkPath);
-
-export const getTsharkPath = () => store.get('tsharkExecutablePath', null);
-export const setTsharkPath = (tsharkPath: string) =>
-    store.set('tsharkExecutablePath', tsharkPath);
-
-export const getTraceFormats = () =>
-    store.get('traceFormats', [ALL_TRACE_FORMATS[0]]);
-export const setTraceFormats = (traceFormats: TraceFormat[]) =>
-    store.set('traceFormats', traceFormats);
 
 const serialPorts = () => store.get('serialPorts', {});
 export const getSerialPort = (serialNumber: string) =>
@@ -64,26 +53,44 @@ export const setSerialPort = (serialNumber: string, port: string) =>
         [serialNumber]: port,
     });
 
-export const getCollapsePowerSection = () =>
-    store.get('collapsePowerSection', false);
-export const setCollapsePowerSection = (collapsePowerSection: boolean) =>
-    store.set('collapsePowerSection', collapsePowerSection);
+export const [getManualDbFilePath, storeManualDbFilePath] =
+    fromStore('dbFilePath');
 
-export const getCollapseConnectionStatusSection = () =>
-    store.get('connectionStatusSection', false);
-export const setCollapseConnectionStatusSection = (
-    collapseConnectionStatusSection: boolean
-) => store.set('connectionStatusSection', collapseConnectionStatusSection);
+export const deleteDbFilePath = () => store.delete('dbFilePath');
 
-export const setShowStartupDialog = (showStartupDialog: boolean) =>
-    store.set('showStartupDialog', showStartupDialog);
-export const getShowStartupDialog = () => store.get('showStartupDialog', true);
+export const [getWiresharkPath, setWiresharkPath] = fromStore(
+    'wiresharkExecutablePath',
+    null
+);
 
-export const storeResetDevice = (resetDevice: boolean) =>
-    store.set('resetDevice', resetDevice);
-export const restoreResetDevice = () => store.get('resetDevice', false);
+export const [getTsharkPath, setTsharkPath] = fromStore('tsharkExecutablePath');
 
-export const storeRefreshDashboard = (refreshDashboard: boolean) =>
-    store.set('refreshDashboard', refreshDashboard);
-export const restoreRefreshDashboard = () =>
-    store.get('refreshDashboard', false);
+export const [getTraceFormats, setTraceFormats] = fromStore(
+    'traceFormats',
+    ALL_TRACE_FORMATS[0]
+);
+
+export const [getCollapsePowerSection, setCollapsePowerSection] = fromStore(
+    'collapsePowerSection',
+    false
+);
+
+export const [
+    getCollapseConnectionStatusSection,
+    setCollapseConnectionStatusSection,
+] = fromStore('connectionStatusSection', false);
+
+export const [getShowStartupDialog, setShowStartupDialog] = fromStore(
+    'showStartupDialog',
+    true
+);
+
+export const [restoreRefreshDashboard, storeRefreshDashboard] = fromStore(
+    'refreshDashboard',
+    false
+);
+
+export const [restoreResetDevice, storeResetDevice] = fromStore(
+    'resetDevice',
+    false
+);
