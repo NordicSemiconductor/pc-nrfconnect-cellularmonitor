@@ -224,7 +224,6 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
 
-        const selectedTsharkPath = getTsharkPath(getState());
         const sinks = withTsharkIfAvailable([], getState);
 
         const packets: Packet[] = [];
@@ -238,7 +237,6 @@ export const readRawTrace =
         dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
         tracePacketEvents.emit('start-process');
-        console.log(sinks, selectedTsharkPath);
 
         nrfml.start(
             nrfmlConfig(state, source, sinks),
