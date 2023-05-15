@@ -56,7 +56,7 @@ const TraceSettings = () => {
             </div>
 
             <div className="d-flex justify-content-between">
-                Reset dashboard{' '}
+                Refresh dashboard{' '}
                 <Toggle
                     disabled={isTracing}
                     isToggled={refreshDashboard}
