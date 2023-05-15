@@ -81,7 +81,6 @@ const sendSingleCommandLineMode = (command: string, serialPort: SerialPort) =>
             response += decoder.decode(data);
             const isCompleteRespose =
                 response.includes('OK') || response.includes('ERROR');
-
             if (isCompleteRespose) {
                 handler();
                 if (response.includes('ERROR')) {
@@ -162,8 +161,10 @@ export const detectDatabaseVersion = async (
 export const testIfShellMode = async (serialPort: SerialPort) => {
     try {
         await sendSingleCommandLineMode('at AT', serialPort);
+        logger.info('Device is in shell mode.');
         return true;
     } catch (error) {
+        logger.info('Device is in line mode.');
         return false;
     }
 };

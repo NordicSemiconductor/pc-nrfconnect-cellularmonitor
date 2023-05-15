@@ -5,7 +5,7 @@
  */
 
 import { connect } from 'react-redux';
-import {
+import type {
     DeviceTraits,
     SerialPort,
 } from '@nordicsemiconductor/nrf-device-lib-js';
@@ -16,16 +16,20 @@ import {
     logger,
 } from 'pc-nrfconnect-shared';
 
+import { autoSetUartSerialPort } from '../features/terminal/uartSerialPort';
 import { stopTrace } from '../features/tracing/nrfml';
+import { resetTraceEvents } from '../features/tracing/tracePacketEvents';
 import {
     removeShellParser,
     resetManualDbFilePath,
+    resetTraceInfo,
     setAvailableSerialPorts,
     setDetectingTraceDb,
     setSerialPort,
     setUartSerialPort,
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
+import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
 import type { TAction } from '../utils/thunk';
 import { TDispatch } from '../utils/thunk';
@@ -69,27 +73,37 @@ const closeDevice = (): TAction => dispatch => {
 const openDevice =
     (device: Device): TAction =>
     dispatch => {
+        dispatch(resetDashboardState());
+        dispatch(resetTraceInfo());
+        resetTraceEvents();
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
         dispatch(setSerialPort(null));
-        const ports = device.serialPorts;
 
-        if (ports && ports.length > 0) {
-            dispatch(
-                setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
-            );
-        }
+        dispatch(
+            setAvailableSerialPorts(
+                device.serialPorts?.map(port => port.comName ?? '') ?? []
+            )
+        );
+
+        dispatch(autoSetTraceSerialPort(device));
+        dispatch(autoSetUartSerialPort(device));
+    };
+
+const autoSetTraceSerialPort =
+    (device: Device): TAction =>
+    dispatch => {
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
             dispatch(setSerialPort(persistedPath));
             return;
         }
-        const port = autoSelectPort(ports ?? []);
+        const port = autoSelectTraceSerialPort(device?.serialPorts ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
             dispatch(setSerialPort(path));
         } else {
-            logger.error("Couldn't identify serial port");
+            logger.error("Couldn't identify trace serial port");
         }
     };
 
@@ -100,4 +114,4 @@ const openDevice =
  * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
  * @returns {SerialPort} the selected serialport object
  */
-const autoSelectPort = (ports: SerialPort[]) => ports?.at(-1);
+const autoSelectTraceSerialPort = (ports: SerialPort[]) => ports?.at(-1);

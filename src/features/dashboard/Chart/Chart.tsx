@@ -82,9 +82,11 @@ export default () => {
         };
 
         tracePacketEvents.on('start-process', handler);
+        tracePacketEvents.on('reset-chart', handler);
 
         return () => {
             tracePacketEvents.removeListener('start-process', handler);
+            tracePacketEvents.removeListener('reset-chart', handler);
         };
     }, []);
 

@@ -72,7 +72,7 @@ const packetsToEvent = (packet: Packet) =>
             : undefined,
     } as TraceEvent);
 
-tracePacketEvents.on('start-process', () => events.splice(0, events.length));
+tracePacketEvents.on('start-process', () => resetTraceEvents());
 
 export const notifyListeners = (packets: Packet[]) => {
     const formattedEvents: TraceEvent[] = [];
@@ -111,4 +111,9 @@ const parseJsonData = (data: unknown): AttachPacket | undefined => {
     }
 
     return undefined;
+};
+
+export const resetTraceEvents = () => {
+    events.splice(0, events.length);
+    tracePacketEvents.emit('reset-chart');
 };
