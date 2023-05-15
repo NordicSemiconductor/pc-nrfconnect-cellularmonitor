@@ -54,6 +54,14 @@ export const askForWiresharkPath = () => {
             `C:\\Program Files`
         );
     }
+    if (process.platform === 'linux') {
+        return askForFile(
+            [{ name: 'Executable', extensions: ['*'] }],
+            `/usr/bin/`
+        );
+    }
+
+    throw new Error('Platform not supported');
 };
 
 const askForFile = async (
