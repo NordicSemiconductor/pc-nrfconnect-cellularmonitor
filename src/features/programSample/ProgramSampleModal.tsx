@@ -22,7 +22,14 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
-import { getIsTracing, setUartSerialPort } from '../tracing/traceSlice';
+import { autoSetUartSerialPort } from '../terminal/uartSerialPort';
+import { resetTraceEvents } from '../tracing/tracePacketEvents';
+import {
+    getIsTracing,
+    resetTraceInfo,
+    setUartSerialPort,
+} from '../tracing/traceSlice';
+import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { is91DK, isThingy91, program, SampleProgress } from './programSample';
 import {
     downloadedFilePath,
@@ -292,16 +299,6 @@ const ProgramSample = ({
                 )}
 
                 <DialogButton
-                    onClick={() => selectSample(undefined)}
-                    disabled={isProgramming || !device}
-                >
-                    Back
-                </DialogButton>
-
-                <DialogButton onClick={close} disabled={isProgramming}>
-                    Close
-                </DialogButton>
-                <DialogButton
                     variant="primary"
                     disabled={isProgramming || waitingForReconnect || !device}
                     onClick={async () => {
@@ -323,7 +320,15 @@ const ProgramSample = ({
                                 selectedFirmware.filter(fw => fw.selected),
                                 progressCb
                             );
-                            setStage('success');
+
+                            setTimeout(() => {
+                                // Test if new fw uses shell mode
+                                dispatch(autoSetUartSerialPort(device));
+                                dispatch(resetDashboardState());
+                                dispatch(resetTraceInfo());
+                                resetTraceEvents();
+                                setStage('success');
+                            }, 3000);
                         } catch (error) {
                             logger.error(error);
                             setErrorMessage(
@@ -334,6 +339,15 @@ const ProgramSample = ({
                     }}
                 >
                     Program
+                </DialogButton>
+                <DialogButton
+                    onClick={() => selectSample(undefined)}
+                    disabled={isProgramming || !device}
+                >
+                    Back
+                </DialogButton>
+                <DialogButton onClick={close} disabled={isProgramming}>
+                    Close
                 </DialogButton>
             </Dialog.Footer>
         </>

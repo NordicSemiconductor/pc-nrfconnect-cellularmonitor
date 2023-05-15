@@ -21,7 +21,6 @@ import {
     mockedDataDir,
     render,
     screen,
-    waitFor,
 } from '../../../utils/testUtils';
 import TraceCollector from '../Tracing/TraceCollector';
 
