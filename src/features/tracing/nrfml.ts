@@ -122,9 +122,9 @@ export const convertTraceFile =
     };
 
 export const startTrace =
-    (sinks: TraceFormat[]): TAction =>
+    (formats: TraceFormat[]): TAction =>
     async (dispatch, getState) => {
-        const formats = [...sinks];
+        const sinks = withTsharkIfAvailable(formats, getState);
         const state = getState();
         const uartPort = getUartSerialPort(state);
         const shellParser = getShellParser(state);
@@ -143,14 +143,14 @@ export const startTrace =
         };
 
         let isDetectingTraceDb = getManualDbFilePath(state) == null;
-        let autoDetectedTraceDbFile: string | null = null;
+
         if (uartPort && isDetectingTraceDb) {
             const version = await raceTimeout(
                 detectDatabaseVersion(uartPort, shellParser)
             );
 
             if (typeof version === 'string') {
-                autoDetectedTraceDbFile =
+                const autoDetectedTraceDbFile =
                     await getSelectedTraceDatabaseFromVersion(version);
                 if (autoDetectedTraceDbFile) {
                     isDetectingTraceDb = false;
@@ -161,14 +161,7 @@ export const startTrace =
             }
         }
 
-        const selectedTsharkPath = getTsharkPath(getState());
-        if (findTshark(selectedTsharkPath) && !formats.includes('tshark')) {
-            formats.push('tshark');
-        }
-
-        formats.forEach(format => {
-            usageData.sendUsageData(sinkEvent(format));
-        });
+        sinks.forEach(format => usageData.sendUsageData(sinkEvent(format)));
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -182,7 +175,7 @@ export const startTrace =
         dispatch(setTraceDataReceived(false));
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, formats),
+            nrfmlConfig(state, source, sinks),
             err => {
                 clearInterval(throttle);
                 notifyListeners(packets.splice(0, packets.length));
@@ -201,9 +194,9 @@ export const startTrace =
 
                 // stop tracing if Completed callback is called and we are only doing live tracing
                 if (
-                    formats.length === 2 &&
-                    formats.includes('live') &&
-                    formats.includes('tshark')
+                    sinks.length === 2 &&
+                    sinks.includes('live') &&
+                    sinks.includes('tshark')
                 ) {
                     dispatch(stopTrace());
                 }
@@ -243,12 +236,10 @@ export const startTrace =
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: progressConfigs(source, formats),
+                progressConfigs: progressConfigs(source, sinks),
             })
         );
-        reloadHandler = () => {
-            nrfml.stop(taskId);
-        };
+        reloadHandler = () => nrfml.stop(taskId);
         window.addEventListener('beforeunload', reloadHandler);
     };
 
@@ -257,7 +248,8 @@ export const readRawTrace =
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
-        const sinks: TraceFormat[] = ['tshark'];
+
+        const sinks = withTsharkIfAvailable([], getState);
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -270,6 +262,7 @@ export const readRawTrace =
         dispatch(setTraceSourceFilePath(null));
         dispatch(setTraceDataReceived(false));
         tracePacketEvents.emit('start-process');
+
         nrfml.start(
             nrfmlConfig(state, source, sinks),
             error => {
@@ -306,4 +299,12 @@ export const stopTrace = (): TAction => (dispatch, getState) => {
     usageData.sendUsageData(EventAction.STOP_TRACE);
     dispatch(setTraceIsStopped());
     tracePacketEvents.emit('stop-process');
+};
+
+const withTsharkIfAvailable = (
+    sinks: TraceFormat[],
+    getState: () => RootState
+): TraceFormat[] => {
+    const selectedTsharkPath = getTsharkPath(getState());
+    return findTshark(selectedTsharkPath) ? [...sinks, 'tshark'] : sinks;
 };

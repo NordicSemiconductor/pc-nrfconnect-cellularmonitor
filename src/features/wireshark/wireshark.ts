@@ -9,8 +9,8 @@ import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 
+import { getWiresharkPath } from '../../utils/store';
 import { TAction } from '../../utils/thunk';
-import { getWiresharkPath } from './wiresharkSlice';
 
 export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
@@ -87,8 +87,8 @@ const locateSharkPathOnLinux = (shark: Shark) => {
 
 export const openInWireshark =
     (pcapPath: string): TAction =>
-    (_, getState) => {
-        const path = getWiresharkPath(getState());
+    () => {
+        const path = getWiresharkPath();
         const wiresharkPath = findWireshark(path);
 
         if (wiresharkPath == null) {
@@ -102,3 +102,11 @@ export const openInWireshark =
             }
         });
     };
+
+let wiresharkDetected: boolean | undefined;
+export const isWiresharkInstalled = () => {
+    if (wiresharkDetected !== undefined) return wiresharkDetected;
+    const path = getWiresharkPath();
+    wiresharkDetected = findWireshark(path) !== null;
+    return wiresharkDetected;
+};
