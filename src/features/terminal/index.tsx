@@ -37,7 +37,7 @@ export const OpenSerialTerminal = () => {
 
     return (
         <Button
-            className="w-100 mt-2"
+            className="w-100 mt-2 position-relative"
             onClick={() =>
                 openSerialTerminal(device, selectedUartSerialPort.path)
             }
@@ -46,6 +46,10 @@ export const OpenSerialTerminal = () => {
             disabled={!appInstalled}
         >
             Open Serial Terminal
+            <span
+                className="mdi mdi-open-in-new"
+                style={{ position: 'absolute', right: '4px', fontSize: '16px' }}
+            />
         </Button>
     );
 };
