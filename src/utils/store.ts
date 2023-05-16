@@ -87,7 +87,7 @@ export const [getShowStartupDialog, setShowStartupDialog] = fromStore(
 
 export const [restoreRefreshDashboard, storeRefreshDashboard] = fromStore(
     'refreshDashboard',
-    false
+    true
 );
 
 export const [restoreResetDevice, storeResetDevice] = fromStore(
