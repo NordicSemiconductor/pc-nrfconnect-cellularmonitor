@@ -22,7 +22,7 @@ import { sendAT } from '../../features/tracingEvents/at/sendCommand';
 import EventAction from '../../usageDataActions';
 
 export const Recommended = () => (
-    <Macro commands={recommendedAt} title="Run recommended AT commands" />
+    <Macro commands={recommendedAt} title="Refresh dashboard" />
 );
 
 export const FullNetworkReport = () => (
