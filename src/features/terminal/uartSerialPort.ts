@@ -90,10 +90,10 @@ export const autoSetUartSerialPort =
     (device: Device): TAction =>
     async dispatch => {
         const port = device.serialPorts?.at(0);
-        if (port && port.path) {
+        if (port && port.comName) {
             const uartSerialPort = await connectToSerialPort(
                 dispatch,
-                port.path
+                port.comName
             );
 
             if (uartSerialPort) {
