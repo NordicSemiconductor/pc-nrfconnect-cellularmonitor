@@ -67,7 +67,7 @@ export const [getTsharkPath, setTsharkPath] = fromStore('tsharkExecutablePath');
 
 export const [getTraceFormats, setTraceFormats] = fromStore(
     'traceFormats',
-    ALL_TRACE_FORMATS[0]
+    ALL_TRACE_FORMATS.slice(0, 1)
 );
 
 export const [getCollapsePowerSection, setCollapsePowerSection] = fromStore(
