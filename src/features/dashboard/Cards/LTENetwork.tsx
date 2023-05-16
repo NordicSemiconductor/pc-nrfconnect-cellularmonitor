@@ -125,16 +125,16 @@ export default () => {
         'COVERAGE ENHANCEMENT LEVEL': {
             value: conevalCoverageEnhancementLevel ?? 'Unknown',
         },
-        'CONEVAL TX POWER': {
+        'TX POWER': {
             value: conevalTXPower ?? 'Unknown',
         },
-        'CONEVAL TX REPETITIONS': {
+        'TX REPETITIONS': {
             value: conevalTXRepetitions ?? 'Unknown',
         },
-        'CONEVAL RX REPETITIONS': {
+        'RX REPETITIONS': {
             value: conevalRXRepetitions ?? 'Unknown',
         },
-        'CONEVAL DL PATH LOSS': {
+        'DL PATH LOSS': {
             value: conevalDLPathLoss ?? 'Unknown',
         },
     };

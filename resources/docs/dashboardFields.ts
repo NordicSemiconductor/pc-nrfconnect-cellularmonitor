@@ -21,19 +21,19 @@ export const documentation: Documentation = {
         ACT: {
             title: 'Access Technology (AcT)',
             description:
-                "The current state of a mobile device's cellular network connection, such as LTE-M or NB-IoT.",
+                'The cellular network bearer currently used by the mobile device, such as LTE-M or NB-IoT.',
             commands: ['AT+CEREG', 'AT%XMONITOR', 'AT+CEDRXRDP'] as const,
         },
         'ACT STATE': {
             title: 'Access Technology State',
             description:
-                "Indicates the current state of a mobile device's cellular network connection.",
+                "Indicates the current operational state of a mobile device's cellular network connection.",
             commands: ['AT+CEDRXRDP'] as const,
         },
         RRC: {
             title: 'Radio Resource Control State (RRC)',
             description:
-                "The state of the radio resources being used by a mobile device's cellular network connection, such as active or idle state.",
+                "The state of the radio resources being used by a mobile device's cellular network connection, such as active or idle.",
             commands: ['AT%CONEVAL', 'AT+CSCON'] as const,
         },
         'NETWORK TYPE': {
@@ -43,19 +43,19 @@ export const documentation: Documentation = {
         },
         OPERATOR: {
             description:
-                'The name of the operator whose network the mobile device is currently registered to.',
+                'The name of the operator whose network the mobile device is currently registered to. Network provision of operator name is not guaranteed.',
             commands: ['AT%XMONITOR'] as const,
         },
         MNC: {
             title: 'Mobile Network Code (MNC)',
             description:
-                'A code identifying the telecommunications network. Defined in ITU-T Recommendation E.212, it consists of 2 or 3 digits, and is used together with the Mobile Country Code (MCC)',
+                'A 2- or 3-digit code identifying the telecommunications network, used together with the MCC to uniquely identify a mobile network operator. It is defined in ITU-T Recommendation E.212.',
             commands: [] as const,
         },
         MCC: {
             title: 'Mobile Country Code (MCC)',
             description:
-                'A unique three-digit part of an IMSI code identifying the country of domicile of the mobile subscriber. MCC is used together with the Mobile Network Code (MNC).',
+                'A unique 3-digit code, identifying the country of the mobile network to which the mobile device is connected. MCC is used together with the MNC to uniquely identify a mobile network operator.',
             commands: [] as const,
         },
         EARFCN: {
@@ -67,13 +67,13 @@ export const documentation: Documentation = {
         RSRP: {
             title: 'Reference Signal Received Power (RSRP)',
             description:
-                'The average power level received from a single reference signal in an LTE (Long-Term Evolution) network.',
+                'The average power level received from a single reference signal in an LTE network.',
             commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         RSRQ: {
             title: 'Reference Signal Received Quality (RSRQ)',
             description:
-                'The quality of a single reference signal received in an LTE (Long-Term Evolution) network and calculated from RSRP.',
+                'The quality of a single reference signal received in an LTE network and calculated from RSRP.',
             commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
         },
         SNR: {
@@ -95,19 +95,18 @@ export const documentation: Documentation = {
         'ACTIVITY STATUS': {
             description: `The current state of a mobile device's radio interface. This command returns one of the following values:
                 0: Not registered. UE is not currently searching for an operator to register to.
-                1:  Registered, home network.
-                2: Not registered, but UE is currently trying to attach or searching an operator to
-register to
+                1: Registered, home network.
+                2: Not registered, but UE is currently trying to attach or searching an operator to register to.
                 3: Registration denied.
-                4: Unknown  (for example, out of E-UTRAN coverage).
+                4: Unknown (for example, out of E-UTRAN coverage).
                 5: Registered, roaming.
-                90: Not registered due to UICC failure
-        `,
+                90: Not registered due to UICC failure.
+         `,
             commands: ['AT+CEREG'] as const,
         },
         'EPS NETWORK REGISTRATION STATUS': {
             description:
-                'This indicates whether a mobile device is registered with a cellular network, and to which network. This can be useful to check that the device can communicate with other devices and services over the network, and for troubleshooting connection issues.',
+                'Indicates whether a mobile device is registered with a cellular network, and to which network. This can be useful to check that the device can communicate with other devices and services over the network, and for troubleshooting connection issues.',
             commands: [] as const,
         },
         'NETWORK TIME NOTIFICATIONS': {
@@ -129,7 +128,7 @@ register to
         },
         'ENERGY ESTIMATE': {
             description:
-                'A parameter indicating the overall quality of the received signal, to assess its suitability for data transmission. In general, a higher Energy Estimate value indicates a stronger and more reliable signal. However, the interpretation of the Energy Estimate value depends on the specific use case and the requirements of the application.',
+                'Indicates the overall quality of the received signal, to assess its suitability for data transmission. In general, a higher value indicates a stronger and more reliable signal. However the interpretation of the Energy Estimate value depends on the specific use case and the requirements of the application.',
             commands: ['AT%CONEVAL'] as const,
         },
         'CELL ID': {
@@ -139,20 +138,19 @@ register to
         },
         PLMN: {
             title: 'Public Land Mobile Network (PLMN)',
-            description:
-                'The name of the cellular network that the device is connected to.',
+            description: `The name of the cellular network that the device is connected to. See also PLMN format and mode.`,
             commands: ['AT+COPS', 'AT%CONEVAL'] as const,
         },
         'PLMN MODE': {
             title: 'Public Land Mobile Network Mode (PLMN mode)',
             description:
-                'A setting that determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: automatic, manual, or deregister. In automatic mode, the device automatically selects and connects to the best available network based on its signal strength and other factors. In manual mode, the device only connects to a network that has been manually selected by the user. In deregister mode, the device disconnects from the current network and deregisters from all available networks.',
+                'Determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: Automatic (the device automatically selects and connects to the best available network based on factors such as signal strength), Manual (the device only connects to a network that has been manually selected by the user), or deregister (the device disconnects from the current network and deregisters from all available networks).',
             commands: ['AT+COPS'] as const,
         },
         'PLMN FORMAT': {
             title: 'Public Land Mobile Network Format (PLMN format)',
             description:
-                'This setting determines how a mobile device displays the name of the connected network. It can be set to one of three formats: long alphanumeric, short alphanumeric, or numeric. In long alphanumeric format, the device displays the full name of the network. In short alphanumeric format, the device displays the abbreviated name of the network. In numeric format, the device displays the network’s MCC and MNC codes.',
+                'Determines how a mobile device displays the name of the connected network. It can be set to one of three formats: long alphanumeric (the device displays the full name of the network), short alphanumeric (the device displays the abbreviated name of the network), or numeric (the device displays the network’s MCC and MNC codes).',
             commands: ['AT+COPS'] as const,
         },
         'PHYSICAL CELL ID': {
@@ -168,28 +166,28 @@ register to
         },
         'COVERAGE ENHANCEMENT LEVEL (CEL)': {
             description:
-                'This indicates the level of Coverage Enhancement (CE) that the modem is configured for. This can help to improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
+                'Indicates the level of Coverage Enhancement (CE) for which the modem is configured. This can help to improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
             commands: ['AT%CONEVAL'] as const,
         },
-        'CONEVAL TX POWER': {
-            title: 'CONEVAL Transmit power)',
-            description: 'The transmit power used by the User Equipment (UE).',
+        'TX POWER': {
+            title: 'Transmit power',
+            description: 'The transmit power used by the mobile device.',
             commands: ['AT%CONEVAL'] as const,
         },
-        'CONEVAL TX REPETITIONS': {
-            title: 'CONEVAL Transmit Repetitions',
+        'TX REPETITIONS': {
+            title: 'Transmit Repetitions',
             description:
                 'The number of times the transmit procedure was repeated.',
             commands: ['AT%CONEVAL'] as const,
         },
-        'CONEVAL RX REPETITIONS': {
-            title: 'CONEVAL Receive Repetitions',
+        'RX REPETITIONS': {
+            title: 'Receive Repetitions',
             description:
                 'The number of times the receive procedure was repeated.',
             commands: ['AT%CONEVAL'] as const,
         },
-        'CONEVAL DL PATH LOSS': {
-            title: 'CONEVAL Downlink Path Loss',
+        'DL PATH LOSS': {
+            title: 'Downlink Path Loss',
             description:
                 'The downlink path loss, which is a measure of the attenuation of the signal as it travels from the serving cell to the device.',
             commands: ['AT%CONEVAL'] as const,
@@ -237,7 +235,7 @@ register to
             commands: ['AT+CGMI'] as const,
         },
         'PREFERRED BEARER': {
-            description: `The modem's preferred network type.It can be set to LTE- M or NB- IoT, see the documentation at the following link for more information.`,
+            description: `The modem's preferred network access technology. It can be set to LTE-M or NB-IoT, see the documentation at the following link for more information.`,
             commands: ['AT%XSYSTEMMODE'] as const,
         },
         'SUPPORTED BEARERS': {
@@ -251,14 +249,12 @@ register to
             commands: ['AT+CFUN'] as const,
         },
         'TRACE STATE OPERATION': {
-            description:
-                'The Trace State Operation of the modem. The recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
+            description: `The modem's trace state operation - it is used together with Trace State Identifier. The recommended values when using Cellular Monitor are: state operation: 1, state identifier: 2. AT%XMODEMTRACE=1,2`,
             commands: ['AT%XMODEMTRACE'] as const,
         },
         'TRACE STATE SET ID': {
             title: 'Trace State Identifier',
-            description:
-                'The Trace State Operation of the modem. The recommended value when using the app is (1,2): AT%XMODEMTRACE=1,2',
+            description: `The modem's trace state identifier - it is used together with Trace State Operation. The recommended values when using Cellular Monitor are: state operation: 1, state identifier: 2. AT%XMODEMTRACE=1,2`,
             commands: ['AT%XMODEMTRACE'] as const,
         },
         'LTE-M TX REDUCTION': {
@@ -270,7 +266,7 @@ register to
         'NB-IOT TX REDUCTION': {
             title: 'NB-IOT Transmission Reduction',
             description:
-                'If set before modem activation this configures an extra reduction of 0.5 or 1 dB to the maximum transmission power on NB-IOT. The command is Nordic-proprietary, see the documentation at the following link for more information.',
+                'If set before modem activation this configures an extra reduction of 0.5 or 1 dB to the maximum transmission power on NB-IoT. The command is Nordic-proprietary, see the documentation at the following link for more information.',
             commands: ['AT%XEMPR'] as const,
         },
     },
@@ -278,7 +274,7 @@ register to
         'UICC STATUS': {
             title: 'Universal Integrated Circuit Card (UICC) Status',
             description:
-                'Status of the UICC, a new generation Subscriber Identity Module (SIM) used in mobile device for ensuring the integrity and security of personal data.',
+                'Status of the UICC, a new generation SIM used in mobile device for ensuring the integrity and security of personal data.',
             commands: ['AT%XSIM'] as const,
         },
         IMSI: {
@@ -300,24 +296,26 @@ register to
         },
         'PIN RETRIES': {
             title: 'Personal Identification Number (PIN) Retries',
-            description: 'The number of remaining PIN retries',
+            description:
+                'The number of remaining PIN retries. A SIM is disabled when the number of PIN retries is exceeded and a PUK is then required to unlock it.',
             commands: ['AT+CPINR'] as const,
         },
         'PUK RETRIES': {
             title: 'Personal Unblocking Key (PUK) Retries',
             description:
-                'The number of remaining (PUK) Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining Personal Identification Number (PIN) retries is exceeded.',
+                'The number of remaining PUK Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining PIN retries is exceeded.',
             commands: ['AT+CPINR'] as const,
         },
         'PIN2 RETRIES': {
             title: 'Personal Identification Number (PIN) 2 Retries',
-            description: 'The number of remaining PIN2 retries',
+            description:
+                'The number of remaining PIN2 retries. A SIM is disabled when the number of PIN retries is exceeded and a PUK is then required to unlock it.',
             commands: ['AT+CPINR'] as const,
         },
         'PUK2 RETRIES': {
             title: 'Personal Unblocking Key (PUK) 2 Retries',
             description:
-                'The number of remaining PUK2 Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining Personal Identification Number (PIN) retries is exceeded.',
+                'The number of remaining PUK2 Retries. A digit sequence required in to unlock a SIM that is disabled when the remaining PIN retries is exceeded.',
             commands: ['AT+CPINR'] as const,
         },
     },
