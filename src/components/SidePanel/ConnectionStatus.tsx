@@ -146,7 +146,11 @@ export default () => {
     let simState = SIM_DEFAULT_STATE;
     if (lteConnectionState === LTE_SUCCESS_STATE || uiccInitialised) {
         simState = SIM_SUCCESS_STATE;
-    } else if (uiccInitialised === false) {
+    } else if (
+        uiccInitialised === false ||
+        (typeof lteConnectionState.caption === 'string' &&
+            lteConnectionState.caption.includes('UICC'))
+    ) {
         if (uiccInitialisedErrorCause) {
             simState = {
                 ...SIM_FAIL_STATE,
