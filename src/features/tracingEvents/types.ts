@@ -28,6 +28,7 @@ export interface State {
     // What value to use in order to show the latest LTE network connection
     // status in the Connection Status Component
     networkStatusLastUpdate?: 'coneval' | 'networkStatus' | 'packetDomainEvent';
+    packetDomainStatus?: string;
 
     uiccInitialised?: boolean;
     uiccInitialisedErrorCause?: string;

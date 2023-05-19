@@ -100,12 +100,15 @@ const STATUS_CHECK_TIMEOUT = 60 * 1000; // 1 minute
 export default () => {
     const device = useSelector(selectedDevice);
     const {
-        networkStatusLastUpdate,
-        networkStatus,
-        conevalResult,
-        accessPointNames,
         uiccInitialised,
         uiccInitialisedErrorCause,
+
+        networkStatusLastUpdate,
+        packetDomainStatus,
+        networkStatus,
+        conevalResult,
+
+        accessPointNames,
     } = useSelector(getDashboardState);
     const sourceFilePath = useSelector(getTraceSourceFilePath);
     const isTracing = useSelector(getIsTracing);
@@ -120,13 +123,23 @@ export default () => {
 
     // Handle LTE Connection State
     let lteConnectionState = LTE_DEFAULT_STATE;
-    if (networkStatusLastUpdate === 'coneval') {
+    if (pdnState === PDN_SUCCESS_STATE) {
+        lteConnectionState = LTE_SUCCESS_STATE;
+    } else if (networkStatusLastUpdate === 'coneval') {
         lteConnectionState = validateConeval(conevalResult, lteConnectionState);
     } else if (networkStatusLastUpdate === 'networkStatus' && networkStatus) {
         lteConnectionState = validateNetworkStatus(
             networkStatus,
             lteConnectionState
         );
+    } else if (
+        networkStatusLastUpdate === 'packetDomainEvent' &&
+        packetDomainStatus
+    ) {
+        lteConnectionState = {
+            ...LTE_FAIL_STATE,
+            caption: packetDomainStatus,
+        };
     }
 
     // Handle SIM state
