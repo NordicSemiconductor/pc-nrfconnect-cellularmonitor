@@ -25,6 +25,7 @@ import { processor as modemUUID } from './commandProcessors/modemUUID';
 import { processor as modeOfOperation } from './commandProcessors/modeOfOperation';
 import { processor as networkRegistrationStatus } from './commandProcessors/networkRegistrationStatusNotification';
 import { processor as networkTimeNotification } from './commandProcessors/networkTimeNotification';
+import { processor as packetDomainEvents } from './commandProcessors/packetDomainEvents';
 import { processor as pdpContext } from './commandProcessors/pdpContext';
 import { processor as periodicTAU } from './commandProcessors/periodicTAU';
 import { processor as pinCode } from './commandProcessors/pinCode';
@@ -41,6 +42,7 @@ import { processor as xsim } from './commandProcessors/xsim';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
+    packetDomainEvents,
     xsim,
     pdpContext,
     publicLandMobileNetwork,
