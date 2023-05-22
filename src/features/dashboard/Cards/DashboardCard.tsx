@@ -163,7 +163,15 @@ const CardTooltip = ({
             >
                 <p className="font-weight-bold">{tooltipTitle}</p>
                 {description !== undefined ? (
-                    <p style={{ color: colors.gray100 }}>{description}</p>
+                    <p style={{ color: colors.gray100 }}>
+                        {description.split('\n').map(partial => (
+                            // eslint-disable-next-line react/jsx-key
+                            <span>
+                                {partial}
+                                <br />
+                            </span>
+                        ))}
+                    </p>
                 ) : null}
                 {commands.length > 0 ? (
                     <>
