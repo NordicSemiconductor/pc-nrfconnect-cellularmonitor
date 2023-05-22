@@ -99,9 +99,10 @@ export default () => {
                         close={close}
                     />
                 )}
-                {modalStage === 'modemSelection' && (
+                {modalStage === 'modemSelection' && selectedSample && (
                     <ProgramModem
                         setModalStage={setModalStage}
+                        sample={selectedSample}
                         selectSample={setSelectedSample}
                         modemFirmwares={samples.mfw}
                         close={close}
@@ -394,11 +395,13 @@ const ProgramSample = ({
 
 const ProgramModem = ({
     setModalStage,
+    sample,
     selectSample,
     modemFirmwares,
     close,
 }: {
     setModalStage: (stage: ModalStage) => void;
+    sample: Sample;
     selectSample: (sample?: Sample) => void;
     modemFirmwares: ModemFirmware[];
     close: () => void;
@@ -461,8 +464,8 @@ const ProgramModem = ({
             />
             <Dialog.Body>
                 <p>
-                    Do you want to program a modem firmware before the
-                    application you selected?
+                    Do you want to program a modem firmware before programming{' '}
+                    {sample?.title ?? 'the selected application'}?
                 </p>
                 <div className="installable-app-grid">
                     {modemFirmwares.map(mfw => (
@@ -477,6 +480,7 @@ const ProgramModem = ({
                             <Button
                                 className="w-100"
                                 variant="secondary"
+                                disabled={isProgramming}
                                 onClick={() => {
                                     if (selectedMfw === mfw) {
                                         setSelectedMfw(undefined);
@@ -485,7 +489,7 @@ const ProgramModem = ({
                                     }
                                 }}
                             >
-                                Select
+                                {selectedMfw === mfw ? 'Deselect' : 'Select'}
                             </Button>
                         </div>
                     ))}
