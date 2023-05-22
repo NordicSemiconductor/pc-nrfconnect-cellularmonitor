@@ -52,6 +52,7 @@ export const processor: Processor<'%XMONITOR'> = {
 
             return {
                 ...state,
+                networkStatusLastUpdate: 'networkStatus',
                 networkStatus: getNumber(responseArray[0]),
                 operatorFullName: responseArray[1],
                 operatorShortName: responseArray[2],

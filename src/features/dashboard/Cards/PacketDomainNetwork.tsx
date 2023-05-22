@@ -18,6 +18,7 @@ export default ({
     info,
     state: connection,
     cause,
+    cid,
 }: AccessPointName) => {
     const fields: DashboardCardFields = {
         'ACCESS POINT NAME': {
@@ -29,6 +30,7 @@ export default ({
         'IPV6 ADDRESS': { value: `${ipv6}` ?? 'Unknown' },
         INFO: { value: info ?? 'Unknown' },
         CONNECTION: { value: connection ?? 'Unknown' },
+        'CONTEXT ID': { value: cid ?? 'Unknown' },
     };
     const fieldsToDisplay = Object.keys(fields)
         .filter(field => {

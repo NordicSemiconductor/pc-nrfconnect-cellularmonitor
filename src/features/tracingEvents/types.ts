@@ -25,6 +25,11 @@ export type PacketFormat =
     | 'modem_trace';
 
 export interface State {
+    // What value to use in order to show the latest LTE network connection
+    // status in the Connection Status Component
+    networkStatusLastUpdate?: 'coneval' | 'networkStatus' | 'packetDomainEvent';
+    packetDomainStatus?: string;
+
     uiccInitialised?: boolean;
     uiccInitialisedErrorCause?: string;
     uiccInitialisedErrorCauseCode?: number;
@@ -73,7 +78,7 @@ export interface State {
         granted?: PowerSavingModeEntries;
     };
 
-    accessPointNames: { [key: string]: AccessPointName };
+    accessPointNames: AccessPointNames;
 
     mnc: string;
     mncCode: number;
@@ -222,9 +227,11 @@ export type TAUTriggered = 0 | 1 | 255 | undefined;
 
 export type SignalingConnectionStatusNotifications = 0 | 1 | 2 | 3 | undefined;
 
+export type AccessPointNames = { [key: string]: AccessPointName };
 export interface AccessPointName {
     // Identification properties
     cid?: number;
+    pcid?: number;
     imsi?: string;
     bearerId?: string;
     apn?: string;
@@ -245,7 +252,12 @@ export interface AccessPointName {
     // First IPv6 postfix is retrieved from Attach Accept, and ipv6Complete=false
     // Then IPv6 prefix is retrieved from an IP packet, and ipv6Complete is set to true.
     ipv6Complete?: boolean;
-    info?: 'IPv4 Only' | 'IPv6 Only';
+    info?:
+        | 'IPv4 Only'
+        | 'IPv6 Only'
+        | 'Only single access bearers allowed'
+        | 'Only single access bearers allowed and context activation for a second address type bearer was not successful.';
+    eventType?: number;
 }
 
 // Need to be cast from RawPDNType with parsePDNType function
