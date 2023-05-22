@@ -18,10 +18,10 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import EventAction from '../../usageDataActions';
-import { downloadedFilePath, Firmware } from './samples';
+import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
 
 export type SampleProgress = {
-    fw: Firmware;
+    fw: Firmware | ModemFirmware;
     progressJson: Parameters<
         Parameters<typeof firmwareProgram>['6']
     >['0']['progressJson'];
@@ -32,6 +32,23 @@ export const isThingy91 = (device?: Device) =>
 
 export const is91DK = (device?: Device) =>
     device?.jlink?.boardVersion === 'PCA10090';
+
+export const programModemFirmware = async (
+    device: Device,
+    modemFirmware: ModemFirmware,
+    progress: (progress: SampleProgress) => void
+) => {
+    try {
+        usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, modemFirmware.file);
+        await programModem(device, modemFirmware, progress);
+    } catch (error) {
+        usageData.sendErrorReport(
+            `Failed to program modem firmware: ${modemFirmware.file}`
+        );
+        logger.error(error);
+        throw error;
+    }
+};
 
 export const program = async (
     device: Device,
@@ -66,7 +83,7 @@ export const program = async (
 
 const programModem = (
     device: Device,
-    fw: Firmware,
+    fw: Firmware | ModemFirmware,
     progress: (progress: SampleProgress) => void
 ) =>
     new Promise<void>((resolve, reject) => {

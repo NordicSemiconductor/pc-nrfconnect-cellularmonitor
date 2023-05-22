@@ -21,9 +21,17 @@ export interface Sample {
     fw: Firmware[];
 }
 
+export interface ModemFirmware {
+    title: string;
+    description: string;
+    documentation: string;
+    file: string;
+}
+
 export interface Samples {
     thingy91: Sample[];
     dk91: Sample[];
+    mfw: ModemFirmware[];
 }
 
 const SERVER_URL =
@@ -37,6 +45,8 @@ export const initialSamples: Samples = {
     thingy91: [],
 
     dk91: [],
+
+    mfw: [],
 };
 
 export const readBundledIndex = () =>
@@ -47,6 +57,9 @@ export const readBundledIndex = () =>
 export const downloadSampleIndex = fetch(`${SERVER_URL}/index.json`, {
     cache: 'no-cache',
 }).then<Samples>(result => result.json());
+
+export const downloadModemFirmware = (modemFirmware: ModemFirmware) =>
+    downloadFile(modemFirmware.file);
 
 export const downloadSample = (sample: Sample) =>
     Promise.all(sample.fw.map(fw => downloadFile(fw.file)));
