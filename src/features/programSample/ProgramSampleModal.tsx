@@ -30,54 +30,91 @@ import {
     setUartSerialPort,
 } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
-import { is91DK, isThingy91, program, SampleProgress } from './programSample';
+import {
+    is91DK,
+    isThingy91,
+    program,
+    programModemFirmware,
+    SampleProgress,
+} from './programSample';
 import {
     downloadedFilePath,
+    downloadModemFirmware,
     downloadSample,
     downloadSampleIndex,
     Firmware,
     initialSamples,
+    ModemFirmware,
     readBundledIndex,
     Sample,
 } from './samples';
 
 import './ProgramSampleModal.scss';
 
+type ProgrammingStage = 'unstarted' | 'programming' | 'success' | 'failed';
+type ModalStage = 'programSelection' | 'modemSelection' | 'programming';
 export default () => {
     const [selectedSample, setSelectedSample] = useState<Sample>();
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalStage, setModalStage] =
+        useState<ModalStage>('programSelection');
     const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
     const compatible = device && (isThingy91(device) || is91DK(device));
+
+    const [samples, setSamples] = useState(initialSamples);
+    useEffect(() => {
+        readBundledIndex()
+            .then(setSamples)
+            .then(() => downloadSampleIndex)
+            .then(setSamples);
+    }, []);
 
     const close = useCallback(() => {
         setModalVisible(false);
         setSelectedSample(undefined);
     }, []);
 
+    if (!compatible) {
+        return null;
+    }
+
     return (
         <>
-            {compatible && (
-                <Button
-                    className="w-100"
-                    variant="secondary"
-                    onClick={() => setModalVisible(!modalVisible)}
-                    disabled={isTracing}
-                >
-                    Program device
-                </Button>
-            )}
-            <Dialog isVisible={modalVisible} closeOnUnfocus onHide={close}>
-                {selectedSample ? (
+            <Button
+                className="w-100"
+                variant="secondary"
+                onClick={() => setModalVisible(!modalVisible)}
+                disabled={isTracing}
+            >
+                Program device
+            </Button>
+            <Dialog isVisible={modalVisible} onHide={close}>
+                {modalStage === 'programming' && selectedSample && (
                     <ProgramSample
+                        setModalStage={setModalStage}
                         sample={selectedSample}
                         selectSample={setSelectedSample}
                         close={close}
                     />
-                ) : (
-                    <SelectSample
+                )}
+                {modalStage === 'modemSelection' && selectedSample && (
+                    <ProgramModem
+                        setModalStage={setModalStage}
+                        sample={selectedSample}
                         selectSample={setSelectedSample}
+                        modemFirmwares={samples.mfw}
+                        close={close}
+                    />
+                )}
+                {modalStage === 'programSelection' && (
+                    <SelectSample
+                        setModalStage={setModalStage}
+                        selectSample={setSelectedSample}
+                        samples={
+                            isThingy91(device) ? samples.thingy91 : samples.dk91
+                        }
                         close={close}
                     />
                 )}
@@ -87,27 +124,21 @@ export default () => {
 };
 
 const SelectSample = ({
+    setModalStage,
     selectSample,
+    samples,
     close,
 }: {
+    setModalStage: (stage: ModalStage) => void;
     selectSample: (sample: Sample) => void;
+    samples: Sample[];
     close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
-    const [samples, setSamples] = useState(initialSamples);
-
-    useEffect(() => {
-        readBundledIndex()
-            .then(setSamples)
-            .then(() => downloadSampleIndex)
-            .then(setSamples);
-    }, []);
 
     const deviceName = device
         ? device.nickname || deviceInfo(device).name
         : 'No device selected';
-
-    const selectedSamples = is91DK(device) ? samples.dk91 : samples.thingy91;
 
     return (
         <>
@@ -118,7 +149,7 @@ const SelectSample = ({
                     pre-compiled application and modem firmware.
                 </p>
                 <div className="installable-app-grid">
-                    {selectedSamples.map(sample => (
+                    {samples.map(sample => (
                         <div
                             key={sample.title}
                             className="card-in-card p-3 d-flex flex-column"
@@ -131,6 +162,11 @@ const SelectSample = ({
                                 className="w-100"
                                 variant="secondary"
                                 onClick={() => {
+                                    if (isThingy91(device)) {
+                                        setModalStage('modemSelection');
+                                    } else {
+                                        setModalStage('programming');
+                                    }
                                     selectSample(sample);
                                 }}
                             >
@@ -149,10 +185,12 @@ const SelectSample = ({
 };
 
 const ProgramSample = ({
+    setModalStage,
     sample,
     selectSample,
     close,
 }: {
+    setModalStage: (stage: ModalStage) => void;
     sample: Sample;
     selectSample: (sample?: Sample) => void;
     close: () => void;
@@ -170,9 +208,7 @@ const ProgramSample = ({
     );
 
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [stage, setStage] = useState<
-        'unstarted' | 'programming' | 'success' | 'failed'
-    >('unstarted');
+    const [stage, setStage] = useState<ProgrammingStage>('unstarted');
 
     const isProgramming = stage === 'programming';
 
@@ -200,7 +236,7 @@ const ProgramSample = ({
                 ((json.step - 1) / json.amountOfSteps) * 100 +
                 (1 / json.amountOfSteps) * json.progressPercentage;
 
-            progress.set(fw, amountOfProgress);
+            progress.set(fw as Firmware, amountOfProgress);
             setProgress(new Map(progress.entries()));
         },
         [progress]
@@ -341,12 +377,249 @@ const ProgramSample = ({
                     Program
                 </DialogButton>
                 <DialogButton
-                    onClick={() => selectSample(undefined)}
+                    onClick={() => {
+                        selectSample(undefined);
+                        setModalStage('programSelection');
+                    }}
                     disabled={isProgramming || !device}
                 >
                     Back
                 </DialogButton>
                 <DialogButton onClick={close} disabled={isProgramming}>
+                    Close
+                </DialogButton>
+            </Dialog.Footer>
+        </>
+    );
+};
+
+const ProgramModem = ({
+    setModalStage,
+    sample,
+    selectSample,
+    modemFirmwares,
+    close,
+}: {
+    setModalStage: (stage: ModalStage) => void;
+    sample: Sample;
+    selectSample: (sample?: Sample) => void;
+    modemFirmwares: ModemFirmware[];
+    close: () => void;
+}) => {
+    const dispatch = useDispatch();
+    const device = useSelector(selectedDevice);
+    const [selectedMfw, setSelectedMfw] = useState<ModemFirmware>();
+
+    const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
+
+    const [progress, setProgress] = useState(0);
+
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const [stage, setStage] = useState<ProgrammingStage>('unstarted');
+
+    const isProgramming = stage === 'programming';
+
+    useEffect(() => {
+        dispatch(
+            setWaitForDevice({
+                once: false,
+                timeout: 60_000,
+                when: 'always',
+                onFail: setErrorMessage,
+            })
+        );
+
+        return () => {
+            dispatch(clearWaitForDevice());
+        };
+    }, [dispatch]);
+
+    const newProgressCb = () => {
+        let memoizedProgress = 0;
+
+        return ({ progressJson: json }: SampleProgress) => {
+            logger.info(
+                `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
+            );
+            const amountOfProgress =
+                ((json.step - 1) / json.amountOfSteps) * 100 +
+                (1 / json.amountOfSteps) * json.progressPercentage;
+
+            memoizedProgress =
+                amountOfProgress > memoizedProgress
+                    ? amountOfProgress
+                    : memoizedProgress;
+
+            setProgress(memoizedProgress);
+        };
+    };
+
+    const isMcuBoot = isThingy91(device);
+
+    return (
+        <>
+            <Dialog.Header
+                title="Program Modem Firmware (Optional)"
+                showSpinner={isProgramming || waitingForReconnect}
+            />
+            <Dialog.Body>
+                <p>
+                    Do you want to program a modem firmware before programming{' '}
+                    {sample?.title ?? 'the selected application'}?
+                </p>
+                <div className="installable-app-grid">
+                    {modemFirmwares.map(mfw => (
+                        <div
+                            key={mfw.title}
+                            className="card-in-card p-3 d-flex flex-column"
+                        >
+                            <strong className="d-block">{mfw.title}</strong>
+                            <p className="flex-grow-1 py-2">
+                                {mfw.description}
+                            </p>
+                            <Button
+                                className="w-100"
+                                variant="secondary"
+                                disabled={isProgramming}
+                                onClick={() => {
+                                    if (selectedMfw === mfw) {
+                                        setSelectedMfw(undefined);
+                                    } else {
+                                        setSelectedMfw(mfw);
+                                    }
+                                }}
+                            >
+                                {selectedMfw === mfw ? 'Deselect' : 'Select'}
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+                {selectedMfw != null && isMcuBoot ? (
+                    <p className="mt-4">
+                        <em>
+                            Remember to put the device in MCUBoot mode. Press
+                            down the center black button on the device while
+                            powering on.
+                        </em>
+                    </p>
+                ) : null}
+
+                {selectedMfw != null ? (
+                    <div key={selectedMfw.file} className="mb-4">
+                        <div className="d-flex align-items-center">
+                            <label htmlFor={selectedMfw.file} className="mb-0">
+                                <strong>{selectedMfw.title}</strong>
+                            </label>
+                            <button
+                                type="button"
+                                className="btn btn-link"
+                                onClick={() =>
+                                    shell.openPath(
+                                        dirname(
+                                            downloadedFilePath(selectedMfw.file)
+                                        )
+                                    )
+                                }
+                            >
+                                {basename(selectedMfw.file)}
+                            </button>
+                        </div>
+                        <ProgressBar now={progress} style={{ height: '4px' }} />
+                    </div>
+                ) : null}
+                {stage === 'success' && (
+                    <Alert variant="success">
+                        Successfully programmed device
+                    </Alert>
+                )}
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+            </Dialog.Body>
+
+            <Dialog.Footer>
+                {stage === 'success' ? (
+                    <DialogButton
+                        variant="primary"
+                        onClick={() => setModalStage('programming')}
+                    >
+                        Continue
+                    </DialogButton>
+                ) : (
+                    <DialogButton
+                        variant="primary"
+                        disabled={
+                            !selectedMfw ||
+                            isProgramming ||
+                            waitingForReconnect ||
+                            !device
+                        }
+                        onClick={async () => {
+                            if (!device) {
+                                throw new Error(
+                                    'Device must be selected in order to program firmware'
+                                );
+                            }
+
+                            if (!selectedMfw) {
+                                throw new Error(
+                                    'Modem firmware must be selected in order to program it'
+                                );
+                            }
+
+                            setStage('programming');
+                            setErrorMessage(undefined);
+                            const progressCb = newProgressCb();
+
+                            try {
+                                await downloadModemFirmware(selectedMfw);
+                                dispatch(setUartSerialPort(null));
+
+                                await programModemFirmware(
+                                    device,
+                                    selectedMfw,
+                                    progressCb
+                                );
+
+                                setTimeout(() => {
+                                    // Test if new fw uses shell mode
+                                    dispatch(autoSetUartSerialPort(device));
+                                    dispatch(resetDashboardState());
+                                    dispatch(resetTraceInfo());
+                                    resetTraceEvents();
+                                    setStage('success');
+                                }, 3000);
+                            } catch (error) {
+                                logger.error(error);
+                                setErrorMessage(
+                                    'Unable to program device, please check the log.'
+                                );
+                                setStage('failed');
+                            }
+                        }}
+                    >
+                        Program
+                    </DialogButton>
+                )}
+
+                {stage !== 'success' && (
+                    <DialogButton
+                        disabled={isProgramming}
+                        onClick={() => setModalStage('programming')}
+                    >
+                        Skip
+                    </DialogButton>
+                )}
+
+                <DialogButton
+                    disabled={isProgramming}
+                    onClick={() => {
+                        selectSample(undefined);
+                        setModalStage('programSelection');
+                    }}
+                >
+                    Back
+                </DialogButton>
+
+                <DialogButton disabled={isProgramming} onClick={close}>
                     Close
                 </DialogButton>
             </Dialog.Footer>
