@@ -105,10 +105,11 @@ const expectedState = {
         daylightSavingTime: '01',
     },
     accessPointNames: {
-        'ibasis.iot': {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'ibasis.iot',
+            info: 'IPv4 Only',
             ipv4: '10.160.148.98',
         },
     },

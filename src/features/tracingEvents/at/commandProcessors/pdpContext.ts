@@ -21,28 +21,25 @@ export const processor: Processor<'+CGDCONT'> = {
 
                 if (apns.length === 0) return state;
 
-                const accessPointNames = state.accessPointNames;
+                const apnsFromState = state.accessPointNames;
 
                 // Filter out `expired` APNs
-                const activeApns = Object.keys(accessPointNames).filter(
-                    apnKey => apns.find(apn => apn.apn === apnKey)
+                const activeApns = Object.keys(apnsFromState).filter(apnKey =>
+                    apns.find(apn => `${apn.cid}` === apnKey)
                 );
 
                 state.accessPointNames = activeApns.reduce((acc, apnKey) => {
-                    acc[apnKey] = accessPointNames[apnKey];
+                    acc[apnKey] = apnsFromState[apnKey];
                     return acc;
                 }, {} as { [key: string]: AccessPointName });
 
                 apns.forEach(accessPointName => {
-                    if (!accessPointName.apn) return;
-
-                    const alreadyInState =
-                        state.accessPointNames[accessPointName.apn];
+                    const cidAsKey = `${accessPointName.cid}`;
+                    const alreadyInState = state.accessPointNames[cidAsKey];
                     if (alreadyInState) {
                         Object.assign(alreadyInState, accessPointName);
                     } else {
-                        state.accessPointNames[accessPointName.apn] =
-                            accessPointName;
+                        state.accessPointNames[cidAsKey] = accessPointName;
                     }
                 });
 
@@ -74,9 +71,9 @@ const parseResponse = (payload: string): AccessPointName[] => {
         } else if (pdnType === 'IPV6' && ip) {
             accessPointName.ipv6 = ip as IPv6Address;
         } else if (pdnType === 'IPV4V6' && ip) {
-            // TODO: Figure out how we should handle IPv4v6,
-            // documentation contain no example.
-            accessPointName.ipv4 = ip as IPv4Address;
+            const [ipv4, ipv6] = ip.split(' ');
+            accessPointName.ipv4 = ipv4 as IPv4Address;
+            accessPointName.ipv6 = ipv6 as IPv6Address;
         }
 
         apns.push(accessPointName);

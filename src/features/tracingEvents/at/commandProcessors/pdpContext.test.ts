@@ -13,7 +13,7 @@ test('parse +CGDCONT', () => {
         atPacket('+CGDCONT: 0,"IP","internet","10.0.1.1",0,0\r\nOK\r\n'),
     ]);
     expect(state.accessPointNames).toEqual({
-        internet: {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'internet',
@@ -28,13 +28,13 @@ test('parse +CGDCONT', () => {
         ),
     ]);
     expect(state.accessPointNames).toEqual({
-        internet: {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'internet',
             ipv4: '10.0.1.1',
         },
-        IOT_apn: {
+        1: {
             cid: 1,
             pdnType: 'IP',
             apn: 'IOT_apn',
@@ -50,7 +50,7 @@ test('parse +CGDCONT', () => {
         state
     );
     expect(state.accessPointNames).toEqual({
-        internet: {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'internet',
@@ -68,7 +68,7 @@ test('parse +CGDCONT', () => {
         {
             ...initialState(),
             accessPointNames: {
-                internet: {
+                0: {
                     apn: 'internet',
                     ipv6: '1111:1111:1111:1111:0001:0001:0001:0001',
                 },
@@ -77,7 +77,7 @@ test('parse +CGDCONT', () => {
     );
 
     expect(state.accessPointNames).toEqual({
-        internet: {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'internet',
