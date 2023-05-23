@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CollapsibleGroup, selectedDevice, Toggle } from 'pc-nrfconnect-shared';
 
+import { is91DK } from '../../features/programSample/programSample';
 import {
     getIsTracing,
     getRefreshDashboard,
@@ -37,6 +38,7 @@ export default () => {
 
 const TraceSettings = () => {
     const dispatch = useDispatch();
+    const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
     const resetDevice = useSelector(getResetDevice);
     const refreshDashboard = useSelector(getRefreshDashboard);
@@ -44,16 +46,24 @@ const TraceSettings = () => {
     const dispatchToggle = (fn: (param: boolean) => void) => (value: boolean) =>
         dispatch(fn(value));
 
+    useEffect(() => {
+        if (!is91DK(device)) {
+            dispatch(setResetDevice(false));
+        }
+    }, [device, dispatch]);
+
     return (
         <>
-            <div className="d-flex justify-content-between">
-                Reset device on start{' '}
-                <Toggle
-                    disabled={isTracing}
-                    isToggled={resetDevice}
-                    onToggle={dispatchToggle(setResetDevice)}
-                />
-            </div>
+            {is91DK(device) && (
+                <div className="d-flex justify-content-between">
+                    Reset device on start{' '}
+                    <Toggle
+                        disabled={isTracing}
+                        isToggled={resetDevice}
+                        onToggle={dispatchToggle(setResetDevice)}
+                    />
+                </div>
+            )}
 
             <div className="d-flex justify-content-between">
                 Refresh dashboard on start{' '}

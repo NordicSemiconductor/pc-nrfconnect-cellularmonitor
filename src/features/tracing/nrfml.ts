@@ -218,6 +218,13 @@ export const startTrace =
 
         logger.info('Started tracefile');
 
+        dispatch(
+            setTraceIsStarted({
+                taskId,
+                progressConfigs: progressConfigs(source, sinks),
+            })
+        );
+
         if (resetDevice) {
             logger.info(`Reseting device`);
             const device = selectedDevice(state);
@@ -225,7 +232,13 @@ export const startTrace =
                 throw new Error('No device selected, unable to reset');
             }
 
-            await deviceControlReset(getDeviceLibContext(), device.id);
+            try {
+                await deviceControlReset(getDeviceLibContext(), device.id);
+            } catch (err) {
+                setTimeout(() => nrfml.stop(taskId), 500);
+                logger.error(err);
+                throw new Error('Unable to reset device');
+            }
         }
 
         if (refreshDashboard) {
@@ -233,12 +246,6 @@ export const startTrace =
             setTimeout(() => dispatch(sendAT(recommendedAt)), 3000);
         }
 
-        dispatch(
-            setTraceIsStarted({
-                taskId,
-                progressConfigs: progressConfigs(source, sinks),
-            })
-        );
         reloadHandler = () => nrfml.stop(taskId);
         window.addEventListener('beforeunload', reloadHandler);
     };
