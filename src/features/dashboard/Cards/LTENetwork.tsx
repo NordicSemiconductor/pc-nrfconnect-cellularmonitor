@@ -67,7 +67,7 @@ export default () => {
                     : parsePlmnToMccOrMnc(parsePlmnType.MCC, plmn),
         },
         EARFCN: {
-            value: earfcn ?? 'Unknown',
+            value: earfcn == null || Number.isNaN(earfcn) ? 'Unknown' : earfcn,
         },
         RSRP: {
             value: signalQuality?.rsrp_decibel
