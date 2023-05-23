@@ -19,9 +19,11 @@ export const processor: Processor<'+CEDRXRDP'> = {
 
             /* eslint-disable camelcase */
             const AcTState = getNumber(payloadValues[0]);
-            const requested_eDRX_value = payloadValues[1];
-            const NW_provided_eDRX_value = payloadValues[2];
-            const pagingTimeWindow = payloadValues[3];
+            const requested_eDRX_value = validateEmptyString(payloadValues[1]);
+            const NW_provided_eDRX_value = validateEmptyString(
+                payloadValues[2]
+            );
+            const pagingTimeWindow = validateEmptyString(payloadValues[3]);
 
             return {
                 ...state,
@@ -34,5 +36,8 @@ export const processor: Processor<'+CEDRXRDP'> = {
         return state;
     },
 };
+
+const validateEmptyString = (value: string) =>
+    value === '' ? undefined : value;
 
 export default processor;

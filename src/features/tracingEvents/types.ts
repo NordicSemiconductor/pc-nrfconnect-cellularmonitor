@@ -150,9 +150,9 @@ export interface State {
 
     // +CEDRXRDP eDRX Dynamic Parameters
     AcTState?: AcTState;
-    requested_eDRX_value: string; // 4 bit string (either NB-iot or LTE-M)
-    NW_provided_eDRX_value: string; // 4 bit string
-    pagingTimeWindow: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
+    requested_eDRX_value?: string; // 4 bit string (either NB-iot or LTE-M)
+    NW_provided_eDRX_value?: string; // 4 bit string
+    pagingTimeWindow?: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
 
     // %XTIME Network Time Notification
     networkTimeNotifications?: 0 | 1;
