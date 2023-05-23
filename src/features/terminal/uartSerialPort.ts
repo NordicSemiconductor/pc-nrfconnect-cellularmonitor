@@ -58,7 +58,6 @@ export const connectToSerialPort = async (
          the next time we send a command.
          */
     const isShellMode = await raceTimeout(testIfShellMode(port));
-    console.log('isShellMode', isShellMode);
 
     if (isShellMode === undefined) {
         dispatch(setDetectedAtHostLibrary(false));
