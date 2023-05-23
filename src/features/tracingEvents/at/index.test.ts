@@ -37,7 +37,7 @@ const expectedState = {
     cell_id: '02024720',
     phys_cell_id: 428,
     earfcn: 6300,
-    NW_provided_eDRX_value: '',
+    NW_provided_eDRX_value: undefined,
     pinCodeStatus: 'READY',
     functionalMode: 1,
     IMEI: '352656106647673',
@@ -105,10 +105,11 @@ const expectedState = {
         daylightSavingTime: '01',
     },
     accessPointNames: {
-        'ibasis.iot': {
+        0: {
             cid: 0,
             pdnType: 'IP',
             apn: 'ibasis.iot',
+            info: 'IPv4 Only',
             ipv4: '10.160.148.98',
         },
     },

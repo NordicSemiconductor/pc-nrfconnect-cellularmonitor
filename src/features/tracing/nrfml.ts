@@ -242,8 +242,14 @@ export const startTrace =
         }
 
         if (refreshDashboard) {
-            logger.info(`Refreshing values in 3 seconds`);
-            setTimeout(() => dispatch(sendAT(recommendedAt)), 3000);
+            const waitBeforeRefresh = sinks.includes('live') ? 10_000 : 3_000;
+            logger.info(
+                `Refreshing values in ${waitBeforeRefresh / 1000} seconds`
+            );
+            setTimeout(
+                () => dispatch(sendAT(recommendedAt)),
+                waitBeforeRefresh
+            );
         }
 
         reloadHandler = () => nrfml.stop(taskId);

@@ -74,7 +74,7 @@ export const processor: Processor<'%XMONITOR'> = {
                         ? snr - 24
                         : state.signalQuality?.snr_decibel,
                 },
-                NW_provided_eDRX_value: responseArray[12],
+                NW_provided_eDRX_value: validateEmptyString(responseArray[12]),
 
                 powerSavingMode: {
                     ...state.powerSavingMode,
@@ -121,3 +121,6 @@ const parsePSMValues = (
 
     return PsmValues;
 };
+
+const validateEmptyString = (value: string) =>
+    value === '' ? undefined : value;
