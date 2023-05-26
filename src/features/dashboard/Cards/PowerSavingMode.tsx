@@ -74,13 +74,20 @@ export default () => {
         },
     };
 
-    // Only display LEGACY PROVIDED PERIODIC TAU when LEGACY PROVIDED PERIODIC
-    // TAU is available, and PROVIDED PERIODIC TAU is DEACTIVTED.
-    const grantedPeriodicTauBitmask = granted?.T3412Extended?.bitmask;
+    // Only display LEGACY PROVIDED PERIODIC TAU when
+    // PROVIDED ACTIVE TIMER is not deactivated (if it is PSM is not on)
+    // and PROVIDED PERIODIC TAU is deactivated (if it is we rather want to show this)
+    // and LEGACY PROVIDED PERIODIC TAU is not deactivated
+    const providedActiveTimer = granted?.T3324?.bitmask;
+    const providedPeriodicTau = granted?.T3412Extended?.bitmask;
+    const providedLegacyPeriodicTau = granted?.T3412?.bitmask;
     if (
-        !grantedPeriodicTauBitmask ||
-        isDeactivated(grantedPeriodicTauBitmask) ||
-        granted.T3412Extended?.bitmask
+        !providedActiveTimer ||
+        isDeactivated(providedActiveTimer) ||
+        !providedPeriodicTau ||
+        !isDeactivated(providedPeriodicTau) ||
+        !providedLegacyPeriodicTau ||
+        isDeactivated(providedLegacyPeriodicTau)
     ) {
         delete fields['LEGACY PROVIDED PERIODIC TAU'];
     }

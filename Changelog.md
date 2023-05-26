@@ -11,6 +11,9 @@
 -   The Power Saving Mode values Periodic Tau and Active Timer had default
     values, but will now show as 'Unknown' until we are able to detect otherwise
     in the trace.
+-   The Power Saving Mode value LEGACY PROVIDED PERIODIC TAU was always shown,
+    but is now only shown if PROVIDED ACTIVE TIMER is activated, and PROVIDED
+    PERIODIC TAU is deactivated and LEGACY PROVIDED PERIODIC TAU is activated.
 
 ## 0.9.0 - 2022-05-24
 
