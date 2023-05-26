@@ -7,6 +7,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { secondsToDhms } from '../../../utils/converters';
+import { isDeactivated } from '../../../utils/powerSavingMode';
 import {
     getDashboardState,
     getPowerSavingMode,
@@ -20,14 +22,15 @@ const formatPSMValuesToString = (
     if (values === undefined) {
         return 'Unknown';
     }
+    const { value, unit, bitmask } = values;
 
-    if (values.bitmask === '11100000') {
-        return `Deactivated = ${values.bitmask}`;
+    if (bitmask.slice(0, 3) === '111') {
+        return `DEACTIVTED (${bitmask})`;
     }
-    if (values.unit && values.value) {
-        return `${values.bitmask}`;
+    if (unit === 'seconds' && value != null) {
+        return `${secondsToDhms(value)} (${bitmask})`;
     }
-    return `${values.bitmask}`;
+    return `${bitmask}`;
 };
 
 export default () => {
@@ -39,7 +42,6 @@ export default () => {
     // eslint-disable-next-line camelcase
     const { requested_eDRX_value, NW_provided_eDRX_value, pagingTimeWindow } =
         useSelector(getDashboardState);
-    useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
         'REQUESTED ACTIVE TIMER': {
@@ -71,6 +73,24 @@ export default () => {
             value: pagingTimeWindow ?? 'Unknown',
         },
     };
+
+    // Only display LEGACY PROVIDED PERIODIC TAU when
+    // PROVIDED ACTIVE TIMER is not deactivated (if it is PSM is not on)
+    // and PROVIDED PERIODIC TAU is deactivated (if it is we rather want to show this)
+    // and LEGACY PROVIDED PERIODIC TAU is not deactivated
+    const providedActiveTimer = granted?.T3324?.bitmask;
+    const providedPeriodicTau = granted?.T3412Extended?.bitmask;
+    const providedLegacyPeriodicTau = granted?.T3412?.bitmask;
+    if (
+        !providedActiveTimer ||
+        isDeactivated(providedActiveTimer) ||
+        !providedPeriodicTau ||
+        !isDeactivated(providedPeriodicTau) ||
+        !providedLegacyPeriodicTau ||
+        isDeactivated(providedLegacyPeriodicTau)
+    ) {
+        delete fields['LEGACY PROVIDED PERIODIC TAU'];
+    }
 
     return (
         <DashboardCard

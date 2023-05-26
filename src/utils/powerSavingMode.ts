@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { logger } from 'pc-nrfconnect-shared';
+
 import {
     isValidBitmask,
     PowerSavingModeDeactivatedTimer,
@@ -47,9 +49,14 @@ export const TAU_ACTIVE_TIMER_BASE_VALUES: { [index: string]: number } = {
  * * T3324 timer ==> Active timer
  */
 export const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
-    const byteArray = [...byteString.trim()];
+    const byteArray = Array.from(byteString);
 
-    if (byteArray.length !== 8) return -1;
+    if (byteArray.length !== 8) {
+        logger.debug(
+            `parseTAUByteToSeconds: Invalid byte string, byte mask is not 8 bits. Length: ${byteArray.length}. Byte string: ${byteString}`
+        );
+        return -1;
+    }
 
     const TAU_MULTIPLYER = byteArray.slice(0, 3).join('');
     if (TAU_MULTIPLYER === '111') {
@@ -74,7 +81,10 @@ export const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
         return TAU_ACTIVE_TIMER_BASE_VALUES[TAU_MULTIPLYER] * TAU_BINARY_VALUE;
 
     // Invalid values: deactivated timer returned
-    return -1;
+    logger.debug(
+        `parseTauByteToSeconds: Invalid value. Type: ${type}. Byte string: ${byteString}`
+    );
+    return -1 as never;
 };
 
 export const parsePowerSavingMode = (
@@ -98,3 +108,7 @@ export const parsePowerSavingMode = (
 
     return PowerSavingModeDeactivatedTimer;
 };
+
+export function isDeactivated(bitmask: string): boolean {
+    return bitmask.slice(0, 3) === '111';
+}
