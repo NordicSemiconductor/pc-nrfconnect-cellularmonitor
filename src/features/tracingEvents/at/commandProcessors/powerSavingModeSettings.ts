@@ -36,12 +36,7 @@ export const processor: Processor<'+CPSMS'> = {
     documentation:
         'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cpsms.html',
     initialState: () => ({
-        powerSavingMode: {
-            requested: {
-                T3324: defaultT3324,
-                T3412Extended: defaultT3412Extended,
-            },
-        },
+        powerSavingMode: {},
     }),
     onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {

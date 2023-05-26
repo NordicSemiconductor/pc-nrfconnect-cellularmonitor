@@ -1,3 +1,17 @@
+## Unreleased
+
+### Added
+
+-   Power Saving Mode values are now shown as decimal time units, days, hours,
+    minutes, seconds, with the bit mask shown in parentheses. Example, REQUESTED
+    PERIODIC TAU: 1 hour (00100001)
+
+### Changed
+
+-   The Power Saving Mode values Periodic Tau and Active Timer had default
+    values, but will now show as 'Unknown' until we are able to detect otherwise
+    in the trace.
+
 ## 0.9.0 - 2022-05-24
 
 ### Added
