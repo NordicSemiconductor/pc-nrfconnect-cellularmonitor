@@ -11,6 +11,7 @@ import appReducer from './appReducer';
 import DeviceSelector from './components/DeviceSelector';
 import DocumentationSections from './components/DocumentationSection';
 import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
+import CertificateManager from './features/certificateManager/CertificateManager';
 import EventChartDashboard from './features/dashboard/Dashboard';
 import logLibVersions from './utils/logLibVersions';
 
@@ -29,6 +30,10 @@ export default () => (
                 name: 'Dashboard',
                 Main: EventChartDashboard,
                 SidePanel: TraceCollectorSidePanel,
+            },
+            {
+                name: 'Certificate Manager',
+                Main: CertificateManager,
             },
             {
                 name: 'Feedback',
