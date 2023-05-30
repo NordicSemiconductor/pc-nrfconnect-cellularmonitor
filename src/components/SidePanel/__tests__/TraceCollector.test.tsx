@@ -113,10 +113,7 @@ describe('TraceCollector', () => {
             ]);
             fireEvent.click(screen.getByText('Start'));
 
-            expectNrfmlStartCalledWithSinks(
-                'nrfml-raw-file-sink',
-                'nrfml-tshark-sink'
-            );
+            expectNrfmlStartCalledWithSinks('nrfml-raw-file-sink');
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
@@ -128,8 +125,7 @@ describe('TraceCollector', () => {
 
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
-                'nrfml-pcap-sink',
-                'nrfml-tshark-sink'
+                'nrfml-pcap-sink'
             );
         });
 
@@ -143,7 +139,6 @@ describe('TraceCollector', () => {
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
                 'nrfml-pcap-sink',
-                'nrfml-tshark-sink',
                 'nrfml-wireshark-named-pipe-sink'
             );
         });

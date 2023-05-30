@@ -16,6 +16,7 @@ import {
 } from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../../features/wireshark/WiresharkWarning';
 import EventAction from '../../../usageDataActions';
+import { AddTsharkSink } from '../TsharkSink';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);
@@ -34,23 +35,19 @@ export default () => {
 
     return (
         <>
-            <div className="d-flex justify-content-between">
-                Open in Wireshark{' '}
-                <Toggle
-                    disabled={isTracing}
-                    isToggled={selectedFormats.includes('live')}
-                    onToggle={toggle('live')}
-                />
-            </div>
-
-            <div className="d-flex justify-content-between">
-                Save trace file to disk{' '}
-                <Toggle
-                    disabled={isTracing}
-                    isToggled={selectedFormats.includes('raw')}
-                    onToggle={toggle('raw')}
-                />
-            </div>
+            <Toggle
+                label="Open in Wireshark"
+                disabled={isTracing}
+                isToggled={selectedFormats.includes('live')}
+                onToggle={toggle('live')}
+            />
+            <Toggle
+                label="Save trace file to disk"
+                disabled={isTracing}
+                isToggled={selectedFormats.includes('raw')}
+                onToggle={toggle('raw')}
+            />
+            <AddTsharkSink />
 
             <WiresharkWarning />
         </>

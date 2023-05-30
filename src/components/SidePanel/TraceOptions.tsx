@@ -55,24 +55,19 @@ const TraceSettings = () => {
     return (
         <>
             {is91DK(device) && (
-                <div className="d-flex justify-content-between">
-                    Reset device on start{' '}
-                    <Toggle
-                        disabled={isTracing}
-                        isToggled={resetDevice}
-                        onToggle={dispatchToggle(setResetDevice)}
-                    />
-                </div>
-            )}
-
-            <div className="d-flex justify-content-between">
-                Refresh dashboard on start{' '}
                 <Toggle
+                    label="Reset device on start"
                     disabled={isTracing}
-                    isToggled={refreshDashboard}
-                    onToggle={dispatchToggle(setRefreshDashboard)}
+                    isToggled={resetDevice}
+                    onToggle={dispatchToggle(setResetDevice)}
                 />
-            </div>
+            )}
+            <Toggle
+                label="Refresh dashboard on start"
+                disabled={isTracing}
+                isToggled={refreshDashboard}
+                onToggle={dispatchToggle(setRefreshDashboard)}
+            />
         </>
     );
 };
