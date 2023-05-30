@@ -30,6 +30,9 @@ const store = getPersistentStore<StoreSchema>({
         '0.4.5': instance => {
             instance.set('traceFormats', ['raw', 'tshark']);
         },
+        '0.9.0': instance => {
+            instance.set('traceFormats', ['raw']);
+        },
     },
 });
 

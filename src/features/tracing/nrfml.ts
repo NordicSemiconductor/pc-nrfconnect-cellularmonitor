@@ -21,8 +21,6 @@ import type { TAction } from '../../utils/thunk';
 import { recommendedAt } from '../tracingEvents/at/recommeneded';
 import { detectDatabaseVersion, sendAT } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
-import { findTshark } from '../wireshark/wireshark';
-import { getTsharkPath } from '../wireshark/wiresharkSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
@@ -41,6 +39,7 @@ import {
     getSerialPort,
     getShellParser,
     getTaskId,
+    getTraceFormats,
     getUartSerialPort,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -124,7 +123,6 @@ export const convertTraceFile =
 export const startTrace =
     (formats: TraceFormat[]): TAction =>
     async (dispatch, getState) => {
-        const sinks = withTsharkIfAvailable(formats, getState);
         const state = getState();
         const uartPort = getUartSerialPort(state);
         const shellParser = getShellParser(state);
@@ -161,7 +159,7 @@ export const startTrace =
             }
         }
 
-        sinks.forEach(format => usageData.sendUsageData(sinkEvent(format)));
+        formats.forEach(format => usageData.sendUsageData(sinkEvent(format)));
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -175,7 +173,7 @@ export const startTrace =
         dispatch(setTraceDataReceived(false));
         tracePacketEvents.emit('start-process');
         const taskId = nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, formats),
             err => {
                 clearInterval(throttle);
                 notifyListeners(packets.splice(0, packets.length));
@@ -193,11 +191,7 @@ export const startTrace =
                 }
 
                 // stop tracing if Completed callback is called and we are only doing live tracing
-                if (
-                    sinks.length === 2 &&
-                    sinks.includes('live') &&
-                    sinks.includes('tshark')
-                ) {
+                if (formats.length === 1 && formats.includes('live')) {
                     dispatch(stopTrace());
                 }
             },
@@ -221,7 +215,7 @@ export const startTrace =
         dispatch(
             setTraceIsStarted({
                 taskId,
-                progressConfigs: progressConfigs(source, sinks),
+                progressConfigs: progressConfigs(source, formats),
             })
         );
 
@@ -242,7 +236,7 @@ export const startTrace =
         }
 
         if (refreshDashboard) {
-            const waitBeforeRefresh = sinks.includes('live') ? 10_000 : 3_000;
+            const waitBeforeRefresh = formats.includes('live') ? 10_000 : 3_000;
             logger.info(
                 `Refreshing values in ${waitBeforeRefresh / 1000} seconds`
             );
@@ -262,7 +256,7 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
 
-        const sinks = withTsharkIfAvailable([], getState);
+        const sinks = getTraceFormats(state);
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -312,12 +306,4 @@ export const stopTrace = (): TAction => (dispatch, getState) => {
     usageData.sendUsageData(EventAction.STOP_TRACE);
     dispatch(setTraceIsStopped());
     tracePacketEvents.emit('stop-process');
-};
-
-const withTsharkIfAvailable = (
-    sinks: TraceFormat[],
-    getState: () => RootState
-): TraceFormat[] => {
-    const selectedTsharkPath = getTsharkPath(getState());
-    return findTshark(selectedTsharkPath) ? [...sinks, 'tshark'] : sinks;
 };
