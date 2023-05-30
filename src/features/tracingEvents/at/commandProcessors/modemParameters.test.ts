@@ -47,6 +47,37 @@ test('%XMONITOR packet with mfw v1.0.x - v1.1.x', () => {
     );
 });
 
+test('%XMONITOR Power Saving Mode specifics', () => {
+    const expectedGranted = {
+        T3324: {
+            bitmask: '00000001',
+        },
+        T3412Extended: {
+            bitmask: '11000001',
+        },
+        T3412: {
+            bitmask: '01011111',
+        },
+    };
+
+    const state = convertPackets([
+        atPacket('AT%XMONITOR'),
+        atPacket(
+            '1,"","","24201","8169",7,20,"014ACE00",,,,,"","00000001","11000001","01011111"\r\nOK\r\n'
+        ),
+    ]);
+
+    expect(state.powerSavingMode?.granted?.T3324?.bitmask).toEqual(
+        expectedGranted.T3324.bitmask
+    );
+    expect(state.powerSavingMode?.granted?.T3412Extended?.bitmask).toEqual(
+        expectedGranted.T3412Extended.bitmask
+    );
+    expect(state.powerSavingMode?.granted?.T3412?.bitmask).toEqual(
+        expectedGranted.T3412.bitmask
+    );
+});
+
 // Format of mfw version >= v1.2.x
 const modernModemVersionPacket = {
     command: atPacket('AT%XMONITOR'),

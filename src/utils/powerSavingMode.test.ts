@@ -41,15 +41,6 @@ test('parsePowerSavingMode for T3412Extended (Periodic Tau)', () => {
             }
         }
     );
-
-    const invalidMultiplier = '110';
-
-    expect(
-        parsePowerSavingMode(
-            `${invalidMultiplier}00011`,
-            TAU_TYPES.SLEEP_INTERVAL
-        )
-    ).toEqual(deactivatedTimer);
 });
 
 test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
@@ -77,7 +68,7 @@ test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
         }
     );
 
-    const invalidMultiplier = ['010', '100', '011', '101', '110'];
+    const invalidMultiplier = ['100', '011', '101', '110'];
 
     invalidMultiplier.forEach(multiplierBitmask => {
         expect(
