@@ -25,7 +25,7 @@ const formatPSMValuesToString = (
     const { value, unit, bitmask } = values;
 
     if (bitmask.slice(0, 3) === '111') {
-        return `DEACTIVTED (${bitmask})`;
+        return `DEACTIVATED (${bitmask})`;
     }
     if (unit === 'seconds' && value != null) {
         return `${secondsToDhms(value)} (${bitmask})`;
