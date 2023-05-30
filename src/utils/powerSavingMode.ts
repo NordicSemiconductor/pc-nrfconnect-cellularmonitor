@@ -19,17 +19,21 @@ export enum TAU_TYPES {
     ACTIVE_TIMER = 1,
 }
 
+const ONE_MINUTE = 60;
+const ONE_HOUR = ONE_MINUTE * 60;
+
 export const TAU_SLEEP_INTERVAL_BASE_VALUES: { [index: string]: number } = {
     /*
      * Multiplyer of 000 means timer is Deactivated
      * And, a value of 0 effectively means that the timer is deactivated.
      */
-    '000': 600,
-    '001': 3600,
-    '010': 36000,
+    '000': ONE_MINUTE * 10,
+    '001': ONE_HOUR,
+    '010': ONE_HOUR * 10,
     '011': 2,
     '100': 30,
-    '101': 60,
+    '101': ONE_MINUTE,
+    '110': ONE_HOUR * 320,
     '111': 0, // Deactivated
 };
 export const TAU_ACTIVE_TIMER_BASE_VALUES: { [index: string]: number } = {
@@ -38,7 +42,8 @@ export const TAU_ACTIVE_TIMER_BASE_VALUES: { [index: string]: number } = {
      * However, a value of 0 is allowed when activeTimer is activated.
      */
     '000': 2,
-    '001': 60,
+    '001': ONE_MINUTE,
+    '010': ONE_MINUTE * 6, // 6 minutes
     '111': 0, // Deactivated
 };
 
