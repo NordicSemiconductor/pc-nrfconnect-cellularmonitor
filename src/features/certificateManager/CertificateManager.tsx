@@ -11,27 +11,56 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { dialog } from '@electron/remote';
 import { readFileSync } from 'fs';
 import { homedir } from 'os';
-import { logger } from 'pc-nrfconnect-shared';
+import { logger, SerialPort } from 'pc-nrfconnect-shared';
 
-import { TDispatch } from '../../utils/thunk';
-import { sendAT } from '../tracingEvents/at/sendCommand';
+import { ShellParser } from '../shell/shellParser';
+import { getShellParser, getUartSerialPort } from '../tracing/traceSlice';
+import { sendSingleCommand } from '../tracingEvents/at/sendCommand';
 
-const deleteTLSCredential =
-    (secTag: number, type: number) => async (dispatch: TDispatch) => {
-        const cmd = `AT%CMNG=3,${secTag},${type}`;
-        await dispatch(sendAT(cmd));
-    };
+const deleteTLSCredential = async (
+    secTag: number,
+    type: number,
+    uartSerialPort: SerialPort | null,
+    shellParser: ShellParser | null
+) => {
+    const command = `AT%CMNG=3,${secTag},${type}`;
+    const response = await sendSingleCommand(
+        uartSerialPort,
+        shellParser,
+        command
+    );
 
-const writeTLSCredential =
-    (secTag: number, type: number, content: string) =>
-    async (dispatch: TDispatch) => {
-        const cmd = `AT%CMNG=0,${secTag},${type},"${content.trim()}"`;
-        await dispatch(sendAT(cmd));
-    };
+    if (response?.includes('OK')) {
+        logger.info('Successfully deleted TLS credential');
+    } else {
+        logger.error('Unable to delete TLS credential');
+    }
+};
+
+const writeTLSCredential = async (
+    secTag: number,
+    type: number,
+    content: string,
+    uartSerialPort: SerialPort | null,
+    shellParser: ShellParser | null
+) => {
+    const command = `AT%CMNG=0,${secTag},${type},"${content.trim()}"`;
+    const response = await sendSingleCommand(
+        uartSerialPort,
+        shellParser,
+        command
+    );
+    console.log(response);
+    if (response?.includes('OK')) {
+        logger.info('Successfully deleted TLS credential');
+    } else {
+        logger.error('Unable to Write TLS credential');
+    }
+};
 
 const NRF_CLOUD_TAG = 16842753;
 
@@ -81,8 +110,6 @@ const FormGroupWithCheckbox = ({
 );
 
 export default ({ active }: { active: boolean }) => {
-    const dispatch = useDispatch();
-
     const [caCert, setCACert] = useState('');
     const [clientCert, setClientCert] = useState('');
     const [privateKey, setPrivateKey] = useState('');
@@ -95,6 +122,9 @@ export default ({ active }: { active: boolean }) => {
     const [clearPskIdentity, setClearPskIdentity] = useState(false);
     const [secTag, setSecTag] = useState(NRF_CLOUD_TAG);
     const [showWarning, setShowWarning] = useState(false);
+
+    const uartPort = useSelector(getUartSerialPort);
+    const shellParser = useSelector(getShellParser);
 
     function parseSecTag(secTagAsString: string) {
         if (secTagAsString === '') {
@@ -146,14 +176,20 @@ export default ({ active }: { active: boolean }) => {
             if (clear) {
                 logger.info(`Clearing ${info}...`);
                 try {
-                    await dispatch(deleteTLSCredential(secTag, type));
+                    deleteTLSCredential(secTag, type, uartPort, shellParser);
                 } catch (err) {
                     logger.error((err as Error).message);
                 }
             } else if (content) {
                 logger.info(`Updating ${info}...`);
                 try {
-                    await dispatch(writeTLSCredential(secTag, type, content));
+                    await writeTLSCredential(
+                        secTag,
+                        type,
+                        content,
+                        uartPort,
+                        shellParser
+                    );
                 } catch (err) {
                     logger.error((err as Error).message);
                 }

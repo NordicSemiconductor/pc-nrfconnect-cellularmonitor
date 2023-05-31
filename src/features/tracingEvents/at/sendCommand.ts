@@ -158,6 +158,54 @@ export const detectDatabaseVersion = async (
     return null as never;
 };
 
+export const sendSingleCommand = async (
+    uartSerialPort: SerialPort | null,
+    shellParser: ShellParser | null,
+    command: string
+) => {
+    if (queue.length) {
+        logger.info('Device is busy.');
+        return;
+    }
+
+    if (!shellParser && uartSerialPort) {
+        try {
+            return await sendSingleCommandLineMode(command, uartSerialPort);
+        } catch (error) {
+            logger.debug(
+                `Failed to execute the AT command: ${command}: (${error})`
+            );
+            return null;
+        }
+    }
+
+    if (shellParser) {
+        if (shellParser.isPaused()) {
+            shellParser.unPause();
+        }
+        return new Promise<string | null>(resolve => {
+            shellParser.enqueueRequest(
+                `at ${command}`,
+                (response: string) => {
+                    resolve(getModemVersionFromResponse(response));
+                },
+                error => {
+                    logger.warn(`"${error}"`);
+                    resolve(null);
+                },
+                timeout => {
+                    logger.warn(
+                        `Timed out while executing command: "${timeout}"`
+                    );
+                    resolve(null);
+                }
+            );
+        });
+    }
+
+    return null as never;
+};
+
 export const testIfShellMode = async (serialPort: SerialPort) => {
     try {
         await sendSingleCommandLineMode('at AT', serialPort);
