@@ -8,6 +8,8 @@
 -   Option to enable/disable tshark for more detail in the dashboard view. This
     option was always enabled before, but is now disabled by default, because it
     adds more delay. This option does not affect the content of the trace file.
+-   Visual effect to dashboard fields that are updated, in order to make it
+    easier to notice when a change has been made.
 
 ### Changed
 

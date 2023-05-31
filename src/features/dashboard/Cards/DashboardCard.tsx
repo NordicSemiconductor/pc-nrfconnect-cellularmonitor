@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ import {
     recommendedAT,
 } from '../../tracingEvents/at/recommeneded';
 import { sendAT } from '../../tracingEvents/at/sendCommand';
+
+import './DashboardCard.css';
 
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
@@ -91,8 +93,25 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
     const [keepShowing, setKeepShowing] = useState(false);
 
+    const fieldRef = useRef<HTMLDivElement>(null);
+    const oldValue = useRef<string | number | null>(null);
+
     const canSendCommand = device != null && detectedAtHostLibrary && isTracing;
     const showTooltip = (show: boolean) => setKeepShowing(show);
+
+    useEffect(() => {
+        if (
+            value !== oldValue.current &&
+            oldValue.current &&
+            fieldRef.current
+        ) {
+            fieldRef.current?.classList.remove('animated-card-entry');
+            setTimeout(() =>
+                fieldRef?.current?.classList.add('animated-card-entry')
+            );
+        }
+        oldValue.current = value;
+    }, [value]);
 
     return (
         <div
@@ -104,7 +123,10 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
                 setKeepShowing(false);
             }}
         >
-            <div className="w-100 d-flex justify-content-between">
+            <div
+                ref={fieldRef}
+                className="w-100 d-flex justify-content-between"
+            >
                 <p>
                     <b>{fieldKey}</b>
                 </p>
