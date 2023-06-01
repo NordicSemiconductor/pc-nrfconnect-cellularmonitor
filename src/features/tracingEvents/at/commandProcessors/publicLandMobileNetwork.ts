@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import mccMncList from 'mcc-mnc-list';
+
 import type {
     AcTState,
     AvailablePlmn,
@@ -40,6 +42,9 @@ export const processor: Processor<'+COPS'> = {
                     plmnMode,
                     plmnFormat: plmnFormat ?? state.plmnFormat,
                     plmn: plmn ?? state.plmn,
+                    operatorInfo: plmn
+                        ? mccMncList.find({ mccmnc: plmn })
+                        : state.operatorInfo,
                 };
             }
             if (requestType === RequestType.READ && packet.payload) {
@@ -52,6 +57,9 @@ export const processor: Processor<'+COPS'> = {
                     plmnFormat: plmnFormat ?? state.plmnFormat,
                     plmn: plmn ?? state.plmn,
                     AcTState: AcTState ?? state.AcTState,
+                    operatorInfo: plmn
+                        ? mccMncList.find({ mccmnc: plmn })
+                        : state.operatorInfo,
                 };
             }
             if (requestType === RequestType.TEST) {

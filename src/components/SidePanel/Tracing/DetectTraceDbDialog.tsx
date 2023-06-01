@@ -37,7 +37,7 @@ export default () => {
                 <ul className="trace-db-dialog-list">
                     <li>
                         TIP! You can manually select a trace database in the
-                        Advanced Options section to skip this step.
+                        Trace Options section to skip this step.
                     </li>
                     <li>
                         TIP! Ensure that the correct serialport is selected, and

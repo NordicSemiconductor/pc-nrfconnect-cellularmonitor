@@ -16,7 +16,6 @@ import {
 } from '../../../features/tracing/traceSlice';
 import WiresharkWarning from '../../../features/wireshark/WiresharkWarning';
 import EventAction from '../../../usageDataActions';
-import { AddTsharkSink } from '../TsharkSink';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);
@@ -47,8 +46,6 @@ export default () => {
                 isToggled={selectedFormats.includes('raw')}
                 onToggle={toggle('raw')}
             />
-            <AddTsharkSink />
-
             <WiresharkWarning />
         </>
     );

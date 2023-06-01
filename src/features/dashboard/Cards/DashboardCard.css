@@ -5,12 +5,12 @@
  */
 
 .animated-card-entry {
-    animation: valueChanged 3s;
+    animation: valueChanged 5s;
 }
 
 @keyframes valueChanged {
     0% {
-        background-color: var(--color-nordic-blue);
+        background-color: #c8e6c9;
     }
     100% {
         background-color: white;

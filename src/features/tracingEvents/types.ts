@@ -4,18 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { Packet } from '../tracing/tracePacketEvents';
+import { Operator } from 'mcc-mnc-list';
+
 import { PowerLevel } from './at/commandProcessors/dataProfile';
 import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
 import { Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
-import type { AttachPacket } from './nas/types';
-
-export const assertIsNasPacket = (packet: Packet): packet is NasPacket =>
-    packet.format === 'nas-eps' && packet.interpreted_json !== undefined;
-
-type NasPacket = Omit<Packet, 'interpreted_json'> & {
-    interpreted_json: { 'nas-eps': AttachPacket };
-};
 
 export type PacketFormat =
     | 'at'
@@ -81,9 +74,10 @@ export interface State {
     accessPointNames: AccessPointNames;
 
     mnc: string;
-    mncCode: number;
+    mncCode: string;
     mcc: string;
-    mccCode: number;
+    mccCode: string;
+    operatorInfo: Operator;
 
     // XModemTrace
     xModemTraceOperation?: number;
