@@ -6,10 +6,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { basename } from 'path';
 import {
     Dropdown,
     DropdownItem,
     logger,
+    truncateMiddle,
     usageData,
 } from 'pc-nrfconnect-shared';
 
@@ -28,7 +30,7 @@ import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
 import { deleteDbFilePath, storeManualDbFilePath } from '../../utils/store';
 
-const autoSelectItem = {
+const autoSelectItem: DropdownItem = {
     label: 'Autoselect',
     value: 'autoselect',
 };
@@ -74,7 +76,8 @@ export default () => {
     }, [databases, manualDbFilePath]);
 
     const onSelect = async (item: DropdownItem) => {
-        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, item.label);
+        const label = typeof item.label === 'string' ? item.label : item.value;
+        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, label);
         setSelectedItem(item);
         if (item.value === selectFromDiskItem.value) {
             const filePath = await askForTraceDbFile();
@@ -82,6 +85,11 @@ export default () => {
                 dispatch(setManualDbFilePath(filePath));
                 storeManualDbFilePath(filePath);
                 usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
+
+                setSelectedItem({
+                    label: truncateMiddle(basename(filePath), 10, 16),
+                    value: 'select-trace-db',
+                });
                 logger.info(
                     `Database path successfully updated to ${filePath}`
                 );
@@ -91,7 +99,7 @@ export default () => {
             dispatch(resetManualDbFilePath());
             logger.info(`Database path successfully reset to default value`);
         } else {
-            dispatch(setSelectedTraceDatabaseFromVersion(item.label));
+            dispatch(setSelectedTraceDatabaseFromVersion(label));
         }
     };
 
