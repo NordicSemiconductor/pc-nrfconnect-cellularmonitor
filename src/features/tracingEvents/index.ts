@@ -6,22 +6,11 @@
 
 import type { TraceEvent } from '../tracing/tracePacketEvents';
 import ATConverter from './at';
-import LTEConverter from './lte';
-import NASConverter from './nas';
 import type { State } from './types';
 
 export const convert = (packet: TraceEvent, state: State): State => {
     if (packet.format === 'AT') {
         return ATConverter(packet, state);
-    }
-
-    if (packet.jsonData) {
-        if (packet.format === 'NAS') {
-            return NASConverter(packet, state);
-        }
-    }
-    if (packet.format === 'RRC') {
-        return LTEConverter(packet, state);
     }
 
     return state;

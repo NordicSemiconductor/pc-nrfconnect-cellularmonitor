@@ -6,7 +6,6 @@
 
 import EventEmitter from 'events';
 
-import type { AttachPacket } from '../tracingEvents/nas/types';
 import type { NetworkType } from '../tracingEvents/types';
 import { eventType } from './formats';
 
@@ -18,7 +17,6 @@ export interface Packet {
         value?: number;
     };
     sequence_number: number;
-    interpreted_json?: unknown;
 }
 export interface TraceEvent {
     timestamp: number;
@@ -26,7 +24,6 @@ export interface TraceEvent {
     networkType?: NetworkType;
     sequenceNumber: number;
     data: Uint8Array;
-    jsonData?: unknown;
 }
 
 export const tracePacketEvents = new EventEmitter();
@@ -67,9 +64,6 @@ const packetsToEvent = (packet: Packet) =>
         timestamp: (packet.timestamp?.value ?? 0) / 1000,
         data: packet.packet_data,
         sequenceNumber: packet.sequence_number,
-        jsonData: packet.interpreted_json
-            ? parseJsonData(packet.interpreted_json)
-            : undefined,
     } as TraceEvent);
 
 tracePacketEvents.on('start-process', () => resetTraceEvents());
@@ -77,40 +71,11 @@ tracePacketEvents.on('start-process', () => resetTraceEvents());
 export const notifyListeners = (packets: Packet[]) => {
     const formattedEvents: TraceEvent[] = [];
     packets.forEach(packet => {
-        if (!packet.interpreted_json) {
-            formattedEvents.push(packetsToEvent(packet));
-        } else {
-            const rawPacket =
-                formattedEvents.find(
-                    event => event.sequenceNumber === packet.sequence_number
-                ) ||
-                events.find(
-                    event => event.sequenceNumber === packet.sequence_number
-                );
-
-            if (rawPacket) {
-                rawPacket.jsonData = parseJsonData(packet.interpreted_json);
-            } else {
-                // This would indicate an issue with monitor lib
-            }
-        }
+        formattedEvents.push(packetsToEvent(packet));
     });
 
     events.push(...formattedEvents);
     tracePacketEvents.emit('new-packets', formattedEvents);
-};
-
-type InterpretedJSON = { 'nas-eps': AttachPacket };
-
-const assertContainsNAS = (data: unknown): data is InterpretedJSON =>
-    data != null && 'nas-eps' in (data as InterpretedJSON);
-
-const parseJsonData = (data: unknown): AttachPacket | undefined => {
-    if (assertContainsNAS(data)) {
-        return data['nas-eps'];
-    }
-
-    return undefined;
 };
 
 export const resetTraceEvents = () => {
