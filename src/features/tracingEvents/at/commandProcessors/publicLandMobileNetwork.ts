@@ -51,7 +51,6 @@ export const processor: Processor<'+COPS'> = {
                 const { plmnMode, plmnFormat, plmn, AcTState } = getParameters(
                     packet.payload
                 );
-                console.log(`PLMN to be used for search: ${plmn}`);
                 return {
                     ...state,
                     plmnMode,
