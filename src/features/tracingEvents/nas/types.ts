@@ -31,9 +31,9 @@ export type AttachAcceptPacket = {
     accept: `${number}`;
     apn: string;
     mcc: string;
-    mcc_code: number;
+    mcc_code: string;
     mnc: string;
-    mnc_code: number;
+    mnc_code: string;
     tac: `${number}`;
 
     apn_aggregate_maximum_bit_rate: {

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import mccMncList, { Operator } from 'mcc-mnc-list';
+
 import {
     parsePowerSavingMode,
     TAU_TYPES,
@@ -113,6 +115,11 @@ export const processAttachAcceptPacket = (
         state.accessPointNames
     );
 
+    let operatorInfo: Operator | undefined;
+    if (packet.mcc && packet.mnc) {
+        operatorInfo = mccMncList.find({ mcc: packet.mcc, mnc: packet.mnc });
+    }
+
     return {
         ...state,
         powerSavingMode: {
@@ -130,6 +137,7 @@ export const processAttachAcceptPacket = (
         mncCode: packet.mnc_code,
         mcc: packet.mcc,
         mccCode: packet.mcc_code,
+        operatorInfo: operatorInfo ?? state.operatorInfo,
     };
 };
 

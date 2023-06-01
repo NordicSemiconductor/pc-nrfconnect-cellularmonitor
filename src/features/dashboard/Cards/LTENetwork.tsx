@@ -17,12 +17,7 @@ export default () => {
         rrcState,
         signalQuality,
         networkStatus,
-        operatorFullName,
-        operatorShortName,
-        mcc,
-        mccCode,
-        mnc,
-        mncCode,
+        operatorInfo,
         earfcn,
         networkTimeNotification,
         // %CONEVAL
@@ -52,19 +47,17 @@ export default () => {
                 AcTState !== undefined ? parseModeFromAcT(AcTState) : 'Unknown',
         },
         OPERATOR: {
-            value: parseOperator(operatorFullName, operatorShortName),
+            value: operatorInfo ? operatorInfo.operator : 'Unknown',
         },
         MNC: {
-            value:
-                mnc || mncCode
-                    ? parseMCC(mnc, mncCode)
-                    : parsePlmnToMccOrMnc(parsePlmnType.MNC, plmn),
+            value: operatorInfo
+                ? `${operatorInfo.brand} (${operatorInfo.mnc})`
+                : 'Unknown',
         },
         MCC: {
-            value:
-                mcc || mccCode
-                    ? parseMCC(mcc, mccCode)
-                    : parsePlmnToMccOrMnc(parsePlmnType.MCC, plmn),
+            value: operatorInfo
+                ? `${operatorInfo.countryName} (${operatorInfo.mcc})`
+                : 'Unknown',
         },
         EARFCN: {
             value: earfcn == null || Number.isNaN(earfcn) ? 'Unknown' : earfcn,
@@ -138,6 +131,7 @@ export default () => {
             value: conevalDLPathLoss ?? 'Unknown',
         },
     };
+
     return (
         <DashboardCard
             key="dashboard-LTE-card"
@@ -166,42 +160,4 @@ const parseModeFromAcT = (AcTState: AcTState) => {
     }
 
     return null as never;
-};
-
-const parseOperator = (
-    operatorFullName?: string,
-    operatorShortName?: string
-) => {
-    if (operatorFullName === '' && operatorShortName === '') {
-        return 'Not Available';
-    }
-    return operatorFullName ?? operatorShortName ?? 'Unknown';
-};
-
-const parseMCC = (mcc: string | undefined, mccCode: number | undefined) => {
-    let result = '';
-    if (mccCode !== undefined) {
-        result += `${mccCode}`;
-    }
-    if (mcc !== undefined) {
-        result += ` ${mcc}`;
-    }
-    if (result === '') return 'Unknown';
-    return result.trim();
-};
-
-enum parsePlmnType {
-    MCC = 'MCC',
-    MNC = 'MNC',
-}
-const parsePlmnToMccOrMnc = (type: parsePlmnType, plmn?: string) => {
-    if (!plmn) return 'Unknown';
-    if (type === parsePlmnType.MCC) {
-        return plmn.slice(0, 3);
-    }
-    if (type === parsePlmnType.MNC) {
-        return plmn.slice(3);
-    }
-
-    return 'Unknown';
 };

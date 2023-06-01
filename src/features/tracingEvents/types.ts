@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { Operator } from 'mcc-mnc-list';
+
 import type { Packet } from '../tracing/tracePacketEvents';
 import { PowerLevel } from './at/commandProcessors/dataProfile';
 import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
@@ -81,9 +83,10 @@ export interface State {
     accessPointNames: AccessPointNames;
 
     mnc: string;
-    mncCode: number;
+    mncCode: string;
     mcc: string;
-    mccCode: number;
+    mccCode: string;
+    operatorInfo: Operator;
 
     // XModemTrace
     xModemTraceOperation?: number;

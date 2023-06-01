@@ -122,9 +122,9 @@ const expectedAcceptState: Partial<State> = {
     },
 
     mnc: 'Telenor Norge AS',
-    mncCode: 1,
+    mncCode: '01',
     mcc: 'Norway',
-    mccCode: 242,
+    mccCode: '242',
 };
 const actualAttachRequestPacket: TraceEvent = {
     data: Uint8Array.from([
