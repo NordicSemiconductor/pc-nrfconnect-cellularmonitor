@@ -10,7 +10,6 @@ import { Group, selectedDevice } from 'pc-nrfconnect-shared';
 
 import { LoadTraceFile } from './LoadTraceFile';
 import TraceConverter from './Tracing/TraceConverter';
-import { AddTsharkSink } from './TsharkSink';
 
 export default () => {
     const device = useSelector(selectedDevice);
@@ -19,7 +18,6 @@ export default () => {
 
     return (
         <Group heading="FILE ACTIONS">
-            <AddTsharkSink />
             <LoadTraceFile />
             <TraceConverter />
         </Group>
