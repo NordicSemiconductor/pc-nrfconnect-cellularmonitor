@@ -81,23 +81,13 @@ describe('Sidepanel functionality', () => {
     });
 
     describe('DetectTraceDbDialog', () => {
-        it('should show dialog while auto-detecting fw when tracing to PCAP', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+        it('should show dialog when tracing to RAW and it is trying to auto-detect mfw', async () => {
+            render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
             startTrace();
 
             await expect(
                 screen.findByText('Detecting modem firmware version')
             ).resolves.toBeDefined();
-        });
-
-        xit('should not show dialog when tracing to RAW', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
-
-            startTrace();
-
-            await expect(
-                screen.findByText('Detecting modem firmware version')
-            ).rejects.toBeDefined();
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
@@ -142,26 +132,6 @@ describe('Sidepanel functionality', () => {
                 'Detecting modem firmware version'
             );
             expect(modal).not.toBeInTheDocument();
-        });
-    });
-
-    xdescribe('multiple sinks', () => {
-        it('should show file details for multiple sinks', async () => {
-            render(
-                <TraceCollectorSidePanel />,
-                serialPortActions(['pcap', 'raw'])
-            );
-            startTrace();
-            expect(
-                screen.getByText('.mtrace', {
-                    exact: false,
-                })
-            ).toBeInTheDocument();
-            expect(
-                await screen.findByText('.pcapng', {
-                    exact: false,
-                })
-            ).toBeInTheDocument();
         });
     });
 });
