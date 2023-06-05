@@ -17,7 +17,7 @@ export default () => {
     if (!device) return null;
 
     return (
-        <CollapsibleGroup heading="Advanced Options">
+        <CollapsibleGroup heading="Advanced Options" defaultCollapsed={false}>
             <ProgramSampleModal />
             <SourceSelector />
         </CollapsibleGroup>
