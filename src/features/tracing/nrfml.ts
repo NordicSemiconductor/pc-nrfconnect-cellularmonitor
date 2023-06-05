@@ -243,8 +243,6 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
 
-        const sinks = getTraceFormats(state);
-
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
             if (packets.length > 0) {
@@ -258,7 +256,7 @@ export const readRawTrace =
         tracePacketEvents.emit('start-process');
 
         nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, []),
             error => {
                 clearInterval(throttle);
                 if (error) {
