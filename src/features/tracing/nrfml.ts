@@ -18,6 +18,7 @@ import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
+import { is91DK } from '../programSample/programSample';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -216,9 +217,9 @@ export const startTrace =
             })
         );
 
-        if (resetDevice) {
+        const device = selectedDevice(state);
+        if (resetDevice && is91DK(device)) {
             logger.info(`Reseting device`);
-            const device = selectedDevice(state);
             if (!device) {
                 throw new Error('No device selected, unable to reset');
             }

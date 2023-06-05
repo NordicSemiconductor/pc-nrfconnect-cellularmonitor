@@ -28,7 +28,6 @@ export default () => {
             <DatabaseFileOverride />
             <Serialports />
             {is91DK(device) && <TraceSettings />}
-            <TraceSettings />
             <TraceFormatSelector />
             <TraceFileInformation />
         </CollapsibleGroup>
@@ -37,18 +36,11 @@ export default () => {
 
 const TraceSettings = () => {
     const dispatch = useDispatch();
-    const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
     const resetDevice = useSelector(getResetDevice);
 
     const dispatchToggle = (fn: (param: boolean) => void) => (value: boolean) =>
         dispatch(fn(value));
-
-    useEffect(() => {
-        if (!is91DK(device)) {
-            dispatch(setResetDevice(false));
-        }
-    }, [device, dispatch]);
 
     return (
         <Toggle
