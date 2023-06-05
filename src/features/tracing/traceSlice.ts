@@ -42,6 +42,7 @@ interface TraceState {
     detectedAtHostLibrary: boolean;
     isSendingATCommands: boolean;
     resetDevice: boolean;
+    detectedTraceDbFailed: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -60,6 +61,7 @@ const initialState = (): TraceState => ({
     detectedAtHostLibrary: false,
     isSendingATCommands: false,
     resetDevice: restoreResetDevice(),
+    detectedTraceDbFailed: false,
 });
 
 const traceSlice = createSlice({
@@ -114,7 +116,10 @@ const traceSlice = createSlice({
         setSerialPort: (state, action: PayloadAction<string | null>) => {
             state.serialPort = action.payload;
         },
-        setManualDbFilePath: (state, action: PayloadAction<string>) => {
+        setManualDbFilePath: (
+            state,
+            action: PayloadAction<string | undefined>
+        ) => {
             state.manualDbFilePath = action.payload;
         },
         resetManualDbFilePath: state => {
@@ -158,6 +163,9 @@ const traceSlice = createSlice({
         setResetDevice: (state, action: PayloadAction<boolean>) => {
             state.resetDevice = action.payload;
             storeResetDevice(action.payload);
+        },
+        setDetectTraceDbFailed: (state, action: PayloadAction<boolean>) => {
+            state.detectedTraceDbFailed = action.payload;
         },
     },
 });
@@ -208,6 +216,9 @@ export const getIsSendingATCommands = (state: RootState) =>
 
 export const getResetDevice = (state: RootState) => state.app.trace.resetDevice;
 
+export const getDetectTraceDbFailed = (state: RootState) =>
+    state.app.trace.detectedTraceDbFailed;
+
 export const {
     resetTraceInfo,
     setTraceIsStarted,
@@ -228,6 +239,7 @@ export const {
     setDetectedAtHostLibrary,
     setIsSendingATCommands,
     setResetDevice,
+    setDetectTraceDbFailed,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

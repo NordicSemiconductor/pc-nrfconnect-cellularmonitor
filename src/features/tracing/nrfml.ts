@@ -39,6 +39,7 @@ import {
     getShellParser,
     getTaskId,
     getUartSerialPort,
+    setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
@@ -262,6 +263,10 @@ export const readRawTrace =
                     logger.error(
                         `Error when reading trace from ${sourceFile}: ${error.message}`
                     );
+
+                    if (error.error_code === 22 || error.error_code === 100) {
+                        dispatch(setDetectTraceDbFailed(true));
+                    }
                 } else {
                     logger.info(`Completed reading trace from ${sourceFile}`);
                 }
