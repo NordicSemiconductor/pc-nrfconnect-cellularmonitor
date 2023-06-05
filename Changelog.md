@@ -1,15 +1,13 @@
-## Unreleased
+## 1.0.0 - 2023-06-08
 
 ### Added
 
 -   Power Saving Mode values are now shown as decimal time units, days, hours,
     minutes, seconds, with the bit mask shown in parentheses. Example, REQUESTED
     PERIODIC TAU: 1 hour (00100001)
--   Option to enable/disable tshark for more detail in the dashboard view. This
-    option was always enabled before, but is now disabled by default, because it
-    adds more delay. This option does not affect the content of the trace file.
 -   Visual effect to dashboard fields that are updated, in order to make it
     easier to notice when a change has been made.
+-   Certificate Manager from the Link Monitor app.
 
 ### Changed
 
