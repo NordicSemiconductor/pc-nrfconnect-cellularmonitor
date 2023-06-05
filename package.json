@@ -1,8 +1,8 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "0.9.1",
+    "version": "1.0.0",
     "description": "Capture and analyze modem traces",
-    "displayName": "Cellular Monitor Preview",
+    "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicPlayground/pc-nrfconnect-cellularmonitor",
     "repository": {
         "type": "git",
