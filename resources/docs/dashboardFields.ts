@@ -360,19 +360,36 @@ register to.
         'TAU TRIGGERED': {
             commands: ['AT%CONEVAL'] as const,
         },
-        'REQUESTED EDRX': {
-            title: 'Requested extended Discontinuous Reception (eDRX)',
+        'LTE-M REQUESTED EDRX': {
+            title: 'Requested extended Discontinuous Reception (eDRX) for LTE-M',
             description:
                 'This is requested by the mobile device during its cellular network registration. The value indicates the desired eDRX cycle length that the device would like to use to conserve power, while maintaining an acceptable level of network connectivity.',
             commands: ['AT+CEDRXRDP'] as const,
         },
-        'NW PROVIDED EDRX': {
+        'LTE-M NW PROVIDED EDRX': {
             title: 'Network provided extended Discontinuous Reception (eDRX)',
             description:
                 'This is provided by the cellular network to a mobile device during its registration process. The value indicates the suggested eDRX cycle length that the device should use to conserve power, while maintaining a reasonable level of network connectivity.',
             commands: ['AT+CEDRXRDP'] as const,
         },
-        'PAGING TIME WINDOW': {
+        'LTE-M PAGING TIME WINDOW': {
+            description:
+                'The period of time during which the mobile device attempts to receive a paging message.',
+            commands: ['AT+CEDRXRDP'] as const,
+        },
+        'NB-IOT REQUESTED EDRX': {
+            title: 'Requested extended Discontinuous Reception (eDRX) for NB-IoT',
+            description:
+                'This is requested by the mobile device during its cellular network registration. The value indicates the desired eDRX cycle length that the device would like to use to conserve power, while maintaining an acceptable level of network connectivity.',
+            commands: ['AT+CEDRXRDP'] as const,
+        },
+        'NB-IOT NW PROVIDED EDRX': {
+            title: 'Network provided extended Discontinuous Reception (eDRX)',
+            description:
+                'This is provided by the cellular network to a mobile device during its registration process. The value indicates the suggested eDRX cycle length that the device should use to conserve power, while maintaining a reasonable level of network connectivity.',
+            commands: ['AT+CEDRXRDP'] as const,
+        },
+        'NB-IOT PAGING TIME WINDOW': {
             description:
                 'The period of time during which the mobile device attempts to receive a paging message.',
             commands: ['AT+CEDRXRDP'] as const,

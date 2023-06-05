@@ -92,10 +92,9 @@ const modernModemVersionPacket = {
         tac: '0901',
         AcTState: 7,
         band: 20,
-        cell_id: '02024720',
+        cellID: '02024720',
         phys_cell_id: 428,
         earfcn: 6300,
-        NW_provided_eDRX_value: undefined,
 
         powerSavingMode: {
             granted: {
@@ -137,10 +136,9 @@ const legacyModemVersionPacket = {
         tac: '0901',
         AcTState: 7,
         band: 20,
-        cell_id: '02024720',
+        cellID: '02024720',
         phys_cell_id: 428,
         earfcn: 6300,
-        NW_provided_eDRX_value: undefined,
 
         powerSavingMode: {
             granted: {
