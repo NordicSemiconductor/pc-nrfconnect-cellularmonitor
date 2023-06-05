@@ -48,6 +48,8 @@ import {
     readBundledIndex,
     Sample,
 } from './samples';
+// @ts-expect-error We can import svgs
+import thingySvg from './thingy91_sw1_sw3.svg';
 
 import './ProgramSampleModal.scss';
 
@@ -262,16 +264,7 @@ const ProgramSample = ({
                 showSpinner={isProgramming || waitingForReconnect}
             />
             <Dialog.Body>
-                <p>This will program the following:</p>
-                {isMcuBoot && (
-                    <p>
-                        <em>
-                            Remember to put the device in MCUBoot mode. Press
-                            down the center black button on the device while
-                            powering on.
-                        </em>
-                    </p>
-                )}
+                {isMcuBoot && <MCUBootModeInstructions />}
                 {selectedFirmware.map(fw => (
                     <div key={fw.file} className="mb-4">
                         <div className="d-flex align-items-center">
@@ -467,7 +460,7 @@ const ProgramModem = ({
                     Do you want to program a modem firmware before programming{' '}
                     {sample?.title ?? 'the selected application'}?
                 </p>
-                <div className="installable-app-grid">
+                <div className="installable-app-grid mb-5">
                     {modemFirmwares.map(mfw => (
                         <div
                             key={mfw.title}
@@ -495,17 +488,11 @@ const ProgramModem = ({
                     ))}
                 </div>
                 {selectedMfw != null && isMcuBoot ? (
-                    <p className="mt-4">
-                        <em>
-                            Remember to put the device in MCUBoot mode. Press
-                            down the center black button on the device while
-                            powering on.
-                        </em>
-                    </p>
+                    <MCUBootModeInstructions />
                 ) : null}
 
                 {selectedMfw != null ? (
-                    <div key={selectedMfw.file} className="mb-4">
+                    <div key={selectedMfw.file} className="my-4">
                         <div className="d-flex align-items-center">
                             <label htmlFor={selectedMfw.file} className="mb-0">
                                 <strong>{selectedMfw.title}</strong>
@@ -626,3 +613,16 @@ const ProgramModem = ({
         </>
     );
 };
+
+const MCUBootModeInstructions = () => (
+    <>
+        <strong>Please enable MCUBoot mode:</strong>
+        <p>
+            Press down the center black button (SW3) on the device while
+            powering on (SW1).
+        </p>
+        <p className="text-center">
+            <img src={thingySvg} alt="Thingy91 diagram" />
+        </p>
+    </>
+);

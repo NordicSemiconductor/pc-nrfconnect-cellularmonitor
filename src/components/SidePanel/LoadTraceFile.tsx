@@ -52,8 +52,8 @@ export const LoadTraceFile = () => {
                 onHide={() => dispatch(setDetectTraceDbFailed(false))}
             >
                 <p>
-                    Could not determine the type of modem file used, please
-                    select one
+                    Could not determine the type of modem trace database used,
+                    please select one
                 </p>
                 <DatabaseFileOverride />
             </InfoDialog>
