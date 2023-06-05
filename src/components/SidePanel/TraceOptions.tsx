@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CollapsibleGroup, selectedDevice, Toggle } from 'pc-nrfconnect-shared';
 
 import { is91DK } from '../../features/programSample/programSample';
 import {
     getIsTracing,
-    getRefreshDashboard,
     getResetDevice,
-    setRefreshDashboard,
     setResetDevice,
 } from '../../features/tracing/traceSlice';
 import DatabaseFileOverride from './DatabaseFileOverride';
@@ -29,7 +27,7 @@ export default () => {
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
             <Serialports />
-            <TraceSettings />
+            {is91DK(device) && <TraceSettings />}
             <TraceFormatSelector />
             <TraceFileInformation />
         </CollapsibleGroup>
@@ -38,36 +36,18 @@ export default () => {
 
 const TraceSettings = () => {
     const dispatch = useDispatch();
-    const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
     const resetDevice = useSelector(getResetDevice);
-    const refreshDashboard = useSelector(getRefreshDashboard);
 
     const dispatchToggle = (fn: (param: boolean) => void) => (value: boolean) =>
         dispatch(fn(value));
 
-    useEffect(() => {
-        if (!is91DK(device)) {
-            dispatch(setResetDevice(false));
-        }
-    }, [device, dispatch]);
-
     return (
-        <>
-            {is91DK(device) && (
-                <Toggle
-                    label="Reset device on start"
-                    disabled={isTracing}
-                    isToggled={resetDevice}
-                    onToggle={dispatchToggle(setResetDevice)}
-                />
-            )}
-            <Toggle
-                label="Refresh dashboard on start"
-                disabled={isTracing}
-                isToggled={refreshDashboard}
-                onToggle={dispatchToggle(setRefreshDashboard)}
-            />
-        </>
+        <Toggle
+            label="Reset device on start"
+            disabled={isTracing}
+            isToggled={resetDevice}
+            onToggle={dispatchToggle(setResetDevice)}
+        />
     );
 };

@@ -67,7 +67,7 @@ export default () => {
     useEffect(() => {
         readBundledIndex()
             .then(setSamples)
-            .then(() => downloadSampleIndex)
+            .then(downloadSampleIndex)
             .then(setSamples);
     }, []);
 

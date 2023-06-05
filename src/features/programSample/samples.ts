@@ -54,9 +54,10 @@ export const readBundledIndex = () =>
         encoding: 'utf8',
     }).then(file => JSON.parse(file) as Samples);
 
-export const downloadSampleIndex = fetch(`${SERVER_URL}/index.json`, {
-    cache: 'no-cache',
-}).then<Samples>(result => result.json());
+export const downloadSampleIndex = () =>
+    fetch(`${SERVER_URL}/index.json`, {
+        cache: 'no-cache',
+    }).then<Samples>(result => result.json());
 
 export const downloadModemFirmware = (modemFirmware: ModemFirmware) =>
     downloadFile(modemFirmware.file);

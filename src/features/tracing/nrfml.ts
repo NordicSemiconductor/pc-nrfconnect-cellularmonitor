@@ -18,8 +18,8 @@ import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
-import { recommendedAt } from '../tracingEvents/at/recommeneded';
-import { detectDatabaseVersion, sendAT } from '../tracingEvents/at/sendCommand';
+import { is91DK } from '../programSample/programSample';
+import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
@@ -34,7 +34,6 @@ import {
 } from './tracePacketEvents';
 import {
     getManualDbFilePath,
-    getRefreshDashboard,
     getResetDevice,
     getSerialPort,
     getShellParser,
@@ -128,7 +127,6 @@ export const startTrace =
         const shellParser = getShellParser(state);
         const tracePort = getSerialPort(state);
         const resetDevice = getResetDevice(state);
-        const refreshDashboard = getRefreshDashboard(state);
 
         if (!tracePort) {
             logger.error('Select serial port to start tracing');
@@ -219,9 +217,9 @@ export const startTrace =
             })
         );
 
-        if (resetDevice) {
+        const device = selectedDevice(state);
+        if (resetDevice && is91DK(device)) {
             logger.info(`Reseting device`);
-            const device = selectedDevice(state);
             if (!device) {
                 throw new Error('No device selected, unable to reset');
             }
@@ -233,17 +231,6 @@ export const startTrace =
                 logger.error(err);
                 throw new Error('Unable to reset device');
             }
-        }
-
-        if (refreshDashboard) {
-            const waitBeforeRefresh = formats.includes('live') ? 10_000 : 3_000;
-            logger.info(
-                `Refreshing values in ${waitBeforeRefresh / 1000} seconds`
-            );
-            setTimeout(
-                () => dispatch(sendAT(recommendedAt)),
-                waitBeforeRefresh
-            );
         }
 
         reloadHandler = () => nrfml.stop(taskId);
