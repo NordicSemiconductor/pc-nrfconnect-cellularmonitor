@@ -38,7 +38,6 @@ import {
     getSerialPort,
     getShellParser,
     getTaskId,
-    getTraceFormats,
     getUartSerialPort,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -74,7 +73,6 @@ export const convertTraceFile =
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
-        const sinks = ['pcap' as TraceFormat];
 
         const state = getState();
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
@@ -82,7 +80,7 @@ export const convertTraceFile =
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             const taskId = nrfml.start(
-                nrfmlConfig(state, source, sinks),
+                nrfmlConfig(state, source, ['live']),
                 err => {
                     dispatch(setTraceIsStopped());
                     setLoading(false);

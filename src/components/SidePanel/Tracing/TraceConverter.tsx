@@ -9,10 +9,7 @@ import { useDispatch } from 'react-redux';
 import { Button, usageData } from 'pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
-import {
-    isWiresharkInstalled,
-    openInWireshark,
-} from '../../../features/wireshark/wireshark';
+import { isWiresharkInstalled } from '../../../features/wireshark/wireshark';
 import EventAction from '../../../usageDataActions';
 import { askForTraceFile } from '../../../utils/fileUtils';
 
@@ -27,10 +24,7 @@ export default () => {
         const filePath = await askForTraceFile();
         if (filePath) {
             usageData.sendUsageData(EventAction.OPEN_TRACE_IN_WIRESHARK);
-            await dispatch(convertTraceFile(filePath, setLoading));
-            dispatch(
-                openInWireshark(`${filePath.replace('.mtrace', '')}.pcapng`)
-            );
+            dispatch(convertTraceFile(filePath, setLoading));
         }
     };
 
