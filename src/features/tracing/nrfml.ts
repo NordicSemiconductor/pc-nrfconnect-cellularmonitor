@@ -73,6 +73,7 @@ export const convertTraceFile =
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
+        const sinks = ['live' as TraceFormat];
 
         const state = getState();
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
@@ -80,7 +81,7 @@ export const convertTraceFile =
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             const taskId = nrfml.start(
-                nrfmlConfig(state, source, ['live']),
+                nrfmlConfig(state, source, sinks),
                 err => {
                     dispatch(setTraceIsStopped());
                     setLoading(false);

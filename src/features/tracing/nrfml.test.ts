@@ -61,16 +61,11 @@ describe('nrfml', () => {
         store.dispatch(convertTraceFile('somePath.mtrace'));
         expect(store.getActions()).toEqual([
             {
-                type: setTraceIsStarted.type,
                 payload: {
+                    progressConfigs: [],
                     taskId: 1,
-                    progressConfigs: [
-                        {
-                            format: 'pcap',
-                            path: 'somePath.pcapng',
-                        },
-                    ],
                 },
+                type: 'trace/setTraceIsStarted',
             },
         ]);
     });
