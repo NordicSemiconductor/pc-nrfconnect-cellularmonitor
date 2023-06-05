@@ -64,7 +64,7 @@ export default () => {
         },
         RSRP: {
             value: signalQuality?.rsrp_decibel
-                ? `${signalQuality?.rsrp_decibel} dB`
+                ? `${signalQuality?.rsrp_decibel} dBm`
                 : 'Unknown',
         },
         RSRQ: {
