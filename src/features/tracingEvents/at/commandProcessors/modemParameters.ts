@@ -60,7 +60,7 @@ export const processor: Processor<'%XMONITOR'> = {
                 tac: responseArray[4],
                 AcTState,
                 band: getNumber(responseArray[6]),
-                cell_id: responseArray[7],
+                cellID: responseArray[7],
                 phys_cell_id: getNumber(responseArray[8]),
                 earfcn: getNumber(responseArray[9]),
                 signalQuality: {

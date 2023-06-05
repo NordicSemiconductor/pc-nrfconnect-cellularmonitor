@@ -13,6 +13,7 @@ import { rawTraceData } from './traceSample';
 const expectedState = {
     networkStatusLastUpdate: 'networkStatus',
 
+    cellID: '02024720',
     uiccInitialised: true,
     notifySignalQuality: true,
     signalQuality: {
@@ -34,10 +35,8 @@ const expectedState = {
     tac: '0901',
     AcTState: 7,
     band: 20,
-    cell_id: '02024720',
     phys_cell_id: 428,
     earfcn: 6300,
-    NW_provided_eDRX_value: undefined,
     pinCodeStatus: 'READY',
     functionalMode: 1,
     IMEI: '352656106647673',

@@ -20,6 +20,7 @@ export type PacketFormat =
 export interface State {
     // What value to use in order to show the latest LTE network connection
     // status in the Connection Status Component
+    AcTState?: AcTState;
     networkStatusLastUpdate?: 'coneval' | 'networkStatus' | 'packetDomainEvent';
     packetDomainStatus?: string;
 
@@ -31,7 +32,6 @@ export interface State {
     operatorFullName?: string;
     operatorShortName?: string;
     tac?: string;
-    cell_id?: string;
     phys_cell_id?: number;
     activeTime?: string;
     periodicTAU?: string;
@@ -142,11 +142,8 @@ export interface State {
         packetAverage?: number; // The average packet size (in bytes) used during the collection period
     };
 
-    // +CEDRXRDP eDRX Dynamic Parameters
-    AcTState?: AcTState;
-    requested_eDRX_value?: string; // 4 bit string (either NB-iot or LTE-M)
-    NW_provided_eDRX_value?: string; // 4 bit string
-    pagingTimeWindow?: string; // 4 bit string: calculation of value different depending on LTE-M or NB-IoT
+    eDrxLteM: eDRX;
+    eDrxNbIot: eDRX;
 
     // %XTIME Network Time Notification
     networkTimeNotifications?: 0 | 1;
@@ -156,6 +153,13 @@ export interface State {
         universalTime?: string; // 7 bytes in hexadecimal string
         daylightSavingTime?: string; // 1 byte in hexadecimal string
     };
+}
+
+export interface eDRX {
+    AcT?: 0; // Current cell is not using eDRX. Used only in the unsolicited result code.
+    requestedValue?: string;
+    nwProvidedValue?: string;
+    pagingTimeWindow?: string;
 }
 
 export enum PlmnStatus {

@@ -64,7 +64,7 @@ export default () => {
         },
         RSRP: {
             value: signalQuality?.rsrp_decibel
-                ? `${signalQuality?.rsrp_decibel} dB`
+                ? `${signalQuality?.rsrp_decibel} dBm`
                 : 'Unknown',
         },
         RSRQ: {
@@ -96,7 +96,7 @@ export default () => {
             value: conevalEnergyEstimate ?? 'Unknown',
         },
         'CELL ID': {
-            value: cellID ?? 'Unknown',
+            value: parseCellId(cellID),
         },
         PLMN: {
             value: plmn ?? 'Unknown',
@@ -160,4 +160,14 @@ const parseModeFromAcT = (AcTState: AcTState) => {
     }
 
     return null as never;
+};
+
+const parseCellId = (id?: string) => {
+    if (id != null) {
+        const hexValue = `0x${id}`;
+        const decimalValue = parseInt(hexValue, 16);
+        return `${decimalValue} (${hexValue})`;
+    }
+
+    return 'Unknown';
 };

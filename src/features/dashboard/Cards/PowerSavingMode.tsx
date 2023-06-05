@@ -8,7 +8,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { secondsToDhms } from '../../../utils/converters';
-import { isDeactivated } from '../../../utils/powerSavingMode';
+import {
+    eDrxPagingTimeWindowToSeconds,
+    eDrxValueToSeconds,
+    isDeactivated,
+} from '../../../utils/powerSavingMode';
 import {
     getDashboardState,
     getPowerSavingMode,
@@ -16,32 +20,13 @@ import {
 import { PowerSavingModeValues } from '../../tracingEvents/types';
 import DashboardCard, { DashboardCardFields } from './DashboardCard';
 
-const formatPSMValuesToString = (
-    values: PowerSavingModeValues | undefined
-): string => {
-    if (values === undefined) {
-        return 'Unknown';
-    }
-    const { value, unit, bitmask } = values;
-
-    if (bitmask.slice(0, 3) === '111') {
-        return `DEACTIVATED (${bitmask})`;
-    }
-    if (unit === 'seconds' && value != null) {
-        return `${secondsToDhms(value)} (${bitmask})`;
-    }
-    return `${bitmask}`;
-};
-
 export default () => {
     const { TAUTriggered } = useSelector(getDashboardState);
     const { requested, granted } = useSelector(getPowerSavingMode) ?? {
         requested: undefined,
         granted: undefined,
     };
-    // eslint-disable-next-line camelcase
-    const { requested_eDRX_value, NW_provided_eDRX_value, pagingTimeWindow } =
-        useSelector(getDashboardState);
+    const { eDrxLteM, eDrxNbIot } = useSelector(getDashboardState);
 
     const fields: DashboardCardFields = {
         'REQUESTED ACTIVE TIMER': {
@@ -62,15 +47,31 @@ export default () => {
         'TAU TRIGGERED': {
             value: TAUTriggered ?? 'Unknown',
         },
-        /* eslint-disable camelcase */
-        'REQUESTED EDRX': {
-            value: requested_eDRX_value ?? 'Unknown',
+
+        'LTE-M REQUESTED EDRX': {
+            value: formateDrxValuesToString(eDrxLteM?.requestedValue),
         },
-        'NW PROVIDED EDRX': {
-            value: NW_provided_eDRX_value ?? 'Unknown',
+        'LTE-M NW PROVIDED EDRX': {
+            value: formateDrxValuesToString(eDrxLteM?.nwProvidedValue),
         },
-        'PAGING TIME WINDOW': {
-            value: pagingTimeWindow ?? 'Unknown',
+        'LTE-M PAGING TIME WINDOW': {
+            value: formatPagingTimeWindow(
+                eDrxLteM?.nwProvidedValue,
+                eDrxLteM?.AcT ?? 4
+            ),
+        },
+
+        'NB-IOT REQUESTED EDRX': {
+            value: formateDrxValuesToString(eDrxNbIot?.requestedValue),
+        },
+        'NB-IOT NW PROVIDED EDRX': {
+            value: formateDrxValuesToString(eDrxNbIot?.nwProvidedValue),
+        },
+        'NB-IOT PAGING TIME WINDOW': {
+            value: formatPagingTimeWindow(
+                eDrxNbIot?.nwProvidedValue,
+                eDrxNbIot?.AcT ?? 4
+            ),
         },
     };
 
@@ -100,4 +101,50 @@ export default () => {
             fields={fields}
         />
     );
+};
+
+const formatPSMValuesToString = (
+    values: PowerSavingModeValues | undefined
+): string => {
+    if (values === undefined) {
+        return 'Unknown';
+    }
+    const { value, unit, bitmask } = values;
+
+    if (bitmask.slice(0, 3) === '111') {
+        return `Deactivated (${bitmask})`;
+    }
+    if (unit === 'seconds' && value != null) {
+        return `${secondsToDhms(value)} (${bitmask})`;
+    }
+    return `${bitmask}`;
+};
+
+const formateDrxValuesToString = (bitmask: string | undefined) => {
+    if (!bitmask) {
+        return 'Unknown';
+    }
+
+    const seconds = eDrxValueToSeconds(bitmask);
+    if (seconds >= 0) {
+        return `${seconds}s (${bitmask})`;
+    }
+
+    return `${bitmask}`;
+};
+
+const formatPagingTimeWindow = (
+    bitmask: string | undefined,
+    AcT: 0 | 4 | 5
+) => {
+    if (!bitmask) {
+        return 'Unknown';
+    }
+
+    const seconds = eDrxPagingTimeWindowToSeconds(bitmask, AcT);
+    if (seconds >= 0) {
+        return `${seconds}s (${bitmask})`;
+    }
+
+    return `${bitmask}`;
 };

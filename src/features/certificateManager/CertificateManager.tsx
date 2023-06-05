@@ -54,7 +54,6 @@ const writeTLSCredential = async (
         shellParser,
         command
     );
-    console.log(response);
     if (response?.includes('OK')) {
         logger.info('Successfully deleted TLS credential');
     } else {

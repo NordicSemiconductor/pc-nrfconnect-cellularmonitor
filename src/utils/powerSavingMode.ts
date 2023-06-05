@@ -117,3 +117,92 @@ export const parsePowerSavingMode = (
 export function isDeactivated(bitmask: string): boolean {
     return bitmask.slice(0, 3) === '111';
 }
+
+const eDRX = {
+    '0000': 5.12,
+    '0001': 10.24,
+    '0010': 20.48,
+    '0011': 40.96,
+    '0100': 61.44,
+    '0101': 81.92,
+    '0110': 102.4,
+    '0111': 122.88,
+    '1000': 143.36,
+    '1001': 163.84,
+    '1010': 327.68,
+    '1011': 655.36,
+    '1101': 2621.44,
+    '1110': 5242.88,
+    '1111': 10485.76,
+};
+
+export const eDrxValueToSeconds = (bitmask: string): number =>
+    eDRX[bitmask as keyof typeof eDRX] || -1;
+
+type PagingTimeWindowlteM = typeof pagingTimeWindowLteM;
+const pagingTimeWindowLteM = {
+    '0000': 1.28,
+    '0001': 2.56,
+    '0010': 3.84,
+    '0011': 5.12,
+    '0100': 6.4,
+    '0101': 7.68,
+    '0110': 8.96,
+    '0111': 10.24,
+    '1000': 11.52,
+    '1001': 12.8,
+    '1010': 14.08,
+    '1011': 15.36,
+    '1100': 16.64,
+    '1101': 17.92,
+    '1110': 19.2,
+    '1111': 20.48,
+};
+
+type PagingTimeWindowNbIot = typeof pagingTimeWindowNbIot;
+const pagingTimeWindowNbIot = {
+    '0000': 2.56,
+    '0001': 5.12,
+    '0010': 7.68,
+    '0011': 10.24,
+    '0100': 12.8,
+    '0101': 15.36,
+    '0110': 17.92,
+    '0111': 20.48,
+    '1000': 23.04,
+    '1001': 25.6,
+    '1010': 28.16,
+    '1011': 30.72,
+    '1100': 33.28,
+    '1101': 35.84,
+    '1110': 38.4,
+    '1111': 40.96,
+};
+
+const eDRXType = {
+    0: 'Off', // Current cell is not using eDRX. Used only in the unsolicited result code
+    4: 'LTE-M',
+    5: 'NB-IoT',
+};
+
+export const eDrxPagingTimeWindowToSeconds = (
+    bitmask: string,
+    AcT: keyof typeof eDRXType
+): number => {
+    const type = eDRXType[AcT];
+    if (type === 'Off') {
+        return -1;
+    }
+    if (type === 'LTE-M') {
+        return (
+            pagingTimeWindowLteM[bitmask as keyof PagingTimeWindowlteM] ?? -1
+        );
+    }
+    if (type === 'NB-IoT') {
+        return (
+            pagingTimeWindowNbIot[bitmask as keyof PagingTimeWindowNbIot] ?? -1
+        );
+    }
+
+    return -1 as never;
+};

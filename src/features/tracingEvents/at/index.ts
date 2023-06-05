@@ -10,7 +10,8 @@ import { processor as connectivityStatistics } from './commandProcessors/connect
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
 import { processor as activityStatus } from './commandProcessors/deviceActivityStatus';
-import { processor as edrxdynamicparameters } from './commandProcessors/eDRXDynamicParameters';
+import { processor as eDrxDynamicParameters } from './commandProcessors/eDrxDynamicParameters';
+import { processor as eDrxSetting } from './commandProcessors/eDrxSetting';
 import { processor as evaluatingConnectionParameters } from './commandProcessors/evaluatingConnectionParameters';
 import { processor as extendedSignalQuality } from './commandProcessors/extendedSignalQuality';
 import { processor as functionMode } from './commandProcessors/functionMode';
@@ -42,6 +43,8 @@ import { processor as xsim } from './commandProcessors/xsim';
 import { parseAT, ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
+    eDrxSetting,
+    eDrxDynamicParameters,
     packetDomainEvents,
     xsim,
     pdpContext,
@@ -51,7 +54,6 @@ const processors = [
     networkTimeNotification,
     currentBand,
     dataProfile,
-    edrxdynamicparameters,
     evaluatingConnectionParameters,
     extendedSignalQuality,
     functionMode,

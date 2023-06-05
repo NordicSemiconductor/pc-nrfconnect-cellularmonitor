@@ -79,7 +79,6 @@ export const networkStatus = {
         long: 'Not registered, but UE is currently trying to attach or searching an operator to register to',
     },
     3: { short: 'Denied', long: 'Registration denied' },
-    // TODO: 'Unknown' is also the default in the frontend view.
     4: {
         short: 'Unknown',
         long: 'Unknown (for example, out of Evolved Terrestrial Radio Access Network (E-UTRAN) coverage)',
@@ -194,6 +193,7 @@ const handleNetworkRegPayload = (
     return {
         ...state,
         ...networkRegState,
+        cellID: networkRegState.ci ? networkRegState.ci : state.cellID,
         powerSavingMode: {
             requested: { ...state?.powerSavingMode?.requested },
             granted: grantedPSM ?? { ...state.powerSavingMode?.granted },
