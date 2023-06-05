@@ -11,9 +11,7 @@ import { CollapsibleGroup, selectedDevice, Toggle } from 'pc-nrfconnect-shared';
 import { is91DK } from '../../features/programSample/programSample';
 import {
     getIsTracing,
-    getRefreshDashboard,
     getResetDevice,
-    setRefreshDashboard,
     setResetDevice,
 } from '../../features/tracing/traceSlice';
 import DatabaseFileOverride from './DatabaseFileOverride';
@@ -29,6 +27,7 @@ export default () => {
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
             <Serialports />
+            {is91DK(device) && <TraceSettings />}
             <TraceSettings />
             <TraceFormatSelector />
             <TraceFileInformation />
@@ -41,7 +40,6 @@ const TraceSettings = () => {
     const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
     const resetDevice = useSelector(getResetDevice);
-    const refreshDashboard = useSelector(getRefreshDashboard);
 
     const dispatchToggle = (fn: (param: boolean) => void) => (value: boolean) =>
         dispatch(fn(value));
@@ -53,21 +51,11 @@ const TraceSettings = () => {
     }, [device, dispatch]);
 
     return (
-        <>
-            {is91DK(device) && (
-                <Toggle
-                    label="Reset device on start"
-                    disabled={isTracing}
-                    isToggled={resetDevice}
-                    onToggle={dispatchToggle(setResetDevice)}
-                />
-            )}
-            <Toggle
-                label="Refresh dashboard on start"
-                disabled={isTracing}
-                isToggled={refreshDashboard}
-                onToggle={dispatchToggle(setRefreshDashboard)}
-            />
-        </>
+        <Toggle
+            label="Reset device on start"
+            disabled={isTracing}
+            isToggled={resetDevice}
+            onToggle={dispatchToggle(setResetDevice)}
+        />
     );
 };

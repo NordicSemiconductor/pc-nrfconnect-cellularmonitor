@@ -22,7 +22,6 @@ interface StoreSchema {
     connectionStatusSection: boolean;
     showStartupDialog: boolean;
     resetDevice: boolean;
-    refreshDashboard: boolean;
 }
 
 const store = getPersistentStore<StoreSchema>({
@@ -85,11 +84,6 @@ export const [
 
 export const [getShowStartupDialog, setShowStartupDialog] = fromStore(
     'showStartupDialog',
-    true
-);
-
-export const [restoreRefreshDashboard, storeRefreshDashboard] = fromStore(
-    'refreshDashboard',
     true
 );
 
