@@ -38,8 +38,8 @@ import {
     getSerialPort,
     getShellParser,
     getTaskId,
-    getTraceFormats,
     getUartSerialPort,
+    setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
@@ -74,7 +74,7 @@ export const convertTraceFile =
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
-        const sinks = ['pcap' as TraceFormat];
+        const sinks = ['live' as TraceFormat];
 
         const state = getState();
         const isDetectingTraceDb = getManualDbFilePath(state) == null;
@@ -243,8 +243,6 @@ export const readRawTrace =
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
 
-        const sinks = getTraceFormats(state);
-
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
             if (packets.length > 0) {
@@ -258,13 +256,17 @@ export const readRawTrace =
         tracePacketEvents.emit('start-process');
 
         nrfml.start(
-            nrfmlConfig(state, source, sinks),
+            nrfmlConfig(state, source, []),
             error => {
                 clearInterval(throttle);
                 if (error) {
                     logger.error(
                         `Error when reading trace from ${sourceFile}: ${error.message}`
                     );
+
+                    if (error.error_code === 22 || error.error_code === 100) {
+                        dispatch(setDetectTraceDbFailed(true));
+                    }
                 } else {
                     logger.info(`Completed reading trace from ${sourceFile}`);
                 }
