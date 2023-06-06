@@ -40,7 +40,7 @@ export default () => {
             value: parseRRCState(rrcState),
         },
         'ACTIVITY STATUS': {
-            value: networkStatus ?? 'Unknown',
+            value: parseActivityStatus(networkStatus),
         },
         ACT: {
             value:
@@ -140,6 +140,28 @@ export default () => {
             fields={fields}
         />
     );
+};
+
+const parseActivityStatus = (networkStatus?: number) => {
+    if (networkStatus === undefined) return 'Unknown';
+    switch (networkStatus) {
+        case 0:
+            return 'Not registered';
+        case 1:
+            return 'Registered, home network';
+        case 2:
+            return 'Not registered, attaching or searching';
+        case 3:
+            return 'Registration denied';
+        case 4:
+            return 'Unknown';
+        case 5:
+            return 'Registered, roaming';
+        case 90:
+            return 'Not registered due to UICC failure';
+        default:
+            return 'Unknown';
+    }
 };
 
 const parseRRCState = (rrcState: number | undefined) => {
