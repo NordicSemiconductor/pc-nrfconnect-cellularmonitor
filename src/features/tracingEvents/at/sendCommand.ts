@@ -51,12 +51,13 @@ const sendCommandShellMode = async (shellParser: ShellParser) => {
     do {
         const command = queue.shift();
         // eslint-disable-next-line no-await-in-loop
-        await shellParser.enqueueRequest(
-            `at ${command}`,
-            () => {},
-            () => {},
-            () => {}
-        );
+        await shellParser.enqueueRequest(`at ${command}`, {
+            onSuccess: () => {},
+            onError: err => {
+                console.error('There was an error', err);
+            },
+            onTimeout: () => {},
+        });
     } while (queue.length);
 };
 
@@ -134,24 +135,23 @@ export const detectDatabaseVersion = async (
             shellParser.unPause();
         }
         return new Promise<string | null>(resolve => {
-            shellParser.enqueueRequest(
-                `at ${atGetModemVersion}`,
-                (response: string) => {
+            shellParser.enqueueRequest(`at ${atGetModemVersion}`, {
+                onSuccess: (response: string) => {
                     resolve(getModemVersionFromResponse(response));
                 },
-                error => {
+                onError: error => {
                     logger.warn(
                         `Error while requesting modem firmware version: "${error}"`
                     );
                     resolve(null);
                 },
-                timeout => {
+                onTimeout: timeout => {
                     logger.warn(
                         `Timed out while requesting modem firmware version: "${timeout}"`
                     );
                     resolve(null);
-                }
-            );
+                },
+            });
         });
     }
 
@@ -184,22 +184,21 @@ export const sendSingleCommand = async (
             shellParser.unPause();
         }
         return new Promise<string | null>(resolve => {
-            shellParser.enqueueRequest(
-                `at ${command}`,
-                (response: string) => {
+            shellParser.enqueueRequest(`at ${command}`, {
+                onSuccess: (response: string) => {
                     resolve(getModemVersionFromResponse(response));
                 },
-                error => {
+                onError: error => {
                     logger.warn(`"${error}"`);
                     resolve(null);
                 },
-                timeout => {
+                onTimeout: timeout => {
                     logger.warn(
                         `Timed out while executing command: "${timeout}"`
                     );
                     resolve(null);
-                }
-            );
+                },
+            });
         });
     }
 

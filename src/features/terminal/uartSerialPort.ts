@@ -68,14 +68,7 @@ export const connectToSerialPort = async (
                 port,
                 xTerminalShellParserWrapper(
                     new Terminal({ allowProposedApi: true, cols: 999 })
-                ),
-                {
-                    shellPromptUart: 'mosh:~$',
-                    logRegex:
-                        /[[][0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3},[0-9]{3}] <([^<^>]+)> ([^:]+): /,
-                    errorRegex: /ERROR/i,
-                    timeout: 10_000,
-                }
+                )
             );
             dispatch(setShellParser(shellParser));
         } else {
