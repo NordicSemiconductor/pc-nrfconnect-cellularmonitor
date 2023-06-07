@@ -7,18 +7,29 @@
             "fw": [
                 {
                     "type": "Application",
-                    "file": "thingy91_asset_tracker_v2_debug_2022-12-08_188a1603.hex"
+                    "file": "thingy91_asset_tracker_v2_debug_2023-03-02_8f26142b.hex"
                 }
             ]
         },
         {
-            "title": "Modem 1.3.3",
-            "description": "This is a modem that can be used by the Thingy91",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html",
+            "title": "Serial LTE Modem",
+            "description": "Use this application if you want to evaluate the modem using an external MCU.",
+            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/serial_lte_modem/README.html",
             "fw": [
                 {
-                    "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.3.zip"
+                    "type": "Application",
+                    "file": "thingy91_serial_lte_modem_debug_2023-03-02_8f26142b.hex"
+                }
+            ]
+        },
+        {
+            "title": "Modem Shell",
+            "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
+            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/modem_shell/README.html",
+            "fw": [
+                {
+                    "type": "Application",
+                    "file": "thingy91_modem_shell_debug_2023-03-02_8f26142b.hex"
                 }
             ]
         }
@@ -31,19 +42,23 @@
             "fw": [
                 {
                     "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.3.zip"
+                    "file": "mfw_nrf9160_1.3.4.zip"
                 },
                 {
                     "type": "Application",
-                    "file": "nrf9160dk_asset_tracker_v2_debug_2022-09-15_7a358cb7.hex"
+                    "file": "nrf9160dk_asset_tracker_v2_debug_2023-03-02_8f26142b.hex"
                 }
             ]
         },
         {
-            "title": "Serial LTE Monitor",
+            "title": "Serial LTE ",
             "description": "Use this application if you want to evaluate the modem using an external MCU.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/slm_shell/README.html",
+            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/serial_lte_modem/README.html",
             "fw": [
+                {
+                    "type": "Modem",
+                    "file": "mfw_nrf9160_1.3.4.zip"
+                },
                 {
                     "type": "Application",
                     "file": "slm-with-trace.hex"
@@ -56,21 +71,22 @@
             "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/modem_shell/README.html",
             "fw": [
                 {
-                    "type": "Application",
-                    "file": "nrf9160dk_modem_shell_2022-12-08_188a1603.hex"
-                }
-            ]
-        },
-        {
-            "title": "AT Client",
-            "description": "AT Client",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/at_client/README.html",
-            "fw": [
+                    "type": "Modem",
+                    "file": "mfw_nrf9160_1.3.4.zip"
+                },
                 {
                     "type": "Application",
-                    "file": "nrf9160dk_ns_at_client_with_trace.hex"
+                    "file": "nrf9160dk_modem_shell_with_trace_ncs_v2_3_0_2023_05_04.hex"
                 }
             ]
+        }
+    ],
+    "mfw": [
+        {
+            "title": "Modem Firmware v1.3.4",
+            "description": "This is a modem firmware",
+            "documentation": "",
+            "file": "mfw_nrf9160_1.3.4.zip"
         }
     ]
 }
