@@ -25,7 +25,7 @@ import './startupDialog.css';
 
 const Config = [
     'CONFIG_NRF_MODEM_LIB_TRACE=y',
-    'CONFIG_AT_HOST_LIBRARY = y #(note this is optional)',
+    'CONFIG_AT_HOST_LIBRARY=y #(note this is optional)',
 ];
 
 const StartupDialog = () => {
