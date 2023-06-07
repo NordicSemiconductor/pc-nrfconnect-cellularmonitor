@@ -87,7 +87,10 @@ export default () => {
             <Button
                 className="w-100"
                 variant="secondary"
-                onClick={() => setModalVisible(!modalVisible)}
+                onClick={() => {
+                    setModalVisible(!modalVisible);
+                    setModalStage('programSelection');
+                }}
                 disabled={isTracing}
             >
                 Program device
