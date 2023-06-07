@@ -139,10 +139,16 @@ const traceSlice = createSlice({
             state.uartSerialPort = action.payload;
         },
         setShellParser: (state, action: PayloadAction<ShellParser>) => {
+            if (state.shellParser != null) {
+                state.shellParser.unregister();
+            }
             state.shellParser = action.payload;
         },
         removeShellParser: state => {
-            state.shellParser = null;
+            if (state.shellParser != null) {
+                state.shellParser.unregister();
+                state.shellParser = null;
+            }
         },
         setTraceFormats: (state, action: PayloadAction<TraceFormat[]>) => {
             state.selectedFormats = action.payload;
