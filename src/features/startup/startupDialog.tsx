@@ -98,8 +98,8 @@ const StartupDialog = () => {
                 </b>
                 <p>
                     If you use nRF Connect SDK v2.0.1 or higher, add the
-                    following Kconfig snippets to enable trace and AT commands*
-                    in your application firmware.
+                    following Kconfig snippets to enable trace, and optionally,
+                    AT commands in your application firmware.
                 </p>
                 <pre
                     style={{
@@ -133,8 +133,6 @@ const StartupDialog = () => {
                         <li>Modem firmware version 1.3.1 or higher</li>
                     </ul>
                 </p>
-
-                <p>* Optional</p>
             </div>
         </GenericDialog>
     );
