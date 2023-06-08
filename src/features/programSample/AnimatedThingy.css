@@ -1,0 +1,68 @@
+#animated-thingy {
+    animation: fade_out 8s linear infinite;
+}
+
+#center-circle {
+    fill: var(--color-gray-800);
+    animation: button_press 8s linear infinite;
+}
+
+#on-off-trigger {
+    animation: power_toggle 8s linear infinite;
+}
+
+@keyframes fade_out {
+    0% {
+        opacity: unset;
+    }
+    
+    90% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes button_press {
+    0% {
+        fill: var(--color-gray-800) /* released */
+    }
+    19% {
+        fill: var(--color-gray-800) /* released */
+    }
+    20% {
+        fill: var(--color-red); /* pressed */
+    }
+    49% {
+        fill: var(--color-red); /* pressed */
+    }
+    50% {
+        fill: var(--color-gray-800) /* released */
+    }
+
+}
+
+@keyframes power_toggle {
+    0% {
+        transform: translateX(0px); /* initial/center */
+    }
+    8% {
+        transform: translateX(0px); /* initial/center */
+    }
+    10% {
+        transform: translateX(9px); /* off */
+    }
+    38% {
+        transform: translateX(9px); /* off */
+    }
+    40% {
+        transform: translateX(-7px); /* on */
+    }
+    100% {
+        transform: translateX(-7px); /* on */
+    }
+}

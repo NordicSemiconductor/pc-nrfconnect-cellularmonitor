@@ -30,6 +30,7 @@ import {
     setUartSerialPort,
 } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
+import AnimatedSvg from './AnimatedThingy';
 import {
     is91DK,
     isThingy91,
@@ -48,8 +49,6 @@ import {
     readBundledIndex,
     Sample,
 } from './samples';
-// @ts-expect-error We can import svgs
-import thingySvg from './thingy91_sw1_sw3.svg';
 
 import './ProgramSampleModal.scss';
 
@@ -624,8 +623,8 @@ const MCUBootModeInstructions = () => (
             Press down the center black button (SW3) on the device while
             powering on (SW1).
         </p>
-        <p className="text-center">
-            <img src={thingySvg} alt="Thingy91 diagram" />
+        <p>
+            <AnimatedSvg />
         </p>
     </>
 );
