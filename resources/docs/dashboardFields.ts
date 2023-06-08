@@ -114,12 +114,18 @@ register to.
             commands: ['AT%XTIME'] as const,
         },
         'LOCAL TIME ZONE': {
+            description:
+                'The Nordic-proprietary %XTIME command subscribes unsolicited network time notifications.',
             commands: ['AT%XTIME'] as const,
         },
         'UNIVERSAL TIME': {
+            description:
+                'The Nordic-proprietary %XTIME command subscribes unsolicited network time notifications.',
             commands: ['AT%XTIME'] as const,
         },
         'DAYLIGHT SAVING TIME': {
+            description:
+                'The Nordic-proprietary %XTIME command subscribes unsolicited network time notifications.',
             commands: ['AT%XTIME'] as const,
         },
         'CONNECTION EVALUATION RESULT': {
@@ -146,7 +152,7 @@ register to.
         'PLMN MODE': {
             title: 'Public Land Mobile Network Mode (PLMN mode)',
             description:
-                'Determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: Automatic (the device automatically selects and connects to the best available network based on factors such as signal strength), Manual (the device only connects to a network that has been manually selected by the user), or deregister (the device disconnects from the current network and deregisters from all available networks)',
+                'Determines how a mobile device selects and connects to a cellular network. It can be set to one of three modes: Automatic (the device automatically selects and connects to the best available network based on factors such as signal strength), Manual (the device only connects to a network that has been manually selected by the user), or deregister (the device disconnects from the current network and deregisters from all available networks).',
             commands: ['AT+COPS'] as const,
         },
         'PLMN FORMAT': {
@@ -166,7 +172,8 @@ register to.
                 'The frequency range that a mobile device uses to communicate with the cellular network. Knowing the current band can help ensure that the device is operating on the appropriate network for its location and service provider.',
             commands: ['AT%XCBAND', 'AT%CONEVAL'] as const,
         },
-        'COVERAGE ENHANCEMENT LEVEL (CEL)': {
+        'COVERAGE ENHANCEMENT LEVEL': {
+            title: 'COVERAGE ENHANCEMENT LEVEL (CEL)',
             description:
                 'Indicates the level of Coverage Enhancement (CE) for which the modem is configured. This can help to improve the signal strength and data transfer rates for devices operating in areas with weak signal coverage.',
             commands: ['AT%CONEVAL'] as const,
@@ -247,7 +254,7 @@ register to.
         },
         'FUNCTIONAL MODE': {
             description:
-                'The functional mode of the modem, such as: Power off, Normal, Offline/Flight mode',
+                'The functional mode of the modem, such as: Power off, Normal, Offline/Flight mode.',
             commands: ['AT+CFUN'] as const,
         },
         'TRACE STATE OPERATION': {
@@ -283,6 +290,8 @@ register to.
         },
         IMSI: {
             title: 'International Mobile Subscriber Identity (IMSI)',
+            description:
+                'A unique code, usually 15 digits, used for the identification of a mobile subscriber and consisting of MCC, MNC, and MSIN (Mobile Subscription Identification Number).',
             commands: ['AT+CIMI'] as const,
         },
         MANUFACTURER: {
@@ -290,6 +299,7 @@ register to.
         },
         ICCID: {
             title: 'Integrated Circuit Card Identifier (ICCID)',
+            description: 'The unique serial number of a SIM/UICC card.',
             commands: ['AT%XICCID'] as const,
         },
         PIN: {
@@ -358,6 +368,11 @@ register to.
             commands: ['AT+CEREG', 'AT%XMONITOR'] as const,
         },
         'TAU TRIGGERED': {
+            title: 'Tracking Area Update Triggered',
+            description: `Possible values:
+	                0: User Equipment(UE) is registered on the evaluated cell.Therefore, Tracking Area Update(TAU) is not needed before sending user data.
+	                1: UE is not registered on the evaluated cell.Therefore, the TAU procedure is initiated before sending user data.
+	                255: Not known.The command is Nordic- proprietary, see the documentation at the following link for more information.`,
             commands: ['AT%CONEVAL'] as const,
         },
         'LTE-M REQUESTED EDRX': {
@@ -397,43 +412,64 @@ register to.
     },
     'Connectivity Statistics': {
         'COLLECTING DATA': {
+            description:
+                'The Nordic-proprietary %XCONNSTAT command starts and stops the collecting of connectivity statistics. Values:0 – Stop, 1 – Start',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'SUCCESSFUL SMS TX': {
             title: 'Successful SMS Transmitted',
+            description:
+                'The total number of SMSs successfully transmitted during the collection period.',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'SUCCESSFUL SMS RX': {
             title: 'Successful SMS Received',
+            description:
+                'The total number of SMSs successfully received during the collection period.',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'DATA TRANSMITTED': {
+            description:
+                'The total amount of data (in kilobytes) transmitted during the collection period.',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'DATA RECIEVED': {
+            description:
+                'The total amount of data (in kilobytes) received during the collection period.',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'MAX PACKET SIZE TX OR RX': {
             title: 'Maximum Packet Size Transmitted or Received',
+            description:
+                'The maximum packet size (in bytes) used during the collection period.',
             commands: ['AT%XCONNSTAT'] as const,
         },
         'AVERAGE PACKET SIZE': {
+            description:
+                'The average packet size (in bytes) used during the collection period',
             commands: ['AT%XCONNSTAT'] as const,
         },
     },
     'Packet Domain Network': {
         'ACCESS POINT NAME': {
+            description:
+                'The name of the gateway between the mobile network and the data network.',
             commands: [] as const,
         },
-        'PDN TYPE': {
-            title: 'Packet Domain Network Type',
+        'PDP TYPE': {
+            title: 'Packet Data Protocol Type',
+            description: `The packet transfer protocol used, possible values:
+			        IP: Internet Protocol.
+                    IPV6: Internet Protocol version 6.
+                    IPV4V6: Virtual type of dual IP stack.
+                    Non-IP: Transfer of non-IP data to external packet data network.`,
             commands: ['AT+CGDCONT'] as const,
         },
-        'PDN TYPE RAW': {
-            title: 'Raw Packet Domain Network Type',
+        'PDP TYPE RAW': {
             commands: [] as const,
         },
         'IPV4 ADDRESS': {
+            description: 'The IPV4 address assigned to the mobile device.',
             commands: ['AT+CGDCONT'] as const,
         },
         'IPV6 ADDRESS': {
@@ -444,6 +480,11 @@ register to.
         },
         CONNECTION: {
             commands: [] as const,
+        },
+        'CONTEXT ID': {
+            description:
+                'Specifies a particular Packet Data Protocol (PDP) Context definition. The parameter is local to the device and is used in other PDP context related commands.',
+            commands: ['AT+CGDCONT'] as const,
         },
     },
 };

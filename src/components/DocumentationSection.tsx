@@ -17,6 +17,11 @@ const DocumentationSections = [
     >
         Visit our Infocenter for more documentation about using the app.
     </DocumentationSection>,
+    <DocumentationSection
+        key="credentialManager"
+        linkLabel="Credential Manager"
+        link="https://infocenter.nordicsemi.com/topic/ug_link_monitor/UG/link_monitor/lm_certificate_manager.html"
+    />,
     <StartupDialog key="default-startup-dialog" />,
 ];
 
