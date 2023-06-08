@@ -24,8 +24,8 @@ export default ({
         'ACCESS POINT NAME': {
             value: apn ?? 'Unknown',
         },
-        'PDN TYPE': { value: pdnType ?? 'Unknown' },
-        'PDN TYPE RAW': { value: rawPDNType ?? 'Unknown' },
+        'PDP TYPE': { value: pdnType ?? 'Unknown' },
+        'PDP TYPE RAW': { value: rawPDNType ?? 'Unknown' },
         'IPV4 ADDRESS': { value: ipv4 ?? 'Unknown' },
         'IPV6 ADDRESS': { value: `${ipv6}` ?? 'Unknown' },
         INFO: { value: info ?? 'Unknown' },
