@@ -129,8 +129,16 @@ register to.
             commands: ['AT%XTIME'] as const,
         },
         'CONNECTION EVALUATION RESULT': {
-            description:
-                "Possible result values are: 0='Connection pre-evaluation successful', 1='No Cell Available', 2='UICC not available', 3='Only barred cells available', 4='Busy (for example, GNSS activity)', 5='Aborted because of higher priority operation', 6='Not registered', 7='Unspecified'.",
+            description: `Possible result values are:
+                    0: Connection pre-evaluation successful.
+                    1: No Cell Available.
+                    2: UICC not available.
+                    3: Only barred cells available.
+                    4: Busy (for example, GNSS activity).
+                    5: Aborted because of higher priority operation.
+                    6: Not registered.
+                    7: Unspecified.
+            `,
             commands: ['AT%CONEVAL'] as const,
         },
         'ENERGY ESTIMATE': {
@@ -157,8 +165,14 @@ register to.
         },
         'PLMN FORMAT': {
             title: 'Public Land Mobile Network Format (PLMN format)',
-            description:
-                "Determines how a mobile device displays the name of the connected network. It can be set to one of three formats: long alphanumeric (the device displays the full name of the network), short alphanumeric (the device displays the abbreviated name of the network), or numeric (the device displays the network's MCC and MNC codes).",
+            description: `Determines how a mobile device displays the name of the connected network. It can be set to one of three formats:
+
+                    Long alphanumeric: the device displays the full name of the network.
+
+                    Short alphanumeric: the device displays the abbreviated name of the network.
+
+                    Numeric: the device displays the network's MCC and MNC codes.
+            `,
             commands: ['AT+COPS'] as const,
         },
         'PHYSICAL CELL ID': {
@@ -179,7 +193,7 @@ register to.
             commands: ['AT%CONEVAL'] as const,
         },
         'CONEVAL TX POWER': {
-            title: 'CONEVAL Transmit power)',
+            title: 'CONEVAL Transmit power',
             description: 'The transmit power used by the mobile device.',
             commands: ['AT%CONEVAL'] as const,
         },
@@ -412,8 +426,10 @@ register to.
     },
     'Connectivity Statistics': {
         'COLLECTING DATA': {
-            description:
-                'The Nordic-proprietary %XCONNSTAT command starts and stops the collecting of connectivity statistics. Values:0 – Stop, 1 – Start',
+            description: `The Nordic-proprietary %XCONNSTAT command starts and stops the collecting of connectivity statistics.
+                0: Stop.
+                1: Start.
+            `,
             commands: ['AT%XCONNSTAT'] as const,
         },
         'SUCCESSFUL SMS TX': {
