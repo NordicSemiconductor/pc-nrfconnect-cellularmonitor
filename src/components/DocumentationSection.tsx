@@ -19,7 +19,7 @@ const DocumentationSections = [
     // </DocumentationSection>,
     <DocumentationSection
         key="credentialManager"
-        linkLabel="Credential Manager"
+        linkLabel="Certificate Manager"
         link="https://infocenter.nordicsemi.com/topic/ug_link_monitor/UG/link_monitor/lm_certificate_manager.html"
     >
         Visit our Infocenter for more documentation about using the app.
