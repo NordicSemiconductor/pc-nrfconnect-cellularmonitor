@@ -5,14 +5,10 @@
  */
 
 import { existsSync } from 'fs';
-import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
-import {
-    getAppDataDir,
-    getAppDir,
-} from 'pc-nrfconnect-shared/src/utils/appDirs';
 
 import {
     autoDetectDbRootFolder,
@@ -42,11 +38,13 @@ const SERVER_URL =
 
 // Fallback value added in order to make tests pass.
 // If fallback value, trace files will end up in pc-nrfconnect-launcher
-const DOWNLOAD_FOLDER = join(getAppDataDir() ?? '', 'traceDB');
+const DOWNLOAD_FOLDER = autoDetectDbRootFolder();
 
-let databasesCache: Database[];
+let localDatabasesCache: Database[];
+let remoteDatabasesCache: Database[];
+
 export const getDatabases = async () => {
-    if (!databasesCache) {
+    if (!localDatabasesCache) {
         const json = await readFile(
             join(autoDetectDbRootFolder(), 'config.json'),
             {
@@ -54,11 +52,12 @@ export const getDatabases = async () => {
             }
         );
         const config = JSON.parse(json);
-        databasesCache =
+        localDatabasesCache =
             config.firmwares.devices[0].databases.reverse() as Database[];
     }
 
-    return databasesCache;
+    if (remoteDatabasesCache != null) return remoteDatabasesCache;
+    return localDatabasesCache;
 };
 
 export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
@@ -79,31 +78,35 @@ export const setSelectedTraceDatabaseFromVersion =
         dispatch(setManualDbFilePath(manualDbFile));
     };
 
-export const downloadTraceDatabaseConfig = () =>
-    fetch(`${SERVER_URL}/config.json`, {
-        cache: 'no-cache',
-    })
-        .then(async result => {
-            let config: undefined | TraceConfig;
-            try {
-                config = (await result.json()) as TraceConfig;
-            } catch (err) {
-                logger.error(`Could not parse config.json: ${err}`);
-                return [];
-            }
+export const remoteTraceDatabasesSynch = () =>
+    remoteDatabasesCache != null
+        ? remoteDatabasesCache
+        : fetch(`${SERVER_URL}/config.json`, {
+              cache: 'no-cache',
+          })
+              .then(async result => {
+                  let config: undefined | TraceConfig;
+                  try {
+                      config = (await result.json()) as TraceConfig;
+                  } catch (err) {
+                      logger.error(`Could not parse config.json: ${err}`);
+                      return [];
+                  }
 
-            if (!config) return [];
+                  if (!config) return [];
 
-            await downloadAll(config);
-            return config.firmwares.devices[0].databases;
-        })
-        .catch(err => {
-            logger.error(
-                'Could not update trace databases, because internet request failed. Please check your internet connection, or feel free to ignore this error message.',
-                err
-            );
-            return databasesCache;
-        });
+                  await downloadAll(config);
+
+                  remoteDatabasesCache = config.firmwares.devices[0].databases;
+                  return remoteDatabasesCache;
+              })
+              .catch(err => {
+                  logger.error(
+                      'Could not update trace databases, because internet request failed. Please check your internet connection, or feel free to ignore this error message.',
+                      err
+                  );
+                  return localDatabasesCache;
+              });
 
 const downloadAll = async (config: TraceConfig) => {
     await prepareTargetDirectory();
@@ -111,27 +114,15 @@ const downloadAll = async (config: TraceConfig) => {
     const databases =
         config.firmwares.devices[0].databases.reverse() as Database[];
 
-    return Promise.all(databases.map(db => downloadTraceDatabases(db.path)));
+    return Promise.all(databases.map(db => downloadTraceDatabase(db.path)));
 };
-const downloadTraceDatabases = async (fileName: string) => {
+const downloadTraceDatabase = async (fileName: string) => {
     fileName = fileName.replace(/\${root}/, '');
     const targetFile = join(DOWNLOAD_FOLDER, fileName);
     const url = `${SERVER_URL}/${fileName}`;
 
     if (existsSync(targetFile)) {
         logger.debug(`Trace database already downloaded: ${fileName}`);
-        return;
-    }
-
-    if (existsSync(fullPath(fileName))) {
-        logger.debug(
-            `Trace database ${fileName} was bundled, but has not yet been copied to ${DOWNLOAD_FOLDER}`
-        );
-        try {
-            await copyFile(fullPath(fileName), targetFile);
-        } catch (err) {
-            logger.error(`Could not copy trace database: ${err}`);
-        }
         return;
     }
 
@@ -147,9 +138,6 @@ const downloadTraceDatabases = async (fileName: string) => {
         logger.error(`Could not download trace database: ${err}`);
     }
 };
-
-const fullPath = (file: string) =>
-    join(getAppDir(), 'resources', 'traceDB', file);
 
 const prepareTargetDirectory = async () => {
     if (!existsSync(DOWNLOAD_FOLDER)) {
