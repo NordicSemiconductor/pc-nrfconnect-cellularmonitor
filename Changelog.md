@@ -1,3 +1,9 @@
+## 1.0.1 - 2023-06-13
+
+### Added
+
+-   Modem Firmware v1.3.5, and trace database for v1.3.5.
+
 ## 1.0.0 - 2023-06-08
 
 ### Added
