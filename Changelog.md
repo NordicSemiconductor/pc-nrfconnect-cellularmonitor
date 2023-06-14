@@ -1,5 +1,9 @@
 ## 1.0.2 - 2023-06-14
 
+### Fixed
+
+-   Could not read trace file in v1.0.1.
+
 ### Changed
 
 -   Always ask user which trace database to use when reading from file.
