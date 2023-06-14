@@ -6,11 +6,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, InfoDialog, usageData } from 'pc-nrfconnect-shared';
+import { Button, ConfirmationDialog, usageData } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import {
-    getDetectTraceDbFailed,
     getManualDbFilePath,
     getSerialPort,
     setDetectTraceDbFailed,
@@ -25,38 +24,45 @@ export const LoadTraceFile = () => {
     const [loading, setLoading] = useState(false);
     const [filePath, setFilePath] = useState<string>();
     const hasSerialPort = useSelector(getSerialPort) != null;
-    const detectTraceDbFailed = useSelector(getDetectTraceDbFailed);
     const dbFilePath = useSelector(getManualDbFilePath);
+    const [showTraceDbSelector, setShowTraceDbSelector] = useState(false);
 
     const readRawFile = async () => {
+        // Reset selected trace db
+        dispatch(setManualDbFilePath(undefined));
+
+        // Ask for file
         const path = await askForTraceFile();
         setFilePath(path);
-        if (path) {
-            usageData.sendUsageData(EventAction.READ_TRACE_FILE);
-            dispatch(setManualDbFilePath(undefined));
-            dispatch(readRawTrace(path, setLoading));
-        }
+
+        // Ask for trace db
+        setShowTraceDbSelector(true);
     };
 
     useEffect(() => {
-        if (detectTraceDbFailed && dbFilePath && filePath) {
+        // User selected db and closed the dialog
+        if (!showTraceDbSelector && dbFilePath && filePath) {
             dispatch(setDetectTraceDbFailed(false));
             dispatch(readRawTrace(filePath, setLoading));
+            setFilePath(undefined);
+            usageData.sendUsageData(EventAction.READ_TRACE_FILE);
         }
-    }, [dbFilePath, detectTraceDbFailed, dispatch, filePath]);
+    }, [dbFilePath, showTraceDbSelector, dispatch, filePath]);
 
     return (
         <>
-            <InfoDialog
-                isVisible={detectTraceDbFailed && !dbFilePath}
-                onHide={() => dispatch(setDetectTraceDbFailed(false))}
+            <ConfirmationDialog
+                confirmLabel="Use selected trace database"
+                isVisible={showTraceDbSelector}
+                onConfirm={() => setShowTraceDbSelector(false)}
+                onCancel={() => {
+                    setFilePath(undefined);
+                    setShowTraceDbSelector(false);
+                }}
             >
-                <p>
-                    Could not determine the type of modem trace database used,
-                    please select one
-                </p>
-                <DatabaseFileOverride />
-            </InfoDialog>
+                <p>Please select modem trace database to be used:</p>
+                <DatabaseFileOverride disableAutoSelect />
+            </ConfirmationDialog>
             <Button
                 className={`w-100 ${loading && 'active-animation'}`}
                 onClick={readRawFile}

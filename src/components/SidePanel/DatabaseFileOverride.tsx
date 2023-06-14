@@ -31,6 +31,10 @@ import EventAction from '../../usageDataActions';
 import { askForTraceDbFile } from '../../utils/fileUtils';
 import { deleteDbFilePath, storeManualDbFilePath } from '../../utils/store';
 
+interface Props {
+    disableAutoSelect?: boolean;
+}
+
 const autoSelectItem: DropdownItem = {
     label: 'Autoselect',
     value: 'autoselect',
@@ -41,15 +45,18 @@ const selectFromDiskItem = {
     value: 'select-trace-db',
 };
 
-export default () => {
+export default ({ disableAutoSelect }: Props) => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
     const [databases, setDatabases] = useState<Database[]>([]);
-    const [selectedItem, setSelectedItem] = useState(autoSelectItem);
+    const [selectedItem, setSelectedItem] = useState(
+        disableAutoSelect ? selectFromDiskItem : autoSelectItem
+    );
     const isTracing = useSelector(getIsTracing);
 
+    const autoSelect = disableAutoSelect ? [] : [autoSelectItem];
     const items = [
-        autoSelectItem,
+        ...autoSelect,
         selectFromDiskItem,
         ...databases.map(database => ({
             label: database.version,
