@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, InfoDialog, usageData } from 'pc-nrfconnect-shared';
+import { Button, ConfirmationDialog, usageData } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import {
@@ -51,13 +51,18 @@ export const LoadTraceFile = () => {
 
     return (
         <>
-            <InfoDialog
+            <ConfirmationDialog
+                confirmLabel="Use selected trace database"
                 isVisible={showTraceDbSelector}
-                onHide={() => setShowTraceDbSelector(false)}
+                onConfirm={() => setShowTraceDbSelector(false)}
+                onCancel={() => {
+                    setFilePath(undefined);
+                    setShowTraceDbSelector(false);
+                }}
             >
                 <p>Please select modem trace database to be used:</p>
-                <DatabaseFileOverride />
-            </InfoDialog>
+                <DatabaseFileOverride disableAutoSelect />
+            </ConfirmationDialog>
             <Button
                 className={`w-100 ${loading && 'active-animation'}`}
                 onClick={readRawFile}
