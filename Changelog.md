@@ -1,3 +1,9 @@
+## 1.0.2 - 2023-06-14
+
+### Changed
+
+-   Always ask user which trace database to use when reading from file.
+
 ## 1.0.1 - 2023-06-14
 
 ### Added
