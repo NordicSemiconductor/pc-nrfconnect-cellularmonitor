@@ -42,7 +42,7 @@
             "fw": [
                 {
                     "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.4.zip"
+                    "file": "mfw_nrf9160_1.3.5.zip"
                 },
                 {
                     "type": "Application",
@@ -57,7 +57,7 @@
             "fw": [
                 {
                     "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.4.zip"
+                    "file": "mfw_nrf9160_1.3.5.zip"
                 },
                 {
                     "type": "Application",
@@ -72,7 +72,7 @@
             "fw": [
                 {
                     "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.4.zip"
+                    "file": "mfw_nrf9160_1.3.5.zip"
                 },
                 {
                     "type": "Application",
@@ -87,6 +87,12 @@
             "description": "This is a modem firmware",
             "documentation": "",
             "file": "mfw_nrf9160_1.3.4.zip"
+        },
+        {
+            "title": "Modem Firmware v1.3.5",
+            "description": "This is a modem firmware",
+            "documentation": "",
+            "file": "mfw_nrf9160_1.3.5.zip"
         }
     ]
 }

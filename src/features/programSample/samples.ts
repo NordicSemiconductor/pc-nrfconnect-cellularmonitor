@@ -79,6 +79,7 @@ export const downloadFile = async (fileName: string) => {
     if (existsSync(fullPath(fileName))) {
         logger.info(`Sample is bundled with app, copying.`);
         await copyFile(fullPath(fileName), targetFile);
+        return;
     }
 
     const response = await fetch(url);
