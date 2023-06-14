@@ -6,7 +6,7 @@
 
 ### Changed
 
--   Always ask user which trace database to use when reading from file.
+-   Always ask what trace database to use when reading trace file.
 
 ## 1.0.1 - 2023-06-14
 
