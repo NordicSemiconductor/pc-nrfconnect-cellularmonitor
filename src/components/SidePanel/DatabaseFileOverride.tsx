@@ -18,7 +18,7 @@ import {
 import {
     Database,
     getDatabases,
-    remoteTraceDatabasesSynch,
+    getRemoteDatabases,
     setSelectedTraceDatabaseFromVersion,
 } from '../../features/tracing/traceDatabase';
 import {
@@ -60,9 +60,9 @@ export default () => {
     useEffect(() => {
         getDatabases()
             .then(setDatabases)
-            .then(remoteTraceDatabasesSynch)
+            .then(getRemoteDatabases)
             .then(dbs => {
-                if (dbs.length > 0) {
+                if (dbs != null) {
                     setDatabases(dbs);
                 }
             });

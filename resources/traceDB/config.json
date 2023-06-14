@@ -1,6 +1,6 @@
 {
     "firmwares": {
-        "updated_timestamp": "2023-01-25 10:00:00",
+        "updated_timestamp": "2023-06-23 12:00:00",
         "devices": [
             {
                 "type": "nRF9160",
@@ -124,6 +124,18 @@
                         "sha256": "43eb49138a94261cbff5505bc18b4d8e8b68a39fe255c71b833a96741dba9124",
                         "uuid": "ec4458cc-1df7-41b1-9bee-729ccc5d5d02",
                         "version": "1.3.4-FOTA"
+                    },
+                    {
+                        "path": "${root}mfw_nrf9160_1.3.5_trace-db.json",
+                        "sha256": "946ba89579ab1a44b70fa638c0fdc583042add88be243bebb6471e744bb2ec47",
+                        "uuid": "dc8e7aff-5331-409e-be02-5529dffa5537",
+                        "version": "1.3.5"
+                    },
+                    {
+                        "path": "${root}mfw_nrf9160_1.3.5-FOTA-TEST_trace-db.json",
+                        "sha256": "e0c683edf840ba46c01d674afe09a55f49bd4725a1a0aca36eaac54a38817742",
+                        "uuid": "b388ff53-7acb-4fa0-af23-a82288330738",
+                        "version": "1.3.5-FOTA"
                     }
                 ]
             }

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { existsSync } from 'fs';
-import { mkdir, readFile, writeFile } from 'fs/promises';
+import { existsSync, mkdirSync } from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/src/state';
@@ -35,9 +35,6 @@ export type Database = {
 
 const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/trace-db';
-
-// Fallback value added in order to make tests pass.
-// If fallback value, trace files will end up in pc-nrfconnect-launcher
 const DOWNLOAD_FOLDER = autoDetectDbRootFolder();
 
 let localDatabasesCache: Database[];
@@ -56,8 +53,7 @@ export const getDatabases = async () => {
             config.firmwares.devices[0].databases.reverse() as Database[];
     }
 
-    if (remoteDatabasesCache != null) return remoteDatabasesCache;
-    return localDatabasesCache;
+    return remoteDatabasesCache ?? localDatabasesCache;
 };
 
 export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
@@ -78,41 +74,56 @@ export const setSelectedTraceDatabaseFromVersion =
         dispatch(setManualDbFilePath(manualDbFile));
     };
 
-export const remoteTraceDatabasesSynch = () =>
-    remoteDatabasesCache != null
-        ? remoteDatabasesCache
-        : fetch(`${SERVER_URL}/config.json`, {
-              cache: 'no-cache',
-          })
-              .then(async result => {
-                  let config: undefined | TraceConfig;
-                  try {
-                      config = (await result.json()) as TraceConfig;
-                  } catch (err) {
-                      logger.error(`Could not parse config.json: ${err}`);
-                      return [];
-                  }
+export const getRemoteDatabases = () =>
+    remoteDatabasesCache ?? downloadRemote();
 
-                  if (!config) return [];
+const downloadRemote = async () => {
+    let response: Response;
+    try {
+        response = await fetch(`${SERVER_URL}/config.json`, {
+            cache: 'no-cache',
+        });
+    } catch (err) {
+        logger.error(
+            'Could not download trace databases. Please check your internet connection or feel free to ignore this error message.',
+            err
+        );
+        return;
+    }
 
-                  await downloadAll(config);
+    let config: undefined | TraceConfig;
+    try {
+        config = await response.json();
+    } catch (err) {
+        logger.error(
+            'Could not parse remote trace database configuration file',
+            err
+        );
+        return;
+    }
 
-                  remoteDatabasesCache = config.firmwares.devices[0].databases;
-                  return remoteDatabasesCache;
-              })
-              .catch(err => {
-                  logger.error(
-                      'Could not update trace databases, because internet request failed. Please check your internet connection, or feel free to ignore this error message.',
-                      err
-                  );
-                  return localDatabasesCache;
-              });
+    if (!config) return;
 
-const downloadAll = async (config: TraceConfig) => {
-    await prepareTargetDirectory();
+    try {
+        const writableConfig = JSON.stringify(config);
+        await writeFile(join(DOWNLOAD_FOLDER, 'config.json'), writableConfig);
+    } catch (err) {
+        logger.debug(
+            'traceDatabase: Could not persist remote config.json',
+            err
+        );
+    }
 
-    const databases =
-        config.firmwares.devices[0].databases.reverse() as Database[];
+    await downloadAll(config);
+
+    remoteDatabasesCache = config.firmwares.devices[0].databases;
+    return remoteDatabasesCache;
+};
+
+const downloadAll = (config: TraceConfig) => {
+    prepareTargetDirectory();
+
+    const databases = config.firmwares.devices[0].databases.reverse();
 
     return Promise.all(databases.map(db => downloadTraceDatabase(db.path)));
 };
@@ -129,8 +140,7 @@ const downloadTraceDatabase = async (fileName: string) => {
     logger.info(`Downloading trace database: ${fileName}`);
     try {
         const response = await fetch(url);
-        const blob = await response.blob();
-        const buffer = await blob.arrayBuffer();
+        const buffer = await response.arrayBuffer();
 
         await writeFile(targetFile, Buffer.from(buffer));
         logger.info(`Download successful: ${targetFile}`);
@@ -139,9 +149,9 @@ const downloadTraceDatabase = async (fileName: string) => {
     }
 };
 
-const prepareTargetDirectory = async () => {
+const prepareTargetDirectory = () => {
     if (!existsSync(DOWNLOAD_FOLDER)) {
-        await mkdir(DOWNLOAD_FOLDER);
+        mkdirSync(DOWNLOAD_FOLDER);
         logger.info(`Created directory: ${DOWNLOAD_FOLDER}`);
     }
 };
