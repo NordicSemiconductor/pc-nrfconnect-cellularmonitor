@@ -1,3 +1,9 @@
+## 1.0.3 - Unreleased
+
+### Added
+
+-   Option to auto detect trace database when reading trace file.
+
 ## 1.0.2 - 2023-06-15
 
 ### Fixed
