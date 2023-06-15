@@ -27,8 +27,10 @@ interface TraceConfig {
 }
 
 export type Database = {
-    path: string;
-    sha256: string;
+    database: {
+        path: string;
+        sha256: string;
+    };
     uuid: string;
     version: string;
 };
@@ -61,7 +63,7 @@ export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
     const selectedVersion = versions.find(v => v.version === version);
     const file = join(
         autoDetectDbRootFolder(),
-        selectedVersion?.path.replace(`\${root}`, '') ?? ''
+        selectedVersion?.database?.path.replace(`\${root}`, '') ?? ''
     );
     return file;
 };
@@ -125,7 +127,9 @@ const downloadAll = (config: TraceConfig) => {
 
     const databases = config.firmwares.devices[0].databases.reverse();
 
-    return Promise.all(databases.map(db => downloadTraceDatabase(db.path)));
+    return Promise.all(
+        databases.map(db => downloadTraceDatabase(db.database.path))
+    );
 };
 const downloadTraceDatabase = async (fileName: string) => {
     fileName = fileName.replace(/\${root}/, '');
