@@ -242,6 +242,7 @@ export const readRawTrace =
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
+        const autoDetectTraceDb = getManualDbFilePath(getState()) == null;
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -274,7 +275,12 @@ export const readRawTrace =
                 notifyListeners(packets.splice(0, packets.length));
                 setTimeout(() => tracePacketEvents.emit('stop-process'), 1000);
             },
-            () => {},
+            autoDetectTraceDb
+                ? makeProgressCallback(dispatch, {
+                      detectingTraceDb: true,
+                      displayDetectingTraceDbMessage: false,
+                  })
+                : () => {},
             data => {
                 const { dataReceived } = getState().app.trace;
                 if (!dataReceived) dispatch(setTraceDataReceived(true));

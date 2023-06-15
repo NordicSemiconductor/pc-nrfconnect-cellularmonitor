@@ -4,15 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, ConfirmationDialog, usageData } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import {
-    getManualDbFilePath,
     getSerialPort,
-    setDetectTraceDbFailed,
     setManualDbFilePath,
 } from '../../features/tracing/traceSlice';
 import EventAction from '../../usageDataActions';
@@ -24,7 +22,6 @@ export const LoadTraceFile = () => {
     const [loading, setLoading] = useState(false);
     const [filePath, setFilePath] = useState<string>();
     const hasSerialPort = useSelector(getSerialPort) != null;
-    const dbFilePath = useSelector(getManualDbFilePath);
     const [showTraceDbSelector, setShowTraceDbSelector] = useState(false);
 
     const readRawFile = async () => {
@@ -39,29 +36,30 @@ export const LoadTraceFile = () => {
         setShowTraceDbSelector(true);
     };
 
-    useEffect(() => {
-        // User selected db and closed the dialog
-        if (!showTraceDbSelector && dbFilePath && filePath) {
-            dispatch(setDetectTraceDbFailed(false));
+    const startReadingFile = () => {
+        if (filePath != null) {
             dispatch(readRawTrace(filePath, setLoading));
             setFilePath(undefined);
             usageData.sendUsageData(EventAction.READ_TRACE_FILE);
         }
-    }, [dbFilePath, showTraceDbSelector, dispatch, filePath]);
+    };
 
     return (
         <>
             <ConfirmationDialog
                 confirmLabel="Use selected trace database"
                 isVisible={showTraceDbSelector}
-                onConfirm={() => setShowTraceDbSelector(false)}
+                onConfirm={() => {
+                    setShowTraceDbSelector(false);
+                    startReadingFile();
+                }}
                 onCancel={() => {
                     setFilePath(undefined);
                     setShowTraceDbSelector(false);
                 }}
             >
                 <p>Please select modem trace database to be used:</p>
-                <DatabaseFileOverride disableAutoSelect />
+                <DatabaseFileOverride />
             </ConfirmationDialog>
             <Button
                 className={`w-100 ${loading && 'active-animation'}`}
