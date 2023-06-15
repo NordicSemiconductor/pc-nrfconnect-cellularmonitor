@@ -273,10 +273,7 @@ export const readRawTrace =
                 setLoading(false);
                 setTimeout(() => tracePacketEvents.emit('stop-process'), 1000);
             },
-            makeProgressCallback(dispatch, {
-                detectingTraceDb: true,
-                displayDetectingTraceDbMessage: true,
-            }),
+            () => {},
             data => {
                 const { dataReceived } = getState().app.trace;
                 if (!dataReceived) dispatch(setTraceDataReceived(true));

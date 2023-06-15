@@ -60,6 +60,7 @@ describe('nrfml', () => {
     it('should start converting', () => {
         store.dispatch(convertTraceFile('somePath.mtrace'));
         expect(store.getActions()).toEqual([
+            { payload: true, type: 'trace/setDetectingTraceDb' },
             {
                 payload: {
                     progressConfigs: [],
