@@ -271,6 +271,7 @@ export const readRawTrace =
                     logger.info(`Completed reading trace from ${sourceFile}`);
                 }
                 setLoading(false);
+                notifyListeners(packets.splice(0, packets.length));
                 setTimeout(() => tracePacketEvents.emit('stop-process'), 1000);
             },
             () => {},
