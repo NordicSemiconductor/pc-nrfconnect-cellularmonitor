@@ -45,7 +45,7 @@ let remoteDatabasesCache: DatabaseVersion[];
 export const getDatabases = async () => {
     if (!localDatabasesCache) {
         const json = await readFile(
-            join(autoDetectDbRootFolder(), 'config.json'),
+            join(autoDetectDbRootFolder(), 'config_v2.json'),
             {
                 encoding: 'utf-8',
             }
@@ -82,7 +82,7 @@ export const getRemoteDatabases = () =>
 const downloadRemote = async () => {
     let response: Response;
     try {
-        response = await fetch(`${SERVER_URL}/config.json`, {
+        response = await fetch(`${SERVER_URL}/config_v2.json`, {
             cache: 'no-cache',
         });
     } catch (err) {
@@ -108,7 +108,10 @@ const downloadRemote = async () => {
 
     try {
         const writableConfig = JSON.stringify(config);
-        await writeFile(join(DOWNLOAD_FOLDER, 'config.json'), writableConfig);
+        await writeFile(
+            join(DOWNLOAD_FOLDER, 'config_v2.json'),
+            writableConfig
+        );
     } catch (err) {
         logger.debug(
             'traceDatabase: Could not persist remote config.json',

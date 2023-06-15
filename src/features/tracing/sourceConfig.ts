@@ -32,7 +32,7 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
                   root: autoDetectDbRootURL(),
                   update_cache: true,
                   // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
-                  trace_db_locations: ['${root}/config.json'],
+                  trace_db_locations: ['${root}/config_v2.json'],
               },
           };
 
