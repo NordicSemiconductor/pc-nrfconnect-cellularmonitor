@@ -21,12 +21,12 @@ interface TraceConfig {
         updated_timestamp: string;
         devices: {
             type: string;
-            databases: Database[];
+            versions: DatabaseVersion[];
         }[];
     };
 }
 
-export type Database = {
+export type DatabaseVersion = {
     database: {
         path: string;
         sha256: string;
@@ -39,8 +39,8 @@ const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/trace-db';
 const DOWNLOAD_FOLDER = autoDetectDbRootFolder();
 
-let localDatabasesCache: Database[];
-let remoteDatabasesCache: Database[];
+let localDatabasesCache: DatabaseVersion[];
+let remoteDatabasesCache: DatabaseVersion[];
 
 export const getDatabases = async () => {
     if (!localDatabasesCache) {
@@ -52,7 +52,7 @@ export const getDatabases = async () => {
         );
         const config = JSON.parse(json);
         localDatabasesCache =
-            config.firmwares.devices[0].databases.reverse() as Database[];
+            config.firmwares.devices[0].versions.reverse() as DatabaseVersion[];
     }
 
     return remoteDatabasesCache ?? localDatabasesCache;
@@ -118,14 +118,14 @@ const downloadRemote = async () => {
 
     await downloadAll(config);
 
-    remoteDatabasesCache = config.firmwares.devices[0].databases;
+    remoteDatabasesCache = config.firmwares.devices[0].versions;
     return remoteDatabasesCache;
 };
 
 const downloadAll = (config: TraceConfig) => {
     prepareTargetDirectory();
 
-    const databases = config.firmwares.devices[0].databases.reverse();
+    const databases = config.firmwares.devices[0].versions.reverse();
 
     return Promise.all(
         databases.map(db => downloadTraceDatabase(db.database.path))
