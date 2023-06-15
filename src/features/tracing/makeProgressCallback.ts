@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import nrfml, {
-    ProgressCallback,
-} from '@nordicsemiconductor/nrf-monitor-lib-js';
+import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 import { logger } from 'pc-nrfconnect-shared';
 import { Dispatch } from 'redux';
 
@@ -18,36 +16,20 @@ import {
 
 type MetaField = nrfml.MetaFields[keyof nrfml.MetaFields];
 
-const noop: ProgressCallback = () => {};
-
-const makeDetectModemFwUuid = () => {
-    let detectedModemFwUuid: MetaField;
-
-    return (progress: nrfml.Progress) => {
-        const reportedModemFwUuid = progress.meta?.modem_db_uuid;
-
-        if (
-            detectedModemFwUuid == null &&
-            detectedModemFwUuid !== reportedModemFwUuid
-        ) {
-            detectedModemFwUuid = reportedModemFwUuid;
-            logger.info(
-                `Detected modem firmware with UUID ${detectedModemFwUuid}`
-            );
-        }
-    };
-};
-
 const makeDetectTraceDB = (dispatch: Dispatch) => {
     let detectedTraceDB: MetaField;
 
     return (progress: nrfml.Progress) => {
-        const reportedTraceDB = progress.meta?.modem_db_path;
+        const reportedTraceDB = progress.meta?.modem_db_path as string;
 
-        if (detectedTraceDB == null && detectedTraceDB !== reportedTraceDB) {
-            detectedTraceDB = reportedTraceDB;
+        if (
+            detectedTraceDB == null &&
+            reportedTraceDB !== '' &&
+            detectedTraceDB !== reportedTraceDB
+        ) {
+            logger.info(`Detected trace DB: ${reportedTraceDB}`);
             dispatch(setManualDbFilePath(reportedTraceDB as string));
-            logger.info(`Using trace DB ${detectedTraceDB}`);
+            return reportedTraceDB;
         }
     };
 };
@@ -62,13 +44,13 @@ export default (
         displayDetectingTraceDbMessage: boolean;
     }
 ) => {
-    const detectModemFwUuid = detectingTraceDb ? makeDetectModemFwUuid() : noop;
-    const detectTraceDB = detectingTraceDb ? makeDetectTraceDB(dispatch) : noop;
+    const detectTraceDB = detectingTraceDb ? makeDetectTraceDB(dispatch) : null;
 
     if (displayDetectingTraceDbMessage) {
         dispatch(setDetectingTraceDb(true));
     }
 
+    let traceDB: string | undefined;
     let lastUpdate = Date.now();
     let pendingUpdate: NodeJS.Timeout;
     let lookingForDb = displayDetectingTraceDbMessage;
@@ -94,12 +76,17 @@ export default (
     };
 
     return (progress: nrfml.Progress) => {
-        if (lookingForDb) {
-            dispatch(setDetectingTraceDb(false));
+        if (traceDB == null && detectTraceDB != null) {
+            traceDB = detectTraceDB(progress);
+
+            if (traceDB != null) {
+                // Stop looking for trace DB
+                if (lookingForDb) {
+                    dispatch(setDetectingTraceDb(false));
+                    lookingForDb = false;
+                }
+            }
         }
-        lookingForDb = false;
-        detectModemFwUuid(progress);
-        detectTraceDB(progress);
 
         if (Date.now() - lastUpdate > 200) {
             update(progress);

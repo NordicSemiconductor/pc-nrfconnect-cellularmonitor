@@ -16,7 +16,7 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import {
-    Database,
+    DatabaseVersion,
     getDatabases,
     getRemoteDatabases,
     setSelectedTraceDatabaseFromVersion,
@@ -48,7 +48,7 @@ const selectFromDiskItem = {
 export default ({ disableAutoSelect }: Props) => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
-    const [databases, setDatabases] = useState<Database[]>([]);
+    const [databases, setDatabases] = useState<DatabaseVersion[]>([]);
     const [selectedItem, setSelectedItem] = useState(
         disableAutoSelect ? selectFromDiskItem : autoSelectItem
     );
@@ -79,7 +79,7 @@ export default ({ disableAutoSelect }: Props) => {
         const selectedDatabase = databases.find(file =>
             manualDbFilePath?.includes(
                 // eslint-disable-next-line no-template-curly-in-string
-                file.path.replace('${root}', '')
+                file.database.path.replace('${root}', '')
             )
         );
         if (selectedDatabase) {

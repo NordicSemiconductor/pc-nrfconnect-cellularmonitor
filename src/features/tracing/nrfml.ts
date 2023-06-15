@@ -104,7 +104,7 @@ export const convertTraceFile =
                 },
                 makeProgressCallback(dispatch, {
                     detectingTraceDb: isDetectingTraceDb,
-                    displayDetectingTraceDbMessage: false,
+                    displayDetectingTraceDbMessage: true,
                 }),
                 () => {}
             );

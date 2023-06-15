@@ -21,14 +21,16 @@ interface TraceConfig {
         updated_timestamp: string;
         devices: {
             type: string;
-            databases: Database[];
+            versions: DatabaseVersion[];
         }[];
     };
 }
 
-export type Database = {
-    path: string;
-    sha256: string;
+export type DatabaseVersion = {
+    database: {
+        path: string;
+        sha256: string;
+    };
     uuid: string;
     version: string;
 };
@@ -37,20 +39,20 @@ const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/trace-db';
 const DOWNLOAD_FOLDER = autoDetectDbRootFolder();
 
-let localDatabasesCache: Database[];
-let remoteDatabasesCache: Database[];
+let localDatabasesCache: DatabaseVersion[];
+let remoteDatabasesCache: DatabaseVersion[];
 
 export const getDatabases = async () => {
     if (!localDatabasesCache) {
         const json = await readFile(
-            join(autoDetectDbRootFolder(), 'config.json'),
+            join(autoDetectDbRootFolder(), 'config_v2.json'),
             {
                 encoding: 'utf-8',
             }
         );
         const config = JSON.parse(json);
         localDatabasesCache =
-            config.firmwares.devices[0].databases.reverse() as Database[];
+            config.firmwares.devices[0].versions.reverse() as DatabaseVersion[];
     }
 
     return remoteDatabasesCache ?? localDatabasesCache;
@@ -61,7 +63,7 @@ export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
     const selectedVersion = versions.find(v => v.version === version);
     const file = join(
         autoDetectDbRootFolder(),
-        selectedVersion?.path.replace(`\${root}`, '') ?? ''
+        selectedVersion?.database?.path.replace(`\${root}`, '') ?? ''
     );
     return file;
 };
@@ -80,7 +82,7 @@ export const getRemoteDatabases = () =>
 const downloadRemote = async () => {
     let response: Response;
     try {
-        response = await fetch(`${SERVER_URL}/config.json`, {
+        response = await fetch(`${SERVER_URL}/config_v2.json`, {
             cache: 'no-cache',
         });
     } catch (err) {
@@ -106,7 +108,10 @@ const downloadRemote = async () => {
 
     try {
         const writableConfig = JSON.stringify(config);
-        await writeFile(join(DOWNLOAD_FOLDER, 'config.json'), writableConfig);
+        await writeFile(
+            join(DOWNLOAD_FOLDER, 'config_v2.json'),
+            writableConfig
+        );
     } catch (err) {
         logger.debug(
             'traceDatabase: Could not persist remote config.json',
@@ -116,16 +121,18 @@ const downloadRemote = async () => {
 
     await downloadAll(config);
 
-    remoteDatabasesCache = config.firmwares.devices[0].databases;
+    remoteDatabasesCache = config.firmwares.devices[0].versions;
     return remoteDatabasesCache;
 };
 
 const downloadAll = (config: TraceConfig) => {
     prepareTargetDirectory();
 
-    const databases = config.firmwares.devices[0].databases.reverse();
+    const databases = config.firmwares.devices[0].versions.reverse();
 
-    return Promise.all(databases.map(db => downloadTraceDatabase(db.path)));
+    return Promise.all(
+        databases.map(db => downloadTraceDatabase(db.database.path))
+    );
 };
 const downloadTraceDatabase = async (fileName: string) => {
     fileName = fileName.replace(/\${root}/, '');
