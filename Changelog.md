@@ -4,6 +4,11 @@
 
 -   Option to auto detect trace database when reading trace file.
 
+### Fixed
+
+-   Programming sample on windows sometimes crashed when the target folder was
+    missing.
+
 ## 1.0.2 - 2023-06-15
 
 ### Fixed

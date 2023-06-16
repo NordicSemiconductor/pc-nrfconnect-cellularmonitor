@@ -6,7 +6,7 @@
 
 import { existsSync } from 'fs';
 import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { getAppDataDir, getAppDir, logger } from 'pc-nrfconnect-shared';
 
 export interface Firmware {
@@ -62,8 +62,13 @@ export const downloadSampleIndex = () =>
 export const downloadModemFirmware = (modemFirmware: ModemFirmware) =>
     downloadFile(modemFirmware.file);
 
-export const downloadSample = (sample: Sample) =>
+export const downloadSample = async (sample: Sample) => {
+    if (!existsSync(DOWNLOAD_FOLDER)) {
+        await mkdir(DOWNLOAD_FOLDER);
+    }
+
     Promise.all(sample.fw.map(fw => downloadFile(fw.file)));
+};
 
 export const downloadFile = async (fileName: string) => {
     const targetFile = downloadedFilePath(fileName);
@@ -71,10 +76,6 @@ export const downloadFile = async (fileName: string) => {
 
     if (existsSync(targetFile)) return;
     logger.info(`Sample not found locally, downloading ${url}`);
-
-    if (!existsSync(dirname(targetFile))) {
-        await mkdir(dirname(targetFile));
-    }
 
     if (existsSync(fullPath(fileName))) {
         logger.info(`Sample is bundled with app, copying.`);
