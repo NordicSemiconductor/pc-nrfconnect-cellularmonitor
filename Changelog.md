@@ -6,8 +6,7 @@
 
 ### Fixed
 
--   Programming sample on windows sometimes crashed when the target folder was
-    missing.
+-   Programming sample could fail the first time programming an application.
 
 ## 1.0.2 - 2023-06-15
 
