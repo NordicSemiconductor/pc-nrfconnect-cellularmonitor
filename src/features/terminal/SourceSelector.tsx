@@ -82,7 +82,7 @@ export default () => {
     return (
         <>
             <Dropdown
-                label="Terminal Serial Port"
+                label="Terminal serial port"
                 onSelect={item => {
                     if (item !== selectedSerialPortItem) {
                         setSelectedSerialPortItem(item);
