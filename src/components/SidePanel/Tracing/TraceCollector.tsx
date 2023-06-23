@@ -7,12 +7,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getSerialPort } from '../../../features/tracing/traceSlice';
+import { getTraceSerialPort } from '../../../features/tracing/traceSlice';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
 import StartStopTrace from './StartStopTrace';
 
 export default () => {
-    const selectedSerialPort = useSelector(getSerialPort);
+    const selectedSerialPort = useSelector(getTraceSerialPort);
 
     if (!selectedSerialPort) {
         return null;

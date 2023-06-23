@@ -8,12 +8,12 @@ import { existsSync, mkdirSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { logger } from 'pc-nrfconnect-shared';
-import { TDispatch } from 'pc-nrfconnect-shared/src/state';
 
 import {
     autoDetectDbRootFolder,
     storeManualDbFilePath,
 } from '../../utils/store';
+import { TDispatch } from '../../utils/thunk';
 import { setManualDbFilePath } from './traceSlice';
 
 interface TraceConfig {

@@ -18,7 +18,10 @@ import { homedir } from 'os';
 import { logger, SerialPort } from 'pc-nrfconnect-shared';
 
 import { ShellParser } from '../shell/shellParser';
-import { getShellParser, getUartSerialPort } from '../tracing/traceSlice';
+import {
+    getShellParser,
+    getTerminalSerialPort,
+} from '../terminal/serialPortSlice';
 import { sendSingleCommand } from '../tracingEvents/at/sendCommand';
 
 const deleteTLSCredential = async (
@@ -122,7 +125,7 @@ export default ({ active }: { active: boolean }) => {
     const [secTag, setSecTag] = useState(NRF_CLOUD_TAG);
     const [showWarning, setShowWarning] = useState(false);
 
-    const uartPort = useSelector(getUartSerialPort);
+    const uartPort = useSelector(getTerminalSerialPort);
     const shellParser = useSelector(getShellParser);
 
     function parseSecTag(secTagAsString: string) {

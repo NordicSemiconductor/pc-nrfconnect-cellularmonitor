@@ -16,11 +16,11 @@ import {
 } from 'pc-nrfconnect-shared';
 
 import EventAction from '../../usageDataActions';
-import { getUartSerialPort } from '../tracing/traceSlice';
+import { getTerminalSerialPort } from './serialPortSlice';
 
 export const OpenSerialTerminal = () => {
     const device = useSelector(selectedDevice);
-    const selectedUartSerialPort = useSelector(getUartSerialPort);
+    const selectedUartSerialPort = useSelector(getTerminalSerialPort);
     const [appInstalled, setAppInstalled] = useState(false);
 
     useEffect(() => {

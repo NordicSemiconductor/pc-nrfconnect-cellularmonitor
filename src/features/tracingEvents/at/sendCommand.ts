@@ -10,9 +10,9 @@ import { TAction } from '../../../utils/thunk';
 import { ShellParser } from '../../shell/shellParser';
 import {
     getShellParser,
-    getUartSerialPort,
-    setIsSendingATCommands,
-} from '../../tracing/traceSlice';
+    getTerminalSerialPort,
+} from '../../terminal/serialPortSlice';
+import { setIsSendingATCommands } from '../../tracing/traceSlice';
 
 const decoder = new TextDecoder();
 const queue: string[] = [];
@@ -22,7 +22,7 @@ export const clearATQueue = () => queue.splice(0, queue.length);
 export const sendAT =
     (commands: string | string[]): TAction =>
     async (dispatch, getState) => {
-        const uartSerialPort = getUartSerialPort(getState());
+        const uartSerialPort = getTerminalSerialPort(getState());
         const shellParser = getShellParser(getState());
 
         const commandList = Array.isArray(commands) ? commands : [commands];

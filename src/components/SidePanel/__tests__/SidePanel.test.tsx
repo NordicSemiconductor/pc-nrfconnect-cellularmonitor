@@ -10,8 +10,8 @@ import { enableFetchMocks } from 'jest-fetch-mock';
 import { TraceFormat } from '../../../features/tracing/formats';
 import {
     setAvailableSerialPorts,
-    setSerialPort,
     setTraceFormats,
+    setTraceSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
     fireEvent,
@@ -68,7 +68,7 @@ jest.mock('electron', () => ({
 
 const serialPortActions = (formats: TraceFormat[] = []) => [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
-    setSerialPort('COM1'),
+    setTraceSerialPort('COM1'),
     setTraceFormats(formats),
 ];
 

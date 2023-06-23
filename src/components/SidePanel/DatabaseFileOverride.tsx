@@ -114,7 +114,7 @@ export default () => {
     return (
         <Dropdown
             disabled={isTracing}
-            label="Trace database"
+            label="Modem trace database"
             items={items}
             onSelect={onSelect}
             selectedItem={selectedItem}

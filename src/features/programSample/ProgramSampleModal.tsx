@@ -22,13 +22,10 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
+import { setTerminalSerialPort } from '../terminal/serialPortSlice';
 import { autoSetUartSerialPort } from '../terminal/uartSerialPort';
 import { resetTraceEvents } from '../tracing/tracePacketEvents';
-import {
-    getIsTracing,
-    resetTraceInfo,
-    setUartSerialPort,
-} from '../tracing/traceSlice';
+import { getIsTracing, resetTraceInfo } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import {
     is91DK,
@@ -345,7 +342,7 @@ const ProgramSample = ({
 
                         try {
                             await downloadSample(sample);
-                            dispatch(setUartSerialPort(null));
+                            dispatch(setTerminalSerialPort(null));
 
                             await program(
                                 device,
@@ -561,7 +558,7 @@ const ProgramModem = ({
 
                             try {
                                 await downloadModemFirmware(selectedMfw);
-                                dispatch(setUartSerialPort(null));
+                                dispatch(setTerminalSerialPort(null));
 
                                 await programModemFirmware(
                                     device,

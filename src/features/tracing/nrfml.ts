@@ -19,6 +19,10 @@ import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
 import { is91DK } from '../programSample/programSample';
+import {
+    getShellParser,
+    getTerminalSerialPort as getUartSerialPort,
+} from '../terminal/serialPortSlice';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -35,10 +39,8 @@ import {
 import {
     getManualDbFilePath,
     getResetDevice,
-    getSerialPort,
-    getShellParser,
     getTaskId,
-    getUartSerialPort,
+    getTraceSerialPort,
     setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -125,7 +127,7 @@ export const startTrace =
         const state = getState();
         const uartPort = getUartSerialPort(state);
         const shellParser = getShellParser(state);
-        const tracePort = getSerialPort(state);
+        const tracePort = getTraceSerialPort(state);
         const resetDevice = getResetDevice(state);
 
         if (!tracePort) {

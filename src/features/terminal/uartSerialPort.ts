@@ -15,22 +15,26 @@ import {
     xTerminalShellParserWrapper,
 } from '../shell/shellParser';
 import {
-    removeShellParser,
     setDetectedAtHostLibrary,
-    setShellParser,
     setShowConflictingSettingsDialog,
-    setUartSerialPort,
 } from '../tracing/traceSlice';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
+import {
+    removeShellParser,
+    setShellParser,
+    setTerminalSerialPort,
+} from './serialPortSlice';
+
+const LOGGER_PREFIX = 'Terminal Serial Port:';
 
 export const connectToSerialPort = async (
     dispatch: Dispatch,
     path: string,
     overwrite = false
 ) => {
-    let port;
+    let createdSerialPort;
     try {
-        port = await createSerialPort(
+        createdSerialPort = await createSerialPort(
             {
                 path,
                 baudRate: 115200,
@@ -43,12 +47,14 @@ export const connectToSerialPort = async (
             dispatch(setShowConflictingSettingsDialog(true));
         } else {
             logger.error(
-                'Port could not be opened. Verify it is not used by some other applications'
+                `${LOGGER_PREFIX} Port could not be opened. Verify it is not used by some other applications`
             );
         }
     }
 
-    if (!port) return;
+    if (!createdSerialPort) return;
+
+    dispatch(setTerminalSerialPort(createdSerialPort));
 
     /*
          Some applications that run Line Mode have an issue, where if you power-cycle the device,
@@ -57,42 +63,58 @@ export const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await raceTimeout(testIfShellMode(port));
+    const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort));
+    // If race times out, then we assume AT Host is not detected on device.
+    const detectedAtHostLibrary = isShellMode !== undefined;
 
-    if (isShellMode === undefined) {
-        dispatch(setDetectedAtHostLibrary(false));
-    } else {
+    if (detectedAtHostLibrary) {
         dispatch(setDetectedAtHostLibrary(true));
+
         if (isShellMode) {
-            const shellParser = await hookModemToShellParser(
-                port,
-                xTerminalShellParserWrapper(
-                    new Terminal({ allowProposedApi: true, cols: 999 })
+            logger.debug(
+                `${LOGGER_PREFIX} Detected AT Host Library: Device is in shell mode`
+            );
+            dispatch(
+                setShellParser(
+                    await hookModemToShellParser(
+                        createdSerialPort,
+                        xTerminalShellParserWrapper(
+                            new Terminal({ allowProposedApi: true, cols: 999 })
+                        )
+                    )
                 )
             );
-            dispatch(setShellParser(shellParser));
         } else {
+            logger.debug(
+                `${LOGGER_PREFIX} Detected AT Host Library: Device is in Line mode`
+            );
             dispatch(removeShellParser());
         }
+    } else {
+        logger.debug(`${LOGGER_PREFIX} Could not detect AT Host library`);
+        dispatch(setDetectedAtHostLibrary(false));
+        dispatch(removeShellParser());
     }
-
-    return port;
 };
 
 export const autoSetUartSerialPort =
     (device: Device): TAction =>
-    async dispatch => {
-        const port = device.serialPorts?.at(0);
-        if (port && port.comName) {
-            const uartSerialPort = await connectToSerialPort(
-                dispatch,
-                port.comName
+    dispatch => {
+        if (!device.serialPorts || device.serialPorts.length < 2) {
+            logger.debug(
+                `${LOGGER_PREFIX} Fewer than two serial ports exposed, and will therefore not auto-connect.`
             );
-
-            if (uartSerialPort) {
-                dispatch(setUartSerialPort(uartSerialPort));
-            }
+            return;
+        }
+        const serialPortPath = device.serialPorts?.at(0)?.comName;
+        if (serialPortPath) {
+            connectToSerialPort(dispatch, serialPortPath);
+            logger.debug(
+                `${LOGGER_PREFIX} Will attempt to auto-connect to serial port ${serialPortPath}`
+            );
         } else {
-            logger.error('Could not identify serial port');
+            logger.error(
+                `${LOGGER_PREFIX} Serial port found, but could not identify serial port path`
+            );
         }
     };

@@ -10,7 +10,7 @@ import { Button, ConfirmationDialog, usageData } from 'pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import {
-    getSerialPort,
+    getTraceSerialPort,
     setManualDbFilePath,
 } from '../../features/tracing/traceSlice';
 import EventAction from '../../usageDataActions';
@@ -21,7 +21,7 @@ export const LoadTraceFile = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [filePath, setFilePath] = useState<string>();
-    const hasSerialPort = useSelector(getSerialPort) != null;
+    const hasSerialPort = useSelector(getTraceSerialPort) != null;
     const [showTraceDbSelector, setShowTraceDbSelector] = useState(false);
 
     const readRawFile = async () => {

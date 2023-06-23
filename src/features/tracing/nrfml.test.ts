@@ -40,10 +40,14 @@ const mockStore = getMockStore();
 const initialState = {
     app: {
         trace: {
+            traceSerialPort: 'COM3',
             traceData: [],
-            serialPort: 'COM1',
         },
         wireshark: {},
+        serialPort: {
+            terminalSerialPort: null,
+            shellParser: null,
+        },
     },
     device: {
         devices: {},
