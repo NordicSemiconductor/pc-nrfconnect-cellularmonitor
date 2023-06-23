@@ -8,11 +8,8 @@ import { logger, SerialPort } from 'pc-nrfconnect-shared';
 
 import { TAction } from '../../../utils/thunk';
 import { ShellParser } from '../../shell/shellParser';
-import {
-    getShellParser,
-    getUartSerialPort,
-    setIsSendingATCommands,
-} from '../../tracing/traceSlice';
+import { getSerialPort, getShellParser } from '../../terminal/serialPortSlice';
+import { setIsSendingATCommands } from '../../tracing/traceSlice';
 
 const decoder = new TextDecoder();
 const queue: string[] = [];
@@ -22,7 +19,7 @@ export const clearATQueue = () => queue.splice(0, queue.length);
 export const sendAT =
     (commands: string | string[]): TAction =>
     async (dispatch, getState) => {
-        const uartSerialPort = getUartSerialPort(getState());
+        const uartSerialPort = getSerialPort(getState());
         const shellParser = getShellParser(getState());
 
         const commandList = Array.isArray(commands) ? commands : [commands];

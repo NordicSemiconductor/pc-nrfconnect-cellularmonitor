@@ -20,18 +20,23 @@ import { SerialPortOpenOptions } from 'serialport';
 import {
     getAvailableSerialPorts,
     getShowConflictingSettingsDialog,
-    getUartSerialPort,
     setShowConflictingSettingsDialog,
-    setUartSerialPort,
 } from '../tracing/traceSlice';
+import {
+    closeSerialPort,
+    getSerialPort,
+    setSerialPort,
+} from './serialPortSlice';
 import { connectToSerialPort } from './uartSerialPort';
+
+const DESELECT_DEVICE = { label: 'Deselect', value: '' };
 
 export default () => {
     const dispatch = useDispatch();
     const [serialPortItems, setSerialPortItems] = useState<DropdownItem[]>([]);
     const device = useSelector(selectedDevice);
     const availablePorts = useSelector(getAvailableSerialPorts);
-    const selectedUartSerialPort = useSelector(getUartSerialPort);
+    const selectedUartSerialPort = useSelector(getSerialPort);
     const showConflictingSettingsDialog = useSelector(
         getShowConflictingSettingsDialog
     );
@@ -43,13 +48,16 @@ export default () => {
     >();
 
     useEffect(() => {
-        const items =
-            availablePorts.length > 0
-                ? availablePorts.map(portPath => ({
-                      label: truncateMiddle(portPath, 20, 8),
-                      value: portPath,
-                  }))
-                : [{ label: 'Not connected', value: '' }];
+        let items: DropdownItem[] = [];
+        if (availablePorts.length > 0) {
+            items = availablePorts.map(portPath => ({
+                label: truncateMiddle(portPath, 20, 8),
+                value: portPath,
+            }));
+            items.push(DESELECT_DEVICE);
+        } else {
+            items = [{ label: 'Not connected', value: '' }];
+        }
         setSerialPortItems(items);
 
         const selectedPath = selectedUartSerialPort?.path || '';
@@ -61,11 +69,11 @@ export default () => {
     }, [availablePorts, selectedUartSerialPort?.path]);
 
     const connectToSerialPortWrapper = (path: string, overwrite = false) => {
-        connectToSerialPort(dispatch, path, overwrite).then(uartSerialPort => {
-            if (uartSerialPort) {
-                dispatch(setUartSerialPort(uartSerialPort));
-            }
-        });
+        if (path === '') {
+            dispatch(closeSerialPort());
+            return;
+        }
+        connectToSerialPort(dispatch, path, overwrite);
     };
 
     if (!device || !selectedSerialPortItem) {
@@ -102,7 +110,7 @@ export default () => {
                     setSerialPortCallback={async (
                         newSerialPort: SerialPort
                     ) => {
-                        dispatch(setUartSerialPort(newSerialPort));
+                        dispatch(setSerialPort(newSerialPort));
                         const options = await newSerialPort.getOptions();
                         setSelectedSerialPortOptions(options);
                     }}

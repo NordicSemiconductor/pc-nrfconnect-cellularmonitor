@@ -16,17 +16,19 @@ import {
     logger,
 } from 'pc-nrfconnect-shared';
 
+import {
+    removeShellParser,
+    setSerialPort as setUartSerialPort,
+} from '../features/terminal/serialPortSlice';
 import { autoSetUartSerialPort } from '../features/terminal/uartSerialPort';
 import { stopTrace } from '../features/tracing/nrfml';
 import { resetTraceEvents } from '../features/tracing/tracePacketEvents';
 import {
-    removeShellParser,
     resetManualDbFilePath,
     resetTraceInfo,
     setAvailableSerialPorts,
     setDetectingTraceDb,
     setSerialPort,
-    setUartSerialPort,
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';

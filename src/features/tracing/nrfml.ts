@@ -19,6 +19,10 @@ import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
 import { is91DK } from '../programSample/programSample';
+import {
+    getSerialPort as getUartSerialPort,
+    getShellParser,
+} from '../terminal/serialPortSlice';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
@@ -36,9 +40,7 @@ import {
     getManualDbFilePath,
     getResetDevice,
     getSerialPort,
-    getShellParser,
     getTaskId,
-    getUartSerialPort,
     setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,

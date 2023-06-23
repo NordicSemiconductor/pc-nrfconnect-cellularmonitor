@@ -5,7 +5,6 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SerialPort } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import {
@@ -15,7 +14,6 @@ import {
     setTraceFormats as storeTraceFormats,
     storeResetDevice,
 } from '../../utils/store';
-import { ShellParser } from '../shell/shellParser';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 
@@ -33,8 +31,6 @@ interface TraceState {
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
-    readonly uartSerialPort: SerialPort | null;
-    readonly shellParser: ShellParser | null;
     selectedFormats: TraceFormat[];
     showConflictingSettingsDialog: boolean;
     // From Device config.prj --> AT_HOST=y
@@ -54,8 +50,6 @@ const initialState = (): TraceState => ({
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
-    uartSerialPort: null,
-    shellParser: null,
     selectedFormats: restoreTraceFormats(),
     showConflictingSettingsDialog: false,
     detectedAtHostLibrary: false,
@@ -128,28 +122,6 @@ const traceSlice = createSlice({
         setDetectingTraceDb: (state, action: PayloadAction<boolean>) => {
             state.detectingTraceDb = action.payload;
         },
-        setUartSerialPort: (
-            state,
-            action: PayloadAction<SerialPort | null>
-        ) => {
-            if (state.uartSerialPort?.path === action.payload?.path) return;
-            if (state.uartSerialPort != null) {
-                state.uartSerialPort.close();
-            }
-            state.uartSerialPort = action.payload;
-        },
-        setShellParser: (state, action: PayloadAction<ShellParser>) => {
-            if (state.shellParser != null) {
-                state.shellParser.unregister();
-            }
-            state.shellParser = action.payload;
-        },
-        removeShellParser: state => {
-            if (state.shellParser != null) {
-                state.shellParser.unregister();
-                state.shellParser = null;
-            }
-        },
         setTraceFormats: (state, action: PayloadAction<TraceFormat[]>) => {
             state.selectedFormats = action.payload;
             storeTraceFormats(action.payload);
@@ -200,11 +172,6 @@ export const getSelectedSerialNumber = (state: RootState) =>
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
 
-export const getUartSerialPort = (state: RootState) =>
-    state.app.trace.uartSerialPort;
-
-export const getShellParser = (state: RootState) => state.app.trace.shellParser;
-
 export const getTraceFormats = (state: RootState) =>
     state.app.trace.selectedFormats;
 
@@ -237,9 +204,6 @@ export const {
     setManualDbFilePath,
     resetManualDbFilePath,
     setDetectingTraceDb,
-    setUartSerialPort,
-    setShellParser,
-    removeShellParser,
     setTraceFormats,
     setShowConflictingSettingsDialog,
     setDetectedAtHostLibrary,

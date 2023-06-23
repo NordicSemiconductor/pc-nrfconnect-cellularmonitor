@@ -10,6 +10,7 @@ import { combineReducers } from 'redux';
 import chartSlice from './features/dashboard/Chart/chartSlice';
 import modemReducer from './features/modem/modemSlice';
 import startupReducer from './features/startup/startupSlice';
+import serialPortReducer from './features/terminal/serialPortSlice';
 import traceReducer from './features/tracing/traceSlice';
 import dashboardReducer from './features/tracingEvents/dashboardSlice';
 import wiresharkReducer from './features/wireshark/wiresharkSlice';
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
     dashboard: dashboardReducer,
     chart: chartSlice,
     startup: startupReducer,
+    serialPort: serialPortReducer,
 });
 
 export default appReducer;
