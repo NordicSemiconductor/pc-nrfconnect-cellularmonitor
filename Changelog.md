@@ -2,8 +2,9 @@
 
 ### Added
 
--   Option to auto detect trace database when reading trace file.
+-   Option to auto-detect trace database when reading trace file.
 -   Option to deselect **Terminal Serial Port**.
+-   Dashboard field values can be copied by clicking on the value.
 
 ### Fixed
 

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+.copiable {
+    color: white;
+    background-color: var(--color-nordic-blue);
+}
+
 .animated-card-entry {
     animation: valueChanged 5s;
 }

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { App, FeedbackPane } from 'pc-nrfconnect-shared';
+import { App } from 'pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
 import DeviceSelector from './components/DeviceSelector';
@@ -35,12 +35,8 @@ export default () => (
                 name: 'Certificate Manager',
                 Main: CertificateManager,
             },
-            {
-                name: 'Feedback',
-                Main: FeedbackPane,
-                SidePanel: TraceCollectorSidePanel,
-            },
         ]}
+        feedback
         documentation={DocumentationSections}
     />
 );
