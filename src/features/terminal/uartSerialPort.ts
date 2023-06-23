@@ -21,8 +21,8 @@ import {
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
     removeShellParser,
-    setSerialPort,
     setShellParser,
+    setTerminalSerialPort,
 } from './serialPortSlice';
 
 const LOGGER_PREFIX = 'Terminal Serial Port:';
@@ -54,7 +54,7 @@ export const connectToSerialPort = async (
 
     if (!createdSerialPort) return;
 
-    dispatch(setSerialPort(createdSerialPort));
+    dispatch(setTerminalSerialPort(createdSerialPort));
 
     /*
          Some applications that run Line Mode have an issue, where if you power-cycle the device,

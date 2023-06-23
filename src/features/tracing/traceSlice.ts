@@ -27,7 +27,7 @@ interface TraceState {
     taskId: TaskId | null;
     dataReceived: boolean;
     sourceFilePath: string | null;
-    serialPort: string | null;
+    traceSerialPort: string | null;
     availableSerialPorts: string[];
     manualDbFilePath?: string;
     detectingTraceDb: boolean;
@@ -46,7 +46,7 @@ const initialState = (): TraceState => ({
     taskId: null,
     dataReceived: false,
     sourceFilePath: null,
-    serialPort: null,
+    traceSerialPort: null,
     availableSerialPorts: [],
     manualDbFilePath: getPersistedManualDbFilePath(),
     detectingTraceDb: false,
@@ -107,8 +107,8 @@ const traceSlice = createSlice({
         setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
             state.availableSerialPorts = action.payload;
         },
-        setSerialPort: (state, action: PayloadAction<string | null>) => {
-            state.serialPort = action.payload;
+        setTraceSerialPort: (state, action: PayloadAction<string | null>) => {
+            state.traceSerialPort = action.payload;
         },
         setManualDbFilePath: (
             state,
@@ -153,9 +153,10 @@ export const getTaskId = (state: RootState) => state.app.trace.taskId;
 export const getIsTracing = (state: RootState) =>
     state.app.trace.taskId != null;
 
-export const getSerialPort = (state: RootState) => state.app.trace.serialPort;
+export const getTraceSerialPort = (state: RootState) =>
+    state.app.trace.traceSerialPort;
 export const getIsDeviceSelected = (state: RootState) =>
-    state.app.trace.serialPort != null;
+    state.app.trace.traceSerialPort != null;
 
 export const getAvailableSerialPorts = (state: RootState) =>
     state.app.trace.availableSerialPorts;
@@ -199,7 +200,7 @@ export const {
     setTraceProgress,
     setTraceDataReceived,
     setTraceSourceFilePath,
-    setSerialPort,
+    setTraceSerialPort,
     setAvailableSerialPorts,
     setManualDbFilePath,
     resetManualDbFilePath,

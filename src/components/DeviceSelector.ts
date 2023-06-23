@@ -18,7 +18,7 @@ import {
 
 import {
     removeShellParser,
-    setSerialPort as setUartSerialPort,
+    setTerminalSerialPort as setUartSerialPort,
 } from '../features/terminal/serialPortSlice';
 import { autoSetUartSerialPort } from '../features/terminal/uartSerialPort';
 import { stopTrace } from '../features/tracing/nrfml';
@@ -28,7 +28,7 @@ import {
     resetTraceInfo,
     setAvailableSerialPorts,
     setDetectingTraceDb,
-    setSerialPort,
+    setTraceSerialPort,
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';
@@ -65,7 +65,7 @@ const closeDevice = (): TAction => dispatch => {
     logger.info('Closing device');
     dispatch(setUartSerialPort(null));
     dispatch(setAvailableSerialPorts([]));
-    dispatch(setSerialPort(null));
+    dispatch(setTraceSerialPort(null));
     dispatch(stopTrace());
     dispatch(setDetectingTraceDb(false));
     dispatch(removeShellParser());
@@ -80,7 +80,7 @@ const openDevice =
         resetTraceEvents();
         // Reset serial port settings
         dispatch(setAvailableSerialPorts([]));
-        dispatch(setSerialPort(null));
+        dispatch(setTraceSerialPort(null));
 
         dispatch(
             setAvailableSerialPorts(
@@ -97,13 +97,13 @@ const autoSetTraceSerialPort =
     dispatch => {
         const persistedPath = getPersistedSerialPort(device.serialNumber);
         if (persistedPath) {
-            dispatch(setSerialPort(persistedPath));
+            dispatch(setTraceSerialPort(persistedPath));
             return;
         }
         const port = autoSelectTraceSerialPort(device?.serialPorts ?? []);
         const path = port?.comName ?? device?.serialport?.comName;
         if (path) {
-            dispatch(setSerialPort(path));
+            dispatch(setTraceSerialPort(path));
         } else {
             logger.error("Couldn't identify trace serial port");
         }

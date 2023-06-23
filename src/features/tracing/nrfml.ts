@@ -20,8 +20,8 @@ import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
 import { is91DK } from '../programSample/programSample';
 import {
-    getSerialPort as getUartSerialPort,
     getShellParser,
+    getTerminalSerialPort as getUartSerialPort,
 } from '../terminal/serialPortSlice';
 import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
@@ -39,8 +39,8 @@ import {
 import {
     getManualDbFilePath,
     getResetDevice,
-    getSerialPort,
     getTaskId,
+    getTraceSerialPort,
     setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -127,7 +127,7 @@ export const startTrace =
         const state = getState();
         const uartPort = getUartSerialPort(state);
         const shellParser = getShellParser(state);
-        const tracePort = getSerialPort(state);
+        const tracePort = getTraceSerialPort(state);
         const resetDevice = getResetDevice(state);
 
         if (!tracePort) {

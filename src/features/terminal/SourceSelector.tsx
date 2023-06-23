@@ -23,9 +23,9 @@ import {
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
 import {
-    closeSerialPort,
-    getSerialPort,
-    setSerialPort,
+    closeTerminalSerialPort,
+    getTerminalSerialPort,
+    setTerminalSerialPort,
 } from './serialPortSlice';
 import { connectToSerialPort } from './uartSerialPort';
 
@@ -36,7 +36,7 @@ export default () => {
     const [serialPortItems, setSerialPortItems] = useState<DropdownItem[]>([]);
     const device = useSelector(selectedDevice);
     const availablePorts = useSelector(getAvailableSerialPorts);
-    const selectedUartSerialPort = useSelector(getSerialPort);
+    const selectedUartSerialPort = useSelector(getTerminalSerialPort);
     const showConflictingSettingsDialog = useSelector(
         getShowConflictingSettingsDialog
     );
@@ -70,7 +70,7 @@ export default () => {
 
     const connectToSerialPortWrapper = (path: string, overwrite = false) => {
         if (path === '') {
-            dispatch(closeSerialPort());
+            dispatch(closeTerminalSerialPort());
             return;
         }
         connectToSerialPort(dispatch, path, overwrite);
@@ -110,7 +110,7 @@ export default () => {
                     setSerialPortCallback={async (
                         newSerialPort: SerialPort
                     ) => {
-                        dispatch(setSerialPort(newSerialPort));
+                        dispatch(setTerminalSerialPort(newSerialPort));
                         const options = await newSerialPort.getOptions();
                         setSelectedSerialPortOptions(options);
                     }}

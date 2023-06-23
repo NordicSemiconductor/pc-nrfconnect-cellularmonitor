@@ -8,8 +8,8 @@ import React from 'react';
 
 import {
     setAvailableSerialPorts,
-    setSerialPort,
     setTraceFormats,
+    setTraceSerialPort,
 } from '../../../features/tracing/traceSlice';
 import * as wireshark from '../../../features/wireshark/wireshark';
 import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
@@ -43,7 +43,7 @@ const serialPortActions = (
 ) => [
     setTraceFormats(formats),
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
-    setSerialPort('COM1'),
+    setTraceSerialPort('COM1'),
 ];
 
 describe('TraceCollector', () => {

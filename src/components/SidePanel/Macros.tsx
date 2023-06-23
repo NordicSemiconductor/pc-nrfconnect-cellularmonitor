@@ -8,7 +8,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, usageData } from 'pc-nrfconnect-shared';
 
-import { getSerialPort } from '../../features/terminal/serialPortSlice';
+import { getTerminalSerialPort } from '../../features/terminal/serialPortSlice';
 import {
     getDetectedAtHostLibrary,
     getIsSendingATCommands,
@@ -36,7 +36,7 @@ type Macro = {
 
 export const Macro = ({ commands, title }: Macro) => {
     const dispatch = useDispatch();
-    const serialPort = useSelector(getSerialPort);
+    const serialPort = useSelector(getTerminalSerialPort);
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
     const isTracing = useSelector(getIsTracing);
     const isSending = useSelector(getIsSendingATCommands);

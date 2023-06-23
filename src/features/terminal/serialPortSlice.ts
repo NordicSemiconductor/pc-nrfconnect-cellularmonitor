@@ -11,37 +11,37 @@ import type { RootState } from '../../appReducer';
 import type { ShellParser } from '../shell/shellParser';
 
 interface SerialPortState {
-    readonly serialPort: SerialPort | null;
+    readonly terminalSerialPort: SerialPort | null;
     readonly shellParser: ShellParser | null;
 }
 
 const initialState: SerialPortState = {
-    serialPort: null,
+    terminalSerialPort: null,
     shellParser: null,
 };
 
 const serialPortSlice = createSlice({
-    name: 'serialPort',
+    name: 'terminalSerialPort',
     initialState,
     reducers: {
-        setSerialPort: (
+        setTerminalSerialPort: (
             state,
             { payload: newSerialPort }: PayloadAction<SerialPort | null>
         ) => {
-            if (state.serialPort?.path === newSerialPort?.path) return;
-            if (state.serialPort != null) {
-                state.serialPort.close();
+            if (state.terminalSerialPort?.path === newSerialPort?.path) return;
+            if (state.terminalSerialPort != null) {
+                state.terminalSerialPort.close();
             }
             if (newSerialPort != null) {
-                state.serialPort = newSerialPort;
+                state.terminalSerialPort = newSerialPort;
             }
         },
-        closeSerialPort: state => {
+        closeTerminalSerialPort: state => {
             state.shellParser?.unregister();
             state.shellParser = null;
 
-            state.serialPort?.close();
-            state.serialPort = null;
+            state.terminalSerialPort?.close();
+            state.terminalSerialPort = null;
         },
         setShellParser: (state, action: PayloadAction<ShellParser>) => {
             if (state.shellParser != null) {
@@ -58,15 +58,15 @@ const serialPortSlice = createSlice({
     },
 });
 
-export const getSerialPort = (state: RootState) =>
-    state.app.serialPort.serialPort;
+export const getTerminalSerialPort = (state: RootState) =>
+    state.app.serialPort.terminalSerialPort;
 
 export const getShellParser = (state: RootState) =>
     state.app.serialPort.shellParser;
 
 export const {
-    setSerialPort,
-    closeSerialPort,
+    setTerminalSerialPort,
+    closeTerminalSerialPort,
     setShellParser,
     removeShellParser,
 } = serialPortSlice.actions;

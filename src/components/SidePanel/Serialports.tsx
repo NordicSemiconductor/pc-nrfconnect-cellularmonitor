@@ -12,8 +12,8 @@ import {
     getAvailableSerialPorts,
     getIsTracing,
     getSelectedSerialNumber,
-    getSerialPort,
-    setSerialPort,
+    getTraceSerialPort,
+    setTraceSerialPort,
 } from '../../features/tracing/traceSlice';
 import { setSerialPort as persistSerialPort } from '../../utils/store';
 
@@ -21,11 +21,11 @@ export default () => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
     const serialNumber = useSelector(getSelectedSerialNumber) ?? '';
-    const selectedSerialPort = useSelector(getSerialPort);
+    const selectedSerialPort = useSelector(getTraceSerialPort);
     const isTracing = useSelector(getIsTracing);
 
     const updateSerialPort = ({ value: port }: { value: string }) => {
-        dispatch(setSerialPort(port));
+        dispatch(setTraceSerialPort(port));
         persistSerialPort(serialNumber, port);
     };
 

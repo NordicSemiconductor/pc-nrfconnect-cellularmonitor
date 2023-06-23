@@ -22,7 +22,7 @@ import {
     setWaitForDevice,
 } from 'pc-nrfconnect-shared';
 
-import { setSerialPort } from '../terminal/serialPortSlice';
+import { setTerminalSerialPort } from '../terminal/serialPortSlice';
 import { autoSetUartSerialPort } from '../terminal/uartSerialPort';
 import { resetTraceEvents } from '../tracing/tracePacketEvents';
 import { getIsTracing, resetTraceInfo } from '../tracing/traceSlice';
@@ -342,7 +342,7 @@ const ProgramSample = ({
 
                         try {
                             await downloadSample(sample);
-                            dispatch(setSerialPort(null));
+                            dispatch(setTerminalSerialPort(null));
 
                             await program(
                                 device,
@@ -558,7 +558,7 @@ const ProgramModem = ({
 
                             try {
                                 await downloadModemFirmware(selectedMfw);
-                                dispatch(setSerialPort(null));
+                                dispatch(setTerminalSerialPort(null));
 
                                 await programModemFirmware(
                                     device,
