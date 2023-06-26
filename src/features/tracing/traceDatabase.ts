@@ -51,8 +51,7 @@ export const getDatabases = async () => {
             }
         );
         const config = JSON.parse(json);
-        localDatabasesCache =
-            config.firmwares.devices[0].versions.reverse() as DatabaseVersion[];
+        localDatabasesCache = config.firmwares.devices[0].versions;
     }
 
     return remoteDatabasesCache ?? localDatabasesCache;
@@ -128,7 +127,7 @@ const downloadRemote = async () => {
 const downloadAll = (config: TraceConfig) => {
     prepareTargetDirectory();
 
-    const databases = config.firmwares.devices[0].versions.reverse();
+    const databases = config.firmwares.devices[0].versions;
 
     return Promise.all(
         databases.map(db => downloadTraceDatabase(db.database.path))
