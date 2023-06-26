@@ -51,10 +51,12 @@ export default () => {
     const items = [
         autoSelectItem,
         selectFromDiskItem,
-        ...databases.map(database => ({
-            label: database.version,
-            value: database.uuid,
-        })),
+        ...databases
+            .map(database => ({
+                label: database.version,
+                value: database.uuid,
+            }))
+            .reverse(),
     ];
 
     useEffect(() => {
