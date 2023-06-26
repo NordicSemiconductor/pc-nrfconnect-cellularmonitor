@@ -118,6 +118,7 @@ export default () => {
             items={items}
             onSelect={onSelect}
             selectedItem={selectedItem}
+            numItemsBeforeScroll={10}
         />
     );
 };
