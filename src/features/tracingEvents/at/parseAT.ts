@@ -75,7 +75,7 @@ export const parseAT = (packet: TraceEvent): ParsedPacket => {
         const status = getStatus(body);
         const payload = body ? removeStatusFromBody(body) : undefined;
         return {
-            command,
+            command: command != null ? command.toUpperCase() : command,
             payload: payload || undefined,
             requestType: startsWithAt
                 ? operatorToRequestType(operator)

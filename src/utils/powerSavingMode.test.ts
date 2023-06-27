@@ -6,9 +6,9 @@
 
 import { PowerSavingModeValues } from '../features/tracingEvents/types';
 import {
+    ACTIVE_TIMER_BASE_VALUES,
     parsePowerSavingMode,
-    TAU_ACTIVE_TIMER_BASE_VALUES,
-    TAU_SLEEP_INTERVAL_BASE_VALUES,
+    PERIODIC_TAU_BASE_VALUES,
     TAU_TYPES,
 } from './powerSavingMode';
 
@@ -20,7 +20,7 @@ const deactivatedTimer: PowerSavingModeValues = {
 test('parsePowerSavingMode for T3412Extended (Periodic Tau)', () => {
     const valueBitmask = '01010';
     const valueDecimal = 10;
-    Object.entries(TAU_SLEEP_INTERVAL_BASE_VALUES).forEach(
+    Object.entries(PERIODIC_TAU_BASE_VALUES).forEach(
         ([multiplyerBitmask, multiplyerDecimalValue]) => {
             const expectedSeconds = multiplyerDecimalValue * valueDecimal;
             const bitmask = `${multiplyerBitmask}${valueBitmask}`;
@@ -46,7 +46,7 @@ test('parsePowerSavingMode for T3412Extended (Periodic Tau)', () => {
 test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
     const valueBitmask = '01010';
     const valueDecimal = 10;
-    Object.entries(TAU_ACTIVE_TIMER_BASE_VALUES).forEach(
+    Object.entries(ACTIVE_TIMER_BASE_VALUES).forEach(
         ([multiplyerBitmask, multiplyerDecimalValue]) => {
             const expectedSeconds = multiplyerDecimalValue * valueDecimal;
             const bitmask = `${multiplyerBitmask}${valueBitmask}`;

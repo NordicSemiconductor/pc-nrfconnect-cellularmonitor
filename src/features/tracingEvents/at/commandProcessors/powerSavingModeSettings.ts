@@ -58,13 +58,11 @@ export const processor: Processor<'+CPSMS'> = {
             } else {
                 // Then we must have gotten the `AT+CPSMS=` command
                 // Which means we should turn PSM off and reset timers to default.
-                console.log('Got the AT+CPSMS= command');
                 storedPowerSavingMode = resetToDefault;
                 setRequested = resetToDisabled;
             }
         }
         if (packet.requestType === RequestType.SET) {
-            console.log('This is just the RequestType.Set');
             setRequested = resetToDefault;
         }
         return state;
@@ -114,18 +112,9 @@ const parsePowerSavingModePayload = (
     if (mode === '0') {
         if (currentRequestedValues) {
             storedPowerSavingMode = currentRequestedValues;
-            console.log(
-                'Will persist current requested values: ',
-                currentRequestedValues
-            );
         }
         return { T3324: disabledT3324, T3412Extended: disabledT3412Extended };
     }
-
-    console.log(
-        'Turning on PSM, have stored values from before:',
-        storedPowerSavingMode
-    );
 
     return {
         T3324:

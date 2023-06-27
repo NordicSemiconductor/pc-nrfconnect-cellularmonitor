@@ -110,15 +110,6 @@ const parsePSMValues = (
         );
     }
 
-    if (
-        PsmValues.T3324.activated &&
-        (PsmValues?.T3412Extended?.activated || PsmValues?.T3412?.activated)
-    ) {
-        PsmValues.state = 'on';
-    } else {
-        PsmValues.state = 'off';
-    }
-
     return PsmValues;
 };
 
