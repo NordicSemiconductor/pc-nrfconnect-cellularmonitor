@@ -19,6 +19,7 @@ import { SerialPortOpenOptions } from 'serialport';
 
 import {
     getAvailableSerialPorts,
+    getIsTracing,
     getShowConflictingSettingsDialog,
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
@@ -35,6 +36,7 @@ export default () => {
     const dispatch = useDispatch();
     const [serialPortItems, setSerialPortItems] = useState<DropdownItem[]>([]);
     const device = useSelector(selectedDevice);
+    const isTracing = useSelector(getIsTracing);
     const availablePorts = useSelector(getAvailableSerialPorts);
     const selectedUartSerialPort = useSelector(getTerminalSerialPort);
     const showConflictingSettingsDialog = useSelector(
@@ -89,6 +91,7 @@ export default () => {
                         connectToSerialPortWrapper(item.value);
                     }
                 }}
+                disabled={isTracing}
                 items={serialPortItems}
                 selectedItem={selectedSerialPortItem}
             />
