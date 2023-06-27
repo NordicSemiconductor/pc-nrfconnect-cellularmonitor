@@ -50,8 +50,10 @@ export const getDatabases = async () => {
                 encoding: 'utf-8',
             }
         );
-        const config = JSON.parse(json);
-        localDatabasesCache = config.firmwares.devices[0].versions;
+        const config = JSON.parse(json) as TraceConfig;
+        localDatabasesCache = config.firmwares.devices.flatMap(
+            device => device.versions
+        );
     }
 
     return remoteDatabasesCache ?? localDatabasesCache;
@@ -118,16 +120,16 @@ const downloadRemote = async () => {
         );
     }
 
-    await downloadAll(config);
+    remoteDatabasesCache = config.firmwares.devices.flatMap(
+        device => device.versions
+    );
+    await downloadAll(remoteDatabasesCache);
 
-    remoteDatabasesCache = config.firmwares.devices[0].versions;
     return remoteDatabasesCache;
 };
 
-const downloadAll = (config: TraceConfig) => {
+const downloadAll = (databases: DatabaseVersion[]) => {
     prepareTargetDirectory();
-
-    const databases = config.firmwares.devices[0].versions;
 
     return Promise.all(
         databases.map(db => downloadTraceDatabase(db.database.path))
