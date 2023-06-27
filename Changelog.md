@@ -17,6 +17,7 @@
     will be used for modem trace. Hence, it will only auto-select serial port
     for the **Modem trace serial port**, and will not select anything for
     **Terminal serial port**.
+-   Dashboard card title from Power Saving Mode to Power Saving Features.
 
 ## 1.0.2 - 2023-06-15
 

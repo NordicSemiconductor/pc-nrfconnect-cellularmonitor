@@ -347,7 +347,7 @@ register to.
             commands: ['AT+CPINR'] as const,
         },
     },
-    'Power Saving Mode': {
+    'Power Saving Features': {
         'REQUESTED ACTIVE TIMER': {
             title: 'Requested Active Timer (T3324)',
             description:

@@ -96,7 +96,7 @@ export default () => {
     return (
         <DashboardCard
             key="dashboard-psm-card"
-            title="Power Saving Mode"
+            title="Power Saving Features"
             iconName="mdi-lightning-bolt-circle"
             fields={fields}
         />
