@@ -10,10 +10,15 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Card, colors, openUrl, selectedDevice } from 'pc-nrfconnect-shared';
+import { clipboard } from 'electron';
+import {
+    Card,
+    colors,
+    newCopiedFlashMessage,
+    openUrl,
+} from 'pc-nrfconnect-shared';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
-import { TDispatch } from '../../../utils/thunk';
 import {
     getDetectedAtHostLibrary,
     getIsTracing,
@@ -86,18 +91,15 @@ type CardEntry = {
     title: string;
 };
 
+const isCopiable = (value: string | number) => value !== 'Unknown';
+
 const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
     const dispatch = useDispatch();
-    const device = useSelector(selectedDevice);
-    const isTracing = useSelector(getIsTracing);
-    const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
-    const [keepShowing, setKeepShowing] = useState(false);
+    const [showTooltip, setShowTooltip] = useState(false);
 
     const fieldRef = useRef<HTMLDivElement>(null);
+    const fieldValueRef = useRef<HTMLParagraphElement>(null);
     const oldValue = useRef<string | number | null>(null);
-
-    const canSendCommand = device != null && detectedAtHostLibrary && isTracing;
-    const showTooltip = (show: boolean) => setKeepShowing(show);
 
     useEffect(() => {
         if (
@@ -113,15 +115,32 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
         oldValue.current = value;
     }, [value]);
 
+    const showCopiable = (copiable: boolean) => {
+        if (copiable) {
+            fieldValueRef.current?.classList.add('copiable');
+        } else {
+            fieldValueRef.current?.classList.remove('copiable');
+        }
+    };
+
+    const copyFieldValue = () => {
+        if (isCopiable(value)) {
+            clipboard.writeText(value.toString());
+            dispatch(newCopiedFlashMessage());
+            showCopiable(false);
+            setShowTooltip(false);
+        }
+    };
+
     return (
         <div
+            role="textbox"
+            tabIndex={0}
             className="card-entry"
-            onMouseEnter={() => {
-                setKeepShowing(true);
-            }}
-            onMouseLeave={() => {
-                setKeepShowing(false);
-            }}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            onFocus={() => setShowTooltip(true)}
+            onBlur={() => setShowTooltip(false)}
         >
             <div
                 ref={fieldRef}
@@ -130,21 +149,33 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
                 <p>
                     <b>{fieldKey}</b>
                 </p>
-                <p className="text-right">{value}</p>
+                <p
+                    ref={fieldValueRef}
+                    role="presentation"
+                    onMouseEnter={() => showCopiable(true)}
+                    onMouseLeave={() => showCopiable(false)}
+                    onKeyDown={event => {
+                        if (event.key === ' ') {
+                            copyFieldValue();
+                        }
+                    }}
+                    onClick={copyFieldValue}
+                    className="text-right"
+                >
+                    {value}
+                </p>
             </div>
 
-            {keepShowing ? (
+            {showTooltip ? (
                 <OverlayTrigger
                     key={`overlay-${fieldKey}`}
                     placement="bottom-end"
                     overlay={CardTooltip({
                         fieldKey,
                         title,
-                        showTooltip,
-                        canSendCommand,
-                        dispatch,
+                        setShowTooltip,
                     })}
-                    show={keepShowing}
+                    show={showTooltip}
                 >
                     <div className="tooltip-helper" />
                 </OverlayTrigger>
@@ -156,129 +187,152 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
 type CardTooltip = {
     fieldKey: string;
     title: string;
-    showTooltip: (show: boolean) => void;
-    canSendCommand: boolean;
-    dispatch: TDispatch;
+    setShowTooltip: (show: boolean) => void;
 };
 
-const CardTooltip = ({
-    fieldKey,
-    title,
-    showTooltip,
-    canSendCommand,
-    dispatch,
-}: CardTooltip) => {
-    const cardType = title.includes('PDN') ? 'Packet Domain Network' : title;
-    const tooltipTitle = documentation[cardType]?.[fieldKey]?.title ?? fieldKey;
-    const tooltipDocumentation = documentation[cardType]?.[fieldKey];
-    const { commands, description } = tooltipDocumentation ?? {
-        commands: [],
-        description: undefined,
-    };
+const CardTooltip = ({ fieldKey, title, setShowTooltip }: CardTooltip) => {
+    const {
+        commands,
+        description,
+        title: titleFromDocumentation,
+    } = getDashboardFieldDocumentation(title, fieldKey);
+
+    const tooltipTitle = titleFromDocumentation || title;
 
     return (
         <Tooltip id={`tooltip-${fieldKey}`}>
             <div
                 className="card-tooltip"
-                onMouseEnter={() => showTooltip(true)}
-                onMouseLeave={() => showTooltip(false)}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
             >
                 <p className="font-weight-bold">{tooltipTitle}</p>
-                {description !== undefined ? (
-                    <p style={{ color: colors.gray100 }}>
-                        {description.split('\n').map((partial, indexKey) => (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <span key={indexKey}>
-                                {partial}
-                                <br />
-                            </span>
-                        ))}
-                    </p>
-                ) : null}
-                {commands.length > 0 ? (
-                    <>
-                        <p className="font-weight-bold">
-                            RELATED{' '}
-                            {commands.length > 1 ? 'COMMANDS' : 'COMMAND'}
-                        </p>
-                        {commands.map((cmd, index) => (
-                            <div key={`${cmd}`} className="mb-3">
-                                <p className="mb-0">{cmd}</p>
-
-                                <div className="d-flex">
-                                    {canSendCommand &&
-                                    commandHasRecommeneded(cmd) ? (
-                                        <span
-                                            role="button"
-                                            tabIndex={index}
-                                            style={{
-                                                marginRight: '8px',
-                                                ...linkStyle,
-                                            }}
-                                            onClick={() => {
-                                                const commandsToSend =
-                                                    recommendedAT[cmd];
-                                                if (commandsToSend) {
-                                                    dispatch(
-                                                        sendAT(commandsToSend)
-                                                    );
-                                                }
-                                            }}
-                                            onKeyDown={event => {
-                                                if (event.key === 'Enter') {
-                                                    const commandsToSend =
-                                                        recommendedAT[cmd];
-                                                    if (commandsToSend) {
-                                                        dispatch(
-                                                            sendAT(
-                                                                commandsToSend
-                                                            )
-                                                        );
-                                                    }
-                                                }
-                                            }}
-                                        >
-                                            <Icon
-                                                className="mr-1"
-                                                path={mdiPlayBox}
-                                                size={0.6}
-                                            />{' '}
-                                            Run command{' '}
-                                        </span>
-                                    ) : null}
-                                    <span
-                                        role="button"
-                                        tabIndex={index}
-                                        style={linkStyle}
-                                        onClick={() =>
-                                            openUrl(documentationMap[cmd])
-                                        }
-                                        onKeyDown={event =>
-                                            event.key === 'Enter'
-                                                ? openUrl(documentationMap[cmd])
-                                                : null
-                                        }
-                                    >
-                                        <Icon
-                                            className="mr-1"
-                                            path={mdiTextBox}
-                                            size={0.6}
-                                        />{' '}
-                                        Doc
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </>
-                ) : null}
+                <Documentation description={description} />
+                <Commands commands={commands} />
             </div>
         </Tooltip>
     );
 };
 
-const linkStyle: React.CSSProperties = {
-    fontSize: '14px',
-    color: colors.nordicBlue,
-    display: 'flex',
-    alignItems: 'center',
+const Documentation = ({
+    description,
+}: {
+    description: string | undefined;
+}) => {
+    if (!description) {
+        return null;
+    }
+
+    return (
+        <p style={{ color: colors.gray100 }}>
+            {description.split('\n').map((partial, indexKey) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <span key={indexKey}>
+                    {partial}
+                    <br />
+                </span>
+            ))}
+        </p>
+    );
+};
+
+const Commands = ({
+    commands,
+}: {
+    commands: readonly (keyof typeof recommendedAT)[];
+}) => {
+    const dispatch = useDispatch();
+    const isTracing = useSelector(getIsTracing);
+    const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
+
+    if (!isTracing || !detectedAtHostLibrary || commands.length === 0) {
+        return null;
+    }
+
+    return (
+        <>
+            <p className="font-weight-bold">
+                RELATED {commands.length > 1 ? 'COMMANDS' : 'COMMAND'}
+            </p>
+            {commands.map((cmd, index) => (
+                <div key={`${cmd}`} className="mb-3">
+                    <p className="mb-0">{cmd}</p>
+
+                    <div className="d-flex">
+                        {commandHasRecommeneded(cmd) ? (
+                            <IconAction
+                                action={() => {
+                                    const commandsToSend = recommendedAT[cmd];
+                                    if (commandsToSend) {
+                                        dispatch(sendAT(commandsToSend));
+                                    }
+                                }}
+                                label="Run command"
+                                icon={mdiPlayBox}
+                                index={index}
+                            />
+                        ) : null}
+                        <IconAction
+                            action={() => openUrl(documentationMap[cmd])}
+                            label="Doc"
+                            icon={mdiTextBox}
+                            index={index}
+                        />
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+};
+
+const IconAction = ({
+    action,
+    label,
+    icon,
+    index,
+    className,
+}: {
+    action: () => void;
+    label: string;
+    icon: string;
+    index?: number;
+    className?: string;
+}) => (
+    <span
+        role="button"
+        tabIndex={index ?? 0}
+        style={{
+            fontSize: '14px',
+            color: colors.nordicBlue,
+            display: 'flex',
+            alignItems: 'center',
+        }}
+        onClick={action}
+        onKeyDown={event => {
+            if (event.key === 'Enter') {
+                action();
+            }
+        }}
+        className={className}
+    >
+        <Icon className="mr-1" path={icon} size={0.6} />
+        {label}
+    </span>
+);
+
+const getDashboardFieldDocumentation = (
+    cardTitle: string,
+    fieldKey: string
+) => {
+    const cardType = cardTitle.includes('PDN')
+        ? 'Packet Domain Network'
+        : cardTitle;
+
+    const tooltipDocumentation = documentation[cardType]?.[fieldKey];
+    return (
+        tooltipDocumentation ?? {
+            commands: [],
+            description: undefined,
+        }
+    );
 };

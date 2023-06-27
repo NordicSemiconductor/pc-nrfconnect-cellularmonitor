@@ -43,7 +43,7 @@
         "check-disk-space": "^2.1.0",
         "jest-fetch-mock": "^3.0.3",
         "mcc-mnc-list": "^1.1.11",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v44",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v62",
         "pretty-bytes": "^5.6.0",
         "react-chartjs-2": "^5.2.0",
         "redux-mock-store": "^1.5.4",
