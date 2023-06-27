@@ -291,7 +291,6 @@ export type GeneratedPowerSavingModeEntries = {
     [timer: TimerKey]: PowerSavingModeValues;
 };
 export type PowerSavingModeEntries = {
-    state?: 'on' | 'off';
     // Also known as 'Active Time'
     T3324?: PowerSavingModeValues;
     // Also known as Periodic TAU (Legacy)

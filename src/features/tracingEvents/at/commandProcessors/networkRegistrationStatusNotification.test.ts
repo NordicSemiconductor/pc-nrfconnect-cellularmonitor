@@ -15,7 +15,7 @@ READ CMD: AT+CEREG?
     - [<tac>]               ==> When n >= 2
     - [<ci>]                ==> When n >= 2
     - [<AcT>]               ==> When n >= 2
-    - [<cause_type>]        ==> When n = 3 or 5 FIXME: Unsure how its presented 
+    - [<cause_type>]        ==> When n = 3 or 5 FIXME: Unsure how its presented
     - [<reject_cause>]      ==> When n = 3 or 5 FIXME: Unsure how its presented (this it's one of  2 | 3 | 6 | 9 | 10, according to 3GPP 24.301 Annex A.1)
     - [<Active-Time>]       ==> When n >= 4
     - [<Periodic-TAU>]      ==> When n >= 4
@@ -91,7 +91,6 @@ const testResponses = [
             AcTState: 7,
             powerSavingMode: {
                 granted: {
-                    state: 'on',
                     T3412Extended: {
                         bitmask: '00100010',
                         value: 7200,

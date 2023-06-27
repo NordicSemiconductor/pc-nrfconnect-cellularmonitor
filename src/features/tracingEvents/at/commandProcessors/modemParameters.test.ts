@@ -98,7 +98,6 @@ const modernModemVersionPacket = {
 
         powerSavingMode: {
             granted: {
-                state: 'on',
                 T3324: {
                     activated: true,
                     bitmask: '00000010',
@@ -142,7 +141,6 @@ const legacyModemVersionPacket = {
 
         powerSavingMode: {
             granted: {
-                state: 'on',
                 T3324: {
                     activated: true,
                     bitmask: '00000010',

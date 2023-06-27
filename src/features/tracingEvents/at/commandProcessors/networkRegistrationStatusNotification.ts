@@ -163,9 +163,8 @@ const handleNetworkRegPayload = (
             networkRegState.ceregRejectCause = parseInt(rejectCause, 10);
         }
     }
-    let grantedPSM: PowerSavingModeEntries | undefined;
+    const grantedPSM: PowerSavingModeEntries = {};
     if (responseArray.length >= 9) {
-        grantedPSM = { state: 'on' };
         const T3324Bitmask = responseArray[index.T3324];
         if (isValidBitmask(T3324Bitmask)) {
             grantedPSM.T3324 = {

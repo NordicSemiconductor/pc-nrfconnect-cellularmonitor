@@ -52,7 +52,6 @@ const expectedState = {
     ci: '02024720',
     powerSavingMode: {
         requested: {
-            state: 'on',
             T3324: {
                 activated: true,
                 bitmask: '00000000',
@@ -81,7 +80,6 @@ const expectedState = {
                 activated: false,
                 bitmask: '11100000',
             },
-            state: 'off',
         },
     },
 
