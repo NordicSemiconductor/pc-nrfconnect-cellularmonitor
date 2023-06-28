@@ -21,12 +21,3 @@
         background-color: white;
     }
 }
-
-@keyframes valueChangedWithWarning {
-    from {
-        background-color: #c8e6c9;
-    }
-    to {
-        background-color: var(--color-orange);
-    }
-}

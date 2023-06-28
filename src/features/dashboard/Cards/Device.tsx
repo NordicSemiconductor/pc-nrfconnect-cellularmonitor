@@ -114,11 +114,9 @@ export default () => {
         },
         'SEARCH STATUS 1': {
             value: searchStatus1 ? 'Yes' : 'No',
-            conditionalStyle: addWarningStyle(searchStatus1),
         },
         'SEARCH STATUS 2': {
             value: searchStatus2 ? 'Yes' : 'No',
-            conditionalStyle: addWarningStyle(searchStatus2),
         },
         'RESET LOOP': {
             value: resetLoop ? 'Yes' : 'No',
@@ -221,8 +219,8 @@ const parsePreferredBearer = (preferred: number) => {
 const addWarningStyle = (active?: boolean): React.CSSProperties =>
     active
         ? {
-              color: colors.white,
-              backgroundColor: colors.orange,
-              animation: '5s valueChangedWithWarning',
+              // orange200
+              backgroundColor: '#FFCC80',
+              animation: 'unset',
           }
         : {};

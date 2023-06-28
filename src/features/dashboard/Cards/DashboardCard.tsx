@@ -74,7 +74,7 @@ export default ({
             }
         >
             {Object.entries(fields).map(([fieldKey, fieldValues]) => (
-                <li key={fieldKey}>
+                <li key={fieldKey} style={{ padding: 0 }}>
                     <CardEntry
                         fieldKey={fieldKey}
                         value={fieldValues.value}
@@ -141,18 +141,16 @@ const CardEntry = ({ fieldKey, value, title, style }: CardEntry) => {
     return (
         <div
             role="textbox"
+            ref={fieldRef}
             tabIndex={0}
-            style={style}
+            style={{ ...style, padding: '2px 4px' }}
             className="card-entry"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
             onFocus={() => setShowTooltip(true)}
             onBlur={() => setShowTooltip(false)}
         >
-            <div
-                ref={fieldRef}
-                className="w-100 d-flex justify-content-between"
-            >
+            <div className="w-100 d-flex justify-content-between">
                 <p>
                     <b>{fieldKey}</b>
                 </p>
