@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { existsSync, mkdirSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { logger } from 'pc-nrfconnect-shared';
+import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import {
     autoDetectDbRootFolder,
@@ -37,12 +37,15 @@ export type DatabaseVersion = {
 
 const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/trace-db';
-const DOWNLOAD_FOLDER = autoDetectDbRootFolder();
+const DOWNLOAD_FOLDER = join(getAppDataDir(), 'trace-db');
+const INITIAL_SOURCE_FOLDER = autoDetectDbRootFolder();
 
 let localDatabasesCache: DatabaseVersion[];
 let remoteDatabasesCache: DatabaseVersion[];
 
 export const getDatabases = async () => {
+    prepareTargetDirectory();
+
     if (!localDatabasesCache) {
         const json = await readFile(
             join(autoDetectDbRootFolder(), 'config_v2.json'),
@@ -128,13 +131,8 @@ const downloadRemote = async () => {
     return remoteDatabasesCache;
 };
 
-const downloadAll = (databases: DatabaseVersion[]) => {
-    prepareTargetDirectory();
-
-    return Promise.all(
-        databases.map(db => downloadTraceDatabase(db.database.path))
-    );
-};
+const downloadAll = (databases: DatabaseVersion[]) =>
+    Promise.all(databases.map(db => downloadTraceDatabase(db.database.path)));
 const downloadTraceDatabase = async (fileName: string) => {
     fileName = fileName.replace(/\${root}/, '');
     const targetFile = join(DOWNLOAD_FOLDER, fileName);
@@ -161,5 +159,22 @@ const prepareTargetDirectory = () => {
     if (!existsSync(DOWNLOAD_FOLDER)) {
         mkdirSync(DOWNLOAD_FOLDER);
         logger.info(`Created directory: ${DOWNLOAD_FOLDER}`);
+
+        try {
+            readdirSync(INITIAL_SOURCE_FOLDER).forEach(file => {
+                copyFileSync(
+                    join(INITIAL_SOURCE_FOLDER, file),
+                    join(DOWNLOAD_FOLDER, file)
+                );
+            });
+            logger.debug(
+                `Copied ${INITIAL_SOURCE_FOLDER} to ${DOWNLOAD_FOLDER}`
+            );
+        } catch (err) {
+            logger.error(
+                `traceDatabase: Could not copy ${INITIAL_SOURCE_FOLDER} to ${DOWNLOAD_FOLDER}`,
+                err
+            );
+        }
     }
 };
