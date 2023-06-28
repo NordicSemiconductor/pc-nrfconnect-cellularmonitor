@@ -129,7 +129,11 @@ export interface State {
 
     // %MDMEV Modem Domain Event Notification
     mdmevNotification?: 0 | 1;
-    modemDomainEvents: string[];
+    meOverheated: boolean;
+    meBatteryLow: boolean;
+    searchStatus1: boolean;
+    searchStatus2: boolean;
+    resetLoop: boolean;
 
     // %CONNSTAT Connectivity Statistics state
     connStat?: {

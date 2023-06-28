@@ -38,7 +38,7 @@ export const processor: Processor<'+CGEV'> = {
             const payload = packet.payload.trim();
 
             // The 17 different cases based on the +CGEV notifactions
-            if (payload === PacketDomainEvent.NW_DETACH) {
+            if (payload.includes(PacketDomainEvent.NW_DETACH)) {
                 return {
                     ...state,
                     // networkStatus update?
@@ -47,7 +47,7 @@ export const processor: Processor<'+CGEV'> = {
                     accessPointNames: {},
                 };
             }
-            if (payload === PacketDomainEvent.ME_DETACH) {
+            if (payload.includes(PacketDomainEvent.ME_DETACH)) {
                 return {
                     ...state,
                     // networkStatus update?
@@ -56,12 +56,14 @@ export const processor: Processor<'+CGEV'> = {
                     accessPointNames: {},
                 };
             }
-            if (payload === PacketDomainEvent.ME_OVERHEATED) {
+            if (payload.includes(PacketDomainEvent.ME_OVERHEATED)) {
                 // TODO: should notify user about overheated
+                state.meOverheated = true;
                 return state;
             }
-            if (payload === PacketDomainEvent.ME_BATTERY_LOW) {
+            if (payload.includes(PacketDomainEvent.ME_BATTERY_LOW)) {
                 // TODO: should notify user about low battery
+                state.meBatteryLow = true;
                 return state;
             }
 

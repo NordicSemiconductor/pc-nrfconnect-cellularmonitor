@@ -35,6 +35,7 @@ import './DashboardCard.css';
 export type DashboardCardFields = Record<string, DashboardCardField>;
 export type DashboardCardField = {
     value: string | number;
+    conditionalStyle?: React.CSSProperties;
 };
 
 type DashboardCard = {
@@ -78,6 +79,7 @@ export default ({
                         fieldKey={fieldKey}
                         value={fieldValues.value}
                         title={title}
+                        style={fieldValues.conditionalStyle}
                     />
                 </li>
             ))}
@@ -89,11 +91,12 @@ type CardEntry = {
     fieldKey: string;
     value: string | number;
     title: string;
+    style?: React.CSSProperties;
 };
 
 const isCopiable = (value: string | number) => value !== 'Unknown';
 
-const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
+const CardEntry = ({ fieldKey, value, title, style }: CardEntry) => {
     const dispatch = useDispatch();
     const [showTooltip, setShowTooltip] = useState(false);
 
@@ -102,6 +105,9 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
     const oldValue = useRef<string | number | null>(null);
 
     useEffect(() => {
+        if (style?.animation) {
+            return;
+        }
         if (
             value !== oldValue.current &&
             oldValue.current &&
@@ -113,7 +119,7 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
             );
         }
         oldValue.current = value;
-    }, [value]);
+    }, [style?.animation, value]);
 
     const showCopiable = (copiable: boolean) => {
         if (copiable) {
@@ -136,6 +142,7 @@ const CardEntry = ({ fieldKey, value, title }: CardEntry) => {
         <div
             role="textbox"
             tabIndex={0}
+            style={style}
             className="card-entry"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
@@ -197,7 +204,7 @@ const CardTooltip = ({ fieldKey, title, setShowTooltip }: CardTooltip) => {
         title: titleFromDocumentation,
     } = getDashboardFieldDocumentation(title, fieldKey);
 
-    const tooltipTitle = titleFromDocumentation || title;
+    const tooltipTitle = titleFromDocumentation ?? fieldKey;
 
     return (
         <Tooltip id={`tooltip-${fieldKey}`}>

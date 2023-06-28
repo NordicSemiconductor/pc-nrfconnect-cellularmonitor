@@ -294,6 +294,44 @@ register to.
                 'If set before modem activation this configures an extra reduction of 0.5 or 1 dB to the maximum transmission power on NB-IOT. The command is Nordic-proprietary, see the documentation at the following link for more information.',
             commands: ['AT%XEMPR'] as const,
         },
+        'ME OVERHEATED': {
+            title: 'Mobile Equipment (ME) Overheated',
+            description: 'ME is overheated and therefore modem is deactivated',
+            commands: ['AT+CGEV', 'AT%MDMEV'] as const,
+        },
+        'ME BATTERY LOW': {
+            title: 'Mobile Equipment (ME) Battery Low',
+            description: 'ME battery is low and modem is deactivated',
+            commands: ['AT+CGEV', 'AT%MDMEV'] as const,
+        },
+        'SEARCH STATUS 1': {
+            description: `SEARCH STATUS 1 indicates light search performed. This event gives the application a chance to
+            stop the modem from using more power on searching networks from possibly weaker radio condition.
+            Before sending this event, the modem searches the cells based on previous cell history, measures the
+            radio conditions, and makes assumptions on where networks might be deployed. This event means that
+            the modem has not found a network that it could select based on the 3GPP network selection rules
+            from those locations. It does not mean that there are no networks to be found in the area. The modem
+            continues more thorough searches automatically after sending this status. The modem can be deactivated,
+            for example, with +CFUN=4, to stop it from using more power on the search.`,
+            commands: ['AT%MDMEV'] as const,
+        },
+        'SEARCH STATUS 2': {
+            description: `SEARCH STATUS 2 indicates search performed. The modem has found a network that it can select
+            according to the 3GPP network selection rules or all frequencies have been scanned and a suitable cell
+            has not been found. In the latter case, the modem enters normal limited service state functionality and
+            performs scans for service periodically.`,
+            commands: ['AT%MDMEV'] as const,
+        },
+        'RESET LOOP': {
+            description: `RESET LOOP indicates that the modem restricts Attach attempts for the next 30 minutes. The timer
+            does not run when the modem has no power or while it stays in the reset loop. The modem counts all the resets where the modem is not gracefully deinitialized with +CFUN=0.
+
+            Reset Loop is activated if:
+            For mfw v1.3.0: more than five resets
+            For mfw >= v1.3.1: more than seven resets
+            `,
+            commands: ['AT%MDMEV'] as const,
+        },
     },
     Sim: {
         'UICC STATUS': {

@@ -16,9 +16,16 @@ test('AT%MDMEV updates the domainEvents state when notifications are received.',
         atPacket('%MDMEV: SEARCH STATUS 1'),
     ]);
 
-    expect(state.modemDomainEvents).toEqual([
-        'ME OVERHEATED',
-        'ME BATTERY LOW',
-        'SEARCH STATUS 1',
-    ]);
+    expect(state.meOverheated).toBe(true);
+    expect(state.meBatteryLow).toBe(true);
+    expect(state.searchStatus1).toBe(true);
+
+    state = convertPackets([atPacket('%MDMEV: ME OVERHEATED')], state);
+
+    expect(state.meOverheated).toBe(true);
+    expect(state.resetLoop).toBeUndefined();
+
+    state = convertPackets([atPacket('%MDMEV: RESET LOOP')], state);
+
+    expect(state.resetLoop).toBe(true);
 });

@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { colors } from 'pc-nrfconnect-shared';
 
 import { FunctionalMode } from '../../tracingEvents/at/commandProcessors/functionMode';
 import { Mode } from '../../tracingEvents/at/commandProcessors/TXPowerReduction';
@@ -35,6 +36,11 @@ export default () => {
         // xModemTrace
         xModemTraceOperation,
         xModemTraceSetID,
+        meOverheated,
+        meBatteryLow,
+        searchStatus1,
+        searchStatus2,
+        resetLoop,
     } = useSelector(getDashboardState);
 
     const haveRecievedModemSupport = !(
@@ -97,6 +103,26 @@ export default () => {
         },
         'NB-IOT TX REDUCTION': {
             value: formatMode(nbiotTXReduction) ?? 'Unknown',
+        },
+        'ME OVERHEATED': {
+            value: meOverheated ? 'Yes' : 'No',
+            conditionalStyle: addWarningStyle(meOverheated),
+        },
+        'ME BATTERY LOW': {
+            value: meBatteryLow ? 'Yes' : 'No',
+            conditionalStyle: addWarningStyle(meBatteryLow),
+        },
+        'SEARCH STATUS 1': {
+            value: searchStatus1 ? 'Yes' : 'No',
+            conditionalStyle: addWarningStyle(searchStatus1),
+        },
+        'SEARCH STATUS 2': {
+            value: searchStatus2 ? 'Yes' : 'No',
+            conditionalStyle: addWarningStyle(searchStatus2),
+        },
+        'RESET LOOP': {
+            value: resetLoop ? 'Yes' : 'No',
+            conditionalStyle: addWarningStyle(resetLoop),
         },
     };
     return (
@@ -191,3 +217,12 @@ const parsePreferredBearer = (preferred: number) => {
             return 'Unknown';
     }
 };
+
+const addWarningStyle = (active?: boolean): React.CSSProperties =>
+    active
+        ? {
+              color: colors.white,
+              backgroundColor: colors.orange,
+              animation: '5s valueChangedWithWarning',
+          }
+        : {};
