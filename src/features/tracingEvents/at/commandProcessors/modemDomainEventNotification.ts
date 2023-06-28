@@ -6,7 +6,15 @@
 
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
-import { getNumber, parseStringValue } from '../utils';
+import { getNumber } from '../utils';
+
+const ModemDomainEvent = {
+    ME_OVERHEATED: 'ME OVERHEATED',
+    ME_BATTERY_LOW: 'ME BATTERY LOW',
+    SEARCH_STATUS_1: 'SEARCH STATUS 1',
+    SEARCH_STATUS_2: 'SEARCH STATUS 2',
+    RESET_LOOP: 'RESET LOOP',
+};
 
 let setNotification: 0 | 1;
 
@@ -36,17 +44,28 @@ export const processor: Processor<'%MDMEV'> = {
                 };
             }
         }
-        return state;
-    },
-    onNotification: (packet, state) => {
         if (packet.payload) {
-            const event = parseStringValue(packet.payload);
-            return {
-                ...state,
-                modemDomainEvents: state.modemDomainEvents
-                    ? [...state.modemDomainEvents, event]
-                    : [event],
-            };
+            const payload = packet.payload.trim();
+            if (payload.includes(ModemDomainEvent.ME_OVERHEATED)) {
+                state.meOverheated = true;
+                return state;
+            }
+            if (payload.includes(ModemDomainEvent.ME_BATTERY_LOW)) {
+                state.meBatteryLow = true;
+                return state;
+            }
+            if (payload.includes(ModemDomainEvent.SEARCH_STATUS_1)) {
+                state.searchStatus1 = true;
+                return state;
+            }
+            if (payload.includes(ModemDomainEvent.SEARCH_STATUS_2)) {
+                state.searchStatus2 = true;
+                return state;
+            }
+            if (payload.includes(ModemDomainEvent.RESET_LOOP)) {
+                state.resetLoop = true;
+                return state;
+            }
         }
         return state;
     },

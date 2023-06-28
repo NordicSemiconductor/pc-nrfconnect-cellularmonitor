@@ -88,3 +88,20 @@ test('+CGEV: PDN deactivation removes the relevant AccessPointName', () => {
     state = convertPackets([atPacket('+CGEV: ME PDN DEACT 1')], state);
     expect(state.accessPointNames).toEqual({});
 });
+
+test('AT+CGEV updates overheated and batteryLow', () => {
+    let state = convertPackets([
+        atPacket('+CGEV: ME OVERHEATED\r\n'),
+        atPacket('+CGEV: ME BATTERY LOW'),
+    ]);
+    expect(state.meOverheated).toBe(true);
+    expect(state.meBatteryLow).toBe(true);
+
+    state = convertPackets([atPacket('+CGEV: ME OVERHEATED\r\n')]);
+    expect(state.meOverheated).toBe(true);
+    expect(state.meBatteryLow).toBeUndefined();
+
+    state = convertPackets([atPacket('+CGEV: ME BATTERY LOW\r\n')]);
+    expect(state.meOverheated).toBeUndefined();
+    expect(state.meBatteryLow).toBe(true);
+});

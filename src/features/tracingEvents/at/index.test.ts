@@ -93,7 +93,6 @@ const expectedState = {
     xModemTraceSetID: 2,
     rrcState: 1,
     mdmevNotification: 1,
-    modemDomainEvents: ['SEARCH STATUS 2'],
 
     networkTimeNotifications: 1,
     networkTimeNotification: {
@@ -110,6 +109,7 @@ const expectedState = {
             ipv4: '10.160.148.98',
         },
     },
+    searchStatus2: true,
 } as Partial<State>;
 
 test('Trace is read properly', () => {
