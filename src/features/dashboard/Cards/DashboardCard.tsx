@@ -250,7 +250,7 @@ const Commands = ({
     const isTracing = useSelector(getIsTracing);
     const detectedAtHostLibrary = useSelector(getDetectedAtHostLibrary);
 
-    if (!isTracing || !detectedAtHostLibrary || commands.length === 0) {
+    if (commands.length === 0) {
         return null;
     }
 
@@ -264,7 +264,9 @@ const Commands = ({
                     <p className="mb-0">{cmd}</p>
 
                     <div className="d-flex">
-                        {commandHasRecommeneded(cmd) ? (
+                        {isTracing &&
+                        detectedAtHostLibrary &&
+                        commandHasRecommeneded(cmd) ? (
                             <IconAction
                                 action={() => {
                                     const commandsToSend = recommendedAT[cmd];
