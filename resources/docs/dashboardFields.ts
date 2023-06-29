@@ -68,19 +68,24 @@ export const documentation: Documentation = {
             title: 'Reference Signal Received Power (RSRP)',
             description:
                 'The average power level received from a single reference signal in an LTE network.',
-            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
+            commands: [
+                'AT+CESQ',
+                'AT%CESQ',
+                'AT%CONEVAL',
+                'AT%XMONITOR',
+            ] as const,
         },
         RSRQ: {
             title: 'Reference Signal Received Quality (RSRQ)',
             description:
                 'The quality of a single reference signal received in an LTE network and calculated from RSRP.',
-            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
+            commands: ['AT+CESQ', 'AT%CESQ', 'AT%CONEVAL'] as const,
         },
         SNR: {
             title: 'Signal-to-Noise Ratio (SNR)',
             description:
                 'A measure of the quality of the cellular signal received by the mobile device. It represents the ratio of the signal power to the noise power in the received signal. A higher SNR value indicates a better-quality signal, while a lower value indicates a weaker or noisier signal.',
-            commands: ['AT%CESQ', 'AT%CONEVAL'] as const,
+            commands: ['AT%CESQ', 'AT%CONEVAL', 'AT%XMONITOR'] as const,
         },
         'NETWORK STATUS NOTIFICATIONS': {
             description:
