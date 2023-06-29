@@ -8,7 +8,11 @@ import {
     parsePowerSavingMode,
     TAU_TYPES,
 } from '../../../../utils/powerSavingMode';
-import { isValidAcTState, PowerSavingModeEntries } from '../../types';
+import {
+    isValidAcTState,
+    PowerSavingModeEntries,
+    SignalQuality,
+} from '../../types';
 import type { Processor } from '..';
 import { getNumber, getParametersFromResponse } from '../utils';
 
@@ -48,7 +52,7 @@ export const processor: Processor<'%XMONITOR'> = {
             }
 
             const rsrp = getNumber(responseArray[10]);
-            const snr = getNumber(responseArray[10]);
+            const snr = getNumber(responseArray[11]);
 
             return {
                 ...state,
@@ -65,14 +69,7 @@ export const processor: Processor<'%XMONITOR'> = {
                 earfcn: getNumber(responseArray[9]),
                 signalQuality: {
                     ...state.signalQuality,
-                    rsrp: rsrp ?? state.signalQuality?.rsrp,
-                    rsrp_decibel: rsrp
-                        ? rsrp - 140
-                        : state.signalQuality?.rsrp_decibel,
-                    snr: snr ?? state.signalQuality?.snr,
-                    snr_decibel: snr
-                        ? snr - 24
-                        : state.signalQuality?.snr_decibel,
+                    ...parseSignalQuality(rsrp, snr),
                 },
                 NW_provided_eDRX_value: validateEmptyString(responseArray[12]),
 
@@ -115,3 +112,24 @@ const parsePSMValues = (
 
 const validateEmptyString = (value: string) =>
     value === '' ? undefined : value;
+
+const parseSignalQuality = (rsrp: number, snr: number) => {
+    const result: SignalQuality = {
+        rsrp,
+        snr,
+    };
+
+    if (rsrp && rsrp !== 255) {
+        result.rsrp_decibel = rsrp - 140;
+    } else if (rsrp === 255) {
+        result.rsrp_decibel = undefined;
+    }
+
+    if (snr && snr !== 255) {
+        result.snr_decibel = snr - 24;
+    } else if (snr === 255) {
+        result.snr_decibel = undefined;
+    }
+
+    return result;
+};

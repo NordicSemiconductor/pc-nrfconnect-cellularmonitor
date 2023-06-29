@@ -63,19 +63,13 @@ export default () => {
             value: earfcn == null || Number.isNaN(earfcn) ? 'Unknown' : earfcn,
         },
         RSRP: {
-            value: signalQuality?.rsrp_decibel
-                ? `${signalQuality?.rsrp_decibel} dBm`
-                : 'Unknown',
+            value: parseRsrp(signalQuality?.rsrp, signalQuality?.rsrp_decibel),
         },
         RSRQ: {
-            value: signalQuality?.rsrq_decibel
-                ? `${signalQuality?.rsrq_decibel} dB`
-                : 'Unknown',
+            value: parseRsrq(signalQuality?.rsrq, signalQuality?.rsrq_decibel),
         },
         SNR: {
-            value: signalQuality?.snr_decibel
-                ? `${signalQuality?.snr_decibel} dB`
-                : 'Unknown',
+            value: parseSnr(signalQuality?.snr, signalQuality?.snr_decibel),
         },
         'EPS NETWORK REGISTRATION STATUS': {
             value: networkStatus ?? 'Unknown',
@@ -192,4 +186,76 @@ const parseCellId = (id?: string) => {
     }
 
     return 'Unknown';
+};
+
+const parseRsrp = (rsrp?: number, rsrpDecibel?: number) => {
+    if (rsrp == null) return 'Unknown';
+
+    if (rsrp === 255) {
+        return 'Not known or not detectable (255)';
+    }
+
+    if (rsrpDecibel != null) {
+        let quality = '';
+        if (rsrpDecibel >= -84) {
+            quality = 'Excellent';
+        } else if (rsrpDecibel <= -85 && rsrpDecibel >= -102) {
+            quality = 'Good';
+        } else if (rsrpDecibel <= -103 && rsrpDecibel >= -111) {
+            quality = 'Fair';
+        } else if (rsrpDecibel < -111) {
+            quality = 'Poor';
+        }
+        return `${quality} (${rsrpDecibel} dBm)`;
+    }
+
+    return 'Unknown' as never;
+};
+
+const parseRsrq = (rsrq?: number, rsrqDecibel?: number) => {
+    if (rsrq == null) return 'Unknown';
+
+    if (rsrq === 255) {
+        return 'Not known or not detectable (255)';
+    }
+
+    if (rsrqDecibel != null) {
+        let quality = '';
+        if (rsrqDecibel >= -4) {
+            quality = 'Excellent';
+        } else if (rsrqDecibel <= -5 && rsrqDecibel >= -9) {
+            quality = 'Good';
+        } else if (rsrqDecibel <= -9 && rsrqDecibel >= -12) {
+            quality = 'Fair';
+        } else if (rsrqDecibel < -12) {
+            quality = 'Poor';
+        }
+        return `${quality} (${rsrqDecibel} dB)`;
+    }
+
+    return 'Unknown' as never;
+};
+
+const parseSnr = (snr?: number, snrDecibel?: number) => {
+    if (snr == null) return 'Unknown';
+
+    if (snr === 255) {
+        return 'Not known or not detectable (255)';
+    }
+
+    if (snrDecibel != null) {
+        let quality = '';
+        if (snrDecibel >= 12.5) {
+            quality = 'Excellent';
+        } else if (snrDecibel >= 10 && snrDecibel <= 12.5) {
+            quality = 'Good';
+        } else if (snrDecibel >= 7 && snrDecibel <= 10) {
+            quality = 'Fair';
+        } else if (snrDecibel < 7) {
+            quality = 'Poor';
+        }
+        return `${quality} (${snrDecibel} dB)`;
+    }
+
+    return 'Unknown' as never;
 };

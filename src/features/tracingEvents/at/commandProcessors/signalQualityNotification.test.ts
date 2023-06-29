@@ -39,18 +39,18 @@ const signalQualityNotifications = [
     // Mixes
     { packet: atPacket('%CESQ: 64,3,17,2'), result: [64, 3, -76, 17, 2, -11] },
 
-    // Unknown
+    // Unknown should yield undefined for decibel values
     {
         packet: atPacket('%CESQ: 255,255,255,255'),
-        result: [255, 255, 115, 255, 255, 108],
+        result: [255, 255, undefined, 255, 255, undefined],
     },
     {
         packet: atPacket('%CESQ: 255,255,17,2'),
-        result: [255, 255, 115, 17, 2, -11],
+        result: [255, 255, undefined, 17, 2, -11],
     },
     {
         packet: atPacket('%CESQ: 64,3,255, 255'),
-        result: [64, 3, -76, 255, 255, 108],
+        result: [64, 3, -76, 255, 255, undefined],
     },
 ];
 
@@ -126,4 +126,15 @@ test('%CESQ notification does set snr back to undefined', () => {
 
     expect(state.signalQuality?.snr).toBe(13);
     expect(state.signalQuality?.snr_decibel).toBe(13 - 24);
+});
+
+test('CESQ rsrq and rsrp with index 255 do not yield a decibel value', () => {
+    const state = convertPackets([
+        atPacket('AT+CESQ=1'),
+        atPacket('%CESQ: 255,255,255,255\r\nOK\r\n'),
+    ]);
+    expect(state.signalQuality?.rsrq).toBe(255);
+    expect(state.signalQuality?.rsrq_decibel).toBeUndefined();
+    expect(state.signalQuality?.rsrp).toBe(255);
+    expect(state.signalQuality?.rsrp_decibel).toBeUndefined();
 });

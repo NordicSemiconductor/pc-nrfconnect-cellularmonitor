@@ -7,6 +7,18 @@
 import { State } from '../../types';
 import { atPacket, convertPackets } from '../testUtils';
 
+test('%XMONTIOR rsrp and snr 255 yield undefined decibel', () => {
+    const state = convertPackets([
+        atPacket(
+            '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,255,255,"","00000010","00100010","01001001"\r\nOK'
+        ),
+    ]);
+    expect(state.signalQuality?.rsrp).toBe(255);
+    expect(state.signalQuality?.rsrp_decibel).toBeUndefined();
+    expect(state.signalQuality?.snr).toBe(255);
+    expect(state.signalQuality?.snr_decibel).toBeUndefined();
+});
+
 test('%XMONITOR packet with mfw version >= v1.2.x', () => {
     const state = convertPackets([
         modernModemVersionPacket.command,

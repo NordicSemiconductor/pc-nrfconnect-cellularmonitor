@@ -32,3 +32,14 @@ test('CESQ read commands work as expected', () => {
         ).toEqual(test.expected);
     });
 });
+
+test('CESQ rsrq and rsrp with index 255 do not yield a decibel value', () => {
+    const state = convertPackets([
+        atPacket('AT+CESQ'),
+        atPacket('+CESQ: 255,255,255,255,255,255\r\nOK\r\n'),
+    ]);
+    expect(state.signalQuality?.rsrq).toBe(255);
+    expect(state.signalQuality?.rsrq_decibel).toBeUndefined();
+    expect(state.signalQuality?.rsrp).toBe(255);
+    expect(state.signalQuality?.rsrp_decibel).toBeUndefined();
+});

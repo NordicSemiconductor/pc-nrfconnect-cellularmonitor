@@ -100,16 +100,7 @@ export interface State {
     conevalResult?: ConnectionEvaluationResult;
     conevalEnergyEstimate?: ConevalEnergyEstimate;
     rrcState?: RRCState;
-    signalQuality?: {
-        rsrp?: number;
-        rsrp_threshold_index?: number;
-        rsrp_decibel?: number;
-        rsrq?: number;
-        rsrq_threshold_index?: number;
-        rsrq_decibel?: number;
-        snr?: number;
-        snr_decibel?: number;
-    };
+    signalQuality?: SignalQuality;
     cellID: string; // 4-byte E-UTRAN cell ID.
     physicalCellID?: number; // Integer [0, 503]
     earfcn?: number;
@@ -164,6 +155,17 @@ export interface eDRX {
     requestedValue?: string;
     nwProvidedValue?: string;
     pagingTimeWindow?: string;
+}
+
+export interface SignalQuality {
+    rsrp?: number;
+    rsrp_threshold_index?: number;
+    rsrp_decibel?: number;
+    rsrq?: number;
+    rsrq_threshold_index?: number;
+    rsrq_decibel?: number;
+    snr?: number;
+    snr_decibel?: number;
 }
 
 export enum PlmnStatus {
