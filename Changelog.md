@@ -4,11 +4,16 @@
 
 -   Option to auto-detect trace database when reading trace file.
 -   Option to deselect **Terminal Serial Port**.
--   Dashboard field values can be copied by clicking on the value.
+-   Dashboard field values can be copied by clicking on the value. The value
+    will have a blue background when it is possible to copy.
+-   Signal quality properties (RSRP, RSRQ, SNR) will show an indication of
+    Excellent, Good, Fair, or Bad signal strength when it is available.
 
 ### Fixed
 
 -   Programming sample could fail the first time programming an application.
+-   Signal quality properties (RSRP, RSRQ, SNR) showed incorrect decibel value
+    when it should have shown "Not known or not detectable".
 
 ### Changed
 
