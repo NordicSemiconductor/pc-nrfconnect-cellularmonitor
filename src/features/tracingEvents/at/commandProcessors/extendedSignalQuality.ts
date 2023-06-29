@@ -22,15 +22,18 @@ export const processor: Processor<'+CESQ'> = {
             packet.payload
         ) {
             const responseArray = getNumberArray(packet.payload);
+            const [, , , , rsrq, rsrp] = responseArray;
             return {
                 ...state,
                 signalQuality: {
                     ...state.signalQuality,
                     // Unused,Unused,Unused,Unused,rsrq,rsrp
-                    rsrq: responseArray[4],
-                    rsrq_decibel: responseArray[4] / 2 - 19.5,
-                    rsrp: responseArray[5],
-                    rsrp_decibel: responseArray[5] - 140,
+                    rsrq,
+                    rsrq_decibel:
+                        rsrq !== 255 ? responseArray[4] / 2 - 19.5 : undefined,
+                    rsrp,
+                    rsrp_decibel:
+                        rsrp !== 255 ? responseArray[5] - 140 : undefined,
                 },
             };
         }

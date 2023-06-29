@@ -9,6 +9,7 @@ import {
     ConnectionEvaluationResult,
     CoverageEnhancementLevel,
     RRCState,
+    SignalQuality,
     TAUTriggered,
 } from '../../types';
 import type { Processor } from '..';
@@ -37,18 +38,7 @@ export const processor: Processor<'%CONEVAL'> = {
                     ),
                     signalQuality: {
                         ...state.signalQuality,
-                        rsrp: rsrp ?? state.signalQuality?.rsrp,
-                        rsrp_decibel: rsrp
-                            ? rsrp - 140
-                            : state.signalQuality?.rsrp_decibel,
-                        rsrq: rsrq ?? state.signalQuality?.rsrq,
-                        rsrq_decibel: rsrq
-                            ? rsrq / 2 - 19.5
-                            : state.signalQuality?.rsrq_decibel,
-                        snr: snr ?? state.signalQuality?.snr,
-                        snr_decibel: snr
-                            ? snr - 24
-                            : state.signalQuality?.snr_decibel,
+                        ...parseSignalQuality(rsrp, rsrq, snr),
                     },
                     cellID: parsedPayload[6],
                     plmn: parsedPayload[7],
@@ -134,4 +124,36 @@ const validateNumberValue = (value: string): number | undefined => {
     const numberValue = Number.parseInt(value, 10);
     if (!Number.isNaN(numberValue)) return numberValue;
     return undefined as never;
+};
+
+const parseSignalQuality = (
+    rsrp?: number,
+    rsrq?: number,
+    snr?: number
+): SignalQuality => {
+    const result: SignalQuality = {
+        rsrp,
+        rsrq,
+        snr,
+    };
+
+    if (rsrp && rsrp !== 255) {
+        result.rsrp_decibel = rsrp - 140;
+    } else if (rsrp === 255) {
+        result.rsrp_decibel = undefined;
+    }
+
+    if (rsrq && rsrq !== 255) {
+        result.rsrq_decibel = rsrq / 2 - 19.5;
+    } else if (rsrq === 255) {
+        result.rsrq_decibel = undefined;
+    }
+
+    if (snr && snr !== 255) {
+        result.snr_decibel = snr - 24;
+    } else if (snr === 255) {
+        result.snr_decibel = undefined;
+    }
+
+    return result;
 };

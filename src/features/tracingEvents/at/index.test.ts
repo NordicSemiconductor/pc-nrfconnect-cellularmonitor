@@ -25,8 +25,8 @@ const expectedState = {
         rsrq_threshold_index: 1,
         rsrq_decibel: 11 / 2 - 19.5,
 
-        snr: 53,
-        snr_decibel: 53 - 24,
+        snr: 22,
+        snr_decibel: 22 - 24,
     },
     notifyPeriodicTAU: false,
     operatorFullName: 'Telia N@',

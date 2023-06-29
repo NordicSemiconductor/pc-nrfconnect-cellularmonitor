@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { colors } from 'pc-nrfconnect-shared';
 
 import { FunctionalMode } from '../../tracingEvents/at/commandProcessors/functionMode';
 import { Mode } from '../../tracingEvents/at/commandProcessors/TXPowerReduction';

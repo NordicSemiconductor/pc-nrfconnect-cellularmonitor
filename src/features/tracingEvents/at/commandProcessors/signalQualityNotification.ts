@@ -54,23 +54,22 @@ export const processor: Processor<'%CESQ'> = {
     },
     onNotification: (packet, state) => {
         if (packet.payload) {
-            const signalQualityValues = getNumberArray(packet.payload);
+            const [rsrp, rsrpThresholdIndex, rsrq, rsrqThresholdIndex] =
+                getNumberArray(packet.payload);
 
-            if (signalQualityValues?.length === 4) {
-                return {
-                    ...state,
-                    signalQuality: {
-                        ...state.signalQuality,
-                        rsrp: signalQualityValues[0],
-                        rsrp_threshold_index: signalQualityValues[1],
-                        rsrp_decibel: signalQualityValues[0] - 140,
+            return {
+                ...state,
+                signalQuality: {
+                    ...state.signalQuality,
+                    rsrp,
+                    rsrp_threshold_index: rsrpThresholdIndex,
+                    rsrp_decibel: rsrp !== 255 ? rsrp - 140 : undefined,
 
-                        rsrq: signalQualityValues[2],
-                        rsrq_threshold_index: signalQualityValues[3],
-                        rsrq_decibel: signalQualityValues[2] / 2 - 19.5,
-                    },
-                };
-            }
+                    rsrq,
+                    rsrq_threshold_index: rsrqThresholdIndex,
+                    rsrq_decibel: rsrq !== 255 ? rsrq / 2 - 19.5 : undefined,
+                },
+            };
         }
         return state;
     },
