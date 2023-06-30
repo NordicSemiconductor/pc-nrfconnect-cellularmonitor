@@ -207,11 +207,16 @@ const CardTooltip = ({ fieldKey, title, setShowTooltip }: CardTooltip) => {
     return (
         <Tooltip id={`tooltip-${fieldKey}`}>
             <div
-                className="card-tooltip"
+                style={{ backgroundColor: colors.gray900, padding: '8px 16px' }}
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
             >
-                <p className="font-weight-bold">{tooltipTitle}</p>
+                <p
+                    className="font-weight-bold"
+                    style={{ textTransform: 'uppercase', marginBottom: '8px' }}
+                >
+                    {tooltipTitle}
+                </p>
                 <Documentation description={description} />
                 <Commands commands={commands} />
             </div>
@@ -256,14 +261,26 @@ const Commands = ({
 
     return (
         <>
-            <p className="font-weight-bold">
+            <p className="font-weight-bold" style={{ marginBottom: '8px' }}>
                 RELATED {commands.length > 1 ? 'COMMANDS' : 'COMMAND'}
             </p>
             {commands.map((cmd, index) => (
-                <div key={`${cmd}`} className="mb-3">
-                    <p className="mb-0">{cmd}</p>
+                <div key={`${cmd}`}>
+                    <p style={{ marginBottom: 0 }}>{cmd}</p>
 
-                    <div className="d-flex">
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            marginBottom: '8px',
+                        }}
+                    >
+                        <IconAction
+                            action={() => openUrl(documentationMap[cmd])}
+                            label="Doc"
+                            icon={mdiTextBox}
+                            index={index}
+                        />
                         {isTracing &&
                         detectedAtHostLibrary &&
                         commandHasRecommeneded(cmd) ? (
@@ -279,12 +296,6 @@ const Commands = ({
                                 index={index}
                             />
                         ) : null}
-                        <IconAction
-                            action={() => openUrl(documentationMap[cmd])}
-                            label="Doc"
-                            icon={mdiTextBox}
-                            index={index}
-                        />
                     </div>
                 </div>
             ))}
@@ -313,6 +324,7 @@ const IconAction = ({
             color: colors.nordicBlue,
             display: 'flex',
             alignItems: 'center',
+            verticalAlign: 'middle',
         }}
         onClick={action}
         onKeyDown={event => {
@@ -322,7 +334,7 @@ const IconAction = ({
         }}
         className={className}
     >
-        <Icon className="mr-1" path={icon} size={0.6} />
+        <Icon className="mr-1" path={icon} size={0.7} />
         {label}
     </span>
 );
