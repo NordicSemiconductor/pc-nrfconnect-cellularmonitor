@@ -1,4 +1,4 @@
-## 1.0.3 - Unreleased
+## 1.0.3 - 2023-07-03
 
 ### Added
 
@@ -18,7 +18,7 @@
 ### Changed
 
 -   Renamed **Serial port trace capture** to **Modem trace serial port**.
--   When selected device only expose one serial port, the app will assume it
+-   When selected device only exposes one serial port, the app will assume it
     will be used for modem trace. Hence, it will only auto-select serial port
     for the **Modem trace serial port**, and will not select anything for
     **Terminal serial port**.
