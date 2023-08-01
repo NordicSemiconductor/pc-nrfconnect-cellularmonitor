@@ -74,13 +74,8 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
             ) : (
                 <>
                     <h6>Wireshark not detected</h6>
+                    {extendedDescription && <p> {extendedDescription}</p>}
                     <p>
-                        {extendedDescription && (
-                            <span>
-                                Wireshark is required for live streaming trace
-                                output.
-                            </span>
-                        )}
                         <Button
                             variant="link"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
