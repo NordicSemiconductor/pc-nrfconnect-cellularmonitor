@@ -19,10 +19,6 @@ import { getWiresharkPath, setWiresharkPath } from './wiresharkSlice';
 
 import './wireshark.scss';
 
-type WiresharkProps = {
-    extendedDescription?: boolean;
-};
-
 export const SelectWireshark: FC = ({ children }) => {
     const dispatch = useDispatch();
 
@@ -41,7 +37,7 @@ export const SelectWireshark: FC = ({ children }) => {
     );
 };
 
-export default ({ extendedDescription = false }: WiresharkProps) => {
+export default () => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
     const dispatch = useDispatch();
@@ -74,7 +70,6 @@ export default ({ extendedDescription = false }: WiresharkProps) => {
             ) : (
                 <>
                     <h6>Wireshark not detected</h6>
-                    {extendedDescription && <p> {extendedDescription}</p>}
                     <p>
                         <Button
                             variant="link"
