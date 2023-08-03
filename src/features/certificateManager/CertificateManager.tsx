@@ -231,7 +231,7 @@ export default ({ active }: { active: boolean }) => {
     return (
         <div className={`${className} ${active ? 'hidden' : ''}`}>
             <Alert variant="info">
-                <span className="float-left h-100 mdi mdi-information mdi-36px pr-3" />
+                <span className="h-100 mdi mdi-information mdi-36px float-left pr-3" />
                 <div style={{ lineHeight: '1.5rem', userSelect: 'text' }}>
                     The modem must be in <strong>offline</strong> state (
                     <code>AT+CFUN=4</code>) for updating certificates.
@@ -249,7 +249,7 @@ export default ({ active }: { active: boolean }) => {
                     tag.
                 </div>
             </Alert>
-            <Form className="mt-4 mb-4 pr-4">
+            <Form className="mb-4 mt-4 pr-4">
                 <Row>
                     <Col xs={8}>
                         {FormGroupWithCheckbox({

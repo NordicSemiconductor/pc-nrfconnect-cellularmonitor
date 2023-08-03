@@ -154,7 +154,7 @@ const SelectSample = ({
                     {samples.map(sample => (
                         <div
                             key={sample.title}
-                            className="card-in-card p-3 d-flex flex-column"
+                            className="card-in-card d-flex flex-column p-3"
                         >
                             <strong className="d-block">{sample.title}</strong>
                             <p className="flex-grow-1 py-2">
@@ -464,7 +464,7 @@ const ProgramModem = ({
                     {modemFirmwares.map(mfw => (
                         <div
                             key={mfw.title}
-                            className="card-in-card p-3 d-flex flex-column"
+                            className="card-in-card d-flex flex-column p-3"
                         >
                             <strong className="d-block">{mfw.title}</strong>
                             <p className="flex-grow-1 py-2">

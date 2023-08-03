@@ -37,7 +37,7 @@ export const OpenSerialTerminal = () => {
 
     return (
         <Button
-            className="w-100 mt-2 position-relative"
+            className="w-100 position-relative mt-2"
             onClick={() =>
                 openSerialTerminal(device, selectedUartSerialPort.path)
             }
