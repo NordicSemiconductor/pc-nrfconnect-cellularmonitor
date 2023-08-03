@@ -12,19 +12,21 @@ import { findWireshark } from './wireshark';
 import Wireshark from './WiresharkButton';
 import { getWiresharkPath } from './wiresharkSlice';
 
-export default () => {
+export default ({ onLiveTrace }: { onLiveTrace?: boolean }) => {
     const selectedWiresharkPath = useSelector(getWiresharkPath);
     const selectedTraceFormats = useSelector(getTraceFormats);
     const wiresharkPath = findWireshark(selectedWiresharkPath);
 
-    const showWiresharkWarning =
-        selectedTraceFormats.includes('live') && !wiresharkPath;
-    if (!showWiresharkWarning) return null;
+    if (wiresharkPath) return null;
+
+    if (onLiveTrace && !selectedTraceFormats.includes('live')) {
+        return null;
+    }
 
     return (
         <div className="wireshark-warning">
             <span className="mdi mdi-alert mdi-24px wireshark-warning-icon" />
-            <Wireshark extendedDescription />
+            <Wireshark />
         </div>
     );
 };

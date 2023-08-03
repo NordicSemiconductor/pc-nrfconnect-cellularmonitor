@@ -8,6 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Group, selectedDevice } from 'pc-nrfconnect-shared';
 
+import WiresharkWarning from '../../features/wireshark/WiresharkWarning';
 import { LoadTraceFile } from './LoadTraceFile';
 import TraceConverter from './Tracing/TraceConverter';
 
@@ -20,6 +21,7 @@ export default () => {
         <Group heading="FILE ACTIONS">
             <LoadTraceFile />
             <TraceConverter />
+            <WiresharkWarning />
         </Group>
     );
 };

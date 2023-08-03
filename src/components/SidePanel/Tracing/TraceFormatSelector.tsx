@@ -46,7 +46,7 @@ export default () => {
                 isToggled={selectedFormats.includes('raw')}
                 onToggle={toggle('raw')}
             />
-            <WiresharkWarning />
+            <WiresharkWarning onLiveTrace />
         </>
     );
 };
