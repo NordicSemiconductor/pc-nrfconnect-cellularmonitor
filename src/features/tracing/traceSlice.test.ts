@@ -6,8 +6,8 @@
 
 import '../../utils/testUtils';
 
+import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import { configureStore } from '@reduxjs/toolkit';
-import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import {

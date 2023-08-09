@@ -6,7 +6,11 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CollapsibleGroup, selectedDevice, Toggle } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    selectedDevice,
+    Toggle,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { is91DK } from '../../features/programSample/programSample';
 import {

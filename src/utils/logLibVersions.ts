@@ -6,7 +6,7 @@
 
 import nrfml, { ModuleVersion } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import nrfMonitorLibJsPackageJson from '@nordicsemiconductor/nrf-monitor-lib-js/package.json';
-import { logger } from 'pc-nrfconnect-shared';
+import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 const version = (module: ModuleVersion) => {
     switch (module.version_format) {

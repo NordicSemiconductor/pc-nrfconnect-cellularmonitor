@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
-import { logger } from 'pc-nrfconnect-shared';
 
 import { getWiresharkPath } from '../../utils/store';
 import { TAction } from '../../utils/thunk';

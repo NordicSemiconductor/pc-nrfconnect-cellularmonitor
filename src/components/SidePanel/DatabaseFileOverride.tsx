@@ -6,14 +6,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { basename } from 'path';
 import {
     Dropdown,
     DropdownItem,
     logger,
     truncateMiddle,
     usageData,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { basename } from 'path';
 
 import {
     DatabaseVersion,

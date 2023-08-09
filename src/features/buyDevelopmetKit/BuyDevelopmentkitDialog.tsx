@@ -5,7 +5,12 @@
  */
 
 import React, { useState } from 'react';
-import { Button, InfoDialog, openUrl, usageData } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    InfoDialog,
+    openUrl,
+    usageData,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../usageDataActions';
 

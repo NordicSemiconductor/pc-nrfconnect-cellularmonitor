@@ -6,7 +6,10 @@
 
 import React from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
-import { Button, truncateMiddle } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    truncateMiddle,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { openInFolder } from '../../utils/fileUtils';
 

@@ -25,8 +25,8 @@ import {
 import TraceCollector from '../Tracing/TraceCollector';
 
 jest.mock('../../../features/wireshark/wireshark');
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
+jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
 }));

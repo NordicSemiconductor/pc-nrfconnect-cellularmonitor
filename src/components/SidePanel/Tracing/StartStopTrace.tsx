@@ -6,7 +6,10 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger, StartStopButton } from 'pc-nrfconnect-shared';
+import {
+    logger,
+    StartStopButton,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
 import {

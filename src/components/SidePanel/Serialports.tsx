@@ -6,7 +6,10 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, truncateMiddle } from 'pc-nrfconnect-shared';
+import {
+    Dropdown,
+    truncateMiddle,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     getAvailableSerialPorts,

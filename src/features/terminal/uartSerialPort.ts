@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSerialPort, Device, logger } from 'pc-nrfconnect-shared';
+import {
+    createSerialPort,
+    Device,
+    logger,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
 

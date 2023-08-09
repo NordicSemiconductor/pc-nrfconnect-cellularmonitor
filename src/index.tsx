@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { App } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
 import DeviceSelector from './components/DeviceSelector';

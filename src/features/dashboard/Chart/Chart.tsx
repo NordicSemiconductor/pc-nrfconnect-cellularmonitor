@@ -9,6 +9,7 @@ import { Scatter } from 'react-chartjs-2';
 // eslint-disable-next-line import/no-unresolved
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useDispatch, useSelector } from 'react-redux';
+import { colors as sharedColors } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import {
     Chart as ChartJS,
     ChartData,
@@ -19,7 +20,6 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import { colors as sharedColors } from 'pc-nrfconnect-shared';
 
 import { EventColours } from '../../tracing/formats';
 import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';

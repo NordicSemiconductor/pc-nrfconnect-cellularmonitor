@@ -12,7 +12,7 @@ import {
     StateSelector,
     Toggle,
     usageData,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../usageDataActions';
 import { EVENT_TYPES } from '../../tracing/formats';

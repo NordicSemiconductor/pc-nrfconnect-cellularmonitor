@@ -8,8 +8,8 @@ import path from 'path';
 
 import createSinkFile from './sinkFile';
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
+jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => 'data/dir',
 }));
 

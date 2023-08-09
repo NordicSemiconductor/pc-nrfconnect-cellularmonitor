@@ -14,7 +14,7 @@ import {
     DeviceSelector,
     DeviceSelectorProps,
     logger,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     removeShellParser,

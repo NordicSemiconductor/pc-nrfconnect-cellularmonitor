@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Group } from 'pc-nrfconnect-shared';
+import { Group } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import BuyDevelopmentkitDialog from '../../features/buyDevelopmetKit/BuyDevelopmentkitDialog';
 import { getIsDeviceSelected } from '../../features/tracing/traceSlice';

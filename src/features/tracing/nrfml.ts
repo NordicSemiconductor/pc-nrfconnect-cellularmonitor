@@ -12,7 +12,7 @@ import {
     logger,
     selectedDevice,
     usageData,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';

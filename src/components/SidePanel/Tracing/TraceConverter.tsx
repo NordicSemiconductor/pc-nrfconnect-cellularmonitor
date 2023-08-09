@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, usageData } from 'pc-nrfconnect-shared';
+import { Button, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { convertTraceFile } from '../../../features/tracing/nrfml';
 import { isWiresharkInstalled } from '../../../features/wireshark/wireshark';

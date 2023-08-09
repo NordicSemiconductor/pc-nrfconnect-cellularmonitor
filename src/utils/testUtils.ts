@@ -7,9 +7,9 @@
 import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { currentPane, logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import checkDiskSpace from 'check-disk-space';
-import { currentPane, logger } from 'pc-nrfconnect-shared';
-import { testUtils } from 'pc-nrfconnect-shared/test';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -72,8 +72,8 @@ export const mockedCheckDiskSpace = checkDiskSpace as jest.MockedFunction<
 
 export const mockedDataDir = '/mocked/data/dir';
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
+jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDir: () => '/mocked/data/dir',
     getAppFile: () => '/mocked/data/dir',
     getAppDataDir: () => '/mocked/data/dir',

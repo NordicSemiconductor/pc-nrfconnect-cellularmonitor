@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { DocumentationSection } from 'pc-nrfconnect-shared';
+import { DocumentationSection } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import StartupDialog from '../features/startup/startupDialog';
 

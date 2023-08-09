@@ -6,7 +6,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MasonryLayout } from 'pc-nrfconnect-shared';
+import { MasonryLayout } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { events } from '../../tracing/tracePacketEvents';
 import { convert } from '../../tracingEvents';

@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import {
+    getAppDataDir,
+    logger,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { getAppDataDir, logger } from 'pc-nrfconnect-shared';
 
 import {
     autoDetectDbRootFolder,

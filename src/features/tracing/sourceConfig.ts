@@ -6,8 +6,8 @@
 
 // eslint-disable-next-line import/no-unresolved
 import { InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
-import { getAppDataDir } from 'pc-nrfconnect-shared';
 import { pathToFileURL } from 'url';
 
 import type { RootState } from '../../appReducer';

@@ -5,7 +5,7 @@
  */
 
 import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-import { logger } from 'pc-nrfconnect-shared';
+import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { Dispatch } from 'redux';
 
 import {

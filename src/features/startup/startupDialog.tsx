@@ -11,7 +11,7 @@ import {
     DialogButton,
     GenericDialog,
     Toggle,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import Copy from '../../components/Copy';
 import {

@@ -6,14 +6,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ipcRenderer } from 'electron';
 import {
     Button,
     Device,
-    openAppWindow,
+    openWindow,
     selectedDevice,
     usageData,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { ipcRenderer } from 'electron';
 
 import EventAction from '../../usageDataActions';
 import { getTerminalSerialPort } from './serialPortSlice';
@@ -37,7 +37,7 @@ export const OpenSerialTerminal = () => {
 
     return (
         <Button
-            className="w-100 mt-2 position-relative"
+            className="w-100 position-relative mt-2"
             onClick={() =>
                 openSerialTerminal(device, selectedUartSerialPort.path)
             }
@@ -56,7 +56,7 @@ export const OpenSerialTerminal = () => {
 
 const openSerialTerminal = (device: Device, serialPortPath: string) => {
     usageData.sendUsageData(EventAction.OPEN_SERIAL_TERMINAL);
-    openAppWindow(
+    openWindow.openApp(
         { name: 'pc-nrfconnect-serial-terminal', source: 'official' },
         {
             device: {

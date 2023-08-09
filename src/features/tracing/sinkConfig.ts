@@ -10,8 +10,12 @@ import {
     TsharkInitParameters,
     WiresharkNamedPipeInitParameters,
 } from '@nordicsemiconductor/nrf-monitor-lib-js';
+import {
+    Device,
+    deviceInfo,
+    selectedDevice,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
-import { Device, deviceInfo, selectedDevice } from 'pc-nrfconnect-shared';
 
 import type { RootState } from '../../appReducer';
 import { defaultSharkPath, findTshark } from '../wireshark/wireshark';
