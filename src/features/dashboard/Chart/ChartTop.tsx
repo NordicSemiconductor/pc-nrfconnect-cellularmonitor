@@ -22,12 +22,12 @@ export default ({ marginLeft }: { marginLeft: number }) => {
         >
             <p>Packet Event Viewer</p>
             <div className="d-flex justify-content-end flex-row">
-                <Button
-                    variant="primary"
+                <button
+                    type="button"
                     onClick={() => dispatch(setShowOptionsDialog(true))}
                 >
                     <span className="mdi mdi-cog" /> <p>SETTINGS</p>
-                </Button>
+                </button>
                 <Toggle
                     label="LIVE"
                     isToggled={isLive}
