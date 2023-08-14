@@ -6,7 +6,11 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, ConfirmationDialog, usageData } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    ConfirmationDialog,
+    usageData,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { readRawTrace } from '../../features/tracing/nrfml';
 import {

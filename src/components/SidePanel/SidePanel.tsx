@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { SidePanel } from 'pc-nrfconnect-shared';
+import { SidePanel } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { OpenSerialTerminal } from '../../features/terminal';
 import AdvancedOptions from './AdvancedOptions';

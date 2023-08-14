@@ -9,7 +9,10 @@
 
 import React, { FC } from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
-import { truncateMiddle, usageData } from 'pc-nrfconnect-shared';
+import {
+    truncateMiddle,
+    usageData,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { TraceProgress } from '../../../features/tracing/traceSlice';
 import EventAction from '../../../usageDataActions';

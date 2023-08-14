@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import path from 'path';
-import { testUtils } from 'pc-nrfconnect-shared/test';
 
 import appReducer from '../../appReducer';
 import { getMockStore, mockedDataDir } from '../../utils/testUtils';
@@ -28,8 +28,8 @@ jest.mock('../wireshark/wireshark', () => ({
     findTshark: () => 'path/to/tshark',
 }));
 
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
+jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
     selectedDevice: () => {},

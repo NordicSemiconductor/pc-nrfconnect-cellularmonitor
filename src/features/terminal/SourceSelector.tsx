@@ -6,7 +6,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AutoDetectTypes } from '@serialport/bindings-cpp';
 import {
     ConflictingSettingsDialog,
     Dropdown,
@@ -14,7 +13,8 @@ import {
     selectedDevice,
     SerialPort,
     truncateMiddle,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import type { AutoDetectTypes } from '@serialport/bindings-cpp';
 import { SerialPortOpenOptions } from 'serialport';
 
 import {

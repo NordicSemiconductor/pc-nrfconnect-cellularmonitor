@@ -6,7 +6,11 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, selectedDevice, usageData } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    selectedDevice,
+    usageData,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { getTerminalSerialPort } from '../../features/terminal/serialPortSlice';
 import {

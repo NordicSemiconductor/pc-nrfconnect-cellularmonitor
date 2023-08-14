@@ -9,13 +9,13 @@ import {
     deviceControlReset,
     firmwareProgram,
 } from '@nordicsemiconductor/nrf-device-lib-js';
-import { readFileSync } from 'fs';
 import {
     Device,
     getDeviceLibContext,
     logger,
     usageData,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { readFileSync } from 'fs';
 
 import EventAction from '../../usageDataActions';
 import { downloadedFilePath, Firmware, ModemFirmware } from './samples';

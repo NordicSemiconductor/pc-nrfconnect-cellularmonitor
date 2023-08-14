@@ -6,7 +6,7 @@
 
 @use 'sass:color';
 
-@import '~pc-nrfconnect-shared/src/variables';
+@import '~@nordicsemiconductor/pc-nrfconnect-shared/src/variables';
 
 .installable-app-grid {
     display: grid;

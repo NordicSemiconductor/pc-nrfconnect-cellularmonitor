@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import {
+    getAppFile,
+    getPersistentStore,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
-import { getAppFile, getPersistentStore } from 'pc-nrfconnect-shared';
 
 import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
 

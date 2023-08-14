@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Toggle, usageData } from 'pc-nrfconnect-shared';
+import { Toggle, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { TraceFormat } from '../../../features/tracing/formats';
 import {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger, SerialPort } from 'pc-nrfconnect-shared';
+import { logger, SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { TAction } from '../../../utils/thunk';
 import { ShellParser } from '../../shell/shellParser';

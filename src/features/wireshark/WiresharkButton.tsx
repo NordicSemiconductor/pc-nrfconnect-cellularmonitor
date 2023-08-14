@@ -6,7 +6,11 @@
 
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, openUrl, usageData } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    openUrl,
+    usageData,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../usageDataActions';
 import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';

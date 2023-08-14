@@ -5,8 +5,8 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import checkDiskSpace from 'check-disk-space';
-import { getAppDataDir } from 'pc-nrfconnect-shared';
 
 import DiskSpaceUsageBox from './DiskSpaceUsageBox';
 

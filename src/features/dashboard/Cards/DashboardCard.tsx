@@ -10,13 +10,13 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { mdiPlayBox, mdiTextBox } from '@mdi/js';
 import Icon from '@mdi/react';
-import { clipboard } from 'electron';
 import {
     Card,
     colors,
     newCopiedFlashMessage,
     openUrl,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { clipboard } from 'electron';
 
 import { documentation } from '../../../../resources/docs/dashboardFields';
 import {

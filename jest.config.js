@@ -5,9 +5,10 @@
  */
 const path = require('path');
 
-const config = require('pc-nrfconnect-shared/config/jest.config')([
-    'serialport',
-]);
+const config =
+    require('@nordicsemiconductor/pc-nrfconnect-shared/config/jest.config')([
+        'serialport',
+    ]);
 
 config.setupFilesAfterEnv.push(
     path.join(__dirname, 'src', 'utils', 'polyfillJest.js')

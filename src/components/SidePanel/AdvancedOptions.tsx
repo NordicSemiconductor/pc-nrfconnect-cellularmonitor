@@ -6,7 +6,10 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { CollapsibleGroup, selectedDevice } from 'pc-nrfconnect-shared';
+import {
+    CollapsibleGroup,
+    selectedDevice,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import ProgramSampleModal from '../../features/programSample/ProgramSampleModal';
 import SourceSelector from '../../features/terminal/SourceSelector';

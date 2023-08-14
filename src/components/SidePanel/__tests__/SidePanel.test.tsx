@@ -26,8 +26,8 @@ import { TraceCollectorSidePanel } from '../SidePanel';
 enableFetchMocks();
 
 jest.mock('../../../features/wireshark/wireshark');
-jest.mock('pc-nrfconnect-shared', () => ({
-    ...jest.requireActual('pc-nrfconnect-shared'),
+jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
+    ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,
     getAppDir: () => mockedDataDir,
     getAppFile: () => mockedDataDir,
