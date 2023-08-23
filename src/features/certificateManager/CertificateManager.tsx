@@ -245,8 +245,7 @@ export default ({ active }: { active: boolean }) => {
                     to support long AT-commands.
                     <br />
                     Use security tag <code>{NRF_CLOUD_TAG}</code> to manage nRF
-                    Connect for Cloud certificate, otherwise pick a different
-                    tag.
+                    Cloud certificate, otherwise pick a different tag.
                 </div>
             </Alert>
             <Form className="mb-4 mt-4 pr-4">
