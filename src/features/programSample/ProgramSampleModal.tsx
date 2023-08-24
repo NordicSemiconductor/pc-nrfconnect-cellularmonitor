@@ -30,7 +30,7 @@ import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import {
     is91DK,
     isThingy91,
-    program,
+    programDevice,
     programModemFirmware,
     SampleProgress,
 } from './programSample';
@@ -235,8 +235,9 @@ const ProgramSample = ({
                 `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
             );
             const amountOfProgress =
-                ((json.step - 1) / json.amountOfSteps) * 100 +
-                (1 / json.amountOfSteps) * json.progressPercentage;
+                // Future api of shared will remove undefined steps
+                ((json.step! - 1) / json.amountOfSteps!) * 100 +
+                (1 / json.amountOfSteps!) * json.progressPercentage;
 
             progress.set(fw as Firmware, amountOfProgress);
             setProgress(new Map(progress.entries()));
@@ -344,7 +345,7 @@ const ProgramSample = ({
                             await downloadSample(sample);
                             dispatch(setTerminalSerialPort(null));
 
-                            await program(
+                            await programDevice(
                                 device,
                                 selectedFirmware.filter(fw => fw.selected),
                                 progressCb
@@ -435,8 +436,9 @@ const ProgramModem = ({
                 `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
             );
             const amountOfProgress =
-                ((json.step - 1) / json.amountOfSteps) * 100 +
-                (1 / json.amountOfSteps) * json.progressPercentage;
+                // Future api of shared will remove undefined steps
+                ((json.step! - 1) / json.amountOfSteps!) * 100 +
+                (1 / json.amountOfSteps!) * json.progressPercentage;
 
             memoizedProgress =
                 amountOfProgress > memoizedProgress

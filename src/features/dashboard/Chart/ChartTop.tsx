@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Toggle } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { Toggle } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { getLive, setLive, setShowOptionsDialog } from './chartSlice';
 

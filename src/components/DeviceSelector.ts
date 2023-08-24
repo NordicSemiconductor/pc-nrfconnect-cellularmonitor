@@ -5,16 +5,16 @@
  */
 
 import { connect } from 'react-redux';
-import type {
-    DeviceTraits,
-    SerialPort,
-} from '@nordicsemiconductor/nrf-device-lib-js';
 import {
     Device,
     DeviceSelector,
     DeviceSelectorProps,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import type {
+    DeviceSerialPort,
+    DeviceTraits,
+} from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
 import {
     removeShellParser,
@@ -116,4 +116,4 @@ const autoSetTraceSerialPort =
  * @param {Array<device>} ports array of nrf-device-lib-js serialport objects
  * @returns {SerialPort} the selected serialport object
  */
-const autoSelectTraceSerialPort = (ports: SerialPort[]) => ports?.at(-1);
+const autoSelectTraceSerialPort = (ports: DeviceSerialPort[]) => ports?.at(-1);

@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { deviceControlReset } from '@nordicsemiconductor/nrf-device-lib-js';
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import type { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import {
-    getDeviceLibContext,
     logger,
     selectedDevice,
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
@@ -227,7 +226,7 @@ export const startTrace =
             }
 
             try {
-                await deviceControlReset(getDeviceLibContext(), device.id);
+                await NrfutilDeviceLib.reset(device);
             } catch (err) {
                 setTimeout(() => nrfml.stop(taskId), 500);
                 logger.error(err);
