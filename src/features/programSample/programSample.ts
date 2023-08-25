@@ -6,25 +6,23 @@
 /* eslint-disable no-await-in-loop */
 
 import {
-    deviceControlReset,
-    firmwareProgram,
-} from '@nordicsemiconductor/nrf-device-lib-js';
-import {
     Device,
-    getDeviceLibContext,
     logger,
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { readFileSync } from 'fs';
+import {
+    NrfutilDeviceLib,
+    type Progress,
+} from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
 import EventAction from '../../usageDataActions';
 import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
 
+const { reset, program } = NrfutilDeviceLib;
+
 export type SampleProgress = {
     fw: Firmware | ModemFirmware;
-    progressJson: Parameters<
-        Parameters<typeof firmwareProgram>['6']
-    >['0']['progressJson'];
+    progressJson: Progress;
 };
 
 export const isThingy91 = (device?: Device) =>
@@ -50,7 +48,7 @@ export const programModemFirmware = async (
     }
 };
 
-export const program = async (
+export const programDevice = async (
     device: Device,
     firmwares: Firmware[],
     progress: (progress: SampleProgress) => void
@@ -73,7 +71,7 @@ export const program = async (
         }
 
         logger.info('Programming complete, reseting device.');
-        deviceControlReset(getDeviceLibContext(), device.id);
+        reset(device);
     } catch (error) {
         usageData.sendErrorReport('Failed to program a sample');
         logger.error(error);
@@ -84,26 +82,10 @@ export const program = async (
 const programModem = (
     device: Device,
     fw: Firmware | ModemFirmware,
-    progress: (progress: SampleProgress) => void
+    progressCb: (progress: SampleProgress) => void
 ) =>
-    new Promise<void>((resolve, reject) => {
-        firmwareProgram(
-            getDeviceLibContext(),
-            device.id,
-            'NRFDL_FW_FILE',
-            'NRFDL_FW_NRF91_MODEM',
-            downloadedFilePath(fw.file),
-            error => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve();
-                }
-            },
-            ({ progressJson }) => {
-                progress({ fw, progressJson });
-            }
-        );
+    program(device, downloadedFilePath(fw.file), progress => {
+        progressCb({ fw, progressJson: progress });
     });
 
 const programFirmware = (
@@ -111,24 +93,11 @@ const programFirmware = (
     fw: Firmware,
     progress: (progress: SampleProgress) => void
 ) =>
-    new Promise<void>((resolve, reject) => {
-        firmwareProgram(
-            getDeviceLibContext(),
-            device.id,
-            'NRFDL_FW_BUFFER',
-            'NRFDL_FW_INTEL_HEX',
-            readFileSync(downloadedFilePath(fw.file)),
-            error => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve();
-                }
-            },
-            ({ progressJson }) => {
-                progress({ fw, progressJson });
-            },
-            null,
-            'NRFDL_DEVICE_CORE_APPLICATION'
-        );
-    });
+    program(
+        device,
+        downloadedFilePath(fw.file),
+        progressJson => {
+            progress({ fw, progressJson });
+        },
+        'Application'
+    );
