@@ -74,7 +74,7 @@ export default () => {
             ) : (
                 <>
                     <h6>Wireshark not detected</h6>
-                    <p>
+                    <div>
                         <Button
                             variant="link"
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
@@ -83,7 +83,7 @@ export default () => {
                         </Button>{' '}
                         or manually{' '}
                         <SelectWireshark>specify install path</SelectWireshark>.
-                    </p>
+                    </div>
                 </>
             )}
         </div>
