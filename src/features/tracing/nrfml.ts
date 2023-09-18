@@ -17,7 +17,7 @@ import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
 import type { TAction } from '../../utils/thunk';
-import { is91DK } from '../programSample/programSample';
+import { getNrfDeviceVersion, is9160DK } from '../programSample/programSample';
 import {
     getShellParser,
     getTerminalSerialPort as getUartSerialPort,
@@ -128,6 +128,8 @@ export const startTrace =
         const shellParser = getShellParser(state);
         const tracePort = getTraceSerialPort(state);
         const resetDevice = getResetDevice(state);
+        const device = selectedDevice(state);
+        const nrfDeviceVersion = getNrfDeviceVersion(device);
 
         if (!tracePort) {
             logger.error('Select serial port to start tracing');
@@ -148,7 +150,11 @@ export const startTrace =
 
             if (typeof version === 'string') {
                 const autoDetectedTraceDbFile =
-                    await getSelectedTraceDatabaseFromVersion(version);
+                    await getSelectedTraceDatabaseFromVersion(
+                        version,
+                        nrfDeviceVersion
+                    );
+                console.log('autoDetectedTraceDbFile', autoDetectedTraceDbFile);
                 if (autoDetectedTraceDbFile) {
                     isDetectingTraceDb = false;
                     dispatch(setManualDbFilePath(autoDetectedTraceDbFile));
@@ -218,8 +224,7 @@ export const startTrace =
             })
         );
 
-        const device = selectedDevice(state);
-        if (resetDevice && is91DK(device)) {
+        if (resetDevice && is9160DK(device)) {
             logger.info(`Reseting device`);
             if (!device) {
                 throw new Error('No device selected, unable to reset');

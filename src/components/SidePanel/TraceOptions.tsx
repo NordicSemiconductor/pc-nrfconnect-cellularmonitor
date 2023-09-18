@@ -12,7 +12,7 @@ import {
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { is91DK } from '../../features/programSample/programSample';
+import { is9160DK } from '../../features/programSample/programSample';
 import {
     getIsTracing,
     getResetDevice,
@@ -31,7 +31,7 @@ export default () => {
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
             <Serialports />
-            {is91DK(device) && <TraceSettings />}
+            {is9160DK(device) && <TraceSettings />}
             <TraceFormatSelector />
             <TraceFileInformation />
         </CollapsibleGroup>

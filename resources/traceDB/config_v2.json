@@ -3,6 +3,19 @@
         "updated_timestamp": "2023-06-15 08:45:00",
         "devices": [
             {
+                "type": "nRF9161",
+                "versions": [
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.0-77.beta_trace-db.json",
+                            "sha256": "b756d3d1a557ef2bc4f2efd9ae1ad41d11621d0483af7c515598c952cbdeca26"
+                        },
+                        "uuid": "4f98600b-a3d2-4153-8f92-b44eeb19ee90",
+                        "version": "2.0.0-beta"
+                    }
+                ]
+            },
+            {
                 "type": "nRF9160",
                 "versions": [
                     {

@@ -28,7 +28,7 @@ import { resetTraceEvents } from '../tracing/tracePacketEvents';
 import { getIsTracing, resetTraceInfo } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import {
-    is91DK,
+    is9160DK,
     isThingy91,
     programDevice,
     programModemFirmware,
@@ -60,7 +60,7 @@ export default () => {
         useState<ModalStage>('programSelection');
     const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
-    const compatible = device && (isThingy91(device) || is91DK(device));
+    const compatible = device && (isThingy91(device) || is9160DK(device));
 
     const [samples, setSamples] = useState(initialSamples);
     useEffect(() => {

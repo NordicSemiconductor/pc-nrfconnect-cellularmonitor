@@ -18,7 +18,7 @@
         "html": "dist/index.html",
         "nrfutil": {
             "device": [
-                "1.2.2"
+                "1.4.3"
             ]
         }
     },

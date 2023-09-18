@@ -25,11 +25,36 @@ export type SampleProgress = {
     progressJson: Progress;
 };
 
+export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161';
+
+export const getNrfDeviceVersion = (
+    device?: Device
+): SupportedDeviceVersion => {
+    let deviceVersion: 'nRF9160' | 'nRF9161' | undefined;
+    if (is9161DK(device)) {
+        deviceVersion = 'nRF9161';
+    } else if (is9160DK(device) || isThingy91(device)) {
+        deviceVersion = 'nRF9160';
+    }
+    if (deviceVersion) {
+        return deviceVersion;
+    }
+
+    logger.error(
+        'Attempted to retrieve trace databases for an unrecognized device',
+        device
+    );
+    return undefined as never;
+};
+
 export const isThingy91 = (device?: Device) =>
     device?.serialport?.productId === '9100';
 
-export const is91DK = (device?: Device) =>
+export const is9160DK = (device?: Device) =>
     device?.jlink?.boardVersion === 'PCA10090';
+
+export const is9161DK = (device?: Device) =>
+    device?.jlink?.boardVersion === 'PCA10153';
 
 export const programModemFirmware = async (
     device: Device,
