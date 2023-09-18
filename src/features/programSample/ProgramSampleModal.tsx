@@ -234,13 +234,15 @@ const ProgramSample = ({
             logger.info(
                 `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
             );
-            const amountOfProgress =
-                // Future api of shared will remove undefined steps
-                ((json.step! - 1) / json.amountOfSteps!) * 100 +
-                (1 / json.amountOfSteps!) * json.progressPercentage;
+            if (json.step && json.amountOfSteps) {
+                const amountOfProgress =
+                    // Future api of shared will remove undefined steps
+                    ((json.step - 1) / json.amountOfSteps) * 100 +
+                    (1 / json.amountOfSteps) * json.progressPercentage;
 
-            progress.set(fw as Firmware, amountOfProgress);
-            setProgress(new Map(progress.entries()));
+                progress.set(fw as Firmware, amountOfProgress);
+                setProgress(new Map(progress.entries()));
+            }
         },
         [progress]
     );
@@ -435,17 +437,20 @@ const ProgramModem = ({
             logger.info(
                 `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
             );
-            const amountOfProgress =
-                // Future api of shared will remove undefined steps
-                ((json.step! - 1) / json.amountOfSteps!) * 100 +
-                (1 / json.amountOfSteps!) * json.progressPercentage;
 
-            memoizedProgress =
-                amountOfProgress > memoizedProgress
-                    ? amountOfProgress
-                    : memoizedProgress;
+            if (json.step && json.amountOfSteps) {
+                const amountOfProgress =
+                    // Future api of shared will remove undefined steps
+                    ((json.step - 1) / json.amountOfSteps) * 100 +
+                    (1 / json.amountOfSteps) * json.progressPercentage;
 
-            setProgress(memoizedProgress);
+                memoizedProgress =
+                    amountOfProgress > memoizedProgress
+                        ? amountOfProgress
+                        : memoizedProgress;
+
+                setProgress(memoizedProgress);
+            }
         };
     };
 

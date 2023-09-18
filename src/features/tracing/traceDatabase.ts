@@ -95,15 +95,15 @@ export const getSelectedTraceDatabaseFromVersion = async (
 
 export const setSelectedTraceDatabaseFromVersion =
     (version: string, nrfDeviceVersion: SupportedDeviceVersion) =>
-        async (dispatch: TDispatch) => {
-            const manualDbFile = await getSelectedTraceDatabaseFromVersion(
-                version,
-                nrfDeviceVersion
-            );
-            storeManualDbFilePath(manualDbFile);
+    async (dispatch: TDispatch) => {
+        const manualDbFile = await getSelectedTraceDatabaseFromVersion(
+            version,
+            nrfDeviceVersion
+        );
+        storeManualDbFilePath(manualDbFile);
 
-            dispatch(setManualDbFilePath(manualDbFile));
-        };
+        dispatch(setManualDbFilePath(manualDbFile));
+    };
 
 export const getRemoteDatabases = (nrfDeviceVersion: SupportedDeviceVersion) =>
     remoteDatabasesCache ?? downloadRemote(nrfDeviceVersion);
