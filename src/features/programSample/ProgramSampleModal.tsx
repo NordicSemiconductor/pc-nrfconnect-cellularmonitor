@@ -232,17 +232,13 @@ const ProgramSample = ({
     const progressCb = useCallback(
         ({ firmware, progress }: SampleProgress) => {
             logger.info(
-                `${progress.step}/${progress.amountOfSteps}: ${progress.progressPercentage}% - ${progress.message}`
+                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
             );
 
-            const amountOfSteps = progress.amountOfSteps ?? 1;
-            const step = progress.step ?? 1;
-
-            const amountOfProgress =
-                ((step - 1) / amountOfSteps) * 100 +
-                (1 / amountOfSteps) * progress.progressPercentage;
-
-            progressMap.set(firmware as Firmware, amountOfProgress);
+            progressMap.set(
+                firmware as Firmware,
+                progress.totalProgressPercentage
+            );
             setProgressMap(new Map(progressMap.entries()));
         },
         [progressMap]
@@ -438,17 +434,10 @@ const ProgramModem = ({
 
         return ({ progress }: SampleProgress) => {
             logger.info(
-                `${progress.step}/${progress.amountOfSteps}: ${progress.progressPercentage}% - ${progress.message}`
+                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
             );
 
-            const amountOfSteps = progress.amountOfSteps ?? 1;
-            const step = progress.step ?? 1;
-
-            const amountOfProgress =
-                ((step - 1) / amountOfSteps) * 100 +
-                (1 / amountOfSteps) * progress.progressPercentage;
-
-            memoizedProgress = amountOfProgress;
+            memoizedProgress = progress.totalProgressPercentage;
             setProgressState(memoizedProgress);
         };
     };
