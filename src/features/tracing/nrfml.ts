@@ -154,7 +154,6 @@ export const startTrace =
                         version,
                         nrfDeviceVersion
                     );
-                console.log('autoDetectedTraceDbFile', autoDetectedTraceDbFile);
                 if (autoDetectedTraceDbFile) {
                     isDetectingTraceDb = false;
                     dispatch(setManualDbFilePath(autoDetectedTraceDbFile));
