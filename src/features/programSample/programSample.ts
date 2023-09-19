@@ -30,14 +30,11 @@ export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161';
 export const getNrfDeviceVersion = (
     device?: Device
 ): SupportedDeviceVersion => {
-    let deviceVersion: 'nRF9160' | 'nRF9161' | undefined;
     if (is9161DK(device)) {
-        deviceVersion = 'nRF9161';
-    } else if (is9160DK(device) || isThingy91(device)) {
-        deviceVersion = 'nRF9160';
+        return 'nRF9161';
     }
-    if (deviceVersion) {
-        return deviceVersion;
+    if (is9160DK(device) || isThingy91(device)) {
+        return 'nRF9160';
     }
 
     logger.error(

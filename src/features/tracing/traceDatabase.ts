@@ -66,14 +66,10 @@ export const getDatabases = async (
             }
         );
         const config = JSON.parse(json) as TraceConfig;
-        localDatabasesCache = config.firmwares.devices
-            .filter(
-                device =>
-                    nrfDeviceVersion === undefined ||
-                    device.type === nrfDeviceVersion
-            )
-            .flatMap(device => device.versions);
-        console.log(localDatabasesCache);
+        localDatabasesCache = extractDatabaseVersionsTraceConfig(
+            config,
+            nrfDeviceVersion
+        );
     }
 
     cachedForDevice = nrfDeviceVersion;
@@ -148,14 +144,10 @@ const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
         );
     }
 
-    remoteDatabasesCache = config.firmwares.devices
-        .filter(
-            device =>
-                nrfDeviceVersion === undefined ||
-                device.type === nrfDeviceVersion
-        )
-        .flatMap(device => device.versions);
-    console.log('Will download: ', localDatabasesCache);
+    remoteDatabasesCache = extractDatabaseVersionsTraceConfig(
+        config,
+        nrfDeviceVersion
+    );
     await downloadAll(remoteDatabasesCache);
 
     return remoteDatabasesCache;
@@ -208,3 +200,15 @@ const prepareTargetDirectory = () => {
         }
     }
 };
+
+const extractDatabaseVersionsTraceConfig = (
+    config: TraceConfig,
+    nrfDeviceVersion: SupportedDeviceVersion
+) =>
+    config.firmwares.devices
+        .filter(
+            device =>
+                nrfDeviceVersion === undefined ||
+                device.type === nrfDeviceVersion
+        )
+        .flatMap(device => device.versions);
