@@ -20,10 +20,10 @@ import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
 
 const { reset, program } = NrfutilDeviceLib;
 
-export type SampleProgress = {
-    fw: Firmware | ModemFirmware;
-    progressJson: Progress;
-};
+export interface SampleProgress {
+    firmware: Firmware | ModemFirmware;
+    progress: Progress;
+}
 
 export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161';
 
@@ -103,23 +103,23 @@ export const programDevice = async (
 
 const programModem = (
     device: Device,
-    fw: Firmware | ModemFirmware,
+    firmware: Firmware | ModemFirmware,
     progressCb: (progress: SampleProgress) => void
 ) =>
-    program(device, downloadedFilePath(fw.file), progress => {
-        progressCb({ fw, progressJson: progress });
+    program(device, downloadedFilePath(firmware.file), progress => {
+        progressCb({ firmware, progress });
     });
 
 const programFirmware = (
     device: Device,
-    fw: Firmware,
-    progress: (progress: SampleProgress) => void
+    firmware: Firmware,
+    progressCb: (progress: SampleProgress) => void
 ) =>
     program(
         device,
-        downloadedFilePath(fw.file),
-        progressJson => {
-            progress({ fw, progressJson });
+        downloadedFilePath(firmware.file),
+        progress => {
+            progressCb({ firmware, progress });
         },
         'Application'
     );
