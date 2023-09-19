@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { FC } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -23,7 +23,23 @@ import { getWiresharkPath, setWiresharkPath } from './wiresharkSlice';
 
 import './wireshark.scss';
 
-export const SelectWireshark: FC = ({ children }) => {
+const LinkButton = ({
+    label,
+    onClick,
+}: {
+    label: string;
+    onClick: () => void;
+}) => (
+    <button
+        className="tw-bg-transparent tw-border-none tw-p-0 tw-text-nordicBlue hover:tw-underline"
+        type="button"
+        onClick={onClick}
+    >
+        {label}
+    </button>
+);
+
+export const SelectWireshark = ({ label }: { label: string }) => {
     const dispatch = useDispatch();
 
     const updateWiresharkPath = async () => {
@@ -34,11 +50,7 @@ export const SelectWireshark: FC = ({ children }) => {
         }
     };
 
-    return (
-        <Button onClick={updateWiresharkPath} variant="link">
-            {children}
-        </Button>
-    );
+    return <LinkButton label={label} onClick={updateWiresharkPath} />;
 };
 
 export default () => {
@@ -66,23 +78,19 @@ export default () => {
                         Open in Wireshark
                     </Button>
                     <div className="w-100 mt-2 text-center">
-                        <SelectWireshark>
-                            Or select a different Wireshark executable
-                        </SelectWireshark>
+                        <SelectWireshark label="Or select a different Wireshark executable" />
                     </div>
                 </>
             ) : (
                 <>
                     <h6>Wireshark not detected</h6>
                     <div>
-                        <Button
-                            variant="link"
+                        <LinkButton
                             onClick={() => openUrl(WIRESHARK_DOWNLOAD_URL)}
-                        >
-                            Install Wireshark
-                        </Button>{' '}
+                            label="Install Wireshark"
+                        />{' '}
                         or manually{' '}
-                        <SelectWireshark>specify install path</SelectWireshark>.
+                        <SelectWireshark label="specify install path" />.
                     </div>
                 </>
             )}
