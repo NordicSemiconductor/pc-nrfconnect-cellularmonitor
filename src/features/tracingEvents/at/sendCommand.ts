@@ -100,8 +100,14 @@ const atGetModemVersion = 'AT+CGMR';
 
 export const getModemVersionFromResponse = (response: string) => {
     const versionRegex = /(\d+\.\d+\.\d+)(-FOTA)?/;
-    const version = response.match(versionRegex);
-    return version ? version[0] : null;
+    const versionMatch = response.match(versionRegex);
+
+    let version = versionMatch ? versionMatch[0] : null;
+
+    if (version && response.includes('beta')) {
+        version += '-beta';
+    }
+    return version;
 };
 
 export const detectDatabaseVersion = async (

@@ -20,16 +20,38 @@ import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
 
 const { reset, program } = NrfutilDeviceLib;
 
-export type SampleProgress = {
-    fw: Firmware | ModemFirmware;
-    progressJson: Progress;
+export interface SampleProgress {
+    firmware: Firmware | ModemFirmware;
+    progress: Progress;
+}
+
+export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161';
+
+export const getNrfDeviceVersion = (
+    device?: Device
+): SupportedDeviceVersion => {
+    if (is9161DK(device)) {
+        return 'nRF9161';
+    }
+    if (is9160DK(device) || isThingy91(device)) {
+        return 'nRF9160';
+    }
+
+    logger.error(
+        'Attempted to retrieve trace databases for an unrecognized device',
+        device
+    );
+    return undefined as never;
 };
 
 export const isThingy91 = (device?: Device) =>
     device?.serialport?.productId === '9100';
 
-export const is91DK = (device?: Device) =>
+export const is9160DK = (device?: Device) =>
     device?.jlink?.boardVersion === 'PCA10090';
+
+export const is9161DK = (device?: Device) =>
+    device?.jlink?.boardVersion === 'PCA10153';
 
 export const programModemFirmware = async (
     device: Device,
@@ -81,23 +103,23 @@ export const programDevice = async (
 
 const programModem = (
     device: Device,
-    fw: Firmware | ModemFirmware,
+    firmware: Firmware | ModemFirmware,
     progressCb: (progress: SampleProgress) => void
 ) =>
-    program(device, downloadedFilePath(fw.file), progress => {
-        progressCb({ fw, progressJson: progress });
+    program(device, downloadedFilePath(firmware.file), progress => {
+        progressCb({ firmware, progress });
     });
 
 const programFirmware = (
     device: Device,
-    fw: Firmware,
-    progress: (progress: SampleProgress) => void
+    firmware: Firmware,
+    progressCb: (progress: SampleProgress) => void
 ) =>
     program(
         device,
-        downloadedFilePath(fw.file),
-        progressJson => {
-            progress({ fw, progressJson });
+        downloadedFilePath(firmware.file),
+        progress => {
+            progressCb({ firmware, progress });
         },
         'Application'
     );

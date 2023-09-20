@@ -37,7 +37,7 @@ export const OpenSerialTerminal = () => {
 
     return (
         <Button
-            className="w-100 position-relative mt-2"
+            className="tw-relative tw-w-full"
             onClick={() =>
                 openSerialTerminal(device, selectedUartSerialPort.path)
             }
@@ -47,8 +47,8 @@ export const OpenSerialTerminal = () => {
         >
             Open Serial Terminal
             <span
-                className="mdi mdi-open-in-new"
-                style={{ position: 'absolute', right: '4px', fontSize: '16px' }}
+                className="mdi mdi-open-in-new tw-absolute tw-right-1"
+                style={{ fontSize: '16px' }}
             />
         </Button>
     );

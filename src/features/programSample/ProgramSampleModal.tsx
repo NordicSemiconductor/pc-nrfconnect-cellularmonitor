@@ -28,7 +28,7 @@ import { resetTraceEvents } from '../tracing/tracePacketEvents';
 import { getIsTracing, resetTraceInfo } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import {
-    is91DK,
+    is9160DK,
     isThingy91,
     programDevice,
     programModemFirmware,
@@ -60,7 +60,7 @@ export default () => {
         useState<ModalStage>('programSelection');
     const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
-    const compatible = device && (isThingy91(device) || is91DK(device));
+    const compatible = device && (isThingy91(device) || is9160DK(device));
 
     const [samples, setSamples] = useState(initialSamples);
     useEffect(() => {
@@ -205,7 +205,7 @@ const ProgramSample = ({
     const [selectedFirmware, setSelectedFirmware] = useState(
         sample.fw.map(fw => ({ ...fw, selected: true }))
     );
-    const [progress, setProgress] = useState(
+    const [progressMap, setProgressMap] = useState(
         new Map(sample.fw.map(fw => [fw, 0]))
     );
 
@@ -230,19 +230,18 @@ const ProgramSample = ({
     }, [dispatch]);
 
     const progressCb = useCallback(
-        ({ progressJson: json, fw }: SampleProgress) => {
+        ({ firmware, progress }: SampleProgress) => {
             logger.info(
-                `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
+                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
             );
-            const amountOfProgress =
-                // Future api of shared will remove undefined steps
-                ((json.step! - 1) / json.amountOfSteps!) * 100 +
-                (1 / json.amountOfSteps!) * json.progressPercentage;
 
-            progress.set(fw as Firmware, amountOfProgress);
-            setProgress(new Map(progress.entries()));
+            progressMap.set(
+                firmware as Firmware,
+                progress.totalProgressPercentage
+            );
+            setProgressMap(new Map(progressMap.entries()));
         },
-        [progress]
+        [progressMap]
     );
 
     const toggleFirmwareChecked =
@@ -295,7 +294,7 @@ const ProgramSample = ({
                             </button>
                         </div>
                         <ProgressBar
-                            now={progress.get(fw)}
+                            now={progressMap.get(fw)}
                             style={{ height: '4px' }}
                         />
                     </div>
@@ -340,6 +339,8 @@ const ProgramSample = ({
 
                         setStage('programming');
                         setErrorMessage(undefined);
+
+                        resetProgressMap(progressMap);
 
                         try {
                             await downloadSample(sample);
@@ -406,7 +407,7 @@ const ProgramModem = ({
 
     const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
 
-    const [progress, setProgress] = useState(0);
+    const [progressState, setProgressState] = useState(0);
 
     const [errorMessage, setErrorMessage] = useState<string>();
     const [stage, setStage] = useState<ProgrammingStage>('unstarted');
@@ -431,21 +432,13 @@ const ProgramModem = ({
     const newProgressCb = () => {
         let memoizedProgress = 0;
 
-        return ({ progressJson: json }: SampleProgress) => {
+        return ({ progress }: SampleProgress) => {
             logger.info(
-                `${json.step}/${json.amountOfSteps}: ${json.progressPercentage}% - ${json.message}`
+                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
             );
-            const amountOfProgress =
-                // Future api of shared will remove undefined steps
-                ((json.step! - 1) / json.amountOfSteps!) * 100 +
-                (1 / json.amountOfSteps!) * json.progressPercentage;
 
-            memoizedProgress =
-                amountOfProgress > memoizedProgress
-                    ? amountOfProgress
-                    : memoizedProgress;
-
-            setProgress(memoizedProgress);
+            memoizedProgress = progress.totalProgressPercentage;
+            setProgressState(memoizedProgress);
         };
     };
 
@@ -513,7 +506,10 @@ const ProgramModem = ({
                                 {basename(selectedMfw.file)}
                             </button>
                         </div>
-                        <ProgressBar now={progress} style={{ height: '4px' }} />
+                        <ProgressBar
+                            now={progressState}
+                            style={{ height: '4px' }}
+                        />
                     </div>
                 ) : null}
                 {stage === 'success' && (
@@ -614,6 +610,11 @@ const ProgramModem = ({
             </Dialog.Footer>
         </>
     );
+};
+
+const resetProgressMap = (progressMap: Map<Firmware, number>) => {
+    [...progressMap.keys()].forEach(firmware => progressMap.set(firmware, 0));
+    return progressMap;
 };
 
 const MCUBootModeInstructions = () => (

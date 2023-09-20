@@ -74,9 +74,7 @@ const InstallWiresharkDialog = ({
                     <b className="mb-3">Option 2</b>
                     {process.platform === 'darwin' ||
                     process.platform === 'win32' ? (
-                        <SelectWireshark>
-                            Manually specify install path
-                        </SelectWireshark>
+                        <SelectWireshark label="Manually specify install path" />
                     ) : (
                         <p className="mb-0">Add Wireshark to your PATH</p>
                     )}

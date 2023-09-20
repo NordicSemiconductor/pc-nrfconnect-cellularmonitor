@@ -52,9 +52,10 @@ export default () => {
                     Choose a development kit to see global vendor availability.
                 </p>
                 {kits.map(kit => (
-                    <div key={kit.name}>
+                    <div key={kit.name} className="tw-py-1">
                         <Button
-                            variant="link"
+                            className="tw-w-32"
+                            variant="link-button"
                             onClick={() => {
                                 openUrl(kit.url);
                             }}

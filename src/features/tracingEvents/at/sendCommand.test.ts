@@ -16,4 +16,8 @@ test('Modem version is found', () => {
     expect(getModemVersionFromResponse('mfw_nrf9160_1.13.0\r\nOK\r\n')).toBe(
         '1.13.0'
     );
+
+    expect(getModemVersionFromResponse('mfw_nrf91x1_2.0.0-77.beta')).toBe(
+        '2.0.0-beta'
+    );
 });
