@@ -14,6 +14,7 @@ import {
     setTraceSerialPort,
 } from '../../../features/tracing/traceSlice';
 import {
+    act,
     fireEvent,
     getNrfmlCallbacks,
     mockedCheckDiskSpace,
@@ -126,7 +127,10 @@ describe('Sidepanel functionality', () => {
                 await screen.findByText('Detecting modem firmware version')
             ).toBeInTheDocument();
             const { progressCallback } = await callbacks;
-            progressCallback(PROGRESS);
+
+            act(() => {
+                progressCallback(PROGRESS);
+            });
 
             const modal = screen.queryByText(
                 'Detecting modem firmware version'

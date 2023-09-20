@@ -17,6 +17,7 @@ import {
     storeManualDbFilePath,
 } from '../../utils/store';
 import { TDispatch } from '../../utils/thunk';
+import { SupportedDeviceVersion } from '../programSample/programSample';
 import { setManualDbFilePath } from './traceSlice';
 
 interface TraceConfig {
@@ -43,11 +44,19 @@ const SERVER_URL =
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'trace-db');
 const INITIAL_SOURCE_FOLDER = autoDetectDbRootFolder();
 
-let localDatabasesCache: DatabaseVersion[];
-let remoteDatabasesCache: DatabaseVersion[];
+let cachedForDevice: SupportedDeviceVersion;
+let localDatabasesCache: undefined | DatabaseVersion[];
+let remoteDatabasesCache: undefined | DatabaseVersion[];
 
-export const getDatabases = async () => {
+export const getDatabases = async (
+    nrfDeviceVersion: SupportedDeviceVersion
+) => {
     prepareTargetDirectory();
+
+    if (nrfDeviceVersion !== cachedForDevice) {
+        localDatabasesCache = undefined;
+        remoteDatabasesCache = undefined;
+    }
 
     if (!localDatabasesCache) {
         const json = await readFile(
@@ -57,16 +66,21 @@ export const getDatabases = async () => {
             }
         );
         const config = JSON.parse(json) as TraceConfig;
-        localDatabasesCache = config.firmwares.devices.flatMap(
-            device => device.versions
+        localDatabasesCache = extractDatabaseVersionsTraceConfig(
+            config,
+            nrfDeviceVersion
         );
     }
 
+    cachedForDevice = nrfDeviceVersion;
     return remoteDatabasesCache ?? localDatabasesCache;
 };
 
-export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
-    const versions = await getDatabases();
+export const getSelectedTraceDatabaseFromVersion = async (
+    version: string,
+    nrfDeviceVersion: SupportedDeviceVersion
+) => {
+    const versions = await getDatabases(nrfDeviceVersion);
     const selectedVersion = versions.find(v => v.version === version);
     const file = join(
         autoDetectDbRootFolder(),
@@ -76,17 +90,21 @@ export const getSelectedTraceDatabaseFromVersion = async (version: string) => {
 };
 
 export const setSelectedTraceDatabaseFromVersion =
-    (version: string) => async (dispatch: TDispatch) => {
-        const manualDbFile = await getSelectedTraceDatabaseFromVersion(version);
+    (version: string, nrfDeviceVersion: SupportedDeviceVersion) =>
+    async (dispatch: TDispatch) => {
+        const manualDbFile = await getSelectedTraceDatabaseFromVersion(
+            version,
+            nrfDeviceVersion
+        );
         storeManualDbFilePath(manualDbFile);
 
         dispatch(setManualDbFilePath(manualDbFile));
     };
 
-export const getRemoteDatabases = () =>
-    remoteDatabasesCache ?? downloadRemote();
+export const getRemoteDatabases = (nrfDeviceVersion: SupportedDeviceVersion) =>
+    remoteDatabasesCache ?? downloadRemote(nrfDeviceVersion);
 
-const downloadRemote = async () => {
+const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
     let response: Response;
     try {
         response = await fetch(`${SERVER_URL}/config_v2.json`, {
@@ -126,8 +144,9 @@ const downloadRemote = async () => {
         );
     }
 
-    remoteDatabasesCache = config.firmwares.devices.flatMap(
-        device => device.versions
+    remoteDatabasesCache = extractDatabaseVersionsTraceConfig(
+        config,
+        nrfDeviceVersion
     );
     await downloadAll(remoteDatabasesCache);
 
@@ -181,3 +200,15 @@ const prepareTargetDirectory = () => {
         }
     }
 };
+
+const extractDatabaseVersionsTraceConfig = (
+    config: TraceConfig,
+    nrfDeviceVersion: SupportedDeviceVersion
+) =>
+    config.firmwares.devices
+        .filter(
+            device =>
+                nrfDeviceVersion === undefined ||
+                device.type === nrfDeviceVersion
+        )
+        .flatMap(device => device.versions);

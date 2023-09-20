@@ -10,11 +10,13 @@ import {
     Dropdown,
     DropdownItem,
     logger,
+    selectedDevice,
     truncateMiddle,
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { basename } from 'path';
 
+import { getNrfDeviceVersion } from '../../features/programSample/programSample';
 import {
     DatabaseVersion,
     getDatabases,
@@ -47,6 +49,8 @@ export default () => {
     const [databases, setDatabases] = useState<DatabaseVersion[]>([]);
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const isTracing = useSelector(getIsTracing);
+    const device = useSelector(selectedDevice);
+    const nrfDeviceVersion = getNrfDeviceVersion(device);
 
     const items = [
         autoSelectItem,
@@ -60,15 +64,15 @@ export default () => {
     ];
 
     useEffect(() => {
-        getDatabases()
+        getDatabases(nrfDeviceVersion)
             .then(setDatabases)
-            .then(getRemoteDatabases)
+            .then(() => getRemoteDatabases(nrfDeviceVersion))
             .then(dbs => {
                 if (dbs != null) {
                     setDatabases(dbs);
                 }
             });
-    }, []);
+    }, [nrfDeviceVersion]);
 
     useEffect(() => {
         const selectedDatabase = databases.find(file =>
@@ -109,7 +113,9 @@ export default () => {
             dispatch(resetManualDbFilePath());
             logger.info(`Database path successfully reset to default value`);
         } else {
-            dispatch(setSelectedTraceDatabaseFromVersion(label));
+            dispatch(
+                setSelectedTraceDatabaseFromVersion(label, nrfDeviceVersion)
+            );
         }
     };
 
