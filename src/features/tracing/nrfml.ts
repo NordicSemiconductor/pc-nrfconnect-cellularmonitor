@@ -22,7 +22,8 @@ import {
     getShellParser,
     getTerminalSerialPort as getUartSerialPort,
 } from '../terminal/serialPortSlice';
-import { detectDatabaseVersion } from '../tracingEvents/at/sendCommand';
+import { recommendedAt } from '../tracingEvents/at/recommeneded';
+import { detectDatabaseVersion, sendAT } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
 import makeProgressCallback from './makeProgressCallback';
@@ -37,6 +38,7 @@ import {
 } from './tracePacketEvents';
 import {
     getManualDbFilePath,
+    getRefreshOnStart,
     getResetDevice,
     getTaskId,
     getTraceSerialPort,
@@ -232,6 +234,11 @@ export const startTrace =
                 logger.error(err);
                 throw new Error('Unable to reset device');
             }
+        }
+
+        if (getRefreshOnStart(state)) {
+            logger.info(`Refreshing values in 5 seconds`);
+            setTimeout(() => dispatch(sendAT(recommendedAt)), 5_000);
         }
 
         reloadHandler = () => nrfml.stop(taskId);

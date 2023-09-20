@@ -15,7 +15,10 @@ import {
 import { is91DK } from '../../features/programSample/programSample';
 import {
     getIsTracing,
+    getRefreshOnStart,
     getResetDevice,
+    getTraceFormats,
+    setRefreshOnStart,
     setResetDevice,
 } from '../../features/tracing/traceSlice';
 import DatabaseFileOverride from './DatabaseFileOverride';
@@ -31,27 +34,46 @@ export default () => {
         <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
             <Serialports />
-            {is91DK(device) && <TraceSettings />}
+            {is91DK(device) && <ResetOnStart />}
+            <RefreshOnStart />
             <TraceFormatSelector />
             <TraceFileInformation />
         </CollapsibleGroup>
     );
 };
 
-const TraceSettings = () => {
+const ResetOnStart = () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const resetDevice = useSelector(getResetDevice);
-
-    const dispatchToggle = (fn: (param: boolean) => void) => (value: boolean) =>
-        dispatch(fn(value));
 
     return (
         <Toggle
             label="Reset device on start"
             disabled={isTracing}
             isToggled={resetDevice}
-            onToggle={dispatchToggle(setResetDevice)}
+            onToggle={toggled => dispatch(setResetDevice(toggled))}
+        />
+    );
+};
+
+const RefreshOnStart = () => {
+    const dispatch = useDispatch();
+    const isTracing = useSelector(getIsTracing);
+    const refreshOnStart = useSelector(getRefreshOnStart);
+    const selectedFormats = useSelector(getTraceFormats);
+    const liveEnabled = selectedFormats.includes('live');
+    const title = liveEnabled
+        ? 'Cannot be enabled when Wireshark is enabled.'
+        : 'Refresh dashboard 5 seconds after starting the trace';
+
+    return (
+        <Toggle
+            label="Refresh dashboard on start"
+            disabled={isTracing || liveEnabled}
+            isToggled={refreshOnStart}
+            onToggle={toggled => dispatch(setRefreshOnStart(toggled))}
+            title={title}
         />
     );
 };

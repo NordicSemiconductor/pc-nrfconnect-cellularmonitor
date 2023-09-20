@@ -10,8 +10,10 @@ import type { RootState } from '../../appReducer';
 import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     getTraceFormats as restoreTraceFormats,
+    restoreRefreshOnStart,
     restoreResetDevice,
     setTraceFormats as storeTraceFormats,
+    storeRefreshOnStart,
     storeResetDevice,
 } from '../../utils/store';
 import { TraceFormat } from './formats';
@@ -38,6 +40,7 @@ interface TraceState {
     detectedAtHostLibrary: boolean;
     isSendingATCommands: boolean;
     resetDevice: boolean;
+    refreshOnStart: boolean;
     detectedTraceDbFailed: boolean;
 }
 
@@ -55,6 +58,7 @@ const initialState = (): TraceState => ({
     detectedAtHostLibrary: false,
     isSendingATCommands: false,
     resetDevice: restoreResetDevice(),
+    refreshOnStart: restoreRefreshOnStart(),
     detectedTraceDbFailed: false,
 });
 
@@ -142,6 +146,10 @@ const traceSlice = createSlice({
             state.resetDevice = action.payload;
             storeResetDevice(action.payload);
         },
+        setRefreshOnStart: (state, action: PayloadAction<boolean>) => {
+            state.refreshOnStart = action.payload;
+            storeRefreshOnStart(action.payload);
+        },
         setDetectTraceDbFailed: (state, action: PayloadAction<boolean>) => {
             state.detectedTraceDbFailed = action.payload;
         },
@@ -190,6 +198,8 @@ export const getIsSendingATCommands = (state: RootState) =>
 
 export const getResetDevice = (state: RootState) => state.app.trace.resetDevice;
 
+export const getRefreshOnStart = (state: RootState) => state.app.trace.refreshOnStart;
+
 export const getDetectTraceDbFailed = (state: RootState) =>
     state.app.trace.detectedTraceDbFailed;
 
@@ -210,6 +220,7 @@ export const {
     setDetectedAtHostLibrary,
     setIsSendingATCommands,
     setResetDevice,
+    setRefreshOnStart,
     setDetectTraceDbFailed,
 } = traceSlice.actions;
 
