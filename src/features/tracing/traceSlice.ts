@@ -198,7 +198,8 @@ export const getIsSendingATCommands = (state: RootState) =>
 
 export const getResetDevice = (state: RootState) => state.app.trace.resetDevice;
 
-export const getRefreshOnStart = (state: RootState) => state.app.trace.refreshOnStart;
+export const getRefreshOnStart = (state: RootState) =>
+    state.app.trace.refreshOnStart;
 
 export const getDetectTraceDbFailed = (state: RootState) =>
     state.app.trace.detectedTraceDbFailed;
