@@ -64,7 +64,7 @@
         "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
-    "bundleDependencies": [
+    "bundledDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ]
 }
