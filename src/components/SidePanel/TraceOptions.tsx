@@ -63,15 +63,14 @@ const RefreshOnStart = () => {
     const refreshOnStart = useSelector(getRefreshOnStart);
     const selectedFormats = useSelector(getTraceFormats);
     const liveEnabled = selectedFormats.includes('live');
-    const title = liveEnabled
-        ? 'Cannot be enabled when Wireshark is enabled.'
-        : 'Refresh dashboard 5 seconds after starting the trace';
+    const title =
+        'Cannot be enabled when Wireshark is enabled.\nRefresh dashboard 5 seconds after starting the trace';
 
     return (
         <Toggle
             label="Refresh dashboard on start"
             disabled={isTracing || liveEnabled}
-            isToggled={refreshOnStart}
+            isToggled={refreshOnStart && !liveEnabled}
             onToggle={toggled => dispatch(setRefreshOnStart(toggled))}
             title={title}
         />
