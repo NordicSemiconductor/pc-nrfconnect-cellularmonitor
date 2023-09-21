@@ -241,7 +241,7 @@ export const startTrace =
         }
 
         if (getRefreshOnStart(state) && !formats.includes('live')) {
-            logger.info(`Refreshing values in 5 seconds`);
+            logger.info(`Refreshing dashboard in 5 seconds`);
             setTimeout(() => dispatch(sendAT(recommendedAt)), 5_000);
         }
 
