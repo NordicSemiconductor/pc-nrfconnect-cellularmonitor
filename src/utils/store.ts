@@ -98,5 +98,5 @@ export const [restoreResetDevice, storeResetDevice] = fromStore(
 
 export const [restoreRefreshOnStart, storeRefreshOnStart] = fromStore(
     'refreshOnStart',
-    false
+    true
 );
