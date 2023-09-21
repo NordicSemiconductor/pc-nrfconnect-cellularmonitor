@@ -25,6 +25,7 @@ interface StoreSchema {
     connectionStatusSection: boolean;
     showStartupDialog: boolean;
     resetDevice: boolean;
+    refreshOnStart: boolean;
 }
 
 const store = getPersistentStore<StoreSchema>({
@@ -93,4 +94,9 @@ export const [getShowStartupDialog, setShowStartupDialog] = fromStore(
 export const [restoreResetDevice, storeResetDevice] = fromStore(
     'resetDevice',
     false
+);
+
+export const [restoreRefreshOnStart, storeRefreshOnStart] = fromStore(
+    'refreshOnStart',
+    true
 );
