@@ -83,7 +83,7 @@ export const getSelectedTraceDatabaseFromVersion = async (
     const versions = await getDatabases(nrfDeviceVersion);
     const selectedVersion = versions.find(v => v.version === version);
     const file = join(
-        autoDetectDbRootFolder(),
+        DOWNLOAD_FOLDER,
         selectedVersion?.database?.path.replace(`\${root}`, '') ?? ''
     );
     return file;

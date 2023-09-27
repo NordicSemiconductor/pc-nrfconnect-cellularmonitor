@@ -1,3 +1,23 @@
+## 1.0.4 - 2023-09-27
+
+### Added
+
+-   Trace database v2.0.0-beta for nRF9161DK.
+-   Option to **Refresh dashboard on start**, which will refresh the dashboard
+    after 5 seconds of starting a trace. The option is only available if
+    Wireshark is disabled.
+-   Warning in the SidePanel when Wireshark executable is not found.
+-   Action to specify path to a Wireshark executable.
+
+### Fixed
+
+-   In some cases, the **Refresh dashboard** button was visible after
+    deselecting device.
+
+### Changed
+
+-   "nRF Connect for Cloud" changed to "nRF Cloud".
+
 ## 1.0.3 - 2023-07-03
 
 ### Added
