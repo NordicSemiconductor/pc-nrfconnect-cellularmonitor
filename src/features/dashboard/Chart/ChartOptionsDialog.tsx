@@ -46,24 +46,27 @@ export default () => {
                     }}
                 />
 
-                {EVENT_TYPES.map(type => (
-                    <Toggle
-                        key={type}
-                        label={type}
-                        isToggled={traceEventFilter.includes(type)}
-                        onToggle={isToggled => {
-                            usageData.sendUsageData(
-                                EventAction.OPEN_CHART_OPTIONS
-                            );
-                            dispatch(
-                                changeTraceEventFilter({
-                                    type,
-                                    enable: isToggled,
-                                })
-                            );
-                        }}
-                    />
-                ))}
+                <div className="tw-w-32 tw-min-w-[8rem]">
+                    {EVENT_TYPES.map(type => (
+                        <div key={type} className="tw-p-1 tw-pl-0">
+                            <Toggle
+                                label={type}
+                                isToggled={traceEventFilter.includes(type)}
+                                onToggle={isToggled => {
+                                    usageData.sendUsageData(
+                                        EventAction.OPEN_CHART_OPTIONS
+                                    );
+                                    dispatch(
+                                        changeTraceEventFilter({
+                                            type,
+                                            enable: isToggled,
+                                        })
+                                    );
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
             </Dialog.Body>
         </InfoDialog>
     );
