@@ -63,17 +63,13 @@ export default connect(mapState, mapDispatch)(DeviceSelector);
 
 const closeDevice = (): TAction => dispatch => {
     logger.info('Closing device');
-    try {
-        dispatch(setUartSerialPort(null));
-        dispatch(setAvailableSerialPorts([]));
-        dispatch(setTraceSerialPort(null));
-        dispatch(stopTrace());
-        dispatch(setDetectingTraceDb(false));
-        dispatch(removeShellParser());
-        dispatch(resetManualDbFilePath());
-    } catch (error) {
-        logger.error('Error while closing device', error);
-    }
+    dispatch(setUartSerialPort(null));
+    dispatch(setAvailableSerialPorts([]));
+    dispatch(setTraceSerialPort(null));
+    dispatch(stopTrace());
+    dispatch(setDetectingTraceDb(false));
+    dispatch(removeShellParser());
+    dispatch(resetManualDbFilePath());
 };
 
 const openDevice =
