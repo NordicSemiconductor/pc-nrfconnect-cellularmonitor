@@ -13,8 +13,7 @@
 
 -   In some cases, the **Refresh dashboard** button was visible after
     deselecting device.
--   Was not able to copy modem firmware zip if target directory did not exist,
-    meaning that programming modem firmware failed.
+-   Programming modem firmware failed if target directory did not exist.
 
 ### Changed
 
