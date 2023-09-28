@@ -193,10 +193,21 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
+    const sectionHeight = 22;
+    const sectionSeperatorHeight = 1;
+    const chartHeight =
+        sectionHeight * traceEventFilter.length +
+        sectionSeperatorHeight * (traceEventFilter.length - 1);
+
     return (
         <>
             <ChartTop marginLeft={chart.current?.chartArea.left ?? 0} />
-            <div className="chart-data">
+            <div
+                className="chart-data"
+                style={{
+                    height: chartHeight,
+                }}
+            >
                 <Scatter
                     ref={chart}
                     options={options}
