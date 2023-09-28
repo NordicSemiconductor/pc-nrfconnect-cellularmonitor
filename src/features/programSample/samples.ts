@@ -9,7 +9,7 @@ import {
     getAppDir,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
@@ -63,8 +63,12 @@ export const downloadSampleIndex = () =>
         cache: 'no-cache',
     }).then<Samples>(result => result.json());
 
-export const downloadModemFirmware = (modemFirmware: ModemFirmware) =>
+export const downloadModemFirmware = (modemFirmware: ModemFirmware) => {
+    if (!existsSync(DOWNLOAD_FOLDER)) {
+        mkdirSync(DOWNLOAD_FOLDER);
+    }
     downloadFile(modemFirmware.file);
+};
 
 export const downloadSample = async (sample: Sample) => {
     if (!existsSync(DOWNLOAD_FOLDER)) {

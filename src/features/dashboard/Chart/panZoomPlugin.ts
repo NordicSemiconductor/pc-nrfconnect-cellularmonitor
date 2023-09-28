@@ -277,7 +277,16 @@ export default {
             }
 
             const { data, options } = getState(chart);
-            options.maxRange = data[data.length - 1].timestamp;
+            if (data.length === 0) {
+                return;
+            }
+
+            const lastPacket = data.at(-1);
+            if (lastPacket == null) {
+                return;
+            }
+
+            options.maxRange = lastPacket.timestamp;
             updateRange(chart, getRange(chart));
             chart.update('none');
         });

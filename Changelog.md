@@ -17,13 +17,11 @@
 -   Powering off or deselecting device while tracing, and before receiving any
     packets, would leave the app in a strange state, where it did not look like
     the device was deselected.
+-   Programming modem firmware failed if target directory did not exist.
 
 ### Changed
 
 -   Toggles inside Chart Options are now displayed closer to its label.
-
-### Changed
-
 -   "nRF Connect for Cloud" changed to "nRF Cloud".
 
 ## 1.0.3 - 2023-07-03
