@@ -39,7 +39,7 @@ export const getNrfDeviceVersion = (
 
     logger.error(
         'Attempted to retrieve trace databases for an unrecognized device',
-        device
+        JSON.stringify(device)
     );
     return undefined as never;
 };
