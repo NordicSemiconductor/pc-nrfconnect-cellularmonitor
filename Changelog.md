@@ -3,6 +3,7 @@
 ### Added
 
 -   Trace database v2.0.0-beta for nRF9161DK.
+-   Link to official documentation in the About pane.
 -   Option to **Refresh dashboard on start**, which will refresh the dashboard
     after 5 seconds of starting a trace. The option is only available if
     Wireshark is disabled.
@@ -13,10 +14,14 @@
 
 -   In some cases, the **Refresh dashboard** button was visible after
     deselecting device.
+-   Powering off or deselecting device while tracing, and before receiving any
+    packets, would leave the app in a strange state, where it did not look like
+    the device was deselected.
 -   Programming modem firmware failed if target directory did not exist.
 
 ### Changed
 
+-   Toggles inside Chart Options are now displayed closer to its label.
 -   "nRF Connect for Cloud" changed to "nRF Cloud".
 
 ## 1.0.3 - 2023-07-03
