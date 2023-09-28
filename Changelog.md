@@ -1,4 +1,4 @@
-## 1.0.4 - 2023-09-27
+## 2.0.0 - 2023-09-28
 
 ### Added
 
@@ -21,8 +21,12 @@
 
 ### Changed
 
+-   From **nrf-device-lib-js** to **nrfutil device**, as a backend for
+    interacting with devices.
 -   Toggles inside Chart Options are now displayed closer to its label.
 -   "nRF Connect for Cloud" changed to "nRF Cloud".
+-   Font size and color in the Packet Event Viewer, and as a consequence the
+    size of the Packet Event Viewer.
 
 ## 1.0.3 - 2023-07-03
 
