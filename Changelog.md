@@ -13,6 +13,7 @@
 
 -   In some cases, the **Refresh dashboard** button was visible after
     deselecting device.
+-   Programming modem firmware failed if target directory did not exist.
 
 ### Changed
 
