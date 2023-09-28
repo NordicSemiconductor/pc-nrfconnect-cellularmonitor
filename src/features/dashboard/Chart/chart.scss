@@ -26,31 +26,31 @@
             margin-right: 8px;
             border: 0;
             background: $gray-200;
-            font-size: 10px;
+            font-size: 12px;
             .mdi {
                 line-height: 1;
                 margin-top: 0;
                 margin-bottom: 0;
                 font-size: 12px;
                 margin-right: 4px;
-                color: $gray-700;
+                color: $gray-900;
             }
         }
 
         p {
-            font-size: 10px;
+            font-size: 12px;
             margin: 0;
-            color: $gray-700;
+            color: $gray-900;
         }
 
         .toggle {
             label {
                 span {
-                    color: $gray-700;
+                    color: $gray-900;
                 }
             }
             .toggle-label {
-                font-size: 10px;
+                font-size: 12px;
             }
             .toggle-handle {
                 height: 8px;

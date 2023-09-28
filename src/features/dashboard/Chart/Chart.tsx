@@ -115,10 +115,10 @@ export default () => {
             scales: {
                 y: {
                     ticks: {
-                        padding: 10,
-                        color: sharedColors.gray700,
+                        padding: 12,
+                        color: sharedColors.gray900,
                         font: {
-                            size: 10,
+                            size: 12,
                             lineHeight: 1,
                         },
                         backdropPadding: 0,
@@ -144,8 +144,8 @@ export default () => {
                     border: {
                         display: false,
                     },
-                    suggestedMin: -0.5,
-                    suggestedMax: traceEventFilter.length - 0.5,
+                    min: -0.5,
+                    max: traceEventFilter.length - 0.5,
                 },
                 x: {
                     type: 'linear',
@@ -193,21 +193,10 @@ export default () => {
         [dispatch, traceEventFilter]
     );
 
-    const sectionHeight = 13;
-    const sectionSeperatorHeight = 1;
-    const chartHeight =
-        sectionHeight * traceEventFilter.length +
-        sectionSeperatorHeight * (traceEventFilter.length - 1);
-
     return (
         <>
             <ChartTop marginLeft={chart.current?.chartArea.left ?? 0} />
-            <div
-                className="chart-data"
-                style={{
-                    height: `${chartHeight}px`,
-                }}
-            >
+            <div className="chart-data">
                 <Scatter
                     ref={chart}
                     options={options}
