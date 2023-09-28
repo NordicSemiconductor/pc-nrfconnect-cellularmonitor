@@ -22,7 +22,7 @@ const DocumentationSections = [
         linkLabel="Certificate Manager"
         link="https://infocenter.nordicsemi.com/topic/ug_link_monitor/UG/link_monitor/lm_certificate_manager.html"
     >
-        Visit our Infocenter for more documentation about Certificate Manager.
+        Visit our Infocenter for more documentation about managing credentials.
     </DocumentationSection>,
     <StartupDialog key="default-startup-dialog" />,
 ];
