@@ -5,6 +5,7 @@ resources:
   repositories:
     - repository: 'pc-nrfconnect-shared'
       type: github
+      endpoint: NordicSemiconductor
       name: NordicSemiconductor/pc-nrfconnect-shared
       ref: build-app-pipeline
 extends:
