@@ -1,4 +1,4 @@
-## 2.0.0 - 2023-09-28
+## 2.0.0 - 2023-09-29
 
 ### Added
 
@@ -8,7 +8,7 @@
     after 5 seconds of starting a trace. The option is only available if
     Wireshark is disabled.
 -   Warning in the SidePanel when Wireshark executable is not found.
--   Action to specify path to a Wireshark executable.
+-   Option to specify path to a Wireshark executable.
 
 ### Fixed
 
