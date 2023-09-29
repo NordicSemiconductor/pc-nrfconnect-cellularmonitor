@@ -3,11 +3,11 @@ trigger:
 
 resources:
   repositories:
-      - repository: 'pc-nrfconnect-shared'
-        type: github
-        endpoint: NordicSemiconductor
-        name: NordicSemiconductor/pc-nrfconnect-shared
-        ref: refs/heads/build-app-pipeline
+    - repository: 'pc-nrfconnect-shared'
+      type: github
+      endpoint: NordicSemiconductor
+      name: NordicSemiconductor/pc-nrfconnect-shared
+      ref: build-app-pipeline
 extends:
   template: build-app.yml@pc-nrfconnect-shared
    
