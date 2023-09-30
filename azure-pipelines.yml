@@ -9,5 +9,5 @@ resources:
       name: NordicSemiconductor/pc-nrfconnect-shared
       ref: build-app-pipeline
 extends:
-  template: build-app.yml@pc-nrfconnect-shared
+  template: ci/build-app.yml@pc-nrfconnect-shared
    
