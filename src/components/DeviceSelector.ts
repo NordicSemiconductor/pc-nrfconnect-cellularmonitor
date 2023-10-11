@@ -94,7 +94,7 @@ const openDevice =
 
         if (is9161DK(device)) {
             logger.warn(
-                'Modem tracing can become unresponsive when resetting the device multiple times. An automatic firmware update is being worked on.'
+                'Modem tracing can become unresponsive when resetting the device multiple times. An automatic firmware update to resolve the issue is being worked on.'
             );
         }
     };
