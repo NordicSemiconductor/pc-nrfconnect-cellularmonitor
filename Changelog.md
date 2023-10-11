@@ -1,3 +1,10 @@
+## 2.0.1 - 2023-10-12
+
+### Added
+
+-   Warning for known issue when resetting nRF9161 DK multiple times during a
+    trace.
+
 ## 2.0.0 - 2023-09-29
 
 ### Added
