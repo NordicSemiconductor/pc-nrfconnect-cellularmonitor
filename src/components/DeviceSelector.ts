@@ -16,6 +16,7 @@ import type {
     DeviceTraits,
 } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
+import { is9161DK } from '../features/programSample/programSample';
 import {
     removeShellParser,
     setTerminalSerialPort as setUartSerialPort,
@@ -90,6 +91,12 @@ const openDevice =
 
         dispatch(autoSetTraceSerialPort(device));
         dispatch(autoSetUartSerialPort(device));
+
+        if (is9161DK(device)) {
+            logger.warn(
+                'Modem tracing can become unresponsive when resetting the device multiple times. An automatic firmware update is being worked on.'
+            );
+        }
     };
 
 const autoSetTraceSerialPort =
