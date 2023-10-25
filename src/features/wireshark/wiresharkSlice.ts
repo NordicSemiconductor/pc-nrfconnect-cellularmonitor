@@ -8,20 +8,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../appReducer';
 import {
-    getTsharkPath as getPersistedTsharkPath,
     getWiresharkPath as getPersistedWiresharkPath,
-    setTsharkPath as setPersistedTsharkPath,
     setWiresharkPath as setPersistedWiresharkPath,
 } from '../../utils/store';
 
 interface WiresharkState {
     wiresharkPath: string | null;
-    tsharkPath: string | null;
 }
 
 const initialState = (): WiresharkState => ({
     wiresharkPath: getPersistedWiresharkPath(),
-    tsharkPath: getPersistedTsharkPath(),
 });
 
 const wiresharkSlice = createSlice({
@@ -32,18 +28,12 @@ const wiresharkSlice = createSlice({
             state.wiresharkPath = action.payload;
             setPersistedWiresharkPath(action.payload);
         },
-        setTsharkPath: (state, action: PayloadAction<string>) => {
-            state.tsharkPath = action.payload;
-            setPersistedTsharkPath(action.payload);
-        },
     },
 });
 
 export const getWiresharkPath = (state: RootState) =>
     state.app.wireshark.wiresharkPath;
-export const getTsharkPath = (state: RootState) =>
-    state.app.wireshark.tsharkPath;
 
-export const { setWiresharkPath, setTsharkPath } = wiresharkSlice.actions;
+export const { setWiresharkPath } = wiresharkSlice.actions;
 
 export default wiresharkSlice.reducer;

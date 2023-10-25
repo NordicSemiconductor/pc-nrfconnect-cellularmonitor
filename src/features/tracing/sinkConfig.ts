@@ -7,7 +7,6 @@
 import {
     PcapInitParameters,
     RawFileInitParameters,
-    TsharkInitParameters,
     WiresharkNamedPipeInitParameters,
 } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import {
@@ -15,11 +14,10 @@ import {
     deviceInfo,
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import path from 'path';
 
 import type { RootState } from '../../appReducer';
-import { defaultSharkPath, findTshark } from '../wireshark/wireshark';
-import { getTsharkPath, getWiresharkPath } from '../wireshark/wiresharkSlice';
+import { defaultSharkPath } from '../wireshark/wireshark';
+import { getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
 
@@ -37,8 +35,7 @@ const additionalPcapProperties = (device?: Device) => ({
 type InitParameters =
     | RawFileInitParameters
     | PcapInitParameters
-    | WiresharkNamedPipeInitParameters
-    | TsharkInitParameters;
+    | WiresharkNamedPipeInitParameters;
 
 export default (
     state: RootState,
@@ -73,23 +70,9 @@ export default (
             init_parameters: {
                 start_process:
                     getWiresharkPath(state) ??
-                    defaultSharkPath('wireshark') ??
+                    defaultSharkPath() ??
                     'WIRESHARK NOT FOUND',
                 ...additionalPcapProperties(selectedDevice(state)),
-            },
-        };
-    }
-
-    if (format === 'tshark') {
-        // <TsharkInitParameters>
-        const sharkPath = getTsharkPath(state);
-        const tshark = findTshark(sharkPath);
-        const tsharkFolder = tshark && path.dirname(tshark);
-
-        return {
-            name: 'nrfml-tshark-sink',
-            init_parameters: {
-                tshark_directory: tsharkFolder ?? undefined,
             },
         };
     }

@@ -101,9 +101,6 @@ describe('TraceCollector', () => {
     describe('sink configurations', () => {
         beforeEach(() => {
             jest.resetAllMocks();
-            jest.spyOn(wireshark, 'findTshark').mockReturnValue(
-                'path/to/tshark'
-            );
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
@@ -141,20 +138,6 @@ describe('TraceCollector', () => {
                 'nrfml-pcap-sink',
                 'nrfml-wireshark-named-pipe-sink'
             );
-        });
-    });
-
-    describe('tshark not installed', () => {
-        beforeEach(() => {
-            jest.resetAllMocks();
-        });
-
-        it('should call nrfml start without tshark sink', () => {
-            jest.spyOn(wireshark, 'findTshark').mockReturnValue(null);
-            render(<TraceCollector />, serialPortActions(['raw']));
-            fireEvent.click(screen.getByText('Start'));
-
-            expectNrfmlStartCalledWithSinks('nrfml-raw-file-sink');
         });
     });
 });

@@ -14,31 +14,25 @@ import { TAction } from '../../utils/thunk';
 
 export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
-type Shark = 'wireshark' | 'tshark';
-
 const DEFAULT_WINDOWS_WIRESHARK_FOLDER = join(
     'C:',
     'Program Files',
     'Wireshark'
 );
-const DEFAULT_WINDOWS_PATHS = {
-    wireshark: join(DEFAULT_WINDOWS_WIRESHARK_FOLDER, 'Wireshark.exe'),
-    tshark: join(DEFAULT_WINDOWS_WIRESHARK_FOLDER, 'tshark.exe'),
-};
+const DEFAULT_WINDOWS_PATH = join(
+    DEFAULT_WINDOWS_WIRESHARK_FOLDER,
+    'Wireshark.exe'
+);
 
 const DEFAULT_MAC_WIRESHARK_FOLDER = join(sep, 'Applications', 'Wireshark.app');
 
-const macOSExecutableWithinAppFolder = (shark: Shark) =>
-    join('Contents', 'MacOS', shark === 'wireshark' ? 'Wireshark' : 'tshark');
+const macOSExecutableWithinAppFolder = () =>
+    join('Contents', 'MacOS', 'wireshark');
 
 export const findWireshark = (selectedPath: string | null) =>
-    validatedSharkPath('wireshark', selectedPath) ||
-    defaultSharkPath('wireshark');
+    validatedSharkPath(selectedPath) || defaultSharkPath();
 
-export const findTshark = (selectedPath: string | null) =>
-    validatedSharkPath('tshark', selectedPath) || defaultSharkPath('tshark');
-
-const validatedSharkPath = (shark: Shark, path: string | null) => {
+const validatedSharkPath = (path: string | null) => {
     if (path == null) {
         return null;
     }
@@ -52,18 +46,18 @@ const validatedSharkPath = (shark: Shark, path: string | null) => {
 
     return process.platform !== 'darwin'
         ? path
-        : join(path, macOSExecutableWithinAppFolder(shark));
+        : join(path, macOSExecutableWithinAppFolder());
 };
 
-export const defaultSharkPath = (shark: Shark) => {
+export const defaultSharkPath = () => {
     if (process.platform === 'win32') {
-        return validatedSharkPath(shark, DEFAULT_WINDOWS_PATHS[shark]);
+        return validatedSharkPath(DEFAULT_WINDOWS_PATH);
     }
     if (process.platform === 'darwin') {
-        return validatedSharkPath(shark, DEFAULT_MAC_WIRESHARK_FOLDER);
+        return validatedSharkPath(DEFAULT_MAC_WIRESHARK_FOLDER);
     }
     if (process.platform === 'linux') {
-        return locateSharkPathOnLinux(shark);
+        return locateSharkPathOnLinux();
     }
 
     logger.error(
@@ -72,15 +66,11 @@ export const defaultSharkPath = (shark: Shark) => {
     return null;
 };
 
-const locateSharkPathOnLinux = (shark: Shark) => {
+const locateSharkPathOnLinux = () => {
     try {
-        return execSync(`which ${shark}`).toString().trim();
+        return execSync(`which wireshark`).toString().trim();
     } catch (err) {
-        logger.debug(
-            `Could not locate ${
-                shark === 'wireshark' ? 'Wireshark' : 'Tshark'
-            } executable`
-        );
+        logger.debug(`Could not locate Wireshark executable`);
         return null;
     }
 };
