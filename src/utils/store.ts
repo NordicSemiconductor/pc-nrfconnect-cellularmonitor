@@ -15,7 +15,6 @@ import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
 interface StoreSchema {
     dbFilePath: string | undefined;
     wiresharkExecutablePath: string | null;
-    tsharkExecutablePath: string | null;
     traceFormats: TraceFormat[];
     serialPorts: {
         [serialNumber: string]: string;
@@ -34,6 +33,11 @@ const store = getPersistentStore<StoreSchema>({
             instance.set('traceFormats', ['raw', 'tshark']);
         },
         '0.9.1': instance => {
+            instance.set('traceFormats', ['raw']);
+        },
+        '2.0.2': instance => {
+            // Make sure there are no tshark selected, as this would break the
+            // application.
             instance.set('traceFormats', ['raw']);
         },
     },
@@ -68,8 +72,6 @@ export const [getWiresharkPath, setWiresharkPath] = fromStore(
     'wiresharkExecutablePath',
     null
 );
-
-export const [getTsharkPath, setTsharkPath] = fromStore('tsharkExecutablePath');
 
 export const [getTraceFormats, setTraceFormats] = fromStore(
     'traceFormats',

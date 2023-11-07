@@ -31,7 +31,7 @@ export default () => {
     const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
     const start = () => {
-        const locatedWireshark = wiresharkPath ?? defaultSharkPath('wireshark');
+        const locatedWireshark = wiresharkPath ?? defaultSharkPath();
         if (openWiresharkOnStart && !locatedWireshark) {
             setShowWiresharkDialog(true);
         } else {

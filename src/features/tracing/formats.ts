@@ -26,7 +26,7 @@ export const EventColours = {
         dark: '#1A237E',
     },
 } as { [K in eventType]: { light: string; dark: string } };
-export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live', 'tshark'] as const;
+export const ALL_TRACE_FORMATS = ['raw', 'pcap', 'live'] as const;
 export type TraceFormat = (typeof ALL_TRACE_FORMATS)[number];
 
 export const sinkEvent = (format: TraceFormat) =>
@@ -34,11 +34,9 @@ export const sinkEvent = (format: TraceFormat) =>
         raw: EventAction.RAW_TRACE,
         pcap: EventAction.PCAP_TRACE,
         live: EventAction.LIVE_TRACE,
-        tshark: EventAction.TSHARK_TRACE,
     }[format] ?? EventAction.UNKNOWN_TRACE);
 
-export const hasProgress = (format: TraceFormat) =>
-    format !== 'live' && format !== 'tshark';
+export const hasProgress = (format: TraceFormat) => format !== 'live';
 
 export type SourceFormat =
     | {
