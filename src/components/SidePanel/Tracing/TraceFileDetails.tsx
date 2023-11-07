@@ -36,10 +36,11 @@ const TraceFileName: FC<{
             <span
                 className="trace-filename"
                 onClick={() => {
-                    usageData.sendUsageData(
-                        EventAction.OPEN_FILE_DIRECTORY,
-                        progress.format
-                    );
+                    usageData.sendUsageData(EventAction.OPEN_FILE_DIRECTORY, {
+                        traceProgress: progress,
+                        format: progress.format,
+                        path: progress.path,
+                    });
                     openInFolder(progress.path);
                 }}
                 title={filename}

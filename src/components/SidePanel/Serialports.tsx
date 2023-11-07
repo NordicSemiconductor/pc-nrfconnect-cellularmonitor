@@ -8,13 +8,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Dropdown,
+    selectedDevice,
     truncateMiddle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     getAvailableSerialPorts,
     getIsTracing,
-    getSelectedSerialNumber,
     getTraceSerialPort,
     setTraceSerialPort,
 } from '../../features/tracing/traceSlice';
@@ -23,7 +23,8 @@ import { setSerialPort as persistSerialPort } from '../../utils/store';
 export default () => {
     const dispatch = useDispatch();
     const availablePorts = useSelector(getAvailableSerialPorts);
-    const serialNumber = useSelector(getSelectedSerialNumber) ?? '';
+    // TODO: verify if this is needed
+    const serialNumber = useSelector(selectedDevice)?.serialNumber ?? '';
     const selectedSerialPort = useSelector(getTraceSerialPort);
     const isTracing = useSelector(getIsTracing);
 

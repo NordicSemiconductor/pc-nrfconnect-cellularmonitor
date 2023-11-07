@@ -176,8 +176,6 @@ export const getTraceSourceFilePath = (state: RootState) =>
     state.app.trace.sourceFilePath;
 export const getManualDbFilePath = (state: RootState) =>
     state.app.trace.manualDbFilePath;
-export const getSelectedSerialNumber = (state: RootState) =>
-    state.device.selectedSerialNumber;
 export const getDetectingTraceDb = (state: RootState) =>
     state.app.trace.detectingTraceDb;
 

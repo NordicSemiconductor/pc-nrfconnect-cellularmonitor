@@ -1,3 +1,9 @@
+## 2.1.0 - unreleased
+
+### Changed
+
+-   Update nrfutil device to 2.0.2.
+
 ## 2.0.1 - 2023-10-12
 
 ### Added

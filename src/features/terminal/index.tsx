@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     Button,
-    Device,
     openWindow,
     selectedDevice,
     usageData,
@@ -38,9 +37,7 @@ export const OpenSerialTerminal = () => {
     return (
         <Button
             className="tw-relative tw-w-full"
-            onClick={() =>
-                openSerialTerminal(device, selectedUartSerialPort.path)
-            }
+            onClick={() => openSerialTerminal(selectedUartSerialPort.path)}
             title={title}
             variant="secondary"
             disabled={!appInstalled}
@@ -54,13 +51,12 @@ export const OpenSerialTerminal = () => {
     );
 };
 
-const openSerialTerminal = (device: Device, serialPortPath: string) => {
+const openSerialTerminal = (serialPortPath: string) => {
     usageData.sendUsageData(EventAction.OPEN_SERIAL_TERMINAL);
     openWindow.openApp(
         { name: 'pc-nrfconnect-serial-terminal', source: 'official' },
         {
             device: {
-                serialNumber: device.serialNumber,
                 serialPortPath,
             },
         }

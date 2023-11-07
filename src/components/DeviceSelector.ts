@@ -102,13 +102,29 @@ const openDevice =
 const autoSetTraceSerialPort =
     (device: Device): TAction =>
     dispatch => {
-        const persistedPath = getPersistedSerialPort(device.serialNumber);
-        if (persistedPath) {
-            dispatch(setTraceSerialPort(persistedPath));
+        if (device.serialPorts == null) {
             return;
         }
+
+        const persistedPath =
+            device.serialNumber != null
+                ? getPersistedSerialPort(device.serialNumber)
+                : null;
+
+        if (persistedPath) {
+            // Verify that the port is available on the selected device.
+            if (
+                device.serialPorts.findIndex(
+                    port => port.comName === persistedPath
+                ) !== -1
+            ) {
+                dispatch(setTraceSerialPort(persistedPath));
+                return;
+            }
+        }
+
         const port = autoSelectTraceSerialPort(device?.serialPorts ?? []);
-        const path = port?.comName ?? device?.serialport?.comName;
+        const path = port?.comName ?? port?.path;
         if (path) {
             dispatch(setTraceSerialPort(path));
         } else {
