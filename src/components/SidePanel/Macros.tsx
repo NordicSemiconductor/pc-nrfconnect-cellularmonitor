@@ -54,7 +54,7 @@ export const Macro = ({ commands, title }: Macro) => {
                 onClick={() => {
                     usageData.sendUsageData(
                         EventAction.SEND_AT_COMMANDS_MACRO,
-                        title
+                        { type: title }
                     );
                     dispatch(sendAT(commands));
                 }}

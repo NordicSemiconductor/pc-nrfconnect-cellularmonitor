@@ -45,13 +45,13 @@ export const getNrfDeviceVersion = (
 };
 
 export const isThingy91 = (device?: Device) =>
-    device?.serialport?.productId === '9100';
+    device?.devkit?.boardVersion === '9100';
 
 export const is9160DK = (device?: Device) =>
-    device?.jlink?.boardVersion === 'PCA10090';
+    device?.devkit?.boardVersion === 'PCA10090';
 
 export const is9161DK = (device?: Device) =>
-    device?.jlink?.boardVersion === 'PCA10153';
+    device?.devkit?.boardVersion === 'PCA10153';
 
 export const programModemFirmware = async (
     device: Device,
@@ -59,7 +59,10 @@ export const programModemFirmware = async (
     progress: (progress: SampleProgress) => void
 ) => {
     try {
-        usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, modemFirmware.file);
+        usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, {
+            type: 'ModemFirmware',
+            firmware: modemFirmware,
+        });
         await programModem(device, modemFirmware, progress);
     } catch (error) {
         usageData.sendErrorReport(
@@ -78,7 +81,9 @@ export const programDevice = async (
     try {
         // eslint-disable-next-line no-restricted-syntax
         for (const fw of firmwares) {
-            usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, fw.file);
+            usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, {
+                firmware: fw,
+            });
             switch (fw.type) {
                 case 'Modem':
                     await programModem(device, fw, progress);

@@ -91,7 +91,9 @@ export default () => {
 
     const onSelect = async (item: DropdownItem) => {
         const label = typeof item.label === 'string' ? item.label : item.value;
-        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, label);
+        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, {
+            selectedTraceDatabase: label,
+        });
         setSelectedItem(item);
         if (item.value === selectFromDiskItem.value) {
             const filePath = await askForTraceDbFile();

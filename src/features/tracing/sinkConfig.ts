@@ -24,7 +24,7 @@ import sinkFile from './sinkFile';
 const { displayName: appName } = require('../../../package.json');
 
 const describeDevice = (device: Device) =>
-    `${deviceInfo(device).name ?? 'unknown'} ${device?.boardVersion}`;
+    `${deviceInfo(device).name ?? 'unknown'} ${device?.devkit?.boardVersion}`;
 
 const additionalPcapProperties = (device?: Device) => ({
     os_name: process.platform,

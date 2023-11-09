@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import usageData from '@nordicsemiconductor/pc-nrfconnect-shared/src/utils/usageData';
 
 import appReducer from './appReducer';
 import DeviceSelector from './components/DeviceSelector';
@@ -14,14 +15,16 @@ import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
 import CertificateManager from './features/certificateManager/CertificateManager';
 import EventChartDashboard from './features/dashboard/Dashboard';
 import logLibVersions from './utils/logLibVersions';
+import { enableNrfmlLogging } from './utils/monitorLibLogging';
 
 import './index.scss';
 
+usageData.enableTelemetry();
 logLibVersions();
+enableNrfmlLogging();
 
 render(
     <App
-        reportUsageData
         appReducer={appReducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<div />}
