@@ -15,11 +15,13 @@ import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
 import CertificateManager from './features/certificateManager/CertificateManager';
 import EventChartDashboard from './features/dashboard/Dashboard';
 import logLibVersions from './utils/logLibVersions';
+import { enableNrfmlLogging } from './utils/monitorLibLogging';
 
 import './index.scss';
 
 usageData.enableTelemetry();
 logLibVersions();
+enableNrfmlLogging();
 
 render(
     <App

@@ -6,6 +6,7 @@
 
 import React from 'react';
 
+import ChangeLogLevel from '../ChangeLogLevel';
 import DashboardCards from './Cards';
 import Chart from './Chart';
 
@@ -17,6 +18,7 @@ const Dashboard = () => (
             <DashboardCards />
         </div>
         <Chart />
+        <ChangeLogLevel />
     </div>
 );
 
