@@ -51,9 +51,9 @@ export default () => {
                 </ul>
             </Dialog.Body>
             <Dialog.Footer>
-                &nbsp;
                 <Button
                     variant="secondary"
+                    size="lg"
                     onClick={() => dispatch(setDetectingTraceDb(false))}
                 >
                     Close
