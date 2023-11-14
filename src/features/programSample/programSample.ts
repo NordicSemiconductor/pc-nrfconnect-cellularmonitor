@@ -44,8 +44,15 @@ export const getNrfDeviceVersion = (
     return undefined as never;
 };
 
-export const isThingy91 = (device?: Device) =>
-    device?.devkit?.boardVersion === '9100';
+export const isThingy91 = (device?: Device) => {
+    const serialPorts = device?.serialPorts;
+
+    if (serialPorts == null) {
+        return false;
+    }
+
+    return serialPorts.some(port => port.productId === '9100');
+};
 
 export const is9160DK = (device?: Device) =>
     device?.devkit?.boardVersion === 'PCA10090';
