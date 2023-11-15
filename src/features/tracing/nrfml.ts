@@ -7,6 +7,7 @@
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import type { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import {
+    AppThunk,
     logger,
     selectedDevice,
     usageData,
@@ -16,7 +17,6 @@ import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfu
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
-import type { TAction } from '../../utils/thunk';
 import { getNrfDeviceVersion, is9160DK } from '../programSample/programSample';
 import {
     getShellParser,
@@ -42,6 +42,7 @@ import {
     getResetDevice,
     getTaskId,
     getTraceSerialPort,
+    setDetectingTraceDb,
     setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
@@ -73,7 +74,7 @@ export const convertTraceFile =
     (
         path: string,
         setLoading: (loading: boolean) => void = () => {}
-    ): TAction =>
+    ): AppThunk<RootState, Promise<void>> =>
     (dispatch, getState) => {
         usageData.sendUsageData(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
@@ -88,6 +89,7 @@ export const convertTraceFile =
                 nrfmlConfig(state, source, sinks),
                 err => {
                     dispatch(setTraceIsStopped());
+                    dispatch(setDetectingTraceDb(false));
                     setLoading(false);
 
                     if (err?.error_code === 100) {
@@ -123,7 +125,7 @@ export const convertTraceFile =
     };
 
 export const startTrace =
-    (formats: TraceFormat[]): TAction =>
+    (formats: TraceFormat[]): AppThunk<RootState> =>
     async (dispatch, getState) => {
         const state = getState();
         const uartPort = getUartSerialPort(state);
@@ -250,7 +252,10 @@ export const startTrace =
     };
 
 export const readRawTrace =
-    (sourceFile: string, setLoading: (loading: boolean) => void): TAction =>
+    (
+        sourceFile: string,
+        setLoading: (loading: boolean) => void
+    ): AppThunk<RootState> =>
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };
@@ -307,7 +312,7 @@ export const readRawTrace =
         logger.info(`Started reading trace from ${sourceFile}`);
     };
 
-export const stopTrace = (): TAction => (dispatch, getState) => {
+export const stopTrace = (): AppThunk<RootState> => (dispatch, getState) => {
     const taskId = getTaskId(getState());
     if (taskId === null) return;
     nrfml.stop(taskId);

@@ -5,6 +5,7 @@
  */
 
 import {
+    AppThunk,
     createSerialPort,
     Device,
     logger,
@@ -12,8 +13,8 @@ import {
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
 
+import { RootState } from '../../appReducer';
 import { raceTimeout } from '../../utils/promise';
-import { TAction } from '../../utils/thunk';
 import {
     hookModemToShellParser,
     xTerminalShellParserWrapper,
@@ -102,7 +103,7 @@ export const connectToSerialPort = async (
 };
 
 export const autoSetUartSerialPort =
-    (device: Device): TAction =>
+    (device: Device): AppThunk<RootState> =>
     dispatch => {
         if (!device.serialPorts || device.serialPorts.length < 2) {
             logger.debug(

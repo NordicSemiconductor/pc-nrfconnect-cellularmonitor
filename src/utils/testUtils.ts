@@ -7,14 +7,17 @@
 import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
 import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
-import { currentPane, logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import {
+    AppDispatch,
+    currentPane,
+    logger,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import checkDiskSpace from 'check-disk-space';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import appReducer from '../appReducer';
-import { TDispatch } from './thunk';
 
 const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
 
@@ -94,7 +97,7 @@ export const assertErrorWasLogged = () => {
 
 export const getMockStore = () => {
     const middlewares = [thunk];
-    return configureMockStore<unknown, TDispatch>(middlewares);
+    return configureMockStore<unknown, AppDispatch>(middlewares);
 };
 
 export const render = testUtils.render(appReducer);

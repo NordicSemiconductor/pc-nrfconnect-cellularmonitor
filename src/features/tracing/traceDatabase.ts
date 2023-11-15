@@ -5,6 +5,7 @@
  */
 
 import {
+    AppDispatch,
     getAppDataDir,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -16,7 +17,6 @@ import {
     autoDetectDbRootFolder,
     storeManualDbFilePath,
 } from '../../utils/store';
-import { TDispatch } from '../../utils/thunk';
 import { SupportedDeviceVersion } from '../programSample/programSample';
 import { setManualDbFilePath } from './traceSlice';
 
@@ -44,6 +44,7 @@ const SERVER_URL =
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'trace-db');
 const INITIAL_SOURCE_FOLDER = autoDetectDbRootFolder();
 
+// All: specifically used for opening files, and you want all databases available
 let cachedForDevice: SupportedDeviceVersion;
 let localDatabasesCache: undefined | DatabaseVersion[];
 let remoteDatabasesCache: undefined | DatabaseVersion[];
@@ -91,7 +92,7 @@ export const getSelectedTraceDatabaseFromVersion = async (
 
 export const setSelectedTraceDatabaseFromVersion =
     (version: string, nrfDeviceVersion: SupportedDeviceVersion) =>
-    async (dispatch: TDispatch) => {
+    async (dispatch: AppDispatch) => {
         const manualDbFile = await getSelectedTraceDatabaseFromVersion(
             version,
             nrfDeviceVersion
@@ -208,6 +209,7 @@ const extractDatabaseVersionsTraceConfig = (
     config.firmwares.devices
         .filter(
             device =>
+                nrfDeviceVersion === 'AllDevices' ||
                 nrfDeviceVersion === undefined ||
                 device.type === nrfDeviceVersion
         )
