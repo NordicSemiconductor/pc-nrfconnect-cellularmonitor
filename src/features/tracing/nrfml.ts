@@ -17,7 +17,6 @@ import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfu
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
-import type { TAction } from '../../utils/thunk';
 import { getNrfDeviceVersion, is9160DK } from '../programSample/programSample';
 import {
     getShellParser,
@@ -253,7 +252,10 @@ export const startTrace =
     };
 
 export const readRawTrace =
-    (sourceFile: string, setLoading: (loading: boolean) => void): TAction =>
+    (
+        sourceFile: string,
+        setLoading: (loading: boolean) => void
+    ): AppThunk<RootState> =>
     (dispatch, getState) => {
         const state = getState();
         const source: SourceFormat = { type: 'file', path: sourceFile };

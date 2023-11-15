@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { AppThunk, logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 
+import { RootState } from '../../appReducer';
 import { getWiresharkPath } from '../../utils/store';
-import { TAction } from '../../utils/thunk';
 
 export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 
@@ -76,7 +76,7 @@ const locateSharkPathOnLinux = () => {
 };
 
 export const openInWireshark =
-    (pcapPath: string): TAction =>
+    (pcapPath: string): AppThunk<RootState> =>
     () => {
         const path = getWiresharkPath();
         const wiresharkPath = findWireshark(path);

@@ -5,6 +5,7 @@
  */
 
 import {
+    AppDispatch,
     getAppDataDir,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -16,7 +17,6 @@ import {
     autoDetectDbRootFolder,
     storeManualDbFilePath,
 } from '../../utils/store';
-import { TDispatch } from '../../utils/thunk';
 import { SupportedDeviceVersion } from '../programSample/programSample';
 import { setManualDbFilePath } from './traceSlice';
 
@@ -92,7 +92,7 @@ export const getSelectedTraceDatabaseFromVersion = async (
 
 export const setSelectedTraceDatabaseFromVersion =
     (version: string, nrfDeviceVersion: SupportedDeviceVersion) =>
-    async (dispatch: TDispatch) => {
+    async (dispatch: AppDispatch) => {
         const manualDbFile = await getSelectedTraceDatabaseFromVersion(
             version,
             nrfDeviceVersion

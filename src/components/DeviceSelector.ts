@@ -6,6 +6,8 @@
 
 import { connect } from 'react-redux';
 import {
+    AppDispatch,
+    AppThunk,
     Device,
     DeviceSelector,
     DeviceSelectorProps,
@@ -16,6 +18,7 @@ import type {
     DeviceTraits,
 } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
+import { RootState } from '../appReducer';
 import { is9161DK } from '../features/programSample/programSample';
 import {
     removeShellParser,
@@ -34,8 +37,6 @@ import {
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';
 import { getSerialPort as getPersistedSerialPort } from '../utils/store';
-import type { TAction } from '../utils/thunk';
-import { TDispatch } from '../utils/thunk';
 
 const deviceListing: DeviceTraits = {
     nordicUsb: true,
@@ -48,7 +49,7 @@ const mapState = (): DeviceSelectorProps => ({
     deviceListing,
 });
 
-const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
+const mapDispatch = (dispatch: AppDispatch): Partial<DeviceSelectorProps> => ({
     onDeviceSelected: (device: Device) => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
         dispatch(openDevice(device));
@@ -62,7 +63,7 @@ const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
 
 export default connect(mapState, mapDispatch)(DeviceSelector);
 
-const closeDevice = (): TAction => dispatch => {
+const closeDevice = (): AppThunk<RootState> => dispatch => {
     logger.info('Closing device');
     dispatch(setUartSerialPort(null));
     dispatch(setAvailableSerialPorts([]));
@@ -74,7 +75,7 @@ const closeDevice = (): TAction => dispatch => {
 };
 
 const openDevice =
-    (device: Device): TAction =>
+    (device: Device): AppThunk<RootState> =>
     dispatch => {
         dispatch(resetDashboardState());
         dispatch(resetTraceInfo());
@@ -100,7 +101,7 @@ const openDevice =
     };
 
 const autoSetTraceSerialPort =
-    (device: Device): TAction =>
+    (device: Device): AppThunk<RootState> =>
     dispatch => {
         if (device.serialPorts == null) {
             return;
