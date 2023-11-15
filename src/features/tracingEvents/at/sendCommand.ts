@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger, SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import {
+    AppThunk,
+    logger,
+    SerialPort,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { TAction } from '../../../utils/thunk';
+import type { RootState } from '../../../appReducer';
 import { ShellParser } from '../../shell/shellParser';
 import {
     getShellParser,
@@ -20,7 +24,7 @@ const queue: string[] = [];
 export const clearATQueue = () => queue.splice(0, queue.length);
 
 export const sendAT =
-    (commands: string | string[]): TAction =>
+    (commands: string | string[]): AppThunk<RootState> =>
     async (dispatch, getState) => {
         const uartSerialPort = getTerminalSerialPort(getState());
         const shellParser = getShellParser(getState());

@@ -37,7 +37,7 @@ export default () => {
             title={title}
         >
             {loading === true
-                ? 'Converting file to PCAP'
+                ? 'Opening file...'
                 : 'Open trace file in Wireshark...'}
         </Button>
     );
