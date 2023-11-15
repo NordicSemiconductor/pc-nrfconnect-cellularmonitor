@@ -44,6 +44,7 @@ const SERVER_URL =
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'trace-db');
 const INITIAL_SOURCE_FOLDER = autoDetectDbRootFolder();
 
+// All: specifically used for opening files, and you want all databases available
 let cachedForDevice: SupportedDeviceVersion;
 let localDatabasesCache: undefined | DatabaseVersion[];
 let remoteDatabasesCache: undefined | DatabaseVersion[];
@@ -208,6 +209,7 @@ const extractDatabaseVersionsTraceConfig = (
     config.firmwares.devices
         .filter(
             device =>
+                nrfDeviceVersion === 'AllDevices' ||
                 nrfDeviceVersion === undefined ||
                 device.type === nrfDeviceVersion
         )

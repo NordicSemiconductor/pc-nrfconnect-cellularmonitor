@@ -25,7 +25,7 @@ export interface SampleProgress {
     progress: Progress;
 }
 
-export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161';
+export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161' | 'AllDevices';
 
 export const getNrfDeviceVersion = (
     device?: Device
@@ -37,11 +37,8 @@ export const getNrfDeviceVersion = (
         return 'nRF9160';
     }
 
-    logger.error(
-        'Attempted to retrieve trace databases for an unrecognized device',
-        JSON.stringify(device)
-    );
-    return undefined as never;
+    // Used when loading file, and want to see all database files.
+    return 'AllDevices';
 };
 
 export const isThingy91 = (device?: Device) => {
