@@ -18,6 +18,7 @@ import {
     storeManualDbFilePath,
 } from '../../utils/store';
 import { SupportedDeviceVersion } from '../programSample/programSample';
+import { TRACE_DATABASE_CONFIG_FILE } from './sourceConfig';
 import { setManualDbFilePath } from './traceSlice';
 
 interface TraceConfig {
@@ -61,7 +62,7 @@ export const getDatabases = async (
 
     if (!localDatabasesCache) {
         const json = await readFile(
-            join(autoDetectDbRootFolder(), 'config_v2.json'),
+            join(autoDetectDbRootFolder(), TRACE_DATABASE_CONFIG_FILE),
             {
                 encoding: 'utf-8',
             }
@@ -108,7 +109,7 @@ export const getRemoteDatabases = (nrfDeviceVersion: SupportedDeviceVersion) =>
 const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
     let response: Response;
     try {
-        response = await fetch(`${SERVER_URL}/config_v2.json`, {
+        response = await fetch(`${SERVER_URL}/${TRACE_DATABASE_CONFIG_FILE}`, {
             cache: 'no-cache',
         });
     } catch (err) {
@@ -135,7 +136,7 @@ const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
     try {
         const writableConfig = JSON.stringify(config);
         await writeFile(
-            join(DOWNLOAD_FOLDER, 'config_v2.json'),
+            join(DOWNLOAD_FOLDER, TRACE_DATABASE_CONFIG_FILE),
             writableConfig
         );
     } catch (err) {

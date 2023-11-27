@@ -17,8 +17,9 @@ import { getManualDbFilePath } from './traceSlice';
 
 const BUFFER_SIZE = 1;
 const CHUNK_SIZE = 256;
-
 const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
+
+export const TRACE_DATABASE_CONFIG_FILE = 'config_v3.json';
 
 const autoDetectDbRootURL = () =>
     pathToFileURL(autoDetectDbRootFolder()).toString();
@@ -31,8 +32,10 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
                   cache_directory: autoDetectDbCacheDirectory,
                   root: autoDetectDbRootURL(),
                   update_cache: true,
-                  // eslint-disable-next-line no-template-curly-in-string -- Because this is no template string but the syntax used by nrf-monitor-lib
-                  trace_db_locations: ['${root}/config_v2.json'],
+
+                  trace_db_locations: [
+                      `\${root}/${TRACE_DATABASE_CONFIG_FILE}`,
+                  ],
               },
           };
 

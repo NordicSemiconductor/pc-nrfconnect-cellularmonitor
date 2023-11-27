@@ -3,7 +3,7 @@
         "updated_timestamp": "2023-09-27 14:45:00",
         "devices": [
             {
-                "type": "nRF9161",
+                "type": "nRF91x1",
                 "versions": [
                     {
                         "database": {
@@ -12,6 +12,22 @@
                         },
                         "uuid": "4f98600b-a3d2-4153-8f92-b44eeb19ee90",
                         "version": "2.0.0-beta"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.0-FOTA-TEST_trace-db.json",
+                            "sha256": "9ddb0a97abceafb0166f1d82246843541c5c43605f23cc4955350de7154c19cc"
+                        },
+                        "uuid": "063869d2-e9e8-4d65-8ae2-265ab6985657",
+                        "version": "2.0.0-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.0_official_trace-db.json",
+                            "sha256": "33cb18707df9d1c5c5e2e0c0974d9fc5ee98084557d07bce150a58425583993d"
+                        },
+                        "uuid": "c234531b-9f14-4135-9092-f4e52d37fb23",
+                        "version": "2.0.0"
                     }
                 ]
             },
