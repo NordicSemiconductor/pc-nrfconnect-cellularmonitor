@@ -25,13 +25,13 @@ export interface SampleProgress {
     progress: Progress;
 }
 
-export type SupportedDeviceVersion = 'nRF9160' | 'nRF9161' | 'AllDevices';
+export type SupportedDeviceVersion = 'nRF9160' | 'nRF91x1' | 'AllDevices';
 
-export const getNrfDeviceVersion = (
+export const getDeviceKeyForTraceDatabaseEntries = (
     device?: Device
 ): SupportedDeviceVersion => {
-    if (is9161DK(device)) {
-        return 'nRF9161';
+    if (is9131DK(device) || is9161DK(device)) {
+        return 'nRF91x1';
     }
     if (is9160DK(device) || isThingy91(device)) {
         return 'nRF9160';
@@ -53,9 +53,10 @@ export const isThingy91 = (device?: Device) => {
 
 export const is9160DK = (device?: Device) =>
     device?.devkit?.boardVersion === 'PCA10090';
-
 export const is9161DK = (device?: Device) =>
     device?.devkit?.boardVersion === 'PCA10153';
+export const is9131DK = (device?: Device) =>
+    device?.devkit?.boardVersion === 'PCA10165';
 
 export const programModemFirmware = async (
     device: Device,

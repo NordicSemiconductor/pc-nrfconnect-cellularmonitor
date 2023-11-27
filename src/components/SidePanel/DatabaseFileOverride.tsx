@@ -16,7 +16,7 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { basename } from 'path';
 
-import { getNrfDeviceVersion } from '../../features/programSample/programSample';
+import { getDeviceKeyForTraceDatabaseEntries } from '../../features/programSample/programSample';
 import {
     DatabaseVersion,
     getDatabases,
@@ -50,7 +50,7 @@ export default () => {
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const isTracing = useSelector(getIsTracing);
     const device = useSelector(selectedDevice);
-    const nrfDeviceVersion = getNrfDeviceVersion(device);
+    const nrfDeviceVersion = getDeviceKeyForTraceDatabaseEntries(device);
 
     const items = [
         autoSelectItem,

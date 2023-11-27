@@ -1,5 +1,9 @@
 ## 2.1.0 - unreleased
 
+### Added
+
+-   Trace database v2.0.0 and v2.0.0-FOTA for nRF91x1DK.
+
 ### Changed
 
 -   Update nrfutil device to 2.0.2.

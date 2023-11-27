@@ -58,7 +58,7 @@
         "xterm-headless": "^5.1.0"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.3"
+        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.4"
     },
     "eslintConfig": {
         "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"

@@ -17,7 +17,10 @@ import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfu
 import type { RootState } from '../../appReducer';
 import EventAction from '../../usageDataActions';
 import { raceTimeout } from '../../utils/promise';
-import { getNrfDeviceVersion, is9160DK } from '../programSample/programSample';
+import {
+    getDeviceKeyForTraceDatabaseEntries,
+    is9160DK,
+} from '../programSample/programSample';
 import {
     getShellParser,
     getTerminalSerialPort as getUartSerialPort,
@@ -133,7 +136,7 @@ export const startTrace =
         const tracePort = getTraceSerialPort(state);
         const resetDevice = getResetDevice(state);
         const device = selectedDevice(state);
-        const nrfDeviceVersion = getNrfDeviceVersion(device);
+        const nrfDeviceVersion = getDeviceKeyForTraceDatabaseEntries(device);
 
         if (!tracePort) {
             logger.error('Select serial port to start tracing');
