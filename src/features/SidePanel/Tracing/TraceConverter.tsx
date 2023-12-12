@@ -8,10 +8,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { convertTraceFile } from '../../../features/tracing/nrfml';
-import { isWiresharkInstalled } from '../../../features/wireshark/wireshark';
-import EventAction from '../../../usageDataActions';
-import { askForTraceFile } from '../../../utils/fileUtils';
+import EventAction from '../../../app/usageDataActions';
+import { askForTraceFile } from '../../../common/fileUtils';
+import { convertTraceFile } from '../../tracing/nrfml';
+import { isWiresharkInstalled } from '../../wireshark/wireshark';
 
 export default () => {
     const dispatch = useDispatch();

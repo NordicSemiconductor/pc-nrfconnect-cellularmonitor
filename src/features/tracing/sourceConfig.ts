@@ -10,8 +10,8 @@ import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
-import type { RootState } from '../../appReducer';
-import { autoDetectDbRootFolder } from '../../utils/store';
+import type { RootState } from '../../app/appReducer';
+import { autoDetectDbRootFolder } from '../../app/store';
 import { SourceFormat } from './formats';
 import { getManualDbFilePath } from './traceSlice';
 

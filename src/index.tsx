@@ -8,14 +8,14 @@ import React from 'react';
 import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import usageData from '@nordicsemiconductor/pc-nrfconnect-shared/src/utils/usageData';
 
-import appReducer from './appReducer';
-import DeviceSelector from './components/DeviceSelector';
-import DocumentationSections from './components/DocumentationSection';
-import { TraceCollectorSidePanel } from './components/SidePanel/SidePanel';
+import appReducer from './app/appReducer';
+import DeviceSelector from './app/DeviceSelector';
+import DocumentationSections from './app/DocumentationSection';
+import logLibVersions from './app/logLibVersions';
+import { enableNrfmlLogging } from './app/monitorLibLogging';
 import CertificateManager from './features/certificateManager/CertificateManager';
 import EventChartDashboard from './features/dashboard/Dashboard';
-import logLibVersions from './utils/logLibVersions';
-import { enableNrfmlLogging } from './utils/monitorLibLogging';
+import { TraceCollectorSidePanel } from './features/SidePanel/SidePanel';
 
 import './index.scss';
 

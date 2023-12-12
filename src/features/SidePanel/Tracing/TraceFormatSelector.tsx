@@ -8,14 +8,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Toggle, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { TraceFormat } from '../../../features/tracing/formats';
+import EventAction from '../../../app/usageDataActions';
+import { TraceFormat } from '../../tracing/formats';
 import {
     getIsTracing,
     getTraceFormats,
     setTraceFormats,
-} from '../../../features/tracing/traceSlice';
-import WiresharkWarning from '../../../features/wireshark/WiresharkWarning';
-import EventAction from '../../../usageDataActions';
+} from '../../tracing/traceSlice';
+import WiresharkWarning from '../../wireshark/WiresharkWarning';
 
 export default () => {
     const selectedFormats = useSelector(getTraceFormats);

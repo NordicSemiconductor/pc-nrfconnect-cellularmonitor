@@ -7,7 +7,7 @@
 import {
     parsePowerSavingMode,
     TAU_TYPES,
-} from '../../../../utils/powerSavingMode';
+} from '../../../../common/powerSavingMode';
 import {
     isValidAcTState,
     PowerSavingModeEntries,

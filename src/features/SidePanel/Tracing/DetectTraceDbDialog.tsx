@@ -11,7 +11,7 @@ import { Button, Dialog } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import {
     getDetectingTraceDb,
     setDetectingTraceDb,
-} from '../../../features/tracing/traceSlice';
+} from '../../tracing/traceSlice';
 
 export default () => {
     const dispatch = useDispatch();

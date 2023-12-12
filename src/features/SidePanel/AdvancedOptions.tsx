@@ -11,8 +11,8 @@ import {
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import ProgramSampleModal from '../../features/programSample/ProgramSampleModal';
-import SourceSelector from '../../features/terminal/SourceSelector';
+import ProgramSampleModal from '../programSample/ProgramSampleModal';
+import SourceSelector from '../terminal/SourceSelector';
 
 export default () => {
     const device = useSelector(selectedDevice);

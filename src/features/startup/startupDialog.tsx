@@ -13,7 +13,7 @@ import {
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import Copy from '../../components/Copy';
+import Copy from '../../common/Copy';
 import {
     getShowStartupDialog,
     getShowStartupDialogOnAppStart,

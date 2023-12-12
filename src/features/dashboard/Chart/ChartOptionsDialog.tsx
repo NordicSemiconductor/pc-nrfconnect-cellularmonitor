@@ -14,7 +14,7 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import EventAction from '../../../usageDataActions';
+import EventAction from '../../../app/usageDataActions';
 import { EVENT_TYPES } from '../../tracing/formats';
 import {
     changeTraceEventFilter,

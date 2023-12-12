@@ -15,7 +15,7 @@ import {
     type Progress,
 } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
-import EventAction from '../../usageDataActions';
+import EventAction from '../../app/usageDataActions';
 import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
 
 const { reset, program } = NrfutilDeviceLib;

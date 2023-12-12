@@ -12,13 +12,13 @@ import {
     truncateMiddle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
+import { setSerialPort as persistSerialPort } from '../../app/store';
 import {
     getAvailableSerialPorts,
     getIsTracing,
     getTraceSerialPort,
     setTraceSerialPort,
-} from '../../features/tracing/traceSlice';
-import { setSerialPort as persistSerialPort } from '../../utils/store';
+} from '../tracing/traceSlice';
 
 export default () => {
     const dispatch = useDispatch();

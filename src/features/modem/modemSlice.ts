@@ -6,7 +6,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import { Modem } from './modem';
 
 interface ModemState {

@@ -6,11 +6,11 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import {
     getWiresharkPath as getPersistedWiresharkPath,
     setWiresharkPath as setPersistedWiresharkPath,
-} from '../../utils/store';
+} from '../../app/store';
 
 interface WiresharkState {
     wiresharkPath: string | null;

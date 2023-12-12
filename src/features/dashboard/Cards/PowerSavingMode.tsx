@@ -7,12 +7,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { secondsToDhms } from '../../../utils/converters';
+import { secondsToDhms } from '../../../common/converters';
 import {
     eDrxPagingTimeWindowToSeconds,
     eDrxValueToSeconds,
     isDeactivated,
-} from '../../../utils/powerSavingMode';
+} from '../../../common/powerSavingMode';
 import {
     getDashboardState,
     getPowerSavingMode,

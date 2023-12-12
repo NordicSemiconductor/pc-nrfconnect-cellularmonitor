@@ -7,7 +7,7 @@
 import { SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import type { ShellParser } from '../shell/shellParser';
 
 interface SerialPortState {

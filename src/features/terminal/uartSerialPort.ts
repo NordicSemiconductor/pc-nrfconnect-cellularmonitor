@@ -13,8 +13,8 @@ import {
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
 
-import { RootState } from '../../appReducer';
-import { raceTimeout } from '../../utils/promise';
+import { RootState } from '../../app/appReducer';
+import { raceTimeout } from '../../common/promise';
 import {
     hookModemToShellParser,
     xTerminalShellParserWrapper,

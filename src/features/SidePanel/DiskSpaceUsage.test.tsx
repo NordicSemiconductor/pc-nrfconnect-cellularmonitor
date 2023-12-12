@@ -7,8 +7,8 @@
 import React from 'react';
 import prettyBytes from 'pretty-bytes';
 
-import { mockedCheckDiskSpace, render, screen } from '../../../utils/testUtils';
-import DiskSpaceUsage from '../Tracing/DiskSpaceUsage/DiskSpaceUsage';
+import { mockedCheckDiskSpace, render, screen } from '../../common/testUtils';
+import DiskSpaceUsage from './Tracing/DiskSpaceUsage/DiskSpaceUsage';
 
 const FREE = 100;
 const TOTAL = 200;

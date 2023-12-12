@@ -11,7 +11,7 @@ const config =
     ]);
 
 config.setupFilesAfterEnv.push(
-    path.join(__dirname, 'src', 'utils', 'polyfillJest.js')
+    path.join(__dirname, 'src', 'common', 'polyfillJest.js')
 );
 
 module.exports = config;

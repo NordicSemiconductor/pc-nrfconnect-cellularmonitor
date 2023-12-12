@@ -16,22 +16,22 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { basename } from 'path';
 
-import { getDeviceKeyForTraceDatabaseEntries } from '../../features/programSample/programSample';
+import { deleteDbFilePath, storeManualDbFilePath } from '../../app/store';
+import EventAction from '../../app/usageDataActions';
+import { askForTraceDbFile } from '../../common/fileUtils';
+import { getDeviceKeyForTraceDatabaseEntries } from '../programSample/programSample';
 import {
     DatabaseVersion,
     getDatabases,
     getRemoteDatabases,
     setSelectedTraceDatabaseFromVersion,
-} from '../../features/tracing/traceDatabase';
+} from '../tracing/traceDatabase';
 import {
     getIsTracing,
     getManualDbFilePath,
     resetManualDbFilePath,
     setManualDbFilePath,
-} from '../../features/tracing/traceSlice';
-import EventAction from '../../usageDataActions';
-import { askForTraceDbFile } from '../../utils/fileUtils';
-import { deleteDbFilePath, storeManualDbFilePath } from '../../utils/store';
+} from '../tracing/traceSlice';
 
 const autoSelectItem: DropdownItem = {
     label: 'Autoselect',

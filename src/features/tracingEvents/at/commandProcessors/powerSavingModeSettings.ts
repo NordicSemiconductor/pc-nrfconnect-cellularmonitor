@@ -11,7 +11,7 @@
 import {
     parsePowerSavingMode,
     TAU_TYPES,
-} from '../../../../utils/powerSavingMode';
+} from '../../../../common/powerSavingMode';
 import { PowerSavingModeEntries } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';

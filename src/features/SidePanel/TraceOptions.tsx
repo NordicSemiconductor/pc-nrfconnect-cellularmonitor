@@ -12,7 +12,7 @@ import {
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { is9160DK } from '../../features/programSample/programSample';
+import { is9160DK } from '../programSample/programSample';
 import {
     getIsTracing,
     getRefreshOnStart,
@@ -20,7 +20,7 @@ import {
     getTraceFormats,
     setRefreshOnStart,
     setResetDevice,
-} from '../../features/tracing/traceSlice';
+} from '../tracing/traceSlice';
 import DatabaseFileOverride from './DatabaseFileOverride';
 import Serialports from './Serialports';
 import TraceFileInformation from './Tracing/TraceFileInformation';

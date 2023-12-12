@@ -7,13 +7,6 @@
 import React from 'react';
 
 import {
-    setAvailableSerialPorts,
-    setTraceFormats,
-    setTraceSerialPort,
-} from '../../../features/tracing/traceSlice';
-import * as wireshark from '../../../features/wireshark/wireshark';
-import { setWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
-import {
     act,
     expectNrfmlStartCalledWithSinks,
     fireEvent,
@@ -21,10 +14,17 @@ import {
     mockedDataDir,
     render,
     screen,
-} from '../../../utils/testUtils';
-import TraceCollector from '../Tracing/TraceCollector';
+} from '../../common/testUtils';
+import {
+    setAvailableSerialPorts,
+    setTraceFormats,
+    setTraceSerialPort,
+} from '../tracing/traceSlice';
+import * as wireshark from '../wireshark/wireshark';
+import { setWiresharkPath } from '../wireshark/wiresharkSlice';
+import TraceCollector from './Tracing/TraceCollector';
 
-jest.mock('../../../features/wireshark/wireshark');
+jest.mock('../wireshark/wireshark');
 jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
     ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,

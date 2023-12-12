@@ -14,7 +14,7 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { ipcRenderer } from 'electron';
 
-import EventAction from '../../usageDataActions';
+import EventAction from '../../app/usageDataActions';
 import { getTerminalSerialPort } from './serialPortSlice';
 
 export const OpenSerialTerminal = () => {
