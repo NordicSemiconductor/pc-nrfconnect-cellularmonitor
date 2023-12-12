@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { isLoggingVerbose as getIsVerboseLogging } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { setNrfmlLogLevel } from '../utils/monitorLibLogging';
+import { setNrfmlLogLevel } from '../app/monitorLibLogging';
 
 /* This component is just a listener to the redux entry isVerboseLogging
  * in order to emit a setNrfmlLogLevel without needing to put it into

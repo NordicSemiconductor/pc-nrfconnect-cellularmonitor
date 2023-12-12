@@ -7,8 +7,8 @@
 import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import path from 'path';
 
-import appReducer from '../../appReducer';
-import { getMockStore, mockedDataDir } from '../../utils/testUtils';
+import appReducer from '../../app/appReducer';
+import { getMockStore, mockedDataDir } from '../../common/testUtils';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';

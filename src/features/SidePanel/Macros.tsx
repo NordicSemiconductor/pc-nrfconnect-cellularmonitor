@@ -12,18 +12,15 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { getTerminalSerialPort } from '../../features/terminal/serialPortSlice';
+import EventAction from '../../app/usageDataActions';
+import { getTerminalSerialPort } from '../terminal/serialPortSlice';
 import {
     getDetectedAtHostLibrary,
     getIsSendingATCommands,
     getIsTracing,
-} from '../../features/tracing/traceSlice';
-import {
-    fullReport,
-    recommendedAt,
-} from '../../features/tracingEvents/at/recommeneded';
-import { sendAT } from '../../features/tracingEvents/at/sendCommand';
-import EventAction from '../../usageDataActions';
+} from '../tracing/traceSlice';
+import { fullReport, recommendedAt } from '../tracingEvents/at/recommeneded';
+import { sendAT } from '../tracingEvents/at/sendCommand';
 
 export const Recommended = () => (
     <Macro commands={recommendedAt} title="Refresh dashboard" />

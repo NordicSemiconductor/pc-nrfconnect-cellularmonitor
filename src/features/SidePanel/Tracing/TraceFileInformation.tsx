@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getTraceProgress } from '../../../features/tracing/traceSlice';
+import { getTraceProgress } from '../../tracing/traceSlice';
 import DiskSpaceUsage from './DiskSpaceUsage/DiskSpaceUsage';
 import TraceFileDetails from './TraceFileDetails';
 

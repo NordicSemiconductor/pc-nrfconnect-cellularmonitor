@@ -11,15 +11,15 @@ import {
     StartStopButton,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { startTrace, stopTrace } from '../../../features/tracing/nrfml';
+import { startTrace, stopTrace } from '../../tracing/nrfml';
 import {
     getIsTracing,
     getOpenInWiresharkSelected,
     getTraceFormats,
-} from '../../../features/tracing/traceSlice';
-import InstallWiresharkDialog from '../../../features/wireshark/InstallWiresharkDialog';
-import { defaultSharkPath } from '../../../features/wireshark/wireshark';
-import { getWiresharkPath } from '../../../features/wireshark/wiresharkSlice';
+} from '../../tracing/traceSlice';
+import InstallWiresharkDialog from '../../wireshark/InstallWiresharkDialog';
+import { defaultSharkPath } from '../../wireshark/wireshark';
+import { getWiresharkPath } from '../../wireshark/wiresharkSlice';
 
 export default () => {
     const dispatch = useDispatch();

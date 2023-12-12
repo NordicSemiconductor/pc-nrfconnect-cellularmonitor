@@ -6,12 +6,9 @@
 
 import React from 'react';
 
-import {
-    setTraceIsStarted,
-    setTraceProgress,
-} from '../../../features/tracing/traceSlice';
-import { mockedCheckDiskSpace, render, screen } from '../../../utils/testUtils';
-import TraceFileInformation from '../Tracing/TraceFileInformation';
+import { mockedCheckDiskSpace, render, screen } from '../../common/testUtils';
+import { setTraceIsStarted, setTraceProgress } from '../tracing/traceSlice';
+import TraceFileInformation from './Tracing/TraceFileInformation';
 
 describe('FileInformation', () => {
     it('should display the name and size of the trace', async () => {

@@ -14,9 +14,9 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { TraceProgress } from '../../../features/tracing/traceSlice';
-import EventAction from '../../../usageDataActions';
-import { getNameAndDirectory, openInFolder } from '../../../utils/fileUtils';
+import EventAction from '../../../app/usageDataActions';
+import { getNameAndDirectory, openInFolder } from '../../../common/fileUtils';
+import { TraceProgress } from '../../tracing/traceSlice';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
 const TraceFileName: FC<{

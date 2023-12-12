@@ -10,7 +10,7 @@ import {
     SerialPort,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import type { RootState } from '../../../appReducer';
+import type { RootState } from '../../../app/appReducer';
 import { ShellParser } from '../../shell/shellParser';
 import {
     getShellParser,

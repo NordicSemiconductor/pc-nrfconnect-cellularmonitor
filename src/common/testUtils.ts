@@ -17,7 +17,7 @@ import checkDiskSpace from 'check-disk-space';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import appReducer from '../appReducer';
+import appReducer from '../app/appReducer';
 
 const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
 

@@ -14,16 +14,16 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
+    getCollapseConnectionStatusSection,
+    setCollapseConnectionStatusSection,
+} from '../../app/store';
+import {
     getIsTracing,
     getTraceDataReceived,
     getTraceSourceFilePath,
-} from '../../features/tracing/traceSlice';
-import { getDashboardState } from '../../features/tracingEvents/dashboardSlice';
-import { ConnectionEvaluationResult } from '../../features/tracingEvents/types';
-import {
-    getCollapseConnectionStatusSection,
-    setCollapseConnectionStatusSection,
-} from '../../utils/store';
+} from '../tracing/traceSlice';
+import { getDashboardState } from '../tracingEvents/dashboardSlice';
+import { ConnectionEvaluationResult } from '../tracingEvents/types';
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {

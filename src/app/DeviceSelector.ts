@@ -18,7 +18,6 @@ import type {
     DeviceTraits,
 } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
-import { RootState } from '../appReducer';
 import { is9161DK } from '../features/programSample/programSample';
 import {
     removeShellParser,
@@ -36,7 +35,8 @@ import {
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';
-import { getSerialPort as getPersistedSerialPort } from '../utils/store';
+import { RootState } from './appReducer';
+import { getSerialPort as getPersistedSerialPort } from './store';
 
 const deviceListing: DeviceTraits = {
     nordicUsb: true,

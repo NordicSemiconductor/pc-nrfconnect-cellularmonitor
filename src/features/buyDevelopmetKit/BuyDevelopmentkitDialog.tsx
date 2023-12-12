@@ -12,7 +12,7 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import EventAction from '../../usageDataActions';
+import EventAction from '../../app/usageDataActions';
 
 export default () => {
     const [modalVisible, setModalVisible] = useState(false);

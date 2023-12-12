@@ -11,7 +11,7 @@ import {
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import WiresharkWarning from '../../features/wireshark/WiresharkWarning';
+import WiresharkWarning from '../wireshark/WiresharkWarning';
 import { LoadTraceFile } from './LoadTraceFile';
 import TraceConverter from './Tracing/TraceConverter';
 

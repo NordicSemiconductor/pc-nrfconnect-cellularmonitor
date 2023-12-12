@@ -12,13 +12,10 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { readRawTrace } from '../../features/tracing/nrfml';
-import {
-    getTraceSerialPort,
-    setManualDbFilePath,
-} from '../../features/tracing/traceSlice';
-import EventAction from '../../usageDataActions';
-import { askForTraceFile } from '../../utils/fileUtils';
+import EventAction from '../../app/usageDataActions';
+import { askForTraceFile } from '../../common/fileUtils';
+import { readRawTrace } from '../tracing/nrfml';
+import { getTraceSerialPort, setManualDbFilePath } from '../tracing/traceSlice';
 import DatabaseFileOverride from './DatabaseFileOverride';
 
 export const LoadTraceFile = () => {

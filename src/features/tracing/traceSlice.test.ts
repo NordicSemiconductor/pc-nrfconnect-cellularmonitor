@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import '../../utils/testUtils';
+import '../../common/testUtils';
 
 import { testUtils } from '@nordicsemiconductor/pc-nrfconnect-shared/test';
 import { configureStore } from '@reduxjs/toolkit';
 
-import appReducer from '../../appReducer';
+import appReducer from '../../app/appReducer';
 import {
     getIsTracing,
     getTaskId,

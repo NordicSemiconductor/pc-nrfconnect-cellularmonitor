@@ -7,7 +7,7 @@
 import {
     parseTAUByteToSeconds,
     TAU_TYPES,
-} from '../../../../utils/powerSavingMode';
+} from '../../../../common/powerSavingMode';
 import {
     isValidAcTState,
     isValidBitmask,

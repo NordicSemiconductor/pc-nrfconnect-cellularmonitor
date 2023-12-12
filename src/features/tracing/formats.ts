@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import EventAction from '../../usageDataActions';
+import EventAction from '../../app/usageDataActions';
 
 export const EVENT_TYPES = ['AT', 'RRC', 'NAS', 'IP'] as const;
 export type eventType = (typeof EVENT_TYPES)[number];

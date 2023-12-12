@@ -9,7 +9,7 @@ import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { FileFilter } from 'electron';
 import path from 'path';
 
-import { autoDetectDbRootFolder } from './store';
+import { autoDetectDbRootFolder } from '../app/store';
 
 export const askForTraceDbFile = () =>
     askForFile(

@@ -14,9 +14,9 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
-import type { RootState } from '../../appReducer';
-import EventAction from '../../usageDataActions';
-import { raceTimeout } from '../../utils/promise';
+import type { RootState } from '../../app/appReducer';
+import EventAction from '../../app/usageDataActions';
+import { raceTimeout } from '../../common/promise';
 import {
     getDeviceKeyForTraceDatabaseEntries,
     is9160DK,

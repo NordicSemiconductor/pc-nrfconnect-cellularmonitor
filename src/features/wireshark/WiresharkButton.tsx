@@ -12,8 +12,8 @@ import {
     usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import EventAction from '../../usageDataActions';
-import { askForPcapFile, askForWiresharkPath } from '../../utils/fileUtils';
+import EventAction from '../../app/usageDataActions';
+import { askForPcapFile, askForWiresharkPath } from '../../common/fileUtils';
 import {
     findWireshark,
     openInWireshark,

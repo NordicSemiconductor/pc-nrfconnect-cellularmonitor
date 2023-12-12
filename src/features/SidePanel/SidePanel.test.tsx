@@ -7,12 +7,6 @@
 import React from 'react';
 import { enableFetchMocks } from 'jest-fetch-mock';
 
-import { TraceFormat } from '../../../features/tracing/formats';
-import {
-    setAvailableSerialPorts,
-    setTraceFormats,
-    setTraceSerialPort,
-} from '../../../features/tracing/traceSlice';
 import {
     act,
     fireEvent,
@@ -21,12 +15,18 @@ import {
     mockedDataDir,
     render,
     screen,
-} from '../../../utils/testUtils';
-import { TraceCollectorSidePanel } from '../SidePanel';
+} from '../../common/testUtils';
+import { TraceFormat } from '../tracing/formats';
+import {
+    setAvailableSerialPorts,
+    setTraceFormats,
+    setTraceSerialPort,
+} from '../tracing/traceSlice';
+import { TraceCollectorSidePanel } from './SidePanel';
 
 enableFetchMocks();
 
-jest.mock('../../../features/wireshark/wireshark');
+jest.mock('../wireshark/wireshark');
 jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
     ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
     getAppDataDir: () => mockedDataDir,

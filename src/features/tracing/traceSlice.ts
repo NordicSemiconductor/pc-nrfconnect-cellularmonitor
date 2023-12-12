@@ -6,7 +6,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import {
     getManualDbFilePath as getPersistedManualDbFilePath,
     getTraceFormats as restoreTraceFormats,
@@ -15,7 +15,7 @@ import {
     setTraceFormats as storeTraceFormats,
     storeRefreshOnStart,
     storeResetDevice,
-} from '../../utils/store';
+} from '../../app/store';
 import { TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 

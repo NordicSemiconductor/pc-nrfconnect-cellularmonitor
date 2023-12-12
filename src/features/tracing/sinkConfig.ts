@@ -15,7 +15,7 @@ import {
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import { defaultSharkPath } from '../wireshark/wireshark';
 import { getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';

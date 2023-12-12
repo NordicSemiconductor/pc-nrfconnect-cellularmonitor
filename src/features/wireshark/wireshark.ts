@@ -9,8 +9,8 @@ import { exec, execSync } from 'child_process';
 import { accessSync, constants } from 'fs';
 import { join, sep } from 'path';
 
-import { RootState } from '../../appReducer';
-import { getWiresharkPath } from '../../utils/store';
+import { RootState } from '../../app/appReducer';
+import { getWiresharkPath } from '../../app/store';
 
 export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
 

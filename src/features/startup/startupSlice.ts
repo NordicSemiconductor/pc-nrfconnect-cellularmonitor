@@ -6,11 +6,11 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../appReducer';
+import type { RootState } from '../../app/appReducer';
 import {
     getShowStartupDialog as getPersistedShowStartupDialogOnAppStart,
     setShowStartupDialog as setPersistedShowStartupDialogOnAppStart,
-} from '../../utils/store';
+} from '../../app/store';
 
 interface Startup {
     showStartupDialog: boolean;

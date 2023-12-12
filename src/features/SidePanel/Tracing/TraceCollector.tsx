@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getTraceSerialPort } from '../../../features/tracing/traceSlice';
+import { getTraceSerialPort } from '../../tracing/traceSlice';
 import DetectTraceDbDialog from './DetectTraceDbDialog';
 import StartStopTrace from './StartStopTrace';
 
