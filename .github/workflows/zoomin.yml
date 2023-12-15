@@ -21,7 +21,7 @@ jobs:
       - name: Create zip file
         run: |
           zip -r nrf-connect-cellularmonitor.zip \
-            docs mkdocs.yml custom.properties tags.yml
+            doc/docs doc/mkdocs.yml custom.properties tags.yml
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v3
