@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Capture and analyze modem traces",
     "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor",
@@ -46,7 +46,7 @@
     "devDependencies": {
         "@mdi/js": "^7.2.96",
         "@mdi/react": "^1.6.1",
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^140.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^142.0.0",
         "@types/redux-mock-store": "^1.0.2",
         "chart.js": "^4.1.2",
         "check-disk-space": "^2.1.0",
@@ -65,9 +65,6 @@
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "bundledDependencies": [
-        "@nordicsemiconductor/nrf-monitor-lib-js"
-    ],
-    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ]
 }
