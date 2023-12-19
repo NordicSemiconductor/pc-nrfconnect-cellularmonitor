@@ -22,30 +22,31 @@ Opens file explorer and allows you to select a trace file. Traces captured using
 
 Opens file explorer and allows you to select an `.mtrace` or `.bin` file. The selected file is converted to Packet Capture Next Generation (PcapNG) format and displayed in Wireshark.
 
-### After selection
+## After selection
 
 When a device is selected, **Cellular Monitor** tries to discover its capabilities. The side panel options are updated depending on the results.
 
-## Start
-  - Starts tracing.
+### Start
+
+Starts tracing.
 
 ### Refresh dashboard
 
-Extensively populates the dashboard fields by sending a set of recommended AT commands to your device. This button is available only if **Cellular Monitor** has identified either Modem Shell or [AT Host](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/libraries/modem/at_host.html#lib-at-host) on the device, and if you are tracing.
+Extensively populates the dashboard fields by sending a set of recommended AT commands to your device. This button is available only if **Cellular Monitor** has identified either Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) on the device, and if you are tracing.
 
 ### Open Serial Terminal
 
-Opens the Serial Terminal application in a new window. You can view the modem dialog and logging information from your application and the RTOS here. See [nRF Connect for Desktop Serial Terminal User Guide](link) for more information on the application.
+Opens the Serial Terminal application in a new window. You can view the modem dialog and logging information from your application and the RTOS here. See [nRF Connect for Desktop Serial Terminal User Guide](lhttps://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/index.html) for more information on the application.
 
 ### Connection Status
 
-Displays the trace status. If you have enabled Modem Shell or [AT Host](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/libraries/modem/at_host.html#lib-at-host) and click **Refresh Dashboard**, the Connection Status is updated automatically. See [Capturing a Modem trace](link) for more information.
+Displays the trace status. If you have enabled Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) and click **Refresh Dashboard**, the Connection Status is updated automatically. See [Capturing a Modem trace](./capturing.md) for more information.
 
 ### Trace Database
 
 The trace database is used to decode the raw modem trace. Each modem firmware version has a separate trace database. The trace database version must match the modem firmware version of the selected device.
 
-If AT Host is enabled, choose **Autoselect**, and **Cellular Monitor** automatically selects the trace database version. If not, select the database whose version matches your modem firmware from the dropdown list of databases.
+If [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) is enabled, choose **Autoselect**, and **Cellular Monitor** automatically selects the trace database version. If not, select the database whose version matches your modem firmware from the dropdown list of databases.
 
 ### Serial Port Trace Capture
 
@@ -61,19 +62,19 @@ Opens and displays trace data live in Wireshark when the trace is started.
 
 ### Program Device
 
-Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and AT Host prerequisites for **Cellular Monitor**. Modem firmware supporting trace is available with all samples, and you can choose to program the modem or application firmware, or both. The modem firmware needs only to be programmed once.
+Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for **Cellular Monitor**. Modem firmware supporting trace is available with all samples, and you can choose to program the modem or application firmware, or both. The modem firmware needs only to be programmed once.
 
 ### Terminal Serial Port
 
-The serial port used to send AT commands to your device if Modem Shell or [AT Host](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/libraries/modem/at_host.html#lib-at-host) is enabled. This is the port used by Serial Terminal. It is the first port in the dropdown list if your application firmware uses default settings.
+The serial port used to send AT commands to your device if Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) is enabled. This is the port used by Serial Terminal. It is the first port in the dropdown list if your application firmware uses default settings.
 
 ### Dashboard Tab and Packet Event Viewer
 
-See [Viewing a Modem trace in Cellular Monitor](link).
+See [Viewing a Modem trace in Cellular Monitor](./viewing.md).
 
 ### Certificate Manager Tab
 
-See [Managing modem credentials](link).
+See [Managing modem credentials](./managing_credentials.md).
 
 ## Log
 
