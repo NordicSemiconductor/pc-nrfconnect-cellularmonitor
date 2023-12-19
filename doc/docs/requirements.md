@@ -10,10 +10,10 @@ Either **Program** one of the built-in sample apps and/or required modem firmwar
 
   - The modem firmware must be at least version 1.3.3.
   - The application firmware must use nRF Connect SDK version v2.0.1 or higher. The latest version is recommended.
-  - The application must enable modem trace over Universal Asynchronous Receiver/Transmitter (UART) using snippets. See [nRF Connect SDK nRF91 modem tracing with UART backend using snippets](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/device_guides/working_with_nrf/nrf91/nrf9160.html#nrf91-modem-trace-uart-snippet) for more information.
+  - The application must enable modem trace over Universal Asynchronous Receiver/Transmitter (UART) using snippets. See [nRF Connect SDK nRF91 modem tracing with UART backend using snippets](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/working_with_nrf/nrf91/nrf9160.html#nrf91_modem_tracing_with_uart_backend_using_snippets) for more information.
   - Your application must also include Modem Shell, the AT Host library, or AT Shell. See the following for more information.
-    - Enable the [AT Host](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/libraries/modem/at_host.html#lib-at-host) library using the Kconfig option `CONFIG_AT_HOST_LIBRARY` in the `prj.conf` file of your application. The library exposes the AT commands interface to the application and enables you to communicate with the modem using AT commands.
-    - Information on Modem Shell and AT Shell can be found in [nRF Connect SDK documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/index.html).
+    - Enable the [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/libraries/modem/at_host.html) library using the Kconfig option `CONFIG_AT_HOST_LIBRARY` in the `prj.conf` file of your application. The library exposes the AT commands interface to the application and enables you to communicate with the modem using AT commands.
+    - Information on Modem Shell and AT Shell can be found in [nRF Connect SDK documentation](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html).
 
 ## Limitations
 

@@ -5,7 +5,7 @@ These troubleshooting instructions can help you fix issues you might encounter i
 Check Cellular Monitor's [Minimum requirements and limitations](./requirements.md).
 
 ## Trace data is not displayed or the file size does not increase
-  - Check the trace serial port used, see [Identifying trace serial port](./identifying_port.md).
+  - Check the trace serial port used. See [Identifying trace serial port](./identifying_port.md).
   - The default UART trace settings are 1,000,000 baud rate, with hardware flow control enabled.
 
 ## Refresh Dashboard is greyed out
