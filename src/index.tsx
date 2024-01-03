@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+// Some change
+
 import React from 'react';
 import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import usageData from '@nordicsemiconductor/pc-nrfconnect-shared/src/utils/usageData';

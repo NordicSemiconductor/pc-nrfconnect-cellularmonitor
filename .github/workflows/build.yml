@@ -1,0 +1,32 @@
+name: Build and pack
+
+on:
+    pull_request:
+        types: [synchronize, opened, reopened]
+        paths:
+            - '.github/workflows/build.yml'
+    workflow_dispatch:
+    workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          # cache: 'npm'
+
+      - name: temp
+        run: set -o errexit -o pipefail
+      - name: Install Dependencies
+        run: npm ci
+      # - name: Run all checks
+      #   run: npm run check
+      - name: Run Tests
+        run: npm run test
+      - name: Build for Production
+        run: npm run build:prod
+      - name: Pack
+        run: npm pack
