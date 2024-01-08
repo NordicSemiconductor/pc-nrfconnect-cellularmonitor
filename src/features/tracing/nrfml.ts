@@ -41,6 +41,7 @@ import {
 } from './tracePacketEvents';
 import {
     getManualDbFilePath,
+    getMasterSecretTimeout,
     getRefreshOnStart,
     getResetDevice,
     getTaskId,
@@ -62,7 +63,10 @@ const nrfmlConfig = (
     source: SourceFormat,
     sinks: TraceFormat[]
 ): Configuration => ({
-    config: { plugins_directory: getPluginsDir() },
+    config: {
+        plugins_directory: getPluginsDir(),
+        master_secret_timeout: getMasterSecretTimeout(state),
+    },
     sources: [sourceConfig(state, source)],
     sinks: sinks.map(format => sinkConfig(state, source, format)),
 });

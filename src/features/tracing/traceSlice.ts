@@ -42,6 +42,7 @@ interface TraceState {
     resetDevice: boolean;
     refreshOnStart: boolean;
     detectedTraceDbFailed: boolean;
+    masterSecretTimeout?: number;
 }
 
 const initialState = (): TraceState => ({
@@ -153,6 +154,13 @@ const traceSlice = createSlice({
         setDetectTraceDbFailed: (state, action: PayloadAction<boolean>) => {
             state.detectedTraceDbFailed = action.payload;
         },
+        setMasterSecretTimeout: (
+            state,
+            { payload: masterSecretTimeout }: PayloadAction<number>
+        ) => {
+            state.masterSecretTimeout =
+                masterSecretTimeout === 0 ? undefined : masterSecretTimeout;
+        },
     },
 });
 
@@ -202,6 +210,9 @@ export const getRefreshOnStart = (state: RootState) =>
 export const getDetectTraceDbFailed = (state: RootState) =>
     state.app.trace.detectedTraceDbFailed;
 
+export const getMasterSecretTimeout = (state: RootState) =>
+    state.app.trace.masterSecretTimeout;
+
 export const {
     resetTraceInfo,
     setTraceIsStarted,
@@ -221,6 +232,7 @@ export const {
     setResetDevice,
     setRefreshOnStart,
     setDetectTraceDbFailed,
+    setMasterSecretTimeout,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;
