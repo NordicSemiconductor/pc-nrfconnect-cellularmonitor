@@ -63,13 +63,12 @@ nav:
   - Minimum requirements and limitations: requirements.md
   - Overview and user interface: overview.md
   - Preparing the device for modem trace: preparing.md
-  - Capturing a Modem trace: capturing.md
-  - Viewing a Modem trace in Cellular Monitor: viewing.md
+  - Capturing a modem trace: capturing.md
+  - Viewing a modem trace in Cellular Monitor: viewing.md
   - Using Wireshark: wireshark.md
   - Loading modem traces for play back: loading.md
   - Viewing RTT modem traces: viewing_rtt.md
   - Memfault and modem trace in production: memfault_in_production.md
   - Managing modem credentials: managing_credentials.md
-  - Identifying trace serial port: identifying_port.md
   - Troubleshooting: troubleshooting.md
   - Revision history: revision_history.md

@@ -1,28 +1,22 @@
-# Capturing a Modem trace
+# Capturing a modem trace
 
-Cellular Monitor generates a broad set of cellular environment data displayed in the dashboard panels. Optionally, you can also view the modem trace in Wireshark and observe application logging and the modem dialog in Serial Terminal.
+Cellular Monitor generates a broad set of cellular environment data displayed in the [**Dashboard**](./overview.md#dashboard-tab) tab panels. Optionally, you can also view the modem trace in Wireshark and observe application logging and the modem dialog in [Serial Terminal](https://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/index.html).
 
 See [Minimum requirements and limitations](./requirements.md) and [Preparing the device for modem trace](./preparing.md).
 
 Complete the following steps to trace data:
 
-1. Set the trace options in the **Cellular Monitor** side panel.
+1. Set the trace options in the Cellular Monitor side panel according to your needs. See [Overview and user interface](./overview.md) for the description of the available options.
 
-    - To store a copy of the trace for future use, enable **Save Trace file to disk**.
-    - To supplement the information in the **Cellular Monitor** dashboard, choose from the following options:
-
-        - To reset your application for trace capture, click **Reset device on start**.
-        - To view the device modem dialog, application log, and depending on the application running, send custom AT commands, click **Open Serial Terminal**.
-        - To view the live trace in Wireshark, click **Open in Wireshark**.
-
-2. Click **Start** to trace.
+2. Click **Start** to trace.</br>
+   Depending on the options you have chosen, the application starts tracing and applies the selected options. The initialization of tracing can take some time.
 
 3. Generate additional trace data.
 
-    - Click **Refresh Dashboard** to send a set of AT commands to the device to feed the trace with information on the environment.
+    - Click **Refresh dashboard** to send a set of AT commands to the device to feed the trace with information on the environment.
     - Send AT commands using the Serial Terminal and from the dashboard fields.
 
-4. Follow the progress in the **Connection Status** panel.</br>
+4. Follow the progress in the [**Connection Status**](./overview.md#connection-status) side panel.</br>
    On success, the stage's status indicator turns green with a checkmark.
 
     If a stage fails, a red X is displayed along with a reason for the failure. You can check the corresponding dashboard field for troubleshooting information.
@@ -32,4 +26,6 @@ Complete the following steps to trace data:
      - **Long-Term Evolution (LTE) Connection** depends on conditions in the local cellular network to which you are subscribed.
      - **Packet Data Network (PDN)** turns green when the device has successfully connected to the connection endpoint.
 
-For more information on trace data visualization, see [Viewing a Modem trace in Cellular Monitor](./viewing.md).
+![Cellular Monitor tracing started](./screenshots/cel_mon_capture_started.png "Cellular Monitor tracing started")
+
+For more information on trace data visualization, see [Viewing a modem trace in Cellular Monitor](./viewing.md).
