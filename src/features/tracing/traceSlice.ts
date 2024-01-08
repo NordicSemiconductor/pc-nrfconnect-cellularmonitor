@@ -61,6 +61,7 @@ const initialState = (): TraceState => ({
     resetDevice: restoreResetDevice(),
     refreshOnStart: restoreRefreshOnStart(),
     detectedTraceDbFailed: false,
+    masterSecretTimeout: 1500,
 });
 
 const traceSlice = createSlice({
