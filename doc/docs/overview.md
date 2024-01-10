@@ -37,7 +37,7 @@ When a device is selected, Cellular Monitor tries to discover its capabilities. 
 Starts tracing for the selected device.
 
 !!! tip "Tip"
-      You must have [Save trace file to disk](#save-trace-file-to-disk) toggled on to be able to start tracing.
+      You must have [Save trace file to disk](#save-trace-file-to-disk) or [Open in Wireshark](#open-in-wireshark) (or both) toggled on to be able to start tracing.
 
 ### Refresh dashboard
 
@@ -96,7 +96,10 @@ This section lists advanced tracing options.
 
 #### Program device
 
-Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for Cellular Monitor. Modem firmware supporting trace is available with all samples, and you can choose to program the modem or application firmware, or both. The modem firmware needs only to be programmed once.
+Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for Cellular Monitor. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
+
+!!! note "Note"
+     Programming the modem firmware deletes the application firmware. If you choose to program only the modem firmware, you need to reprogram the application firmware.
 
 #### Terminal serial port
 
