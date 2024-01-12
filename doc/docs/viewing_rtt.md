@@ -1,12 +1,15 @@
 # Viewing RTT modem traces
 
-Modem traces captured in J-link Real Time Transfer (RTT) logger can be played back in Cellular Monitor.
+Modem traces captured in J-Link Real Time Transfer (RTT) logger can be played back in Cellular Monitor.
 
-In the first release of Cellular Monitor, the RTT interface is not supported for traces capture. However, RTT modem traces captured outside of the tool can be viewed in Cellular Monitor with the following procedure.
+!!! note "Note"
+      In the current release of Cellular Monitor, the RTT interface is not supported for traces capture. You can only view RTT modem traces captured outside of the tool.
 
-1. Enable the RTT trace backend in your device's application using the Kconfig option `CONFIG_NRF_MODEM_LIB_TRACE_BACKEND_RTT` in the `prj.conf` file.
+To view RTT modem traces captured outside of the tool in Cellular Monitor, complete the following steps:
+
+1. Enable the RTT trace backend in your device's application using the Kconfig option [`CONFIG_NRF_MODEM_LIB_TRACE_BACKEND_RTT`](https://docs.nordicsemi.com/bundle/ncs-2.4.2/page/kconfig/index.html#CONFIG_NRF_MODEM_LIB_TRACE_BACKEND_RTT) in the `prj.conf` file.
 2. Ensure your device is running supported modem firmware, see [Minimum requirements and limitations](./requirements.md), and note the version for playback.
-3. Use the J-link RTT logger to collect the trace or traces and save in binary (`.bin`) format.</br>
+3. Use the J-Link RTT logger to collect the trace or traces and save in binary (`.bin`) format.</br>
    See [SEGGER Real Time Transfer (RTT)](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) for more information.
 4. Load and playback the trace in **Cellular Monitor**.</br>
    See [Loading modem traces for playback](./loading.md) for more information.

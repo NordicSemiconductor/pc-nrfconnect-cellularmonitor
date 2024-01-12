@@ -1,6 +1,6 @@
-# Viewing a Modem trace in Cellular Monitor
+# Viewing a modem trace in Cellular Monitor
 
-To play back and focus on a part of the trace, you can drag and scroll the **Packet Event Viewer**. Cellular Monitor's **Connection Status** and **Dashboard** update and replay the selected events.
+To play back and focus on a part of the trace, you can drag and scroll the **Packet Event Viewer**. Cellular Monitor's [**Connection Status**](./overview.md#connection-status) and [**Dashboard**](./overview.md#dashboard-tab) update accordingly and replay the selected events.
 
 ## Packet Event Viewer
 
@@ -15,7 +15,9 @@ You can control the viewed trace data with the following options:
 - To view information on the AT commands and the event timestamp, hover over a specific event.
 - To pause a live trace, click the live button.
 
-## Cellular Monitor Dashboard
+![Packet Event Viewer](./screenshots/cel_mon_pev.png "Packet Event Viewer")
+
+## Dashboard
 
 The dashboard contains detailed information about the connection and its components. During trace, dashboard fields are highlighted as they are populated. To view in slow motion, you can use the **Packet Event Viewer** to play back.
 
@@ -25,7 +27,9 @@ The trace data is categorized into the following 6 dashboard panels:
 
 - **LTE Network**
 - **Device**
-- **Power Saving Mode**
 - **SIM**
 - **Connectivity Statistics**
+- **Power Saving Features**
 - **PDN** (There can be more than one. A **PDN** panel is displayed for each network when a connection is established.)
+
+![Dashboard panels](./screenshots/cel_mon_dashboard.png "Dashboard panels")
