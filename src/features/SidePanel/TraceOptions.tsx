@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     CollapsibleGroup,
+    NumberInputSliderWithUnit,
     selectedDevice,
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -15,9 +16,11 @@ import {
 import { is9160DK } from '../programSample/programSample';
 import {
     getIsTracing,
+    getMasterSecretTimeout,
     getRefreshOnStart,
     getResetDevice,
     getTraceFormats,
+    setMasterSecretTimeout,
     setRefreshOnStart,
     setResetDevice,
 } from '../tracing/traceSlice';
@@ -38,6 +41,7 @@ export default () => {
             <RefreshOnStart />
             <TraceFormatSelector />
             <TraceFileInformation />
+            <MasterSecretTimeout />
         </CollapsibleGroup>
     );
 };
@@ -74,5 +78,29 @@ const RefreshOnStart = () => {
             onToggle={toggled => dispatch(setRefreshOnStart(toggled))}
             title={title}
         />
+    );
+};
+
+const MasterSecretTimeout = () => {
+    const dispatch = useDispatch();
+    const masterSecretTimeout = useSelector(getMasterSecretTimeout);
+    const [localMasterSecretTimeout, setLocalMasterSecretTimeout] = useState(
+        masterSecretTimeout ?? 1500
+    );
+
+    return (
+        <div title="optional master secret timeout in ms, to detect if ip packets are received before master secret, typical value 500-1500ms">
+            <NumberInputSliderWithUnit
+                className="toggle-label"
+                label="Master secret timeout"
+                range={{ min: 0, max: 10_000, step: 1 }}
+                value={localMasterSecretTimeout}
+                onChange={setLocalMasterSecretTimeout}
+                onChangeComplete={value =>
+                    dispatch(setMasterSecretTimeout(value))
+                }
+                unit="s"
+            />
+        </div>
     );
 };

@@ -1,8 +1,9 @@
-## 2.2.0 - 2023-12-14
+## 2.2.0 - unreleased
 
 ## Added
 
 -   Persist state of `show log` panel
+-   Master secret timeout configuration to tracing.
 
 ## 2.1.0 - 2023-12-07
 
