@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "Capture and analyze modem traces",
     "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor",
@@ -11,14 +11,14 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": ">=4.3.0"
+        "nrfconnect": ">=4.4.1"
     },
     "main": "dist/bundle.js",
     "nrfConnectForDesktop": {
         "html": "dist/index.html",
         "nrfutil": {
             "device": [
-                "2.0.3"
+                "2.1.1"
             ]
         }
     },
