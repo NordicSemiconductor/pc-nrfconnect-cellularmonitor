@@ -10,9 +10,9 @@ import {
     AppThunk,
     logger,
     selectedDevice,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
+import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import type { RootState } from '../../app/appReducer';
 import EventAction from '../../app/usageDataActions';
@@ -79,7 +79,7 @@ export const convertTraceFile =
         setLoading: (loading: boolean) => void = () => {}
     ): AppThunk<RootState, Promise<void>> =>
     (dispatch, getState) => {
-        usageData.sendUsageData(EventAction.CONVERT_TRACE);
+        telemetry.sendEvent(EventAction.CONVERT_TRACE);
         const source: SourceFormat = { type: 'file', path };
         const sinks = ['live' as TraceFormat];
 
@@ -170,7 +170,7 @@ export const startTrace =
             }
         }
 
-        formats.forEach(format => usageData.sendUsageData(sinkEvent(format)));
+        formats.forEach(format => telemetry.sendEvent(sinkEvent(format)));
 
         const packets: Packet[] = [];
         const throttle = setInterval(() => {
@@ -319,7 +319,7 @@ export const stopTrace = (): AppThunk<RootState> => (dispatch, getState) => {
     const taskId = getTaskId(getState());
     if (taskId === null) return;
     nrfml.stop(taskId);
-    usageData.sendUsageData(EventAction.STOP_TRACE);
+    telemetry.sendEvent(EventAction.STOP_TRACE);
     dispatch(setTraceIsStopped());
     tracePacketEvents.emit('stop-process');
 };

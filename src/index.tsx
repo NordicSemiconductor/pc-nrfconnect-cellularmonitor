@@ -5,8 +5,11 @@
  */
 
 import React from 'react';
-import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import usageData from '@nordicsemiconductor/pc-nrfconnect-shared/src/utils/usageData';
+import {
+    App,
+    render,
+    telemetry,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import appReducer from './app/appReducer';
 import DeviceSelector from './app/DeviceSelector';
@@ -19,7 +22,7 @@ import { TraceCollectorSidePanel } from './features/SidePanel/SidePanel';
 
 import './index.scss';
 
-usageData.enableTelemetry();
+telemetry.enableTelemetry();
 logLibVersions();
 enableNrfmlLogging();
 

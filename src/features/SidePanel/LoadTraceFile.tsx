@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
     ConfirmationDialog,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -41,7 +41,7 @@ export const LoadTraceFile = () => {
         if (filePath != null) {
             dispatch(readRawTrace(filePath, setLoading));
             setFilePath(undefined);
-            usageData.sendUsageData(EventAction.READ_TRACE_FILE);
+            telemetry.sendEvent(EventAction.READ_TRACE_FILE);
         }
     };
 

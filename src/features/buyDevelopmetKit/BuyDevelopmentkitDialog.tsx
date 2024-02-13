@@ -9,7 +9,7 @@ import {
     Button,
     InfoDialog,
     openUrl,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -22,7 +22,7 @@ export default () => {
     };
 
     const open = () => {
-        usageData.sendUsageData(EventAction.OPEN_BUY_DK_DIALOG);
+        telemetry.sendEvent(EventAction.OPEN_BUY_DK_DIALOG);
         setModalVisible(true);
     };
 

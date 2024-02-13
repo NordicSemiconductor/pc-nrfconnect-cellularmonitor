@@ -10,7 +10,7 @@ import {
     Button,
     openWindow,
     selectedDevice,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { ipcRenderer } from 'electron';
 
@@ -52,7 +52,7 @@ export const OpenSerialTerminal = () => {
 };
 
 const openSerialTerminal = (serialPortPath: string) => {
-    usageData.sendUsageData(EventAction.OPEN_SERIAL_TERMINAL);
+    telemetry.sendEvent(EventAction.OPEN_SERIAL_TERMINAL);
     openWindow.openApp(
         { name: 'pc-nrfconnect-serial-terminal', source: 'official' },
         {

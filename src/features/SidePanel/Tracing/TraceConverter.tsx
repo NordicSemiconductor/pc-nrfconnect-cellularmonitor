@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { Button, telemetry } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../app/usageDataActions';
 import { askForTraceFile } from '../../../common/fileUtils';
@@ -23,7 +23,7 @@ export default () => {
     const loadTrace = async () => {
         const filePath = await askForTraceFile();
         if (filePath) {
-            usageData.sendUsageData(EventAction.OPEN_TRACE_IN_WIRESHARK);
+            telemetry.sendEvent(EventAction.OPEN_TRACE_IN_WIRESHARK);
             dispatch(convertTraceFile(filePath, setLoading));
         }
     };
