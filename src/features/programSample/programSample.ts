@@ -8,12 +8,10 @@
 import {
     Device,
     logger,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import {
-    NrfutilDeviceLib,
-    type Progress,
-} from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
+import { type Progress } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
+import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import EventAction from '../../app/usageDataActions';
 import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
@@ -64,13 +62,13 @@ export const programModemFirmware = async (
     progress: (progress: SampleProgress) => void
 ) => {
     try {
-        usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, {
+        telemetry.sendEvent(EventAction.PROGRAM_SAMPLE, {
             type: 'ModemFirmware',
             firmware: modemFirmware,
         });
         await programModem(device, modemFirmware, progress);
     } catch (error) {
-        usageData.sendErrorReport(
+        telemetry.sendErrorReport(
             `Failed to program modem firmware: ${modemFirmware.file}`
         );
         logger.error(error);
@@ -86,7 +84,7 @@ export const programDevice = async (
     try {
         // eslint-disable-next-line no-restricted-syntax
         for (const fw of firmwares) {
-            usageData.sendUsageData(EventAction.PROGRAM_SAMPLE, {
+            telemetry.sendEvent(EventAction.PROGRAM_SAMPLE, {
                 firmware: fw,
             });
             switch (fw.type) {
@@ -105,7 +103,7 @@ export const programDevice = async (
         logger.info('Programming complete, reseting device.');
         reset(device);
     } catch (error) {
-        usageData.sendErrorReport('Failed to program a sample');
+        telemetry.sendErrorReport('Failed to program a sample');
         logger.error(error);
         throw error;
     }

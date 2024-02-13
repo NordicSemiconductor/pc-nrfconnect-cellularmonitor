@@ -11,8 +11,8 @@ import {
     DropdownItem,
     logger,
     selectedDevice,
+    telemetry,
     truncateMiddle,
-    usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { basename } from 'path';
 
@@ -91,7 +91,7 @@ export default () => {
 
     const onSelect = async (item: DropdownItem) => {
         const label = typeof item.label === 'string' ? item.label : item.value;
-        usageData.sendUsageData(EventAction.SELECT_TRACE_DATABASE, {
+        telemetry.sendEvent(EventAction.SELECT_TRACE_DATABASE, {
             selectedTraceDatabase: label,
         });
         setSelectedItem(item);
@@ -100,7 +100,7 @@ export default () => {
             if (filePath) {
                 dispatch(setManualDbFilePath(filePath));
                 storeManualDbFilePath(filePath);
-                usageData.sendUsageData(EventAction.SET_TRACE_DB_MANUALLY);
+                telemetry.sendEvent(EventAction.SET_TRACE_DB_MANUALLY);
 
                 setSelectedItem({
                     label: truncateMiddle(basename(filePath), 10, 16),

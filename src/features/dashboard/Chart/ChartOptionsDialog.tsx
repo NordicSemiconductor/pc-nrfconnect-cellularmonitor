@@ -10,8 +10,8 @@ import {
     Dialog,
     InfoDialog,
     StateSelector,
+    telemetry,
     Toggle,
-    usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../app/usageDataActions';
@@ -53,7 +53,7 @@ export default () => {
                                 label={type}
                                 isToggled={traceEventFilter.includes(type)}
                                 onToggle={isToggled => {
-                                    usageData.sendUsageData(
+                                    telemetry.sendEvent(
                                         EventAction.OPEN_CHART_OPTIONS
                                     );
                                     dispatch(

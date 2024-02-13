@@ -16,7 +16,7 @@ import {
 import type {
     DeviceSerialPort,
     DeviceTraits,
-} from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
+} from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import { is9161DK } from '../features/programSample/programSample';
 import {

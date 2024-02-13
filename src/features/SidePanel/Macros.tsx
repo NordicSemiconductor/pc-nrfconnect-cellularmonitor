@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
     selectedDevice,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -49,10 +49,9 @@ export const Macro = ({ commands, title }: Macro) => {
                 className="w-100"
                 variant="secondary"
                 onClick={() => {
-                    usageData.sendUsageData(
-                        EventAction.SEND_AT_COMMANDS_MACRO,
-                        { type: title }
-                    );
+                    telemetry.sendEvent(EventAction.SEND_AT_COMMANDS_MACRO, {
+                        type: title,
+                    });
                     dispatch(sendAT(commands));
                 }}
                 title={

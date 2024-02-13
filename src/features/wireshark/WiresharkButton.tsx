@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
     openUrl,
-    usageData,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -45,7 +45,7 @@ export const SelectWireshark = ({ label }: { label: string }) => {
     const updateWiresharkPath = async () => {
         const filePath = await askForWiresharkPath();
         if (filePath) {
-            usageData.sendUsageData(EventAction.SET_WIRESHARK_PATH);
+            telemetry.sendEvent(EventAction.SET_WIRESHARK_PATH);
             dispatch(setWiresharkPath(filePath));
         }
     };
@@ -61,7 +61,7 @@ export default () => {
     const loadPcap = async () => {
         const filePath = await askForPcapFile();
         if (filePath) {
-            usageData.sendUsageData(EventAction.OPEN_IN_WIRESHARK);
+            telemetry.sendEvent(EventAction.OPEN_IN_WIRESHARK);
             dispatch(openInWireshark(filePath));
         }
     };

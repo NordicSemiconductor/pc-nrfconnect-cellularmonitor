@@ -8,8 +8,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     InfoDialog,
+    telemetry,
     Toggle,
-    usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -34,7 +34,7 @@ const InstallWiresharkDialog = ({
     const openInWiresharkSelected = useSelector(getOpenInWiresharkSelected);
 
     const toggleOpenInWireshark = () => {
-        usageData.sendUsageData(EventAction.TOGGLE_OPEN_IN_WIRESHARK);
+        telemetry.sendEvent(EventAction.TOGGLE_OPEN_IN_WIRESHARK);
         if (openInWiresharkSelected) {
             const traceFormatsWithoutWireshark = traceFormats.filter(
                 format => format !== 'live'

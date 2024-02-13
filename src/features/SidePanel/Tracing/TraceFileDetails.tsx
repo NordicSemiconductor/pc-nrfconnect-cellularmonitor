@@ -10,8 +10,8 @@
 import React, { FC } from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
 import {
+    telemetry,
     truncateMiddle,
-    usageData,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../app/usageDataActions';
@@ -36,7 +36,7 @@ const TraceFileName: FC<{
             <span
                 className="trace-filename"
                 onClick={() => {
-                    usageData.sendUsageData(EventAction.OPEN_FILE_DIRECTORY, {
+                    telemetry.sendEvent(EventAction.OPEN_FILE_DIRECTORY, {
                         traceProgress: progress,
                         format: progress.format,
                         path: progress.path,

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-/* eslint-disable no-undef */
 if (
     typeof globalThis.TextEncoder === 'undefined' ||
     typeof globalThis.TextDecoder === 'undefined'

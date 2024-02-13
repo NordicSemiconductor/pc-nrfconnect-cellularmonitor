@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Toggle, usageData } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { telemetry, Toggle } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../app/usageDataActions';
 import { TraceFormat } from '../../tracing/formats';
@@ -24,7 +24,7 @@ export default () => {
     const dispatch = useDispatch();
 
     const toggle = (format: TraceFormat) => () => {
-        usageData.sendUsageData(EventAction.TOGGLE_SAVE_TRACE_TO_FILE);
+        telemetry.sendEvent(EventAction.TOGGLE_SAVE_TRACE_TO_FILE);
         const formats = selectedFormats.includes(format)
             ? selectedFormats.filter(f => f !== format)
             : [...selectedFormats, format];
