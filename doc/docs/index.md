@@ -18,4 +18,4 @@ A cellular connection involves the interoperation of diverse components and scen
 
 Cellular Monitor replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
 
-Cellular Monitor is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/ug_nrf_connect_desktop/page/struct/nrftools_nrfconnect.html).
+Cellular Monitor is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/index.html).
