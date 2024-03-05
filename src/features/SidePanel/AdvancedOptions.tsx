@@ -7,7 +7,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
-    CollapsibleGroup,
+    Group,
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
@@ -20,9 +20,9 @@ export default () => {
     if (!device) return null;
 
     return (
-        <CollapsibleGroup heading="Advanced Options" defaultCollapsed={false}>
+        <Group heading="Advanced Options" defaultCollapsed={false} collapsible>
             <ProgramSampleModal />
             <SourceSelector />
-        </CollapsibleGroup>
+        </Group>
     );
 };
