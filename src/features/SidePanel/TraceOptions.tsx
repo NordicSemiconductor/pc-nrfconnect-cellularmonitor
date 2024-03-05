@@ -7,7 +7,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    CollapsibleGroup,
+    Group,
     selectedDevice,
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -31,14 +31,14 @@ export default () => {
     if (!device) return null;
 
     return (
-        <CollapsibleGroup defaultCollapsed={false} heading="TRACE OPTIONS">
+        <Group collapsible defaultCollapsed={false} heading="TRACE OPTIONS">
             <DatabaseFileOverride />
             <Serialports />
             {is9160DK(device) && <ResetOnStart />}
             <RefreshOnStart />
             <TraceFormatSelector />
             <TraceFileInformation />
-        </CollapsibleGroup>
+        </Group>
     );
 };
 

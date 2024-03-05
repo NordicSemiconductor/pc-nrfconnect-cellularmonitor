@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Group, SidePanel } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { SidePanel } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { OpenSerialTerminal } from '../terminal';
 import AdvancedOptions from './AdvancedOptions';
@@ -24,13 +24,13 @@ export const TraceCollectorSidePanel = () => (
         <Instructions />
         <FileActions />
 
-        <Group>
+        <div className="tw-flex tw-flex-col tw-gap-2">
             <TraceCollector />
-        </Group>
-        <Group>
+        </div>
+        <div className="tw-flex tw-flex-col tw-gap-2">
             <Recommended />
             <OpenSerialTerminal />
-        </Group>
+        </div>
 
         <ConnectionStatus />
         <TraceOptions />
