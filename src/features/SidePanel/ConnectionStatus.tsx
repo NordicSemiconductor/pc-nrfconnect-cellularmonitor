@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-    CollapsibleGroup,
+    Group,
     selectedDevice,
     Step,
     Stepper,
@@ -187,7 +187,8 @@ export default () => {
     }
 
     return (
-        <CollapsibleGroup
+        <Group
+            collapsible
             heading="Connection Status"
             defaultCollapsed={getCollapseConnectionStatusSection()}
             onToggled={isNowExpanded =>
@@ -199,7 +200,7 @@ export default () => {
                     steps={[traceState, simState, lteConnectionState, pdnState]}
                 />
             </div>
-        </CollapsibleGroup>
+        </Group>
     );
 };
 
