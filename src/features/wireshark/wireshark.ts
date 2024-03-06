@@ -12,7 +12,7 @@ import { join, sep } from 'path';
 import { RootState } from '../../app/appReducer';
 import { getWiresharkPath } from '../../app/store';
 
-export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/#download';
+export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/download.html';
 
 const DEFAULT_WINDOWS_WIRESHARK_FOLDER = join(
     'C:',
