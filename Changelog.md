@@ -1,8 +1,8 @@
-## 2.2.0 - 2023-12-14
+## 2.2.0 - UNRELEASED
 
 ## Added
 
--   Persist state of `show log` panel
+-   Persist state of `show log` panel.
 
 ### Changed
 
