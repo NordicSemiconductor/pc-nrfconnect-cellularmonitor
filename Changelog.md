@@ -1,8 +1,8 @@
-## 2.2.0 - UNRELEASED
+## 2.2.0 - 2024-03-13
 
-## Added
+### Added
 
--   Persist state of `show log` panel.
+-   Persist state of the Show Log panel.
 
 ### Changed
 
