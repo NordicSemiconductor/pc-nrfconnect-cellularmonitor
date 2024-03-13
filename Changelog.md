@@ -1,12 +1,12 @@
-## 2.2.0 - UNRELEASED
+## 2.2.0 - 2024-03-13
 
-## Added
+### Added
 
--   Persist state of `show log` panel.
+-   Persist state of the Show Log panel.
 
 ### Changed
 
--   Update nrfutil device to 2.1.1.
+-   Updated `nrfutil device` to v2.1.1.
 
 ## 2.1.0 - 2023-12-07
 
