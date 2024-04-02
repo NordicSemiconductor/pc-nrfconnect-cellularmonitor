@@ -12,7 +12,7 @@ import { getLines, getNumber, getParametersFromResponse } from '../utils';
 export const processor: Processor<'+CGDCONT'> = {
     command: '+CGDCONT',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/packet_domain/cgdcont.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/packet_domain/cgdcont.html',
     initialState: () => ({ accessPointNames: {} }),
     onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK') {

@@ -18,7 +18,7 @@ import { getParametersFromResponse } from '../utils';
 export const processor: Processor<'%CONEVAL'> = {
     command: '%CONEVAL',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/coneval.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/mob_termination_ctrl_status/coneval.html',
     initialState: () => ({}),
     onResponse: (packet, state) => {
         if (packet.status === 'OK') {

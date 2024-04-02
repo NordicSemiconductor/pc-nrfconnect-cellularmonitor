@@ -13,7 +13,7 @@ let setValue: 0 | 1;
 export const processor: Processor<'%XTIME'> = {
     command: '%XTIME',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/xtime.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/nw_service/xtime.html',
     initialState: () => ({}),
     onRequest: (packet, state) => {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {

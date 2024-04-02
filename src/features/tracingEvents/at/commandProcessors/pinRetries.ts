@@ -10,7 +10,7 @@ import { getStringNumberPair } from '../utils';
 export const processor: Processor<'+CPINR'> = {
     command: '+CPINR',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpinr.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/security/cpinr.html',
     initialState: () => ({ pinRetries: {} }),
     onResponse: (packet, state) => {
         if (packet.status === 'OK') {

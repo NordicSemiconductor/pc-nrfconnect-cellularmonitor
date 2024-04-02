@@ -25,7 +25,7 @@ type PinCodeStatus = keyof typeof pinCodeStatus;
 export const processor: Processor<'+CPIN'> = {
     command: '+CPIN',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/security/cpin.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/security/cpin.html',
     initialState: () => ({ pinCodeStatus: 'Unknown' }),
     onResponse: (packet, state) => {
         if (packet.status === 'OK') {

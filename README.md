@@ -3,14 +3,14 @@
 [![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/pc-nrfconnect-cellularmonitor?branchName=main)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=153&branchName=main)
 [![License](https://img.shields.io/badge/license-Modified%20BSD%20License-blue.svg)](LICENSE)
 
-_nRF Connect Cellular Monitor_ is a tool that enables you to capture and analyze
+nRF Connect Cellular Monitor is a tool that enables you to capture and analyze
 modem traces.
 
 ## Installation
 
-See the
-[InfoCenter](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fstruct_nrftools%2Fstruct%2Fnrftools_nrfconnect.html)
-pages for information on how to install the application.
+Read the
+[nRF Connect Cellular Monitor](https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/index.html)
+official documentation.
 
 ## Development
 

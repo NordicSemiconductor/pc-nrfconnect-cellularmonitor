@@ -12,7 +12,7 @@ export const processor: Processor<'%XCBAND'> = {
     command: '%XCBAND',
     initialState: () => ({}),
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xcband.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/mob_termination_ctrl_status/xcband.html',
     onResponse: (packet, state, requestType) => {
         if (packet.status === 'OK' && packet.payload) {
             if (requestType === RequestType.TEST) {
