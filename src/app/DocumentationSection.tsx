@@ -15,14 +15,16 @@ const DocumentationSections = [
         linkLabel="Go to TechDocs"
         link="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/index.html"
     >
-        Visit our Technical Documentation for more documentation about using the app.
+        Visit our Technical Documentation for more documentation about using the
+        app.
     </DocumentationSection>,
     <DocumentationSection
         key="credentialManager"
         linkLabel="Certificate Manager"
         link="https://docs.nordicsemi.com/bundle/nrf-connect-linkmonitor/page/lm_certificate_manager.html"
     >
-        Visit our Technical Documentation for more documentation about managing credentials.
+        Visit our Technical Documentation for more documentation about managing
+        credentials.
     </DocumentationSection>,
     <StartupDialog key="default-startup-dialog" />,
 ];
