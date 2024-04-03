@@ -9,7 +9,7 @@ import type { Processor } from '..';
 export const processor: Processor<'+CIMI'> = {
     command: '+CIMI',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/access_uicc/cimi.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/access_uicc/cimi.html',
     initialState: () => ({}),
     onResponse: (packet, state) => {
         if (packet.status === 'OK') {

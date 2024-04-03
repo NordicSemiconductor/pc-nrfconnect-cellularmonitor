@@ -11,7 +11,7 @@ let parameters: number[];
 export const processor: Processor<'%XT3412'> = {
     command: '%XT3412',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/mob_termination_ctrl_status/xt3412.html',
     initialState: () => ({ notifyPeriodicTAU: false }),
 
     onRequest: (packet, state) => {

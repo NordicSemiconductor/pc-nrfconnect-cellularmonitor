@@ -19,7 +19,7 @@ const setPayload: SetPayload = {};
 export const processor: Processor<'+CEDRXS'> = {
     command: '+CEDRXS',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/nw_service/cedrxs.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/nw_service/cedrxs.html',
     initialState: () => ({}),
     onRequest: (packet, state) => {
         if (

@@ -119,10 +119,6 @@ See [Viewing a Modem trace in Cellular Monitor](./viewing.md) for more informati
 
 See [Managing modem credentials](./managing_credentials.md).
 
-## Feedback tab
-
-The Feedback tab lets you send feedback about nRF Connect Cellular Monitor application to the application development team.
-
 ## Log
 
 The Log panel allows you to view the most important log events, tagged with a timestamp. Each time you open the app, a new session log file is created. You can find the Log panel and its controls, below the main application Window.
@@ -134,4 +130,4 @@ The Log panel allows you to view the most important log events, tagged with a ti
 
 ## About tab
 
-You can view application information, restore defaults, access source code, and documentation. You also can find information on the selected device, access support tools, and enable verbose logging.
+You can view application information, restore defaults, access source code and documentation. You also can find information on the selected device, access support tools, send feedback, and enable verbose logging.

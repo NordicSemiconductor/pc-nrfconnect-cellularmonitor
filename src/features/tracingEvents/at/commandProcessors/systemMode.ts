@@ -18,7 +18,7 @@ let setPayload: {
 export const processor: Processor<'%XSYSTEMMODE'> = {
     command: '%XSYSTEMMODE',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/mob_termination_ctrl_status/xsystemmode.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/mob_termination_ctrl_status/xsystemmode.html',
     initialState: () => ({}),
     onRequest: (packet, state) => {
         if (

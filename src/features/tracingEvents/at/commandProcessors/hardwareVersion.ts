@@ -10,7 +10,7 @@ import { parseStringValue } from '../utils';
 export const processor: Processor<'%HWVERSION'> = {
     command: '%HWVERSION',
     documentation:
-        'https://infocenter.nordicsemi.com/topic/ref_at_commands/REF/at_commands/general/hwver.html',
+        'https://docs.nordicsemi.com/bundle/ref_at_commands/page/REF/at_commands/general/hwver.html',
     initialState: () => ({}),
     onResponse: (packet, state) => {
         if (packet.status === 'OK' && packet.payload) {

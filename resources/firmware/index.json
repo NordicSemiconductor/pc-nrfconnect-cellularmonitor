@@ -1,9 +1,9 @@
 {
     "thingy91": [
         {
-            "title": "Asset Tracker V2",
+            "title": "Asset Tracker v2",
             "description": "This is the default application on your Thingy91.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
             "fw": [
                 {
                     "type": "Application",
@@ -14,7 +14,7 @@
         {
             "title": "Serial LTE Modem",
             "description": "Use this application if you want to evaluate the modem using an external MCU.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/serial_lte_modem/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
             "fw": [
                 {
                     "type": "Application",
@@ -25,7 +25,7 @@
         {
             "title": "Modem Shell",
             "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/modem_shell/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
             "fw": [
                 {
                     "type": "Application",
@@ -36,9 +36,9 @@
     ],
     "dk91": [
         {
-            "title": "Asset Tracker V2",
+            "title": "Asset Tracker v2",
             "description": "This is the default application on your development kit.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/asset_tracker_v2/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
             "fw": [
                 {
                     "type": "Modem",
@@ -51,9 +51,9 @@
             ]
         },
         {
-            "title": "Serial LTE ",
+            "title": "Serial LTE Modem",
             "description": "Use this application if you want to evaluate the modem using an external MCU.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/applications/serial_lte_modem/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
             "fw": [
                 {
                     "type": "Modem",
@@ -68,7 +68,7 @@
         {
             "title": "Modem Shell",
             "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
-            "documentation": "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/samples/nrf9160/modem_shell/README.html",
+            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
             "fw": [
                 {
                     "type": "Modem",
