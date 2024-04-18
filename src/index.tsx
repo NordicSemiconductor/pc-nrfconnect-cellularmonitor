@@ -42,7 +42,6 @@ render(
                 Main: CertificateManager,
             },
         ]}
-        feedback
         documentation={DocumentationSections}
     />
 );
