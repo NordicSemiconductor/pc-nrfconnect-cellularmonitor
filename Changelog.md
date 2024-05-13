@@ -1,3 +1,9 @@
+## 2.4.0 - 2024-05-13
+
+### Added
+
+-   Support for ARM native executables.
+
 ## 2.3.0 - 2024-04-18
 
 ### Changed
