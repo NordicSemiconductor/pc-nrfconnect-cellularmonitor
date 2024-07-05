@@ -13,7 +13,6 @@ import {
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import Copy from '../../common/Copy';
 import {
     getShowStartupDialog,
     getShowStartupDialogOnAppStart,
@@ -22,11 +21,6 @@ import {
 } from './startupSlice';
 
 import './startupDialog.css';
-
-const Config = [
-    'CONFIG_NRF_MODEM_LIB_TRACE=y',
-    'CONFIG_AT_HOST_LIBRARY=y #(note this is optional)',
-];
 
 const StartupDialog = () => {
     const dispatch = useDispatch();
@@ -93,45 +87,32 @@ const StartupDialog = () => {
             }
         >
             <div style={{ padding: '32px' }}>
-                <b style={headerStyle}>
-                    Enable Trace in your application as follows:
-                </b>
+                <b style={headerStyle}>Enable Trace in your application</b>
                 <p>
-                    If you use nRF Connect SDK v2.0.1 or higher, add the
-                    following Kconfig snippets to enable trace, and optionally,
-                    AT commands in your application firmware.
+                    If you use nRF Connect SDK v2.0.1 or higher, your
+                    application must enable modem trace over Universal
+                    Asynchronous Receiver/Transmitter (UART) using snippets. You
+                    can do this by{' '}
+                    <a href="https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets">
+                        adding the `nrf91-modem-trace-uart` snippet to your
+                        build configuration
+                    </a>
+                    , as described in the nRF Connect SDK documentation.
                 </p>
-                <pre
-                    style={{
-                        whiteSpace: 'pre-wrap',
-                        userSelect: 'text',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
-                    {Config.join('\n')}
-                    <Copy
-                        data={Config.join('\n')}
-                        size={0.9}
-                        style={{ marginLeft: '8px' }}
-                    />
-                </pre>
-
                 <p>
-                    Alternatively, in Advanced Options you can program a sample
+                    Alternatively, in <b>Advanced options</b> you can{' '}
+                    <a href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/overview.html#program-device">
+                        program a sample
+                    </a>
                     with trace enabled and upgrade your modem firmware.
                 </p>
 
                 <p>
-                    Minimum requirements:
-                    <ul>
-                        <li>
-                            A Nordic Semiconductor cellular device, such as an
-                            nRF91 series DK or Nordic Thingy:91™
-                        </li>
-                        <li>A nano SIM card supporting LTE-M or NB-IoT</li>
-                        <li>Modem firmware version 1.3.1 or higher</li>
-                    </ul>
+                    Check also{' '}
+                    <a href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/requirements.html">
+                        Cellular Monitor hardware and software requirements
+                    </a>
+                    .
                 </p>
             </div>
         </GenericDialog>
