@@ -1,7 +1,12 @@
 ## 2.4.3 - unreleased
 
+### Added
+
+-   Pre-bundled Modem Trace Database version 2.0.1.
+
 ### Fixed
 
+-   Modem Trace Database dropdown filters out unsupported DB for nRF9151.
 -   Issues with the UI layout in the **Certificate Manager** tab.
 -   Issue with editing the security tag in the **Certificate Manager** tab,
     which would cause the input to become uneditable when a non-numeric value
