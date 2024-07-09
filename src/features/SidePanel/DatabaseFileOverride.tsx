@@ -11,6 +11,7 @@ import {
     DropdownItem,
     logger,
     selectedDevice,
+    selectedDeviceInfo,
     telemetry,
     truncateMiddle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -50,7 +51,11 @@ export default () => {
     const [selectedItem, setSelectedItem] = useState(autoSelectItem);
     const isTracing = useSelector(getIsTracing);
     const device = useSelector(selectedDevice);
-    const nrfDeviceVersion = getDeviceKeyForTraceDatabaseEntries(device);
+    const deviceInfo = useSelector(selectedDeviceInfo);
+    const nrfDeviceVersion = getDeviceKeyForTraceDatabaseEntries(
+        device,
+        deviceInfo
+    );
 
     const items = [
         autoSelectItem,

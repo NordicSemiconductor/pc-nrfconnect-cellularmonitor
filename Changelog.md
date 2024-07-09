@@ -1,3 +1,13 @@
+## 2.4.1 - 2024-07-09
+
+### Added
+
+-   Pre-bundled Modem Trace Database version 2.0.1.
+
+### Fixed
+
+-   Modem Trace Database dropdown filters out unsupported DB for nRF9151.
+
 ## 2.4.0 - 2024-05-13
 
 ### Added
