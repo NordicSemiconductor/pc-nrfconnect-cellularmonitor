@@ -1,10 +1,26 @@
 {
     "firmwares": {
-        "updated_timestamp": "2023-09-27 14:45:00",
+        "updated_timestamp": "2024-07-09 10:09:00",
         "devices": [
             {
                 "type": "nRF91x1",
                 "versions": [
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.1_trace-db.json",
+                            "sha256": "03BB118196E6DD3D57C57710A96DAB6A44E072B8AB5930C4F161FFE4BC835AB1"
+                        },
+                        "uuid": "9e5305b2-d7c6-4948-afe0-756a382016bf",
+                        "version": "2.0.1"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.1-FOTA-TEST_trace-db.json",
+                            "sha256": "21A93EAD9B8CF9F854D14ADED126D66A91CA087F8BDAFCE38E687509B4EB4312"
+                        },
+                        "uuid": "02a775b0-e29d-41cf-865f-36d1233d6ecd",
+                        "version": "2.0.1-FOTA"
+                    },
                     {
                         "database": {
                             "path": "${root}mfw_nrf91x1_2.0.0_trace-db.json",
