@@ -18,7 +18,7 @@ Alternatively, make sure that your application matches the following requirement
 
   - The modem firmware must be at least version 1.3.3.
   - The application firmware must use nRF Connect SDK version v2.0.1 or higher. The latest version is recommended.
-  - The application must enable modem trace over Universal Asynchronous Receiver/Transmitter (UART) using snippets. This enables the `CONFIG_NRF_MODEM_LIB_TRACE` Kconfig option. See [nRF Connect SDK nRF91 modem tracing with UART backend using snippets](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/working_with_nrf/nrf91/nrf9160.html#nrf91_modem_tracing_with_uart_backend_using_snippets) for more information.
+  - The application must enable modem trace over Universal Asynchronous Receiver/Transmitter (UART) using snippets. You can do this by [adding the `nrf91-modem-trace-uart` snippet to your application's build configuration](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets), as described in the nRF Connect SDK documentation.
   - Your application must also include Modem Shell, the AT Host library, or AT Shell. See the following for more information.
     - Enable the [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/libraries/modem/at_host.html) library using the Kconfig option `CONFIG_AT_HOST_LIBRARY` in the `prj.conf` file of your application. The library exposes the AT commands interface to the application and enables you to communicate with the modem using AT commands.
     - Information on Modem Shell and AT Shell can be found in [nRF Connect SDK documentation](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html).
