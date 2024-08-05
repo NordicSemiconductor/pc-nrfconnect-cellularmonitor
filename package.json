@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-cellularmonitor",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "description": "Capture and analyze modem traces",
     "displayName": "Cellular Monitor",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor",
@@ -65,9 +65,6 @@
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "bundledDependencies": [
-        "@nordicsemiconductor/nrf-monitor-lib-js"
-    ],
-    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ]
 }
