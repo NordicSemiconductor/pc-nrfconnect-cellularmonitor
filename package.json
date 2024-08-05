@@ -58,13 +58,16 @@
         "xterm-headless": "^5.1.0"
     },
     "dependencies": {
-        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.6"
+        "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.7"
     },
     "eslintConfig": {
         "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "bundledDependencies": [
+        "@nordicsemiconductor/nrf-monitor-lib-js"
+    ],
+    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ]
 }
