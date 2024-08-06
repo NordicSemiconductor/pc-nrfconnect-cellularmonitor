@@ -2,7 +2,7 @@
 
 ### Added
 
--   Support for trace databases v2.0.1, v2.0.1-FOTA, v1.3.6 and v1.3.6-FOTA.
+-   Support for trace databases: v2.0.1, v2.0.1-FOTA, v1.3.6, and v1.3.6-FOTA.
 
 ## 2.4.0 - 2024-05-13
 
