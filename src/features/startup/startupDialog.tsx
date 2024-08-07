@@ -103,7 +103,7 @@ const StartupDialog = () => {
                     Alternatively, in <b>Advanced options</b> you can{' '}
                     <a href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/overview.html#program-device">
                         program a sample
-                    </a>
+                    </a>{' '}
                     with trace enabled and upgrade your modem firmware.
                 </p>
 
