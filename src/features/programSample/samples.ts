@@ -34,7 +34,9 @@ export interface ModemFirmware {
 
 export interface Samples {
     thingy91: Sample[];
-    dk91: Sample[];
+    dk9160: Sample[];
+    dk9161: Sample[];
+    dk9151: Sample[];
     mfw: ModemFirmware[];
 }
 
@@ -47,9 +49,9 @@ const fullPath = (file: string) =>
 
 export const initialSamples: Samples = {
     thingy91: [],
-
-    dk91: [],
-
+    dk9160: [],
+    dk9161: [],
+    dk9151: [],
     mfw: [],
 };
 
