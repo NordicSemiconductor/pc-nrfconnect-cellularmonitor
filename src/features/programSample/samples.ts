@@ -86,7 +86,6 @@ export const downloadFile = async (fileName: string) => {
     const url = `${SERVER_URL}/${fileName}`;
 
     if (existsSync(targetFile)) return;
-    logger.info(`Sample not found locally, downloading ${url}`);
 
     if (existsSync(fullPath(fileName))) {
         logger.info(`Sample is bundled with app, copying.`);
@@ -94,6 +93,7 @@ export const downloadFile = async (fileName: string) => {
         return;
     }
 
+    logger.info(`Sample not found locally, downloading ${url}`);
     const response = await fetch(url);
     const blob = await response.blob();
     const buffer = await blob.arrayBuffer();
