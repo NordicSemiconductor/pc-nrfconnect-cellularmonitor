@@ -43,6 +43,7 @@ export interface Samples {
 const SERVER_URL =
     'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'firmware');
+const INDEX_FILE = 'index_v2.json';
 
 const fullPath = (file: string) =>
     join(getAppDir(), 'resources', 'firmware', file);
@@ -56,12 +57,12 @@ export const initialSamples: Samples = {
 };
 
 export const readBundledIndex = () =>
-    readFile(fullPath('index.json'), {
+    readFile(fullPath(INDEX_FILE), {
         encoding: 'utf8',
     }).then(file => JSON.parse(file) as Samples);
 
 export const downloadSampleIndex = () =>
-    fetch(`${SERVER_URL}/index.json`, {
+    fetch(`${SERVER_URL}/${INDEX_FILE}`, {
         cache: 'no-cache',
     }).then<Samples>(result => result.json());
 
