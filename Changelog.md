@@ -1,3 +1,9 @@
+## 2.4.2 - UNRELEASED
+
+### Changed
+
+-   Updated `nrfutil device` to v2.6.4.
+
 ## 2.4.1 - 2024-08-07
 
 ### Added
