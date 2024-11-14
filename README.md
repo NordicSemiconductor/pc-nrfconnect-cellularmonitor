@@ -8,8 +8,8 @@ modem traces.
 
 ## Installation
 
-The Cellular Monitor app is installed from nRF Connect from Desktop. For detailed
-steps, see
+The Cellular Monitor app is installed from nRF Connect from Desktop. For
+detailed steps, see
 [Installing nRF Connect for Desktop apps](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/installing_apps.html)
 in the nRF Connect from Desktop documentation.
 
