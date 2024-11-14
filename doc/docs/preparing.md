@@ -8,6 +8,6 @@ A device can optionally be programmed with modem trace prerequisites, making it 
 3. Select the device you want to use.</br>
     The options in the left-side panel are updated. See [Overview and user interface](./overview.md).
 
-    You can also view information on the device's connection settings and status in the Cellular Monitor **Log** view.
+    You can also view information on the device's connection settings and status in the {{app_name}}'s **Log** view.
 
-4. If your application does not support Cellular Monitor minimum requirements, use the [**Program device**](./overview.md#program-device) button to program the prerequisites.
+4. If your application does not support the {{app_name}} minimum requirements, use the [**Program device**](./overview.md#program-device) button to program the prerequisites.

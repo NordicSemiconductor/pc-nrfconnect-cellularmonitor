@@ -1,6 +1,6 @@
-# Viewing a modem trace in Cellular Monitor
+# Viewing a modem trace in the {{app_name}}
 
-To play back and focus on a part of the trace, you can drag and scroll the **Packet Event Viewer**. Cellular Monitor's [**Connection Status**](./overview.md#connection-status) and [**Dashboard**](./overview.md#dashboard-tab) update accordingly and replay the selected events.
+To play back and focus on a part of the trace, you can drag and scroll the **Packet Event Viewer**. The {{app_names}}'s [**Connection Status**](./overview.md#connection-status) and [**Dashboard**](./overview.md#dashboard-tab) update accordingly and replay the selected events.
 
 ## Packet Event Viewer
 
