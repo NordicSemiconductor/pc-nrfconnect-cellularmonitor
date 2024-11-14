@@ -231,10 +231,6 @@ const ProgramSample = ({
 
     const progressCb = useCallback(
         ({ firmware, progress }: SampleProgress) => {
-            logger.info(
-                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
-            );
-
             progressMap.set(
                 firmware as Firmware,
                 progress.totalProgressPercentage
@@ -433,10 +429,6 @@ const ProgramModem = ({
         let memoizedProgress = 0;
 
         return ({ progress }: SampleProgress) => {
-            logger.info(
-                `${progress.step}/${progress.amountOfSteps}: ${progress.stepProgressPercentage}% - ${progress.message}`
-            );
-
             memoizedProgress = progress.totalProgressPercentage;
             setProgressState(memoizedProgress);
         };

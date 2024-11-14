@@ -30,7 +30,7 @@ Opens file explorer and allows you to select an `.mtrace` or `.bin` file. The se
 
 When a device is selected, the {{app_name}} tries to discover its capabilities. The side panel options are updated depending on the results.
 
-![{{app_name}} window after selecting a device](./screenshots/cel_mon_overview.png "{{app_name}} window after selecting a device")
+![{{app_name}} window after selecting a device](./screenshots/cel_mon_overview_selected.png "{{app_name}} window after selecting a device")
 
 ### Start
 
@@ -86,7 +86,7 @@ See [Using Wireshark](./wireshark.md) for more information.
 
 If toggled on, starting tracing will create a raw temporary trace file for storing a copy of the trace for future use. After you start tracing, the information about the file and its size appears under the toggle.
 
-![Tracing file size information](./screenshots/cel_mon_overview.png "Tracing file size information")
+![Tracing file size information](./screenshots/cel_mon_overview_file_info.png "Tracing file size information")
 
 Clicking the file name opens its location.
 
