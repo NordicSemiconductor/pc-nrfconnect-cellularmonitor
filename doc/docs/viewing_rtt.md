@@ -1,9 +1,9 @@
 # Viewing RTT modem traces
 
-Modem traces captured in J-Link Real Time Transfer (RTT) logger can be played back in Cellular Monitor.
+Modem traces captured in J-Link Real Time Transfer (RTT) logger can be played back in the {{app_name}}.
 
 !!! note "Note"
-      In the current release of Cellular Monitor, the RTT interface is not supported for traces capture. You can only view RTT modem traces captured outside of the tool.
+      In the current release of the {{app_name}}, the RTT interface is not supported for traces capture. You can only view RTT modem traces captured outside of the tool.
 
 To view RTT modem traces captured outside of the tool in Cellular Monitor, complete the following steps:
 

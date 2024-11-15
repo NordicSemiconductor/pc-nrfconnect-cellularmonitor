@@ -1,8 +1,8 @@
 # Overview and user interface
 
-After starting Cellular Monitor, the main application window is displayed.
+After starting the {{app_name}}, the main application window is displayed.
 
-![Cellular Monitor application window](./screenshots/cel_mon_overview.png "Cellular Monitor application window")
+![{{app_name}} window](./screenshots/cel_mon_overview.png "{{app_name}} window")
 
 The available options and information change after you **Select Device**. If a supported device is selected, you can capture traces; otherwise, traces can be played back from a file.
 
@@ -20,7 +20,7 @@ Opens a dialog with localized links to partner websites to purchase the supporte
 
 ### Load trace file...
 
-Opens File Explorer and allows you to select a trace file. Traces captured using Cellular Monitor have the file extension `.mtrace`. You can also open files from `nrfutil trace` and `.bin` files from the legacy [nRF Connect Trace Collector](https://docs.nordicsemi.com/bundle/nrf-connect-tracecollector/page/index.html).
+Opens File Explorer and allows you to select a trace file. Traces captured using the {{app_name}} have the file extension `.mtrace`. You can also open files from `nrfutil trace` and `.bin` files from the legacy Trace Collector app.
 
 ### Open trace file in Wireshark...
 
@@ -28,9 +28,9 @@ Opens file explorer and allows you to select an `.mtrace` or `.bin` file. The se
 
 ## After selection
 
-When a device is selected, Cellular Monitor tries to discover its capabilities. The side panel options are updated depending on the results.
+When a device is selected, the {{app_name}} tries to discover its capabilities. The side panel options are updated depending on the results.
 
-![Cellular Monitor application window after selecting a device](./screenshots/cel_mon_overview_selected.png "Cellular Monitor application window after selecting a device")
+![{{app_name}} window after selecting a device](./screenshots/cel_mon_overview_selected.png "{{app_name}} window after selecting a device")
 
 ### Start
 
@@ -41,7 +41,7 @@ Starts tracing for the selected device.
 
 ### Refresh dashboard
 
-Extensively populates the dashboard fields by sending a set of recommended AT commands to your device. This button is available only if Cellular Monitor has identified either Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) on the device, and if you started tracing.
+Extensively populates the dashboard fields by sending a set of recommended AT commands to your device. This button is available only if the {{app_name}} identified either Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) on the device, and if you started tracing.
 
 You can toggle on [Refresh dashboard on start](#refresh-dashboard-on-start) so that this action is automatically run when the tracing starts.
 
@@ -49,7 +49,7 @@ When you start tracing, this button changes to **Sending commands** during the t
 
 ### Open Serial Terminal
 
-Opens the Serial Terminal application in a new window. You can view the modem dialog and logging information from your application and the RTOS here. Depending on the application running, you can also send custom AT commands. See [nRF Connect Serial Terminal](https://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/index.html) for more information on the application.
+Opens the Serial Terminal application in a new window. You can view the modem dialog and logging information from your application and the RTOS here. Depending on the application running, you can also send custom AT commands. See the [Serial Terminal app](https://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/index.html) for more information on the application.
 
 ### Connection Status
 
@@ -63,7 +63,7 @@ This section lists common tracing options.
 
 The trace database is used to decode the raw modem trace. Each modem firmware version has a separate trace database. The trace database version must match the modem firmware version of the selected device.
 
-If [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) is enabled, choose **Autoselect** to have Cellular Monitor automatically select the trace database version. If not, select the database whose version matches your modem firmware from the dropdown list of databases.
+If [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) is enabled, choose **Autoselect** to have the {{app_name}} automatically select the trace database version. If not, select the database whose version matches your modem firmware from the dropdown list of databases.
 
 #### Modem trace serial port
 
@@ -96,7 +96,7 @@ This section lists advanced tracing options.
 
 #### Program device
 
-Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for Cellular Monitor. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
+Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for the {{app_name}}. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
 
 !!! note "Note"
      Programming the modem firmware deletes the application firmware. If you choose to program only the modem firmware, you need to reprogram the application firmware.
@@ -108,12 +108,12 @@ The serial port used to send AT commands to your device if Modem Shell or [AT Ho
 ## Dashboard tab
 
 The dashboard contains detailed information about the connection and its components. During trace, dashboard fields are highlighted as they are populated.
-See [Viewing a Modem trace in Cellular Monitor](./viewing.md) for more information.
+See [Viewing a Modem trace in the {{app_name}}](./viewing.md) for more information.
 
 ### Packet Event Viewer
 
 The **Packet Event Viewer** visualizes communication at the AT command, Radio Resource Control (RRC), Non-access Stratum (NAS), and Internet Protocol (IP) levels.
-See [Viewing a Modem trace in Cellular Monitor](./viewing.md) for more information.
+See [Viewing a Modem trace in the {{app_name}}](./viewing.md) for more information.
 
 ## Certificate Manager tab
 
