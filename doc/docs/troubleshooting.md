@@ -2,7 +2,7 @@
 
 These troubleshooting instructions can help you fix issues you might encounter in the {{app_name}}.
 
-Check the {{app_name}}'s [Minimum requirements and limitations](./requirements.md).
+Check the app's [Minimum requirements and limitations](./requirements.md).
 
 ## Trace data is not displayed or the file size does not increase
   - Check the trace serial port used.
@@ -24,7 +24,7 @@ Check the {{app_name}}'s [Minimum requirements and limitations](./requirements.m
 
 Make sure that **Save trace file to disk** is enabled before starting the trace if you want them to be saved. The easiest way to find your saved files is to click **Load trace file**.
 
-The {{app_name}}'s `.mtrace` files are binary files. The `.mtrace` file extension is used to separate them from other binary files (extension `.bin`). If you want to open the file in a tool that requires a `.bin` extension, replace the `.mtrace` extension with a `.bin`. You are still able to open it in the {{app_name}}.
+The `.mtrace` files are binary files. The `.mtrace` file extension is used to separate them from other binary files (extension `.bin`). If you want to open the file in a tool that requires a `.bin` extension, replace the `.mtrace` extension with a `.bin`. You are still able to open it in the {{app_name}}.
 
 ## Is it sufficient to update `prj.conf` to enable modem trace?
 
