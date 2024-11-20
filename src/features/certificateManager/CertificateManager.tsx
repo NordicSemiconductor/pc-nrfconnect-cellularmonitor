@@ -249,8 +249,8 @@ export default ({ active }: { active: boolean }) => {
                 </div>
             </Alert>
             <Form className="mb-4 mt-4 pr-4">
-                <Row>
-                    <Col xs={8}>
+                <div className="tw-grid tw-grid-cols-3 tw-gap-4">
+                    <div className="tw-col-span-3 lg:tw-col-span-2">
                         {FormGroupWithCheckbox({
                             controlId: 'certMgr.caCert',
                             controlProps: textAreaProps,
@@ -279,8 +279,8 @@ export default ({ active }: { active: boolean }) => {
                             clear: clearPrivateKey,
                             setClear: setClearPrivateKey,
                         })}
-                    </Col>
-                    <Col xs={4}>
+                    </div>
+                    <div className="tw-col-span-3 lg:tw-col-span-1">
                         {FormGroupWithCheckbox({
                             controlId: 'certMgr.preSharedKey',
                             controlProps: textProps,
@@ -317,8 +317,8 @@ export default ({ active }: { active: boolean }) => {
                                 />
                             </Col>
                         </Form.Group>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Form>
             <ButtonGroup className="align-self-end">
                 <Button
