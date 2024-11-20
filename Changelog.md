@@ -1,3 +1,9 @@
+## 2.4.3 - unreleased
+
+### Changed
+
+-   Minor UI layout fixes.
+
 ## 2.4.2 - 2024-11-11
 
 ### Changed
