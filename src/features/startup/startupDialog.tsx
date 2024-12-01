@@ -56,7 +56,7 @@ const StartupDialog = () => {
                 className="mt-3"
                 onClick={() => dispatch(setShowStartupDialog(true))}
             >
-                Open &apos;How to use&apos;
+                Open &quot;How to use&quot;
             </Button>
         );
     }
