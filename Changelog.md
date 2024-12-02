@@ -2,7 +2,12 @@
 
 ### Changed
 
--   Minor UI layout fixes.
+-   UI layout fixes for the certificate manager tab.
+
+### Fixed
+
+-   Security tag in the certificate manager form could become uneditable when
+    non-numeric value was passed.
 
 ## 2.4.2 - 2024-11-11
 
