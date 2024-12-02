@@ -220,7 +220,7 @@ export default ({ active }: { active: boolean }) => {
     };
 
     const className =
-        'cert-mgr-view d-flex flex-column p-4 h-100 overflow-auto pretty-scrollbar';
+        'd-flex flex-column p-4 h-100 tw-overflow-y-scroll styled-scroll';
     const textAreaProps = {
         as: 'textarea',
         className: 'text-monospace',
@@ -311,9 +311,12 @@ export default ({ active }: { active: boolean }) => {
                                 <Form.Control
                                     type="text"
                                     value={secTag}
-                                    onChange={({ target }) =>
-                                        setSecTag(Number(target.value))
-                                    }
+                                    onChange={({ target }) => {
+                                        const tag = Number(target.value);
+                                        if (Number.isNaN(tag)) return;
+
+                                        setSecTag(tag);
+                                    }}
                                 />
                             </Col>
                         </Form.Group>
