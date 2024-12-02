@@ -248,7 +248,7 @@ export default ({ active }: { active: boolean }) => {
                     Cloud certificate, otherwise pick a different tag.
                 </div>
             </Alert>
-            <Form className="mb-4 mt-4 pr-4">
+            <div className="mb-4 mt-4 pr-4">
                 <div className="tw-grid tw-grid-cols-3 tw-gap-4">
                     <div className="tw-col-span-3 lg:tw-col-span-2">
                         {FormGroupWithCheckbox({
@@ -322,7 +322,7 @@ export default ({ active }: { active: boolean }) => {
                         </Form.Group>
                     </div>
                 </div>
-            </Form>
+            </div>
             <ButtonGroup className="align-self-end">
                 <Button
                     variant="secondary"
