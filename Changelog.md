@@ -3,7 +3,9 @@
 ### Fixed
 
 -   Issues with the UI layout in the **Certificate Manager** tab.
--   Issue with editing the security tag in the **Certificate Manager** tab, which would cause the input to become uneditable when a non-numeric value was passed.
+-   Issue with editing the security tag in the **Certificate Manager** tab,
+    which would cause the input to become uneditable when a non-numeric value
+    was passed.
 
 ## 2.4.2 - 2024-11-11
 
