@@ -1,13 +1,9 @@
 ## 2.4.3 - unreleased
 
-### Changed
-
--   UI layout fixes for the certificate manager tab.
-
 ### Fixed
 
--   Security tag in the certificate manager form could become uneditable when
-    non-numeric value was passed.
+-   Issues with the UI layout in the **Certificate Manager** tab.
+-   Issue with editing the security tag in the **Certificate Manager** tab, which would cause the form to freeze when a non-numeric value was passed.
 
 ## 2.4.2 - 2024-11-11
 
