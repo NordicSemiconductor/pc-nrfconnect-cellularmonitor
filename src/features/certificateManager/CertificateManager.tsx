@@ -220,7 +220,7 @@ export default ({ active }: { active: boolean }) => {
     };
 
     const className =
-        'cert-mgr-view d-flex flex-column p-4 h-100 overflow-auto pretty-scrollbar';
+        'd-flex flex-column p-4 h-100 tw-overflow-y-scroll styled-scroll';
     const textAreaProps = {
         as: 'textarea',
         className: 'text-monospace',
@@ -231,7 +231,7 @@ export default ({ active }: { active: boolean }) => {
     return (
         <div className={`${className} ${active ? 'hidden' : ''}`}>
             <Alert variant="info">
-                <span className="h-100 mdi mdi-information mdi-36px float-left pr-3" />
+                <span className="mdi mdi-information mdi-36px float-left pr-3" />
                 <div style={{ lineHeight: '1.5rem', userSelect: 'text' }}>
                     The modem must be in <strong>offline</strong> state (
                     <code>AT+CFUN=4</code>) for updating certificates.
@@ -248,9 +248,9 @@ export default ({ active }: { active: boolean }) => {
                     Cloud certificate, otherwise pick a different tag.
                 </div>
             </Alert>
-            <Form className="mb-4 mt-4 pr-4">
-                <Row>
-                    <Col xs={8}>
+            <div className="mb-4 mt-4 pr-4">
+                <div className="tw-grid tw-grid-cols-3 tw-gap-4">
+                    <div className="tw-col-span-3 lg:tw-col-span-2">
                         {FormGroupWithCheckbox({
                             controlId: 'certMgr.caCert',
                             controlProps: textAreaProps,
@@ -279,8 +279,8 @@ export default ({ active }: { active: boolean }) => {
                             clear: clearPrivateKey,
                             setClear: setClearPrivateKey,
                         })}
-                    </Col>
-                    <Col xs={4}>
+                    </div>
+                    <div className="tw-col-span-3 lg:tw-col-span-1">
                         {FormGroupWithCheckbox({
                             controlId: 'certMgr.preSharedKey',
                             controlProps: textProps,
@@ -311,15 +311,18 @@ export default ({ active }: { active: boolean }) => {
                                 <Form.Control
                                     type="text"
                                     value={secTag}
-                                    onChange={({ target }) =>
-                                        setSecTag(Number(target.value))
-                                    }
+                                    onChange={({ target }) => {
+                                        const tag = Number(target.value);
+                                        if (Number.isNaN(tag)) return;
+
+                                        setSecTag(tag);
+                                    }}
                                 />
                             </Col>
                         </Form.Group>
-                    </Col>
-                </Row>
-            </Form>
+                    </div>
+                </div>
+            </div>
             <ButtonGroup className="align-self-end">
                 <Button
                     variant="secondary"
