@@ -2,7 +2,7 @@
 
 ### Added
 
--   Pre-bundled Modem Trace Database version 1.3.6, 1.3.7, 2.0.1, 2.0.2.
+-   Pre-bundled Modem Trace Databases v1.3.6, v1.3.6-FOTA, v1.3.7, v1.3.7-FOTA, v2.0.1, v2.0.1-FOTA, v2.0.2 and v2.0.2-FOTA.
 
 ### Fixed
 
