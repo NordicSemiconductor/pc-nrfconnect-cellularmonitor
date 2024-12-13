@@ -30,8 +30,6 @@ export const getDeviceKeyForTraceDatabaseEntries = (
     device?: Device,
     deviceInfo?: DeviceInfo
 ): SupportedDeviceVersion => {
-    console.log(deviceInfo?.jlink?.deviceVersion);
-
     // generic check should work on no nordic DKs
     const deviceVersion = deviceInfo?.jlink?.deviceVersion;
     if (deviceVersion) {
