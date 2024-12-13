@@ -44,6 +44,38 @@
                         },
                         "uuid": "c234531b-9f14-4135-9092-f4e52d37fb23",
                         "version": "2.0.0"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.1_trace-db.json",
+                            "sha256": "03bb118196e6dd3d57c57710a96dab6a44e072b8ab5930c4f161ffe4bc835ab1"
+                        },
+                        "uuid": "9e5305b2-d7c6-4948-afe0-756a382016bf",
+                        "version": "2.0.1-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.1-FOTA-TEST_trace-db.json",
+                            "sha256": "21a93ead9b8cf9f854d14aded126d66a91ca087f8bdafce38e687509b4eb4312"
+                        },
+                        "uuid": "02a775b0-e29d-41cf-865f-36d1233d6ecd",
+                        "version": "2.0.1"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.2_trace-db.json",
+                            "sha256": "9472bb51e5bbae9c7759252ac83e97ec145f10bd184b5cfc1c634004ca1da67f"
+                        },
+                        "uuid": "320176d5-9f40-45fc-923b-2661ec18d547",
+                        "version": "2.0.2-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.2-FOTA-TEST_trace-db.json",
+                            "sha256": "fe5ba2705124590a6748cce4ee20dc38fe4811e5bbf86823b622982f0bd686cb"
+                        },
+                        "uuid": "8265da3c-ab9d-44b2-bbec-b1650c7c5a99",
+                        "version": "2.0.2"
                     }
                 ]
             },
@@ -225,6 +257,38 @@
                         },
                         "uuid": "b388ff53-7acb-4fa0-af23-a82288330738",
                         "version": "1.3.5-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf9160_1.3.6_trace-db.json",
+                            "sha256": "126ad29fddb339248370407c0c8e237b3eeb6ecf09f67b5eccc35227fd79c845"
+                        },
+                        "uuid": "3e926f75-d31b-4852-b394-8c13f5a8bb6e",
+                        "version": "1.3.6"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf9160_1.3.6-FOTA-TEST_trace-db.json",
+                            "sha256": "ed2810c172ed00cee803d8d5e007741d288f236981829d324dfd359568665ecf"
+                        },
+                        "uuid": "bd4c354c-f3bc-4243-9f3d-c5f26020427c",
+                        "version": "1.3.6-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf9160_1.3.7_trace-db.json",
+                            "sha256": "7c988aac2665318f8752fbbc80602b178b7b908f2a4c06bd9e554284404a98e1"
+                        },
+                        "uuid": "e7a1c54a-b07c-4512-9c3e-8ecbbfe2641d",
+                        "version": "1.3.7"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf9160_1.3.7-FOTA-TEST_trace-db.json",
+                            "sha256": "9c8719ed8c5a59c192582066c88d8444ebea4bcf72e19eb8be7d2e08da17ec4f"
+                        },
+                        "uuid": "23e3e810-554a-46ff-865f-131928fcca44",
+                        "version": "1.3.7-FOTA"
                     }
                 ]
             }

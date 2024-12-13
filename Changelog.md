@@ -2,7 +2,7 @@
 
 ### Added
 
--   Pre-bundled Modem Trace Database version 2.0.1.
+-   Pre-bundled Modem Trace Database version 1.3.6, 1.3.7, 2.0.1, 2.0.2.
 
 ### Fixed
 
