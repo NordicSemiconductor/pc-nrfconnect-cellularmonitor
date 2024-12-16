@@ -1,7 +1,14 @@
-## 2.4.3 - unreleased
+## 2.4.3 - 2024-12-17
+
+### Added
+
+-   Pre-bundled Modem Trace Databases: v1.3.6, v1.3.6-FOTA, v1.3.7, v1.3.7-FOTA,
+    v2.0.1, v2.0.1-FOTA, v2.0.2, and v2.0.2-FOTA.
 
 ### Fixed
 
+-   Issue where the Modem Trace Database's drop-down would incorrectly include
+    an unsupported database for nRF9151.
 -   Issues with the UI layout in the **Certificate Manager** tab.
 -   Issue with editing the security tag in the **Certificate Manager** tab,
     which would cause the input to become uneditable when a non-numeric value
