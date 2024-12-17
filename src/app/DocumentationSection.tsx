@@ -21,7 +21,7 @@ const DocumentationSections = [
     <DocumentationSection
         key="credentialManager"
         linkLabel="Certificate Manager"
-        link="https://docs.nordicsemi.com/bundle/nrf-connect-linkmonitor/page/lm_certificate_manager.html"
+        link="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/managing_credentials.html"
     >
         Visit our Technical Documentation for more documentation about managing
         credentials.
