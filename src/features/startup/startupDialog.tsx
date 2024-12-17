@@ -95,7 +95,7 @@ const StartupDialog = () => {
                     can do this by{' '}
                     <a
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noreferrer"
                         href="https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets"
                     >
                         adding the `nrf91-modem-trace-uart` snippet to your
@@ -107,7 +107,7 @@ const StartupDialog = () => {
                     Alternatively, in <b>Advanced options</b> you can{' '}
                     <a
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noreferrer"
                         href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/overview.html#program-device"
                     >
                         program a sample
@@ -119,7 +119,7 @@ const StartupDialog = () => {
                     Check also{' '}
                     <a
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noreferrer"
                         href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/requirements.html"
                     >
                         Cellular Monitor hardware and software requirements
