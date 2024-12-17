@@ -93,7 +93,11 @@ const StartupDialog = () => {
                     application must enable modem trace over Universal
                     Asynchronous Receiver/Transmitter (UART) using snippets. You
                     can do this by{' '}
-                    <a href="https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets">
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets"
+                    >
                         adding the `nrf91-modem-trace-uart` snippet to your
                         build configuration
                     </a>
@@ -101,7 +105,11 @@ const StartupDialog = () => {
                 </p>
                 <p>
                     Alternatively, in <b>Advanced options</b> you can{' '}
-                    <a href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/overview.html#program-device">
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/overview.html#program-device"
+                    >
                         program a sample
                     </a>{' '}
                     with trace enabled and upgrade your modem firmware.
@@ -109,7 +117,11 @@ const StartupDialog = () => {
 
                 <p>
                     Check also{' '}
-                    <a href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/requirements.html">
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://docs.nordicsemi.com/bundle/nrf-connect-cellularmonitor/page/requirements.html"
+                    >
                         Cellular Monitor hardware and software requirements
                     </a>
                     .
