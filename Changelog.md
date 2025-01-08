@@ -2,7 +2,7 @@
 
 ### Fixed
 
--   Skipping selecting trace file won't proceed to the selecting modem trace DB.
+-   Issue where skipping selecting trace file would still proceed to automatically select the modem trace DB.
 
 ## 2.4.3 - 2024-12-17
 
