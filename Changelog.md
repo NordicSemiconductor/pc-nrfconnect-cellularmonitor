@@ -1,3 +1,9 @@
+## 2.4.4 - unreleased
+
+### Fixed
+
+-   Skipping selecting trace file won't proceed to the selecting modem trace DB. 
+
 ## 2.4.3 - 2024-12-17
 
 ### Added
