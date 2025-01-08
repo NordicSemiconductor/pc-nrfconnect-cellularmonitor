@@ -19,3 +19,8 @@ A cellular connection involves the interoperation of diverse components and scen
 The {{app_name}} replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
 
 The {{app_name}} is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/index.html).
+
+## Application source code
+
+The code of the application is open source and [available on GitHub](https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor).
+Feel free to fork the repository and clone it for secondary development or feature contributions.
