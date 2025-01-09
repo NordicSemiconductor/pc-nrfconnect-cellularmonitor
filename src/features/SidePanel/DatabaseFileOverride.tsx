@@ -69,6 +69,11 @@ export default () => {
     ];
 
     useEffect(() => {
+        console.log('Device has changed');
+        setSelectedItem(autoSelectItem);
+    }, [device]);
+
+    useEffect(() => {
         getDatabases(nrfDeviceVersion)
             .then(setDatabases)
             .then(() => getRemoteDatabases(nrfDeviceVersion))
