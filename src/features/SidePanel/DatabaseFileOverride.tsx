@@ -69,7 +69,6 @@ export default () => {
     ];
 
     useEffect(() => {
-        console.log('Device has changed');
         setSelectedItem(autoSelectItem);
     }, [device]);
 
