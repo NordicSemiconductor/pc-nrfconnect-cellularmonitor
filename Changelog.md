@@ -1,3 +1,9 @@
+## 2.4.4 - unreleased
+
+### Fixed
+
+-   Modem trace database selection becoming black when switching devices.
+
 ## 2.4.3 - 2024-12-17
 
 ### Added
