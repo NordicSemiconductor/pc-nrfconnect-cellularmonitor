@@ -2,6 +2,8 @@
 
 ### Fixed
 
+-   Issue where skipping selecting trace file would still proceed to
+    automatically select the modem trace DB.
 -   Modem trace database selection becoming black when switching devices.
 
 ## 2.4.3 - 2024-12-17

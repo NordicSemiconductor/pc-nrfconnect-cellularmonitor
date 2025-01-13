@@ -31,6 +31,11 @@ export const LoadTraceFile = () => {
 
         // Ask for file
         const path = await askForTraceFile();
+
+        if (!path) {
+            return;
+        }
+
         setFilePath(path);
 
         // Ask for trace db
