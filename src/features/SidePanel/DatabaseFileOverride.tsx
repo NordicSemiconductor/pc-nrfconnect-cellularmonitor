@@ -69,6 +69,10 @@ export default () => {
     ];
 
     useEffect(() => {
+        setSelectedItem(autoSelectItem);
+    }, [device]);
+
+    useEffect(() => {
         getDatabases(nrfDeviceVersion)
             .then(setDatabases)
             .then(() => getRemoteDatabases(nrfDeviceVersion))
