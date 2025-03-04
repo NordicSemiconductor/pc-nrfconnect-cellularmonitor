@@ -39,7 +39,7 @@ export interface Samples {
 }
 
 const SERVER_URL =
-    'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/samples';
+    'https://files.nordicsemi.com/ui/api/v1/download?isNativeBrowsing=true&repoKey=swtools&path=external/ncd/cellular-monitor/samples';
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'firmware');
 
 const fullPath = (file: string) =>

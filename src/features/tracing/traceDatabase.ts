@@ -38,7 +38,7 @@ export type DatabaseVersion = {
 };
 
 const SERVER_URL =
-    'https://developer.nordicsemi.com/.pc-tools/nrfconnect-apps/trace-db';
+    'https://files.nordicsemi.com/ui/api/v1/download?isNativeBrowsing=true&repoKey=swtools&path=external/ncd/cellular-monitor/trace-db';
 const DOWNLOAD_FOLDER = join(getAppDataDir(), 'trace-db');
 const INITIAL_SOURCE_FOLDER = autoDetectDbRootFolder();
 
