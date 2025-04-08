@@ -1,5 +1,9 @@
 ## 2.4.4 - unreleased
 
+### Changed
+
+-   Update dependencies to support the nRF Connect for Desktop v5.2.0 release.
+
 ### Fixed
 
 -   Issue where skipping selecting trace file would still proceed to
