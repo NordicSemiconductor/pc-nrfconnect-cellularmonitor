@@ -51,11 +51,9 @@ const mapState = (): DeviceSelectorProps => ({
 
 const mapDispatch = (dispatch: AppDispatch): Partial<DeviceSelectorProps> => ({
     onDeviceSelected: (device: Device) => {
-        logger.info(`Selected device with s/n ${device.serialNumber}`);
         dispatch(openDevice(device));
     },
     onDeviceDeselected: () => {
-        logger.info('Deselected device');
         dispatch(closeDevice());
         clearATQueue();
     },
@@ -64,7 +62,6 @@ const mapDispatch = (dispatch: AppDispatch): Partial<DeviceSelectorProps> => ({
 export default connect(mapState, mapDispatch)(DeviceSelector);
 
 const closeDevice = (): AppThunk<RootState> => dispatch => {
-    logger.info('Closing device');
     dispatch(setUartSerialPort(null));
     dispatch(setAvailableSerialPorts([]));
     dispatch(setTraceSerialPort(null));

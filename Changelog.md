@@ -1,10 +1,15 @@
 ## 2.4.4 - unreleased
 
+### Changed
+
+-   Update dependencies to support the nRF Connect for Desktop v5.2.0 release.
+
 ### Fixed
 
--   Issue where skipping selecting trace file would still proceed to
+-   Issue where skipping selecting a trace file would still proceed to
     automatically select the modem trace DB.
--   Modem trace database selection becoming black when switching devices.
+-   Issue where selecting a modem trace database would turn the app window blank
+    when switching devices.
 
 ## 2.4.3 - 2024-12-17
 
