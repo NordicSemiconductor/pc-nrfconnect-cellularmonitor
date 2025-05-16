@@ -13,10 +13,13 @@ A cellular connection involves the interoperation of diverse components and scen
 - Packet event viewer
 - Extensive modem connection status dashboard with mouse-over access to detailed information
 - Auto-selection of trace database
-- Play back trace files from Trace Collector, nRF Util Trace, Memfault, and Real Time Transfer (RTT)
+- Play back trace files from Trace Collector, nRF Util's [`trace` command](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html), Memfault, and Real Time Transfer (RTT)
 - Modem credential management
 
-The {{app_name}} replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
+!!! note "Note"
+
+    The {{app_name}} replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
+    You can still play back trace files created with these legacy apps.
 
 The {{app_name}} is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/index.html).
 
