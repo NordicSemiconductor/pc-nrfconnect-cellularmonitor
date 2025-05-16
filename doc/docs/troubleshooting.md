@@ -4,6 +4,11 @@ These troubleshooting instructions can help you fix issues you might encounter i
 
 Check the app's [Minimum requirements and limitations](./requirements.md).
 
+## I do not see **Program device**
+
+Check if you are using one of the [supported devices](requirements.md).
+The [**Program device**](overview.md#program-device) is only visible when using the nRF9160 DK or Nordic Thingy:91™.
+
 ## Trace data is not displayed or the file size does not increase
   - Check the trace serial port used.
 
