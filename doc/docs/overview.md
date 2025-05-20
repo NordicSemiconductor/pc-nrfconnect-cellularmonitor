@@ -20,7 +20,7 @@ Opens a dialog with localized links to partner websites to purchase the supporte
 
 ### Load trace file...
 
-Opens File Explorer and allows you to select a trace file. Traces captured using the {{app_name}} have the file extension `.mtrace`. You can also open files from `nrfutil trace` and `.bin` files from the legacy Trace Collector app.
+Opens File Explorer and allows you to select a trace file. Traces captured using the {{app_name}} have the file extension `.mtrace`. You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app.
 
 ### Open trace file in Wireshark...
 
@@ -96,9 +96,12 @@ This section lists advanced tracing options.
 
 #### Program device
 
+!!! note "Note"
+     This option is only available for the nRF9160 DK and Nordic Thingy:91™.
+
 Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for the {{app_name}}. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
 
-!!! note "Note"
+!!! warning "Caution"
      Programming the modem firmware deletes the application firmware. If you choose to program only the modem firmware, you need to reprogram the application firmware.
 
 #### Terminal serial port
