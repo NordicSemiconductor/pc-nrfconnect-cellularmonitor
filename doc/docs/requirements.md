@@ -23,7 +23,7 @@ Alternatively, for all other compatible devices (including custom boards), make 
   - The modem firmware must be at least version 1.3.3.
   - The application firmware must use nRF Connect SDK version v2.0.1 or higher. The latest version is recommended.
   - The application must enable modem trace over Universal Asynchronous Receiver/Transmitter (UART) using snippets. You can do this by [adding the `nrf91-modem-trace-uart` snippet to your application's build configuration](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/app_dev/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets), as described in the nRF Connect SDK documentation.
-  - Your application must also include the following components from the nRF Connect SDK:
+  - Your application must also include one of the following components from the nRF Connect SDK:
 
      - [Modem Shell](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html)
      - [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/libraries/modem/at_host.html) library
