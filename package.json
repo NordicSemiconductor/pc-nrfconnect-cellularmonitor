@@ -11,14 +11,14 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": ">=5.0.2"
+        "nrfconnect": ">=5.2.0"
     },
     "main": "dist/bundle.js",
     "nrfConnectForDesktop": {
         "html": "dist/index.html",
         "nrfutil": {
             "device": [
-                "2.6.4"
+                "2.10.2"
             ]
         }
     },
@@ -46,7 +46,7 @@
     "devDependencies": {
         "@mdi/js": "^7.2.96",
         "@mdi/react": "^1.6.1",
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^200.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^210.0.0",
         "@types/redux-mock-store": "^1.0.2",
         "chart.js": "^4.1.2",
         "check-disk-space": "^2.1.0",
@@ -65,6 +65,9 @@
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "bundledDependencies": [
+        "@nordicsemiconductor/nrf-monitor-lib-js"
+    ],
+    "bundleDependencies": [
         "@nordicsemiconductor/nrf-monitor-lib-js"
     ]
 }
