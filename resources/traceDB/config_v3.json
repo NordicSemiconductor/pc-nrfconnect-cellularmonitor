@@ -60,6 +60,22 @@
                         },
                         "uuid": "8265da3c-ab9d-44b2-bbec-b1650c7c5a99",
                         "version": "2.0.2"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.3_trace-db.json",
+                            "sha256": "7e0102dfbfdf8b9d4b905c05906674310c4c7a8926a718d17e8978d5834be64d"
+                        },
+                        "uuid": "4967d395-ed7b-434a-acdc-741d1aba315e",
+                        "version": "2.0.3-FOTA"
+                    },
+                    {
+                        "database": {
+                            "path": "${root}mfw_nrf91x1_2.0.3-FOTA-TEST_trace-db.json",
+                            "sha256": "4d1db2d533b568a531a1db31562f431f406c268783adeea9e383de6ff47ae8c4"
+                        },
+                        "uuid": "f941d3b8-34e9-43ef-8012-c8796e2b8b9a",
+                        "version": "2.0.3"
                     }
                 ]
             },

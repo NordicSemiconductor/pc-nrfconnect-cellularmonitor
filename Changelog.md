@@ -1,4 +1,8 @@
-## 2.4.4 - unreleased
+## 2.5.0 - unreleased
+
+### Added
+
+-   Pre-bundled Modem Trace Databases: v2.0.3, and v2.0.3-FOTA.
 
 ### Fixed
 
