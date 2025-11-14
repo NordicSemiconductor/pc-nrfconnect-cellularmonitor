@@ -22,7 +22,7 @@ const readCommandPackets = [
 test('CIMI read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(convertPackets([test.command, test.response]).imsi).toEqual(
-            test.expected
+            test.expected,
         );
     });
 });

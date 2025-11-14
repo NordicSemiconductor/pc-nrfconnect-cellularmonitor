@@ -52,7 +52,7 @@ export const processor: Processor<'+CFUN'> = {
                     ...state,
                     functionalMode: parseInt(
                         packet.payload,
-                        10
+                        10,
                     ) as FunctionalMode,
                 };
             }

@@ -78,7 +78,7 @@ export const processor: Processor<'%XMONITOR'> = {
                     granted: parsePSMValues(
                         PsmValues.activeTime,
                         PsmValues.periodicTau,
-                        PsmValues.periodicTauExtended
+                        PsmValues.periodicTauExtended,
                     ),
                 },
             };
@@ -90,20 +90,20 @@ export const processor: Processor<'%XMONITOR'> = {
 const parsePSMValues = (
     activeTime: string,
     periodicTau?: string,
-    periodicTauExtended?: string
+    periodicTauExtended?: string,
 ) => {
     const PsmValues: PowerSavingModeEntries = {};
     PsmValues.T3324 = parsePowerSavingMode(activeTime, TAU_TYPES.ACTIVE_TIMER);
     if (periodicTauExtended !== undefined) {
         PsmValues.T3412Extended = parsePowerSavingMode(
             periodicTauExtended,
-            TAU_TYPES.SLEEP_INTERVAL
+            TAU_TYPES.SLEEP_INTERVAL,
         );
     }
     if (periodicTau !== undefined) {
         PsmValues.T3412 = parsePowerSavingMode(
             periodicTau,
-            TAU_TYPES.SLEEP_INTERVAL
+            TAU_TYPES.SLEEP_INTERVAL,
         );
     }
 

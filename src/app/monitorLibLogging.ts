@@ -13,7 +13,7 @@ export function enableNrfmlLogging() {
         () => logger.debug('Logging from nrf-monitor-lib has been disabled.'),
         logEvent => {
             logger.debug(logEvent.message);
-        }
+        },
     );
     setNrfmlLogLevel(getIsLoggingVerbose());
 }
@@ -24,7 +24,7 @@ export function setNrfmlLogLevel(verbose: boolean) {
 
     if (logLevel > 0) {
         logger.info(
-            `nrf-monitor-lib logging with is enabled with log level: ${logLevel}.`
+            `nrf-monitor-lib logging with is enabled with log level: ${logLevel}.`,
         );
     } else {
         logger.info('nrf-monitor-lib logging is disabled.');

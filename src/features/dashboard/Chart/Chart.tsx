@@ -174,7 +174,7 @@ export default () => {
                     onLiveChanged: live => dispatch(setLive(live)),
                     onRangeChanged: (
                         relativeRange,
-                        referenceNrfmlTimestamp
+                        referenceNrfmlTimestamp,
                     ) => {
                         dispatch(setSelectedTime(referenceNrfmlTimestamp));
                         setRange(relativeRange);
@@ -190,7 +190,7 @@ export default () => {
                 },
             },
         }),
-        [dispatch, traceEventFilter]
+        [dispatch, traceEventFilter],
     );
 
     const sectionHeight = 22;

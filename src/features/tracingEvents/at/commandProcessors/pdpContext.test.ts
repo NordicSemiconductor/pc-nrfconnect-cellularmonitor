@@ -24,7 +24,7 @@ test('parse +CGDCONT', () => {
     state = convertPackets([
         atPacket('AT+CGDCONT?'),
         atPacket(
-            '+CGDCONT: 0,"IP","internet","10.0.1.1",0,0\r\n+CGDCONT: 1,"IP","IOT_apn","10.0.1.2",0,0\r\nOK\r\n'
+            '+CGDCONT: 0,"IP","internet","10.0.1.1",0,0\r\n+CGDCONT: 1,"IP","IOT_apn","10.0.1.2",0,0\r\nOK\r\n',
         ),
     ]);
     expect(state.accessPointNames).toEqual({
@@ -47,7 +47,7 @@ test('parse +CGDCONT', () => {
             atPacket('AT+CGDCONT?'),
             atPacket('+CGDCONT: 0,"IP","internet","10.0.1.1",0,0\r\nOK\r\n'),
         ],
-        state
+        state,
     );
     expect(state.accessPointNames).toEqual({
         0: {
@@ -73,7 +73,7 @@ test('parse +CGDCONT', () => {
                     ipv6: '1111:1111:1111:1111:0001:0001:0001:0001',
                 },
             },
-        }
+        },
     );
 
     expect(state.accessPointNames).toEqual({

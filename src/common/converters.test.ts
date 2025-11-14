@@ -30,14 +30,17 @@ test('Single units of duration are shown together', () => {
 
     expected = '1 hour, 1 minute, 1 second';
     expect(secondsToDhms(ONE_HOUR_IN_SECONDS + ONE_MINUTE_IN_SECONDS + 1)).toBe(
-        expected
+        expected,
     );
 
     expected = '1 day, 1 hour, 1 minute, 1 second';
     expect(
         secondsToDhms(
-            ONE_DAY_IN_SECONDS + ONE_HOUR_IN_SECONDS + ONE_MINUTE_IN_SECONDS + 1
-        )
+            ONE_DAY_IN_SECONDS +
+                ONE_HOUR_IN_SECONDS +
+                ONE_MINUTE_IN_SECONDS +
+                1,
+        ),
     ).toBe(expected);
 
     expected = '1 hour, 1 second';
@@ -71,8 +74,8 @@ test('Singular units and Plurals can be combined', () => {
             3 * ONE_DAY_IN_SECONDS +
                 ONE_HOUR_IN_SECONDS +
                 25 * ONE_MINUTE_IN_SECONDS +
-                1
-        )
+                1,
+        ),
     ).toBe(expected);
 });
 

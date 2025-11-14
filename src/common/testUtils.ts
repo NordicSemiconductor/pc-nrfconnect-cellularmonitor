@@ -34,7 +34,7 @@ export const getNrfmlCallbacks = () =>
                 completeCallback: nrfml.CompleteCallback,
                 progressCallback: nrfml.ProgressCallback,
                 dataCallback?: nrfml.DataCallback,
-                jsonCallback?: nrfml.JsonCallback
+                jsonCallback?: nrfml.JsonCallback,
             ) => {
                 resolve({
                     completeCallback,
@@ -43,7 +43,7 @@ export const getNrfmlCallbacks = () =>
                     jsonCallback,
                 });
                 return 1n; // mocked task id
-            }
+            },
         );
     });
 
@@ -54,13 +54,13 @@ export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
                 sinkNames.map(sinkName =>
                     expect.objectContaining({
                         name: sinkName,
-                    })
-                )
+                    }),
+                ),
             ),
         }),
         expect.any(Function),
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
     );
 
     const args = mockedNrfmlStart.mock.calls[0][0];

@@ -41,7 +41,7 @@ const initParameterForTraceDb = (manualDbFilePath?: string) =>
 
 export default (
     state: RootState,
-    source: SourceFormat
+    source: SourceFormat,
 ): InsightInitParameters => ({
     name: 'nrfml-insight-source',
     init_parameters: {
@@ -52,7 +52,7 @@ export default (
         ...initParameterForTraceDb(
             source.type === 'device' && source.autoDetectedManualDbFile
                 ? source.autoDetectedManualDbFile
-                : getManualDbFilePath(state)
+                : getManualDbFilePath(state),
         ),
         chunk_size: CHUNK_SIZE,
     },

@@ -42,13 +42,13 @@ const cpinSetCommand = atPacket('AT+CPIN="1234"');
 test('+CPIN read command responses sets the pinCodeState appropriately', () => {
     readResponseTests.forEach(test => {
         expect(
-            convertPackets([cpinQuestion, test.response]).pinCodeStatus
+            convertPackets([cpinQuestion, test.response]).pinCodeStatus,
         ).toBe(test.expected);
     });
 });
 
 test('+CPIN set command does not disturb state', () => {
     expect(convertPackets([cpinSetCommand, OkPacket]).pinCodeStatus).toBe(
-        'Unknown'
+        'Unknown',
     );
 });

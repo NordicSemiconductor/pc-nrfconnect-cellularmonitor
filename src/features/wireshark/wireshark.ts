@@ -17,11 +17,11 @@ export const WIRESHARK_DOWNLOAD_URL = 'https://www.wireshark.org/download.html';
 const DEFAULT_WINDOWS_WIRESHARK_FOLDER = join(
     'C:',
     'Program Files',
-    'Wireshark'
+    'Wireshark',
 );
 const DEFAULT_WINDOWS_PATH = join(
     DEFAULT_WINDOWS_WIRESHARK_FOLDER,
-    'Wireshark.exe'
+    'Wireshark.exe',
 );
 
 const DEFAULT_MAC_WIRESHARK_FOLDER = join(sep, 'Applications', 'Wireshark.app');
@@ -39,6 +39,7 @@ const validatedSharkPath = (path: string | null) => {
 
     try {
         accessSync(path, constants.X_OK);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
         logger.debug(`Could not locate wireshark executable in ${path}`);
         return null;
@@ -61,7 +62,7 @@ export const defaultSharkPath = () => {
     }
 
     logger.error(
-        `Unable to locate Wireshark because your operating system '${process.platform}' is not supported.`
+        `Unable to locate Wireshark because your operating system '${process.platform}' is not supported.`,
     );
     return null;
 };
@@ -69,6 +70,7 @@ export const defaultSharkPath = () => {
 const locateSharkPathOnLinux = () => {
     try {
         return execSync(`which wireshark`).toString().trim();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
         logger.debug(`Could not locate Wireshark executable`);
         return null;

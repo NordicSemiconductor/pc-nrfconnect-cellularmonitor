@@ -34,7 +34,7 @@ export const processor: Processor<'%CONEVAL'> = {
                     conevalResult: validateConevalResult(parsedPayload[0]),
                     rrcState: validateRRCState(parsedPayload[1]),
                     conevalEnergyEstimate: validateConevalEnergyEstimate(
-                        parsedPayload[2]
+                        parsedPayload[2],
                     ),
                     signalQuality: {
                         ...state.signalQuality,
@@ -50,10 +50,10 @@ export const processor: Processor<'%CONEVAL'> = {
                         validateCoverageEnhancementLevel(parsedPayload[12]),
                     conevalTXPower: validateNumberValue(parsedPayload[13]),
                     conevalTXRepetitions: validateNumberValue(
-                        parsedPayload[14]
+                        parsedPayload[14],
                     ),
                     conevalRXRepetitions: validateNumberValue(
-                        parsedPayload[15]
+                        parsedPayload[15],
                     ),
                     conevalDLPathLoss: validateNumberValue(parsedPayload[16]),
                 };
@@ -87,7 +87,7 @@ const validateRRCState = (value: string): RRCState => {
 };
 
 const validateConevalEnergyEstimate = (
-    value: string
+    value: string,
 ): ConevalEnergyEstimate => {
     const validValues = [5, 6, 7, 8, 9];
     const numberValue = Number.parseInt(value, 10);
@@ -99,7 +99,7 @@ const validateConevalEnergyEstimate = (
 };
 
 const validateCoverageEnhancementLevel = (
-    value: string
+    value: string,
 ): CoverageEnhancementLevel => {
     const validValues = [0, 1, 2, 3, 255];
     const numberValue = Number.parseInt(value, 10);
@@ -129,7 +129,7 @@ const validateNumberValue = (value: string): number | undefined => {
 const parseSignalQuality = (
     rsrp?: number,
     rsrq?: number,
-    snr?: number
+    snr?: number,
 ): SignalQuality => {
     const result: SignalQuality = {
         rsrp,

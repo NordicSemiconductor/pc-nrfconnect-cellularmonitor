@@ -37,7 +37,7 @@ const setCommandPackets = [
 test('CPINR set commands work as expected', () => {
     setCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.setCommand, test.response]).pinRetries
+            convertPackets([test.setCommand, test.response]).pinRetries,
         ).toEqual(test.expected);
     });
 });

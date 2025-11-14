@@ -25,13 +25,16 @@ export const processor: Processor<'+CGDCONT'> = {
 
                 // Filter out `expired` APNs
                 const activeApns = Object.keys(apnsFromState).filter(apnKey =>
-                    apns.find(apn => `${apn.cid}` === apnKey)
+                    apns.find(apn => `${apn.cid}` === apnKey),
                 );
 
-                state.accessPointNames = activeApns.reduce((acc, apnKey) => {
-                    acc[apnKey] = apnsFromState[apnKey];
-                    return acc;
-                }, {} as { [key: string]: AccessPointName });
+                state.accessPointNames = activeApns.reduce(
+                    (acc, apnKey) => {
+                        acc[apnKey] = apnsFromState[apnKey];
+                        return acc;
+                    },
+                    {} as { [key: string]: AccessPointName },
+                );
 
                 apns.forEach(accessPointName => {
                     const cidAsKey = `${accessPointName.cid}`;

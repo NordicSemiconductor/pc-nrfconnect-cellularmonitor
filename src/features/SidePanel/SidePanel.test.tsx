@@ -87,7 +87,7 @@ describe('Sidepanel functionality', () => {
             startTrace();
 
             await expect(
-                screen.findByText('Detecting modem firmware version')
+                screen.findByText('Detecting modem firmware version'),
             ).resolves.toBeDefined();
         });
 
@@ -95,11 +95,11 @@ describe('Sidepanel functionality', () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
             startTrace();
             expect(
-                screen.getByText('Detecting modem firmware version')
+                screen.getByText('Detecting modem firmware version'),
             ).toBeInTheDocument();
             fireEvent.click((await screen.findAllByText('Close'))[0]);
             expect(
-                screen.queryByText('Detecting modem firmware version')
+                screen.queryByText('Detecting modem firmware version'),
             ).not.toBeInTheDocument();
             expect(screen.getByText('Stop')).toBeInTheDocument();
         });
@@ -124,7 +124,7 @@ describe('Sidepanel functionality', () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
             startTrace();
             expect(
-                await screen.findByText('Detecting modem firmware version')
+                await screen.findByText('Detecting modem firmware version'),
             ).toBeInTheDocument();
             const { progressCallback } = await callbacks;
 
@@ -133,7 +133,7 @@ describe('Sidepanel functionality', () => {
             });
 
             const modal = screen.queryByText(
-                'Detecting modem firmware version'
+                'Detecting modem firmware version',
             );
             expect(modal).not.toBeInTheDocument();
         });

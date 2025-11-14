@@ -76,7 +76,7 @@ const traceSlice = createSlice({
             action: PayloadAction<{
                 taskId: TaskId;
                 progressConfigs: Pick<TraceProgress, 'format' | 'path'>[];
-            }>
+            }>,
         ) => {
             state.taskId = action.payload.taskId;
             state.traceProgress = action.payload.progressConfigs.map(sink => ({
@@ -89,10 +89,10 @@ const traceSlice = createSlice({
         },
         setTraceProgress: (
             state,
-            action: PayloadAction<Pick<TraceProgress, 'path' | 'size'>>
+            action: PayloadAction<Pick<TraceProgress, 'path' | 'size'>>,
         ) => {
             const progressToUpdate = state.traceProgress.find(
-                progress => progress.path === action.payload.path
+                progress => progress.path === action.payload.path,
             );
             if (progressToUpdate != null) {
                 progressToUpdate.size = action.payload.size;
@@ -103,7 +103,7 @@ const traceSlice = createSlice({
         },
         setTraceSourceFilePath: (
             state,
-            action: PayloadAction<string | null>
+            action: PayloadAction<string | null>,
         ) => {
             state.sourceFilePath = action.payload;
         },
@@ -116,7 +116,7 @@ const traceSlice = createSlice({
         },
         setManualDbFilePath: (
             state,
-            action: PayloadAction<string | undefined>
+            action: PayloadAction<string | undefined>,
         ) => {
             state.manualDbFilePath = action.payload;
         },
@@ -132,7 +132,7 @@ const traceSlice = createSlice({
         },
         setShowConflictingSettingsDialog: (
             state,
-            action: PayloadAction<boolean>
+            action: PayloadAction<boolean>,
         ) => {
             state.showConflictingSettingsDialog = action.payload;
         },

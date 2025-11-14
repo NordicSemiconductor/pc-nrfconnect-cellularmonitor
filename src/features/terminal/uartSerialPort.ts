@@ -35,7 +35,7 @@ const LOGGER_PREFIX = 'Terminal Serial Port:';
 export const connectToSerialPort = async (
     dispatch: Dispatch,
     path: string,
-    overwrite = false
+    overwrite = false,
 ) => {
     let createdSerialPort;
     try {
@@ -44,7 +44,7 @@ export const connectToSerialPort = async (
                 path,
                 baudRate: 115200,
             },
-            { overwrite, settingsLocked: false }
+            { overwrite, settingsLocked: false },
         );
     } catch (error) {
         const msg = (error as Error).message;
@@ -52,7 +52,7 @@ export const connectToSerialPort = async (
             dispatch(setShowConflictingSettingsDialog(true));
         } else {
             logger.error(
-                `${LOGGER_PREFIX} Port could not be opened. Verify it is not used by some other applications`
+                `${LOGGER_PREFIX} Port could not be opened. Verify it is not used by some other applications`,
             );
         }
     }
@@ -77,21 +77,21 @@ export const connectToSerialPort = async (
 
         if (isShellMode) {
             logger.debug(
-                `${LOGGER_PREFIX} Detected AT Host Library: Device is in shell mode`
+                `${LOGGER_PREFIX} Detected AT Host Library: Device is in shell mode`,
             );
             dispatch(
                 setShellParser(
                     await hookModemToShellParser(
                         createdSerialPort,
                         xTerminalShellParserWrapper(
-                            new Terminal({ allowProposedApi: true, cols: 999 })
-                        )
-                    )
-                )
+                            new Terminal({ allowProposedApi: true, cols: 999 }),
+                        ),
+                    ),
+                ),
             );
         } else {
             logger.debug(
-                `${LOGGER_PREFIX} Detected AT Host Library: Device is in Line mode`
+                `${LOGGER_PREFIX} Detected AT Host Library: Device is in Line mode`,
             );
             dispatch(removeShellParser());
         }
@@ -107,7 +107,7 @@ export const autoSetUartSerialPort =
     dispatch => {
         if (!device.serialPorts || device.serialPorts.length < 2) {
             logger.debug(
-                `${LOGGER_PREFIX} Fewer than two serial ports exposed, and will therefore not auto-connect.`
+                `${LOGGER_PREFIX} Fewer than two serial ports exposed, and will therefore not auto-connect.`,
             );
             return;
         }
@@ -115,11 +115,11 @@ export const autoSetUartSerialPort =
         if (serialPortPath) {
             connectToSerialPort(dispatch, serialPortPath);
             logger.debug(
-                `${LOGGER_PREFIX} Will attempt to auto-connect to serial port ${serialPortPath}`
+                `${LOGGER_PREFIX} Will attempt to auto-connect to serial port ${serialPortPath}`,
             );
         } else {
             logger.error(
-                `${LOGGER_PREFIX} Serial port found, but could not identify serial port path`
+                `${LOGGER_PREFIX} Serial port found, but could not identify serial port path`,
             );
         }
     };

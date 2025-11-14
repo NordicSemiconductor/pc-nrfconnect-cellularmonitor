@@ -57,7 +57,7 @@ export default () => {
         'LTE-M PAGING TIME WINDOW': {
             value: formatPagingTimeWindow(
                 eDrxLteM?.nwProvidedValue,
-                eDrxLteM?.AcT ?? 4
+                eDrxLteM?.AcT ?? 4,
             ),
         },
 
@@ -70,7 +70,7 @@ export default () => {
         'NB-IOT PAGING TIME WINDOW': {
             value: formatPagingTimeWindow(
                 eDrxNbIot?.nwProvidedValue,
-                eDrxNbIot?.AcT ?? 4
+                eDrxNbIot?.AcT ?? 4,
             ),
         },
     };
@@ -104,7 +104,7 @@ export default () => {
 };
 
 const formatPSMValuesToString = (
-    values: PowerSavingModeValues | undefined
+    values: PowerSavingModeValues | undefined,
 ): string => {
     if (values === undefined) {
         return 'Unknown';
@@ -135,7 +135,7 @@ const formateDrxValuesToString = (bitmask: string | undefined) => {
 
 const formatPagingTimeWindow = (
     bitmask: string | undefined,
-    AcT: 0 | 4 | 5
+    AcT: 0 | 4 | 5,
 ) => {
     if (!bitmask) {
         return 'Unknown';

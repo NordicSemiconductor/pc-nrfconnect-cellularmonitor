@@ -22,13 +22,13 @@ const readCommand = atPacket('AT+CGSN?');
 
 test('+CGSN Test Command should not set the IMEI state', () => {
     expect(
-        convertPackets([testCommand.request, testCommand.response]).IMEI
+        convertPackets([testCommand.request, testCommand.response]).IMEI,
     ).toBeUndefined();
 });
 
 test('+CGSN Set Command should set the IMEI response value in the state', () => {
     expect(convertPackets([setCommand.request, setCommand.response]).IMEI).toBe(
-        setCommand.expected
+        setCommand.expected,
     );
 });
 

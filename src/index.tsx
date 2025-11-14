@@ -43,5 +43,5 @@ render(
             },
         ]}
         documentation={DocumentationSections}
-    />
+    />,
 );

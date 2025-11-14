@@ -49,7 +49,7 @@ export const processor: Processor<'+COPS'> = {
             }
             if (requestType === RequestType.READ && packet.payload) {
                 const { plmnMode, plmnFormat, plmn, AcTState } = getParameters(
-                    packet.payload
+                    packet.payload,
                 );
                 return {
                     ...state,
@@ -72,7 +72,7 @@ export const processor: Processor<'+COPS'> = {
                 }
 
                 const availablePlmns = getAvailablePlmnsFromPayload(
-                    packet.payload
+                    packet.payload,
                 );
 
                 return {

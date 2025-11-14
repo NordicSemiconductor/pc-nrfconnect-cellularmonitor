@@ -45,7 +45,7 @@ export const sendAT =
             await sendCommandShellMode(shellParser);
         } else {
             logger.warn(
-                'Tried to send AT command to device, but no serial port is open'
+                'Tried to send AT command to device, but no serial port is open',
             );
         }
         dispatch(setIsSendingATCommands(false));
@@ -116,11 +116,11 @@ export const getModemVersionFromResponse = (response: string) => {
 
 export const detectDatabaseVersion = async (
     uartSerialPort: SerialPort,
-    shellParser: ShellParser | null
+    shellParser: ShellParser | null,
 ) => {
     if (queue.length) {
         logger.info(
-            'Device is busy, skipping fast modem firmware version check'
+            'Device is busy, skipping fast modem firmware version check',
         );
         return;
     }
@@ -129,12 +129,12 @@ export const detectDatabaseVersion = async (
         try {
             const modemVersionResponse = await sendSingleCommandLineMode(
                 atGetModemVersion,
-                uartSerialPort
+                uartSerialPort,
             );
             return getModemVersionFromResponse(modemVersionResponse);
         } catch (error) {
             logger.debug(
-                `Failed to auto detect modem version using ${atGetModemVersion}: (${error})`
+                `Failed to auto detect modem version using ${atGetModemVersion}: (${error})`,
             );
             return null;
         }
@@ -151,13 +151,13 @@ export const detectDatabaseVersion = async (
                 },
                 onError: error => {
                     logger.warn(
-                        `Error while requesting modem firmware version: "${error}"`
+                        `Error while requesting modem firmware version: "${error}"`,
                     );
                     resolve(null);
                 },
                 onTimeout: timeout => {
                     logger.warn(
-                        `Timed out while requesting modem firmware version: "${timeout}"`
+                        `Timed out while requesting modem firmware version: "${timeout}"`,
                     );
                     resolve(null);
                 },
@@ -171,7 +171,7 @@ export const detectDatabaseVersion = async (
 export const sendSingleCommand = async (
     uartSerialPort: SerialPort | null,
     shellParser: ShellParser | null,
-    command: string
+    command: string,
 ) => {
     if (queue.length) {
         logger.info('Device is busy.');
@@ -183,7 +183,7 @@ export const sendSingleCommand = async (
             return await sendSingleCommandLineMode(command, uartSerialPort);
         } catch (error) {
             logger.debug(
-                `Failed to execute the AT command: ${command}: (${error})`
+                `Failed to execute the AT command: ${command}: (${error})`,
             );
             return null;
         }
@@ -204,7 +204,7 @@ export const sendSingleCommand = async (
                 },
                 onTimeout: timeout => {
                     logger.warn(
-                        `Timed out while executing command: "${timeout}"`
+                        `Timed out while executing command: "${timeout}"`,
                     );
                     resolve(null);
                 },
@@ -220,6 +220,7 @@ export const testIfShellMode = async (serialPort: SerialPort) => {
         await sendSingleCommandLineMode('at AT', serialPort);
         logger.info('Device is in shell mode.');
         return true;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         logger.info('Device is in line mode.');
         return false;

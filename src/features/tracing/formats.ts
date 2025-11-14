@@ -34,7 +34,7 @@ export const sinkEvent = (format: TraceFormat) =>
         raw: EventAction.RAW_TRACE,
         pcap: EventAction.PCAP_TRACE,
         live: EventAction.LIVE_TRACE,
-    }[format] ?? EventAction.UNKNOWN_TRACE);
+    })[format] ?? EventAction.UNKNOWN_TRACE;
 
 export const hasProgress = (format: TraceFormat) => format !== 'live';
 

@@ -10,7 +10,7 @@ const readCommandPackets = [
     {
         command: atPacket('AT%XMODEMUUID'),
         response: atPacket(
-            '%XMODEMUUID: 25c95751-efa4-40d4-8b4a-1dcaab81fac9\r\nOK\r\n'
+            '%XMODEMUUID: 25c95751-efa4-40d4-8b4a-1dcaab81fac9\r\nOK\r\n',
         ),
         expected: '25c95751-efa4-40d4-8b4a-1dcaab81fac9',
     },
@@ -24,7 +24,7 @@ const readCommandPackets = [
 test('XMODEMUUID read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(convertPackets([test.command, test.response]).modemUUID).toEqual(
-            test.expected
+            test.expected,
         );
     });
 });

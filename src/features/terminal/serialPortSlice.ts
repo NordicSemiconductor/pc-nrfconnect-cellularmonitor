@@ -26,7 +26,7 @@ const serialPortSlice = createSlice({
     reducers: {
         setTerminalSerialPort: (
             state,
-            { payload: newSerialPort }: PayloadAction<SerialPort | null>
+            { payload: newSerialPort }: PayloadAction<SerialPort | null>,
         ) => {
             if (state.terminalSerialPort?.path === newSerialPort?.path) return;
             if (state.terminalSerialPort != null) {

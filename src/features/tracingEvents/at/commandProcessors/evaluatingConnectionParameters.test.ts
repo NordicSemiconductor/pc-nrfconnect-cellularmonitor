@@ -10,7 +10,7 @@ test('AT%CONEVAL with rsrp, rsrq, snr equal to 255 yields undefined decibel valu
     const state = convertPackets([
         atPacket('AT%CONEVAL'),
         atPacket(
-            '%CONEVAL: 0,1,5,255,255,255,"011B0780”,"26295",7,1575,3,1,1,23,16,32,130\r\nOK\r\n'
+            '%CONEVAL: 0,1,5,255,255,255,"011B0780”,"26295",7,1575,3,1,1,23,16,32,130\r\nOK\r\n',
         ),
     ]);
 
@@ -40,7 +40,7 @@ const setCommands = {
     commands: [
         atPacket('AT%CONEVAL'),
         atPacket(
-            '%CONEVAL: 0,1,5,8,2,14,"011B0780”,"26295",7,1575,3,1,1,23,16,32,130\r\nOK\r\n'
+            '%CONEVAL: 0,1,5,8,2,14,"011B0780”,"26295",7,1575,3,1,1,23,16,32,130\r\nOK\r\n',
         ),
     ],
     expected: {

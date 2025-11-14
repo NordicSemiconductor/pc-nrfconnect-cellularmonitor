@@ -58,7 +58,7 @@ export const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
 
     if (byteArray.length !== 8) {
         logger.debug(
-            `parseTAUByteToSeconds: Invalid byte string, byte mask is not 8 bits. Length: ${byteArray.length}. Byte string: ${byteString}`
+            `parseTAUByteToSeconds: Invalid byte string, byte mask is not 8 bits. Length: ${byteArray.length}. Byte string: ${byteString}`,
         );
         return -1;
     }
@@ -85,14 +85,14 @@ export const parseTAUByteToSeconds = (byteString: string, type: TAU_TYPES) => {
 
     // Invalid values: deactivated timer returned
     logger.debug(
-        `parseTauByteToSeconds: Invalid value. Type: ${type}. Byte string: ${byteString}`
+        `parseTauByteToSeconds: Invalid value. Type: ${type}. Byte string: ${byteString}`,
     );
     return -1 as never;
 };
 
 export const parsePowerSavingMode = (
     bitmask: string,
-    type: TAU_TYPES
+    type: TAU_TYPES,
 ): PowerSavingModeValues => {
     if (isValidBitmask(bitmask)) {
         const seconds = parseTAUByteToSeconds(bitmask, type);
@@ -185,7 +185,7 @@ const eDRXType = {
 
 export const eDrxPagingTimeWindowToSeconds = (
     bitmask: string,
-    AcT: keyof typeof eDRXType
+    AcT: keyof typeof eDRXType,
 ): number => {
     const type = eDRXType[AcT];
     if (type === 'Off') {

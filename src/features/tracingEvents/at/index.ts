@@ -119,7 +119,7 @@ export default (packet: TraceEvent, state: State): State => {
             return processor.onResponse(
                 parsedPacket,
                 state,
-                getAndResetRequestType()
+                getAndResetRequestType(),
             );
         }
 
@@ -136,7 +136,7 @@ export default (packet: TraceEvent, state: State): State => {
         return responseProcessor.onResponse(
             parsedPacket,
             state,
-            getAndResetRequestType()
+            getAndResetRequestType(),
         );
     }
 
@@ -150,7 +150,7 @@ export type Processor<Command extends string> = {
     onResponse: (
         packet: ParsedPacket,
         state: State,
-        requestType?: RequestType
+        requestType?: RequestType,
     ) => State;
     onRequest?: (packet: ParsedPacket, state: State) => State;
     onNotification?: (packet: ParsedPacket, state: State) => State;
@@ -160,7 +160,7 @@ export type Processor<Command extends string> = {
 export const initialState = (): State =>
     processors.reduce(
         (state, processor) => ({ ...state, ...processor.initialState() }),
-        {} as State
+        {} as State,
     );
 
 type ProcessorCommands = (typeof processors)[number]['command'];
@@ -172,5 +172,5 @@ export type ATCommands = ProcessorCommands extends `${infer CMD}`
 export const documentationMap = processors.reduce(
     (acc, { command, documentation }) =>
         Object.assign(acc, { [`AT${command}`]: documentation }),
-    {} as Record<ATCommands, string>
+    {} as Record<ATCommands, string>,
 );

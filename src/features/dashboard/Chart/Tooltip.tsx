@@ -44,12 +44,12 @@ const getTooltipLeft = (
         unknown
     >,
     tooltip: TooltipModel<'scatter'>,
-    tooltipEl: HTMLDivElement
+    tooltipEl: HTMLDivElement,
 ) => {
     // Restrict by the chart border of the chart or the outermost part of the tooltip arrow
     const min = Math.min(
         chart.chartArea.left,
-        tooltip.caretX - tooltipArrowDiagonal
+        tooltip.caretX - tooltipArrowDiagonal,
     );
     const max =
         Math.max(chart.chartArea.right, tooltip.caretX + tooltipArrowDiagonal) -
@@ -58,7 +58,7 @@ const getTooltipLeft = (
     return (
         Math.min(
             Math.max(tooltip.caretX - tooltipEl.offsetWidth / 2, min),
-            max
+            max,
         ) + chart.canvas.offsetLeft
     );
 };
@@ -68,7 +68,7 @@ const getOrCreateTooltip = (
         (number | Point | [number, number] | BubbleDataPoint | null)[],
         unknown
     >,
-    tooltip: TooltipModel<'scatter'>
+    tooltip: TooltipModel<'scatter'>,
 ) => {
     let tooltipEl = chart.canvas.parentNode?.querySelector('div');
 
@@ -93,7 +93,7 @@ const getOrCreateTooltip = (
             tooltipEl.style.left = `${getTooltipLeft(
                 chart,
                 tooltip,
-                tooltipEl
+                tooltipEl,
             )}px`;
 
             const pointRadius = (
@@ -220,8 +220,8 @@ export const tooltipHandler = (context: {
             Number(
                 tooltipEl.style.left.substring(
                     0,
-                    tooltipEl.style.left.length - 2
-                )
+                    tooltipEl.style.left.length - 2,
+                ),
             ) +
             tooltipArrowDiagonal
         }px`;

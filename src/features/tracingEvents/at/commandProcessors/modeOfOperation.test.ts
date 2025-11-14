@@ -50,7 +50,7 @@ const setCommandPackets = [
 test('CEMODE set commands work as expected', () => {
     setCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation,
         ).toEqual(test.expected);
     });
 });
@@ -58,7 +58,7 @@ test('CEMODE set commands work as expected', () => {
 test('CEMODE read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation,
         ).toEqual(test.expected);
     });
 });
@@ -66,7 +66,7 @@ test('CEMODE read commands work as expected', () => {
 test('CEMODE test commands work as expected', () => {
     testCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).modeOfOperation
+            convertPackets([test.command, test.response]).modeOfOperation,
         ).toEqual(test.expected);
     });
 });

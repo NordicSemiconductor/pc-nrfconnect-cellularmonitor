@@ -70,11 +70,11 @@ export const processor: Processor<'+CGEV'> = {
             if (payload.includes(PacketDomainEvent.ME_PDN_ACT)) {
                 const [cid, reason] = stringMultiTool(
                     payload,
-                    PacketDomainEvent.ME_PDN_ACT
+                    PacketDomainEvent.ME_PDN_ACT,
                 );
                 const apnToUpdate = getAccessPointName(
                     cid,
-                    state.accessPointNames
+                    state.accessPointNames,
                 );
 
                 if (reason != null) {
@@ -99,11 +99,11 @@ export const processor: Processor<'+CGEV'> = {
             if (payload.includes(PacketDomainEvent.NW_ACT)) {
                 const [cid, pcid, eventType] = stringMultiTool(
                     payload,
-                    PacketDomainEvent.NW_ACT
+                    PacketDomainEvent.NW_ACT,
                 );
                 const apnToUpdate = getAccessPointName(
                     cid,
-                    state.accessPointNames
+                    state.accessPointNames,
                 );
                 if (pcid) {
                     apnToUpdate.pcid = pcid;
@@ -124,12 +124,12 @@ export const processor: Processor<'+CGEV'> = {
             if (payload.includes(PacketDomainEvent.NW_PDN_DEACT)) {
                 const [cid] = stringMultiTool(
                     payload,
-                    PacketDomainEvent.NW_PDN_DEACT
+                    PacketDomainEvent.NW_PDN_DEACT,
                 );
 
                 const updatedApns = removeAccessPointName(
                     cid,
-                    state.accessPointNames
+                    state.accessPointNames,
                 );
 
                 return {
@@ -141,12 +141,12 @@ export const processor: Processor<'+CGEV'> = {
             if (payload.includes(PacketDomainEvent.ME_PDN_DEACT)) {
                 const [cid] = stringMultiTool(
                     payload,
-                    PacketDomainEvent.ME_PDN_DEACT
+                    PacketDomainEvent.ME_PDN_DEACT,
                 );
 
                 const updatedApns = removeAccessPointName(
                     cid,
-                    state.accessPointNames
+                    state.accessPointNames,
                 );
 
                 return {
@@ -222,8 +222,8 @@ const getAccessPointName = (cid: number, apns: AccessPointNames) => {
 
 const removeAccessPointName = (
     cid: number,
-    apns: AccessPointNames
+    apns: AccessPointNames,
 ): AccessPointNames =>
     Object.fromEntries(
-        Object.entries(apns).filter(([, value]) => value.cid !== cid)
+        Object.entries(apns).filter(([, value]) => value.cid !== cid),
     );

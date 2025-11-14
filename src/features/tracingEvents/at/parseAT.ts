@@ -54,7 +54,7 @@ const removeStatusFromBody = (body: string): string => {
     if (
         payloadArray.length &&
         validStatus.find(
-            status => status === payloadArray[payloadArray.length - 1]
+            status => status === payloadArray[payloadArray.length - 1],
         )
     ) {
         return payloadArray.slice(0, -1).join('\r\n');
@@ -68,7 +68,7 @@ export const parseAT = (packet: TraceEvent): ParsedPacket => {
     const escapedData = textData.substring(1, textData.length - 1);
 
     const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
-        escapedData
+        escapedData,
     );
     if (match) {
         const [, startsWithAt, command, operator, body] = match;

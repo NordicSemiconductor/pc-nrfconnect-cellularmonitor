@@ -22,7 +22,7 @@ const readCommandPackets = [
 test('HWVERSION read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).hardwareVersion
+            convertPackets([test.command, test.response]).hardwareVersion,
         ).toEqual(test.expected);
     });
 });

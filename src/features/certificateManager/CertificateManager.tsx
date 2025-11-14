@@ -28,13 +28,13 @@ const deleteTLSCredential = async (
     secTag: number,
     type: number,
     uartSerialPort: SerialPort | null,
-    shellParser: ShellParser | null
+    shellParser: ShellParser | null,
 ) => {
     const command = `AT%CMNG=3,${secTag},${type}`;
     const response = await sendSingleCommand(
         uartSerialPort,
         shellParser,
-        command
+        command,
     );
 
     if (response?.includes('OK')) {
@@ -49,13 +49,13 @@ const writeTLSCredential = async (
     type: number,
     content: string,
     uartSerialPort: SerialPort | null,
-    shellParser: ShellParser | null
+    shellParser: ShellParser | null,
 ) => {
     const command = `AT%CMNG=0,${secTag},${type},"${content.trim()}"`;
     const response = await sendSingleCommand(
         uartSerialPort,
         shellParser,
-        command
+        command,
     );
     if (response?.includes('OK')) {
         logger.info('Successfully deleted TLS credential');
@@ -173,7 +173,7 @@ export default ({ active }: { active: boolean }) => {
             info: string,
             type: number,
             content: string,
-            clear: boolean
+            clear: boolean,
         ) {
             if (clear) {
                 logger.info(`Clearing ${info}...`);
@@ -190,7 +190,7 @@ export default ({ active }: { active: boolean }) => {
                         type,
                         content,
                         uartPort,
-                        shellParser
+                        shellParser,
                     );
                 } catch (err) {
                     logger.error((err as Error).message);

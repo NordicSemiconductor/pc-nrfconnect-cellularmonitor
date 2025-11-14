@@ -47,17 +47,17 @@ const slice = createSlice({
         },
         changeTraceEventFilter: (
             state,
-            action: PayloadAction<{ type: eventType; enable: boolean }>
+            action: PayloadAction<{ type: eventType; enable: boolean }>,
         ) => {
             if (action.payload.enable)
                 state.traceEventFilter = EVENT_TYPES.filter(
                     e =>
                         e === action.payload.type ||
-                        state.traceEventFilter.includes(e)
+                        state.traceEventFilter.includes(e),
                 );
             else
                 state.traceEventFilter = state.traceEventFilter.filter(
-                    e => e !== action.payload.type
+                    e => e !== action.payload.type,
                 );
         },
         setLive: (state, action: PayloadAction<boolean>) => {

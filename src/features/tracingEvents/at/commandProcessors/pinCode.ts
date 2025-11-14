@@ -38,7 +38,7 @@ export const processor: Processor<'+CPIN'> = {
                     ...state,
                     pinCodeStatus:
                         allowedStates.find(
-                            allowedState => allowedState === packet.payload
+                            allowedState => allowedState === packet.payload,
                         ) ?? 'Unknown',
                 };
             }

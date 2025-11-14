@@ -28,7 +28,7 @@ export const processor: Processor<'%XDATAPRFL'> = {
     onRequest: (packet, state) => {
         if (packet.payload) {
             const powerLevel = (Object.keys(PowerLevel) as string[]).find(
-                key => key === packet.payload
+                key => key === packet.payload,
             );
             requestedDataProfile = powerLevel
                 ? (getNumber(powerLevel) as PowerLevel)

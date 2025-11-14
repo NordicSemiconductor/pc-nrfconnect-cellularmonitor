@@ -22,7 +22,7 @@ const readCommandPackets = [
 test('CGMR read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).revisionID
+            convertPackets([test.command, test.response]).revisionID,
         ).toEqual(test.expected);
     });
 });

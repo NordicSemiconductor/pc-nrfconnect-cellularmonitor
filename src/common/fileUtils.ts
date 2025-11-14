@@ -20,7 +20,7 @@ export const askForTraceDbFile = () =>
             },
             { name: 'All Files', extensions: ['*'] },
         ],
-        autoDetectDbRootFolder()
+        autoDetectDbRootFolder(),
     );
 
 export const askForTraceFile = () =>
@@ -42,7 +42,7 @@ export const askForWiresharkPath = () => {
                 { name: 'Executable', extensions: ['app'] },
                 { name: 'All Files', extensions: ['*'] },
             ],
-            `/Applications`
+            `/Applications`,
         );
     }
     if (process.platform === 'win32') {
@@ -51,13 +51,13 @@ export const askForWiresharkPath = () => {
                 { name: 'Executable', extensions: ['exe'] },
                 { name: 'All Files', extensions: ['*'] },
             ],
-            `C:\\Program Files`
+            `C:\\Program Files`,
         );
     }
     if (process.platform === 'linux') {
         return askForFile(
             [{ name: 'Executable', extensions: ['*'] }],
-            `/usr/bin/`
+            `/usr/bin/`,
         );
     }
 
@@ -66,7 +66,7 @@ export const askForWiresharkPath = () => {
 
 const askForFile = async (
     filters: FileFilter[],
-    defaultPath = getAppDataDir()
+    defaultPath = getAppDataDir(),
 ) => {
     const selection = await dialog.showOpenDialog(getCurrentWindow(), {
         defaultPath,
@@ -90,5 +90,5 @@ type FileTuple = [FileName, FileDirectory];
 
 export const getNameAndDirectory = (
     filepath: string,
-    ext?: string
+    ext?: string,
 ): FileTuple => [path.basename(filepath, ext), path.dirname(filepath)];

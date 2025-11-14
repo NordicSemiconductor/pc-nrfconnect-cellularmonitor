@@ -23,6 +23,6 @@ export const ErrorPacket = atPacket('ERROR\r\n');
 
 export const convertPackets = (
     packets: TraceEvent[],
-    previousState = initialState()
+    previousState = initialState(),
 ): State =>
     packets.reduce((state, packet) => convert(packet, state), previousState);

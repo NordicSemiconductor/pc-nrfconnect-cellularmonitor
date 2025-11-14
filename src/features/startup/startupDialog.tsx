@@ -25,13 +25,13 @@ import './startupDialog.css';
 const StartupDialog = () => {
     const dispatch = useDispatch();
     const showStartupDialogOnAppStart = useSelector(
-        getShowStartupDialogOnAppStart
+        getShowStartupDialogOnAppStart,
     );
     const showStartupDialog = useSelector(getShowStartupDialog);
 
     const [visible, setVisible] = useState(showStartupDialogOnAppStart);
     const [showOnNextStartup, setShowOnNextStartup] = useState(
-        showStartupDialogOnAppStart
+        showStartupDialogOnAppStart,
     );
 
     useEffect(() => {

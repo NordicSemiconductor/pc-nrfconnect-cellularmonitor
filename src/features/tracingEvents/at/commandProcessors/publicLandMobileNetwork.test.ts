@@ -35,7 +35,7 @@ test('Read +COPS should set the state', () => {
 
     state = convertPackets(
         [atPacket('AT+COPS?'), atPacket('+COPS: 0,2,"26201",7\r\nOK\r\n')],
-        state
+        state,
     );
     expect(state.plmnMode).toBe(0);
     expect(state.plmnFormat).toBe(2);
@@ -44,7 +44,7 @@ test('Read +COPS should set the state', () => {
 
     state = convertPackets(
         [atPacket('AT+COPS?'), atPacket('+COPS: 0,0,"RADIOLINJA",7\r\nOK\r\n')],
-        state
+        state,
     );
     expect(state.plmnMode).toBe(0);
     expect(state.plmnFormat).toBe(0);

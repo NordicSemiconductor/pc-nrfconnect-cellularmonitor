@@ -42,7 +42,7 @@ export default (
     }: {
         detectingTraceDb: boolean;
         displayDetectingTraceDbMessage: boolean;
-    }
+    },
 ) => {
     const detectTraceDB = detectingTraceDb ? makeDetectTraceDB(dispatch) : null;
 
@@ -62,15 +62,15 @@ export default (
                     setTraceProgress({
                         path: progressItem.path,
                         size: progressItem.offset,
-                    })
+                    }),
                 );
             });
             lastUpdate = Date.now();
         } catch (err) {
             logger.debug(
                 `Error in progress callback, discarding sample ${JSON.stringify(
-                    err
-                )}`
+                    err,
+                )}`,
             );
         }
     };

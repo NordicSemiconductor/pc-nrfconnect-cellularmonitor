@@ -32,7 +32,7 @@ export const getParametersFromResponse = (payload?: string) => {
             line
                 .split(',')
                 .map(stringValue => stringValue.trim())
-                .map(parseStringValue)
+                .map(parseStringValue),
         )
         .flat();
 

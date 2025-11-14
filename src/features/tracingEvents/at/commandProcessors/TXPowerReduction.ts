@@ -79,10 +79,10 @@ export const processor: Processor<'%XEMPR'> = {
                             const modeValues = getNumberArray(line);
                             return Object.assign(
                                 txPowerState,
-                                parseToTXReduction(modeValues)
+                                parseToTXReduction(modeValues),
                             );
                         },
-                        {}
+                        {},
                     );
                     return {
                         ...state,

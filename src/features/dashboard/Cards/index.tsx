@@ -31,7 +31,7 @@ const getNewDashboardState = (live: boolean, timestamp: number) => {
                 ...current,
                 ...convert(packet, current),
             }),
-            initialState()
+            initialState(),
         );
     }
 
@@ -42,7 +42,7 @@ const getNewDashboardState = (live: boolean, timestamp: number) => {
                 ...current,
                 ...convert(packet, current),
             }),
-            initialState()
+            initialState(),
         );
 };
 
@@ -67,7 +67,7 @@ export default () => {
             <Sim />
             {accessPointNames != null
                 ? Object.values(accessPointNames).map(apn =>
-                      PacketDomainNetwork(apn)
+                      PacketDomainNetwork(apn),
                   )
                 : null}
             {powerSavingMode !== undefined ? <PowerSavingMode /> : null}

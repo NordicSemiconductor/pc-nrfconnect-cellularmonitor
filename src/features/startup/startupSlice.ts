@@ -31,7 +31,7 @@ const startupSlice = createSlice({
         },
         setShowStartupDialogOnAppStart: (
             state,
-            action: PayloadAction<boolean>
+            action: PayloadAction<boolean>,
         ) => {
             state.showStartupDialogOnAppStart = action.payload;
             setPersistedShowStartupDialogOnAppStart(action.payload);
