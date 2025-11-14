@@ -39,8 +39,7 @@ const validatedSharkPath = (path: string | null) => {
 
     try {
         accessSync(path, constants.X_OK);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+    } catch {
         logger.debug(`Could not locate wireshark executable in ${path}`);
         return null;
     }
@@ -72,8 +71,7 @@ const locateSharkPathOnLinux = () => {
         return execSync(`which wireshark`, { encoding: 'utf8' })
             .toString()
             .trim();
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+    } catch {
         logger.debug(`Could not locate Wireshark executable`);
         return null;
     }

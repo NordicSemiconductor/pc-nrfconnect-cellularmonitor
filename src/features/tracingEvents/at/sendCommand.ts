@@ -220,8 +220,7 @@ export const testIfShellMode = async (serialPort: SerialPort) => {
         await sendSingleCommandLineMode('at AT', serialPort);
         logger.info('Device is in shell mode.');
         return true;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
         logger.info('Device is in line mode.');
         return false;
     }
