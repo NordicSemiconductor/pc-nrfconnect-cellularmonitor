@@ -173,7 +173,7 @@ export default () => {
                 panZoom: {
                     onLiveChanged: (live: boolean) => dispatch(setLive(live)),
                     onRangeChanged: (
-                        relativeRange: { min: 0; max: 0 },
+                        relativeRange: { min: number; max: number },
                         referenceNrfmlTimestamp: number,
                     ) => {
                         dispatch(setSelectedTime(referenceNrfmlTimestamp));
