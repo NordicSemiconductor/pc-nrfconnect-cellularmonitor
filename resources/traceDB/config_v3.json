@@ -35,7 +35,7 @@
                             "sha256": "03bb118196e6dd3d57c57710a96dab6a44e072b8ab5930c4f161ffe4bc835ab1"
                         },
                         "uuid": "9e5305b2-d7c6-4948-afe0-756a382016bf",
-                        "version": "2.0.1-FOTA"
+                        "version": "2.0.1"
                     },
                     {
                         "database": {
@@ -43,7 +43,7 @@
                             "sha256": "21a93ead9b8cf9f854d14aded126d66a91ca087f8bdafce38e687509b4eb4312"
                         },
                         "uuid": "02a775b0-e29d-41cf-865f-36d1233d6ecd",
-                        "version": "2.0.1"
+                        "version": "2.0.1-FOTA"
                     },
                     {
                         "database": {
@@ -51,7 +51,7 @@
                             "sha256": "9472bb51e5bbae9c7759252ac83e97ec145f10bd184b5cfc1c634004ca1da67f"
                         },
                         "uuid": "320176d5-9f40-45fc-923b-2661ec18d547",
-                        "version": "2.0.2-FOTA"
+                        "version": "2.0.2"
                     },
                     {
                         "database": {
@@ -59,7 +59,7 @@
                             "sha256": "fe5ba2705124590a6748cce4ee20dc38fe4811e5bbf86823b622982f0bd686cb"
                         },
                         "uuid": "8265da3c-ab9d-44b2-bbec-b1650c7c5a99",
-                        "version": "2.0.2"
+                        "version": "2.0.2-FOTA"
                     },
                     {
                         "database": {
@@ -67,7 +67,7 @@
                             "sha256": "7e0102dfbfdf8b9d4b905c05906674310c4c7a8926a718d17e8978d5834be64d"
                         },
                         "uuid": "4967d395-ed7b-434a-acdc-741d1aba315e",
-                        "version": "2.0.3-FOTA"
+                        "version": "2.0.3"
                     },
                     {
                         "database": {
@@ -75,7 +75,7 @@
                             "sha256": "4d1db2d533b568a531a1db31562f431f406c268783adeea9e383de6ff47ae8c4"
                         },
                         "uuid": "f941d3b8-34e9-43ef-8012-c8796e2b8b9a",
-                        "version": "2.0.3"
+                        "version": "2.0.3-FOTA"
                     }
                 ]
             },
