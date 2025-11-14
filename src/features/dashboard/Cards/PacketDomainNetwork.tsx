@@ -27,7 +27,7 @@ export default ({
         'PDP TYPE': { value: pdnType ?? 'Unknown' },
         'PDP TYPE RAW': { value: rawPDNType ?? 'Unknown' },
         'IPV4 ADDRESS': { value: ipv4 ?? 'Unknown' },
-        'IPV6 ADDRESS': { value: `${ipv6}` ?? 'Unknown' },
+        'IPV6 ADDRESS': { value: ipv6 ?? 'Unknown' },
         INFO: { value: info ?? 'Unknown' },
         CONNECTION: { value: connection ?? 'Unknown' },
         'CONTEXT ID': { value: cid ?? 'Unknown' },

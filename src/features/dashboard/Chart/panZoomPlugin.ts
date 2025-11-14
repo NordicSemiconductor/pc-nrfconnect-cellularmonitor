@@ -13,6 +13,7 @@ import type {
 } from 'chart.js';
 
 import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
+import { ChartWithZoom } from './chart-type';
 import {
     defaultOptions,
     getState,
@@ -27,6 +28,7 @@ declare global {
         findLast(callback: (item: T) => boolean): T | undefined;
     }
 }
+
 if (!Array.prototype.reverseMap) {
     // eslint-disable-next-line no-extend-native
     Array.prototype.reverseMap = function reverseMap<T, R>(
@@ -268,7 +270,7 @@ const setupLiveInterval = (chart: Chart) => {
 
 export default {
     id: 'panZoom',
-    start(chart: Chart) {
+    start(chart: ChartWithZoom) {
         initChart(chart);
         tracePacketEvents.on('stop-process', () => {
             if (liveIntervalId) {
@@ -290,7 +292,7 @@ export default {
             updateRange(chart, getRange(chart));
             chart.update('none');
         });
-        chart.zoom = (resolution, offset) => {
+        chart.zoom = (resolution: number, offset: number) => {
             const { options } = getState(chart);
             // Necessary as options.resolution is not correct during the very start.
             const currentResolution =
@@ -373,10 +375,8 @@ export default {
             let max: number;
             options.resolution = defaultOptions(mode).resolution;
             options.resolutionLimits =
-                (chart.options.plugins?.panZoom?.resolutionLimits as {
-                    min: number;
-                    max: number;
-                }) ?? defaultOptions(mode).resolutionLimits;
+                chart.options.plugins?.panZoom?.resolutionLimits ??
+                defaultOptions(mode).resolutionLimits;
 
             const filteredData = data.filter(e =>
                 options.traceEventFilter.includes(e.format),
@@ -414,7 +414,7 @@ export default {
             }
         };
     },
-    afterInit(chart) {
+    afterInit(chart: ChartWithZoom) {
         initRange(chart);
 
         const { canvas } = chart.ctx;

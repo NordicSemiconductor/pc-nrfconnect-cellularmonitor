@@ -16,6 +16,15 @@ import {
 import { EventColours } from '../../tracing/formats';
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 
+export type TooltipContext = {
+    chart: Chart<
+        keyof ChartTypeRegistry,
+        (number | Point | [number, number] | BubbleDataPoint | null)[],
+        unknown
+    >;
+    tooltip: TooltipModel<'scatter'>;
+};
+
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
     day: '2-digit',
     month: '2-digit',
@@ -129,14 +138,7 @@ const getOrCreateTooltip = (
     return tooltipEl;
 };
 
-export const tooltipHandler = (context: {
-    chart: Chart<
-        keyof ChartTypeRegistry,
-        (number | Point | [number, number] | BubbleDataPoint | null)[],
-        unknown
-    >;
-    tooltip: TooltipModel<'scatter'>;
-}) => {
+export const tooltipHandler = (context: TooltipContext) => {
     const { chart, tooltip } = context;
     const { dataPoints } = tooltip;
     const tooltipEl = getOrCreateTooltip(chart, tooltip);

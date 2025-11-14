@@ -69,7 +69,9 @@ export const defaultSharkPath = () => {
 
 const locateSharkPathOnLinux = () => {
     try {
-        return execSync(`which wireshark`).toString().trim();
+        return execSync(`which wireshark`, { encoding: 'utf8' })
+            .toString()
+            .trim();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
         logger.debug(`Could not locate Wireshark executable`);
@@ -80,7 +82,7 @@ const locateSharkPathOnLinux = () => {
 export const openInWireshark =
     (pcapPath: string): AppThunk<RootState> =>
     () => {
-        const path = getWiresharkPath();
+        const path = getWiresharkPath() as string;
         const wiresharkPath = findWireshark(path);
 
         if (wiresharkPath == null) {
@@ -98,7 +100,7 @@ export const openInWireshark =
 let wiresharkDetected: boolean | undefined;
 export const isWiresharkInstalled = () => {
     if (wiresharkDetected !== undefined) return wiresharkDetected;
-    const path = getWiresharkPath();
+    const path = getWiresharkPath() as string;
     wiresharkDetected = findWireshark(path) !== null;
     return wiresharkDetected;
 };
