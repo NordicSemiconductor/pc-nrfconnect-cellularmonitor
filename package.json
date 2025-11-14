@@ -18,7 +18,7 @@
         "html": "dist/index.html",
         "nrfutil": {
             "device": [
-                "2.10.2"
+                "2.15.0"
             ]
         }
     },
@@ -46,7 +46,7 @@
     "devDependencies": {
         "@mdi/js": "^7.2.96",
         "@mdi/react": "^1.6.1",
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^210.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^239.0.0",
         "@types/redux-mock-store": "^1.0.2",
         "chart.js": "^4.1.2",
         "check-disk-space": "^2.1.0",
@@ -59,9 +59,6 @@
     },
     "dependencies": {
         "@nordicsemiconductor/nrf-monitor-lib-js": "^0.8.7"
-    },
-    "eslintConfig": {
-        "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
     },
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "bundledDependencies": [
