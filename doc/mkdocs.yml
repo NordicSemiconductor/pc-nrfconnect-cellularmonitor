@@ -68,5 +68,8 @@ nav:
   - Viewing RTT modem traces: viewing_rtt.md
   - Memfault and modem trace in production: memfault_in_production.md
   - Managing modem credentials: managing_credentials.md
+  - Programming devices:
+    Programming the nRF9160 DK firmware: programming_91dk
+    Programming the Thingy:91 firmware: programming_thingy91
   - Troubleshooting: troubleshooting.md
   - Revision history: revision_history.md
