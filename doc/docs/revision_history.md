@@ -2,6 +2,7 @@
 
 | Date       | Description    |
 |------------|----------------|
+| November 2025 | - Added the [Programming the nRF9160 DK firmware](programming_91dk.md) page. <br/> - Added the [Programming Nordic Thingy:91 firmware](programming_thingy91.md) page. |
 | May 2025   | - Added Nordic Thingy:91 X™ to the list of devices in [Minimum requirements and limitations](./requirements.md).<br/>- Updated  [software requirements](requirements.md#software-requirements) with additional information for clarity (no new software requirements were added).<br/>- Updated information about **Program device** in [Overview and user interface](overview.md#program-device) and [Troubleshooting](./troubleshooting.md#i-do-not-see-program-device). |
 | January 2025   | Added the [Application source code](./index.md#application-source-code) section on the [Home](./index.md) page |
 | November 2024 | Editorial changes. |
