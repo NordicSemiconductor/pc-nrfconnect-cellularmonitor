@@ -117,7 +117,7 @@ export const programDevice = async (
             }
         }
 
-        logger.info('Programming complete, reseting device.');
+        logger.info('Programming complete, resetting device.');
         reset(device);
     } catch (error) {
         telemetry.sendErrorReport('Failed to program a sample');
