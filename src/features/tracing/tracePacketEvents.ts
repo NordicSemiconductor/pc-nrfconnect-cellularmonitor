@@ -64,7 +64,7 @@ const packetsToEvent = (packet: Packet) =>
         timestamp: (packet.timestamp?.value ?? 0) / 1000,
         data: packet.packet_data,
         sequenceNumber: packet.sequence_number,
-    } as TraceEvent);
+    }) as TraceEvent;
 
 tracePacketEvents.on('start-process', () => resetTraceEvents());
 

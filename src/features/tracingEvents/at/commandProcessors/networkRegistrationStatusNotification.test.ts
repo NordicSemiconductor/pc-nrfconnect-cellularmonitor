@@ -82,7 +82,7 @@ const testResponses = [
     },
     {
         response: atPacket(
-            `+CEREG: 2,1,"002F","0012BEEF",7,,,"00000001","00100010"\r\nOK\r\n`
+            `+CEREG: 2,1,"002F","0012BEEF",7,,,"00000001","00100010"\r\nOK\r\n`,
         ),
         expected: {
             networkStatus: 1,
@@ -124,7 +124,7 @@ test('+CEREG set commands will appropriately set the notifications status in sta
     setCommands.forEach(test => {
         const result = convertPackets(test.commands);
         expect(result.networkStatusNotifications).toBe(
-            test.expected.networkStatusNotifications
+            test.expected.networkStatusNotifications,
         );
     });
 });

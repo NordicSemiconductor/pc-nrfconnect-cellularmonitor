@@ -32,7 +32,7 @@ export const processor: Processor<'+CEREG'> = {
             if (payload) {
                 setPayload = Number.parseInt(
                     payload[0],
-                    10
+                    10,
                 ) as NetworkStatusNotifications;
             }
         }
@@ -48,7 +48,7 @@ export const processor: Processor<'+CEREG'> = {
                 return handleNetworkRegPayload(
                     'response',
                     packet.payload,
-                    state
+                    state,
                 );
             }
         }
@@ -60,7 +60,7 @@ export const processor: Processor<'+CEREG'> = {
                 return handleNetworkRegPayload(
                     'notification',
                     packet.payload,
-                    state
+                    state,
                 );
             }
         }
@@ -134,7 +134,7 @@ const RESPONSE_INDEXES = {
 const handleNetworkRegPayload = (
     requestType: ResponseType,
     payload: string,
-    state: State
+    state: State,
 ): State => {
     const index = RESPONSE_INDEXES[requestType];
     const responseArray = getParametersFromResponse(payload);
@@ -171,7 +171,7 @@ const handleNetworkRegPayload = (
                 bitmask: T3324Bitmask,
                 value: parseTAUByteToSeconds(
                     T3324Bitmask,
-                    TAU_TYPES.ACTIVE_TIMER
+                    TAU_TYPES.ACTIVE_TIMER,
                 ),
                 unit: 'seconds',
             };
@@ -183,7 +183,7 @@ const handleNetworkRegPayload = (
                 bitmask: T3412ExtendedBitmask,
                 value: parseTAUByteToSeconds(
                     T3412ExtendedBitmask,
-                    TAU_TYPES.SLEEP_INTERVAL
+                    TAU_TYPES.SLEEP_INTERVAL,
                 ),
                 unit: 'seconds',
             };

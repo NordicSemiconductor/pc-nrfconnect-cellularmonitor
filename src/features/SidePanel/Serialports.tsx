@@ -39,7 +39,7 @@ export default () => {
     }));
 
     const selectedItem = dropdownItems.find(
-        item => item.value === selectedSerialPort
+        item => item.value === selectedSerialPort,
     ) ?? { label: '', value: '' };
 
     if (selectedSerialPort == null) return null;

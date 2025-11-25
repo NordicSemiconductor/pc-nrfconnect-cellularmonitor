@@ -165,5 +165,5 @@ export const recommendedAt = [
 ];
 
 export const commandHasRecommeneded = (
-    command: string
+    command: string,
 ): command is keyof typeof recommendedAT => command in recommendedAT;

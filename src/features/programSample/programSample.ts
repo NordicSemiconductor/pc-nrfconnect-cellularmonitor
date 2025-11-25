@@ -28,7 +28,7 @@ export type SupportedDeviceVersion = 'nRF9160' | 'nRF91x1' | 'AllDevices';
 
 export const getDeviceKeyForTraceDatabaseEntries = (
     device?: Device,
-    deviceInfo?: DeviceInfo
+    deviceInfo?: DeviceInfo,
 ): SupportedDeviceVersion => {
     // generic check should work on no nordic DKs
     const deviceVersion = deviceInfo?.jlink?.deviceVersion;
@@ -76,7 +76,7 @@ export const is9131DK = (device?: Device) =>
 export const programModemFirmware = async (
     device: Device,
     modemFirmware: ModemFirmware,
-    progress: (progress: SampleProgress) => void
+    progress: (progress: SampleProgress) => void,
 ) => {
     try {
         telemetry.sendEvent(EventAction.PROGRAM_SAMPLE, {
@@ -86,7 +86,7 @@ export const programModemFirmware = async (
         await programModem(device, modemFirmware, progress);
     } catch (error) {
         telemetry.sendErrorReport(
-            `Failed to program modem firmware: ${modemFirmware.file}`
+            `Failed to program modem firmware: ${modemFirmware.file}`,
         );
         logger.error(error);
         throw error;
@@ -96,7 +96,7 @@ export const programModemFirmware = async (
 export const programDevice = async (
     device: Device,
     firmwares: Firmware[],
-    progress: (progress: SampleProgress) => void
+    progress: (progress: SampleProgress) => void,
 ) => {
     try {
         // eslint-disable-next-line no-restricted-syntax
@@ -117,7 +117,7 @@ export const programDevice = async (
             }
         }
 
-        logger.info('Programming complete, reseting device.');
+        logger.info('Programming complete, resetting device.');
         reset(device);
     } catch (error) {
         telemetry.sendErrorReport('Failed to program a sample');
@@ -129,7 +129,7 @@ export const programDevice = async (
 const programModem = (
     device: Device,
     firmware: Firmware | ModemFirmware,
-    progressCb: (progress: SampleProgress) => void
+    progressCb: (progress: SampleProgress) => void,
 ) =>
     program(device, downloadedFilePath(firmware.file), progress => {
         progressCb({ firmware, progress });
@@ -138,7 +138,7 @@ const programModem = (
 const programFirmware = (
     device: Device,
     firmware: Firmware,
-    progressCb: (progress: SampleProgress) => void
+    progressCb: (progress: SampleProgress) => void,
 ) =>
     program(
         device,
@@ -146,5 +146,5 @@ const programFirmware = (
         progress => {
             progressCb({ firmware, progress });
         },
-        'Application'
+        'Application',
     );

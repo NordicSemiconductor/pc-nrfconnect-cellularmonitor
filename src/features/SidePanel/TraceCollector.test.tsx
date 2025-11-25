@@ -35,11 +35,11 @@ mockedCheckDiskSpace.mockImplementation(
     () =>
         new Promise(resolve => {
             resolve({ free: 0, size: 0 });
-        })
+        }),
 );
 
 const serialPortActions = (
-    formats: Parameters<typeof setTraceFormats>[0] = []
+    formats: Parameters<typeof setTraceFormats>[0] = [],
 ) => [
     setTraceFormats(formats),
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
@@ -75,12 +75,12 @@ describe('TraceCollector', () => {
 
         it('should not display warning if wireshark is installed and live tracing is selected', () => {
             jest.spyOn(wireshark, 'findWireshark').mockReturnValue(
-                'path/to/wireshark'
+                'path/to/wireshark',
             );
             render(<TraceCollector />, serialPortActions(['live']));
 
             expect(
-                screen.queryByText('Wireshark not detected')
+                screen.queryByText('Wireshark not detected'),
             ).not.toBeInTheDocument();
         });
     });
@@ -92,7 +92,7 @@ describe('TraceCollector', () => {
         fireEvent.click(screen.getByText('Start'));
 
         expect(
-            screen.getByText('Could not find Wireshark')
+            screen.getByText('Could not find Wireshark'),
         ).toBeInTheDocument();
         expect(screen.getByText('Start')).toBeInTheDocument();
         expect(screen.queryByText('Stop')).not.toBeInTheDocument();
@@ -122,7 +122,7 @@ describe('TraceCollector', () => {
 
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
-                'nrfml-pcap-sink'
+                'nrfml-pcap-sink',
             );
         });
 
@@ -136,7 +136,7 @@ describe('TraceCollector', () => {
             expectNrfmlStartCalledWithSinks(
                 'nrfml-raw-file-sink',
                 'nrfml-pcap-sink',
-                'nrfml-wireshark-named-pipe-sink'
+                'nrfml-wireshark-named-pipe-sink',
             );
         });
     });

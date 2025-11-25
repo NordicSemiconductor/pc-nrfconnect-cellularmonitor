@@ -4,17 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type { ChartType } from 'chart.js';
+import { Chart as ChartBase } from 'chart.js'; // Import the base Chart class
 
 import type { TraceEvent } from '../../tracing/tracePacketEvents';
-import type { PanPluginOptions } from './state';
 
 declare module 'chart.js' {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface PluginOptionsByType<TType extends ChartType> {
-        panZoom?: PanPluginOptions;
-    }
-
     interface Chart {
         zoom: (resolution: number, centerOffset: number) => void;
         addData: (data: TraceEvent[]) => void;
@@ -23,3 +17,5 @@ declare module 'chart.js' {
         setMode: (mode: 'Event' | 'Time') => void;
     }
 }
+
+export type ChartWithZoom = ChartBase;

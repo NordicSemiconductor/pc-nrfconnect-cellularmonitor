@@ -83,8 +83,8 @@ const openDevice =
 
         dispatch(
             setAvailableSerialPorts(
-                device.serialPorts?.map(port => port.comName ?? '') ?? []
-            )
+                device.serialPorts?.map(port => port.comName ?? '') ?? [],
+            ),
         );
 
         dispatch(autoSetTraceSerialPort(device));
@@ -92,7 +92,7 @@ const openDevice =
 
         if (is9161DK(device)) {
             logger.warn(
-                'Modem tracing can become unresponsive when resetting the device multiple times. An automatic firmware update to resolve the issue is being worked on.'
+                'Modem tracing can become unresponsive when resetting the device multiple times. An automatic firmware update to resolve the issue is being worked on.',
             );
         }
     };
@@ -113,7 +113,7 @@ const autoSetTraceSerialPort =
             // Verify that the port is available on the selected device.
             if (
                 device.serialPorts.findIndex(
-                    port => port.comName === persistedPath
+                    port => port.comName === persistedPath,
                 ) !== -1
             ) {
                 dispatch(setTraceSerialPort(persistedPath));

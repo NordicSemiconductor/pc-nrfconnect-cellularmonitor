@@ -203,10 +203,10 @@ const ProgramSample = ({
     const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
 
     const [selectedFirmware, setSelectedFirmware] = useState(
-        sample.fw.map(fw => ({ ...fw, selected: true }))
+        sample.fw.map(fw => ({ ...fw, selected: true })),
     );
     const [progressMap, setProgressMap] = useState(
-        new Map(sample.fw.map(fw => [fw, 0]))
+        new Map(sample.fw.map(fw => [fw, 0])),
     );
 
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -221,7 +221,7 @@ const ProgramSample = ({
                 timeout: 60_000,
                 when: 'always',
                 onFail: setErrorMessage,
-            })
+            }),
         );
 
         return () => {
@@ -233,11 +233,11 @@ const ProgramSample = ({
         ({ firmware, progress }: SampleProgress) => {
             progressMap.set(
                 firmware as Firmware,
-                progress.totalProgressPercentage
+                progress.totalProgressPercentage,
             );
             setProgressMap(new Map(progressMap.entries()));
         },
-        [progressMap]
+        [progressMap],
     );
 
     const toggleFirmwareChecked =
@@ -282,7 +282,7 @@ const ProgramSample = ({
                                 className="btn btn-link"
                                 onClick={() =>
                                     shell.openPath(
-                                        dirname(downloadedFilePath(fw.file))
+                                        dirname(downloadedFilePath(fw.file)),
                                     )
                                 }
                             >
@@ -329,7 +329,7 @@ const ProgramSample = ({
                     onClick={async () => {
                         if (!device) {
                             throw new Error(
-                                'Device must be selected in order to program firmware'
+                                'Device must be selected in order to program firmware',
                             );
                         }
 
@@ -345,7 +345,7 @@ const ProgramSample = ({
                             await programDevice(
                                 device,
                                 selectedFirmware.filter(fw => fw.selected),
-                                progressCb
+                                progressCb,
                             );
 
                             setTimeout(() => {
@@ -359,7 +359,7 @@ const ProgramSample = ({
                         } catch (error) {
                             logger.error(error);
                             setErrorMessage(
-                                'Unable to program device, please check the log.'
+                                'Unable to program device, please check the log.',
                             );
                             setStage('failed');
                         }
@@ -417,7 +417,7 @@ const ProgramModem = ({
                 timeout: 60_000,
                 when: 'always',
                 onFail: setErrorMessage,
-            })
+            }),
         );
 
         return () => {
@@ -490,8 +490,10 @@ const ProgramModem = ({
                                 onClick={() =>
                                     shell.openPath(
                                         dirname(
-                                            downloadedFilePath(selectedMfw.file)
-                                        )
+                                            downloadedFilePath(
+                                                selectedMfw.file,
+                                            ),
+                                        ),
                                     )
                                 }
                             >
@@ -532,13 +534,13 @@ const ProgramModem = ({
                         onClick={async () => {
                             if (!device) {
                                 throw new Error(
-                                    'Device must be selected in order to program firmware'
+                                    'Device must be selected in order to program firmware',
                                 );
                             }
 
                             if (!selectedMfw) {
                                 throw new Error(
-                                    'Modem firmware must be selected in order to program it'
+                                    'Modem firmware must be selected in order to program it',
                                 );
                             }
 
@@ -553,7 +555,7 @@ const ProgramModem = ({
                                 await programModemFirmware(
                                     device,
                                     selectedMfw,
-                                    progressCb
+                                    progressCb,
                                 );
 
                                 setTimeout(() => {
@@ -567,7 +569,7 @@ const ProgramModem = ({
                             } catch (error) {
                                 logger.error(error);
                                 setErrorMessage(
-                                    'Unable to program device, please check the log.'
+                                    'Unable to program device, please check the log.',
                                 );
                                 setStage('failed');
                             }

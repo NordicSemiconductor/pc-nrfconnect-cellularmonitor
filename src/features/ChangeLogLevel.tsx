@@ -18,7 +18,7 @@ import { setNrfmlLogLevel } from '../app/monitorLibLogging';
 export default () => {
     const isVerboseLoggingFromShared = useSelector(getIsVerboseLogging);
     const [isVerboseLogging, setIsVerboseLogging] = useState(
-        isVerboseLoggingFromShared
+        isVerboseLoggingFromShared,
     );
 
     if (isVerboseLoggingFromShared !== isVerboseLogging) {

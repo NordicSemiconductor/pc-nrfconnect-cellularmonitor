@@ -77,7 +77,7 @@ describe('nrfml', () => {
     describe('tracing', () => {
         beforeEach(() => {
             jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(
-                '2000-01-01T00:00:00.000Z'
+                '2000-01-01T00:00:00.000Z',
             );
             nrfml.start.mockClear();
         });
@@ -98,7 +98,7 @@ describe('nrfml', () => {
                                 format: 'pcap',
                                 path: path.join(
                                     mockedDataDir,
-                                    'trace-2000-01-01T00-00-00.000Z.pcapng'
+                                    'trace-2000-01-01T00-00-00.000Z.pcapng',
                                 ),
                             },
                         ],
@@ -123,7 +123,7 @@ describe('nrfml', () => {
                                 format: 'raw',
                                 path: path.join(
                                     mockedDataDir,
-                                    'trace-2000-01-01T00-00-00.000Z.mtrace'
+                                    'trace-2000-01-01T00-00-00.000Z.mtrace',
                                 ),
                             },
                         ],
@@ -148,7 +148,7 @@ describe('nrfml', () => {
                                 format: 'raw',
                                 path: path.join(
                                     mockedDataDir,
-                                    'trace-2000-01-01T00-00-00.000Z.mtrace'
+                                    'trace-2000-01-01T00-00-00.000Z.mtrace',
                                 ),
                             },
                         ],
@@ -212,7 +212,7 @@ describe('nrfml', () => {
             const rawConfig = sinkConfig(
                 state,
                 { type: 'file', path: 'some/path.mtrace' },
-                'raw'
+                'raw',
             );
             expect(rawConfig).toEqual({
                 name: 'nrfml-raw-file-sink',
@@ -226,7 +226,7 @@ describe('nrfml', () => {
             const liveConfig = sinkConfig(
                 state,
                 { type: 'file', path: 'some/path.mtrace' },
-                'live'
+                'live',
             );
             expect(liveConfig).toEqual({
                 name: 'nrfml-wireshark-named-pipe-sink',
@@ -243,7 +243,7 @@ describe('nrfml', () => {
             const pcapConfig = sinkConfig(
                 state,
                 { type: 'file', path: 'some/path.mtrace' },
-                'pcap'
+                'pcap',
             );
             expect(pcapConfig).toEqual({
                 name: 'nrfml-pcap-sink',

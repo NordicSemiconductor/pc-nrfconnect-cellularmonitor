@@ -10,7 +10,7 @@ import { atPacket, convertPackets } from '../testUtils';
 test('%XMONTIOR rsrp and snr 255 yield undefined decibel', () => {
     const state = convertPackets([
         atPacket(
-            '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,255,255,"","00000010","00100010","01001001"\r\nOK'
+            '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,255,255,"","00000010","00100010","01001001"\r\nOK',
         ),
     ]);
     expect(state.signalQuality?.rsrp).toBe(255);
@@ -29,13 +29,13 @@ test('%XMONITOR packet with mfw version >= v1.2.x', () => {
         ([key, value]) => {
             if (key === 'powerSavingMode') {
                 expect(state.powerSavingMode?.granted).toEqual(
-                    modernModemVersionPacket.expected.powerSavingMode.granted
+                    modernModemVersionPacket.expected.powerSavingMode.granted,
                 );
             } else {
                 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
                 expect(state[key as any as keyof State]).toBe(value);
             }
-        }
+        },
     );
 });
 
@@ -49,13 +49,13 @@ test('%XMONITOR packet with mfw v1.0.x - v1.1.x', () => {
         ([key, value]) => {
             if (key === 'powerSavingMode') {
                 expect(state.powerSavingMode?.granted).toEqual(
-                    legacyModemVersionPacket.expected.powerSavingMode.granted
+                    legacyModemVersionPacket.expected.powerSavingMode.granted,
                 );
             } else {
                 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
                 expect(state[key as any as keyof State]).toBe(value);
             }
-        }
+        },
     );
 });
 
@@ -75,18 +75,18 @@ test('%XMONITOR Power Saving Mode specifics', () => {
     const state = convertPackets([
         atPacket('AT%XMONITOR'),
         atPacket(
-            '1,"","","24201","8169",7,20,"014ACE00",,,,,"","00000001","11000001","01011111"\r\nOK\r\n'
+            '1,"","","24201","8169",7,20,"014ACE00",,,,,"","00000001","11000001","01011111"\r\nOK\r\n',
         ),
     ]);
 
     expect(state.powerSavingMode?.granted?.T3324?.bitmask).toEqual(
-        expectedGranted.T3324.bitmask
+        expectedGranted.T3324.bitmask,
     );
     expect(state.powerSavingMode?.granted?.T3412Extended?.bitmask).toEqual(
-        expectedGranted.T3412Extended.bitmask
+        expectedGranted.T3412Extended.bitmask,
     );
     expect(state.powerSavingMode?.granted?.T3412?.bitmask).toEqual(
-        expectedGranted.T3412.bitmask
+        expectedGranted.T3412.bitmask,
     );
 });
 
@@ -94,7 +94,7 @@ test('%XMONITOR Power Saving Mode specifics', () => {
 const modernModemVersionPacket = {
     command: atPacket('AT%XMONITOR'),
     response: atPacket(
-        '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","00100010","01001001"\r\nOK'
+        '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","00100010","01001001"\r\nOK',
     ),
     expected: {
         networkStatus: 5,
@@ -137,7 +137,7 @@ const modernModemVersionPacket = {
 const legacyModemVersionPacket = {
     command: atPacket('AT%XMONITOR'),
     response: atPacket(
-        '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","01001001"\r\nOK'
+        '%XMONITOR: 5,"Telia N@","Telia N@","24202","0901",7,20,"02024720",428,6300,53,22,"","00000010","01001001"\r\nOK',
     ),
     expected: {
         networkStatus: 5,

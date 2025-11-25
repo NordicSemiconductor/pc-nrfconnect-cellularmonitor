@@ -115,7 +115,7 @@ const CardEntry = ({ fieldKey, value, title, style }: CardEntry) => {
         ) {
             fieldRef.current?.classList.remove('animated-card-entry');
             setTimeout(() =>
-                fieldRef?.current?.classList.add('animated-card-entry')
+                fieldRef?.current?.classList.add('animated-card-entry'),
             );
         }
         oldValue.current = value;
@@ -341,7 +341,7 @@ const IconAction = ({
 
 const getDashboardFieldDocumentation = (
     cardTitle: string,
-    fieldKey: string
+    fieldKey: string,
 ) => {
     const cardType = cardTitle.includes('PDN')
         ? 'Packet Domain Network'

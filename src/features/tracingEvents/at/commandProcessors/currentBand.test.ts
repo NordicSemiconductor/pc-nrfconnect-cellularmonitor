@@ -41,7 +41,7 @@ test('%XCBAND test command reads available bands and sets it in the viewModel', 
         const testCommandSent = convertPackets([testCommandPacket]);
         const responseRecieved = convertPackets(
             [response.responsePacket],
-            testCommandSent
+            testCommandSent,
         );
 
         expect(responseRecieved.availableBands).toEqual(response.result);

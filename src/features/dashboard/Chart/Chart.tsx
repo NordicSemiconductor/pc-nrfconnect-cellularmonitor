@@ -35,7 +35,7 @@ import ChartTop from './ChartTop';
 import panZoomPlugin from './panZoomPlugin';
 import { defaultOptions } from './state';
 import TimeSpanDeltaLine from './TimeSpanDeltaLine';
-import { tooltipHandler } from './Tooltip';
+import { TooltipContext, tooltipHandler } from './Tooltip';
 
 ChartJS.register(LinearScale, PointElement, Title, Tooltip, Legend);
 
@@ -171,10 +171,10 @@ export default () => {
                 },
 
                 panZoom: {
-                    onLiveChanged: live => dispatch(setLive(live)),
+                    onLiveChanged: (live: boolean) => dispatch(setLive(live)),
                     onRangeChanged: (
-                        relativeRange,
-                        referenceNrfmlTimestamp
+                        relativeRange: { min: number; max: number },
+                        referenceNrfmlTimestamp: number,
                     ) => {
                         dispatch(setSelectedTime(referenceNrfmlTimestamp));
                         setRange(relativeRange);
@@ -184,13 +184,13 @@ export default () => {
 
                 tooltip: {
                     enabled: false,
-                    external(context) {
+                    external(context: TooltipContext) {
                         tooltipHandler(context);
                     },
                 },
             },
         }),
-        [dispatch, traceEventFilter]
+        [dispatch, traceEventFilter],
     );
 
     const sectionHeight = 22;

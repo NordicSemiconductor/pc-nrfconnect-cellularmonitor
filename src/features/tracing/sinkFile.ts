@@ -17,7 +17,7 @@ const fileExtension = (format: TraceFormat) => {
             return '.pcapng';
         default:
             throw new Error(
-                `Unknown format ${format} does not have associated file extension`
+                `Unknown format ${format} does not have associated file extension`,
             );
     }
 };

@@ -70,17 +70,17 @@ export const deleteDbFilePath = () => store.delete('dbFilePath');
 
 export const [getWiresharkPath, setWiresharkPath] = fromStore(
     'wiresharkExecutablePath',
-    null
+    null,
 );
 
 export const [getTraceFormats, setTraceFormats] = fromStore(
     'traceFormats',
-    ALL_TRACE_FORMATS.slice(0, 1)
+    ALL_TRACE_FORMATS.slice(0, 1),
 );
 
 export const [getCollapsePowerSection, setCollapsePowerSection] = fromStore(
     'collapsePowerSection',
-    false
+    false,
 );
 
 export const [
@@ -90,15 +90,15 @@ export const [
 
 export const [getShowStartupDialog, setShowStartupDialog] = fromStore(
     'showStartupDialog',
-    true
+    true,
 );
 
 export const [restoreResetDevice, storeResetDevice] = fromStore(
     'resetDevice',
-    false
+    false,
 );
 
 export const [restoreRefreshOnStart, storeRefreshOnStart] = fromStore(
     'refreshOnStart',
-    true
+    true,
 );

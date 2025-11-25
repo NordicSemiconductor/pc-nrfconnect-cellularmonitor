@@ -24,7 +24,7 @@ export const processor: Processor<'+CSCON'> = {
         if (packet.requestType === RequestType.SET_WITH_VALUE) {
             const parsedPayload = Number.parseInt(
                 getParametersFromResponse(packet.payload)[0],
-                10
+                10,
             );
             if (parsedPayload >= 0 && parsedPayload <= 4) {
                 setPayload =

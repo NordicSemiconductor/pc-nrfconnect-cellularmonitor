@@ -20,12 +20,12 @@ import { getParametersFromResponse } from '../utils';
 const defaultT3324 = parsePowerSavingMode('00100001', TAU_TYPES.ACTIVE_TIMER);
 const defaultT3412Extended = parsePowerSavingMode(
     '00000110',
-    TAU_TYPES.SLEEP_INTERVAL
+    TAU_TYPES.SLEEP_INTERVAL,
 );
 const disabledT3324 = parsePowerSavingMode('11100000', TAU_TYPES.ACTIVE_TIMER);
 const disabledT3412Extended = parsePowerSavingMode(
     '11100000',
-    TAU_TYPES.SLEEP_INTERVAL
+    TAU_TYPES.SLEEP_INTERVAL,
 );
 
 const resetToDefault = {
@@ -53,7 +53,7 @@ export const processor: Processor<'+CPSMS'> = {
             if (packet.payload) {
                 setRequested = parsePowerSavingModePayload(
                     packet.payload,
-                    state?.powerSavingMode?.requested
+                    state?.powerSavingMode?.requested,
                 );
             } else {
                 // Then we must have gotten the `AT+CPSMS=` command
@@ -104,7 +104,7 @@ export const processor: Processor<'+CPSMS'> = {
 
 const parsePowerSavingModePayload = (
     payload: string,
-    currentRequestedValues?: PowerSavingModeEntries
+    currentRequestedValues?: PowerSavingModeEntries,
 ) => {
     const [mode, , , T3412ExtendedBitmask, T3324Bitmask] =
         getParametersFromResponse(payload);
@@ -120,13 +120,14 @@ const parsePowerSavingModePayload = (
         T3324:
             T3324Bitmask !== undefined
                 ? parsePowerSavingMode(T3324Bitmask, TAU_TYPES.ACTIVE_TIMER)
-                : storedPowerSavingMode?.T3324 ?? defaultT3324,
+                : (storedPowerSavingMode?.T3324 ?? defaultT3324),
         T3412Extended:
             T3412ExtendedBitmask !== undefined
                 ? parsePowerSavingMode(
                       T3412ExtendedBitmask,
-                      TAU_TYPES.SLEEP_INTERVAL
+                      TAU_TYPES.SLEEP_INTERVAL,
                   )
-                : storedPowerSavingMode?.T3412Extended ?? defaultT3412Extended,
+                : (storedPowerSavingMode?.T3412Extended ??
+                  defaultT3412Extended),
     };
 };

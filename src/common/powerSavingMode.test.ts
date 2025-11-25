@@ -27,11 +27,11 @@ test('parsePowerSavingMode for T3412Extended (Periodic Tau)', () => {
 
             if (multiplyerBitmask === '111') {
                 expect(
-                    parsePowerSavingMode(bitmask, TAU_TYPES.SLEEP_INTERVAL)
+                    parsePowerSavingMode(bitmask, TAU_TYPES.SLEEP_INTERVAL),
                 ).toEqual(deactivatedTimer);
             } else {
                 expect(
-                    parsePowerSavingMode(bitmask, TAU_TYPES.SLEEP_INTERVAL)
+                    parsePowerSavingMode(bitmask, TAU_TYPES.SLEEP_INTERVAL),
                 ).toEqual({
                     activated: true,
                     bitmask,
@@ -39,7 +39,7 @@ test('parsePowerSavingMode for T3412Extended (Periodic Tau)', () => {
                     unit: 'seconds',
                 });
             }
-        }
+        },
     );
 });
 
@@ -53,11 +53,11 @@ test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
 
             if (multiplyerBitmask === '111') {
                 expect(
-                    parsePowerSavingMode(bitmask, TAU_TYPES.ACTIVE_TIMER)
+                    parsePowerSavingMode(bitmask, TAU_TYPES.ACTIVE_TIMER),
                 ).toEqual(deactivatedTimer);
             } else {
                 expect(
-                    parsePowerSavingMode(bitmask, TAU_TYPES.ACTIVE_TIMER)
+                    parsePowerSavingMode(bitmask, TAU_TYPES.ACTIVE_TIMER),
                 ).toEqual({
                     activated: true,
                     bitmask,
@@ -65,7 +65,7 @@ test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
                     unit: 'seconds',
                 });
             }
-        }
+        },
     );
 
     const invalidMultiplier = ['100', '011', '101', '110'];
@@ -74,8 +74,8 @@ test('parsePowerSavingMode for T3324 (ActiveTimer)', () => {
         expect(
             parsePowerSavingMode(
                 `${multiplierBitmask}00011`,
-                TAU_TYPES.ACTIVE_TIMER
-            )
+                TAU_TYPES.ACTIVE_TIMER,
+            ),
         ).toEqual(deactivatedTimer);
     });
 });

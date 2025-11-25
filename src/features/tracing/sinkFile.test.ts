@@ -17,7 +17,7 @@ describe('sink file names', () => {
     it('is for file sources based on the source file name', () => {
         const sinkFile = createSinkFile(
             { type: 'file', path: 'some/file.mtrace' },
-            'pcap'
+            'pcap',
         );
 
         expect(sinkFile).toBe(path.join('some', 'file.pcapng'));
@@ -28,27 +28,27 @@ describe('sink file names', () => {
 
         const sinkFile = createSinkFile(
             { type: 'device', port: 'a port', startTime },
-            'raw'
+            'raw',
         );
         expect(sinkFile).toBe(
             path.join(
                 'data',
                 'dir',
-                `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`
-            )
+                `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`,
+            ),
         );
 
         setTimeout(() => {
             const sinkFileAfter10Milliseconds = createSinkFile(
                 { type: 'device', port: 'a port', startTime },
-                'raw'
+                'raw',
             );
             expect(sinkFileAfter10Milliseconds).toBe(
                 path.join(
                     'data',
                     'dir',
-                    `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`
-                )
+                    `trace-${startTime.toISOString().replace(/:/g, '-')}.mtrace`,
+                ),
             );
             done();
         }, 10);

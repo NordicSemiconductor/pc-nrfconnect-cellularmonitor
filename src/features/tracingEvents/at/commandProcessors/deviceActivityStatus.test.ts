@@ -27,7 +27,7 @@ const incorrectResponses = [
 test('+CPAS set command responds with a single value and sets states successfully', () => {
     responses.forEach(test => {
         expect(convertPackets([setCommand, test.response]).activityStatus).toBe(
-            test.expected
+            test.expected,
         );
     });
 });
@@ -37,7 +37,7 @@ test('+CPAS set command responds with a single value and sets states unsuccessfu
         const state = initialState();
         const expectedStatus = state.activityStatus;
         expect(
-            convertPackets([setCommand, test.response], state).activityStatus
+            convertPackets([setCommand, test.response], state).activityStatus,
         ).toBe(expectedStatus);
     });
 });

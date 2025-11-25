@@ -15,13 +15,12 @@ import {
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
+import { displayName as appName } from '../../../package.json';
 import type { RootState } from '../../app/appReducer';
 import { defaultSharkPath } from '../wireshark/wireshark';
 import { getWiresharkPath } from '../wireshark/wiresharkSlice';
 import { SourceFormat, TraceFormat } from './formats';
 import sinkFile from './sinkFile';
-
-const { displayName: appName } = require('../../../package.json');
 
 const describeDevice = (device: Device) =>
     `${deviceInfo(device).name ?? 'unknown'} ${device?.devkit?.boardVersion}`;
@@ -40,7 +39,7 @@ type InitParameters =
 export default (
     state: RootState,
     source: SourceFormat,
-    format: TraceFormat
+    format: TraceFormat,
 ): InitParameters => {
     if (format === 'raw') {
         // RawFileInitParameters
@@ -78,6 +77,6 @@ export default (
     }
 
     throw new Error(
-        `Unknown format ${format} does not have an associated sink config`
+        `Unknown format ${format} does not have an associated sink config`,
     );
 };

@@ -40,7 +40,7 @@ export default () => {
     const availablePorts = useSelector(getAvailableSerialPorts);
     const selectedUartSerialPort = useSelector(getTerminalSerialPort);
     const showConflictingSettingsDialog = useSelector(
-        getShowConflictingSettingsDialog
+        getShowConflictingSettingsDialog,
     );
     const [selectedSerialPortItem, setSelectedSerialPortItem] =
         useState<DropdownItem | null>(null);
@@ -107,11 +107,11 @@ export default () => {
                         dispatch(setShowConflictingSettingsDialog(false));
                         connectToSerialPortWrapper(
                             selectedSerialPortItem.value,
-                            true
+                            true,
                         );
                     }}
                     setSerialPortCallback={async (
-                        newSerialPort: SerialPort
+                        newSerialPort: SerialPort,
                     ) => {
                         dispatch(setTerminalSerialPort(newSerialPort));
                         const options = await newSerialPort.getOptions();

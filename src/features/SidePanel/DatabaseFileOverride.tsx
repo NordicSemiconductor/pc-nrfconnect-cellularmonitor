@@ -54,7 +54,7 @@ export default () => {
     const deviceInfo = useSelector(selectedDeviceInfo);
     const nrfDeviceVersion = getDeviceKeyForTraceDatabaseEntries(
         device,
-        deviceInfo
+        deviceInfo,
     );
 
     const items = [
@@ -87,8 +87,8 @@ export default () => {
         const selectedDatabase = databases.find(file =>
             manualDbFilePath?.includes(
                 // eslint-disable-next-line no-template-curly-in-string
-                file.database.path.replace('${root}', '')
-            )
+                file.database.path.replace('${root}', ''),
+            ),
         );
         if (selectedDatabase) {
             setSelectedItem({
@@ -116,7 +116,7 @@ export default () => {
                     value: 'select-trace-db',
                 });
                 logger.info(
-                    `Database path successfully updated to ${filePath}`
+                    `Database path successfully updated to ${filePath}`,
                 );
             }
         } else if (item.value === autoSelectItem.value) {
@@ -125,7 +125,7 @@ export default () => {
             logger.info(`Database path successfully reset to default value`);
         } else {
             dispatch(
-                setSelectedTraceDatabaseFromVersion(label, nrfDeviceVersion)
+                setSelectedTraceDatabaseFromVersion(label, nrfDeviceVersion),
             );
         }
     };

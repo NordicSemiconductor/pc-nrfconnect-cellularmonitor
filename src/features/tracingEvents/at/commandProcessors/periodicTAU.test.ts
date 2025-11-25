@@ -17,13 +17,13 @@ const OkPacket = atPacket('OK\r\n');
 
 test('Subscribe to %XT3412 signal quality sets correct viewModel', () => {
     expect(convertPackets([subscribePacket, OkPacket]).notifyPeriodicTAU).toBe(
-        true
+        true,
     );
 });
 
 test('Subscribe and unsubscribe of %3412 may turned on and off', () => {
     expect(
-        convertPackets([subscribePacket, unsubscribePacket]).notifyPeriodicTAU
+        convertPackets([subscribePacket, unsubscribePacket]).notifyPeriodicTAU,
     ).toBe(false);
 
     expect(
@@ -34,7 +34,7 @@ test('Subscribe and unsubscribe of %3412 may turned on and off', () => {
             OkPacket,
             subscribePacket,
             OkPacket,
-        ]).notifyPeriodicTAU
+        ]).notifyPeriodicTAU,
     ).toBe(true);
 
     expect(
@@ -45,7 +45,7 @@ test('Subscribe and unsubscribe of %3412 may turned on and off', () => {
             OkPacket,
             unsubscribePacket,
             OkPacket,
-        ]).notifyPeriodicTAU
+        ]).notifyPeriodicTAU,
     ).toBe(false);
 });
 
@@ -53,13 +53,13 @@ test('%3412 notification properly updates remaining T3412 time', () => {
     const state = convertPackets([subscribePacket, OkPacket]);
     expect(state.notifyPeriodicTAU).toBe(true);
     expect(state.powerSavingMode?.granted?.T3412ExtendedNotification).toBe(
-        undefined
+        undefined,
     );
 
     signalQualityNotifications.forEach(notification => {
         expect(
             convertPackets([notification.packet], state).powerSavingMode
-                ?.granted?.T3412ExtendedNotification
+                ?.granted?.T3412ExtendedNotification,
         ).toBe(notification.result);
     });
 });

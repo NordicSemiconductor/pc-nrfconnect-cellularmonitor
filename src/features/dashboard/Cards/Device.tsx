@@ -140,7 +140,7 @@ const functionalModeStrings = {
 };
 
 const functionalModeHasStringValue = (
-    mode: FunctionalMode
+    mode: FunctionalMode,
 ): mode is keyof typeof functionalModeStrings => {
     if (Object.keys(functionalModeStrings).includes(`${mode}`)) {
         return true;
@@ -167,12 +167,13 @@ const formatMode = (mode?: Mode) => {
 
     if (typeof mode === 'number') {
         return `Maximum power reduced ${txPowerReductionToDecibel(
-            mode
+            mode,
         )} on all bands`;
     }
     return mode
         .map(
-            band => `${band.band}: ${txPowerReductionToDecibel(band.reduction)}`
+            band =>
+                `${band.band}: ${txPowerReductionToDecibel(band.reduction)}`,
         )
         .join(', ');
 };

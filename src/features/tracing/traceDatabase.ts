@@ -48,7 +48,7 @@ let localDatabasesCache: undefined | DatabaseVersion[];
 let remoteDatabasesCache: undefined | DatabaseVersion[];
 
 export const getDatabases = async (
-    nrfDeviceVersion: SupportedDeviceVersion
+    nrfDeviceVersion: SupportedDeviceVersion,
 ) => {
     prepareTargetDirectory();
 
@@ -62,12 +62,12 @@ export const getDatabases = async (
             join(autoDetectDbRootFolder(), TRACE_DATABASE_CONFIG_FILE),
             {
                 encoding: 'utf-8',
-            }
+            },
         );
         const config = JSON.parse(json) as TraceConfig;
         localDatabasesCache = extractDatabaseVersionsTraceConfig(
             config,
-            nrfDeviceVersion
+            nrfDeviceVersion,
         );
     }
 
@@ -77,13 +77,13 @@ export const getDatabases = async (
 
 export const getSelectedTraceDatabaseFromVersion = async (
     version: string,
-    nrfDeviceVersion: SupportedDeviceVersion
+    nrfDeviceVersion: SupportedDeviceVersion,
 ) => {
     const versions = await getDatabases(nrfDeviceVersion);
     const selectedVersion = versions.find(v => v.version === version);
     const file = join(
         DOWNLOAD_FOLDER,
-        selectedVersion?.database?.path.replace(`\${root}`, '') ?? ''
+        selectedVersion?.database?.path.replace(`\${root}`, '') ?? '',
     );
     return file;
 };
@@ -93,7 +93,7 @@ export const setSelectedTraceDatabaseFromVersion =
     async (dispatch: AppDispatch) => {
         const manualDbFile = await getSelectedTraceDatabaseFromVersion(
             version,
-            nrfDeviceVersion
+            nrfDeviceVersion,
         );
         storeManualDbFilePath(manualDbFile);
 
@@ -112,7 +112,7 @@ const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
     } catch (err) {
         logger.error(
             'Could not download trace databases. Please check your internet connection or feel free to ignore this error message.',
-            err
+            err,
         );
         return;
     }
@@ -123,7 +123,7 @@ const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
     } catch (err) {
         logger.error(
             'Could not parse remote trace database configuration file',
-            err
+            err,
         );
         return;
     }
@@ -134,18 +134,18 @@ const downloadRemote = async (nrfDeviceVersion: SupportedDeviceVersion) => {
         const writableConfig = JSON.stringify(config);
         await writeFile(
             join(DOWNLOAD_FOLDER, TRACE_DATABASE_CONFIG_FILE),
-            writableConfig
+            writableConfig,
         );
     } catch (err) {
         logger.debug(
             'traceDatabase: Could not persist remote config.json',
-            err
+            err,
         );
     }
 
     remoteDatabasesCache = extractDatabaseVersionsTraceConfig(
         config,
-        nrfDeviceVersion
+        nrfDeviceVersion,
     );
     await downloadAll(remoteDatabasesCache);
 
@@ -185,16 +185,16 @@ const prepareTargetDirectory = () => {
             readdirSync(INITIAL_SOURCE_FOLDER).forEach(file => {
                 copyFileSync(
                     join(INITIAL_SOURCE_FOLDER, file),
-                    join(DOWNLOAD_FOLDER, file)
+                    join(DOWNLOAD_FOLDER, file),
                 );
             });
             logger.debug(
-                `Copied ${INITIAL_SOURCE_FOLDER} to ${DOWNLOAD_FOLDER}`
+                `Copied ${INITIAL_SOURCE_FOLDER} to ${DOWNLOAD_FOLDER}`,
             );
         } catch (err) {
             logger.error(
                 `traceDatabase: Could not copy ${INITIAL_SOURCE_FOLDER} to ${DOWNLOAD_FOLDER}`,
-                err
+                err,
             );
         }
     }
@@ -202,13 +202,13 @@ const prepareTargetDirectory = () => {
 
 const extractDatabaseVersionsTraceConfig = (
     config: TraceConfig,
-    nrfDeviceVersion: SupportedDeviceVersion
+    nrfDeviceVersion: SupportedDeviceVersion,
 ) =>
     config.firmwares.devices
         .filter(
             device =>
                 nrfDeviceVersion === 'AllDevices' ||
                 nrfDeviceVersion === undefined ||
-                device.type === nrfDeviceVersion
+                device.type === nrfDeviceVersion,
         )
         .flatMap(device => device.versions);

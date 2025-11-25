@@ -27,7 +27,7 @@ export interface PanPluginOptions extends AnyObject {
     onLiveChanged?: (live: boolean) => void;
     onRangeChanged?: (
         relativeRange: XAxisRange,
-        referenceNrfmlTimestamp: number
+        referenceNrfmlTimestamp: number,
     ) => void;
 }
 

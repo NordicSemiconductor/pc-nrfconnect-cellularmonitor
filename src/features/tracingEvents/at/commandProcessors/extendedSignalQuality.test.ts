@@ -28,7 +28,7 @@ const readCommandPackets = [
 test('CESQ read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).signalQuality
+            convertPackets([test.command, test.response]).signalQuality,
         ).toEqual(test.expected);
     });
 });

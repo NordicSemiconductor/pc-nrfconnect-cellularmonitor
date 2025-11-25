@@ -29,36 +29,36 @@ test('AT+CPSMS=1 with only mode argument will use default values for t3324 and t
 
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(defaultT3324);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        defaultT3412Extended
+        defaultT3412Extended,
     );
 
     state = convertPackets([atPacket(`${CPSMS}=0`), OkPacket]);
 
     state = convertPackets([
         atPacket(
-            `${CPSMS}=1,"","","${notDefaultT3412Extended}","${notDefaultT3324}"`
+            `${CPSMS}=1,"","","${notDefaultT3412Extended}","${notDefaultT3324}"`,
         ),
         OkPacket,
     ]);
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(
-        notDefaultT3324
+        notDefaultT3324,
     );
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        notDefaultT3412Extended
+        notDefaultT3412Extended,
     );
 
     // Try to reset to default, to check if "AT+CPSMS=" command is interpreted correctly:
     state = convertPackets([atPacket(`${CPSMS}=`), OkPacket]);
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(DISABLED);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        DISABLED
+        DISABLED,
     );
 
     // Then check if the defaults are still used when using the short term on command
     state = convertPackets([atPacket(`${CPSMS}=1`), OkPacket]);
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(defaultT3324);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        defaultT3412Extended
+        defaultT3412Extended,
     );
 });
 
@@ -70,7 +70,7 @@ test('AT+CPSMS? read command will update the state appropriately', () => {
         atPacket(`+CPSMS: 1,,,"${t3412ext}","${t3324}"\r\nOK\r\n`),
     ]);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        t3412ext
+        t3412ext,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(t3324);
 
@@ -80,7 +80,7 @@ test('AT+CPSMS? read command will update the state appropriately', () => {
         atPacket(`+CPSMS: 1,,,"${t3412ext}","${t3324}"\r\nOK\r\n`),
     ]);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        t3412ext
+        t3412ext,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(t3324);
 });
@@ -92,34 +92,34 @@ test('This should be easy to find', () => {
     let state = convertPackets([atPacket(`${CPSMS}=1`), OkPacket]);
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(defaultT3324);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        defaultT3412Extended
+        defaultT3412Extended,
     );
 
     state = convertPackets(
         [atPacket(`${CPSMS}=1,,,"${t3412ext}","${t3324}"`), OkPacket],
-        state
+        state,
     );
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        t3412ext
+        t3412ext,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(t3324);
 
     state = convertPackets([atPacket(`${CPSMS}=0`), OkPacket], state);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        DISABLED
+        DISABLED,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(DISABLED);
 
     // Verify that since AT+CPSMS=0 was sent, we persist the last requested parameters.
     state = convertPackets([atPacket(`${CPSMS}=1`), OkPacket], state);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        t3412ext
+        t3412ext,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(t3324);
 
     state = convertPackets([atPacket(`${CPSMS}=`), OkPacket], state);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        DISABLED
+        DISABLED,
     );
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(DISABLED);
 
@@ -127,6 +127,6 @@ test('This should be easy to find', () => {
     state = convertPackets([atPacket(`${CPSMS}=1`), OkPacket], state);
     expect(state.powerSavingMode?.requested?.T3324?.bitmask).toBe(defaultT3324);
     expect(state.powerSavingMode?.requested?.T3412Extended?.bitmask).toBe(
-        defaultT3412Extended
+        defaultT3412Extended,
     );
 });

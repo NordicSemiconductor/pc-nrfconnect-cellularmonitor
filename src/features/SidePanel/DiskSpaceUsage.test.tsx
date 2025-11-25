@@ -22,7 +22,7 @@ describe('Disk space usage', () => {
                         free: FREE,
                         size: TOTAL,
                     });
-                })
+                }),
         );
         render(<DiskSpaceUsage />);
         expect(await screen.findByText(prettyBytes(FREE))).toBeInTheDocument();

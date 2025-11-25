@@ -59,13 +59,13 @@ const openSerialTerminal = (serialPortPath: string) => {
             device: {
                 serialPortPath,
             },
-        }
+        },
     );
 };
 
 const detectInstalledApp = async () => {
     const downloadableApps = (await ipcRenderer.invoke(
-        'apps:get-downloadable-apps'
+        'apps:get-downloadable-apps',
     )) as {
         apps: {
             name: string;
@@ -78,6 +78,6 @@ const detectInstalledApp = async () => {
         app =>
             app.source === 'official' &&
             app.name === 'pc-nrfconnect-serial-terminal' &&
-            app.installed !== undefined
+            app.installed !== undefined,
     );
 };

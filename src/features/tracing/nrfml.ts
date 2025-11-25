@@ -60,7 +60,7 @@ let reloadHandler: () => void;
 const nrfmlConfig = (
     state: RootState,
     source: SourceFormat,
-    sinks: TraceFormat[]
+    sinks: TraceFormat[],
 ): Configuration => ({
     config: { plugins_directory: getPluginsDir() },
     sources: [sourceConfig(state, source)],
@@ -76,7 +76,7 @@ const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
 export const convertTraceFile =
     (
         path: string,
-        setLoading: (loading: boolean) => void = () => {}
+        setLoading: (loading: boolean) => void = () => {},
     ): AppThunk<RootState, Promise<void>> =>
     (dispatch, getState) => {
         telemetry.sendEvent(EventAction.CONVERT_TRACE);
@@ -97,11 +97,11 @@ export const convertTraceFile =
 
                     if (err?.error_code === 100) {
                         logger.error(
-                            'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.'
+                            'Trace file does not include modem UUID, so trace database version cannot automatically be detected. Please select trace database manually from Advanced Options.',
                         );
                     } else if (err != null) {
                         logger.error(
-                            `Failed conversion to pcap: ${err.message}`
+                            `Failed conversion to pcap: ${err.message}`,
                         );
                         logger.debug(`Full error: ${JSON.stringify(err)}`);
                     } else {
@@ -114,7 +114,7 @@ export const convertTraceFile =
                     detectingTraceDb: isDetectingTraceDb,
                     displayDetectingTraceDbMessage: true,
                 }),
-                () => {}
+                () => {},
             );
 
             logger.info(`Started converting ${path} to pcap.`);
@@ -122,7 +122,7 @@ export const convertTraceFile =
                 setTraceIsStarted({
                     taskId,
                     progressConfigs: progressConfigs(source, sinks),
-                })
+                }),
             );
         });
     };
@@ -152,14 +152,14 @@ export const startTrace =
 
         if (uartPort && isDetectingTraceDb) {
             const version = await raceTimeout(
-                detectDatabaseVersion(uartPort, shellParser)
+                detectDatabaseVersion(uartPort, shellParser),
             );
 
             if (typeof version === 'string') {
                 const autoDetectedTraceDbFile =
                     await getSelectedTraceDatabaseFromVersion(
                         version,
-                        nrfDeviceVersion
+                        nrfDeviceVersion,
                     );
                 if (autoDetectedTraceDbFile) {
                     isDetectingTraceDb = false;
@@ -218,7 +218,7 @@ export const startTrace =
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
                 }
-            }
+            },
         );
 
         logger.info('Started tracefile');
@@ -227,7 +227,7 @@ export const startTrace =
             setTraceIsStarted({
                 taskId,
                 progressConfigs: progressConfigs(source, formats),
-            })
+            }),
         );
 
         if (resetDevice && is9160DK(device)) {
@@ -257,7 +257,7 @@ export const startTrace =
 export const readRawTrace =
     (
         sourceFile: string,
-        setLoading: (loading: boolean) => void
+        setLoading: (loading: boolean) => void,
     ): AppThunk<RootState> =>
     (dispatch, getState) => {
         const state = getState();
@@ -282,7 +282,7 @@ export const readRawTrace =
                 clearInterval(throttle);
                 if (error) {
                     logger.error(
-                        `Error when reading trace from ${sourceFile}: ${error.message}`
+                        `Error when reading trace from ${sourceFile}: ${error.message}`,
                     );
 
                     if (error.error_code === 22 || error.error_code === 100) {
@@ -309,7 +309,7 @@ export const readRawTrace =
                     // @ts-expect-error  -- Monitor lib has wrong type, needs to be changed.
                     packets.push(data as Packet);
                 }
-            }
+            },
         );
         dispatch(setTraceSourceFilePath(sourceFile));
         logger.info(`Started reading trace from ${sourceFile}`);

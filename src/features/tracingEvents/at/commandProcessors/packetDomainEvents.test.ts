@@ -22,13 +22,13 @@ const stateWithApns = {
 test('+CGEV: Detach removes all APNs', () => {
     let state = convertPackets(
         [atPacket('+CGEV: NW DETACH')],
-        stateWithApns as State
+        stateWithApns as State,
     );
     expect(state.accessPointNames).toEqual({});
 
     state = convertPackets(
         [atPacket('+CGEV: ME DETACH')],
-        stateWithApns as State
+        stateWithApns as State,
     );
     expect(state.accessPointNames).toEqual({});
 });
@@ -77,7 +77,7 @@ test('+CGEV: Activated Default Bearer updates APNs', () => {
 test('+CGEV: PDN deactivation removes the relevant AccessPointName', () => {
     let state = convertPackets(
         [atPacket('+CGEV: ME PDN DEACT 0')],
-        stateWithApns as State
+        stateWithApns as State,
     );
     expect(state.accessPointNames).toEqual({
         test2: {

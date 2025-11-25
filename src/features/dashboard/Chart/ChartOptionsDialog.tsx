@@ -54,13 +54,13 @@ export default () => {
                                 isToggled={traceEventFilter.includes(type)}
                                 onToggle={isToggled => {
                                     telemetry.sendEvent(
-                                        EventAction.OPEN_CHART_OPTIONS
+                                        EventAction.OPEN_CHART_OPTIONS,
                                     );
                                     dispatch(
                                         changeTraceEventFilter({
                                             type,
                                             enable: isToggled,
-                                        })
+                                        }),
                                     );
                                 }}
                             />

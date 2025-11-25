@@ -37,7 +37,7 @@ const InstallWiresharkDialog = ({
         telemetry.sendEvent(EventAction.TOGGLE_OPEN_IN_WIRESHARK);
         if (openInWiresharkSelected) {
             const traceFormatsWithoutWireshark = traceFormats.filter(
-                format => format !== 'live'
+                format => format !== 'live',
             );
             dispatch(setTraceFormats(traceFormatsWithoutWireshark));
         } else {

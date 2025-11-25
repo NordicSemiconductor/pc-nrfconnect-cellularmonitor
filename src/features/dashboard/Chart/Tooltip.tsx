@@ -16,6 +16,15 @@ import {
 import { EventColours } from '../../tracing/formats';
 import { TraceEvent } from '../../tracing/tracePacketEvents';
 
+export type TooltipContext = {
+    chart: Chart<
+        keyof ChartTypeRegistry,
+        (number | Point | [number, number] | BubbleDataPoint | null)[],
+        unknown
+    >;
+    tooltip: TooltipModel<'scatter'>;
+};
+
 const dateFormatter = new Intl.DateTimeFormat('nb-NO', {
     day: '2-digit',
     month: '2-digit',
@@ -44,12 +53,12 @@ const getTooltipLeft = (
         unknown
     >,
     tooltip: TooltipModel<'scatter'>,
-    tooltipEl: HTMLDivElement
+    tooltipEl: HTMLDivElement,
 ) => {
     // Restrict by the chart border of the chart or the outermost part of the tooltip arrow
     const min = Math.min(
         chart.chartArea.left,
-        tooltip.caretX - tooltipArrowDiagonal
+        tooltip.caretX - tooltipArrowDiagonal,
     );
     const max =
         Math.max(chart.chartArea.right, tooltip.caretX + tooltipArrowDiagonal) -
@@ -58,7 +67,7 @@ const getTooltipLeft = (
     return (
         Math.min(
             Math.max(tooltip.caretX - tooltipEl.offsetWidth / 2, min),
-            max
+            max,
         ) + chart.canvas.offsetLeft
     );
 };
@@ -68,7 +77,7 @@ const getOrCreateTooltip = (
         (number | Point | [number, number] | BubbleDataPoint | null)[],
         unknown
     >,
-    tooltip: TooltipModel<'scatter'>
+    tooltip: TooltipModel<'scatter'>,
 ) => {
     let tooltipEl = chart.canvas.parentNode?.querySelector('div');
 
@@ -93,7 +102,7 @@ const getOrCreateTooltip = (
             tooltipEl.style.left = `${getTooltipLeft(
                 chart,
                 tooltip,
-                tooltipEl
+                tooltipEl,
             )}px`;
 
             const pointRadius = (
@@ -129,14 +138,7 @@ const getOrCreateTooltip = (
     return tooltipEl;
 };
 
-export const tooltipHandler = (context: {
-    chart: Chart<
-        keyof ChartTypeRegistry,
-        (number | Point | [number, number] | BubbleDataPoint | null)[],
-        unknown
-    >;
-    tooltip: TooltipModel<'scatter'>;
-}) => {
+export const tooltipHandler = (context: TooltipContext) => {
     const { chart, tooltip } = context;
     const { dataPoints } = tooltip;
     const tooltipEl = getOrCreateTooltip(chart, tooltip);
@@ -220,8 +222,8 @@ export const tooltipHandler = (context: {
             Number(
                 tooltipEl.style.left.substring(
                     0,
-                    tooltipEl.style.left.length - 2
-                )
+                    tooltipEl.style.left.length - 2,
+                ),
             ) +
             tooltipArrowDiagonal
         }px`;

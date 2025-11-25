@@ -27,7 +27,7 @@ test('+CEDRXRDP eDRX Dynamic Parameters should properly write to state', () => {
     };
     state = convertPackets(
         [atPacket('%XTIME: "08","81109251714208","01"')],
-        state
+        state,
     );
     expect(state.networkTimeNotifications).toBe(1);
     expect(state.networkTimeNotification).toEqual(expectedNetworkTime);

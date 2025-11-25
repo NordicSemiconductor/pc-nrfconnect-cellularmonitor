@@ -63,13 +63,14 @@ test('Subscribe to %CESQ signal quality sets correct viewModel', () => {
 
 test('Subscribe to %CESQ signal quality followed by error should not write to state', () => {
     expect(
-        convertPackets([subscribePacket, ErrorPacket]).notifySignalQuality
+        convertPackets([subscribePacket, ErrorPacket]).notifySignalQuality,
     ).toBe(false);
 });
 
 test('Notification of %CESQ may turned on and off', () => {
     expect(
-        convertPackets([subscribePacket, unsubscribePacket]).notifySignalQuality
+        convertPackets([subscribePacket, unsubscribePacket])
+            .notifySignalQuality,
     ).toBe(false);
 
     expect(
@@ -80,7 +81,7 @@ test('Notification of %CESQ may turned on and off', () => {
             OkPacket,
             subscribePacket,
             OkPacket,
-        ]).notifySignalQuality
+        ]).notifySignalQuality,
     ).toBe(true);
 
     expect(
@@ -91,7 +92,7 @@ test('Notification of %CESQ may turned on and off', () => {
             OkPacket,
             unsubscribePacket,
             OkPacket,
-        ]).notifySignalQuality
+        ]).notifySignalQuality,
     ).toBe(false);
 });
 
@@ -110,7 +111,7 @@ test('%CESQ notification properly updates signal quality', () => {
             expect(state.signalQuality).toBeDefined();
         } else {
             expect(Object.values(result.signalQuality)).toEqual(
-                notification.result
+                notification.result,
             );
         }
     });
@@ -121,7 +122,7 @@ test('%CESQ notification does set snr back to undefined', () => {
         [atPacket('AT%CESQ=1'), OkPacket, atPacket('%CESQ: 57,2,8,1')],
         {
             signalQuality: { snr: 13, snr_decibel: 13 - 24 },
-        } as State
+        } as State,
     );
 
     expect(state.signalQuality?.snr).toBe(13);

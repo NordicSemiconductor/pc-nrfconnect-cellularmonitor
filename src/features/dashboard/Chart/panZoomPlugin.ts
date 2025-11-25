@@ -13,6 +13,7 @@ import type {
 } from 'chart.js';
 
 import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
+import { ChartWithZoom } from './chart-type';
 import {
     defaultOptions,
     getState,
@@ -27,11 +28,12 @@ declare global {
         findLast(callback: (item: T) => boolean): T | undefined;
     }
 }
+
 if (!Array.prototype.reverseMap) {
     // eslint-disable-next-line no-extend-native
     Array.prototype.reverseMap = function reverseMap<T, R>(
         this: T[],
-        callback?: (item: T) => R
+        callback?: (item: T) => R,
     ) {
         const arr: R[] = [];
         if (!callback) return arr;
@@ -45,7 +47,7 @@ if (!Array.prototype.reverseMap) {
     // eslint-disable-next-line no-extend-native
     Array.prototype.findLast = function findLast<T>(
         this: T[],
-        callback: (item: T) => boolean
+        callback: (item: T) => boolean,
     ) {
         for (let i = this.length - 1; i >= 0; i -= 1) {
             if (callback(this[i])) return this[i];
@@ -92,7 +94,7 @@ const getMinMaxX = (chart: Chart) => {
                     .length -
                     1 +
                     getOffset(chart),
-                min + options.resolution
+                min + options.resolution,
             ),
         ];
     }
@@ -144,7 +146,7 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
     // This is only relevant during the start when the range is bigger than data displayed
     if (options.mode === 'Event') {
         const filteredData = data.filter(event =>
-            options.traceEventFilter.includes(event.format)
+            options.traceEventFilter.includes(event.format),
         );
         if (filteredData.length === 0) {
             options.onRangeChanged({ min: 0, max: 0 }, 0);
@@ -161,7 +163,7 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
                             .timestamp - data[0].timestamp,
                     max: maxTimestamp - data[0].timestamp,
                 },
-                maxTimestamp
+                maxTimestamp,
             );
         }
     }
@@ -177,7 +179,7 @@ const updateRange = (chart: Chart, range: XAxisRange) => {
     if (options.mode === 'Time') {
         options.onRangeChanged(
             { min: range.min - min, max: range.max - min },
-            range.max
+            range.max,
         );
     }
 
@@ -194,7 +196,7 @@ const mutateData = (chart: Chart) => {
     if (data.length === 0) return [];
 
     const filteredData = data.filter(event =>
-        options.traceEventFilter.includes(event.format)
+        options.traceEventFilter.includes(event.format),
     );
 
     if (options.mode === 'Event') {
@@ -205,8 +207,8 @@ const mutateData = (chart: Chart) => {
                 start,
                 Math.min(
                     Math.ceil(options.currentRange.max) + 1,
-                    filteredData.length
-                )
+                    filteredData.length,
+                ),
             )
             .map(
                 (event, index) =>
@@ -214,7 +216,7 @@ const mutateData = (chart: Chart) => {
                         x: start + index,
                         y: options.traceEventFilter.indexOf(event.format),
                         event,
-                    } as ScatterDataPoint)
+                    }) as ScatterDataPoint,
             );
     }
 
@@ -224,7 +226,7 @@ const mutateData = (chart: Chart) => {
         .filter(
             event =>
                 event.timestamp >= options.currentRange.min - offset &&
-                event.timestamp <= options.currentRange.max + offset
+                event.timestamp <= options.currentRange.max + offset,
         )
         .map(
             event =>
@@ -232,7 +234,7 @@ const mutateData = (chart: Chart) => {
                     x: event.timestamp,
                     y: options.traceEventFilter.indexOf(event.format),
                     event,
-                } as ScatterDataPoint)
+                }) as ScatterDataPoint,
         );
 };
 
@@ -268,7 +270,7 @@ const setupLiveInterval = (chart: Chart) => {
 
 export default {
     id: 'panZoom',
-    start(chart: Chart) {
+    start(chart: ChartWithZoom) {
         initChart(chart);
         tracePacketEvents.on('stop-process', () => {
             if (liveIntervalId) {
@@ -290,7 +292,7 @@ export default {
             updateRange(chart, getRange(chart));
             chart.update('none');
         });
-        chart.zoom = (resolution, offset) => {
+        chart.zoom = (resolution: number, offset: number) => {
             const { options } = getState(chart);
             // Necessary as options.resolution is not correct during the very start.
             const currentResolution =
@@ -373,13 +375,11 @@ export default {
             let max: number;
             options.resolution = defaultOptions(mode).resolution;
             options.resolutionLimits =
-                (chart.options.plugins?.panZoom?.resolutionLimits as {
-                    min: number;
-                    max: number;
-                }) ?? defaultOptions(mode).resolutionLimits;
+                chart.options.plugins?.panZoom?.resolutionLimits ??
+                defaultOptions(mode).resolutionLimits;
 
             const filteredData = data.filter(e =>
-                options.traceEventFilter.includes(e.format)
+                options.traceEventFilter.includes(e.format),
             );
 
             if (options.live || filteredData.length === 0) {
@@ -393,7 +393,7 @@ export default {
 
             if (mode === 'Event') {
                 const refEvent = filteredData.findLast(
-                    e => e.timestamp < options.currentRange.max
+                    e => e.timestamp < options.currentRange.max,
                 );
 
                 max = refEvent
@@ -404,7 +404,7 @@ export default {
                     filteredData[
                         Math.min(
                             Math.floor(options.currentRange.max),
-                            data.length - 1
+                            data.length - 1,
                         )
                     ].timestamp + offset;
             }
@@ -414,7 +414,7 @@ export default {
             }
         };
     },
-    afterInit(chart) {
+    afterInit(chart: ChartWithZoom) {
         initRange(chart);
 
         const { canvas } = chart.ctx;
@@ -482,14 +482,14 @@ export default {
             const [min, max] = getMinMaxX(chart);
             const maxResolution = Math.min(
                 max - min,
-                options.resolutionLimits.max
+                options.resolutionLimits.max,
             );
 
             newResolution = Math.ceil(
                 Math.max(
                     options.resolutionLimits.min,
-                    Math.min(newResolution, maxResolution)
-                )
+                    Math.min(newResolution, maxResolution),
+                ),
             );
 
             // Zoom where the mouse pointer is

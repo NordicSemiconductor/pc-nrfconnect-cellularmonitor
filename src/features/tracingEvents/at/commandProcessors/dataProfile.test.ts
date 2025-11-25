@@ -28,7 +28,7 @@ const packets = [
 test('XDATAPRFL read commands work as expected', () => {
     packets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).dataProfile
+            convertPackets([test.command, test.response]).dataProfile,
         ).toEqual(test.expected);
     });
 });

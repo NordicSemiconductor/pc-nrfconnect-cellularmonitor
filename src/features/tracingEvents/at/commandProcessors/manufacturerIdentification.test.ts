@@ -32,7 +32,7 @@ const readCommandPackets = [
 test('CGMI read commands work as expected', () => {
     readCommandPackets.forEach(test => {
         expect(
-            convertPackets([test.command, test.response]).manufacturer
+            convertPackets([test.command, test.response]).manufacturer,
         ).toEqual(test.expected);
     });
 });

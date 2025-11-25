@@ -130,7 +130,7 @@ export default () => {
     } else if (networkStatusLastUpdate === 'networkStatus' && networkStatus) {
         lteConnectionState = validateNetworkStatus(
             networkStatus,
-            lteConnectionState
+            lteConnectionState,
         );
     } else if (
         networkStatusLastUpdate === 'packetDomainEvent' &&
@@ -165,7 +165,7 @@ export default () => {
         if (isTracing && !traceDataReceived) {
             const timeout = setTimeout(
                 () => setTraceTimedOut(true),
-                STATUS_CHECK_TIMEOUT
+                STATUS_CHECK_TIMEOUT,
             );
             return () => clearTimeout(timeout);
         }
@@ -206,7 +206,7 @@ export default () => {
 
 const validateConeval = (
     conevalResult: ConnectionEvaluationResult,
-    lteConnectionState: Step
+    lteConnectionState: Step,
 ) => {
     switch (conevalResult) {
         case 0:
@@ -255,7 +255,7 @@ const validateConeval = (
 
 const validateNetworkStatus = (
     networkStatus: number,
-    lteConnectionState: Step
+    lteConnectionState: Step,
 ) => {
     if (networkStatus === 0) {
         return {
