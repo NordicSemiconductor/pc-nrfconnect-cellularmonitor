@@ -30,7 +30,7 @@ To program the firmware on Nordic Thingy:91 using the {{app_name}}, complete the
 
 1. Click **Select** in the section for the latest modem firmware.
 
-    The **Program Mode Firmware (Optional)** window expands to display additional information.
+    The **Program Modem Firmware (Optional)** window expands to display additional information.
 
     ![{{app_name}} - Enable MCUboot](./screenshots/cellularmonitor_enablemcuboot.png "{{app_name}} - Enable MCUboot")
 
@@ -42,7 +42,7 @@ To program the firmware on Nordic Thingy:91 using the {{app_name}}, complete the
    If you see an error message, switch off the Thingy:91, enable MCUboot mode again, and click **Program**.
 
 1. Click **Continue** to move to the next step.<br/>
-   The **Program Mode Firmware (Optional)** window changes to the **Program Modem Shell** window.
+   The **Program Modem Firmware (Optional)** window changes to the **Program Modem Shell** window.
 
 1. Switch off the Thingy:91.
 1. Press **SW3** while switching **SW1** to the **ON** position to enable the MCUboot mode.

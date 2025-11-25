@@ -101,7 +101,7 @@ This section lists advanced tracing options.
 
 Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for the {{app_name}}. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
 
-See [Programming the nRF9160 DK firmware](./programming_91dk.md) and [Programming Nordic Thingy:91](./programming_thingy91.md) for detailed programming steps.
+See [Programming the nRF9160 DK firmware](./programming_91dk.md) and [Programming Nordic Thingy:91 firmware](./programming_thingy91.md) for detailed programming steps.
 
 !!! warning "Caution"
      Programming the modem firmware deletes the application firmware. If you choose to program only the modem firmware, you need to reprogram the application firmware.
