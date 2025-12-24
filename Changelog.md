@@ -1,3 +1,14 @@
+## 2.6.0 - unreleased
+
+### Added
+
+- Pre-bundled Modem Trace Databases: v2.0.4, and v2.0.4-FOTA.
+
+### Fixed
+
+- Updated the bundled `nrfutil device` command to v2.15.7, which includes a fix
+  to an issue with the device enumeration on Windows.
+
 ## 2.5.0 - 2025-11-26
 
 ### Added
