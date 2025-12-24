@@ -31,7 +31,7 @@ const LinkButton = ({
     onClick: () => void;
 }) => (
     <button
-        className="tw-bg-transparent tw-border-none tw-p-0 tw-text-nordicBlue hover:tw-underline"
+        className="tw-border-none tw-bg-transparent tw-p-0 tw-text-nordicBlue hover:tw-underline"
         type="button"
         onClick={onClick}
     >
