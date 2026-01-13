@@ -14,7 +14,7 @@ Complete the following steps to trace data:
 3. Generate additional trace data.
 
     - Click **Refresh dashboard** to send a set of AT commands to the device to feed the trace with information on the environment.
-    - Send AT commands using the Serial Terminal and from the dashboard fields.
+    - [Send AT commands using the Serial Terminal](https://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/viewing_and_sending_at_commands.html) and from the dashboard fields.
 
 4. Follow the progress in the [**Connection Status**](./overview.md#connection-status) side panel.</br>
    On success, the stage's status indicator turns green with a checkmark.
