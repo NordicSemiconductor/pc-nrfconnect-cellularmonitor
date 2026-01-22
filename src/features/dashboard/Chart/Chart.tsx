@@ -126,7 +126,7 @@ export default () => {
                             (tickValue as number) >= 0 &&
                             Math.ceil(tickValue as number) === tickValue
                                 ? traceEventFilter[tickValue]
-                                : undefined,
+                                : '',
                         stepSize: 0.5,
                     },
                     afterFit: scale => {
