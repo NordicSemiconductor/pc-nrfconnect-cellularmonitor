@@ -1,6 +1,6 @@
 # Memfault and modem trace in production
 
-In a production environment, you can configure the application to send modem traces to Memfault. The trace files can be downloaded from Memfault for playback and analysis in the {{app_name}}.
+In a production environment, you can configure the application to send modem traces to Memfault. The trace files can be downloaded from Memfault for playback and analysis in the Cellular Monitor app.
 
 For information on nRF Connect SDK samples showing how to send modem traces to Memfault, see [Memfault configuration](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/libraries/debug/memfault_ncs.html#configuration) in the nRF Connect SDK documentation.
 
