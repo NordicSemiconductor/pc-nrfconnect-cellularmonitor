@@ -10,4 +10,4 @@ A device can optionally be programmed with modem trace prerequisites, making it 
 
     You can also view information on the device's connection settings and status in the **Log** view.
 
-4. If your application does not support the {{app_name}}'s minimal requirements yet, program the required firmare as listed in [software requirements](requirements.md#software-requirements).
+4. If your application does not support the Cellular Monitor app's minimal requirements yet, program the required firmare as listed in [software requirements](requirements.md#software-requirements).

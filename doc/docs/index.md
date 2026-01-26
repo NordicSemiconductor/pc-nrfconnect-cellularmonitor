@@ -1,10 +1,10 @@
-# {{app_name}}
+# Cellular Monitor app
 
-The {{app_name}} is a cross-platform tool for Nordic Semiconductor nRF91 Series devices. It is used for capturing and analyzing modem traces to evaluate communication and view network parameters.
+The Cellular Monitor app is a cross-platform tool for Nordic Semiconductor nRF91 Series devices. It is used for capturing and analyzing modem traces to evaluate communication and view network parameters.
 
-A cellular connection involves the interoperation of diverse components and scenarios. Sometimes not everything goes according to plan, and we need information about the environment. The modem of the nRF91 Series System in Package (SiP) collects data about the connection in a modem trace. With the {{app_name}}, you can access the trace data and use it to visualize and optimize the connection.
+A cellular connection involves the interoperation of diverse components and scenarios. Sometimes not everything goes according to plan, and we need information about the environment. The modem of the nRF91 Series System in Package (SiP) collects data about the connection in a modem trace. With the Cellular Monitor app, you can access the trace data and use it to visualize and optimize the connection.
 
-## {{app_name}} features
+## Cellular Monitor app features
 
 - Get started quickly by programming precompiled sample apps and modem firmware to the device
 - Modem trace capture - live or playback modes
@@ -18,10 +18,10 @@ A cellular connection involves the interoperation of diverse components and scen
 
 !!! note "Note"
 
-    The {{app_name}} replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
+    The Cellular Monitor app replaces the deprecated nRF Connect for Desktop apps Trace Collector and LTE Link Monitor.
     You can still play back trace files created with these legacy apps.
 
-The {{app_name}} is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/index.html).
+The Cellular Monitor app is installed and updated using [nRF Connect for Desktop](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/index.html).
 
 ## Application source code
 
