@@ -13,8 +13,9 @@ theme:
       toggle:
         icon: material/lightbulb
         name: Switch to light mode
-  # logo: assets/logo.png
-  # favicon: assets/logo.png
+   # logo: assets/logo.png
+   # favicon: assets/logo.png
+
   features:
     - content.code.annotate
     - content.tooltips
@@ -30,7 +31,7 @@ extra_css:
   - stylesheets/style.css
 
 copyright:
-  Copyright &copy; 2023
+  Copyright &copy; 2017-2026
 
 markdown_extensions:
   - abbr
@@ -50,13 +51,11 @@ plugins:
   - macros
   - search
 
-
 extra:
   test: This is a test abbreviation snippet
 
 nav:
-  - Home: index.md
-  - Installing the Cellular Monitor app: installing.md
+  - Get started: index.md
   - Minimum requirements and limitations: requirements.md
   - Overview and user interface: overview.md
   - Preparing the device for modem trace: preparing.md

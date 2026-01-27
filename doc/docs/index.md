@@ -4,6 +4,10 @@ The Cellular Monitor app is a cross-platform tool for Nordic Semiconductor nRF91
 
 A cellular connection involves the interoperation of diverse components and scenarios. Sometimes not everything goes according to plan, and we need information about the environment. The modem of the nRF91 Series System in Package (SiP) collects data about the connection in a modem trace. With the Cellular Monitor app, you can access the trace data and use it to visualize and optimize the connection.
 
+## Installing the Cellular Monitor app
+
+For installation instructions, see [Installing nRF Connect for Desktop apps](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/installing_apps.html) in the nRF Connect for Desktop documentation.
+
 ## Cellular Monitor app features
 
 - Get started quickly by programming precompiled sample apps and modem firmware to the device
