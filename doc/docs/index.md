@@ -7,6 +7,7 @@ A cellular connection involves the interoperation of diverse components and scen
 ## Installing the Cellular Monitor app
 
 For installation instructions, see [Installing nRF Connect for Desktop apps](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/installing_apps.html) in the nRF Connect for Desktop documentation.
+
 ## Cellular Monitor app features
 
 - Get started quickly by programming precompiled sample apps and modem firmware to the device
