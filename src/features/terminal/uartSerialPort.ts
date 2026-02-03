@@ -29,6 +29,7 @@ import {
     setShellParser,
     setTerminalSerialPort,
 } from './serialPortSlice';
+import {detectLineEnding} from "../tracingEvents/at/detectLineEnding";
 
 const LOGGER_PREFIX = 'Terminal Serial Port:';
 
@@ -71,6 +72,10 @@ export const connectToSerialPort = async (
     const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort));
     // If race times out, then we assume AT Host is not detected on device.
     const detectedAtHostLibrary = isShellMode !== undefined;
+
+    if (! isShellMode) {
+        await detectLineEnding(createdSerialPort);
+    }
 
     if (detectedAtHostLibrary) {
         dispatch(setDetectedAtHostLibrary(true));
