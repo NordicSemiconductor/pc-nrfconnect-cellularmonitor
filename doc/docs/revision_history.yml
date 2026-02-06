@@ -1,0 +1,36 @@
+tool:
+- name: Cellular Monitor app
+  link: true
+sections:
+- name: January 2026
+  entries:
+  - "Renamed the Home page to [Get started](./index.md)."
+  - "Removed the separate Installing the Cellular Monitor app page. This page is now a section of the Get started page."
+- name: November 2025
+  entries:
+  - "Added the [Programming the nRF9160 DK firmware](programming_91dk.md) page."
+  - "Added the [Programming Nordic Thingy:91 firmware](programming_thingy91.md) page."
+- name: May 2025
+  entries:
+  - "Added Nordic Thingy:91 X™ to the list of devices in [Minimum requirements and limitations](./requirements.md)."
+  - "Updated  [software requirements](requirements.md#software-requirements) with additional information for clarity (no new software requirements were added)."
+  - "Updated information about **Program device** in [Overview and user interface](overview.md#program-device) and [Troubleshooting](./troubleshooting.md#i-do-not-see-program-device)."
+- name: January 2025
+  entries:
+  - "Added the [Application source code](./index.md#application-source-code) section on the [Home](./index.md) page"
+- name: November 2024
+  entries:
+  - "Editorial changes."
+- name: July 2024
+  entries:
+  - "Updated [software requirements](requirements.md#software-requirements) with information about the `nrf91-modem-trace-uart` snippet."
+  - "Fixed incorrect images on the [overview page](overview.md)."
+- name: February 2024
+  entries:
+  - "Minor documentation changes."
+- name: January 2024
+  entries:
+  - "Updated documentation for the Cellular Monitor app [v2.2.0](https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor/blob/main/Changelog.md)."
+- name: September 2023
+  entries:
+  - "First release."
