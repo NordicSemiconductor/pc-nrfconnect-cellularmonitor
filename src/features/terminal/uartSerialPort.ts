@@ -68,7 +68,7 @@ export const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort));
+    const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort), 2_000);
     // If race times out, then we assume AT Host is not detected on device.
     const detectedAtHostLibrary = isShellMode !== undefined;
 
