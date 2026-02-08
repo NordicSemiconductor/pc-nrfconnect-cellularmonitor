@@ -17,7 +17,6 @@ import {
     getIsTracing,
     getRefreshOnStart,
     getResetDevice,
-    getTraceFormats,
     setRefreshOnStart,
     setResetDevice,
 } from '../tracing/traceSlice';
