@@ -1,3 +1,9 @@
+## 2.6.1 - unreleased
+
+### Fixed
+
+- Detecting AT Host library failed with some firmware.
+
 ## 2.6.0 - 2025-12-24
 
 ### Added
