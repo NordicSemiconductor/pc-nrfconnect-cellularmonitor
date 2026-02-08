@@ -61,8 +61,6 @@ const RefreshOnStart = () => {
     const dispatch = useDispatch();
     const isTracing = useSelector(getIsTracing);
     const refreshOnStart = useSelector(getRefreshOnStart);
-    const selectedFormats = useSelector(getTraceFormats);
-    const liveEnabled = selectedFormats.includes('live');
     const title =
         'Cannot be enabled when Wireshark is enabled.\nRefresh dashboard 5 seconds after starting the trace';
 
