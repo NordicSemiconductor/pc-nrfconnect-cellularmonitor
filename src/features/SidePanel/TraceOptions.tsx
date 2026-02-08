@@ -69,8 +69,8 @@ const RefreshOnStart = () => {
     return (
         <Toggle
             label="Refresh dashboard on start"
-            disabled={isTracing || liveEnabled}
-            isToggled={refreshOnStart && !liveEnabled}
+            disabled={isTracing}
+            isToggled={refreshOnStart}
             onToggle={toggled => dispatch(setRefreshOnStart(toggled))}
             title={title}
         />
