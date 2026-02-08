@@ -250,6 +250,11 @@ export const startTrace =
             setTimeout(() => dispatch(sendAT(recommendedAt)), 5_000);
         }
 
+        if (getRefreshOnStart(state) && formats.includes('live')) {
+            logger.info(`Refreshing dashboard in 10 seconds`);
+            setTimeout(() => dispatch(sendAT(recommendedAt)), 10_000);
+        }
+
         reloadHandler = () => nrfml.stop(taskId);
         window.addEventListener('beforeunload', reloadHandler);
     };
