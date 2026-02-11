@@ -9,15 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
     ConfirmationDialog,
-    telemetry, Toggle,
+    telemetry,
+    Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
 import { askForTraceFile } from '../../common/fileUtils';
-import {convertTraceFile, readRawTrace} from '../tracing/nrfml';
-import {getTraceSerialPort, setManualDbFilePath, setRefreshOnStart} from '../tracing/traceSlice';
+import { convertTraceFile, readRawTrace } from '../tracing/nrfml';
+import { getTraceSerialPort, setManualDbFilePath } from '../tracing/traceSlice';
+import { isWiresharkInstalled } from '../wireshark/wireshark';
 import DatabaseFileOverride from './DatabaseFileOverride';
-import {isWiresharkInstalled} from "../wireshark/wireshark";
 
 export const LoadTraceFileGlobal = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,9 @@ export const LoadTraceFileGlobal = () => {
     const [loadTraceInWireshark, setLoadTraceInWireshark] = useState(false);
 
     const isLoadTraceEnabled = isWiresharkInstalled();
-    const noWiresharkWarning = isLoadTraceEnabled ? undefined : 'Install wireshark to use this feature';
+    const noWiresharkWarning = isLoadTraceEnabled
+        ? undefined
+        : 'Install wireshark to use this feature';
 
     const readRawFile = async () => {
         // Reset selected trace db
@@ -90,7 +93,11 @@ export const LoadTraceFileGlobal = () => {
             <Button
                 className={`w-100 ${loading && 'active-animation'}`}
                 onClick={readRawFile}
-                disabled={loading || hasSerialPort || (!readTraceFile && !loadTraceInWireshark)}
+                disabled={
+                    loading ||
+                    hasSerialPort ||
+                    (!readTraceFile && !loadTraceInWireshark)
+                }
                 variant="secondary"
             >
                 {loading ? 'Loading trace file' : 'Load trace file'}
@@ -111,15 +118,13 @@ export const LoadTraceFileGlobal = () => {
                 title={noWiresharkWarning}
             />
 
-            {
-                filePath && (
-                    <div>
-                        <p className="tw-text-xs mb-0">Loaded file:</p>
-                        <p className="tw-text-xs mb-1">{fileName}</p>
-                        <DatabaseFileOverride disabled />
-                    </div>
-                )
-            }
+            {filePath && (
+                <div>
+                    <p className="mb-0 tw-text-xs">Loaded file:</p>
+                    <p className="mb-1 tw-text-xs">{fileName}</p>
+                    <DatabaseFileOverride disabled />
+                </div>
+            )}
         </>
     );
 };
