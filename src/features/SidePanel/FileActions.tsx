@@ -14,6 +14,7 @@ import {
 import WiresharkWarning from '../wireshark/WiresharkWarning';
 import { LoadTraceFile } from './LoadTraceFile';
 import TraceConverter from './Tracing/TraceConverter';
+import {LoadTraceFileGlobal} from "./LoadTraceFileGlobal";
 
 export default () => {
     const device = useSelector(selectedDevice);
@@ -22,8 +23,9 @@ export default () => {
 
     return (
         <Group heading="FILE ACTIONS">
-            <LoadTraceFile />
-            <TraceConverter />
+            {/*<LoadTraceFile />*/}
+            <LoadTraceFileGlobal />
+            {/*<TraceConverter />*/}
             <WiresharkWarning />
         </Group>
     );
