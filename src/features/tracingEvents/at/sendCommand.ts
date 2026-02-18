@@ -82,12 +82,13 @@ const sendCommandLineMode = async (serialPort: SerialPort) => {
 const sendSingleCommandLineMode = (command: string, serialPort: SerialPort) =>
     new Promise<string>((resolve, reject) => {
         let response = '';
-        const handler = serialPort.onData(data => {
+        const unsubscribe = serialPort.onData(data => {
             response += decoder.decode(data);
-            const isCompleteRespose =
+            const isCompleteResponse =
                 response.includes('OK') || response.includes('ERROR');
-            if (isCompleteRespose) {
-                handler();
+            if (isCompleteResponse) {
+                unsubscribe();
+
                 if (response.includes('ERROR')) {
                     reject(response);
                 }

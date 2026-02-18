@@ -8,7 +8,7 @@ type LineEnding = '\r' | '\n' | '\r\n';
  * Unlike the original function, this does NOT append \r\n automatically
  * and does NOT reject on ERROR (since ERROR is a valid logic path here).
  */
-const sendRawWithTimeout = (data: string, timeoutMs: number, serialPort: SerialPort) =>
+const sendRawWithTimeout = (data: string, timeoutMs: number = 1000, serialPort: SerialPort) =>
     new Promise<string>((resolve, reject) => {
         let response = '';
         let timer: any;
@@ -39,9 +39,6 @@ const sendRawWithTimeout = (data: string, timeoutMs: number, serialPort: SerialP
         }, timeoutMs);
     });
 
-/**
- * Main Logic: Detects line ending based on AT command responses.
- */
 export const detectLineEnding = async (serialPort: SerialPort): Promise<LineEnding> => {
     let detectedEnding: LineEnding | null = null;
 
