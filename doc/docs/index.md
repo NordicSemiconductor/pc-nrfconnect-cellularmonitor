@@ -1,4 +1,4 @@
-# Cellular Monitor app
+# Get started
 
 The Cellular Monitor app is a cross-platform tool for Nordic Semiconductor nRF91 Series devices. It is used for capturing and analyzing modem traces to evaluate communication and view network parameters.
 
