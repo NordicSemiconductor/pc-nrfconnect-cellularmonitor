@@ -1,6 +1,6 @@
 # Minimum requirements and limitations
 
-The {{app_name}} supports the following Development Kits (DKs) and prototyping platforms for cellular development:
+The Cellular Monitor app supports the following Development Kits (DKs) and prototyping platforms for cellular development:
 
 - nRF91 Series DK
 - Nordic Thingy:91™
@@ -39,4 +39,4 @@ Alternatively, for all other compatible devices (including custom boards), make 
 
 Some limitations apply for applications that do not use AT commands extensively.
 
-In the first release of the {{app_name}}, the information in the **Dashboard** tab and in the **Connection Status** section are based on the AT commands in the modem trace. This limits trace data for applications that do not extensively use AT. It is recommended to use the option **Open in Wireshark** where you can find all available traffic.
+In the first release of the Cellular Monitor app, the information in the **Dashboard** tab and in the **Connection Status** section are based on the AT commands in the modem trace. This limits trace data for applications that do not extensively use AT. It is recommended to use the option **Open in Wireshark** where you can find all available traffic.

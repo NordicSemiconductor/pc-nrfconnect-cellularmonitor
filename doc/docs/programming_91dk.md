@@ -1,6 +1,6 @@
 # Programming the nRF9160 DK firmware
 
-You can program the nRF9160 DK application and network core firmware over USB by using MCUboot using the {{app_name}}.
+You can program the nRF9160 DK application and network core firmware over USB by using MCUboot using the Cellular Monitor app.
 
 !!! note "Note"
      This procedure for programming with one of the built-in samples or required modem firmware is only available for the nRF9160 DK.
@@ -9,7 +9,7 @@ You can program the nRF9160 DK application and network core firmware over USB by
 
 To program the firmware on the nRF9160 DK, complete the following steps:
 
-1. Open the {{app_name}}.
+1. Open the Cellular Monitor app.
 1. Punch out the nano-SIM from the SIM card and plug it into the SIM card holder on the nRF9160 DK.
 1. Make sure the **PROG/DEBUG SW10** switch on the nRF9160 DK is set to **nRF91**.<br/>
    (On the DK revision v0.9.0 and earlier, this is the **SW5** switch.)
