@@ -33,4 +33,4 @@ The `.mtrace` files are binary files. The `.mtrace` file extension is used to se
 
 ## Is it sufficient to update `prj.conf` to enable modem trace?
 
-No, the latest UART trace backend requires changes to the device tree, as well as the configuration. It is recommended to use the new backend and snippets, see [nRF91 modem tracing with UART backend using snippets](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/device_guides/working_with_nrf/nrf91/nrf9160.html#nrf91_modem_tracing_with_uart_backend_using_snippets) in the nRF Connect SDK documentation for more information.
+No, the latest UART trace backend requires changes to the device tree, as well as the configuration. It is recommended to use the new backend and snippets, see [nRF91 modem tracing with UART backend using snippets](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/app_dev/device_guides/nrf91/nrf91_snippet.html#nrf91_modem_tracing_with_uart_backend_using_snippets) in the nRF Connect SDK documentation for more information.
