@@ -23,13 +23,13 @@ import {
     setDetectedAtHostLibrary,
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
+import { detectLineEnding } from '../tracingEvents/at/detectLineEnding';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
     removeShellParser,
     setShellParser,
     setTerminalSerialPort,
 } from './serialPortSlice';
-import {detectLineEnding} from "../tracingEvents/at/detectLineEnding";
 
 const LOGGER_PREFIX = 'Terminal Serial Port:';
 
@@ -73,7 +73,7 @@ export const connectToSerialPort = async (
     // If race times out, then we assume AT Host is not detected on device.
     const detectedAtHostLibrary = isShellMode !== undefined;
 
-    if (! isShellMode) {
+    if (!isShellMode) {
         await detectLineEnding(createdSerialPort);
     }
 

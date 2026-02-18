@@ -1,3 +1,6 @@
+import { SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { TextDecoder } from 'util';
+
 import { detectLineEnding } from './detectLineEnding';
 
 class MockSerialPort {
@@ -32,12 +35,12 @@ class MockSerialPort {
 }
 
 describe('detectLineEnding', () => {
-    let mockPort: any;
+    let mockPort: MockSerialPort;
 
     beforeAll(() => {
         // Ensure TextDecoder is available in the test environment (Node/JSDOM)
         if (typeof TextDecoder === 'undefined') {
-            (global as any).TextDecoder = require('util').TextDecoder;
+            (global as Window & typeof globalThis).TextDecoder = TextDecoder;
         }
     });
 
@@ -52,7 +55,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should detect <CR> when AT<CR> returns OK', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
@@ -68,7 +71,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should detect <CRLF> when AT<CR> times out, then <LF> returns OK', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
@@ -89,7 +92,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should detect <LF> when AT<CR> times out, then <LF> returns ERROR', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
@@ -113,7 +116,7 @@ describe('detectLineEnding', () => {
 
     // failure cases:
     test('Should fallback to <CR> (Fatal Error check) when AT<CR> returns ERROR', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
@@ -131,7 +134,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should throw FATAL ERROR if both AT<CR> and <LF> time out', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
@@ -142,11 +145,13 @@ describe('detectLineEnding', () => {
 
         jest.advanceTimersByTime(1000);
 
-        await expect(promise).rejects.toThrow('FATAL ERROR: Device not responding');
+        await expect(promise).rejects.toThrow(
+            'FATAL ERROR: Device not responding',
+        );
     });
 
     test('Should throw FATAL ERROR if Confirmation step fails (Returns ERROR)', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         mockPort.emitData('OK');
 
@@ -159,7 +164,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should throw FATAL ERROR if Confirmation step fails (Timeout)', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         mockPort.emitData('OK');
         await Promise.resolve();
@@ -170,7 +175,7 @@ describe('detectLineEnding', () => {
     });
 
     test('Should handle fragmented data chunks correctly', async () => {
-        const promise = detectLineEnding(mockPort);
+        const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         expect(mockPort.getLastWrite()).toBe('AT\r');
 
