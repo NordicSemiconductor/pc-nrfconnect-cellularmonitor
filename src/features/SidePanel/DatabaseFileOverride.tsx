@@ -44,7 +44,7 @@ const selectFromDiskItem = {
     value: 'select-trace-db',
 };
 
-export default () => {
+export default ({ disabled }: { disabled?: boolean }) => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
     const [databases, setDatabases] = useState<DatabaseVersion[]>([]);
@@ -132,7 +132,7 @@ export default () => {
 
     return (
         <Dropdown
-            disabled={isTracing}
+            disabled={isTracing || disabled}
             label="Modem trace database"
             items={items}
             onSelect={onSelect}
