@@ -77,11 +77,9 @@ export const parseAT = (packet: TraceEvent): ParsedPacket => {
     // const textData = JSON.stringify(decoder.decode(packet.data));
     const textData = decoder.decode(packet.data);
     // console.log('----> textData', textData);
-   //  const escapedData = textData.substring(1, textData.length - 1);
+    //  const escapedData = textData.substring(1, textData.length - 1);
 
-    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gis.exec(
-        textData,
-    );
+    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gis.exec(textData);
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
         const status = getStatus(body?.trim());
