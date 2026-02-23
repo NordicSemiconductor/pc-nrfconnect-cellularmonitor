@@ -5,6 +5,8 @@
  */
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { getGlobalLineModeDelimiter } from './detectLineEnding';
+import { lineSeparator } from './utils';
 
 export enum RequestType {
     NOT_A_REQUEST,
@@ -37,8 +39,15 @@ const operatorToRequestType = (operator?: string) => {
 };
 
 const getStatus = (body?: string) => {
+    const delimiter = getGlobalLineModeDelimiter(); // gives "\r\n" or "\n" or "\r"
+    const escapedDelimiter = delimiter
+        .replace(/\r/g, '\\r')
+        .replace(/\n/g, '\\n');
+
+    // console.log('escapedDelimiter', escapedDelimiter);
+
     const lastLine = body
-        ?.split('\\r\\n')
+        ?.split(escapedDelimiter) // was "\\r\\n"
         .filter(line => line)
         .pop()
         ?.trim();
@@ -47,8 +56,6 @@ const getStatus = (body?: string) => {
 };
 
 const removeStatusFromBody = (body: string): string => {
-    const lineSeparator = /(?:\r\n|\\r\\n)/;
-
     const payloadArray = body.split(lineSeparator).filter(line => line);
 
     if (
@@ -57,6 +64,9 @@ const removeStatusFromBody = (body: string): string => {
             status => status === payloadArray[payloadArray.length - 1],
         )
     ) {
+        // TODO: update? or we're fine as we add this manually and then parse later? afraid parsers will break
+        // const delimiter = getGlobalLineModeDelimiter();
+        // return payloadArray.slice(0, -1).join(delimiter);
         return payloadArray.slice(0, -1).join('\r\n');
     }
     return body;

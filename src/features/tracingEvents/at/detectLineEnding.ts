@@ -1,12 +1,21 @@
+/*
+ * Copyright (c) 2026 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 const decoder = new TextDecoder();
 
 type LineEnding = '\r' | '\n' | '\r\n';
 
+// todo: reset it every time device is changed;
+let LINE_MODE_DELIMITER: LineEnding = '\r\n';
+
 /**
  * Helper: Sends raw data and waits for a response or a timeout.
- * Unlike the original function, this does NOT append \r\n automatically
+ * Does NOT append LineEnding automatically
  * and does NOT reject on ERROR (since ERROR is a valid logic path here).
  *
  * @param {string} data - The raw data to send (e.g., "AT\r" or "\n")
@@ -18,7 +27,7 @@ type LineEnding = '\r' | '\n' | '\r\n';
 const sendRawWithTimeout = (
     data: string,
     serialPort: SerialPort,
-    timeoutMs: number = 1000,
+    timeoutMs: number = 1000, // todo: check if need to wait more
 ): Promise<string> =>
     new Promise<string>((resolve, reject) => {
         let response = '';
@@ -29,7 +38,6 @@ const sendRawWithTimeout = (
             unsubscribe();
         };
 
-        // Set up the data listener (reusing your pattern)
         const unsubscribe = serialPort.onData(chunk => {
             response += decoder.decode(chunk);
             const isCompleteResponse =
@@ -41,10 +49,8 @@ const sendRawWithTimeout = (
             }
         });
 
-        // Write the data
         serialPort.write(data);
 
-        // Setup timeout
         timer = setTimeout(() => {
             cleanup();
             reject(new Error('TIMEOUT'));
@@ -57,24 +63,18 @@ export const detectLineEnding = async (
     let detectedEnding: LineEnding | null = null;
 
     try {
-        // --- Step 1: Send "AT<CR>" and wait 1s ---
-        console.log('Attempting detection: Sending AT<CR>');
-        const response1 = await sendRawWithTimeout('AT\r', serialPort);
+        // --- Step 1: Send "AT<CR>"
+        const responseCR = await sendRawWithTimeout('AT\r', serialPort);
 
-        if (response1.includes('OK')) {
+        if (responseCR.includes('OK')) {
             detectedEnding = '\r';
-        } else if (response1.includes('ERROR')) {
-            // Logic: "FATAL ERROR but try line ending <CR>"
-            console.warn(
-                'Received ERROR on AT<CR>, defaulting to <CR> as requested.',
-            );
+        } else if (responseCR.includes('ERROR')) {
+            // Received ERROR on AT<CR>, defaulting to <CR> as requested.
             detectedEnding = '\r';
         }
     } catch (error) {
-        // If Step 1 timed out, we proceed to Step 2
+        // Timeout on AT<CR>, proceeding to send <LF>
         if ((error as Error).message === 'TIMEOUT') {
-            console.log('Timeout on AT<CR>, proceeding to send <LF>');
-
             try {
                 // --- Step 2: Send "<LF>" and wait 1s ---
                 // Note: The device has effectively received "AT\r" + "\n" now
@@ -87,10 +87,9 @@ export const detectLineEnding = async (
                     detectedEnding = '\n';
                 }
             } catch (innerError) {
-                // --- Step 3: No response ---
                 if ((innerError as Error).message === 'TIMEOUT') {
                     throw new Error(
-                        'FATAL ERROR: Device not responding to line ending detection.',
+                        'Device not responding to line ending detection.',
                     );
                 }
                 throw innerError;
@@ -101,24 +100,28 @@ export const detectLineEnding = async (
     }
 
     if (!detectedEnding) {
-        throw new Error('FATAL ERROR: Could not determine line ending.');
+        throw new Error('Could not determine line ending.');
     }
 
-    // --- Step 4: Confirm correct line ending ---
-    console.log(
-        `Detected candidate: ${JSON.stringify(detectedEnding)}. Verifying...`,
+    const confirmation = await sendRawWithTimeout(
+        `AT${detectedEnding}`,
+        serialPort,
     );
-    try {
-        const confirmation = await sendRawWithTimeout(
-            `AT${detectedEnding}`,
-            serialPort,
-        );
-        if (confirmation.includes('OK')) {
-            console.log('Line ending confirmed.');
-            return detectedEnding;
-        }
-        throw new Error(`Confirmation failed. Received: ${confirmation}`);
-    } catch (e) {
-        throw new Error(`FATAL ERROR during confirmation: ${e}`);
+
+    if (confirmation.includes('OK')) {
+        LINE_MODE_DELIMITER = detectedEnding;
+        return detectedEnding;
     }
+
+    throw new Error(
+        `Line ending confirmation failed. Received: ${confirmation}`,
+    );
 };
+
+export function getGlobalLineModeDelimiter() {
+    return LINE_MODE_DELIMITER;
+}
+
+export function setGlobalLineModeDelimiter(delimiter: LineEnding) {
+    LINE_MODE_DELIMITER = delimiter;
+}

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
+ */
+
 import { SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { TextDecoder } from 'util';
 
@@ -145,12 +151,10 @@ describe('detectLineEnding', () => {
 
         jest.advanceTimersByTime(1000);
 
-        await expect(promise).rejects.toThrow(
-            'FATAL ERROR: Device not responding',
-        );
+        await expect(promise).rejects.toThrow('Device not responding');
     });
 
-    test('Should throw FATAL ERROR if Confirmation step fails (Returns ERROR)', async () => {
+    test('Should throw ERROR if Confirmation step fails (Returns ERROR)', async () => {
         const promise = detectLineEnding(mockPort as unknown as SerialPort);
 
         mockPort.emitData('OK');
@@ -160,7 +164,7 @@ describe('detectLineEnding', () => {
 
         mockPort.emitData('ERROR');
 
-        await expect(promise).rejects.toThrow('Confirmation failed');
+        await expect(promise).rejects.toThrow('confirmation failed');
     });
 
     test('Should throw FATAL ERROR if Confirmation step fails (Timeout)', async () => {

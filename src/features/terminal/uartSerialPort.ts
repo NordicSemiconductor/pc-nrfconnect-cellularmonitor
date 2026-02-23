@@ -69,13 +69,25 @@ export const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort));
+    const isShellMode = await raceTimeout(
+        testIfShellMode(createdSerialPort),
+        2000,
+    );
     // If race times out, then we assume AT Host is not detected on device.
     const detectedAtHostLibrary = isShellMode !== undefined;
 
-    if (!isShellMode) {
-        await detectLineEnding(createdSerialPort);
+    try {
+        if (!isShellMode) {
+            await detectLineEnding(createdSerialPort);
+        }
+    } catch (error) {
+        logger.error(
+            `${LOGGER_PREFIX} Failed to detect line ending, defaulting to <CR><LF>: ${error}`,
+        );
     }
+
+    // todo: 1 add analytics to track shell mode vs line mode; track line ending as well;
+    // TODO: 2 add a locker for start button until we detected line ending and device mode;
 
     if (detectedAtHostLibrary) {
         dispatch(setDetectedAtHostLibrary(true));
