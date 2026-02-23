@@ -40,14 +40,14 @@ const operatorToRequestType = (operator?: string) => {
 
 const getStatus = (body?: string) => {
     const delimiter = getGlobalLineModeDelimiter(); // gives "\r\n" or "\n" or "\r"
-    const escapedDelimiter = delimiter
-        .replace(/\r/g, '\\r')
-        .replace(/\n/g, '\\n');
+    // const escapedDelimiter = delimiter
+    //     .replace(/\r/g, '\r')
+    //     .replace(/\n/g, '\n');
 
     // console.log('escapedDelimiter', escapedDelimiter);
 
     const lastLine = body
-        ?.split(escapedDelimiter) // was "\\r\\n"
+        ?.split(delimiter) // was "\\r\\n"
         .filter(line => line)
         .pop()
         ?.trim();
@@ -74,15 +74,17 @@ const removeStatusFromBody = (body: string): string => {
 
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: TraceEvent): ParsedPacket => {
-    const textData = JSON.stringify(decoder.decode(packet.data));
-    const escapedData = textData.substring(1, textData.length - 1);
+    // const textData = JSON.stringify(decoder.decode(packet.data));
+    const textData = decoder.decode(packet.data);
+    // console.log('----> textData', textData);
+   //  const escapedData = textData.substring(1, textData.length - 1);
 
-    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
-        escapedData,
+    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gis.exec(
+        textData,
     );
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
-        const status = getStatus(body);
+        const status = getStatus(body?.trim());
         const payload = body ? removeStatusFromBody(body) : undefined;
         return {
             command: command != null ? command.toUpperCase() : command,

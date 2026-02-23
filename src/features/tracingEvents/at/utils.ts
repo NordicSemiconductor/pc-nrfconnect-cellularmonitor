@@ -5,7 +5,8 @@
  */
 
 // TODO: ask if we'll somehow get \\r\\r escaped; is that part of AT commands spec somehow or just a mistake?
-export const lineSeparator = /(?:\r\n|\r|\n|\\r\\n|\\r|\\n)/;
+// export const lineSeparator = /(?:\r\n|\r|\n|\\r\\n|\\r|\\n)/;
+export const lineSeparator = /(?:\r\n|\r|\n)/;
 
 export const getStringNumberPair = (payload: string): [string, number] => {
     const payloadArray = payload.split(',').map(parseStringValue);
@@ -44,4 +45,5 @@ export const getParametersFromResponse = (payload?: string) => {
 
 // todo: see if should be updated with \r and \n;
 export const parseStringValue = (value: string): string =>
-    value.replace(/\\r|\\n|[\\]+|["]|[”]/g, '');
+    value.replace(/\r|\n|\\r|\\n|[\\]+|["]|[”]/g, '');
+

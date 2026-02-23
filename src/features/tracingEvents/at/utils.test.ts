@@ -56,7 +56,7 @@ test('getParametersFromResponse', () => {
     expect(getParametersFromResponse(body2)).toEqual(expected);
     expect(getParametersFromResponse(body3)).toEqual(expectedBody3);
 
-    const payload = '"08","81109251714208","01"\\r\\n';
+    const payload = '"08","81109251714208","01"\r\n';
     const expectedValues = ['08', '81109251714208', '01'];
     expect(getParametersFromResponse(payload)).toEqual(expectedValues);
 });

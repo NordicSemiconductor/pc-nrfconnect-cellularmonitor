@@ -8,7 +8,6 @@ import { setGlobalLineModeDelimiter } from './detectLineEnding';
 import { parseAT, RequestType } from './parseAT';
 import { atPacket } from './testUtils';
 
-// TODO: UPDATE TESTS
 const tests = [
     {
         packet: atPacket('AT%XT3412=1,2000,30000'),
