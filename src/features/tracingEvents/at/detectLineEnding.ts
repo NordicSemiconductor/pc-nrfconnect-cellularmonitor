@@ -119,7 +119,7 @@ export const detectLineEnding = async (
 };
 
 export function getGlobalLineModeDelimiter() {
-    console.info('LINE_MODE_DELIMITER from getter', LINE_MODE_DELIMITER);
+    console.info('LINE_MODE_DELIMITER from getter', JSON.stringify(LINE_MODE_DELIMITER));
     return LINE_MODE_DELIMITER;
 }
 
