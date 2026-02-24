@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { setGlobalLineModeDelimiter } from '../detectLineEnding';
 import { atPacket, convertPackets, OkPacket } from '../testUtils';
-import {setGlobalLineModeDelimiter} from "../detectLineEnding";
-import {parseAT} from "../parseAT";
 
 test('Connectivity Statistics %XCONNSTAT can start and stop', () => {
     let state = convertPackets([atPacket('AT%XCONNSTAT=1'), OkPacket]);
