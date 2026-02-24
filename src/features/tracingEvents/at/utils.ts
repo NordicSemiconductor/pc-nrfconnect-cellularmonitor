@@ -43,6 +43,6 @@ export const getParametersFromResponse = (payload?: string) => {
     return paramArray;
 };
 
-// todo: see if should be updated with \r and \n;
+// todo: see if should be updated with \r and \n; \r|\n|\r\n - might not be needed at all; final: /\r|\n|\r\n|"|”/g,
 export const parseStringValue = (value: string): string =>
-    value.replace(/\r|\n|\\r|\\n|[\\]+|["]|[”]/g, '');
+    value.replace(/\r|\n|\r\n|"|”/g, '');

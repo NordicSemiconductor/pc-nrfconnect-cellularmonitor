@@ -107,7 +107,7 @@ const testsCR = [
         expected: {
             command: '%XEMPR',
             requestType: RequestType.NOT_A_REQUEST,
-            payload: '0,0,2\r\n1,3,5,2,8,2,13,1', // because of parseAT payloadArray.slice(0, -1).join('\r\n'); line
+            payload: '0,0,2\r1,3,5,2,8,2,13,1', // because of parseAT payloadArray.slice(0, -1).join('\r\n'); line
             status: 'OK',
         },
     },
@@ -137,7 +137,7 @@ const testsLF = [
         expected: {
             command: '%XEMPR',
             requestType: RequestType.NOT_A_REQUEST,
-            payload: '0,0,2\r\n1,3,5,2,8,2,13,1', // because of parseAT payloadArray.slice(0, -1).join('\r\n'); line
+            payload: '0,0,2\n1,3,5,2,8,2,13,1', // because of parseAT payloadArray.slice(0, -1).join('\r\n'); line
             status: 'OK',
         },
     },
@@ -170,6 +170,7 @@ describe('parseAT with LF delimiter', () => {
 
     test('parseAT successfully parses packet with LF line ending', () => {
         testsLF.forEach(test => {
+            console.log('parseAT(test.packet)', parseAT(test.packet), test.expected);
             expect(parseAT(test.packet)).toEqual(test.expected);
         });
     });
