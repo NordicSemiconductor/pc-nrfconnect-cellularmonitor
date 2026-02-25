@@ -18,22 +18,36 @@ import TraceCollector from './Tracing/TraceCollector';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
+import {useSelector} from "react-redux";
+import {getTraceSerialPort} from "../tracing/traceSlice";
+import {serialPort} from "@nordicsemiconductor/pc-nrfconnect-shared/typings/generated/main";
 
-export const TraceCollectorSidePanel = () => (
-    <SidePanel className="side-panel">
-        <Instructions />
-        <FileActions />
+export const TraceCollectorSidePanel = () => {
 
-        <div className="tw-flex tw-flex-col tw-gap-2">
-            <TraceCollector />
-        </div>
-        <div className="tw-flex tw-flex-col tw-gap-2">
-            <Recommended />
-            <OpenSerialTerminal />
-        </div>
+    const selectedSerialPort = useSelector(getTraceSerialPort);
 
-        <ConnectionStatus />
-        <TraceOptions />
-        <AdvancedOptions />
-    </SidePanel>
-);
+    return (
+        <SidePanel className="side-panel">
+            <Instructions/>
+            <FileActions/>
+
+            {
+                selectedSerialPort && (
+                    <>
+                        <div className="tw-flex tw-flex-col tw-gap-2">
+                            <TraceCollector/>
+                        </div>
+                        <div className="tw-flex tw-flex-col tw-gap-2">
+                            <Recommended/>
+                            <OpenSerialTerminal/>
+                        </div>
+                    </>
+                )
+            }
+
+            <ConnectionStatus/>
+            <TraceOptions/>
+            <AdvancedOptions/>
+        </SidePanel>
+    )
+}

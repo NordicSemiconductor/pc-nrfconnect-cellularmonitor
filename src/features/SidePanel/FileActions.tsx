@@ -12,9 +12,7 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import WiresharkWarning from '../wireshark/WiresharkWarning';
-// import { LoadTraceFile } from './LoadTraceFile';
-import { LoadTraceFileGlobal } from './LoadTraceFileGlobal';
-// import TraceConverter from './Tracing/TraceConverter';
+import { LoadTraceFile } from './LoadTraceFile';
 
 export default () => {
     const device = useSelector(selectedDevice);
@@ -23,9 +21,7 @@ export default () => {
 
     return (
         <Group heading="FILE ACTIONS">
-            {/* <LoadTraceFile /> */}
-            <LoadTraceFileGlobal />
-            {/* <TraceConverter /> */}
+            <LoadTraceFile />
             <WiresharkWarning />
         </Group>
     );
