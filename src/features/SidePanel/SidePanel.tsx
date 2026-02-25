@@ -5,9 +5,11 @@
  */
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { SidePanel } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { OpenSerialTerminal } from '../terminal';
+import { getTraceSerialPort } from '../tracing/traceSlice';
 import AdvancedOptions from './AdvancedOptions';
 import ConnectionStatus from './ConnectionStatus';
 import FileActions from './FileActions';
@@ -18,36 +20,30 @@ import TraceCollector from './Tracing/TraceCollector';
 
 import './sidepanel.scss';
 import './Tracing/tracing.scss';
-import {useSelector} from "react-redux";
-import {getTraceSerialPort} from "../tracing/traceSlice";
-import {serialPort} from "@nordicsemiconductor/pc-nrfconnect-shared/typings/generated/main";
 
 export const TraceCollectorSidePanel = () => {
-
     const selectedSerialPort = useSelector(getTraceSerialPort);
 
     return (
         <SidePanel className="side-panel">
-            <Instructions/>
-            <FileActions/>
+            <Instructions />
+            <FileActions />
 
-            {
-                selectedSerialPort && (
-                    <>
-                        <div className="tw-flex tw-flex-col tw-gap-2">
-                            <TraceCollector/>
-                        </div>
-                        <div className="tw-flex tw-flex-col tw-gap-2">
-                            <Recommended/>
-                            <OpenSerialTerminal/>
-                        </div>
-                    </>
-                )
-            }
+            {selectedSerialPort && (
+                <>
+                    <div className="tw-flex tw-flex-col tw-gap-2">
+                        <TraceCollector />
+                    </div>
+                    <div className="tw-flex tw-flex-col tw-gap-2">
+                        <Recommended />
+                        <OpenSerialTerminal />
+                    </div>
+                </>
+            )}
 
-            <ConnectionStatus/>
-            <TraceOptions/>
-            <AdvancedOptions/>
+            <ConnectionStatus />
+            <TraceOptions />
+            <AdvancedOptions />
         </SidePanel>
-    )
-}
+    );
+};

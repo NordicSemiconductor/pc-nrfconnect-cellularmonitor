@@ -8,7 +8,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
-    ConfirmationDialog, Group,
+    ConfirmationDialog,
+    Group,
     telemetry,
     Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -103,7 +104,7 @@ export const LoadTraceFile = () => {
                 {loading ? 'Loading trace file' : 'Load trace file'}
             </Button>
 
-            <div className="tw-pt-2 tw-flex tw-flex-col tw-gap-2">
+            <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-2">
                 <Toggle
                     label="Read trace file"
                     disabled={loading}
@@ -123,9 +124,11 @@ export const LoadTraceFile = () => {
             {filePath && (
                 <Group heading="FILE INFORMATION" className="tw-mt-6">
                     <div>
-                        <div className="tw-border tw-border-solid tw-border-gray-200 tw-p-2 tw-border-b-0">
+                        <div className="tw-border tw-border-b-0 tw-border-solid tw-border-gray-200 tw-p-2">
                             <p className="tw-mb-0 tw-text-xs">Loaded file:</p>
-                            <p className="tw-mb-0 tw-mt-1 tw-text-xs">{fileName}</p>
+                            <p className="tw-mb-0 tw-mt-1 tw-text-xs">
+                                {fileName}
+                            </p>
                         </div>
 
                         <DatabaseFileOverride previewMode />
