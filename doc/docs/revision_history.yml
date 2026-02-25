@@ -4,6 +4,7 @@ tool:
 sections:
 - name: January 2026
   entries:
+  - "Moved the content of [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations) to the [Get started](./index.md) page to match other app documentation."
   - "Renamed the Home page to [Get started](./index.md)."
   - "Removed the separate Installing the Cellular Monitor app page. This page is now a section of the Get started page."
 - name: November 2025
@@ -12,8 +13,8 @@ sections:
   - "Added the [Programming Nordic Thingy:91 firmware](programming_thingy91.md) page."
 - name: May 2025
   entries:
-  - "Added Nordic Thingy:91 X™ to the list of devices in [Minimum requirements and limitations](./requirements.md)."
-  - "Updated  [software requirements](requirements.md#software-requirements) with additional information for clarity (no new software requirements were added)."
+  - "Added Nordic Thingy:91 X™ to the list of devices in [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations)."
+  - "Updated  [software requirements](index.md#software-requirements) with additional information for clarity (no new software requirements were added)."
   - "Updated information about **Program device** in [Overview and user interface](overview.md#program-device) and [Troubleshooting](./troubleshooting.md#i-do-not-see-program-device)."
 - name: January 2025
   entries:
@@ -23,7 +24,7 @@ sections:
   - "Editorial changes."
 - name: July 2024
   entries:
-  - "Updated [software requirements](requirements.md#software-requirements) with information about the `nrf91-modem-trace-uart` snippet."
+  - "Updated [software requirements](index.md#software-requirements) with information about the `nrf91-modem-trace-uart` snippet."
   - "Fixed incorrect images on the [overview page](overview.md)."
 - name: February 2024
   entries:

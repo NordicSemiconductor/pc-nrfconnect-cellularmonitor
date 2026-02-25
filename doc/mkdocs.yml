@@ -56,7 +56,6 @@ extra:
 
 nav:
   - Get started: index.md
-  - Minimum requirements and limitations: requirements.md
   - Overview and user interface: overview.md
   - Preparing the device for modem trace: preparing.md
   - Capturing a modem trace: capturing.md
