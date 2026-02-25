@@ -1,3 +1,9 @@
+## 2.7.0 - Unreleased
+
+### Changed
+
+- Unified loading trace files into a single action button.
+
 ## 2.6.0 - 2025-12-24
 
 ### Added
