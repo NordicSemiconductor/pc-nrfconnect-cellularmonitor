@@ -10,7 +10,6 @@ const decoder = new TextDecoder();
 
 type LineEnding = '\r' | '\n' | '\r\n';
 
-// todo: reset it every time device is changed;
 let LINE_MODE_DELIMITER: LineEnding = '\r\n';
 
 /**
@@ -60,7 +59,7 @@ const sendRawWithTimeout = (
 export const detectLineEnding = async (
     serialPort: SerialPort,
 ): Promise<LineEnding> => {
-    let detectedEnding: LineEnding | null = null;
+    let detectedEnding: LineEnding = '\r\n';
 
     try {
         // --- Step 1: Send "AT<CR>"
@@ -128,4 +127,17 @@ export function getGlobalLineModeDelimiter() {
 
 export function setGlobalLineModeDelimiter(delimiter: LineEnding) {
     LINE_MODE_DELIMITER = delimiter;
+}
+
+export function lineEndingToDisplayString(lineEnding: LineEnding) {
+    switch (lineEnding) {
+        case '\r':
+            return '<CR>';
+        case '\n':
+            return '<LF>';
+        case '\r\n':
+            return '<CR><LF>';
+        default:
+            return JSON.stringify(lineEnding);
+    }
 }

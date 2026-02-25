@@ -13,6 +13,7 @@ import {
 
 import { startTrace, stopTrace } from '../../tracing/nrfml';
 import {
+    getFinishedDeviceDetection,
     getIsTracing,
     getOpenInWiresharkSelected,
     getTraceFormats,
@@ -27,6 +28,7 @@ export default () => {
     const traceFormats = useSelector(getTraceFormats);
     const openWiresharkOnStart = useSelector(getOpenInWiresharkSelected);
     const wiresharkPath = useSelector(getWiresharkPath);
+    const finishedDeviceDetection = useSelector(getFinishedDeviceDetection);
     const [disabled, setDisabled] = useState(false);
     const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
@@ -68,7 +70,7 @@ export default () => {
                 started={isTracing}
                 startText="Start"
                 stopText="Stop"
-                disabled={(!isTracing && traceFormats.length === 0) || disabled}
+                disabled={(!isTracing && traceFormats.length === 0) || disabled || !finishedDeviceDetection}
             />
             <InstallWiresharkDialog
                 isVisible={showWiresharkDialog}

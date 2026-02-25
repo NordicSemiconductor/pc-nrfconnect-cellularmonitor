@@ -38,6 +38,7 @@ interface TraceState {
     // From Device config.prj --> AT_HOST=y
     // Which is optional from our documentation
     detectedAtHostLibrary: boolean;
+    finishedDeviceDetection: boolean;
     isSendingATCommands: boolean;
     resetDevice: boolean;
     refreshOnStart: boolean;
@@ -56,6 +57,7 @@ const initialState = (): TraceState => ({
     selectedFormats: restoreTraceFormats(),
     showConflictingSettingsDialog: false,
     detectedAtHostLibrary: false,
+    finishedDeviceDetection: false,
     isSendingATCommands: false,
     resetDevice: restoreResetDevice(),
     refreshOnStart: restoreRefreshOnStart(),
@@ -139,6 +141,9 @@ const traceSlice = createSlice({
         setDetectedAtHostLibrary: (state, action: PayloadAction<boolean>) => {
             state.detectedAtHostLibrary = action.payload;
         },
+        setFinishedDeviceDetection: (state, action: PayloadAction<boolean>) => {
+            state.finishedDeviceDetection = action.payload;
+        },
         setIsSendingATCommands: (state, action: PayloadAction<boolean>) => {
             state.isSendingATCommands = action.payload;
         },
@@ -191,6 +196,9 @@ export const getShowConflictingSettingsDialog = (state: RootState) =>
 export const getDetectedAtHostLibrary = (state: RootState) =>
     state.app.trace.detectedAtHostLibrary;
 
+export const getFinishedDeviceDetection = (state: RootState) =>
+    state.app.trace.finishedDeviceDetection;
+
 export const getIsSendingATCommands = (state: RootState) =>
     state.app.trace.isSendingATCommands;
 
@@ -217,6 +225,7 @@ export const {
     setTraceFormats,
     setShowConflictingSettingsDialog,
     setDetectedAtHostLibrary,
+    setFinishedDeviceDetection,
     setIsSendingATCommands,
     setResetDevice,
     setRefreshOnStart,

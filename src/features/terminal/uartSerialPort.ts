@@ -7,6 +7,7 @@
 import {
     AppThunk,
     createSerialPort,
+    telemetry,
     Device,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -20,10 +21,10 @@ import {
     xTerminalShellParserWrapper,
 } from '../shell/shellParser';
 import {
-    setDetectedAtHostLibrary,
+    setDetectedAtHostLibrary, setFinishedDeviceDetection,
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
-import { detectLineEnding } from '../tracingEvents/at/detectLineEnding';
+import {detectLineEnding, lineEndingToDisplayString} from '../tracingEvents/at/detectLineEnding';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
     removeShellParser,
@@ -61,6 +62,7 @@ export const connectToSerialPort = async (
     if (!createdSerialPort) return;
 
     dispatch(setTerminalSerialPort(createdSerialPort));
+    dispatch(setFinishedDeviceDetection(false));
 
     /*
          Some applications that run Line Mode have an issue, where if you power-cycle the device,
@@ -77,8 +79,15 @@ export const connectToSerialPort = async (
     const detectedAtHostLibrary = isShellMode !== undefined;
 
     try {
+        telemetry.sendEvent('Device Mode', { mode: isShellMode ? 'Shell' : 'Line' });
+
         if (!isShellMode) {
-            await detectLineEnding(createdSerialPort);
+            const lineEnding = await detectLineEnding(createdSerialPort);
+            telemetry.sendEvent('Line Ending', { lineEnding });
+
+            logger.debug(
+                `${LOGGER_PREFIX} Detected Line Ending: ${lineEndingToDisplayString(lineEnding)}`,
+            );
         }
     } catch (error) {
         logger.error(
@@ -86,8 +95,7 @@ export const connectToSerialPort = async (
         );
     }
 
-    // todo: 1 add analytics to track shell mode vs line mode; track line ending as well;
-    // TODO: 2 add a locker for start button until we detected line ending and device mode;
+    dispatch(setFinishedDeviceDetection(true));
 
     if (detectedAtHostLibrary) {
         dispatch(setDetectedAtHostLibrary(true));

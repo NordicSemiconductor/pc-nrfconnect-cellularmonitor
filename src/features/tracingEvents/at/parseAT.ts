@@ -64,10 +64,8 @@ const removeStatusFromBody = (body: string): string => {
             status => status === payloadArray[payloadArray.length - 1],
         )
     ) {
-        // TODO: update? or we're fine as we add this manually and then parse later? afraid parsers will break
         const delimiter = getGlobalLineModeDelimiter();
         return payloadArray.slice(0, -1).join(delimiter);
-        // return payloadArray.slice(0, -1).join('\r\n');
     }
     return body;
 };

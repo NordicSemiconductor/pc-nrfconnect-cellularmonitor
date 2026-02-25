@@ -6,7 +6,6 @@
 
 import { getParametersFromResponse, parseStringValue } from './utils';
 
-// TODO: replace \\" in every test with just quotes " in all tests;
 test('getParametersFromResponse', () => {
     const shortBody = '"11100000","11100000","01001001"';
     const body =

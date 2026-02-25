@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-// TODO: ask if we'll somehow get \\r\\r escaped; is that part of AT commands spec somehow or just a mistake?
-// export const lineSeparator = /(?:\r\n|\r|\n|\\r\\n|\\r|\\n)/;
 export const lineSeparator = /(?:\r\n|\r|\n)/;
 
 export const getStringNumberPair = (payload: string): [string, number] => {
@@ -43,6 +41,5 @@ export const getParametersFromResponse = (payload?: string) => {
     return paramArray;
 };
 
-// todo: see if should be updated with \r and \n; \r|\n|\r\n - might not be needed at all; final: /\r|\n|\r\n|"|”/g,
 export const parseStringValue = (value: string): string =>
     value.replace(/\r|\n|\r\n|"|”/g, '');
