@@ -6,7 +6,7 @@ After starting the Cellular Monitor app, the main application window is displaye
 
 ## Common interface
 
-This app uses the nRF Connect for Desktop UI framework. Shared UI elements such as **Select device**, **About** tab, and **Log** panel are described in the [Common user interface](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/common_interface.html) documentation.
+This app uses the nRF Connect for Desktop UI framework. Shared UI elements such as **Select device**, **About** tab, and **Log** panel are described in the [Common user interface](https://docs.nordicsemi.com/bundle/swtools_docs/page/common_interface.html) documentation.
 
 The available options and information change after you select a device. If a supported device is selected, you can capture traces; otherwise, traces can be played back from a file. When you select a supported device, the app attempts to connect to two different serial ports—one for communication and logging, the other for modem trace.
 

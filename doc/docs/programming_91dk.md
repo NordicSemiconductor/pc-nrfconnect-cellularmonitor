@@ -5,7 +5,7 @@ You can program the nRF9160 DK application and network core firmware over USB by
 !!! note "Note"
      This procedure for programming with one of the built-in samples or required modem firmware is only available for the nRF9160 DK.
      A similar procedure is available for [Nordic Thingy:91™](./programming_thingy91.md).
-     For all other compatible devices (including custom boards), see [Software requirements](./requirements.md#software-requirements).
+     For all other compatible devices (including custom boards), see [Software requirements](./index.md#software-requirements).
 
 To program the firmware on the nRF9160 DK, complete the following steps:
 
