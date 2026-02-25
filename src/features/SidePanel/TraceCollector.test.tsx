@@ -19,6 +19,7 @@ import {
     setAvailableSerialPorts,
     setTraceFormats,
     setTraceSerialPort,
+    setFinishedDeviceDetection,
 } from '../tracing/traceSlice';
 import * as wireshark from '../wireshark/wireshark';
 import { setWiresharkPath } from '../wireshark/wiresharkSlice';
@@ -44,6 +45,7 @@ const serialPortActions = (
     setTraceFormats(formats),
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setTraceSerialPort('COM1'),
+    setFinishedDeviceDetection(true),
 ];
 
 describe('TraceCollector', () => {

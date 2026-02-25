@@ -21,6 +21,7 @@ import {
     setAvailableSerialPorts,
     setTraceFormats,
     setTraceSerialPort,
+    setFinishedDeviceDetection,
 } from '../tracing/traceSlice';
 import { TraceCollectorSidePanel } from './SidePanel';
 
@@ -71,6 +72,7 @@ const serialPortActions = (formats: TraceFormat[] = []) => [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setTraceSerialPort('COM1'),
     setTraceFormats(formats),
+    setFinishedDeviceDetection(true),
 ];
 
 const startTrace = () => fireEvent.click(screen.getByText('Start'));
