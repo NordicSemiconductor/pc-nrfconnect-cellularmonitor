@@ -2,7 +2,7 @@
 
 The Cellular Monitor app generates a broad set of cellular environment data displayed in the [**Dashboard**](./overview.md#dashboard-tab) tab panels. Optionally, you can also view the modem trace in Wireshark and observe application logging and the modem dialog in [Serial Terminal](https://docs.nordicsemi.com/bundle/nrf-connect-serial-terminal/page/index.html).
 
-See [Minimum requirements and limitations](./requirements.md) and [Preparing the device for modem trace](./preparing.md).
+See [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations) and [Preparing the device for modem trace](./preparing.md).
 
 Complete the following steps to trace data:
 
@@ -21,7 +21,7 @@ Complete the following steps to trace data:
 
     If a stage fails, a red X is displayed along with a reason for the failure. You can check the corresponding dashboard field for troubleshooting information.
 
-     - If the minimum requirements for trace have been met, the **Trace** checkmark should be green. See [Minimum requirements and limitations](./requirements.md) and [Preparing the device for modem trace](./preparing.md).
+     - If the minimum requirements for trace have been met, the **Trace** checkmark should be green. See [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations) and [Preparing the device for modem trace](./preparing.md).
      - **SIM** shows the Subscriber Identity Module (SIM) card status. For example, if you remove your SIM card from the device, the SIM turns red.
      - **Long-Term Evolution (LTE) Connection** depends on conditions in the local cellular network to which you are subscribed.
      - **Packet Data Network (PDN)** turns green when the device has successfully connected to the connection endpoint.

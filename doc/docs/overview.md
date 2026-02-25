@@ -4,15 +4,15 @@ After starting the Cellular Monitor app, the main application window is displaye
 
 ![Cellular Monitor app window](./screenshots/cel_mon_overview.png "Cellular Monitor app window")
 
-The available options and information change after you **Select Device**. If a supported device is selected, you can capture traces; otherwise, traces can be played back from a file.
+## Common interface
+
+This app uses the nRF Connect for Desktop UI framework. Shared UI elements such as **Select device**, **About** tab, and **Log** panel are described in the [Common user interface](https://docs.nordicsemi.com/bundle/swtools_docs/page/common_interface.html) documentation.
+
+The available options and information change after you select a device. If a supported device is selected, you can capture traces; otherwise, traces can be played back from a file. When you select a supported device, the app attempts to connect to two different serial ports—one for communication and logging, the other for modem trace.
 
 ## Before selection
 
 Before a device is selected, the side panel contains the following buttons:
-
-### Select Device
-
-Dropdown to list the devices attached to the computer. When you select a supported device, the app attempts to connect to two different serial ports. One of the ports is for communication and logging, the other is for modem trace.
 
 ### Buy development kit...
 
@@ -123,16 +123,3 @@ See [Viewing a Modem trace in the Cellular Monitor app](./viewing.md) for more i
 ## Certificate Manager tab
 
 See [Managing modem credentials](./managing_credentials.md).
-
-## Log
-
-The Log panel allows you to view the most important log events, tagged with a timestamp. Each time you open the app, a new session log file is created. You can find the Log panel and its controls, below the main application Window.
-
-- When troubleshooting, to view more detailed information than shown in the Log panel, use **Open log file** to open the current log file in a text editor.
-- To clear the information currently displayed in the Log panel, use **Clear Log**. The contents of the log file are not affected.
-- To hide or display the Log panel in the user interface, use **Show Log**.
-- To freeze Log panel scrolling, use **Autoscroll Log**.
-
-## About tab
-
-You can view application information, restore defaults, access source code and documentation. You also can find information on the selected device, access support tools, send feedback, and enable verbose logging.
