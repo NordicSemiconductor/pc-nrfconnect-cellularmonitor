@@ -7,9 +7,9 @@
 import {
     AppThunk,
     createSerialPort,
-    telemetry,
     Device,
     logger,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
@@ -21,10 +21,14 @@ import {
     xTerminalShellParserWrapper,
 } from '../shell/shellParser';
 import {
-    setDetectedAtHostLibrary, setFinishedDeviceDetection,
+    setDetectedAtHostLibrary,
+    setFinishedDeviceDetection,
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
-import {detectLineEnding, lineEndingToDisplayString} from '../tracingEvents/at/detectLineEnding';
+import {
+    detectLineEnding,
+    lineEndingToDisplayString,
+} from '../tracingEvents/at/detectLineEnding';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
     removeShellParser,
@@ -79,7 +83,9 @@ export const connectToSerialPort = async (
     const detectedAtHostLibrary = isShellMode !== undefined;
 
     try {
-        telemetry.sendEvent('Device Mode', { mode: isShellMode ? 'Shell' : 'Line' });
+        telemetry.sendEvent('Device Mode', {
+            mode: isShellMode ? 'Shell' : 'Line',
+        });
 
         if (!isShellMode) {
             const lineEnding = await detectLineEnding(createdSerialPort);

@@ -70,7 +70,11 @@ export default () => {
                 started={isTracing}
                 startText="Start"
                 stopText="Stop"
-                disabled={(!isTracing && traceFormats.length === 0) || disabled || !finishedDeviceDetection}
+                disabled={
+                    (!isTracing && traceFormats.length === 0) ||
+                    disabled ||
+                    !finishedDeviceDetection
+                }
             />
             <InstallWiresharkDialog
                 isVisible={showWiresharkDialog}
