@@ -17,9 +17,9 @@ import {
 } from '../../common/testUtils';
 import {
     setAvailableSerialPorts,
+    setFinishedDeviceDetection,
     setTraceFormats,
     setTraceSerialPort,
-    setFinishedDeviceDetection,
 } from '../tracing/traceSlice';
 import * as wireshark from '../wireshark/wireshark';
 import { setWiresharkPath } from '../wireshark/wiresharkSlice';

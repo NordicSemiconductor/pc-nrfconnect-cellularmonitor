@@ -19,9 +19,9 @@ import {
 import { TraceFormat } from '../tracing/formats';
 import {
     setAvailableSerialPorts,
+    setFinishedDeviceDetection,
     setTraceFormats,
     setTraceSerialPort,
-    setFinishedDeviceDetection,
 } from '../tracing/traceSlice';
 import { TraceCollectorSidePanel } from './SidePanel';
 
