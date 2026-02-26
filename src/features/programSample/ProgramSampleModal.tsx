@@ -615,7 +615,8 @@ const MCUBootModeInstructions = () => (
     <>
         <strong>Please enable MCUBoot mode:</strong>
         <p>
-            Press and hold the black button in the center (SW3) while switching on the power with SW1.
+            Press and hold the black button in the center (SW3) while switching
+            on the power with SW1.
         </p>
         <p className="text-center">
             <img src={thingySvg} alt="Thingy91 diagram" />
