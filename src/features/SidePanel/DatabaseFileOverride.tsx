@@ -44,7 +44,13 @@ const selectFromDiskItem = {
     value: 'select-trace-db',
 };
 
-export default () => {
+export default ({
+    disabled,
+    previewMode,
+}: {
+    disabled?: boolean;
+    previewMode?: boolean;
+}) => {
     const dispatch = useDispatch();
     const manualDbFilePath = useSelector(getManualDbFilePath);
     const [databases, setDatabases] = useState<DatabaseVersion[]>([]);
@@ -130,9 +136,20 @@ export default () => {
         }
     };
 
+    if (previewMode) {
+        return (
+            <div className="tw-border tw-border-solid tw-border-gray-200 tw-p-2">
+                <p className="tw-mb-0 tw-text-xs">Modem trace database:</p>
+                <p className="tw-mb-0 tw-mt-1 tw-text-xs">
+                    {selectedItem.label}
+                </p>
+            </div>
+        );
+    }
+
     return (
         <Dropdown
-            disabled={isTracing}
+            disabled={isTracing || disabled}
             label="Modem trace database"
             items={items}
             onSelect={onSelect}

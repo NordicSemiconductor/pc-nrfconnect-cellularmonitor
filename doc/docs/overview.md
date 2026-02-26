@@ -18,13 +18,18 @@ Dropdown to list the devices attached to the computer. When you select a support
 
 Opens a dialog with localized links to partner websites to purchase the supported devices.
 
-### Load trace file...
+### File Actions
 
-Opens File Explorer and allows you to select a trace file. Traces captured using the Cellular Monitor app have the file extension `.mtrace`. You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app.
+Options in this menu let you upload a trace file and decide how it is going to be treated.
 
-### Open trace file in Wireshark...
+| Option  | Description  |
+|---------|--------------|
+| **Load trace file** | Button that opens File Explorer and allows you to select a trace file. Traces captured using the Cellular Monitor app have the file extension `.mtrace`. You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app. |
+| **Read trace file** | Toggle on to process the loaded file in the app.   |
+| **Open trace file in Wireshark** | Toggle on to convert the file to Packet Capture Next Generation (PcapNG) format and display it in Wireshark. |
 
-Opens file explorer and allows you to select an `.mtrace` or `.bin` file. The selected file is converted to Packet Capture Next Generation (PcapNG) format and displayed in Wireshark.
+!!! note "Note"
+     When both the **Read trace file** and **Open trace file in Wireshark** toggles are set to off, the **Load trace file** button is not available.
 
 ## After selection
 
