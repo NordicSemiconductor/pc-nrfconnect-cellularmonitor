@@ -2,7 +2,8 @@
 
 ### Added
 
-- In line mode, automatically detect line ending type (CRLF, CR, or LF) when sending AT commands.
+- In line mode, automatically detect line ending type (CRLF, CR, or LF) when
+  sending AT commands.
 
 ## 2.6.0 - 2025-12-24
 
