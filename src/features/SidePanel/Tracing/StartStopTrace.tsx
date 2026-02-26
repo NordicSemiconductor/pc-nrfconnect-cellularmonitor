@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     logger,
@@ -55,6 +55,9 @@ export default () => {
             setDisabled(false);
         }, 2000);
     };
+
+    // Wait for AT modem detection on first render for 2s
+    useEffect(() => disableForAWhile(), []);
 
     return (
         <>
