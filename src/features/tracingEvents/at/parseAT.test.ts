@@ -170,11 +170,6 @@ describe('parseAT with LF delimiter', () => {
 
     test('parseAT successfully parses packet with LF line ending', () => {
         testsLF.forEach(test => {
-            console.log(
-                'parseAT(test.packet)',
-                parseAT(test.packet),
-                test.expected,
-            );
             expect(parseAT(test.packet)).toEqual(test.expected);
         });
     });

@@ -94,8 +94,6 @@ export default (packet: TraceEvent, state: State): State => {
     const parsedPacket = parseAT(packet);
     const { requestType, command } = parsedPacket;
 
-    // console.log('parsedPacket', parsedPacket, 'packet', packet);
-
     // request
     const processor = processors.find(p => p.command === command);
 

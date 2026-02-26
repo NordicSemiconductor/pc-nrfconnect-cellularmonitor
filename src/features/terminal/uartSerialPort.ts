@@ -91,7 +91,7 @@ export const connectToSerialPort = async (
             const lineEnding = await detectLineEnding(createdSerialPort);
             telemetry.sendEvent('Line Ending', { lineEnding });
 
-            logger.debug(
+            logger.info(
                 `${LOGGER_PREFIX} Detected Line Ending: ${lineEndingToDisplayString(lineEnding)}`,
             );
         }

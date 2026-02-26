@@ -61,6 +61,8 @@ export const detectLineEnding = async (
 ): Promise<LineEnding> => {
     let detectedEnding: LineEnding = '\r\n';
 
+    setGlobalLineModeDelimiter(detectedEnding);
+
     try {
         // --- Step 1: Send "AT<CR>"
         const responseCR = await sendRawWithTimeout('AT\r', serialPort);
@@ -118,10 +120,6 @@ export const detectLineEnding = async (
 };
 
 export function getGlobalLineModeDelimiter() {
-    console.info(
-        'LINE_MODE_DELIMITER from getter',
-        JSON.stringify(LINE_MODE_DELIMITER),
-    );
     return LINE_MODE_DELIMITER;
 }
 
