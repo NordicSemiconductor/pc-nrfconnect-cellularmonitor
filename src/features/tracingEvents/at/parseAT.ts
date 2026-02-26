@@ -5,6 +5,8 @@
  */
 
 import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { getGlobalLineModeDelimiter } from './detectLineEnding';
+import { lineSeparator } from './utils';
 
 export enum RequestType {
     NOT_A_REQUEST,
@@ -37,8 +39,10 @@ const operatorToRequestType = (operator?: string) => {
 };
 
 const getStatus = (body?: string) => {
+    const delimiter = getGlobalLineModeDelimiter();
+
     const lastLine = body
-        ?.split('\\r\\n')
+        ?.split(delimiter) // was "\\r\\n"
         .filter(line => line)
         .pop()
         ?.trim();
@@ -47,8 +51,6 @@ const getStatus = (body?: string) => {
 };
 
 const removeStatusFromBody = (body: string): string => {
-    const lineSeparator = /(?:\r\n|\\r\\n)/;
-
     const payloadArray = body.split(lineSeparator).filter(line => line);
 
     if (
@@ -57,22 +59,20 @@ const removeStatusFromBody = (body: string): string => {
             status => status === payloadArray[payloadArray.length - 1],
         )
     ) {
-        return payloadArray.slice(0, -1).join('\r\n');
+        const delimiter = getGlobalLineModeDelimiter();
+        return payloadArray.slice(0, -1).join(delimiter);
     }
     return body;
 };
 
 const decoder = new TextDecoder('utf-8');
 export const parseAT = (packet: TraceEvent): ParsedPacket => {
-    const textData = JSON.stringify(decoder.decode(packet.data));
-    const escapedData = textData.substring(1, textData.length - 1);
+    const textData = decoder.decode(packet.data);
 
-    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gi.exec(
-        escapedData,
-    );
+    const match = /(AT)?([+%][A-Z\d]+)?(=\?|[=?])?:?\s?(.*)?/gis.exec(textData);
     if (match) {
         const [, startsWithAt, command, operator, body] = match;
-        const status = getStatus(body);
+        const status = getStatus(body?.trim());
         const payload = body ? removeStatusFromBody(body) : undefined;
         return {
             command: command != null ? command.toUpperCase() : command,

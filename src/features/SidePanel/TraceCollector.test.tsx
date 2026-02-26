@@ -17,6 +17,7 @@ import {
 } from '../../common/testUtils';
 import {
     setAvailableSerialPorts,
+    setFinishedDeviceDetection,
     setTraceFormats,
     setTraceSerialPort,
 } from '../tracing/traceSlice';
@@ -44,6 +45,7 @@ const serialPortActions = (
     setTraceFormats(formats),
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setTraceSerialPort('COM1'),
+    setFinishedDeviceDetection(true),
 ];
 
 describe('TraceCollector', () => {
