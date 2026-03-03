@@ -7,6 +7,10 @@
 - Issue where detecting AT Host library would fail with some firmware.
 - Allow enabling dashboard refresh when tracing in Wireshark.
 
+### Changed
+
+- Unified loading trace files into a single action button.
+
 ## 2.6.0 - 2025-12-24
 
 ### Added
