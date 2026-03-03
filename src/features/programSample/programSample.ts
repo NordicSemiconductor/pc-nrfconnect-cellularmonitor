@@ -11,8 +11,7 @@ import {
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { type Progress } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
-import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
-import { type DeviceInfo } from '@nordicsemiconductor/pc-nrfconnect-shared/typings/generated/nrfutil/device';
+import { type DeviceInfo, NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import EventAction from '../../app/usageDataActions';
 import {
