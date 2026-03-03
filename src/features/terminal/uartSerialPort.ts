@@ -28,6 +28,7 @@ import {
 import {
     detectLineEnding,
     lineEndingToDisplayString,
+    setGlobalLineModeDelimiter,
 } from '../tracingEvents/at/detectLineEnding';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
@@ -36,7 +37,7 @@ import {
     setTerminalSerialPort,
 } from './serialPortSlice';
 
-const LOGGER_PREFIX = 'Terminal Serial Port:';
+const LOGGER_PREFIX = 'Terminal serial port:';
 
 export const connectToSerialPort = async (
     dispatch: Dispatch,
@@ -68,6 +69,9 @@ export const connectToSerialPort = async (
     dispatch(setTerminalSerialPort(createdSerialPort));
     dispatch(setFinishedDeviceDetection(false));
 
+    // reset before testing for line mode or shell mode
+    setGlobalLineModeDelimiter('\r\n');
+
     /*
          Some applications that run Line Mode have an issue, where if you power-cycle the device,
          the first AT command after the power-cycle will return an ERROR. This function `testIfShellMode`
@@ -87,12 +91,12 @@ export const connectToSerialPort = async (
             mode: isShellMode ? 'Shell' : 'Line',
         });
 
-        if (!isShellMode) {
+        if (!isShellMode && detectedAtHostLibrary) {
             const lineEnding = await detectLineEnding(createdSerialPort);
             telemetry.sendEvent('Line Ending', { lineEnding });
 
             logger.info(
-                `${LOGGER_PREFIX} Detected Line Ending: ${lineEndingToDisplayString(lineEnding)}`,
+                `${LOGGER_PREFIX} detected line ending ${lineEndingToDisplayString(lineEnding)}`,
             );
         }
     } catch (error) {
