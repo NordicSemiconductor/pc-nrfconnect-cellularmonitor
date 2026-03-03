@@ -1,5 +1,12 @@
 ## 2.7.0 - Unreleased
 
+### Added
+
+- In line mode, automatically detect line ending type (CRLF, CR, or LF) when
+  sending AT commands.
+- Issue where detecting AT Host library would fail with some firmware.
+- Allow enabling dashboard refresh when tracing in Wireshark.
+
 ### Changed
 
 - Unified loading trace files into a single action button.
