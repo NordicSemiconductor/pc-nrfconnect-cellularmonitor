@@ -245,9 +245,11 @@ export const startTrace =
             }
         }
 
-        if (getRefreshOnStart(state) && !formats.includes('live')) {
-            logger.info(`Refreshing dashboard in 5 seconds`);
-            setTimeout(() => dispatch(sendAT(recommendedAt)), 5_000);
+        if (getRefreshOnStart(state)) {
+            const timeout = formats.includes('live') ? 10_000 : 5_000;
+
+            logger.info(`Refreshing dashboard in ${timeout / 1000} seconds`);
+            setTimeout(() => dispatch(sendAT(recommendedAt)), timeout);
         }
 
         reloadHandler = () => nrfml.stop(taskId);
