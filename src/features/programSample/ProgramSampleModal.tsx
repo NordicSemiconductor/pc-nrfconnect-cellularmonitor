@@ -32,18 +32,18 @@ import {
     isThingy91,
     programDevice,
     programModemFirmware,
-    SampleProgress,
+    type SampleProgress,
 } from './programSample';
 import {
     downloadedFilePath,
     downloadModemFirmware,
     downloadSample,
     downloadSampleIndex,
-    Firmware,
+    type Firmware,
     initialSamples,
-    ModemFirmware,
+    type ModemFirmware,
     readBundledIndex,
-    Sample,
+    type Sample,
 } from './samples';
 // @ts-expect-error We can import svgs
 import thingySvg from './thingy91_sw1_sw3.svg';

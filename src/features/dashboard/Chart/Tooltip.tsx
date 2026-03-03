@@ -5,16 +5,16 @@
  */
 
 import {
-    BubbleDataPoint,
-    Chart,
-    ChartDataset,
-    ChartTypeRegistry,
-    Point,
-    TooltipModel,
+    type BubbleDataPoint,
+    type Chart,
+    type ChartDataset,
+    type ChartTypeRegistry,
+    type Point,
+    type TooltipModel,
 } from 'chart.js';
 
 import { EventColours } from '../../tracing/formats';
-import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { type TraceEvent } from '../../tracing/tracePacketEvents';
 
 export type TooltipContext = {
     chart: Chart<

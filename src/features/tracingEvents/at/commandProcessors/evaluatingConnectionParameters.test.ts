@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
-import { State } from '../../types';
+import { type State } from '../../types';
 import { atPacket, convertPackets } from '../testUtils';
 
 test('AT%CONEVAL with rsrp, rsrq, snr equal to 255 yields undefined decibel values', () => {

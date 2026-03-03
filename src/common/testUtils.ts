@@ -6,9 +6,9 @@
 
 import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 // eslint-disable-next-line import/no-unresolved
-import { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { type Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import {
-    AppDispatch,
+    type AppDispatch,
     currentPane,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { documentationMap } from './index';
+import { type documentationMap } from './index';
 
 type recommendedAT = Partial<
     Record<keyof typeof documentationMap, string | string[]>

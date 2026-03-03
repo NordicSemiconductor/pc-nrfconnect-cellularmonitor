@@ -6,7 +6,7 @@
 
 import { dialog, getCurrentWindow, shell } from '@electron/remote';
 import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { FileFilter } from 'electron';
+import { type FileFilter } from 'electron';
 import path from 'path';
 
 import { autoDetectDbRootFolder } from '../app/store';

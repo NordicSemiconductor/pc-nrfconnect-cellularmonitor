@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
-import { State } from '../../types';
+import { type State } from '../../types';
 import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 /*

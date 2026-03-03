@@ -5,12 +5,12 @@
  */
 
 import {
-    PcapInitParameters,
-    RawFileInitParameters,
-    WiresharkNamedPipeInitParameters,
+    type PcapInitParameters,
+    type RawFileInitParameters,
+    type WiresharkNamedPipeInitParameters,
 } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import {
-    Device,
+    type Device,
     deviceInfo,
     selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -19,7 +19,7 @@ import { displayName as appName } from '../../../package.json';
 import type { RootState } from '../../app/appReducer';
 import { defaultSharkPath } from '../wireshark/wireshark';
 import { getWiresharkPath } from '../wireshark/wiresharkSlice';
-import { SourceFormat, TraceFormat } from './formats';
+import { type SourceFormat, type TraceFormat } from './formats';
 import sinkFile from './sinkFile';
 
 const describeDevice = (device: Device) =>

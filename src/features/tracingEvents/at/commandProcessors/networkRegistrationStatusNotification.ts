@@ -11,9 +11,9 @@ import {
 import {
     isValidAcTState,
     isValidBitmask,
-    NetworkStatusNotifications,
-    PowerSavingModeEntries,
-    State,
+    type NetworkStatusNotifications,
+    type PowerSavingModeEntries,
+    type State,
 } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
