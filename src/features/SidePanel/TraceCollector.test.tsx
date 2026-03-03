@@ -59,6 +59,7 @@ describe('TraceCollector', () => {
     it('button text should reflect tracing state', async () => {
         jest.useFakeTimers();
         render(<TraceCollector />, serialPortActions(['raw']));
+        act(() => jest.runAllTimers());
         fireEvent.click(screen.getByText('Start'));
 
         act(jest.runOnlyPendingTimers);
@@ -88,8 +89,11 @@ describe('TraceCollector', () => {
     });
 
     test('renders InstallWiresharkDialog if wireshak is not found', () => {
+        jest.useFakeTimers();
         jest.spyOn(wireshark, 'findWireshark').mockReturnValue(null);
+        jest.spyOn(wireshark, 'defaultSharkPath').mockReturnValue(null);
         render(<TraceCollector />, serialPortActions(['live']));
+        act(() => jest.runAllTimers());
 
         fireEvent.click(screen.getByText('Start'));
 
@@ -98,11 +102,19 @@ describe('TraceCollector', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Start')).toBeInTheDocument();
         expect(screen.queryByText('Stop')).not.toBeInTheDocument();
+
+        jest.useRealTimers();
     });
 
     describe('sink configurations', () => {
         beforeEach(() => {
             jest.resetAllMocks();
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.runOnlyPendingTimers();
+            jest.useRealTimers();
         });
 
         it('should call nrfml start with selected sink configurations as arguments', () => {
@@ -110,6 +122,7 @@ describe('TraceCollector', () => {
                 ...serialPortActions(['raw']),
                 setWiresharkPath('path/to/wireshark'),
             ]);
+            act(() => jest.runAllTimers());
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks('nrfml-raw-file-sink');
@@ -120,6 +133,7 @@ describe('TraceCollector', () => {
                 ...serialPortActions(['raw', 'pcap']),
                 setWiresharkPath('path/to/wireshark'),
             ]);
+            act(() => jest.runAllTimers());
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
@@ -133,6 +147,7 @@ describe('TraceCollector', () => {
                 ...serialPortActions(['raw', 'pcap', 'live']),
                 setWiresharkPath('path/to/wireshark'),
             ]);
+            act(() => jest.runAllTimers());
             fireEvent.click(screen.getByText('Start'));
 
             expectNrfmlStartCalledWithSinks(
