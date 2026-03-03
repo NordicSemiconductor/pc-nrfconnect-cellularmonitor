@@ -2,7 +2,7 @@
 
 ### Fixed
 
-- Issue with detecting AT Host library that would fail with some firmware.
+- Issue where detecting AT Host library would fail with some firmware.
 
 ## 2.6.0 - 2025-12-24
 
