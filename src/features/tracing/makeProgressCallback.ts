@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
+import type nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
 import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { Dispatch } from 'redux';
+import { type Dispatch } from 'redux';
 
 import {
     setDetectingTraceDb,

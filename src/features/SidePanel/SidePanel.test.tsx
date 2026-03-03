@@ -16,7 +16,7 @@ import {
     render,
     screen,
 } from '../../common/testUtils';
-import { TraceFormat } from '../tracing/formats';
+import { type TraceFormat } from '../tracing/formats';
 import {
     setAvailableSerialPorts,
     setTraceFormats,

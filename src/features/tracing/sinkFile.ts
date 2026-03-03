@@ -7,7 +7,7 @@
 import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
 
-import { SourceFormat, TraceFormat } from './formats';
+import { type SourceFormat, type TraceFormat } from './formats';
 
 const fileExtension = (format: TraceFormat) => {
     switch (format) {

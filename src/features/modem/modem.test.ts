@@ -8,7 +8,7 @@ import { MockBinding } from '@serialport/binding-mock';
 import { SerialPortStream as MockSerialPortStream } from '@serialport/stream';
 import { SerialPort } from 'serialport';
 
-import { createModem, Modem } from './modem';
+import { createModem, type Modem } from './modem';
 
 const testPortPath = '/dev/PORT';
 

@@ -7,7 +7,7 @@
 import EventEmitter from 'events';
 
 import type { NetworkType } from '../tracingEvents/types';
-import { eventType } from './formats';
+import { type eventType } from './formats';
 
 export interface Packet {
     packet_data: Uint8Array;

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../app/appReducer';
-import { Modem } from './modem';
+import { type Modem } from './modem';
 
 interface ModemState {
     readonly modem: Modem | null;

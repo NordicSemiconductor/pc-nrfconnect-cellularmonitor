@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import { ChartArea } from 'chart.js';
+import { type ChartArea } from 'chart.js';
 
-import { XAxisRange } from './state';
+import { type XAxisRange } from './state';
 
 import './timeSpanDeltaLine.scss';
 

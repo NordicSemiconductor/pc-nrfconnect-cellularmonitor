@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../../tracing/tracePacketEvents';
-import { State } from '../types';
+import { type TraceEvent } from '../../tracing/tracePacketEvents';
+import { type State } from '../types';
 import { processor as connectivityStatistics } from './commandProcessors/connectivityStatistics';
 import { processor as currentBand } from './commandProcessors/currentBand';
 import { processor as dataProfile } from './commandProcessors/dataProfile';
@@ -40,7 +40,7 @@ import { processor as signalQualityNotification } from './commandProcessors/sign
 import { processor as systemMode } from './commandProcessors/systemMode';
 import { processor as TXPowerReduction } from './commandProcessors/TXPowerReduction';
 import { processor as xsim } from './commandProcessors/xsim';
-import { parseAT, ParsedPacket, RequestType } from './parseAT';
+import { parseAT, type ParsedPacket, RequestType } from './parseAT';
 
 const processors = [
     eDrxSetting,

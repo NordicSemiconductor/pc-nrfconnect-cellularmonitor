@@ -6,7 +6,7 @@
 
 import { ReadlineParser } from '@serialport/parser-readline';
 import EventEmitter from 'events';
-import { SerialPort } from 'serialport';
+import { type SerialPort } from 'serialport';
 
 export type Response = string[];
 

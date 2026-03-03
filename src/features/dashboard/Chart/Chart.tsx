@@ -7,13 +7,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 // eslint-disable-next-line import/no-unresolved
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { type ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { colors as sharedColors } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import {
     Chart as ChartJS,
-    ChartData,
-    ChartOptions,
+    type ChartData,
+    type ChartOptions,
     Legend,
     LinearScale,
     PointElement,
@@ -22,7 +22,10 @@ import {
 } from 'chart.js';
 
 import { EventColours } from '../../tracing/formats';
-import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
+import {
+    type TraceEvent,
+    tracePacketEvents,
+} from '../../tracing/tracePacketEvents';
 import chartAreaColorPlugin from './chartAreaColorPlugin';
 import {
     getLive,
@@ -35,7 +38,7 @@ import ChartTop from './ChartTop';
 import panZoomPlugin from './panZoomPlugin';
 import { defaultOptions } from './state';
 import TimeSpanDeltaLine from './TimeSpanDeltaLine';
-import { TooltipContext, tooltipHandler } from './Tooltip';
+import { type TooltipContext, tooltipHandler } from './Tooltip';
 
 ChartJS.register(LinearScale, PointElement, Title, Tooltip, Legend);
 

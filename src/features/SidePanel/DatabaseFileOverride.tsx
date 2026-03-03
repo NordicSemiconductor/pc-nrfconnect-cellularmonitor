@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Dropdown,
-    DropdownItem,
+    type DropdownItem,
     logger,
     selectedDevice,
     selectedDeviceInfo,
@@ -22,7 +22,7 @@ import EventAction from '../../app/usageDataActions';
 import { askForTraceDbFile } from '../../common/fileUtils';
 import { getDeviceKeyForTraceDatabaseEntries } from '../programSample/programSample';
 import {
-    DatabaseVersion,
+    type DatabaseVersion,
     getDatabases,
     getRemoteDatabases,
     setSelectedTraceDatabaseFromVersion,
