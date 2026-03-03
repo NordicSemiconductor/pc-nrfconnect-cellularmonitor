@@ -17,6 +17,7 @@ import {
     getTerminalSerialPort,
 } from '../../terminal/serialPortSlice';
 import { setIsSendingATCommands } from '../../tracing/traceSlice';
+import { getGlobalLineModeDelimiter } from './detectLineEnding';
 
 const decoder = new TextDecoder();
 const queue: string[] = [];
@@ -81,13 +82,16 @@ const sendCommandLineMode = async (serialPort: SerialPort) => {
 
 const sendSingleCommandLineMode = (command: string, serialPort: SerialPort) =>
     new Promise<string>((resolve, reject) => {
+        const delimiter = getGlobalLineModeDelimiter();
+
         let response = '';
-        const handler = serialPort.onData(data => {
+        const unsubscribe = serialPort.onData(data => {
             response += decoder.decode(data);
-            const isCompleteRespose =
+            const isCompleteResponse =
                 response.includes('OK') || response.includes('ERROR');
-            if (isCompleteRespose) {
-                handler();
+            if (isCompleteResponse) {
+                unsubscribe();
+
                 if (response.includes('ERROR')) {
                     reject(response);
                 }
@@ -97,7 +101,7 @@ const sendSingleCommandLineMode = (command: string, serialPort: SerialPort) =>
             }
         });
 
-        serialPort.write(`${command}\r\n`);
+        serialPort.write(`${command}${delimiter}`);
     });
 
 const atGetModemVersion = 'AT+CGMR';

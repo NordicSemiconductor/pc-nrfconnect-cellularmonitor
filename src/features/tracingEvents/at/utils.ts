@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+export const lineSeparator = /(?:\r\n|\r|\n)/;
+
 export const getStringNumberPair = (payload: string): [string, number] => {
     const payloadArray = payload.split(',').map(parseStringValue);
     return [payloadArray[0], parseInt(payloadArray[1], 10)];
@@ -13,7 +15,7 @@ export const getNumber = (payload: string): number =>
     parseInt(payload.trim(), 10);
 
 export const getLines = (payload: string): string[] =>
-    payload.split(/(?:\r\n|\\r\\n)/).filter(line => line);
+    payload.split(lineSeparator).filter(line => line);
 
 export const getNumberArray = (payload: string): number[] =>
     payload
@@ -25,7 +27,7 @@ export const getParametersFromResponse = (payload?: string) => {
     if (!payload) {
         return [];
     }
-    const lineSeparator = /(?:\r\n|\\r\\n)/;
+
     const lines = payload?.split(lineSeparator).filter(line => line);
     const paramArray = lines
         .map(line =>
@@ -40,4 +42,4 @@ export const getParametersFromResponse = (payload?: string) => {
 };
 
 export const parseStringValue = (value: string): string =>
-    value.replace(/\\r|\\n|[\\]+|["]|[”]/g, '');
+    value.replace(/\r|\n|\r\n|"|”/g, '');
