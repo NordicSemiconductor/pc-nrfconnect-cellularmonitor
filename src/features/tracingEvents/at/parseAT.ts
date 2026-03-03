@@ -42,7 +42,7 @@ const getStatus = (body?: string) => {
     const delimiter = getGlobalLineModeDelimiter();
 
     const lastLine = body
-        ?.split(delimiter) // was "\\r\\n"
+        ?.split(delimiter)
         .filter(line => line)
         .pop()
         ?.trim();
