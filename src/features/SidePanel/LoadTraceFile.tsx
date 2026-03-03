@@ -34,7 +34,7 @@ export const LoadTraceFile = () => {
     const isLoadTraceEnabled = isWiresharkInstalled();
     const noWiresharkWarning = isLoadTraceEnabled
         ? undefined
-        : 'Install wireshark to use this feature';
+        : 'Install Wireshark to use this feature';
 
     const readRawFile = async () => {
         // Reset selected trace db
@@ -106,14 +106,14 @@ export const LoadTraceFile = () => {
 
             <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-2">
                 <Toggle
-                    label="Read trace file"
+                    label="Open trace in Cellular Monitor"
                     disabled={loading}
                     isToggled={readTraceFile}
                     onToggle={toggled => setReadTraceFile(toggled)}
                     title="Reads the trace file and shows the content in the dashboard."
                 />
                 <Toggle
-                    label="Open trace file in Wireshark"
+                    label="Open trace in Wireshark"
                     disabled={loading || !isLoadTraceEnabled}
                     isToggled={loadTraceInWireshark}
                     onToggle={toggled => setLoadTraceInWireshark(toggled)}
