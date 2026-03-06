@@ -11,7 +11,6 @@ import {
     ConfirmationDialog,
     Group,
     telemetry,
-    Toggle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../app/usageDataActions';
@@ -28,7 +27,7 @@ export const LoadTraceFile = () => {
     const hasSerialPort = useSelector(getTraceSerialPort) != null;
     const [showTraceDbSelector, setShowTraceDbSelector] = useState(false);
 
-    const [readTraceFile, setReadTraceFile] = useState(true);
+    const [readTraceFile, setReadTraceFile] = useState(false);
     const [loadTraceInWireshark, setLoadTraceInWireshark] = useState(false);
 
     const isLoadTraceEnabled = isWiresharkInstalled();
@@ -36,7 +35,23 @@ export const LoadTraceFile = () => {
         ? undefined
         : 'Install Wireshark to use this feature';
 
-    const readRawFile = async () => {
+    const readRawFile = async (readType: 'readTrace' | 'readWireshark') => {
+        console.log('----- read raw file', filePath);
+        console.log('--- readType', readType);
+        console.log('--- readTraceFile', readTraceFile);
+        console.log('--- loadTraceInWireshark', loadTraceInWireshark);
+        console.log('-----');
+
+        if (filePath) {
+            if (readType === 'readTrace') {
+                startReadingFile();
+            } else {
+                loadTrace();
+            }
+
+            return;
+        }
+
         // Reset selected trace db
         dispatch(setManualDbFilePath(undefined));
 
@@ -58,14 +73,21 @@ export const LoadTraceFile = () => {
 
         dispatch(readRawTrace(filePath, setLoading));
 
+        setReadTraceFile(false); // reset state
+        console.log('--> setReadTraceFile(false);');
+
         telemetry.sendEvent(EventAction.READ_TRACE_FILE);
     };
 
     const loadTrace = () => {
         if (filePath == null) return;
 
-        telemetry.sendEvent(EventAction.OPEN_TRACE_IN_WIRESHARK);
         dispatch(convertTraceFile(filePath, setLoading));
+
+        setLoadTraceInWireshark(false); // reset state
+        console.log('--> setLoadTraceInWireshark(false);');
+
+        telemetry.sendEvent(EventAction.OPEN_TRACE_IN_WIRESHARK);
     };
 
     const fileName = filePath ? filePath.split(/[/\\]/).pop() : '';
@@ -93,33 +115,45 @@ export const LoadTraceFile = () => {
             </ConfirmationDialog>
             <Button
                 className={`w-100 ${loading && 'active-animation'}`}
-                onClick={readRawFile}
-                disabled={
-                    loading ||
-                    hasSerialPort ||
-                    (!readTraceFile && !loadTraceInWireshark)
-                }
+                onClick={async () => {
+                    setReadTraceFile(true);
+                    await readRawFile('readTrace');
+                }}
+                disabled={loading || hasSerialPort} // todo: check why not !hasSerialPort
                 variant="secondary"
+                title="Reads the trace file and shows the content in the dashboard."
             >
-                {loading ? 'Loading trace file' : 'Load trace file'}
+                {loading
+                    ? 'Loading trace file'
+                    : `Load trace file${filePath ? '' : '...'}`}
             </Button>
 
-            <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-2">
-                <Toggle
-                    label="Open trace in Cellular Monitor"
+            <Button
+                className="w-100"
+                onClick={async () => {
+                    setLoadTraceInWireshark(true);
+                    await readRawFile('readWireshark');
+                }}
+                disabled={loading || !isLoadTraceEnabled}
+                variant="secondary"
+                title={noWiresharkWarning}
+            >
+                {`Open trace file in Wireshark${filePath ? '' : '...'}`}
+            </Button>
+            {filePath && (
+                <Button
+                    className="w-100"
+                    onClick={() => {
+                        setLoadTraceInWireshark(false);
+                        setReadTraceFile(false);
+                        setFilePath(undefined);
+                    }}
                     disabled={loading}
-                    isToggled={readTraceFile}
-                    onToggle={toggled => setReadTraceFile(toggled)}
-                    title="Reads the trace file and shows the content in the dashboard."
-                />
-                <Toggle
-                    label="Open trace in Wireshark"
-                    disabled={loading || !isLoadTraceEnabled}
-                    isToggled={loadTraceInWireshark}
-                    onToggle={toggled => setLoadTraceInWireshark(toggled)}
-                    title={noWiresharkWarning}
-                />
-            </div>
+                    variant="secondary"
+                >
+                    Clear file selection
+                </Button>
+            )}
 
             {filePath && (
                 <Group heading="FILE INFORMATION" className="tw-mt-6">
