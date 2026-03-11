@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Operator } from 'mcc-mnc-list';
+import { type Operator } from 'mcc-mnc-list';
 
-import { PowerLevel } from './at/commandProcessors/dataProfile';
-import { ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
-import { Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
+import { type PowerLevel } from './at/commandProcessors/dataProfile';
+import { type ActivityStatus } from './at/commandProcessors/deviceActivityStatus';
+import { type Mode as TXReductionMode } from './at/commandProcessors/TXPowerReduction';
 
 export type PacketFormat =
     | 'at'

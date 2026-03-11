@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { AvailablePlmn } from '../../types';
+import { type AvailablePlmn } from '../../types';
 import { atPacket, convertPackets, OkPacket } from '../testUtils';
 
 test('Set +COPS with OK response should set the state', () => {

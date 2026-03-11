@@ -6,11 +6,11 @@
 
 import { connect } from 'react-redux';
 import {
-    AppDispatch,
-    AppThunk,
-    Device,
+    type AppDispatch,
+    type AppThunk,
+    type Device,
     DeviceSelector,
-    DeviceSelectorProps,
+    type DeviceSelectorProps,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type {
@@ -35,7 +35,7 @@ import {
 } from '../features/tracing/traceSlice';
 import { clearATQueue } from '../features/tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../features/tracingEvents/dashboardSlice';
-import { RootState } from './appReducer';
+import { type RootState } from './appReducer';
 import { getSerialPort as getPersistedSerialPort } from './store';
 
 const deviceListing: DeviceTraits = {

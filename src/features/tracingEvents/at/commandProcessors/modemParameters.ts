@@ -10,8 +10,8 @@ import {
 } from '../../../../common/powerSavingMode';
 import {
     isValidAcTState,
-    PowerSavingModeEntries,
-    SignalQuality,
+    type PowerSavingModeEntries,
+    type SignalQuality,
 } from '../../types';
 import type { Processor } from '..';
 import { getNumber, getParametersFromResponse } from '../utils';

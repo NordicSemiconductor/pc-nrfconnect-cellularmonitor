@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { PowerSavingModeValues } from '../features/tracingEvents/types';
+import { type PowerSavingModeValues } from '../features/tracingEvents/types';
 import {
     ACTIVE_TIMER_BASE_VALUES,
     parsePowerSavingMode,

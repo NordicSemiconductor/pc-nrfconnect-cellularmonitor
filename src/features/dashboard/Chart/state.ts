@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Chart } from 'chart.js';
+import { type Chart } from 'chart.js';
 // eslint-disable-next-line import/no-unresolved
-import { AnyObject } from 'chart.js/dist/types/basic';
+import { type AnyObject } from 'chart.js/dist/types/basic';
 
-import { eventType } from '../../tracing/formats';
-import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { type eventType } from '../../tracing/formats';
+import { type TraceEvent } from '../../tracing/tracePacketEvents';
 
 export interface XAxisRange {
     min: number;

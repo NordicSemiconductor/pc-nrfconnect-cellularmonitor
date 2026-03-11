@@ -6,16 +6,19 @@
 /* eslint-disable no-await-in-loop */
 
 import {
-    Device,
+    type Device,
     logger,
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { type Progress } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
-import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
-import { DeviceInfo } from '@nordicsemiconductor/pc-nrfconnect-shared/typings/generated/nrfutil/device';
+import { NrfutilDeviceLib, type DeviceInfo } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import EventAction from '../../app/usageDataActions';
-import { downloadedFilePath, Firmware, ModemFirmware } from './samples';
+import {
+    downloadedFilePath,
+    type Firmware,
+    type ModemFirmware,
+} from './samples';
 
 const { reset, program } = NrfutilDeviceLib;
 

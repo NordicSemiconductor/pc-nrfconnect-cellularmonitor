@@ -17,8 +17,8 @@ import {
     getDashboardState,
     getPowerSavingMode,
 } from '../../tracingEvents/dashboardSlice';
-import { PowerSavingModeValues } from '../../tracingEvents/types';
-import DashboardCard, { DashboardCardFields } from './DashboardCard';
+import { type PowerSavingModeValues } from '../../tracingEvents/types';
+import DashboardCard, { type DashboardCardFields } from './DashboardCard';
 
 export default () => {
     const { TAUTriggered } = useSelector(getDashboardState);

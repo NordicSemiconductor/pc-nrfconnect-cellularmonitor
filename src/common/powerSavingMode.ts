@@ -9,7 +9,7 @@ import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import {
     isValidBitmask,
     PowerSavingModeDeactivatedTimer,
-    PowerSavingModeValues,
+    type PowerSavingModeValues,
 } from '../features/tracingEvents/types';
 
 export enum TAU_TYPES {
