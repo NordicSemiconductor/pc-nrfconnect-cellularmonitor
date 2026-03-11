@@ -7,7 +7,7 @@
 import nrfml, { getPluginsDir } from '@nordicsemiconductor/nrf-monitor-lib-js';
 import type { Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import {
-    AppThunk,
+    type AppThunk,
     logger,
     selectedDevice,
     telemetry,
@@ -28,7 +28,12 @@ import {
 import { recommendedAt } from '../tracingEvents/at/recommeneded';
 import { detectDatabaseVersion, sendAT } from '../tracingEvents/at/sendCommand';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
-import { hasProgress, sinkEvent, SourceFormat, TraceFormat } from './formats';
+import {
+    hasProgress,
+    sinkEvent,
+    type SourceFormat,
+    type TraceFormat,
+} from './formats';
 import makeProgressCallback from './makeProgressCallback';
 import sinkConfig from './sinkConfig';
 import sinkFile from './sinkFile';
@@ -36,7 +41,7 @@ import sourceConfig from './sourceConfig';
 import { getSelectedTraceDatabaseFromVersion } from './traceDatabase';
 import {
     notifyListeners,
-    Packet,
+    type Packet,
     tracePacketEvents,
 } from './tracePacketEvents';
 import {

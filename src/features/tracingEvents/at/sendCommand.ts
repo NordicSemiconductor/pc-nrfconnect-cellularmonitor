@@ -5,13 +5,13 @@
  */
 
 import {
-    AppThunk,
+    type AppThunk,
     logger,
-    SerialPort,
+    type SerialPort,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import type { RootState } from '../../../app/appReducer';
-import { ShellParser } from '../../shell/shellParser';
+import { type ShellParser } from '../../shell/shellParser';
 import {
     getShellParser,
     getTerminalSerialPort,

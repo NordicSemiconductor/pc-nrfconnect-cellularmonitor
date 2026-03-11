@@ -5,12 +5,12 @@
  */
 
 import {
-    ConevalEnergyEstimate,
-    ConnectionEvaluationResult,
-    CoverageEnhancementLevel,
-    RRCState,
-    SignalQuality,
-    TAUTriggered,
+    type ConevalEnergyEstimate,
+    type ConnectionEvaluationResult,
+    type CoverageEnhancementLevel,
+    type RRCState,
+    type SignalQuality,
+    type TAUTriggered,
 } from '../../types';
 import type { Processor } from '..';
 import { getParametersFromResponse } from '../utils';

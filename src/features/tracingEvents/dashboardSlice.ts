@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../app/appReducer';
 import { initialState } from './at';
-import { RRCState, State } from './types';
+import { type RRCState, type State } from './types';
 
 const dashboardSlice = createSlice({
     name: 'dashboard',

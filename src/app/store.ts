@@ -10,7 +10,10 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
 
-import { ALL_TRACE_FORMATS, TraceFormat } from '../features/tracing/formats';
+import {
+    ALL_TRACE_FORMATS,
+    type TraceFormat,
+} from '../features/tracing/formats';
 
 interface StoreSchema {
     dbFilePath: string | undefined;

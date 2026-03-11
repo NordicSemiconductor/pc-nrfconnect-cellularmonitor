@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger, SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import {
+    logger,
+    type SerialPort,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import EventEmitter from 'events';
-import { Terminal } from 'xterm-headless';
+import { type Terminal } from 'xterm-headless';
 
 export interface ICallbacks {
     onSuccess: (response: string, command: string) => void;

@@ -5,14 +5,14 @@
  */
 
 // eslint-disable-next-line import/no-unresolved
-import { InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { type InsightInitParameters } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
 import { getAppDataDir } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
 import type { RootState } from '../../app/appReducer';
 import { autoDetectDbRootFolder } from '../../app/store';
-import { SourceFormat } from './formats';
+import { type SourceFormat } from './formats';
 import { getManualDbFilePath } from './traceSlice';
 
 const BUFFER_SIZE = 1;

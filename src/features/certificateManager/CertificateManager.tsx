@@ -13,11 +13,14 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useSelector } from 'react-redux';
 import { dialog } from '@electron/remote';
-import { logger, SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import {
+    logger,
+    type SerialPort,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { readFileSync } from 'fs';
 import { homedir } from 'os';
 
-import { ShellParser } from '../shell/shellParser';
+import { type ShellParser } from '../shell/shellParser';
 import {
     getShellParser,
     getTerminalSerialPort,

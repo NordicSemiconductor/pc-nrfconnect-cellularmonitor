@@ -7,10 +7,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { FunctionalMode } from '../../tracingEvents/at/commandProcessors/functionMode';
-import { Mode } from '../../tracingEvents/at/commandProcessors/TXPowerReduction';
+import { type FunctionalMode } from '../../tracingEvents/at/commandProcessors/functionMode';
+import { type Mode } from '../../tracingEvents/at/commandProcessors/TXPowerReduction';
 import { getDashboardState } from '../../tracingEvents/dashboardSlice';
-import DashboardCard, { DashboardCardFields } from './DashboardCard';
+import DashboardCard, { type DashboardCardFields } from './DashboardCard';
 
 const formatAvailableBands = (bandsArray: number[]) =>
     `${bandsArray.join(',')}`;

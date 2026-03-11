@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../../app/appReducer';
-import { EVENT_TYPES, eventType } from '../../tracing/formats';
+import { EVENT_TYPES, type eventType } from '../../tracing/formats';
 
 interface State {
     time: number;
