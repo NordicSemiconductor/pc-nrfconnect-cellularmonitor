@@ -9,6 +9,7 @@ import {
     createSerialPort,
     type Device,
     logger,
+    telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
@@ -21,8 +22,14 @@ import {
 } from '../shell/shellParser';
 import {
     setDetectedAtHostLibrary,
+    setFinishedDeviceDetection,
     setShowConflictingSettingsDialog,
 } from '../tracing/traceSlice';
+import {
+    detectLineEnding,
+    lineEndingToDisplayString,
+    setGlobalLineModeDelimiter,
+} from '../tracingEvents/at/detectLineEnding';
 import { testIfShellMode } from '../tracingEvents/at/sendCommand';
 import {
     removeShellParser,
@@ -30,7 +37,7 @@ import {
     setTerminalSerialPort,
 } from './serialPortSlice';
 
-const LOGGER_PREFIX = 'Terminal Serial Port:';
+const LOGGER_PREFIX = 'Terminal serial port:';
 
 export const connectToSerialPort = async (
     dispatch: Dispatch,
@@ -60,6 +67,10 @@ export const connectToSerialPort = async (
     if (!createdSerialPort) return;
 
     dispatch(setTerminalSerialPort(createdSerialPort));
+    dispatch(setFinishedDeviceDetection(false));
+
+    // reset before testing for line mode or shell mode
+    setGlobalLineModeDelimiter('\r\n');
 
     /*
          Some applications that run Line Mode have an issue, where if you power-cycle the device,
@@ -68,9 +79,33 @@ export const connectToSerialPort = async (
          ERROR if it's in line mode. Since we already got the ERROR, we won't unexpectedly get it again
          the next time we send a command.
          */
-    const isShellMode = await raceTimeout(testIfShellMode(createdSerialPort));
+    const isShellMode = await raceTimeout(
+        testIfShellMode(createdSerialPort),
+        2000,
+    );
     // If race times out, then we assume AT Host is not detected on device.
     const detectedAtHostLibrary = isShellMode !== undefined;
+
+    try {
+        telemetry.sendEvent('Device Mode', {
+            mode: isShellMode ? 'Shell' : 'Line',
+        });
+
+        if (!isShellMode && detectedAtHostLibrary) {
+            const lineEnding = await detectLineEnding(createdSerialPort);
+            telemetry.sendEvent('Line Ending', { lineEnding });
+
+            logger.info(
+                `${LOGGER_PREFIX} detected line ending ${lineEndingToDisplayString(lineEnding)}`,
+            );
+        }
+    } catch (error) {
+        logger.error(
+            `${LOGGER_PREFIX} Failed to detect line ending, defaulting to <CR><LF>: ${error}`,
+        );
+    }
+
+    dispatch(setFinishedDeviceDetection(true));
 
     if (detectedAtHostLibrary) {
         dispatch(setDetectedAtHostLibrary(true));

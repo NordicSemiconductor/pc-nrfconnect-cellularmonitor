@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     logger,
@@ -13,6 +13,7 @@ import {
 
 import { startTrace, stopTrace } from '../../tracing/nrfml';
 import {
+    getFinishedDeviceDetection,
     getIsTracing,
     getOpenInWiresharkSelected,
     getTraceFormats,
@@ -27,6 +28,7 @@ export default () => {
     const traceFormats = useSelector(getTraceFormats);
     const openWiresharkOnStart = useSelector(getOpenInWiresharkSelected);
     const wiresharkPath = useSelector(getWiresharkPath);
+    const finishedDeviceDetection = useSelector(getFinishedDeviceDetection);
     const [disabled, setDisabled] = useState(false);
     const [showWiresharkDialog, setShowWiresharkDialog] = useState(false);
 
@@ -56,6 +58,9 @@ export default () => {
         }, 2000);
     };
 
+    // Wait for AT modem detection on first render for 2s
+    useEffect(() => disableForAWhile(), []);
+
     return (
         <>
             <StartStopButton
@@ -68,7 +73,11 @@ export default () => {
                 started={isTracing}
                 startText="Start"
                 stopText="Stop"
-                disabled={(!isTracing && traceFormats.length === 0) || disabled}
+                disabled={
+                    (!isTracing && traceFormats.length === 0) ||
+                    disabled ||
+                    !finishedDeviceDetection
+                }
             />
             <InstallWiresharkDialog
                 isVisible={showWiresharkDialog}

@@ -5,7 +5,7 @@ You can program the Nordic Thingy:91™ application and network core firmware ov
 !!! note "Note"
      This procedure for programming with one of the built-in samples or required modem firmware is only available for Nordic Thingy:91.
      A similar procedure is available for the [nRF9160 DK](programming_91dk.md).
-     For all other compatible devices (including custom boards), see [Software requirements](./requirements.md#software-requirements).
+     For all other compatible devices (including custom boards), see [Software requirements](./index.md#software-requirements).
 
 To program the firmware on Nordic Thingy:91 using the Cellular Monitor app, complete the following steps:
 

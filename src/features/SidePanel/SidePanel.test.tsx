@@ -19,6 +19,7 @@ import {
 import { type TraceFormat } from '../tracing/formats';
 import {
     setAvailableSerialPorts,
+    setFinishedDeviceDetection,
     setTraceFormats,
     setTraceSerialPort,
 } from '../tracing/traceSlice';
@@ -71,19 +72,27 @@ const serialPortActions = (formats: TraceFormat[] = []) => [
     setAvailableSerialPorts(['COM1', 'COM2', 'COM3']),
     setTraceSerialPort('COM1'),
     setTraceFormats(formats),
+    setFinishedDeviceDetection(true),
 ];
 
 const startTrace = () => fireEvent.click(screen.getByText('Start'));
 
 describe('Sidepanel functionality', () => {
     beforeEach(() => {
+        jest.useFakeTimers();
         mockedCheckDiskSpace.mockImplementation(() => new Promise(() => {}));
         jest.clearAllMocks();
+    });
+
+    afterEach(() => {
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
     });
 
     describe('DetectTraceDbDialog', () => {
         it('should show dialog when tracing to RAW and it is trying to auto-detect mfw', async () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
+            act(() => jest.runAllTimers());
             startTrace();
 
             await expect(
@@ -93,6 +102,7 @@ describe('Sidepanel functionality', () => {
 
         it('clicking Close should close dialog but not stop tracing', async () => {
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            act(() => jest.runAllTimers());
             startTrace();
             expect(
                 screen.getByText('Detecting modem firmware version'),
@@ -122,6 +132,7 @@ describe('Sidepanel functionality', () => {
             const callbacks = getNrfmlCallbacks();
 
             render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            act(() => jest.runAllTimers());
             startTrace();
             expect(
                 await screen.findByText('Detecting modem firmware version'),
