@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../app/appReducer';
 import {
@@ -16,7 +16,7 @@ import {
     storeRefreshOnStart,
     storeResetDevice,
 } from '../../app/store';
-import { TraceFormat } from './formats';
+import { type TraceFormat } from './formats';
 import type { TaskId } from './nrfml';
 
 export interface TraceProgress {

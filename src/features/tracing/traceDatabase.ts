@@ -5,7 +5,7 @@
  */
 
 import {
-    AppDispatch,
+    type AppDispatch,
     getAppDataDir,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
@@ -14,7 +14,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 import { autoDetectDbRootFolder, storeManualDbFilePath } from '../../app/store';
-import { SupportedDeviceVersion } from '../programSample/programSample';
+import { type SupportedDeviceVersion } from '../programSample/programSample';
 import { TRACE_DATABASE_CONFIG_FILE } from './sourceConfig';
 import { setManualDbFilePath } from './traceSlice';
 

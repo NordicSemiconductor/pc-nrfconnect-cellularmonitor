@@ -5,16 +5,16 @@
  */
 
 import {
-    AppThunk,
+    type AppThunk,
     createSerialPort,
-    Device,
+    type Device,
     logger,
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type { Dispatch } from 'redux';
 import { Terminal } from 'xterm-headless';
 
-import { RootState } from '../../app/appReducer';
+import { type RootState } from '../../app/appReducer';
 import { raceTimeout } from '../../common/promise';
 import {
     hookModemToShellParser,

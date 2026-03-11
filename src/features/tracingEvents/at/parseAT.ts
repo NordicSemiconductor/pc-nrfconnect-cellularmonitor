@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { TraceEvent } from '../../tracing/tracePacketEvents';
+import { type TraceEvent } from '../../tracing/tracePacketEvents';
 import { getGlobalLineModeDelimiter } from './detectLineEnding';
 import { lineSeparator } from './utils';
 

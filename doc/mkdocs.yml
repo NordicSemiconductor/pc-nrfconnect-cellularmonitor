@@ -56,7 +56,6 @@ extra:
 
 nav:
   - Get started: index.md
-  - Minimum requirements and limitations: requirements.md
   - Overview and user interface: overview.md
   - Preparing the device for modem trace: preparing.md
   - Capturing a modem trace: capturing.md
@@ -69,4 +68,3 @@ nav:
   - Programming the nRF9160 DK firmware: programming_91dk.md
   - Programming Nordic Thingy:91 firmware: programming_thingy91.md
   - Troubleshooting: troubleshooting.md
-  - Revision history: revision_history.md

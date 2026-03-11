@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { eDRX, State } from '../../types';
+import { type eDRX, type State } from '../../types';
 import type { Processor } from '..';
 import { RequestType } from '../parseAT';
 import { getLines, getNumber, getParametersFromResponse } from '../utils';

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { telemetry, Toggle } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import EventAction from '../../../app/usageDataActions';
-import { TraceFormat } from '../../tracing/formats';
+import { type TraceFormat } from '../../tracing/formats';
 import {
     getIsTracing,
     getTraceFormats,

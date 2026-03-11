@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import {
     Group,
     selectedDevice,
-    Step,
+    type Step,
     Stepper,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
@@ -23,7 +23,7 @@ import {
     getTraceSourceFilePath,
 } from '../tracing/traceSlice';
 import { getDashboardState } from '../tracingEvents/dashboardSlice';
-import { ConnectionEvaluationResult } from '../tracingEvents/types';
+import { type ConnectionEvaluationResult } from '../tracingEvents/types';
 
 // Trace state
 const TRACE_DEFAULT_STATE: Step = {

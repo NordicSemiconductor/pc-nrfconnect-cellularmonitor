@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { Chart as ChartBase } from 'chart.js'; // Import the base Chart class
+import { type Chart as ChartBase } from 'chart.js'; // Import the base Chart class
 
 import type { TraceEvent } from '../../tracing/tracePacketEvents';
 

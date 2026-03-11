@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { getDashboardState } from '../../tracingEvents/dashboardSlice';
 import type { AcTState } from '../../tracingEvents/types';
-import DashboardCard, { DashboardCardFields } from './DashboardCard';
+import DashboardCard, { type DashboardCardFields } from './DashboardCard';
 
 export default () => {
     const {
