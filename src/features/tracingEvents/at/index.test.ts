@@ -6,7 +6,7 @@
 
 import { events, notifyListeners } from '../../tracing/tracePacketEvents';
 import { convert } from '..';
-import { State } from '../types';
+import { type State } from '../types';
 import { initialState } from '.';
 import { rawTraceData } from './traceSample';
 

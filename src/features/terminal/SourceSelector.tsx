@@ -9,13 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     ConflictingSettingsDialog,
     Dropdown,
-    DropdownItem,
+    type DropdownItem,
     selectedDevice,
-    SerialPort,
+    type SerialPort,
     truncateMiddle,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import type { AutoDetectTypes } from '@serialport/bindings-cpp';
-import { SerialPortOpenOptions } from 'serialport';
+import { type SerialPortOpenOptions } from 'serialport';
 
 import {
     getAvailableSerialPorts,

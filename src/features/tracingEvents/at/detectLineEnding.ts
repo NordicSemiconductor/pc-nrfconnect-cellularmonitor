@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { type SerialPort } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 const decoder = new TextDecoder();
 

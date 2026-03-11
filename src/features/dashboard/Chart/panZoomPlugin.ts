@@ -12,14 +12,17 @@ import type {
     ScatterDataPoint,
 } from 'chart.js';
 
-import { TraceEvent, tracePacketEvents } from '../../tracing/tracePacketEvents';
-import { ChartWithZoom } from './chart-type';
+import {
+    type TraceEvent,
+    tracePacketEvents,
+} from '../../tracing/tracePacketEvents';
+import { type ChartWithZoom } from './chart-type';
 import {
     defaultOptions,
     getState,
-    PanPluginOptions,
+    type PanPluginOptions,
     removeState,
-    XAxisRange,
+    type XAxisRange,
 } from './state';
 
 declare global {

@@ -7,7 +7,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 import FormLabel from 'react-bootstrap/FormLabel';
 import {
     telemetry,
@@ -16,7 +16,7 @@ import {
 
 import EventAction from '../../../app/usageDataActions';
 import { getNameAndDirectory, openInFolder } from '../../../common/fileUtils';
-import { TraceProgress } from '../../tracing/traceSlice';
+import { type TraceProgress } from '../../tracing/traceSlice';
 import DiskSpaceUsageBox from './DiskSpaceUsage/DiskSpaceUsageBox';
 
 const TraceFileName: FC<{

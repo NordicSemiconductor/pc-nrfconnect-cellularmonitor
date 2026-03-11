@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { recommendedAT } from '../../src/features/tracingEvents/at/recommeneded';
+import { type recommendedAT } from '../../src/features/tracingEvents/at/recommeneded';
 
 export type Documentation = {
     [key: string]: {
