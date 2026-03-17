@@ -6,6 +6,10 @@
   sending AT commands.
 - Allow enabling dashboard refresh when tracing in Wireshark.
 
+### Changed
+
+- ????
+
 ### Fixed
 
 - Issue where detecting AT Host library would fail with some firmware.
