@@ -6,6 +6,10 @@
   sending AT commands.
 - Allow enabling dashboard refresh when tracing in Wireshark.
 
+### Changed
+
+- Unified **Load trace file** and **Open trace file in Wireshark** into a single **Load trace file** button.
+
 ### Fixed
 
 - Issue where detecting AT Host library would fail with some firmware.
