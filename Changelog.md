@@ -8,7 +8,7 @@
 
 ### Changed
 
-- Unified loading trace files into a single action button.
+- Unified **Load trace file** and **Open trace file in Wireshark** into a single **Load trace file** button.
 
 ### Fixed
 
