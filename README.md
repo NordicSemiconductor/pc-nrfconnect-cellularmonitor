@@ -1,6 +1,5 @@
 # Cellular Monitor app
 
-[![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/pc-nrfconnect-cellularmonitor?branchName=main)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=153&branchName=main)
 [![License](https://img.shields.io/badge/license-Modified%20BSD%20License-blue.svg)](LICENSE)
 
 The Cellular Monitor app in nRF Connect for Desktop lets you capture and analyze
@@ -21,8 +20,7 @@ official documentation.
 
 ## Development
 
-See the
-[app development](https://nordicsemiconductor.github.io/pc-nrfconnect-docs/)
+See the [app development](https://nordicsemi.github.io/pc-nrfconnect-docs/)
 pages for details on how to develop apps for the nRF Connect for Desktop
 framework.
 
@@ -33,7 +31,7 @@ Please report issues on the [DevZone](https://devzone.nordicsemi.com) portal.
 ## Contributing
 
 See the
-[information on contributing](https://nordicsemiconductor.github.io/pc-nrfconnect-docs/contributing)
+[information on contributing](https://nordicsemi.github.io/pc-nrfconnect-docs/contributing)
 for details.
 
 ## License
