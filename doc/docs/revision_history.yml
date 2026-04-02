@@ -31,7 +31,7 @@ sections:
   - "Minor documentation changes."
 - name: January 2024
   entries:
-  - "Updated documentation for the Cellular Monitor app [v2.2.0](https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor/blob/main/Changelog.md)."
+  - "Updated documentation for the Cellular Monitor app [v2.2.0](https://github.com/nordicsemi/pc-nrfconnect-cellularmonitor/blob/main/Changelog.md)."
 - name: September 2023
   entries:
   - "First release."

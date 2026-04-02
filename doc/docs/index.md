@@ -72,5 +72,5 @@ In the first release of the Cellular Monitor app, the information in the **Dashb
 
 ## Application source code
 
-The code of the application is open source and [available on GitHub](https://github.com/NordicSemiconductor/pc-nrfconnect-cellularmonitor).
+The code of the application is open source and [available on GitHub](https://github.com/nordicsemi/pc-nrfconnect-cellularmonitor).
 Feel free to fork the repository and clone it for secondary development or feature contributions.
