@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { type TraceAbortHandle } from '@nordicsemi/nrfml-js';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../app/appReducer';
@@ -17,7 +18,6 @@ import {
     storeResetDevice,
 } from '../../app/store';
 import { type TraceFormat } from './formats';
-import type { TaskId } from './nrfml';
 
 export interface TraceProgress {
     format: TraceFormat;
@@ -26,7 +26,7 @@ export interface TraceProgress {
 }
 interface TraceState {
     traceProgress: TraceProgress[];
-    taskId: TaskId | null;
+    taskAbortHandle: TraceAbortHandle | null;
     dataReceived: boolean;
     sourceFilePath: string | null;
     traceSerialPort: string | null;
@@ -47,7 +47,7 @@ interface TraceState {
 
 const initialState = (): TraceState => ({
     traceProgress: [],
-    taskId: null,
+    taskAbortHandle: null,
     dataReceived: false,
     sourceFilePath: null,
     traceSerialPort: null,
@@ -76,18 +76,18 @@ const traceSlice = createSlice({
         setTraceIsStarted: (
             state,
             action: PayloadAction<{
-                taskId: TaskId;
+                taskAbortHandle: TraceAbortHandle | null;
                 progressConfigs: Pick<TraceProgress, 'format' | 'path'>[];
             }>,
         ) => {
-            state.taskId = action.payload.taskId;
+            state.taskAbortHandle = action.payload.taskAbortHandle;
             state.traceProgress = action.payload.progressConfigs.map(sink => ({
                 ...sink,
                 size: 0,
             }));
         },
         setTraceIsStopped: state => {
-            state.taskId = null;
+            state.taskAbortHandle = null;
         },
         setTraceProgress: (
             state,
@@ -161,10 +161,11 @@ const traceSlice = createSlice({
     },
 });
 
-export const getTaskId = (state: RootState) => state.app.trace.taskId;
+export const getTaskAbortHandle = (state: RootState) =>
+    state.app.trace.taskAbortHandle;
 
 export const getIsTracing = (state: RootState) =>
-    state.app.trace.taskId != null;
+    state.app.trace.taskAbortHandle != null;
 
 export const getTraceSerialPort = (state: RootState) =>
     state.app.trace.traceSerialPort;
