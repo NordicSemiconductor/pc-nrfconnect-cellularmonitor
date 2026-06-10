@@ -52,37 +52,45 @@ export default ({
     fields,
 }: DashboardCard) => (
     <div>
-        <Card
-            title={
-                <>
-                    <span className={`mdi ${iconName} icon`} />
-                    {title}
-                    {information.length > 0 && (
-                        <OverlayTrigger
-                            key={`overlay-${title}`}
-                            placement="bottom-end"
-                            overlay={
-                                <Tooltip id={`tooltip-${title}`}>
-                                    <span className="info">{information}</span>
-                                </Tooltip>
-                            }
-                        >
-                            <span className="mdi mdi-information-outline info-icon" />
-                        </OverlayTrigger>
-                    )}
-                </>
-            }
-        >
-            {Object.entries(fields).map(([fieldKey, fieldValues]) => (
-                <li key={fieldKey} style={{ padding: 0 }}>
-                    <CardEntry
-                        fieldKey={fieldKey}
-                        value={fieldValues.value}
-                        title={title}
-                        style={fieldValues.conditionalStyle}
-                    />
-                </li>
-            ))}
+        <Card>
+            <Card.Header className="tw-flex tw-flex-row tw-justify-between">
+                <Card.Header.Title
+                    className="tw-w-full tw-text-center"
+                    cardTitle={
+                        <div>
+                            <span className={`mdi ${iconName} icon`} />
+                            {title}
+                            {information.length > 0 && (
+                                <OverlayTrigger
+                                    key={`overlay-${title}`}
+                                    placement="bottom-end"
+                                    overlay={
+                                        <Tooltip id={`tooltip-${title}`}>
+                                            <span className="info">
+                                                {information}
+                                            </span>
+                                        </Tooltip>
+                                    }
+                                >
+                                    <span className="mdi mdi-information-outline info-icon" />
+                                </OverlayTrigger>
+                            )}
+                        </div>
+                    }
+                />
+            </Card.Header>
+            <Card.Body>
+                {Object.entries(fields).map(([fieldKey, fieldValues]) => (
+                    <li key={fieldKey} style={{ padding: 0 }}>
+                        <CardEntry
+                            fieldKey={fieldKey}
+                            value={fieldValues.value}
+                            title={title}
+                            style={fieldValues.conditionalStyle}
+                        />
+                    </li>
+                ))}
+            </Card.Body>
         </Card>
     </div>
 );
