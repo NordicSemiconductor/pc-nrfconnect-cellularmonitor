@@ -1,3 +1,9 @@
+## 2.7.1 - 2026-06-15
+
+### Changed
+
+- Maintenance release to update the dependencies.
+
 ## 2.7.0 - 2026-03-12
 
 ### Added
