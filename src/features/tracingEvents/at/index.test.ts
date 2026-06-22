@@ -118,9 +118,11 @@ test('Trace is read properly', () => {
     rawTraceData.forEach(jsonPacket => {
         notifyListeners([
             {
+                type: '',
+                timestamp: new Date(),
                 format: jsonPacket.format,
-                packet_data: new Uint8Array(jsonPacket.packet_data.data),
-                sequence_number: (sequenceNumber += 1),
+                data: new Uint8Array(jsonPacket.packet_data.data),
+                sequenceNumber: BigInt((sequenceNumber += 1)),
             },
         ]);
     });

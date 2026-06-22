@@ -397,7 +397,7 @@ export const readRawTrace =
 export const stopTrace = (): AppThunk<RootState> => (dispatch, getState) => {
     const taskAbortHandle = getTaskAbortHandle(getState());
     if (taskAbortHandle === null) return;
-    taskAbortHandle.cancel();
+    taskAbortHandle?.cancel();
     telemetry.sendEvent(EventAction.STOP_TRACE);
     dispatch(setTraceIsStopped());
     tracePacketEvents.emit('stop-process');

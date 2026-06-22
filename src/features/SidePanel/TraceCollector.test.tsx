@@ -8,8 +8,8 @@ import React from 'react';
 
 import {
     act,
-    expectNrfmlStartCalledWithSinks,
     fireEvent,
+    getNrfmlCalledWithSinks,
     mockedCheckDiskSpace,
     mockedDataDir,
     render,
@@ -117,44 +117,56 @@ describe('TraceCollector', () => {
             jest.useRealTimers();
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', () => {
+        it('should call nrfml start with selected sink configurations as arguments', async () => {
+            const sinks = ['raw'] as ('raw' | 'pcap' | 'live')[];
             render(<TraceCollector />, [
-                ...serialPortActions(['raw']),
+                ...serialPortActions(sinks),
                 setWiresharkPath('path/to/wireshark'),
             ]);
             act(() => jest.runAllTimers());
+            const calledFunctions = getNrfmlCalledWithSinks(sinks);
             fireEvent.click(screen.getByText('Start'));
+            await screen.findByText('Stop');
 
-            expectNrfmlStartCalledWithSinks('nrfml-raw-file-sink');
+            calledFunctions.forEach(f => {
+                expect(f).toHaveBeenCalled();
+            });
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', () => {
+        it('should call nrfml start with selected sink configurations as arguments', async () => {
+            const sinks = ['raw', 'pcap'] as ('raw' | 'pcap' | 'live')[];
             render(<TraceCollector />, [
-                ...serialPortActions(['raw', 'pcap']),
+                ...serialPortActions(sinks),
                 setWiresharkPath('path/to/wireshark'),
             ]);
             act(() => jest.runAllTimers());
+            const calledFunctions = getNrfmlCalledWithSinks(sinks);
             fireEvent.click(screen.getByText('Start'));
+            await screen.findByText('Stop');
 
-            expectNrfmlStartCalledWithSinks(
-                'nrfml-raw-file-sink',
-                'nrfml-pcap-sink',
-            );
+            calledFunctions.forEach(f => {
+                expect(f).toHaveBeenCalled();
+            });
         });
 
-        it('should call nrfml start with selected sink configurations as arguments', () => {
+        it('should call nrfml start with selected sink configurations as arguments', async () => {
+            const sinks = ['raw', 'pcap', 'live'] as (
+                | 'raw'
+                | 'pcap'
+                | 'live'
+            )[];
             render(<TraceCollector />, [
-                ...serialPortActions(['raw', 'pcap', 'live']),
+                ...serialPortActions(sinks),
                 setWiresharkPath('path/to/wireshark'),
             ]);
             act(() => jest.runAllTimers());
+            const calledFunctions = getNrfmlCalledWithSinks(sinks);
             fireEvent.click(screen.getByText('Start'));
+            await screen.findByText('Stop');
 
-            expectNrfmlStartCalledWithSinks(
-                'nrfml-raw-file-sink',
-                'nrfml-pcap-sink',
-                'nrfml-wireshark-named-pipe-sink',
-            );
+            calledFunctions.forEach(f => {
+                expect(f).toHaveBeenCalled();
+            });
         });
     });
 });

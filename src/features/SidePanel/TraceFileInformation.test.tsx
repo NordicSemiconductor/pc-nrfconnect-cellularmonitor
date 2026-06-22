@@ -16,7 +16,7 @@ describe('FileInformation', () => {
         const filePath = 'path/to/file.bin';
         render(<TraceFileInformation />, [
             setTraceIsStarted({
-                taskId: 1n,
+                taskAbortHandle: null,
                 progressConfigs: [{ format: 'raw', path: filePath }],
             }),
             setTraceProgress({ path: filePath, size: 1000 }),
