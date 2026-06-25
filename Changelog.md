@@ -1,3 +1,9 @@
+## 2.8.0 - UNRELEASED
+
+### Added
+
+- Pre-bundled Modem Trace Databases: v1.0.0 NTN, and v1.0.0-FOTA NTN.
+
 ## 2.7.1 - 2026-06-15
 
 ### Changed
