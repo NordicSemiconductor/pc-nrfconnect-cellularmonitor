@@ -4,6 +4,7 @@
 
 - Maintenance release to update the dependencies. - Maintenance release to
   update the dependencies.
+- Add working test line.
 
 ## 2.7.0 - 2026-03-12
 
