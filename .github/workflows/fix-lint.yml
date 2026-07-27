@@ -11,10 +11,6 @@ on:
 permissions:
     contents: write
 
-concurrency:
-    group: fix-lint-${{ github.ref }}
-    cancel-in-progress: false
-
 jobs:
     fix-lint:
         runs-on: ubuntu-latest
@@ -72,5 +68,9 @@ jobs:
                   git commit -m 'style: fix eslint/prettier issues'
                   git push origin "HEAD:${BRANCH}"
 
-                  echo "::notice::Pushed lint fixes to ${BRANCH}."
-                  echo "### ✅ Pushed lint fixes to \`${BRANCH}\`" >> "$GITHUB_STEP_SUMMARY"
+                  sha=$(git rev-parse HEAD)
+                  short_sha=$(git rev-parse --short HEAD)
+                  commit_url="${{ github.server_url }}/${{ github.repository }}/commit/${sha}"
+
+                  echo "::notice::Pushed lint fixes to ${BRANCH} in commit ${short_sha}."
+                  echo "### ✅ Pushed lint fixes in commit [${short_sha}](${commit_url}) to \`${BRANCH}\`" >> "$GITHUB_STEP_SUMMARY"
