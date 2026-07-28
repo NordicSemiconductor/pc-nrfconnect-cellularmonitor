@@ -1,0 +1,13 @@
+name: Fix eslint
+
+# Manually fix eslint/prettier issues on a branch without pulling locally.
+# Useful after editing Changelog, docs or other text directly on GitHub, which
+# often breaks eslint+prettier. Select the branch to fix via the native
+# "Run workflow" branch picker. Protected branches are rejected at runtime.
+
+on:
+    workflow_dispatch:
+
+jobs:
+    fix-eslint:
+        uses: nordicsemi/pc-nrfconnect-shared/.github/workflows/fix-eslint.yml@main
