@@ -20,11 +20,20 @@ Opens a dialog with localized links to partner websites to purchase the supporte
 
 ### Load trace file...
 
-Opens File Explorer and allows you to select a trace file. Traces captured using the Cellular Monitor app have the file extension `.mtrace`. You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app.
+Opens the file explorer and allows you to select a trace file. Traces captured using the Cellular Monitor app have the file extension `.mtrace`.
+
+!!! note "Note"
+     The `.mtrace` are binary files specific to the Cellular Monitor app. They have a different extension to separate them from `.bin` files. If you want to open these files in a tool that requires a `.bin` extension, replace the `.mtrace` extension with `.bin`. You can still open them in the Cellular Monitor app after the replacement.
+
+You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app.
+
+See [Loading modem traces for playback](viewing.md#loading-modem-traces-for-playback) for more information.
 
 ### Open trace file in Wireshark...
 
-Opens file explorer and allows you to select an `.mtrace` or `.bin` file. The selected file is converted to Packet Capture Next Generation (PcapNG) format and displayed in Wireshark.
+Opens File Explorer and allows you to select an `.mtrace` or a `.bin` file. The selected file is converted to Packet Capture Next Generation (PcapNG) format and displayed in Wireshark.
+
+Wireshark analyzes layers and protocols in the trace, in addition to AT commands. It can color and filter traffic based on packet type. See [DevAcademy article on viewing modem traces in Wireshark](https://academy.nordicsemi.com/topic/lesson-7-exercise-2/) for more information.
 
 ## After selection
 
@@ -41,7 +50,12 @@ Starts tracing for the selected device.
 
 ### Refresh dashboard
 
-Extensively populates the dashboard fields by sending a set of recommended AT commands to your device. This button is available only if the Cellular Monitor app identified either Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) on the device, and if you started tracing.
+Extensively populates the dashboard fields by sending a set of recommended AT commands to your device.
+
+This button is available only when the following conditions are met:
+
+* Your device is programmed with either Modem Shell or [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html)
+* Tracing has been started.
 
 You can toggle on [Refresh dashboard on start](#refresh-dashboard-on-start) so that this action is automatically run when the tracing starts.
 
@@ -80,7 +94,6 @@ If toggled on, this option will refresh the dashboard status automatically when 
 #### Open in Wireshark
 
 If toggled on, this option will automatically detect your Wireshark installation. If you have Wireshark installed, it will open and display trace data live in Wireshark when the trace is started.
-See [Using Wireshark](./wireshark.md) for more information.
 
 #### Save trace file to disk
 
@@ -98,7 +111,7 @@ This section lists advanced tracing options.
 
 !!! note "Note"
      This option is only available for the nRF9160 DK and Nordic Thingy:91™.
-
+     You will not see it if you are using a different device, even if it is among the [supported devices](index.md#minimum-requirements-and-limitations).
 Select and program precompiled sample applications and modem firmware to your device. The samples enable the trace and [AT Host](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html) prerequisites for the Cellular Monitor app. Modem firmware supporting trace is available with all samples, and you can choose to program the modem firmware or the application firmware, or both. The modem firmware needs only to be programmed once.
 
 See [Programming the nRF9160 DK firmware](./programming_91dk.md) and [Programming Nordic Thingy:91 firmware](./programming_thingy91.md) for detailed programming steps.
@@ -112,13 +125,42 @@ The serial port used to send AT commands to your device if Modem Shell or [AT Ho
 
 ## Dashboard tab
 
+![The dashboard tab filled with the trace information](./screenshots/Cell_mon_playback_result.png "The dashboard tab filled with the trace information")
+
 The dashboard contains detailed information about the connection and its components. During trace, dashboard fields are highlighted as they are populated.
+To view in slow motion, you can use the **Packet Event Viewer** to play back.
+
+Hover over any of the fields to view a description of the field, including related AT commands and links to documentation. While capturing a trace, you can choose to run the AT commands from here.
+
 See [Viewing a Modem trace in the Cellular Monitor app](./viewing.md) for more information.
+
+### Dashboard panels
+
+![Dashboard panels](./screenshots/cel_mon_dashboard.png "Dashboard panels")
+
+The trace data is categorized into the following 6 dashboard panels:
+
+- **LTE Network**
+- **Device**
+- **SIM**
+- **Connectivity Statistics**
+- **Power Saving Features**
+- **PDN** (There can be more than one. A **PDN** panel is displayed for each network when a connection is established.)
 
 ### Packet Event Viewer
 
+![Packet Event Viewer](./screenshots/cel_mon_pev.png "Packet Event Viewer")
+
 The **Packet Event Viewer** visualizes communication at the AT command, Radio Resource Control (RRC), Non-access Stratum (NAS), and Internet Protocol (IP) levels.
-See [Viewing a Modem trace in the Cellular Monitor app](./viewing.md) for more information.
+
+By default, the events are equally spaced for readability. To view the timeline, switch to **Time** in **Packet Event Viewer settings**. You can also hide unwanted event layers here.
+
+You can control the viewed trace data with the following options:
+
+- To play back the trace, click on and drag the graph to the left.
+- To extend or decrease the viewed trace events, scroll the graph.
+- To view information on the AT commands and the event timestamp, hover over a specific event.
+- To pause a live trace, click the live button.
 
 ## Certificate Manager tab
 
