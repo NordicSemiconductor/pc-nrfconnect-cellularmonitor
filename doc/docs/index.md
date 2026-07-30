@@ -15,7 +15,7 @@ The Cellular Monitor app comes with the following features:
 - Packet event viewer
 - Extensive modem connection status dashboard with mouse-over access to detailed information
 - Auto-selection of trace database
-- Play back trace files from Trace Collector, nRF Util's [`trace` command](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html), Memfault, and Real Time Transfer (RTT)
+- Play back trace files from Trace Collector, nRF Util's [`trace` command](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/nrfutil-trace.html), Memfault, and Real Time Transfer (RTT)
 - Modem credential management
 
 !!! note "Note"

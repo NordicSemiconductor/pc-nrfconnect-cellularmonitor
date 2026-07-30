@@ -25,7 +25,7 @@ Opens the file explorer and allows you to select a trace file. Traces captured u
 !!! note "Note"
      The `.mtrace` are binary files specific to the Cellular Monitor app. They have a different extension to separate them from `.bin` files. If you want to open these files in a tool that requires a `.bin` extension, replace the `.mtrace` extension with `.bin`. You can still open them in the Cellular Monitor app after the replacement.
 
-You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html) and `.bin` files from the legacy Trace Collector app.
+You can also open files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/nrfutil-trace.html) and `.bin` files from the legacy Trace Collector app.
 
 See [Loading modem traces for playback](viewing.md#loading-modem-traces-for-playback) for more information.
 
@@ -93,7 +93,7 @@ If toggled on, this option will refresh the dashboard status automatically when 
 
 #### Open in Wireshark
 
-If toggled on, this option will automatically detect your Wireshark installation. If you have Wireshark installed, it will open and display trace data live in Wireshark when the trace is started.
+If toggled on, this option will automatically detect your Wireshark installation. If you have Wireshark installed, it will open and display trace data live in Wireshark when the trace capture is started.
 
 #### Save trace file to disk
 

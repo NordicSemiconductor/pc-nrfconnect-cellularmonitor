@@ -21,7 +21,7 @@ Complete the following steps:
 1. Click [**Load trace file...**](overview.md#load-trace-file) in the side panel.</br>
    The file explorer opens.
 1. If the file explorer did not open at the location where you saved the trace files, browse to their location. Select and double-click the file to open it.</br>
-   The Cellular Monitor app supports `.mtrace`, files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/guides/tracing.html), and legacy `.bin` files.<br/>
+   The Cellular Monitor app supports `.mtrace`, files from [`nrfutil trace`](https://docs.nordicsemi.com/bundle/nrfutil/page/nrfutil-trace/nrfutil-trace.html), and legacy `.bin` files.<br/>
    The app autodetects the modem firmware version from the trace file.
    You can also select the modem trace database version from the drop-down list.
 
