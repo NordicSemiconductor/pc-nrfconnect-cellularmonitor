@@ -2,6 +2,15 @@ tool:
 - name: Cellular Monitor app
   link: true
 sections:
+- name: July 2026
+  entries:
+  - "Moved the [Preparing the device for modem trace](capturing.md#preparing-the-device-for-modem-trace) page to the [Capturing modem trace data](capturing.md) page."
+  - "Moved information from the Troubleshooting page to different areas of documentation and removed the Troubleshooting page."
+  - "Updated the [Overview and user interface](overview.md) page to include information about the [Dashboard](overview.md#dashboard-tab) and [Packet Event Viewer](overview.md#packet-event-viewer)."
+  - "Moved information from the [Open trace file in Wireshark...](overview.md#open-trace-file-in-wireshark) page to the [Overview and user interface](overview.md) page."
+  - "Moved the [Loading modem traces for playback](viewing.md#loading-modem-traces-for-playback) page to the [Viewing a Modem trace in the Cellular Monitor app](viewing.md) page as a separate section."
+  - "Moved the [Viewing RTT modem traces](viewing.md#viewing-rtt-modem-traces) page to the [Viewing a Modem trace in the Cellular Monitor app](viewing.md) page as a separate section."
+  - "Moved the [Memfault and modem trace in production](viewing.md#memfault-and-modem-trace-in-production) page to the [Viewing a Modem trace in the Cellular Monitor app](viewing.md) page as a separate section."
 - name: January 2026
   entries:
   - "Moved the content of [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations) to the [Get started](./index.md) page to match other app documentation."
@@ -15,7 +24,7 @@ sections:
   entries:
   - "Added Nordic Thingy:91 X™ to the list of devices in [Minimum requirements and limitations](./index.md#minimum-requirements-and-limitations)."
   - "Updated  [software requirements](index.md#software-requirements) with additional information for clarity (no new software requirements were added)."
-  - "Updated information about **Program device** in [Overview and user interface](overview.md#program-device) and [Troubleshooting](./troubleshooting.md#i-do-not-see-program-device)."
+  - "Updated information about **Program device** in [Overview and user interface](overview.md#program-device) and Troubleshooting."
 - name: January 2025
   entries:
   - "Added the [Application source code](./index.md#application-source-code) section on the [Home](./index.md) page"

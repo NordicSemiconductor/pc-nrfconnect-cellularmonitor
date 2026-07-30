@@ -57,14 +57,8 @@ extra:
 nav:
   - Get started: index.md
   - Overview and user interface: overview.md
-  - Preparing the device for modem trace: preparing.md
   - Capturing a modem trace: capturing.md
   - Viewing a modem trace in the Cellular Monitor app: viewing.md
-  - Using Wireshark: wireshark.md
-  - Loading modem traces for play back: loading.md
-  - Viewing RTT modem traces: viewing_rtt.md
-  - Memfault and modem trace in production: memfault_in_production.md
   - Managing modem credentials: managing_credentials.md
   - Programming the nRF9160 DK firmware: programming_91dk.md
   - Programming Nordic Thingy:91 firmware: programming_thingy91.md
-  - Troubleshooting: troubleshooting.md
