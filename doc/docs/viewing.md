@@ -43,7 +43,7 @@ To view RTT modem traces in Cellular Monitor, complete the following steps:
 3. Use the J-Link RTT logger to collect the trace or traces and save in binary (`.bin`) format.</br>
    See [SEGGER Real Time Transfer (RTT)](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) for more information.
 4. Load and play back the trace in **Cellular Monitor**.</br>
-   See [Loading modem traces for playback](./loading.md) for more information.
+   See [Loading modem traces for playback](#loading-modem-traces-for-playback) for more information.
 
 ## Memfault and modem trace in production
 
