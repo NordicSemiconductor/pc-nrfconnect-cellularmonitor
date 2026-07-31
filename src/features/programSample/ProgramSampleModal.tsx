@@ -18,6 +18,7 @@ import {
     logger,
     selectedDevice,
     setWaitForDevice,
+    type Source,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { shell } from 'electron';
 import { basename, dirname } from 'path';
@@ -28,46 +29,71 @@ import { resetTraceEvents } from '../tracing/tracePacketEvents';
 import { getIsTracing, resetTraceInfo } from '../tracing/traceSlice';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
 import {
-    is9160DK,
+    deviceCatalogueId,
+    FWClient,
+    inFlashOrder,
     isThingy91,
     programDevice,
     programModemFirmware,
     type SampleProgress,
 } from './programSample';
-import {
-    downloadedFilePath,
-    downloadModemFirmware,
-    downloadSample,
-    downloadSampleIndex,
-    type Firmware,
-    initialSamples,
-    type ModemFirmware,
-    readBundledIndex,
-    type Sample,
-} from './samples';
 // @ts-expect-error We can import svgs
 import thingySvg from './thingy91_sw1_sw3.svg';
 
 import './ProgramSampleModal.scss';
 
+/*
+ * Two different kinds of `Source` flow through this screen:
+ *
+ *   1. CATALOGUE ENTRY  — from `readBundledIndex()`. Its `file` is a filename
+ *      relative to the app bundle. Display-only. Cannot be flashed, cannot be
+ *      passed to `shell.openPath`.
+ *
+ *   2. RESOLVED SOURCE  — returned by `downloadSample()` /
+ *      `downloadModemFirmware()`. Its `file` is an absolute path inside
+ *      FIRMWAREDIR. This is the only thing that is safe to flash.
+ */
+
 type ProgrammingStage = 'unstarted' | 'programming' | 'success' | 'failed';
 type ModalStage = 'programSelection' | 'modemSelection' | 'programming';
+
+const revealFirmwareFile = (file: string) => () => {
+    shell.openPath(dirname(file));
+};
+
 export default () => {
-    const [selectedSample, setSelectedSample] = useState<Sample>();
+    const [selectedSample, setSelectedSample] = useState<Source>();
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStage, setModalStage] =
         useState<ModalStage>('programSelection');
     const device = useSelector(selectedDevice);
     const isTracing = useSelector(getIsTracing);
-    const compatible = device && (isThingy91(device) || is9160DK(device));
 
-    const [samples, setSamples] = useState(initialSamples);
+    const catalogueId = deviceCatalogueId(device);
+    const compatible = device != null && catalogueId != null;
+
+    const [samples, setSamples] = useState<Source[]>([]);
+    const [indexError, setIndexError] = useState<string>();
+
     useEffect(() => {
-        readBundledIndex()
-            .then(setSamples)
-            .then(downloadSampleIndex)
-            .then(setSamples);
+        let cancelled = false;
+
+        FWClient.loadIndex()
+            .then(index => {
+                if (!cancelled) setSamples(index);
+            })
+            .catch(error => {
+                logger.error(error);
+                if (!cancelled)
+                    setIndexError(
+                        'Unable to read the bundled firmware index. Check the log.',
+                    );
+            });
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const close = useCallback(() => {
@@ -78,6 +104,11 @@ export default () => {
     if (!compatible) {
         return null;
     }
+
+    const applications = samples.filter(
+        s => s.type === 'Application' && s.device.includes(catalogueId),
+    );
+    const modemFirmwares = samples.filter(s => s.type === 'Modem');
 
     return (
         <>
@@ -106,7 +137,7 @@ export default () => {
                         setModalStage={setModalStage}
                         sample={selectedSample}
                         selectSample={setSelectedSample}
-                        modemFirmwares={samples.mfw}
+                        modemFirmwares={modemFirmwares}
                         close={close}
                     />
                 )}
@@ -114,9 +145,8 @@ export default () => {
                     <SelectSample
                         setModalStage={setModalStage}
                         selectSample={setSelectedSample}
-                        samples={
-                            isThingy91(device) ? samples.thingy91 : samples.dk91
-                        }
+                        samples={applications}
+                        indexError={indexError}
                         close={close}
                     />
                 )}
@@ -129,11 +159,13 @@ const SelectSample = ({
     setModalStage,
     selectSample,
     samples,
+    indexError,
     close,
 }: {
     setModalStage: (stage: ModalStage) => void;
-    selectSample: (sample: Sample) => void;
-    samples: Sample[];
+    selectSample: (sample: Source) => void;
+    samples: Source[];
+    indexError?: string;
     close: () => void;
 }) => {
     const device = useSelector(selectedDevice);
@@ -150,10 +182,16 @@ const SelectSample = ({
                     Make a selection to program the {deviceName} with a
                     pre-compiled application and modem firmware.
                 </p>
+                {indexError && <Alert variant="danger">{indexError}</Alert>}
+                {!indexError && samples.length === 0 && (
+                    <Alert variant="info">
+                        No sample applications are available for this device.
+                    </Alert>
+                )}
                 <div className="installable-app-grid">
                     {samples.map(sample => (
                         <div
-                            key={sample.title}
+                            key={sample.file}
                             className="card-in-card d-flex flex-column p-3"
                         >
                             <strong className="d-block">{sample.title}</strong>
@@ -193,8 +231,9 @@ const ProgramSample = ({
     close,
 }: {
     setModalStage: (stage: ModalStage) => void;
-    sample: Sample;
-    selectSample: (sample?: Sample) => void;
+    /** Catalogue entry. Used as the resolution query and for display text only. */
+    sample: Source;
+    selectSample: (sample?: Source) => void;
     close: () => void;
 }) => {
     const dispatch = useDispatch();
@@ -202,13 +241,53 @@ const ProgramSample = ({
     const device = useSelector(selectedDevice);
     const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
 
-    const [selectedFirmware, setSelectedFirmware] = useState(
-        sample.fw.map(fw => ({ ...fw, selected: true })),
-    );
-    const [progressMap, setProgressMap] = useState(
-        new Map(sample.fw.map(fw => [fw, 0])),
-    );
+    /*
+     * =========================== STATE REDESIGN ==============================
+     *
+     * The old code had:
+     *
+     *   const [selectedFirmware, setSelectedFirmware] = useState(sample);
+     *   const [progressMap, setProgressMap] = useState([sample]);
+     *
+     * `selectedFirmware` was a single `Source` but was used with .map/.find/
+     * .length/.filter; `progressMap` was an array but was used with .set/.get/
+     * .entries(). Both were leftovers from the era when a "sample" was itself a
+     * bundle of several firmwares. Neither compiled.
+     *
+     * Replaced with three states, each with one job:
+     * =========================================================================
+     */
 
+    /**
+     * The resolved firmwares to flash, in flash order.
+     * `undefined` means "not resolved yet" — an honest third state rather than
+     * pretending a catalogue entry is a programmable firmware.
+     */
+    const [firmwares, setFirmwares] = useState<Source[]>();
+
+    /**
+     * Files the user has unchecked, keyed by absolute path.
+     *
+     * CHANGED: the old code used `Source & { selected: boolean }` and mutated
+     * `selectedFw.selected` inside a setState updater. Two problems: `selected`
+     * is view state that has no business on a domain type, and those objects
+     * were shared by reference with the parent's `samples` array, so the
+     * mutation leaked into the catalogue. Keeping the flag in a separate Set of
+     * strings makes the domain objects immutable by construction.
+     */
+    const [skipped, setSkipped] = useState<ReadonlySet<string>>(new Set());
+
+    /**
+     * Flash progress per firmware, keyed by absolute path.
+     *
+     * CHANGED: was a Map keyed by the firmware *object*. `progressMap.set` used
+     * the object handed back by programSample.ts while `progressMap.get(fw)`
+     * used an object from a different array — the same reference-equality trap
+     * as calling `.includes()` on an array of objects. A string key is stable.
+     */
+    const [progress, setProgress] = useState<Record<string, number>>({});
+
+    const [resolveError, setResolveError] = useState<string>();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [stage, setStage] = useState<ProgrammingStage>('unstarted');
 
@@ -229,48 +308,111 @@ const ProgramSample = ({
         };
     }, [dispatch]);
 
-    const progressCb = useCallback(
-        ({ firmware, progress }: SampleProgress) => {
-            progressMap.set(
-                firmware as Firmware,
-                progress.totalProgressPercentage,
-            );
-            setProgressMap(new Map(progressMap.entries()));
+    /*
+     * ADDED: resolve on mount instead of on click.
+     *
+     * Why eagerly: the checkbox list needs to know which firmwares exist before
+     * the user presses Program, and only the resolved list knows that. The old
+     * code called `downloadSample` inside the click handler, which is why the
+     * list had nothing real to render.
+     *
+     * The cancelled flag matters here: resolution hits the network, so the user
+     * can hit Back and unmount this component while it is in flight.
+     */
+    useEffect(() => {
+        let cancelled = false;
+
+        setFirmwares(undefined);
+        setResolveError(undefined);
+
+        FWClient.getIndexedFirmwareWithDeps(sample)
+            .then(resolved => {
+                if (!cancelled) setFirmwares(inFlashOrder(resolved));
+            })
+            .catch(error => {
+                logger.error(error);
+                if (!cancelled)
+                    setResolveError(
+                        'Unable to download the firmware. Check the log.',
+                    );
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [sample]);
+
+    /*
+     * CHANGED: functional update, so the callback closes over nothing and can
+     * have an empty dependency array. The old version depended on `progressMap`
+     * and so was recreated on every progress tick — and because nrfutil holds
+     * the callback it was handed at the start of the flash, it would have kept
+     * writing into a stale Map.
+     *
+     * CHANGED: the `firmware as Source` cast is gone; `SampleProgress.firmware`
+     * is already `Source`.
+     */
+    const onProgress = useCallback(
+        ({ firmware, progress: firmwareProgress }: SampleProgress) => {
+            setProgress(previous => ({
+                ...previous,
+                [firmware.file]: firmwareProgress.totalProgressPercentage,
+            }));
         },
-        [progressMap],
+        [],
     );
 
-    const toggleFirmwareChecked =
-        (fw: Firmware & { selected: boolean }) => () => {
-            setSelectedFirmware(previous => {
-                const selectedFw = previous.find(f => f.file === fw.file);
-                if (selectedFw) {
-                    selectedFw.selected = !selectedFw?.selected;
-                }
-                return [...previous];
-            });
-        };
+    /*
+     * CHANGED: replaces `toggleFirmwareChecked`. Builds a new Set instead of
+     * mutating, so React sees a genuinely new value.
+     */
+    const toggleSkipped = (file: string) => () => {
+        setSkipped(previous => {
+            const next = new Set(previous);
+            if (next.has(file)) next.delete(file);
+            else next.add(file);
+            return next;
+        });
+    };
 
+    const selectedFirmwares = (firmwares ?? []).filter(
+        fw => !skipped.has(fw.file),
+    );
+
+    const documentation = sample.documentation;
     const isMcuBoot = isThingy91(device);
 
     return (
         <>
             <Dialog.Header
-                title={`Program ${sample.title}`}
-                showSpinner={isProgramming || waitingForReconnect}
+                title={`Program ${sample.title ?? 'sample'}`}
+                showSpinner={
+                    isProgramming || waitingForReconnect || firmwares == null
+                }
             />
             <Dialog.Body>
                 {isMcuBoot && <MCUBootModeInstructions />}
-                {selectedFirmware.map(fw => (
+
+                {/* ADDED: explicit pending state while resolution is in flight. */}
+                {firmwares == null && !resolveError && (
+                    <p className="text-muted">Downloading firmware…</p>
+                )}
+
+                {/* CHANGED: renders the RESOLVED firmwares, so `fw.file` is a
+                    real absolute path and both basename() and openPath() work. */}
+                {firmwares?.map(fw => (
                     <div key={fw.file} className="mb-4">
                         <div className="d-flex align-items-center">
-                            {selectedFirmware.length > 1 && (
+                            {firmwares.length > 1 && (
                                 <input
                                     type="checkbox"
                                     className="mr-2"
-                                    checked={fw.selected}
-                                    onChange={toggleFirmwareChecked(fw)}
+                                    // CHANGED: derived from `skipped`, not from a
+                                    // `selected` field bolted onto the firmware.
+                                    checked={!skipped.has(fw.file)}
+                                    onChange={toggleSkipped(fw.file)}
                                     id={fw.file}
+                                    disabled={isProgramming}
                                 />
                             )}
 
@@ -280,40 +422,44 @@ const ProgramSample = ({
                             <button
                                 type="button"
                                 className="btn btn-link"
-                                onClick={() =>
-                                    shell.openPath(
-                                        dirname(downloadedFilePath(fw.file)),
-                                    )
-                                }
+                                onClick={revealFirmwareFile(fw.file)}
                             >
                                 {basename(fw.file)}
                             </button>
                         </div>
                         <ProgressBar
-                            now={progressMap.get(fw)}
+                            // CHANGED: string key lookup; `?? 0` because an
+                            // un-flashed firmware has no entry yet and
+                            // ProgressBar wants a number.
+                            now={progress[fw.file] ?? 0}
                             style={{ height: '4px' }}
                         />
                     </div>
                 ))}
 
-                <p
-                    className="text-muted mb-4"
-                    style={{ wordBreak: 'break-all' }}
-                >
-                    Documentation: <br />
-                    <a
-                        href={sample.documentation}
-                        target="_blank"
-                        rel="noreferrer"
+                {/* CHANGED: guarded, and uses the normalised union. */}
+                {documentation && (
+                    <p
+                        className="text-muted mb-4"
+                        style={{ wordBreak: 'break-all' }}
                     >
-                        {sample.documentation}
-                    </a>
-                </p>
+                        Documentation: <br />
+                        <a
+                            href={documentation}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {documentation}
+                        </a>
+                    </p>
+                )}
+
                 {stage === 'success' && (
                     <Alert variant="success">
                         Successfully programmed device
                     </Alert>
                 )}
+                {resolveError && <Alert variant="danger">{resolveError}</Alert>}
                 {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             </Dialog.Body>
             <Dialog.Footer>
@@ -325,27 +471,54 @@ const ProgramSample = ({
 
                 <DialogButton
                     variant="primary"
-                    disabled={isProgramming || waitingForReconnect || !device}
+                    /*
+                     * CHANGED: also disabled until resolution finishes and while
+                     * everything is unchecked. Previously the button was live
+                     * before any firmware existed.
+                     */
+                    disabled={
+                        isProgramming ||
+                        waitingForReconnect ||
+                        !device ||
+                        firmwares == null ||
+                        selectedFirmwares.length === 0
+                    }
                     onClick={async () => {
                         if (!device) {
                             throw new Error(
                                 'Device must be selected in order to program firmware',
                             );
                         }
+                        if (firmwares == null) {
+                            throw new Error(
+                                'Firmware must be downloaded in order to program it',
+                            );
+                        }
 
                         setStage('programming');
                         setErrorMessage(undefined);
 
-                        resetProgressMap(progressMap);
+                        /*
+                         * CHANGED: was `resetProgressMap(progressMap)`, which
+                         * mutated the Map in place and returned it — React never
+                         * saw a new value, so the bars kept their old fill on a
+                         * second run. A plain setState replaces the whole thing.
+                         */
+                        setProgress({});
 
                         try {
-                            await downloadSample(sample);
+                            /*
+                             * CHANGED: no `downloadSample` call here any more —
+                             * resolution happened in the effect above, and its
+                             * result is what we flash. This is the fix for the
+                             * central bug described at the top of the file.
+                             */
                             dispatch(setTerminalSerialPort(null));
 
                             await programDevice(
                                 device,
-                                selectedFirmware.filter(fw => fw.selected),
-                                progressCb,
+                                selectedFirmwares,
+                                onProgress,
                             );
 
                             setTimeout(() => {
@@ -392,14 +565,29 @@ const ProgramModem = ({
     close,
 }: {
     setModalStage: (stage: ModalStage) => void;
-    sample: Sample;
-    selectSample: (sample?: Sample) => void;
-    modemFirmwares: ModemFirmware[];
+    /*
+     * CHANGED: `Sample` / `ModemFirmware` were types from the deleted static
+     * manifest module — they weren't even imported, so this file did not
+     * compile. Both are `Source` now.
+     */
+    sample: Source;
+    selectSample: (sample?: Source) => void;
+    /** Catalogue entries of type 'Modem'. Display-only until resolved. */
+    modemFirmwares: Source[];
     close: () => void;
 }) => {
     const dispatch = useDispatch();
     const device = useSelector(selectedDevice);
-    const [selectedMfw, setSelectedMfw] = useState<ModemFirmware>();
+
+    /** The catalogue entry the user picked — the resolution query. */
+    const [selectedMfw, setSelectedMfw] = useState<Source>();
+
+    /*
+     * ADDED: the resolved modem firmware, i.e. what actually gets flashed.
+     * Without this the old code flashed `selectedMfw`, whose `file` is a
+     * relative bundle name.
+     */
+    const [resolvedMfw, setResolvedMfw] = useState<Source>();
 
     const waitingForReconnect = useSelector(getWaitingForDeviceTimeout);
 
@@ -425,14 +613,14 @@ const ProgramModem = ({
         };
     }, [dispatch]);
 
-    const newProgressCb = () => {
-        let memoizedProgress = 0;
-
-        return ({ progress }: SampleProgress) => {
-            memoizedProgress = progress.totalProgressPercentage;
-            setProgressState(memoizedProgress);
-        };
-    };
+    /*
+     * CHANGED: replaces `newProgressCb`, which built a closure over a
+     * `memoizedProgress` variable that was written and never read — a factory
+     * that returned a plain setter. This is the same thing without the ceremony.
+     */
+    const onProgress = useCallback(({ progress }: SampleProgress) => {
+        setProgressState(progress.totalProgressPercentage);
+    }, []);
 
     const isMcuBoot = isThingy91(device);
 
@@ -445,12 +633,16 @@ const ProgramModem = ({
             <Dialog.Body>
                 <p>
                     Do you want to program a modem firmware before programming{' '}
-                    {sample?.title ?? 'the selected application'}?
+                    {/* CHANGED: `sample?.title` — `sample` is a required prop,
+                        so the optional chain was dead. `title` itself IS
+                        optional, so the fallback stays. */}
+                    {sample.title ?? 'the selected application'}?
                 </p>
                 <div className="installable-app-grid mb-5">
                     {modemFirmwares.map(mfw => (
+                        // CHANGED: key was `mfw.title` (optional, not unique).
                         <div
-                            key={mfw.title}
+                            key={mfw.file}
                             className="card-in-card d-flex flex-column p-3"
                         >
                             <strong className="d-block">{mfw.title}</strong>
@@ -462,14 +654,27 @@ const ProgramModem = ({
                                 variant="secondary"
                                 disabled={isProgramming}
                                 onClick={() => {
-                                    if (selectedMfw === mfw) {
-                                        setSelectedMfw(undefined);
-                                    } else {
-                                        setSelectedMfw(mfw);
-                                    }
+                                    /*
+                                     * CHANGED: compares `file` instead of object
+                                     * identity (`selectedMfw === mfw`). Identity
+                                     * happens to work while both come from the
+                                     * same array, but breaks the moment the
+                                     * catalogue is re-fetched or mapped.
+                                     */
+                                    const isSelected =
+                                        selectedMfw?.file === mfw.file;
+                                    setSelectedMfw(
+                                        isSelected ? undefined : mfw,
+                                    );
+                                    // ADDED: the resolved firmware belongs to the
+                                    // previous selection; drop it.
+                                    setResolvedMfw(undefined);
+                                    setProgressState(0);
                                 }}
                             >
-                                {selectedMfw === mfw ? 'Deselect' : 'Select'}
+                                {selectedMfw?.file === mfw.file
+                                    ? 'Deselect'
+                                    : 'Select'}
                             </Button>
                         </div>
                     ))}
@@ -484,21 +689,28 @@ const ProgramModem = ({
                             <label htmlFor={selectedMfw.file} className="mb-0">
                                 <strong>{selectedMfw.title}</strong>
                             </label>
-                            <button
-                                type="button"
-                                className="btn btn-link"
-                                onClick={() =>
-                                    shell.openPath(
-                                        dirname(
-                                            downloadedFilePath(
-                                                selectedMfw.file,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            >
-                                {basename(selectedMfw.file)}
-                            </button>
+                            {/*
+                             * CHANGED: the "open containing folder" button now
+                             * appears only once the firmware is resolved. Before
+                             * that there is no absolute path to open — the old
+                             * code called downloadedFilePath() on a relative
+                             * bundle name.
+                             */}
+                            {resolvedMfw ? (
+                                <button
+                                    type="button"
+                                    className="btn btn-link"
+                                    onClick={revealFirmwareFile(
+                                        resolvedMfw.file,
+                                    )}
+                                >
+                                    {basename(resolvedMfw.file)}
+                                </button>
+                            ) : (
+                                <span className="btn btn-link disabled">
+                                    {basename(selectedMfw.file)}
+                                </span>
+                            )}
                         </div>
                         <ProgressBar
                             now={progressState}
@@ -546,16 +758,28 @@ const ProgramModem = ({
 
                             setStage('programming');
                             setErrorMessage(undefined);
-                            const progressCb = newProgressCb();
+                            setProgressState(0);
 
                             try {
-                                await downloadModemFirmware(selectedMfw);
+                                /*
+                                 * CHANGED: the return value is used. Previously:
+                                 *   await downloadModemFirmware(selectedMfw);
+                                 *   await programModemFirmware(device, selectedMfw, ...)
+                                 * which downloaded the file and then flashed the
+                                 * catalogue entry's relative path instead.
+                                 */
+                                const resolved =
+                                    await FWClient.getIndexedFirmware(
+                                        selectedMfw,
+                                    );
+                                setResolvedMfw(resolved);
+
                                 dispatch(setTerminalSerialPort(null));
 
                                 await programModemFirmware(
                                     device,
-                                    selectedMfw,
-                                    progressCb,
+                                    resolved,
+                                    onProgress,
                                 );
 
                                 setTimeout(() => {
@@ -604,11 +828,6 @@ const ProgramModem = ({
             </Dialog.Footer>
         </>
     );
-};
-
-const resetProgressMap = (progressMap: Map<Firmware, number>) => {
-    [...progressMap.keys()].forEach(firmware => progressMap.set(firmware, 0));
-    return progressMap;
 };
 
 const MCUBootModeInstructions = () => (

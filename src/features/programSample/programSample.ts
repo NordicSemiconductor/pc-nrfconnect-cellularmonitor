@@ -6,8 +6,10 @@
 /* eslint-disable no-await-in-loop */
 
 import {
+    ApplicationClient,
     type Device,
     logger,
+    type Source,
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { type Progress } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
@@ -17,16 +19,13 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import EventAction from '../../app/usageDataActions';
-import {
-    downloadedFilePath,
-    type Firmware,
-    type ModemFirmware,
-} from './samples';
 
 const { reset, program } = NrfutilDeviceLib;
 
+export const FWClient = new ApplicationClient();
+
 export interface SampleProgress {
-    firmware: Firmware | ModemFirmware;
+    firmware: Source;
     progress: Progress;
 }
 
@@ -36,7 +35,6 @@ export const getDeviceKeyForTraceDatabaseEntries = (
     device?: Device,
     deviceInfo?: DeviceInfo,
 ): SupportedDeviceVersion => {
-    // generic check should work on no nordic DKs
     const deviceVersion = deviceInfo?.jlink?.deviceVersion;
     if (deviceVersion) {
         if (deviceVersion.match(/.*NRF91\d1.*/)) {
@@ -56,7 +54,6 @@ export const getDeviceKeyForTraceDatabaseEntries = (
         return 'nRF9160';
     }
 
-    // Used when loading file, and want to see all database files.
     return 'AllDevices';
 };
 
@@ -79,9 +76,24 @@ export const is9151DK = (device?: Device) =>
 export const is9131DK = (device?: Device) =>
     device?.devkit?.boardVersion === 'PCA10165';
 
+export const deviceCatalogueId = (device?: Device): string | undefined => {
+    if (isThingy91(device)) return 'thingy91x';
+    if (is9160DK(device)) return 'nrf9160dk';
+    return undefined;
+};
+
+const FLASH_ORDER: Record<Source['type'], number> = {
+    Modem: 0,
+    Network: 1,
+    Application: 2,
+};
+
+export const inFlashOrder = (firmwares: Source[]): Source[] =>
+    [...firmwares].sort((a, b) => FLASH_ORDER[a.type] - FLASH_ORDER[b.type]);
+
 export const programModemFirmware = async (
     device: Device,
-    modemFirmware: ModemFirmware,
+    modemFirmware: Source,
     progress: (progress: SampleProgress) => void,
 ) => {
     try {
@@ -101,12 +113,12 @@ export const programModemFirmware = async (
 
 export const programDevice = async (
     device: Device,
-    firmwares: Firmware[],
+    firmwares: Source[],
     progress: (progress: SampleProgress) => void,
 ) => {
     try {
         // eslint-disable-next-line no-restricted-syntax
-        for (const fw of firmwares) {
+        for (const fw of inFlashOrder(firmwares)) {
             telemetry.sendEvent(EventAction.PROGRAM_SAMPLE, {
                 firmware: fw,
             });
@@ -115,6 +127,7 @@ export const programDevice = async (
                     await programModem(device, fw, progress);
 
                     break;
+                case 'Network': // Placeholder
                 case 'Application':
                     await programFirmware(device, fw, progress);
                     break;
@@ -124,7 +137,7 @@ export const programDevice = async (
         }
 
         logger.info('Programming complete, resetting device.');
-        reset(device);
+        await reset(device);
     } catch (error) {
         telemetry.sendErrorReport('Failed to program a sample');
         logger.error(error);
@@ -134,21 +147,21 @@ export const programDevice = async (
 
 const programModem = (
     device: Device,
-    firmware: Firmware | ModemFirmware,
+    firmware: Source,
     progressCb: (progress: SampleProgress) => void,
 ) =>
-    program(device, downloadedFilePath(firmware.file), progress => {
+    program(device, firmware.file, progress => {
         progressCb({ firmware, progress });
     });
 
 const programFirmware = (
     device: Device,
-    firmware: Firmware,
+    firmware: Source,
     progressCb: (progress: SampleProgress) => void,
 ) =>
     program(
         device,
-        downloadedFilePath(firmware.file),
+        firmware.file,
         progress => {
             progressCb({ firmware, progress });
         },

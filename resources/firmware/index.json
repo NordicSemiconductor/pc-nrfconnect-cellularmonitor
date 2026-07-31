@@ -1,98 +1,125 @@
-{
-    "thingy91": [
-        {
-            "title": "Asset Tracker v2",
-            "description": "This is the default application on your Thingy91.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
-            "fw": [
-                {
-                    "type": "Application",
-                    "file": "thingy91_asset_tracker_v2_debug_2023-03-02_8f26142b.hex"
-                }
-            ]
-        },
-        {
-            "title": "Serial LTE Modem",
-            "description": "Use this application if you want to evaluate the modem using an external MCU.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
-            "fw": [
-                {
-                    "type": "Application",
-                    "file": "thingy91_serial_lte_modem_debug_2023-03-02_8f26142b.hex"
-                }
-            ]
-        },
-        {
-            "title": "Modem Shell",
-            "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
-            "fw": [
-                {
-                    "type": "Application",
-                    "file": "thingy91_modem_shell_debug_2023-03-02_8f26142b.hex"
-                }
-            ]
-        }
-    ],
-    "dk91": [
-        {
-            "title": "Asset Tracker v2",
-            "description": "This is the default application on your development kit.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
-            "fw": [
-                {
-                    "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.5.zip"
-                },
-                {
-                    "type": "Application",
-                    "file": "nrf9160dk_asset_tracker_v2_debug_2023-03-02_8f26142b.hex"
-                }
-            ]
-        },
-        {
-            "title": "Serial LTE Modem",
-            "description": "Use this application if you want to evaluate the modem using an external MCU.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
-            "fw": [
-                {
-                    "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.5.zip"
-                },
-                {
-                    "type": "Application",
-                    "file": "slm-with-trace.hex"
-                }
-            ]
-        },
-        {
-            "title": "Modem Shell",
-            "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
-            "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
-            "fw": [
-                {
-                    "type": "Modem",
-                    "file": "mfw_nrf9160_1.3.5.zip"
-                },
-                {
-                    "type": "Application",
-                    "file": "nrf9160dk_modem_shell_with_trace_ncs_v2_3_0_2023_05_04.hex"
-                }
-            ]
-        }
-    ],
-    "mfw": [
-        {
-            "title": "Modem Firmware v1.3.4",
-            "description": "This is a modem firmware",
-            "documentation": "",
-            "file": "mfw_nrf9160_1.3.4.zip"
-        },
-        {
-            "title": "Modem Firmware v1.3.5",
-            "description": "This is a modem firmware",
-            "documentation": "",
-            "file": "mfw_nrf9160_1.3.5.zip"
-        }
-    ]
-}
+[
+    {
+        "title": "Asset Tracker v2",
+        "description": "This is the default application on your Thingy91.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
+        "type": "Application",
+        "name": "assettracker",
+        "file": "thingy91_asset_tracker_v2_debug_2023-03-02_8f26142b.hex",
+        "version": "2.3.0",
+        "device": [
+            "thingy91x",
+            "thingy91"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "title": "Serial LTE Modem",
+        "description": "Use this application if you want to evaluate the modem using an external MCU.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
+        "type": "Application",
+        "name": "serialltemodem",
+        "file": "thingy91_serial_lte_modem_debug_2023-03-02_8f26142b.hex",
+        "version": "2.3.0",
+        "device": [
+            "thingy91x",
+            "thingy91"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "title": "Modem Shell",
+        "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
+        "type": "Application",
+        "name": "modemshell",
+        "file": "thingy91_modem_shell_debug_2023-03-02_8f26142b.hex",
+        "version": "2.3.0",
+        "device": [
+            "thingy91x",
+            "thingy91"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "title": "Asset Tracker v2",
+        "description": "This is the default application on your development kit.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/asset_tracker_v2/README.html",
+        "type": "Application",
+        "name": "assettrackerdebug",
+        "file": "nrf9160dk_asset_tracker_v2_debug_2023-03-02_8f26142b.hex",
+        "version": "2.3.0",
+        "device": [
+            "nrf9160dk"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "title": "Serial LTE Modem",
+        "description": "Use this application if you want to evaluate the modem using an external MCU.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/applications/serial_lte_modem/README.html",
+        "type": "Application",
+        "name": "slm",
+        "version": "1.0.1",
+        "file": "slm-with-trace.hex",
+        "device": [
+            "nrf9160dk"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "title": "Modem Shell",
+        "description": "The Modem Shell (MoSh) sample application enables you to test various device connectivity features, including data throughput.",
+        "documentation": "https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/samples/cellular/modem_shell/README.html",
+        "type": "Application",
+        "name": "modemshelltrace",
+        "version": "2.2.0",
+        "file": "nrf9160dk_modem_shell_with_trace_ncs_v2_3_0_2023_05_04.hex",
+        "device": [
+            "nrf9160dk"
+        ],
+        "dependencies": [
+            {
+                "name": "modemfirmware",
+                "version": "1.3.4"
+            }
+        ]
+    },
+    {
+        "name": "modemfirmware",
+        "device": [
+            "nrf9160dk",
+            "thingy91x",
+            "thingy91"
+        ],
+        "title": "nRF9160 Modem Firmware",
+        "file": "mfw_nrf9160_1.3.4.zip",
+        "type": "Modem",
+        "version": "1.3.4"
+    }
+]
