@@ -5,12 +5,13 @@
  */
 
 import React from 'react';
+import type { ProgressDocument, SinkProgressInfo } from '@nordicsemi/nrfml-js';
 import { enableFetchMocks } from 'jest-fetch-mock';
 
 import {
     act,
     fireEvent,
-    getNrfmlCallbacks,
+    getNrfmlProgressCallback,
     mockedCheckDiskSpace,
     mockedDataDir,
     render,
@@ -27,6 +28,7 @@ import { TraceCollectorSidePanel } from './SidePanel';
 
 enableFetchMocks();
 
+jest.mock('@nordicsemi/nrfml-js');
 jest.mock('../wireshark/wireshark');
 jest.mock('@nordicsemiconductor/pc-nrfconnect-shared', () => ({
     ...jest.requireActual('@nordicsemiconductor/pc-nrfconnect-shared'),
@@ -101,12 +103,12 @@ describe('Sidepanel functionality', () => {
         });
 
         it('clicking Close should close dialog but not stop tracing', async () => {
-            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
             act(() => jest.runAllTimers());
             startTrace();
-            expect(
-                screen.getByText('Detecting modem firmware version'),
-            ).toBeInTheDocument();
+            await expect(
+                screen.findByText('Detecting modem firmware version'),
+            ).resolves.toBeDefined();
             fireEvent.click((await screen.findAllByText('Close'))[0]);
             expect(
                 screen.queryByText('Detecting modem firmware version'),
@@ -117,27 +119,32 @@ describe('Sidepanel functionality', () => {
         it('should hide dialog when fw is detected', async () => {
             const PROGRESS = {
                 meta: {
-                    modem_db_path: 'foo',
-                    modem_db_uuid: '123',
-                },
-                data_offsets: [
-                    {
-                        path: 'some/path',
-                        offset: 1,
+                    modemDbMetadata: {
+                        path: 'foo',
+                        uuid: '123',
                     },
+                },
+                sinkInfos: [
+                    [
+                        '',
+                        {
+                            path: 'some/path',
+                            offset: BigInt(1),
+                        } as SinkProgressInfo,
+                    ],
                 ],
-                duration_ms: 100,
-            };
+                duration: BigInt(100),
+            } as ProgressDocument;
 
-            const callbacks = getNrfmlCallbacks();
+            const callbacks = getNrfmlProgressCallback();
 
-            render(<TraceCollectorSidePanel />, serialPortActions(['pcap']));
+            render(<TraceCollectorSidePanel />, serialPortActions(['raw']));
             act(() => jest.runAllTimers());
             startTrace();
             expect(
                 await screen.findByText('Detecting modem firmware version'),
             ).toBeInTheDocument();
-            const { progressCallback } = await callbacks;
+            const progressCallback = await callbacks;
 
             act(() => {
                 progressCallback(PROGRESS);

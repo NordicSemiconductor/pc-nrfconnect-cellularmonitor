@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import type nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
+import { type ProgressDocument } from '@nordicsemi/nrfml-js';
 import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { type Dispatch } from 'redux';
 
@@ -14,13 +14,11 @@ import {
     setTraceProgress,
 } from './traceSlice';
 
-type MetaField = nrfml.MetaFields[keyof nrfml.MetaFields];
-
 const makeDetectTraceDB = (dispatch: Dispatch) => {
-    let detectedTraceDB: MetaField;
+    let detectedTraceDB;
 
-    return (progress: nrfml.Progress) => {
-        const reportedTraceDB = progress.meta?.modem_db_path as string;
+    return (progress: ProgressDocument) => {
+        const reportedTraceDB = progress.meta.modemDbMetadata?.path as string;
 
         if (
             detectedTraceDB == null &&
@@ -55,13 +53,13 @@ export default (
     let pendingUpdate: NodeJS.Timeout;
     let lookingForDb = displayDetectingTraceDbMessage;
 
-    const update = (progress: nrfml.Progress) => {
+    const update = (progress: ProgressDocument) => {
         try {
-            progress?.data_offsets?.forEach(progressItem => {
+            progress.sinkInfos.forEach(([_, { path, offset }]) => {
                 dispatch(
                     setTraceProgress({
-                        path: progressItem.path,
-                        size: progressItem.offset,
+                        path,
+                        size: Number(offset),
                     }),
                 );
             });
@@ -75,7 +73,7 @@ export default (
         }
     };
 
-    return (progress: nrfml.Progress) => {
+    return (progress: ProgressDocument) => {
         if (traceDB == null && detectTraceDB != null) {
             traceDB = detectTraceDB(progress);
 

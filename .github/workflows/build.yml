@@ -13,3 +13,4 @@ jobs:
         uses: nordicsemi/pc-nrfconnect-shared/.github/workflows/build-app.yml@main
         with:
             ref: ${{ inputs.ref }}
+        secrets: inherit

@@ -44,9 +44,9 @@ export const LoadTraceFile = () => {
 
     const startReadingFile = () => {
         if (filePath != null) {
-            dispatch(readRawTrace(filePath, setLoading));
             setFilePath(undefined);
             telemetry.sendEvent(EventAction.READ_TRACE_FILE);
+            dispatch(readRawTrace(filePath, setLoading));
         }
     };
 

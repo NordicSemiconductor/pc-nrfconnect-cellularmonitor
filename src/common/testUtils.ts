@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-// eslint-disable-next-line import/no-unresolved
-import { type Configuration } from '@nordicsemiconductor/nrf-monitor-lib-js/config/configuration';
+import { TraceTaskBuilder } from '@nordicsemi/nrfml-js';
 import {
     type AppDispatch,
     currentPane,
@@ -19,52 +17,34 @@ import thunk from 'redux-thunk';
 
 import appReducer from '../app/appReducer';
 
-const mockedNrfmlStart = nrfml.start as jest.MockedFunction<typeof nrfml.start>;
-
-export const getNrfmlCallbacks = () =>
-    new Promise<{
-        completeCallback: nrfml.CompleteCallback;
-        progressCallback: nrfml.ProgressCallback;
-        dataCallback?: nrfml.DataCallback;
-        jsonCallback?: nrfml.JsonCallback;
-    }>(resolve => {
-        mockedNrfmlStart.mockImplementationOnce(
-            (
-                _: Configuration,
-                completeCallback: nrfml.CompleteCallback,
-                progressCallback: nrfml.ProgressCallback,
-                dataCallback?: nrfml.DataCallback,
-                jsonCallback?: nrfml.JsonCallback,
-            ) => {
-                resolve({
-                    completeCallback,
-                    progressCallback,
-                    dataCallback,
-                    jsonCallback,
-                });
-                return 1n; // mocked task id
-            },
-        );
+export const getNrfmlProgressCallback = () =>
+    new Promise<
+        Parameters<typeof TraceTaskBuilder.prototype.withProgressCb>[number]
+    >(resolve => {
+        jest.spyOn(
+            TraceTaskBuilder.prototype,
+            'withProgressCb',
+        ).mockImplementationOnce(callback => {
+            resolve(callback);
+            return {} as TraceTaskBuilder;
+        });
     });
 
-export const expectNrfmlStartCalledWithSinks = (...sinkNames: string[]) => {
-    expect(mockedNrfmlStart).toBeCalledWith(
-        expect.objectContaining({
-            sinks: expect.arrayContaining(
-                sinkNames.map(sinkName =>
-                    expect.objectContaining({
-                        name: sinkName,
-                    }),
-                ),
-            ),
-        }),
-        expect.any(Function),
-        expect.any(Function),
-        expect.any(Function),
-    );
+export const getNrfmlCalledWithSinks = (sinks: string[]) => {
+    const called = [];
+    if (sinks.includes('raw')) {
+        called.push(jest.spyOn(TraceTaskBuilder.prototype, 'withRawSink'));
+    }
+    if (sinks.includes('pcap')) {
+        called.push(jest.spyOn(TraceTaskBuilder.prototype, 'withPcapSink'));
+    }
+    if (sinks.includes('live')) {
+        called.push(
+            jest.spyOn(TraceTaskBuilder.prototype, 'withWiresharkSink'),
+        );
+    }
 
-    const args = mockedNrfmlStart.mock.calls[0][0];
-    expect(args.sinks).toHaveLength(sinkNames.length); // raw + pcap + live + opp which is always added in the background
+    return called;
 };
 
 jest.mock('check-disk-space');

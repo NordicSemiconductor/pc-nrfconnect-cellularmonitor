@@ -170,7 +170,9 @@ export const tooltipHandler = (context: TooltipContext) => {
             // Data/Event Type
             const dataP = document.createElement('p');
             const data =
-                packet.format === 'AT' ? packet.data.toString() : packet.format;
+                packet.format === 'AT'
+                    ? new TextDecoder().decode(packet.data)
+                    : packet.format;
             const textP = document.createTextNode(data as string);
             dataP.appendChild(textP);
             children.push(dataP);

@@ -4,20 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { type StreamPacket } from '@nordicsemi/nrfml-js';
 import EventEmitter from 'events';
 
 import type { NetworkType } from '../tracingEvents/types';
 import { type eventType } from './formats';
 
-export interface Packet {
-    packet_data: Uint8Array;
-    format: string;
-    timestamp?: {
-        resolution?: string;
-        value?: number;
-    };
-    sequence_number: number;
-}
 export interface TraceEvent {
     timestamp: number;
     format: eventType;
@@ -55,20 +47,20 @@ const parseNetworkType = (format: string): NetworkType => {
     return null as never;
 };
 
-const packetsToEvent = (packet: Packet) =>
+const packetsToEvent = (packet: StreamPacket) =>
     ({
-        format: formatToLabel(packet.format),
-        networkType: packet.format.startsWith('lte_rrc')
+        format: formatToLabel(packet.format || ''),
+        networkType: packet.format?.startsWith('lte_rrc')
             ? parseNetworkType(packet.format)
             : undefined,
-        timestamp: (packet.timestamp?.value ?? 0) / 1000,
-        data: packet.packet_data,
-        sequenceNumber: packet.sequence_number,
+        timestamp: (packet.timestamp.getMilliseconds() ?? 0) / 1000,
+        data: packet.data,
+        sequenceNumber: Number(packet.sequenceNumber),
     }) as TraceEvent;
 
 tracePacketEvents.on('start-process', () => resetTraceEvents());
 
-export const notifyListeners = (packets: Packet[]) => {
+export const notifyListeners = (packets: StreamPacket[]) => {
     const formattedEvents: TraceEvent[] = [];
     packets.forEach(packet => {
         formattedEvents.push(packetsToEvent(packet));

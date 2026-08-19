@@ -10,7 +10,6 @@ import path from 'path';
 import appReducer from '../../app/appReducer';
 import { getMockStore, mockedDataDir } from '../../common/testUtils';
 import { resetDashboardState } from '../tracingEvents/dashboardSlice';
-import nrfml from './__mocks__/@nordicsemiconductor/nrf-monitor-lib-js';
 import { convertTraceFile, startTrace } from './nrfml';
 import sinkConfig from './sinkConfig';
 import {
@@ -23,6 +22,7 @@ import {
 
 const MOCKED_DEFAULT_WIRESHARK_PATH = 'default/path/to/wireshark';
 
+jest.mock('@nordicsemi/nrfml-js');
 jest.mock('../wireshark/wireshark', () => ({
     defaultSharkPath: () => MOCKED_DEFAULT_WIRESHARK_PATH,
 }));
@@ -60,14 +60,16 @@ describe('nrfml', () => {
         store.clearActions();
     });
 
-    it('should start converting', () => {
-        store.dispatch(convertTraceFile('somePath.mtrace'));
+    it('should start converting', async () => {
+        await store.dispatch(convertTraceFile('somePath.mtrace'));
         expect(store.getActions()).toEqual([
             { payload: true, type: 'trace/setDetectingTraceDb' },
             {
                 payload: {
                     progressConfigs: [],
-                    taskId: 1,
+                    taskAbortHandle: {
+                        cancel: expect.any(Function),
+                    },
                 },
                 type: 'trace/setTraceIsStarted',
             },
@@ -79,20 +81,21 @@ describe('nrfml', () => {
             jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(
                 '2000-01-01T00:00:00.000Z',
             );
-            nrfml.start.mockClear();
         });
 
-        it('should start tracing to pcap', () => {
-            store.dispatch(startTrace(['pcap']));
+        it('should start tracing to pcap', async () => {
+            await store.dispatch(startTrace(['pcap']));
             expect(store.getActions()).toEqual([
                 { type: resetDashboardState.type, payload: undefined },
                 { type: setTraceSourceFilePath.type, payload: null },
-                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
-                        taskId: 1,
+                        taskAbortHandle: {
+                            cancel: expect.any(Function),
+                        },
                         progressConfigs: [
                             {
                                 format: 'pcap',
@@ -107,17 +110,19 @@ describe('nrfml', () => {
             ]);
         });
 
-        it('should start tracing to raw binary', () => {
-            store.dispatch(startTrace(['raw']));
+        it('should start tracing to raw binary', async () => {
+            await store.dispatch(startTrace(['raw']));
             expect(store.getActions()).toEqual([
                 { type: resetDashboardState.type, payload: undefined },
                 { type: setTraceSourceFilePath.type, payload: null },
-                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
-                        taskId: 1,
+                        taskAbortHandle: {
+                            cancel: expect.any(Function),
+                        },
                         progressConfigs: [
                             {
                                 format: 'raw',
@@ -132,17 +137,19 @@ describe('nrfml', () => {
             ]);
         });
 
-        it('does not create a progress config for live traces', () => {
-            store.dispatch(startTrace(['raw', 'live']));
+        it('does not create a progress config for live traces', async () => {
+            await store.dispatch(startTrace(['raw', 'live']));
             expect(store.getActions()).toEqual([
                 { type: resetDashboardState.type, payload: undefined },
                 { type: setTraceSourceFilePath.type, payload: null },
-                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
-                        taskId: 1,
+                        taskAbortHandle: {
+                            cancel: expect.any(Function),
+                        },
                         progressConfigs: [
                             {
                                 format: 'raw',
@@ -157,45 +164,26 @@ describe('nrfml', () => {
             ]);
         });
 
-        it('does not create a progress config for live traces', () => {
-            store.dispatch(startTrace(['live']));
+        it('does not create a progress config for live traces', async () => {
+            await store.dispatch(startTrace(['live']));
+
             expect(store.getActions()).toEqual([
                 { type: resetDashboardState.type, payload: undefined },
                 { type: setTraceSourceFilePath.type, payload: null },
-                { type: setTraceDataReceived.type, payload: false },
                 { type: setDetectingTraceDb.type, payload: true },
+                { type: setTraceDataReceived.type, payload: false },
                 {
                     type: setTraceIsStarted.type,
                     payload: {
-                        taskId: 1,
+                        taskAbortHandle: {
+                            cancel: expect.any(Function),
+                        },
                         progressConfigs: [],
                     },
                 },
+                // Since the mock trace returns immediately, we also have to check for this
+                { type: setTraceIsStopped.type, payload: undefined },
             ]);
-        });
-
-        // Used to simulate wireshark beeing closed while live tracing.
-        const wiresharkClosedError = {
-            error_code: 18,
-            message:
-                'wireshark process closed or pipe error plugin path: nrfml-wireshark-named-pipe-sink.nrfml',
-            origin: 'Error when running nrfml operation worker.',
-        };
-
-        it('stop tracing when wireshark is closed with only live tracing', () => {
-            store.dispatch(startTrace(['live']));
-            const errorHandler = nrfml.start.mock.calls[0][1];
-            errorHandler(wiresharkClosedError);
-            const lastAction = store.getActions().at(-1);
-            expect(lastAction.type).toBe(setTraceIsStopped.type);
-        });
-
-        it('keep tracing when wireshark is closed but pcap is chosen', () => {
-            store.dispatch(startTrace(['live', 'pcap']));
-            const errorHandler = nrfml.start.mock.calls[0][1];
-            errorHandler(wiresharkClosedError);
-            const lastAction = store.getActions().at(-1);
-            expect(lastAction.type).toBe(setTraceIsStarted.type);
         });
     });
 
@@ -215,10 +203,7 @@ describe('nrfml', () => {
                 'raw',
             );
             expect(rawConfig).toEqual({
-                name: 'nrfml-raw-file-sink',
-                init_parameters: {
-                    file_path: path.join('some', 'path.mtrace'),
-                },
+                file_path: path.join('some', 'path.mtrace'),
             });
         });
 
@@ -229,13 +214,10 @@ describe('nrfml', () => {
                 'live',
             );
             expect(liveConfig).toEqual({
-                name: 'nrfml-wireshark-named-pipe-sink',
-                init_parameters: {
-                    application_name: 'Cellular Monitor',
-                    hw_name: undefined,
-                    os_name: 'MockOS',
-                    start_process: MOCKED_DEFAULT_WIRESHARK_PATH,
-                },
+                application_name: 'Cellular Monitor',
+                hw_name: undefined,
+                os_name: 'MockOS',
+                start_process: MOCKED_DEFAULT_WIRESHARK_PATH,
             });
         });
 
@@ -246,13 +228,10 @@ describe('nrfml', () => {
                 'pcap',
             );
             expect(pcapConfig).toEqual({
-                name: 'nrfml-pcap-sink',
-                init_parameters: {
-                    application_name: 'Cellular Monitor',
-                    hw_name: undefined,
-                    os_name: 'MockOS',
-                    file_path: path.join('some', 'path.pcapng'),
-                },
+                application_name: 'Cellular Monitor',
+                hw_name: undefined,
+                os_name: 'MockOS',
+                file_path: path.join('some', 'path.pcapng'),
             });
         });
     });

@@ -5,11 +5,6 @@
  */
 
 import {
-    type PcapInitParameters,
-    type RawFileInitParameters,
-    type WiresharkNamedPipeInitParameters,
-} from '@nordicsemiconductor/nrf-monitor-lib-js';
-import {
     type Device,
     deviceInfo,
     selectedDevice,
@@ -31,48 +26,34 @@ const additionalPcapProperties = (device?: Device) => ({
     hw_name: device != null ? describeDevice(device) : undefined,
 });
 
-type InitParameters =
-    | RawFileInitParameters
-    | PcapInitParameters
-    | WiresharkNamedPipeInitParameters;
-
 export default (
     state: RootState,
     source: SourceFormat,
     format: TraceFormat,
-): InitParameters => {
+) => {
     if (format === 'raw') {
         // RawFileInitParameters
         return {
-            name: 'nrfml-raw-file-sink',
-            init_parameters: {
-                file_path: sinkFile(source, format),
-            },
+            file_path: sinkFile(source, format),
         };
     }
 
     if (format === 'pcap') {
         // PcapInitParameters
         return {
-            name: 'nrfml-pcap-sink',
-            init_parameters: {
-                file_path: sinkFile(source, format),
-                ...additionalPcapProperties(selectedDevice(state)),
-            },
+            file_path: sinkFile(source, format),
+            ...additionalPcapProperties(selectedDevice(state)),
         };
     }
 
     if (format === 'live') {
         // WiresharkNamedPipeInitParameters
         return {
-            name: 'nrfml-wireshark-named-pipe-sink',
-            init_parameters: {
-                start_process:
-                    getWiresharkPath(state) ??
-                    defaultSharkPath() ??
-                    'WIRESHARK NOT FOUND',
-                ...additionalPcapProperties(selectedDevice(state)),
-            },
+            start_process:
+                getWiresharkPath(state) ??
+                defaultSharkPath() ??
+                'WIRESHARK NOT FOUND',
+            ...additionalPcapProperties(selectedDevice(state)),
         };
     }
 

@@ -4,25 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import nrfml from '@nordicsemiconductor/nrf-monitor-lib-js';
-import nrfMonitorLibJsPackageJson from '@nordicsemiconductor/nrf-monitor-lib-js/package.json';
+import nrfml from '@nordicsemi/nrfml-js';
 import { logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-interface NrfmlVersion {
-    major: number;
-    minor: number;
-    patch: number;
-}
-const formatVersion = ({ major, minor, patch }: NrfmlVersion) =>
-    `${major}.${minor}.${patch}`;
-
 export default async () => {
-    const version = (await nrfml.apiVersion()) as unknown as NrfmlVersion;
-    logger.info(
-        `Using nrf-monitor-lib-js version  ${nrfMonitorLibJsPackageJson.version}`,
-    );
-    if (version != null) {
-        // In this case, we always expect to only have one module, namely nrfml
-        logger.info(`Using nrf-monitor-lib version ${formatVersion(version)}`);
-    }
+    const version = await nrfml.version();
+    logger.info(`Using nrfml-js version  ${version.version}`);
+    Object.keys(version.dependencies).forEach(k => {
+        logger.info(`Using ${k} version ${version.dependencies[k]}`);
+    });
 };

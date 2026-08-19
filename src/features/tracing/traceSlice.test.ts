@@ -12,7 +12,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import appReducer from '../../app/appReducer';
 import {
     getIsTracing,
-    getTaskId,
+    getTaskAbortHandle,
     getTraceProgress,
     setTraceIsStarted,
     setTraceIsStopped,
@@ -20,8 +20,6 @@ import {
 } from './traceSlice';
 
 const reducer = testUtils.rootReducer(appReducer);
-
-const A_TRACE_ID = 1n;
 
 const A_PATH = 'a/path';
 const ANOTHER_PATH = 'another/path';
@@ -37,7 +35,7 @@ describe('trace slice', () => {
 
     describe('when starting a trace', () => {
         const startTrace = setTraceIsStarted({
-            taskId: A_TRACE_ID,
+            taskAbortHandle: { cancel: () => {} },
             progressConfigs: [
                 { format: 'raw', path: A_PATH },
                 { format: 'pcap', path: ANOTHER_PATH },
@@ -49,8 +47,8 @@ describe('trace slice', () => {
             expect(getIsTracing(tracingStarted)).toBeTruthy();
         });
 
-        test('a trace ID is set', () => {
-            expect(getTaskId(tracingStarted)).toEqual(A_TRACE_ID);
+        test('a trace abort handler is set', () => {
+            expect(getTaskAbortHandle(tracingStarted)).toBeDefined();
         });
 
         test('the trace progress is initialised', () => {
@@ -64,7 +62,7 @@ describe('trace slice', () => {
     describe('while progression on a trace', () => {
         test('progress is recorded for all files', () => {
             const startTrace = setTraceIsStarted({
-                taskId: A_TRACE_ID,
+                taskAbortHandle: null,
                 progressConfigs: [
                     { format: 'raw', path: A_PATH },
                     { format: 'pcap', path: ANOTHER_PATH },
@@ -88,7 +86,7 @@ describe('trace slice', () => {
 
         test('progress is ignored for unknown files', () => {
             const startTrace = setTraceIsStarted({
-                taskId: A_TRACE_ID,
+                taskAbortHandle: null,
                 progressConfigs: [{ format: 'raw', path: A_PATH }],
             });
             const progressOnTrace = setTraceProgress({
@@ -109,7 +107,7 @@ describe('trace slice', () => {
 
     describe('when stopping a trace', () => {
         const startTrace = setTraceIsStarted({
-            taskId: A_TRACE_ID,
+            taskAbortHandle: null,
             progressConfigs: [{ format: 'raw', path: A_PATH }],
         });
         const progressOnTrace = setTraceProgress({ path: A_PATH, size: 10 });
