@@ -200,7 +200,7 @@ supported_devices:
 
   - device: nRF9151 DK
     pca: PCA10171
-    verification_version:
+    verification_version: 2.8.0
     support:
       reset_device_on_start: unsupported
       program_application_firmware: unsupported
@@ -218,7 +218,7 @@ supported_devices:
 
   - device: nRF9160 DK
     pca: PCA10090
-    verification_version:
+    verification_version: 2.8.0
     support:
       reset_device_on_start: full
       program_application_firmware: full
@@ -227,7 +227,7 @@ supported_devices:
 
   - device: nRF9161 DK
     pca: PCA10153
-    verification_version:
+    verification_version: 2.8.0
     support:
       reset_device_on_start: unsupported
       program_application_firmware: unsupported
