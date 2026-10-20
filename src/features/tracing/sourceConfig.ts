@@ -16,7 +16,8 @@ import { getManualDbFilePath } from './traceSlice';
 const CHUNK_SIZE = 256;
 const autoDetectDbCacheDirectory = path.join(getAppDataDir(), 'trace_db_cache');
 
-export const TRACE_DATABASE_CONFIG_FILE = 'config_v3.json';
+// todo: remote should be also renamed (actually make new config.json for backward compatability)
+export const TRACE_DATABASE_CONFIG_FILE = 'config.json';
 
 const autoDetectDbRootURL = () =>
     pathToFileURL(autoDetectDbRootFolder()).toString();
