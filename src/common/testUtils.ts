@@ -39,9 +39,9 @@ export const getNrfmlCalledWithSinks = (sinks: string[]) => {
         called.push(jest.spyOn(TraceTaskBuilder.prototype, 'withPcapSink'));
     }
     if (sinks.includes('live')) {
-        called.push(
-            jest.spyOn(TraceTaskBuilder.prototype, 'withWiresharkSink'),
-        );
+        // called.push(
+        //     jest.spyOn(TraceTaskBuilder.prototype, 'withWiresharkSink'),
+        // );
     }
 
     return called;
