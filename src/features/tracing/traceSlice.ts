@@ -42,7 +42,6 @@ interface TraceState {
     isSendingATCommands: boolean;
     resetDevice: boolean;
     refreshOnStart: boolean;
-    detectedTraceDbFailed: boolean;
 }
 
 const initialState = (): TraceState => ({
@@ -61,7 +60,6 @@ const initialState = (): TraceState => ({
     isSendingATCommands: false,
     resetDevice: restoreResetDevice(),
     refreshOnStart: restoreRefreshOnStart(),
-    detectedTraceDbFailed: false,
 });
 
 const traceSlice = createSlice({
@@ -155,9 +153,6 @@ const traceSlice = createSlice({
             state.refreshOnStart = action.payload;
             storeRefreshOnStart(action.payload);
         },
-        setDetectTraceDbFailed: (state, action: PayloadAction<boolean>) => {
-            state.detectedTraceDbFailed = action.payload;
-        },
     },
 });
 
@@ -208,9 +203,6 @@ export const getResetDevice = (state: RootState) => state.app.trace.resetDevice;
 export const getRefreshOnStart = (state: RootState) =>
     state.app.trace.refreshOnStart;
 
-export const getDetectTraceDbFailed = (state: RootState) =>
-    state.app.trace.detectedTraceDbFailed;
-
 export const {
     resetTraceInfo,
     setTraceIsStarted,
@@ -230,7 +222,6 @@ export const {
     setIsSendingATCommands,
     setResetDevice,
     setRefreshOnStart,
-    setDetectTraceDbFailed,
 } = traceSlice.actions;
 
 export default traceSlice.reducer;

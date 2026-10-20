@@ -73,6 +73,7 @@ describe('nrfml', () => {
                 },
                 type: 'trace/setTraceIsStarted',
             },
+            { type: setDetectingTraceDb.type, payload: false },
         ]);
     });
 
@@ -107,6 +108,7 @@ describe('nrfml', () => {
                         ],
                     },
                 },
+                { type: setDetectingTraceDb.type, payload: false },
             ]);
         });
 
@@ -134,6 +136,7 @@ describe('nrfml', () => {
                         ],
                     },
                 },
+                { type: setDetectingTraceDb.type, payload: false },
             ]);
         });
 
@@ -161,6 +164,7 @@ describe('nrfml', () => {
                         ],
                     },
                 },
+                { type: setDetectingTraceDb.type, payload: false },
             ]);
         });
 
@@ -182,6 +186,7 @@ describe('nrfml', () => {
                     },
                 },
                 // Since the mock trace returns immediately, we also have to check for this
+                { type: setDetectingTraceDb.type, payload: false },
                 { type: setTraceIsStopped.type, payload: undefined },
             ]);
         });

@@ -63,7 +63,6 @@ import {
     getTaskAbortHandle,
     getTraceSerialPort,
     setDetectingTraceDb,
-    setDetectTraceDbFailed,
     setManualDbFilePath,
     setTraceDataReceived,
     setTraceIsStarted,
@@ -110,6 +109,16 @@ const setupBuilder =
         const hasSelectedManualDbFile =
             getManualDbFilePath(getState()) !== undefined;
         const builder = new TraceTaskBuilder();
+        const cleanup: (() => void)[] = [];
+
+        const displayDetectingTraceDbMessage =
+            !hasSelectedManualDbFile && !hideDetectingTraceDbMessage;
+
+        if (displayDetectingTraceDbMessage) {
+            cleanup.push(() => {
+                dispatch(setDetectingTraceDb(false));
+            });
+        }
 
         builder
             .withDataSource(
@@ -125,9 +134,7 @@ const setupBuilder =
             .withProgressCb(
                 makeProgressCallback(dispatch, {
                     detectingTraceDb: !hasSelectedManualDbFile,
-                    displayDetectingTraceDbMessage:
-                        !hasSelectedManualDbFile &&
-                        !hideDetectingTraceDbMessage,
+                    displayDetectingTraceDbMessage,
                 }),
             );
 
@@ -175,7 +182,6 @@ const setupBuilder =
             }
         });
 
-        let cleanup = () => {};
         if (updateChart) {
             const packets: StreamPacket[] = [];
             const throttle = setInterval(() => {
@@ -195,15 +201,19 @@ const setupBuilder =
 
             dispatch(setTraceDataReceived(false));
             tracePacketEvents.emit('start-process');
-            cleanup = () => {
+            cleanup.push(() => {
                 clearInterval(throttle);
                 notifyListeners(packets.splice(0, packets.length));
-            };
+            });
         }
 
-        const task = await builder.spawn();
-        onStartTrace(task);
-        await waitForTask(task).finally(() => cleanup());
+        try {
+            const task = await builder.spawn();
+            onStartTrace(task);
+            await waitForTask(task);
+        } finally {
+            cleanup.forEach(f => f());
+        }
     };
 
 export const convertTraceFile =
@@ -219,7 +229,7 @@ export const convertTraceFile =
         setLoading(true);
 
         await dispatch(
-            setupBuilder(source, ['live'], task => {
+            setupBuilder(source, sinks, task => {
                 logger.info(`Started converting ${path} to pcap.`);
                 dispatch(
                     setTraceIsStarted({
@@ -228,15 +238,17 @@ export const convertTraceFile =
                     }),
                 );
             }),
-        ).catch(err => {
-            dispatch(setTraceIsStopped());
-            dispatch(setDetectingTraceDb(false));
-            setLoading(false);
+        )
+            .then(() => logger.info(`Successfully converted ${path} to pcap`))
+            .catch(err => {
+                dispatch(setTraceIsStopped());
+                dispatch(setDetectingTraceDb(false));
 
-            logger.error(`Failed conversion to pcap: ${describeError(err)}`);
-        });
-
-        logger.info(`Successfully converted ${path} to pcap`);
+                logger.error(
+                    `Failed conversion to pcap: ${describeError(err)}`,
+                );
+            });
+        setLoading(false);
     };
 
 export const startTrace =
@@ -288,7 +300,7 @@ export const startTrace =
 
         await dispatch(
             setupBuilder(
-                { type: 'device', port: tracePort, startTime: new Date() },
+                source,
                 formats,
                 async task => {
                     logger.info('Started tracefile');
@@ -375,21 +387,14 @@ export const readRawTrace =
                 true,
                 true,
             ),
-        ).catch(err => {
-            logger.error(
-                `Error when reading trace from ${path}: ${describeError(err)}`,
-            );
+        )
+            .then(() => logger.info(`Completed reading trace from ${path}`))
+            .catch(err => {
+                logger.error(
+                    `Error when reading trace from ${path}: ${describeError(err)}`,
+                );
+            });
 
-            if (
-                describeError(err).includes(
-                    'Failed to detect modem trace database',
-                )
-            ) {
-                dispatch(setDetectTraceDbFailed(true));
-            }
-        });
-
-        logger.info(`Completed reading trace from ${path}`);
         setLoading(false);
         setTimeout(() => tracePacketEvents.emit('stop-process'), 1000);
     };

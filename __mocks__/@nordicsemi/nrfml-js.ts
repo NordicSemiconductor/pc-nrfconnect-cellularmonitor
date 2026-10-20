@@ -28,7 +28,13 @@ export class TraceTaskBuilder {
     }
 }
 
-export const waitForTask = jest.fn(() => Promise.resolve());
+export const waitForTask = jest.fn(async () => {
+    await new Promise<void>(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, 100);
+    });
+});
 
 export class DataSource {
     static fromSerialport() {}

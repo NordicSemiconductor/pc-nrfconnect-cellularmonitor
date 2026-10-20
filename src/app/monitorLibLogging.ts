@@ -21,7 +21,7 @@ export function enableNrfmlLogging() {
         LogLevel.Off,
         undefined,
         (message: string) => {
-            logger.debug(message);
+            logger.debug(message.trim());
         },
     );
     setNrfmlLogLevel(getIsLoggingVerbose());
