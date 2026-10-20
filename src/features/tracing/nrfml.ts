@@ -25,7 +25,6 @@ import {
     telemetry,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { NrfutilDeviceLib } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
-import { join } from 'path';
 import { pathToFileURL } from 'url';
 
 import { displayName } from '../../../package.json';
@@ -78,10 +77,9 @@ const progressConfigs = (source: SourceFormat, sinks: TraceFormat[]) =>
         path: sinkFile(source, format),
     }));
 
-const TRACE_DATABASE_CONFIG_FILE = 'config_v3.json';
-
 // Need to figure out what to do with the cache directory
 // Files from here aren't added to the cache, and files in the cache are not added to the config file
+// Function returns either path to trace DB config or URL to the folder
 const getModemDbPath = (state: RootState, source: SourceFormat) => {
     if (source.type === 'device' && source.autoDetectedManualDbFile) {
         return source.autoDetectedManualDbFile;
@@ -91,10 +89,7 @@ const getModemDbPath = (state: RootState, source: SourceFormat) => {
         return manualDbFilePath;
     }
 
-    return join(
-        pathToFileURL(autoDetectDbRootFolder()).toString(),
-        TRACE_DATABASE_CONFIG_FILE,
-    );
+    return pathToFileURL(autoDetectDbRootFolder()).toString();
 };
 
 const setupBuilder =
@@ -125,7 +120,7 @@ const setupBuilder =
                 source.type === 'file'
                     ? await DataSource.fromFile(source.path)
                     : await DataSource.fromSerialport(
-                          new SerialPortBuilder(source.port, 1000000),
+                          new SerialPortBuilder(source.port, 1_000_000),
                       ),
             )
             .withModemDecoder(
@@ -161,6 +156,10 @@ const setupBuilder =
                     break;
                 }
                 case 'live': {
+                    // TODO: wireshark must be conditional, do not turn it on every file load
+                    const enableWireshark = false;
+                    if (!enableWireshark) break;
+
                     const opts = new WiresharkSinkOpts()
                         .withWiresharkPath(
                             getWiresharkPath(getState()) ||
