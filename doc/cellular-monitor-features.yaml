@@ -1,0 +1,331 @@
+app:
+  id: cellular-monitor
+  name: Cellular Monitor
+  repo: pc-nrfconnect-cellularmonitor
+
+statuses: [full, unsupported, not_applicable]
+
+general_app_features:
+  - id: select_device
+    name: Select device
+    description: "Select a connected device from a drop-down list to connect to it"
+  - id: start_modem_trace_capture
+    name: Start modem trace capture
+    description: Start capturing a live modem trace from the selected device
+  - id: stop_modem_trace_capture
+    name: Stop modem trace capture
+    description: Stop capturing a live modem trace from the selected device
+  - id: save_trace_file_to_disk
+    name: Save trace file to disk
+    description: Store a copy of the captured trace as a raw file on disk during capture
+  - id: buy_development_kit
+    name: Buy development kit
+    description: Open a dialog with localized partner links to purchase supported devices
+  - id: show_modal_on_the_start
+    name: Show modal on the start
+    description: "Display 'How to use Cellular Monitor' info modal window after app launch"
+  - id: display_trace_file_information
+    name: Display trace file information
+    description: Show the trace file name and size during capture, and open its location on click
+  - id: autoselect_modem_trace_database
+    name: Autoselect modem trace database
+    description: Automatically select the trace database version matching the modem firmware
+  - id: manual_modem_trace_database_selection
+    name: Manual modem trace database selection
+    description: "Manually select the trace decoding database version from a drop-down list"
+  - id: select_modem_trace_serial_port
+    name: Select modem trace serial port
+    description: Select the serial port used to receive the modem trace
+  - id: select_terminal_serial_port
+    name: Select terminal serial port
+    description: Select the serial port used to send AT commands to the device
+  - id: autoselect_serial_ports_values
+    name: Autoselect serial ports values
+    description: Save and autoselect the modem trace and terminal serial ports between sessions
+  - id: load_trace_file_for_playback
+    name: Load trace file for playback
+    description: Load a previously saved trace file for playback and analysis
+  - id: play_back_mtrace_files
+    name: Play back .mtrace files
+    description: Play back trace files captured by the Cellular Monitor app
+  - id: play_back_nrfutil_trace_files
+    name: Play back nrfutil trace files
+    description: "Play back trace files created with nRF Util's trace command"
+  - id: play_back_legacy_trace_collector_bin_files
+    name: Play back legacy Trace Collector .bin files
+    description: Play back .bin trace files from the legacy Trace Collector app
+  - id: play_back_j_link_rtt_trace_files
+    name: "Play back J-Link RTT trace files"
+    description: "Play back J-Link RTT-captured modem traces (captured outside the tool)"
+  - id: play_back_memfault_rtt_trace_files
+    name: Play back Memfault RTT trace files
+    description: Play back trace files downloaded from Memfault
+  - id: auto_detect_tracefile_modem_firmware_version
+    name: "Auto-detect tracefile modem firmware version"
+    description: Automatically detect the modem firmware version from a loaded trace file
+  - id: refresh_dashboard
+    name: Refresh dashboard
+    description: Send a set of recommended AT commands to populate dashboard fields
+  - id: refresh_dashboard_on_start
+    name: Refresh dashboard on start
+    description: Automatically refresh the dashboard when tracing starts
+  - id: autoselect_trace_options
+    name: Autoselect trace options
+    description: Save and autoselect trace options values between sessions
+  - id: send_at_commands_from_dashboard_fields
+    name: Send AT commands from dashboard fields
+    description: Run related AT commands directly from dashboard fields while capturing
+  - id: open_in_wireshark_live
+    name: Open in Wireshark (live)
+    description: Open and display captured trace data live in Wireshark during capture
+  - id: open_trace_file_in_wireshark
+    name: Open trace file in Wireshark
+    description: Convert a saved .mtrace/.bin file to PcapNG and open it in Wireshark
+  - id: wireshark_autodetection
+    name: Wireshark autodetection
+    description: If the app cannot find a Wireshark installation, it will show a link to either install Wireshark or select the executable.
+  - id: wireshark_custom_path
+    name: Wireshark custom path
+    description: If WS is installed in cusom location, select the exec in app
+  - id: open_serial_terminal
+    name: Open Serial Terminal
+    description: Open the Serial Terminal app to view modem dialog and application logging
+  - id: display_connection_status
+    name: Display connection status
+    description: "Display real-time trace/connection stage status (Trace, SIM, LTE, PDN)"
+  - id: dashboard_connection_visualization
+    name: Dashboard connection visualization
+    description: Display detailed cellular connection data across dashboard panels
+  - id: dashboard_field_mouse_over_details
+    name: "Dashboard field mouse-over details"
+    description: Show field descriptions, related AT commands, and doc links on hover
+  - id: packet_event_viewer
+    name: Packet Event Viewer
+    description: Visualize communication at the AT, RRC, NAS, and IP levels
+  - id: packet_event_viewer_playback_scrub
+    name: Packet Event Viewer playback/scrub
+    description: Drag and scroll the event graph to play back and focus on trace segments
+  - id: packet_event_viewer_timeline_mode
+    name: Packet Event Viewer timeline mode
+    description: "Switch event display between equally-spaced and time-based views"
+  - id: packet_event_viewer_layer_filtering
+    name: Packet Event Viewer layer filtering
+    description: Hide or show specific event layers
+  - id: display_live_trace
+    name: Display live trace
+    description: Display an ongoing live trace via the live button
+  - id: add_or_update_modem_credentials
+    name: Add or update modem credentials
+    description: Enter a security tag and keys/certificates and write them to the modem
+  - id: import_credentials_from_json
+    name: Import credentials from JSON
+    description: Load modem credentials from a JSON file instead of manual entry
+  - id: delete_modem_credentials
+    name: Delete modem credentials
+    description: Delete a stored key or certificate from the modem
+  - id: restart_application
+    name: Restart application
+    description: Restart the app via a keyboard shortcut (Ctrl+R / Command+R)
+
+device_specific_features:
+  - id: reset_device_on_start
+    name: Reset device on start
+    description: Reset the device before starting a new trace
+  - id: program_application_firmware
+    name: Program application firmware
+    description: Program a precompiled sample application to the device over USB via MCUboot
+  - id: program_modem_firmware
+    name: Program modem firmware
+    description: Program modem firmware to the device over USB via MCUboot
+  - id: mcuboot_programming
+    name: MCUboot programming
+    description: Program firmware using the MCUboot workflow
+
+shared_features:
+  - id: restore_defaults
+    name: Restore defaults
+    description: "Restore all app's settings to default"
+  - id: give_feedback
+    name: Give Feedback
+    description: Send a feedback message
+  - id: open_documentation
+    name: Open Documentation
+    description: Open external documentation page
+  - id: verbose_logging
+    name: Verbose Logging
+    description: Turn on verbose logging and restart the app
+  - id: create_system_report
+    name: Create system report
+    description: Generate a txt document with detailed report
+  - id: show_log
+    name: Show Log
+    description: Toggle log window
+  - id: autoscroll_log
+    name: Autoscroll log
+    description: Toggle log window autoscroll
+  - id: open_log_file
+    name: Open log file
+    description: Open the current log file in a text editor
+  - id: clear_log
+    name: Clear Log
+    description: Clear the log window
+
+supported_devices:
+  - device: "Nordic Thingy:91"
+    pca: PCA20035
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: full
+      program_modem_firmware: full
+      mcuboot_programming: full
+
+  - device: "Nordic Thingy:91 X"
+    pca: PCA20049
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF9131 EK
+    pca: PCA10165
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF9151 DK
+    pca: PCA10171
+    verification_version: 2.8.0
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF9151 SMA DK
+    pca: PCA10201
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF9160 DK
+    pca: PCA10090
+    verification_version: 2.8.0
+    support:
+      reset_device_on_start: full
+      program_application_firmware: full
+      program_modem_firmware: full
+      mcuboot_programming: unsupported
+
+  - device: nRF9161 DK
+    pca: PCA10153
+    verification_version: 2.8.0
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF9251 DK
+    pca: PCA10218
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF93M1 DK
+    pca: PCA10232
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+  - device: nRF93M1 DK
+    pca: PCA10237
+    verification_version:
+    support:
+      reset_device_on_start: unsupported
+      program_application_firmware: unsupported
+      program_modem_firmware: unsupported
+      mcuboot_programming: unsupported
+
+unsupported_devices:
+  - device: "Nordic Thingy:52"
+    pca: PCA20020
+
+  - device: "Nordic Thingy:53"
+    pca: PCA20053
+
+  - device: nPM 1300 EK
+    pca: PCA10152  
+
+  - device: nPM 1304 EK
+    pca: PCA10195
+
+  - device: nPM 2100 EK
+    pca: PCA10170
+
+  - device: nRF51 DK
+    pca: PCA10028
+
+  - device: nRF51 Dongle
+    pca: PCA10031
+
+  - device: nRF52 DK
+    pca: PCA10040
+
+  - device: nRF52833 DK
+    pca: PCA10100
+
+  - device: nRF52840 DK
+    pca: PCA10056
+
+  - device: nRF52840 Dongle
+    pca: PCA10059
+
+  - device: nRF5340 Audio DK
+    pca: PCA10121
+
+  - device: nRF5340 DK
+    pca: PCA10095
+
+  - device: nRF54H20 DK
+    pca: PCA10175
+
+  - device: nRF54L15 DK
+    pca: PCA10156
+
+  - device: nRF54LC10 DK
+    pca: PCA10226
+
+  - device: nRF54LM20 DK
+    pca: PCA10184
+
+  - device: nRF54LM20 Dongle
+    pca: PCA10208
+
+  - device: nRF54LS05 DK
+    pca: PCA10214
+
+  - device: nRF54LV10 DK
+    pca: PCA10188
+
+  - device: nRF7002 DK
+    pca: PCA10143
+
+  - device: PPK2
+    pca: PCA63100
+
+  
